@@ -480,10 +480,9 @@ They are **not worse off than today** — they just miss the upside. No downside
 
 ## Team
 
-- **2 engineers** (Rust + Bitcoin protocol)
-- **1 part-time** (wallet integration / mining ops)
-- **Timeline:** 10-12 weeks to production (Phase 0-2)
-- **Advisors desired:** Wallet developer, pool operator, Stratum v2 maintainer
+- ** engineers** 
+- (wallet integration / mining ops)
+- - **Advisors desired:** Wallet developer, pool operator, Stratum v2 maintainer
 
 ## Resources Needed
 
