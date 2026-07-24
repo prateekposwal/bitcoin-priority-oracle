@@ -9,6 +9,7 @@
 - [ ] Publish Post 2 on LinkedIn
 - [ ] Publish Post 3 on LinkedIn
 - [ ] Create GitHub repo with README
+- [x] Create interactive block allocation demo (`interactive-block.html`)
 - [ ] Write blog post version (long-form)
 
 ## 🦀 Phase 2: Oracle Core (Weeks 1-4)
