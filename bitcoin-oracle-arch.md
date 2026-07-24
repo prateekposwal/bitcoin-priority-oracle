@@ -2,176 +2,146 @@
 
 ## Problem
 
-Bitcoin blocks have ~4 MWU (million weight units). Inscriptions (Ordinals, BRC-20, Runes) compete with financial transactions (payments, settlements, Lightning channel opens) for the same space. Miners optimize for fee revenue — if data inscriptions pay higher fees, financial transactions get priced out or delayed.
+Bitcoin blocks have ~4 MWU. Inscriptions (Ordinals, BRC-20, Runes) compete with financial transactions (payments, settlements, Lightning channel opens) for the same space. The market treats them identically — highest fee-rate wins — despite fundamentally different time-value curves:
+
+- A settlement is worth nothing if it misses this block
+- An inscription is worth the same next block, or next hour
 
 No consensus change required. No soft fork. No hard fork.
 
 ## Solution
 
-A **sidecar oracle + Stratum v2 plugin** that classifies transactions as **financial** or **data** before block template assembly, enabling a two-tier priority fee market within the existing block size limit.
+A two-mode system that creates a **two-tier priority fee market** within the existing block size limit:
+
+1. **Passive mode:** Separate fee estimates for financial vs data transactions. No pool changes needed.
+2. **Active mode:** Wallets self-declare transaction type (financial/data) via a signed field. Pools read the declaration and allocate block space accordingly.
+
+**No classification oracle needed.** Wallets know their own intent. False positives drop to zero.
 
 ## Architecture
 
 ```
-┌──────────────────────────────────────────────────────────────────────────┐
-│                             Bitcoin Core Node                            │
-│  ┌──────────────────────────────────────────────────────────────────┐   │
-│  │                          Mempool                                 │   │
-│  │  tx_a (P2WPKH, 200 sat/vB)   tx_b (inscription, 250 sat/vB)     │   │
-│  │  tx_c (HTLC, 180 sat/vB)     tx_d (BRC-20, 300 sat/vB)          │   │
-│  └──────────┬───────────────────────────────────────────────────────┘   │
-└─────────────┼───────────────────────────────────────────────────────────┘
-              │ getrawmempool
-              ▼
-┌─────────────────────────────┐
-│     Transaction Oracle      │
-│                             │
-│  ┌───────────────────────┐  │
-│  │   Classifier Engine   │  │
-│  │  ┌─────────────────┐  │  │
-│  │  │ Rule 1: witness  │  │  │
-│  │  │ Rule 2: taproot  │  │  │
-│  │  │ Rule 3: standard │  │  │
-│  │  │ Rule 4: fallback │  │  │
-│  │  └────────┬────────┘  │  │
-│  │           ▼           │  │
-│  │  ┌─────────────────┐  │  │
-│  │  │ Confidence      │  │  │
-│  │  │ Scorer (0.0-1.0)│  │  │
-│  │  └─────────────────┘  │  │
-│  └───────────────────────┘  │
-│                             │
-│  ┌───────────────────────┐  │
-│  │   Classified Pool     │  │
-│  │  ┌────────┐┌────────┐ │  │
-│  │  │Financial││  Data  │ │  │
-│  │  │ Pool   ││  Pool  │ │  │
-│  │  └────────┘└────────┘ │  │
-│  └───────────────────────┘  │
-└──────────┬──────────────────┘
-           │ classified tx set
-           ▼
-┌──────────────────────────────┐
-│     Allocation Engine        │
-│                              │
-│  Financial minimum: 30%      │
-│  Remainder split by fee-ratio│
-│                              │
-│  ┌────────────────────────┐  │
-│  │   Block Template       │  │
-│  │   tx_a (FIN, 200 s/vB) │  │
-│  │   tx_c (FIN, 180 s/vB) │  │
-│  │   tx_b (DAT, 250 s/vB) │  │
-│  │   tx_d (DAT, 300 s/vB) │  │
-│  └────────────────────────┘  │
-└──────────┬───────────────────┘
-           │ ClassifiedTemplate
-           ▼
-┌──────────────────────────────┐
-│  Stratum v2 Plugin           │
-│                              │
-│  Channel 0x74                │
-│  ┌────────────────────────┐  │
-│  │ SetClassificationRules │──│──> Miner (classification logic)
-│  │ ClassifiedTemplate     │──│──> Miner (template + tags)
-│  │ PriorityPreference     │<─│── Miner (allocation preference)
-│  └────────────────────────┘  │
-└──────────┬───────────────────┘
+┌──────────────────────────────────────────────────┐
+│                   WALLET                          │
+│  TX type: "financial"     Fee: 200 sat/vB        │
+│  Signed declaration in OP_RETURN output           │
+│  (or annex, or PSBT field)                        │
+└──────────────────────┬───────────────────────────┘
+                       │ tx broadcast
+                       ▼
+┌──────────────────────────────────────────────────┐
+│              MEMPOOL (unchanged)                  │
+└──────────────────────┬───────────────────────────┘
+                       │
+                       ▼
+┌─────────────────────────────────────────────────────┐
+│                 POOL TEMPLATE ASSEMBLER              │
+│                                                     │
+│  1. Scan for declarations (check OP_RETURN / annex) │
+│  2. If declared → trust it                          │
+│  3. If undeclared → structural fallback heuristic   │
+│  4. Apply allocation (financial floor / fee ratio)  │
+│  5. Emit final template to Stratum v1 or v2         │
+└──────────┬──────────────────────────────────────────┘
            │
            ▼
-┌──────────────────────────────┐
-│        Mining Hardware        │
-│  (unmodified — sees standard  │
-│   block templates as before)  │
-└──────────────────────────────┘
-
-           ┌──────────────────────┐
-           │   Fee Estimator API  │
-           │                      │
-           │  GET /fees           │
-           │  ┌────────────────┐  │
-           │  │ financial: 120 │  │
-           │  │ data:      200 │  │
-           │  │ alloc:   62/38 │  │
-           │  └────────────────┘  │
-           └──────────────────────┘
+┌─────────────────────────────────────────────────┐
+│      Stratum v1 or v2 (no protocol change)      │
+│  v2 pools get optional classification tags       │
+│  v1 pools see a normal template as before       │
+└─────────────────────────────────────────────────┘
+           │
+           ▼
+┌─────────────────────────────────────────────────┐
+│           FEE ESTIMATOR API (public)             │
+│                                                   │
+│  GET /v1/fees                                    │
+│  ┌──────────────────────────────────────┐        │
+│  │ financial: {fastest: 120, hour: 45} │        │
+│  │ data:      {fastest: 200, hour: 80} │        │
+│  │ allocation: {financial_pct: 62}      │        │
+│  └──────────────────────────────────────┘        │
+└─────────────────────────────────────────────────┘
 ```
 
-## 1. Transaction Classifier (Oracle)
+## 1. Wallet Self-Declaration Protocol
 
-### Input
+### How it works
 
-Raw transactions fetched from `getrawmempool` (full mempool scan every 10s) or `testmempoolaccept` (real-time on new tx).
+The wallet adds a small structured output to the transaction that declares its type. Three mutually exclusive methods, any one sufficient:
 
-### Classification Pipeline
+### Method A: OP_RETURN declaration (recommended for wallets)
 
-Each transaction passes through a rule engine. Rules are evaluated in order; the first match determines the tentative tag, which then passes through confidence scoring.
+Add an OP_RETURN output with type-tag bytes:
 
 ```
-                Raw Tx
-                  │
-                  ▼
-        ┌─────────────────┐
-        │  Rule Engine     │
-        │  (ordered rules) │
-        └────────┬────────┘
-                  │ tag + matched_rule
-                  ▼
-        ┌─────────────────┐
-        │  Confidence     │
-        │  Scorer         │
-        └────────┬────────┘
-                  │ tag + confidence
-                  ▼
-        ┌─────────────────┐
-        │  Threshold Gate │── confidence < 0.7 ──> UNCERTAIN ──> FINANCIAL
-        │  (0.7)          │── confidence ≥ 0.7 ──> emit tag
-        └─────────────────┘
+OP_RETURN 0x7072 0x01 0x00
+  ↑       ↑      ↑    ↑
+  magic  ver   flags  tag
 ```
 
-### Classification Rules
+**Format:**
 
-| # | Rule | Tag | Confidence | Rationale |
-|---|------|-----|-----------|-----------|
-| 1 | `tx.HasOpReturn && tx.OpReturnData.Length > 80` | DATA | 0.95 | Non-standard data carrier per BIP-XXX |
-| 2 | `tx.WitnessSize / tx.Vsize > 0.4` | DATA | 0.85 | High witness density = inscription |
-| 3 | `tx.WitnessSize - tx.ScriptSigSize > 500` | DATA | 0.90 | Taproot script-path spend, large witness = Ordinal |
-| 4 | `tx.Inputs.All(inp => inp.IsP2PKH || inp.IsP2WPKH || inp.IsP2TRKeyPath)` | FINANCIAL | 0.90 | Standard key-path spend |
-| 5 | `tx.Outputs.Any(out => out.IsOpReturn) && tx.WitnessSize < 100` | FINANCIAL | 0.85 | Small OP_RETURN (e.g., timestamping, not inscription) |
-| 6 | `tx.HasCLTV || tx.HasCSV || tx.Outputs.Any(out => out.IsP2WSH)` | FINANCIAL | 0.80 | Timelocks / multisig = Lightning or DeFi |
-| 7 | `tx.IsBIP125` | FINANCIAL | 0.85 | Replace-by-fee = time-sensitive financial tx |
-| 8 | `tx.Fee / tx.Vsize > mempool.P95Feerate` | FINANCIAL | 0.70 | Extremely high fee = urgency signal |
-| 9 | `tx.Version == 3 && tx.Inputs.Any(i => i.IsP2TR)` | FINANCIAL | 0.75 | BIP-119/CTV or BIP-118 (APO) |
+| Offset | Size | Field | Values |
+|--------|------|-------|--------|
+| 0 | 2 | Magic | `0x7072` ("pr" = priority) |
+| 2 | 1 | Version | `0x01` |
+| 3 | 1 | Flags | Bit 0: `0` = financial, `1` = data. Bits 1-7 reserved. |
 
-**Fallback (no rule matched):** FINANCIAL with confidence 0.50
+Total overhead: **4 bytes** in an OP_RETURN output (~10 vB with the output itself).
 
-### Confidence Scoring Detail
+### Method B: Annex field (for Taproot transactions)
 
-Indicators that increase DATA confidence:
-- Multiple inscription-like outputs (e.g., > 3 Taproot script-path spends)
-- Witness data includes content-type markers (`ord`, `text/plain`, etc.)
-- Transaction chaining (same address funds multiple inscription-like tx)
+If the transaction uses Taproot inputs, include an annex (witness element starting with `0x50`) with the declaration:
 
-Indicators that decrease DATA confidence:
-- Transaction has a change output to a known exchange/OTC wallet
-- Transaction includes OP_RETURN with BIP-XXX protocol marker
+```
+annex = 0x50 || 0x7072 || version || flags
+```
 
-### False Positive Budget
+Same data layout as Method A, but in the witness annex instead of a separate output. Zero additional vBytes (annex is witness data, 4 WU = 1 vB).
 
-| Type | Acceptable Rate | Impact |
-|------|----------------|--------|
-| Financial → DATA | < 1% | Tx delayed 1-2 blocks, still confirmed |
-| DATA → Financial | < 5% | Inscription sneaks into financial pool, crowds slightly |
+### Method C: PSBT field (for multi-sig / hardware wallets)
 
-The asymmetric budget reflects that false-DATA is harmless (still confirmed), while false-FINANCIAL lets inscriptions bypass the allocation.
+The declaration is carried in the PSBT during construction and stripped before broadcast. The pool never sees it directly — instead, the wallet includes a commitment to the declaration in the transaction itself (e.g., a specific sighash single byte). This is more complex and only needed for hardware wallet flows.
+
+### Wallet Integration
+
+| Wallet Type | Method | Effort |
+|------------|--------|--------|
+| Software (Sparrow, Electrum, Blue) | Method A (OP_RETURN) | Low — add 1 output |
+| Mobile (Muun, Phoenix) | Method A (OP_RETURN) | Low |
+| Taproot-native (Xverse, Leather) | Method B (annex) | Low — annex field already supported |
+| Hardware (Ledger, Coldcard) | Method C (PSBT) | Medium — needs firmware update |
+| Exchange hot wallets | Method A (OP_RETURN) | Very low — change withdrawal logic |
+
+### Anti-Abuse: Structural Backcheck
+
+The pool doesn't blindly trust declarations. Every declared-"financial" transaction passes a **lightweight structural check**:
+
+| Check | What it tests | Cost |
+|-------|---------------|------|
+| Witness size / input count | If > 0.4 → suspicious | O(1) |
+| Presence of ordinal envelope (`0x00 0x63 ... 0x68`) | If found → override to DATA | O(witness size) |
+| OP_RETURN + OP_13 (`0x6a 0x5d`) in outputs | If found + block >= 840K → override to DATA | O(output count) |
+| Known inscription address | If input from known inscriber → DATA | O(1) (lookup) |
+
+**If structural check disagrees with declaration:**
+- First offense: warning, tx downgraded to DATA allocation
+- Repeated offenses: wallet address rate-limited or blacklisted
+
+**Result:** Honest wallets never hit the backcheck. Liars get caught by simple heuristics.
+
+### For Wallets That Don't Declare
+
+Unmarked transactions use a **fallback classifier** (same structural rules as above, but with lower confidence). Unclear cases default to FINANCIAL.
 
 ## 2. Priority Fee Market
 
 ### Two Virtual Pools
 
 ```
-Financial Pool: all tx with tag=FINANCIAL, sorted by fee-rate descending
-Data Pool:      all tx with tag=DATA, sorted by fee-rate descending
+Financial Pool: tx with tag=FINANCIAL, sorted by fee-rate descending
+Data Pool:      tx with tag=DATA, sorted by fee-rate descending
 ```
 
 ### Allocation Algorithm
@@ -233,8 +203,6 @@ Step 4 — Final merge:
 
 ### Alternative: Proportional Allocation
 
-If the clamp model feels too rigid, a proportional alternative:
-
 ```
 financial_fee_mass = sum(fee × weight) over financial pool top 4 MWU
 data_fee_mass = sum(fee × weight) over data pool top 4 MWU
@@ -244,114 +212,60 @@ financial_allocation = C × (financial_fee_mass / total_fee_mass)
 data_allocation = C × (data_fee_mass / total_fee_mass)
 ```
 
-This is purely fee-proportional — no hard floor. Simpler but financial tx get no guaranteed minimum.
+No hard floor. Simpler but financial tx get no guaranteed minimum.
 
-## 3. Stratum v2 Plugin
+### Data Fee Premium (Pool Revenue)
 
-### Protocol Extension
-
-Extends the Template Distribution Protocol (channel `0x74`) per the Stratum v2 spec. Three new message types:
-
-### Message: `SetClassificationRules`
+Data transactions pay a **premium for the same confirmation speed**:
 
 ```
-+----+--------+--------+--------+--------+
-| 0x74 | 0x01  |  len   |  rules...     |
-+----+--------+--------+--------+--------+
-  ↑       ↑        ↑           ↑
-channel  msg_id  varint_len  CBOR-encoded rules
+data_target_fee = financial_fee_for_same_speed × (1 + premium_rate)
 ```
 
-Payload (CBOR):
+If `premium_rate = 0.25`, a data tx needs 250 sat/vB to match a financial tx at 200 sat/vB for next-block inclusion.
 
-```cbor
-{
-  "version": 1,
-  "rules": [
-    {"id": "witness_ratio", "threshold": 0.4, "tag": "data"},
-    {"id": "taproot_script", "min_witness": 500, "tag": "data"},
-    {"id": "standard_keypath", "tag": "financial"},
-    {"id": "timelock_multisig", "tag": "financial"},
-    {"id": "bip125", "tag": "financial"}
-  ],
-  "confidence_threshold": 0.7,
-  "default_tag": "financial",
-  "hash": "sha256(rule_set)"
-}
-```
+The premium goes to the pool. This gives pools a direct revenue incentive to run the oracle.
 
-Miner receives this once on connect (or when pool updates rules). Miner can reject by closing channel.
+## 3. Stratum Compatibility
 
-### Message: `ClassifiedTemplate`
+### Stratum v1 (Today — ~90% of hashrate)
 
-Replaces `NewTemplate` in channel 0x74.
+**No changes needed.** The oracle operates entirely in the pool's template assembly pipeline:
 
 ```
-+----+--------+--------+--------+--------+
-| 0x74 | 0x02  |  template_data | tags[] |
-+----+--------+--------+--------+--------+
+Pool's tx selection logic → Oracle modifies it → Template → Stratum v1 → Miner
 ```
 
-Payload:
+The miner receives a normal block template. No protocol awareness required.
 
-```cbor
-{
-  "template_id": 142,
-  "previous_block_hash": "0x...",
-  "coinbase_tx": "0x...",
-  "transactions": ["txid_a", "txid_b", "txid_c", ...],
-  "tags": [
-    {"txid": "txid_a", "tag": 1},   // DATA
-    {"txid": "txid_b", "tag": 0},   // FINANCIAL
-    {"txid": "txid_c", "tag": 0},   // FINANCIAL
-  ],
-  "allocation": {
-    "financial_weight": 2410000,
-    "data_weight": 1590000,
-    "financial_floor_pct": 30,
-    "fee_ratio": 1.316
-  }
-}
+### Stratum v2 (Optional upgrade)
+
+For pools that want transparency, three optional messages over Template Distribution Protocol (channel `0x74`):
+
+| Message | Direction | Purpose |
+|---------|-----------|---------|
+| `SetClassificationRules` | Pool → Miner | Publish classification rules hash |
+| `ClassifiedTemplate` | Pool → Miner | Template + per-tx declaration tag |
+| `PriorityPreference` | Miner → Pool | Miner's desired allocation ratio |
+
+Payload format (CBOR):
+
+```
+SetClassificationRules:
+  { "version": 1, "rules_hash": "sha256(...)", "confidence_threshold": 0.7 }
+
+ClassifiedTemplate:
+  { "template_id": 142, "txs": [...], "tags": [{"txid": "...", "tag": 0|1|2}],
+    "allocation": {"financial_weight": 2410000, "data_weight": 1590000} }
+
+PriorityPreference:
+  { "session_id": "...", "min_financial_pct": 30, "max_data_pct": 70,
+    "signature": "0x..." }
 ```
 
 Tags: `0=FINANCIAL`, `1=DATA`, `2=UNCERTAIN`
 
-### Message: `PriorityPreference`
-
-```
-+----+--------+--------+--------+--------+
-| 0x74 | 0x03  |  preference_data      |
-+----+--------+--------+--------+--------+
-```
-
-Payload (miner → pool):
-
-```cbor
-{
-  "session_id": "0x...",
-  "min_financial_pct": 30,       // 0..100, default 30
-  "max_data_pct": 70,            // 0..100, default 70
-  "max_data_weight_absolute": 2000000,  // max 2 MWU for data
-  "fee_ratio_override": null,    // null = use automatic
-  "signature": "0x..."           // signed by miner key
-}
-```
-
-### Flow Diagram (Sequence)
-
-```
-Pool                          Miner
-  │                              │
-  │── SetClassificationRules ───>│  (on connect, or on update)
-  │                              │
-  │── ClassifiedTemplate(tid=1)─>│  (every new block template)
-  │                              │
-  │<── PriorityPreference ──────│  (optional, miner adjusts)
-  │                              │
-  │── ClassifiedTemplate(tid=2)─>│  (adjusted per miner preference)
-  │                              │
-  │── SubmitSolution ───────────>│  (standard Stratum v2, unchanged)
-```
+**Backward compatible:** Unmodified Stratum v2 miners see standard `NewTemplate` messages. The `ClassifiedTemplate` is an opt-in replacement.
 
 ## 4. Fee Estimator API
 
@@ -383,7 +297,7 @@ GET /v1/fees
     "financial_pct": 60.25,
     "data_pct": 39.75,
     "financial_floor_active": false,
-    "blocks_until_financial_congestion": 3,
+    "data_premium_pct": 25,
     "historical_split_24h": {
       "financial_avg": 0.58,
       "data_avg": 0.42
@@ -402,132 +316,177 @@ GET /v1/fees
 
 Wallets call this endpoint. For financial payments, show `financial.fastest`. For inscriptions, show `data.fastest`. Replace the current monolithic fee estimate with the relevant bucket.
 
+In **passive mode** (no pool changes needed), just publishing these estimates shifts wallet behavior — wallets naturally use the appropriate fee curve. Over time, financial tx and data tx segregate into different fee bands, making the allocation algorithm's job easier when pools eventually adopt active mode.
+
 ## 5. Trust Model
+
+### Self-Declaration is Inherently Trustworthy
+
+Unlike a pool-side classifier (which requires trusting the pool), self-declaration requires trusting the wallet — and wallets have reputation:
+
+| Actor | Trust Model | Why It Works |
+|-------|-------------|-------------|
+| Wallet | Self-declaration signed by wallet key | Wallet has reputation to lose. Structural backcheck catches liars. |
+| Pool | Publishes allocation rules + template tags transparently | Miners audit a random sample |
+| Miner | Sets `PriorityPreference` — keeps full discretion | Can ignore oracle entirely |
+
+### Abuse Scenarios
+
+| Attack | Likelihood | Mitigation |
+|--------|-----------|------------|
+| Wallet declares "financial" for an inscription | Low (reputation loss) | Structural backcheck flags it; wallet blacklisted |
+| Pool mis-tags financial as data | Low (miners audit) | Miners sample-check; pool reputation |
+| Miner ignores oracle entirely | High (and that's OK!) | Miner gets standard template — no worse than today |
+| Sybil wallet farm | Medium | Fee-based: lying costs the tx fee anyway |
 
 ### Phased Decentralization
 
-| Phase | Classifier | Allocation | Verification | Trust Assumption |
-|-------|-----------|-----------|-------------|-----------------|
-| 1 (MVP) | Single pool, open-source rules | Deterministic | Manual audit | Trust pool operator to run published code |
-| 2 | Multi-oracle (3-5 pools) | Median of N | Cross-check tags | N-1 Byzantine — honest majority |
-| 3 | Succinct proofs | On-chain commitment | zk-SNARK verification | Trust math |
+| Phase | Declaration | Verification | Adoption |
+|-------|------------|-------------|----------|
+| **0** (now) | None — unified fee market | N/A | Status quo |
+| **1** | Fee estimator API only | None (passive) | Wallets adopt separate fee estimates |
+| **2** | Wallet declaration (OP_RETURN) | Optional pool backcheck | First pool adopts; wallets add declaration |
+| **3** | Multi-pool, cross-verification | Pool A checks Pool B's tags | Standard practice |
 
-### Phase 1 Details (MVP)
+## 6. Economic Incentives — Why Pools Adopt
 
-**What miners verify:**
-- Pool publishes the exact classification binary + rules hash
-- Miner runs `SetClassificationRules` content against local node
-- Miner audits a random 1% of classifications via side-channel (their own node)
+### Short-term: Data Fee Premium
 
-**What users verify:**
-- Fee estimator API is open-source
-- Historical classification log published (anonymized txid → tag)
-
-### Phase 2 Details (Multi-Oracle)
+The oracle applies a **premium rate** to data transactions for the same confirmation speed. A 25% premium means:
 
 ```
-Oracle A ──┐
-Oracle B ──┼──> Miner selects median classification
-Oracle C ──┘
-
-Per tx:
-  votes = [A: FINANCIAL, B: FINANCIAL, C: DATA]
-  tag = majority vote → FINANCIAL
-  confidence = 2/3 = 0.67
+Financial tx at 200 sat/vB → next block
+Data tx at 200 sat/vB → pushed back unless it pays 250+ sat/vB
 ```
 
-Miner sets `PriorityPreference` with oracle whitelist.
+The pool captures this premium. If a pool mines 1,000 blocks/year and data tx average 100K vB/block, a 25% premium on 200 sat/vB average generates:
 
-## 6. Security Analysis
+```
+100,000 vB × 200 sat/vB × 25% premium × 1,000 blocks
+= 5,000,000,000 extra satoshis/year ≈ 5 BTC/year per pool
+```
 
-### Attack Vectors
+### Medium-term: SLA Products for Institutions
 
-| Attack | Description | Severity | Mitigation |
-|--------|------------|----------|------------|
-| **Classification front-running** | Attacker sees a tx labeled DATA, replaces with dummy inscription to claim financial allocation | Medium | Commitment delay: classification computed on txid, not tx content. Rerunning same tx = same classification. |
-| **Sybil oracle** | Pool spins up fake oracles to sway median | High | Phase 2: stake-weighted voting. Each oracle posts bond. |
-| **False DATA tagging** | Pool tags financial tx as DATA to push them into data pool (reduces financial allocation) | Low | Miners audit random sample. Pool reputation damage. |
-| **False FINANCIAL tagging** | Inscription creator mimics financial tx pattern | Medium | Heuristic improvement game. Inscription would need to use standard keypath → no inscription content → defeats purpose. |
-| **Mempool exclusion** | Pool's oracle doesn't see certain tx → invisible to allocation | Low | Miners maintain their own mempool view; cross-check. |
-| **Stratum v2 message forgery** | Attacker injects fake `ClassifiedTemplate` | High | ECDSA signatures on all messages (standard Stratum v2 auth). |
+Exchanges need predictable withdrawal confirmations. A pool offering "Financial Priority" can sell:
 
-### Economic Analysis — Why Pools Adopt
+- **Next-block guarantee** for exchange withdrawals (premium subscription)
+- **Volume discounts** for financial tx bundles (payment processors)
+- **Priority API** for institutional Bitcoin users
 
-**Short-term incentive:** Differentiate your pool. Offer "Financial Priority" as a feature. Payment processors, exchanges, and Lightning nodes will direct hashpower to pools that guarantee financial tx don't get crowded out.
+These are new revenue streams that don't exist today.
 
-**Medium-term incentive:** Capture fee flow from institutional Bitcoin users who need predictable confirmation. If Financial tx fees are consistently lower than data tx fees on your pool vs generic pools, financial users will use you more.
+### Long-term: Network Effects
 
-**Long-term incentive:** Healthy fee market. If data inscriptions permanently dominate block space, financial tx migrate off-chain (Lightning, Liquid). Bitcoin's security budget narrows to inscription speculation. A priority mechanism broadens the fee base.
+First-mover pool gets:
+- Wallet integrations (wallets add "Use Pool X for priority" feature)
+- Exchange partnerships (exchanges direct withdrawals to the pool)
+- Brand differentiation in a commoditized market
 
-**Game theory:** First pool to adopt captures the financial tx premium. Once 2-3 pools adopt, it becomes a competitive necessity. Non-adopting pools still get data tx — no downside.
+Once 2-3 pools adopt, non-adopters look worse for financial tx. Game theory inverts.
 
-### Comparison with Alternatives
+### Risk: Pools That Don't Adopt
+
+Non-adopting pools continue mining standard templates. They get:
+- Whatever data tx remain after the priority pool fills
+- No financial tx premium
+- No SLA revenue
+
+They are **not worse off than today** — they just miss the upside. No downside to non-adoption.
+
+## 7. Comparison with Alternatives
 
 | Approach | Pros | Cons |
 |----------|------|------|
-| **This oracle** | No consensus change, opt-in, backward compatible, market-driven | Requires Stratum v2, adds complexity to template assembly |
-| **Just use CPFP/RBF** | Already works, no new infra | Doesn't solve the allocation problem — both financial and data can CPFP |
-| **Miner-manual policy** | Simple | Non-transparent, no user-facing fee signal, no API |
-| **Consensus-level block type** (e.g., BIP-119 + covenant to reserve space) | Enforceable on-chain | Hard fork, years to deploy, political battle |
-| **Fee oracle (EIP-1559 style)** | Algorithmic, automatic | Requires soft fork to change block reward logic, contentious |
+| **This (self-declaration)** | Zero false positives, works with v1 today, no classifier, wallet-driven | Requires wallet integration for optimal results |
+| **Pool-side classifier** | No wallet changes needed | Black box, false positives, trust issue, Runes hard to classify |
+| **CPFP/RBF** | Already works, no new infra | Doesn't solve allocation — both sides can CPFP |
+| **Consensus block type (BIP-119)** | Enforceable on-chain | Hard fork, years to deploy, political |
+| **EIP-1559 style** | Algorithmic, automatic | Requires soft fork, contentious |
+| **Do nothing** | Simple | Fee market degradation continues |
 
-## Future Work
+## 8. Adoption Strategy
 
-- **Classification proofs:** Merkle inclusion + opcode commitment so miners can independently verify classification without re-running the full classifier.
-- **MEV resistance:** Commit-reveal scheme for classification to prevent front-running.
-- **Cross-pool coordination:** Federation of oracles with BFT consensus on classification.
-- **Client-side validation:** Wallet-side classification to pre-negotiate with pool.
-- **Backtest engine:** Run the classifier + allocation algorithm against historical mainnet mempool data to measure: (a) how many financial tx would confirm faster, (b) revenue impact for pools.
+### Phase 0: Passive (now — no pool changes)
 
-## Implementation Plan
+1. Deploy **Fee Estimator API** that monitors mempool and publishes separate financial/data fee estimates
+2. Wallets integrate the API → users naturally self-select fee bands
+3. Builds the data pipeline for later phases
 
-### Phase 1 — Oracle Core (Weeks 1-4)
+### Phase 1: Wallet Declaration (4-8 weeks)
 
-- Transaction classifier in Rust (using `rust-bitcoin`)
-- Bitcoin Core RPC integration (`getrawmempool`, `decoderawtransaction`)
-- Classification confidence scoring
-- Test against mainnet mempool snapshot (100K transactions)
-- Benchmark: classification throughput (> 1,000 tx/s)
+1. Publish **wallet SDK** (JS, Swift, Kotlin, Rust) — 20 lines to add declaration
+2. Integrate with 3 wallets (Sparrow, Electrum, Blue Wallet as starting candidates)
+3. Ship **OP_RETURN declaration format** spec
 
-### Phase 2 — Fee Market + Template Builder (Weeks 5-7)
+### Phase 2: Pool Integration (4-8 weeks)
 
-- Allocation algorithm (implement both variants)
-- Template assembly with classified transactions
-- Performance benchmark (template generation time < 100ms)
+1. Publish **pool adapter** (Rust/Go) — hooks into template assembly
+2. First pool partner signs on
+3. Launch with data fee premium + SLA products
 
-### Phase 3 — Stratum v2 Plugin (Weeks 8-10)
+### Phase 3: Network Effects (ongoing)
 
-- Stratum v2 protocol extension (rust-stratum)
-- `ClassifiedTemplate` message
-- `PriorityPreference` handling
-- Integration test with mining simulator
+1. More pools: competitive pressure drives adoption
+2. More wallets: standard declaration field becomes expected
+3. Stratum v2 transparency: optional classification tags
 
-### Phase 4 — Fee Estimator + Polish (Weeks 10-12)
+## 9. Implementation Plan
 
-- REST API for fee estimation
-- Prometheus metrics
-- Grafana dashboard
-- Documentation + deployment guide
-- Historical backtest against mainnet data
+### Phase 0 — Fee Estimator (Weeks 1-2)
+
+- Bitcoin Core RPC mempool listener
+- Mempool composition analyzer (declared vs structural vs unknown)
+- REST API: `GET /v1/fees`
+- Prometheus metrics + Grafana dashboard
+
+### Phase 1 — Wallet SDK (Weeks 3-6)
+
+- Rust library for declaration construction (OP_RETURN + annex methods)
+- JS/TS wrapper for web wallets
+- Swift + Kotlin wrappers for mobile wallets
+- Reference integration: Sparrow wallet plugin
+
+### Phase 2 — Pool Adapter (Weeks 7-10)
+
+- Template assembly hook (reads declarations, applies allocation)
+- Structural backcheck (ordinal envelope + runestone detection)
+- Stratum v1 + v2 output
+- Integration test with mining simulator (regtest)
+
+### Phase 3 — Stratum v2 Transparency (Weeks 10-12)
+
+- Optional `ClassifiedTemplate` message for v2 pools
+- `PriorityPreference` handler
+- Multi-pool cross-verification
+
+## 10. Future Work
+
+- **Hardware wallet support:** PSBT-based declaration for Coldcard/Ledger
+- **Declaration aggregation:** Batch wallet declarations into Merkle proof for block-level verification
+- **Cross-pool federation:** Pools share declaration data for anti-abuse
+- **MEV resistance:** Commit-reveal for high-value declarations
+- **Automated premium tuning:** ML-based data fee premium optimization
 
 ## Why This Works
 
-1. **No consensus change:** Everything happens at the template assembly layer.
-2. **Miners opt in voluntarily:** They keep full discretion via `PriorityPreference`.
-3. **Market-driven:** Classification is a suggestion, not a rule. Miners who ignore it lose nothing; miners who use it attract financial tx fee flow.
-4. **Backward compatible:** Unmodified miners see standard templates. Stratum v2 is already rolling out.
-5. **Economic incentives aligned:** First-mover advantage, then competitive necessity.
+1. **No consensus change:** Everything at the wallet/template layer.
+2. **Zero false positives:** Wallets declare their own intent. No classifier oracle.
+3. **Works with Stratum v1 today:** No protocol change needed for MVP.
+4. **Pools get paid more:** Data fee premium is a new revenue stream.
+5. **Wallets control their fate:** Self-declaration gives users agency.
+6. **Backward compatible:** Unmarked tx default to financial. Non-adopting pools see no change.
+7. **Phased rollout:** Passive fee estimates → wallet declaration → pool integration → full network.
 
 ## Team
 
-- **2 engineers** (Rust + Bitcoin protocol background)
-- **1 part-time** (mining ops / Stratum v2 integration)
-- **Timeline:** 10-12 weeks to production
-- **Advisors desired:** Pool operator, Stratum v2 maintainer
+- **2 engineers** (Rust + Bitcoin protocol)
+- **1 part-time** (wallet integration / mining ops)
+- **Timeline:** 10-12 weeks to production (Phase 0-2)
+- **Advisors desired:** Wallet developer, pool operator, Stratum v2 maintainer
 
 ## Resources Needed
 
-- Bitcoin Core node (archive, mainnet) — for classifier testing
-- Mining simulator (regtest + Stratum v2) — for integration testing
-- Mainnet mempool data dump — for backtest and benchmarks
-- Access to a test mining pool (even 1 PH/s in regtest) — for real-world Stratum v2 test
+- Bitcoin Core node (archive, mainnet)
+- Mining simulator (regtest + Stratum v1/v2)
+- Wallet SDK test harness (Electrum, BlueWallet, Sparrow)
