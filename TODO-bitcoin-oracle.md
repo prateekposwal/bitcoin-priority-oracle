@@ -3,7 +3,6 @@
 ## 📋 Phase 1: Planning & Content
 
 - [x] Write tech architecture doc (`bitcoin-oracle-arch.md`)
-- [x] Draft LinkedIn post series (3 posts + 5 bonus ideas)
 - [ ] Refine architecture doc (diagrams, sections, feedback)
 - [ ] Publish Post 1 on LinkedIn
 - [ ] Publish Post 2 on LinkedIn
