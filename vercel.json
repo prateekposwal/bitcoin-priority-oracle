@@ -1,0 +1,13 @@
+{
+  "name": "bitcoin-priority-oracle",
+  "version": 2,
+  "builds": [
+    {
+      "src": "interactive-block.html",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    { "src": "/", "dest": "/interactive-block.html" }
+  ]
+}
