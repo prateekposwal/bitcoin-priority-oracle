@@ -1,11 +1,12 @@
 # Bitcoin Block Priority Oracle — Task List
 
-## 📋 Phase 1: Planning & Content
+## 📋 Phase 1: Foundation
 
 - [x] Write tech architecture doc (`bitcoin-oracle-arch.md`)
 - [ ] Refine architecture doc (diagrams, sections, feedback)
-- [ ] Create GitHub repo with README
+- [x] Create GitHub repo with README
 - [x] Create interactive block allocation demo (`interactive-block.html`)
+- [x] Deploy interactive demo (vercel)
 
 ## 🦀 Phase 2: Oracle Core (Weeks 1-4)
 
@@ -53,16 +54,4 @@
 - [ ] MEV resistance (commit-reveal)
 - [ ] zk-SNARK classification proofs (Phase 3)
 
-## 📣 Content Calendar
 
-| # | Title | Platform | Status |
-|---|-------|----------|--------|
-| 1 | "Bitcoin blocks aren't full. They're contested." | LinkedIn | Drafted |
-| 2 | "How to build a transaction classifier without touching consensus" | LinkedIn | Drafted |
-| 3 | "Why every mining pool should run a transaction oracle" | LinkedIn | Drafted |
-| 4 | Deep dive: the allocation algorithm | LinkedIn | Idea |
-| 5 | Trust model and decentralization roadmap | LinkedIn | Idea |
-| 6 | Performance benchmarks | LinkedIn | Idea |
-| 7 | Why not MEV-Boost for Bitcoin? | LinkedIn | Idea |
-| 8 | Wallet integration guide | LinkedIn | Idea |
-| — | Long-form blog post (mirror of series) | Blog/GitHub | Idea |
