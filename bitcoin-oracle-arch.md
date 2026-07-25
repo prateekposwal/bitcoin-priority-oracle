@@ -13,10 +13,21 @@ No consensus change required. No soft fork. No hard fork.
 
 A two-mode system that creates a **two-tier priority fee market** within the existing block size limit:
 
-1. **Passive mode:** Separate fee estimates for financial vs data transactions. No pool changes needed.
-2. **Active mode:** Wallets self-declare transaction type (financial/data) via a signed field. Pools read the declaration and allocate block space accordingly.
+1. **Passive mode:** Separate fee estimates for financial vs data transactions. Works today — no pool changes, no wallet changes.
+2. **Active mode:** Wallets declare transaction type via 4-byte OP_RETURN. Pools verify the declaration against structural fingerprints (witness ratio, ordinal envelope, runestone markers) and allocate block space accordingly.
 
-**No classification oracle needed.** Wallets know their own intent. False positives drop to zero.
+**Key insight:** Wallets don't need to be trusted — they only need to be *verifiable after the fact*. The declaration is checked against the transaction's actual structure. A liar gets reclassified anyway, so the game shifts from "can you lie?" to "why would you bother?"
+
+## What Reddit Taught Us (v2 Improvements)
+
+After publishing the initial architecture, the Bitcoin community raised hard questions. Here are the improvements:
+
+| Criticism | v1 Response | v2 Improvement |
+|-----------|-------------|----------------|
+| "Wallets will lie" | Trust-based declaration | **Structural backcheck:** witness ratio, ordinal envelope, runestone markers verified at template assembly |
+| "Fixed 25% premium is arbitrary" | Hardcoded premium | **Blind batch auction:** data premium emerges from mempool pressure — zero in quiet periods, equilibrium during congestion |
+| "No pool will adopt first" | Bootstrapping argument | **Fee estimator API works unilaterally:** wallets get separate estimates even if zero pools adopt. Value delivered at every stage |
+| "4 bytes is wasteful" | — | It's an OP_RETURN. Gets pruned. 4 bytes in 1MB block = 0.0004% overhead |
 
 ## Architecture
 
@@ -64,76 +75,68 @@ A two-mode system that creates a **two-tier priority fee market** within the exi
 └─────────────────────────────────────────────────┘
 ```
 
-## 1. Wallet Self-Declaration Protocol
+## 1. Wallet Declaration + Structural Backcheck
 
 ### How it works
 
-The wallet adds a small structured output to the transaction that declares its type. Three mutually exclusive methods, any one sufficient:
+The wallet adds a 4-byte OP_RETURN declaring its transaction type. The pool verifies the declaration against structural fingerprints at template assembly time. Both layers together make the system credible.
 
-### Method A: OP_RETURN declaration (recommended for wallets)
+**Key insight:** Wallets don't need to be trusted — they only need to be *verifiable after the fact*.
 
-Add an OP_RETURN output with type-tag bytes:
+### Declaration Format
 
 ```
 OP_RETURN 0x7072 0x01 0x00
-  ↑       ↑      ↑    ↑
-  magic  ver   flags  tag
+          magic  ver   flags
 ```
-
-**Format:**
 
 | Offset | Size | Field | Values |
 |--------|------|-------|--------|
 | 0 | 2 | Magic | `0x7072` ("pr" = priority) |
 | 2 | 1 | Version | `0x01` |
-| 3 | 1 | Flags | Bit 0: `0` = financial, `1` = data. Bits 1-7 reserved. |
+| 3 | 1 | Flags | Bit 0: `0` = financial, `1` = data |
 
-Total overhead: **4 bytes** in an OP_RETURN output (~10 vB with the output itself).
+Overhead: **4 bytes** in an OP_RETURN output (~10 vB with the output). Gets pruned.
 
-### Method B: Annex field (for Taproot transactions)
+### Annex Alternative (Taproot)
 
-If the transaction uses Taproot inputs, include an annex (witness element starting with `0x50`) with the declaration:
+Taproot wallets can use the witness annex instead:
 
 ```
 annex = 0x50 || 0x7072 || version || flags
 ```
 
-Same data layout as Method A, but in the witness annex instead of a separate output. Zero additional vBytes (annex is witness data, 4 WU = 1 vB).
-
-### Method C: PSBT field (for multi-sig / hardware wallets)
-
-The declaration is carried in the PSBT during construction and stripped before broadcast. The pool never sees it directly — instead, the wallet includes a commitment to the declaration in the transaction itself (e.g., a specific sighash single byte). This is more complex and only needed for hardware wallet flows.
+Zero additional vBytes (annex is witness data, 4 WU = 1 vB).
 
 ### Wallet Integration
 
-| Wallet Type | Method | Effort |
-|------------|--------|--------|
-| Software (Sparrow, Electrum, Blue) | Method A (OP_RETURN) | Low — add 1 output |
-| Mobile (Muun, Phoenix) | Method A (OP_RETURN) | Low |
-| Taproot-native (Xverse, Leather) | Method B (annex) | Low — annex field already supported |
-| Hardware (Ledger, Coldcard) | Method C (PSBT) | Medium — needs firmware update |
-| Exchange hot wallets | Method A (OP_RETURN) | Very low — change withdrawal logic |
+| Wallet Type | Effort |
+|------------|--------|
+| Software wallets | Low — add 4-byte OP_RETURN to outgoing tx |
+| Mobile wallets | Low — ~10 lines of code |
+| Exchange hot wallets | Very low — add flag to withdrawal logic |
+| Hardware wallets | Medium — PSBT-based declaration |
 
 ### Anti-Abuse: Structural Backcheck
 
 The pool doesn't blindly trust declarations. Every declared-"financial" transaction passes a **lightweight structural check**:
 
-| Check | What it tests | Cost |
-|-------|---------------|------|
-| Witness size / input count | If > 0.4 → suspicious | O(1) |
-| Presence of ordinal envelope (`0x00 0x63 ... 0x68`) | If found → override to DATA | O(witness size) |
-| OP_RETURN + OP_13 (`0x6a 0x5d`) in outputs | If found + block >= 840K → override to DATA | O(output count) |
-| Known inscription address | If input from known inscriber → DATA | O(1) (lookup) |
+| Check | What it detects | Cost |
+|-------|----------------|------|
+| **Witness ratio** | `witness_size / vsize > 0.3` → reclassify to DATA | O(1) |
+| **Ordinal envelope** | `0x00 0x63 "ord" ... 0x68` in witness → override to DATA | O(witness size) |
+| **Runestone marker** | `0x6a 0x5d` in outputs + block ≥ 840K → override to DATA | O(output count) |
+| **Inscriber history** | Input from known inscriber address → DATA | O(1) lookup |
 
-**If structural check disagrees with declaration:**
-- First offense: warning, tx downgraded to DATA allocation
-- Repeated offenses: wallet address rate-limited or blacklisted
+**Why this works:** The checks are cheap and deterministic. A wallet that declares "financial" but has a 400KB witness with an ordinal envelope gets reclassified before the template is built. The liar gets the same outcome as telling the truth. The game shifts from "can you lie?" to "why would you bother?"
 
-**Result:** Honest wallets never hit the backcheck. Liars get caught by simple heuristics.
+### Reputation Layer (optional)
 
-### For Wallets That Don't Declare
+Pools can optionally share a lightweight **bloom filter** of wallet addresses with repeated false declarations. No central database, no privacy loss (bloom filters are one-way). Honest wallets never hit it.
 
-Unmarked transactions use a **fallback classifier** (same structural rules as above, but with lower confidence). Unclear cases default to FINANCIAL.
+### Undeclared Transactions
+
+Transactions without a declaration are classified by the structural heuristics alone. Unclear cases default to FINANCIAL.
 
 ## 2. Priority Fee Market
 
@@ -201,30 +204,26 @@ Step 4 — Final merge:
 
 **Template:** A(300,D), B(250,D), C(220,F), D(200,F), E(180,F), F(150,D) → sorted by fee.
 
-### Alternative: Proportional Allocation
+### Blind Batch Auction (v2 — replaces fixed premium)
+
+Instead of a hardcoded premium, the data premium emerges from mempool pressure:
 
 ```
-financial_fee_mass = sum(fee × weight) over financial pool top 4 MWU
-data_fee_mass = sum(fee × weight) over data pool top 4 MWU
-total_fee_mass = financial_fee_mass + data_fee_mass
+Given block capacity C and financial floor F:
 
-financial_allocation = C × (financial_fee_mass / total_fee_mass)
-data_allocation = C × (data_fee_mass / total_fee_mass)
+Step 1: Sort financial pool by fee-rate (descending)
+Step 2: Sort data pool by fee-rate (descending)
+Step 3: Fill financial floor (min 30%)
+Step 4: Fill remaining space with highest-fee tx from either pool
+
+Data premium = marginal data tx fee − marginal financial tx fee
 ```
 
-No hard floor. Simpler but financial tx get no guaranteed minimum.
+**Result:** In quiet periods, premium = 0. During inscription mania, premium finds equilibrium naturally. The pool doesn't set the price — the market does.
 
-### Data Fee Premium (Pool Revenue)
+### Pool Revenue
 
-Data transactions pay a **premium for the same confirmation speed**:
-
-```
-data_target_fee = financial_fee_for_same_speed × (1 + premium_rate)
-```
-
-If `premium_rate = 0.25`, a data tx needs 250 sat/vB to match a financial tx at 200 sat/vB for next-block inclusion.
-
-The premium goes to the pool. This gives pools a direct revenue incentive to run the oracle.
+Pools capture the spread between marginal fees. This is a market outcome, not a surcharge. During normal periods the spread is negligible. During congestion, data tx transparently bid for access.
 
 ## 3. Stratum Compatibility
 

@@ -57,11 +57,11 @@ OP_RETURN 0x7072 0x01 0x00
 // Magic  Ver   Tag (0=financial, 1=data)
 ```
 
-That's it. Your wallet declares: "I'm financial" or "I'm data." Pools read it. Pools allocate.
+That's it. Your wallet declares: "I'm financial" or "I'm data."
 
-**No consensus change. No soft fork. No hard fork. No oracle. No judge. No jury. No execution.**
+**But here's the v2 improvement: the pool doesn't trust you.** Every declaration is checked against structural fingerprints — witness ratio, ordinal envelope, runestone markers. If you declare "financial" but your tx has a 400KB witness with an ordinal envelope, you get reclassified. The liar gets the same outcome as telling the truth. So the game shifts from *"can you lie?"* to *"why would you bother?"*
 
-Just 4 bytes of honesty.
+**No consensus change. No soft fork. No hard fork. No oracle. No trust required.**
 
 > [Wait, that's actually clever. Explain how it works.](bitcoin-oracle-arch.md)
 
@@ -69,14 +69,14 @@ Just 4 bytes of honesty.
 
 ## What Happens Next
 
-Pools split block space into two virtual pools:
+Pools split block space via a **blind batch auction**:
 
 | Pool | Minimum Floor | What Goes There |
 |------|:------------:|-----------------|
 | **Financial** | **30%** | Payments, Lightning, DeFi, settlements — stuff that needs *this block* |
 | **Data** | 0% | Inscriptions, mints, cat JPEGs — stuff that can wait |
 
-Each pool fills by fee-rate within its own class. Financial transactions compete with *financial* transactions. Data transactions compete with *data* transactions.
+The remaining space is filled by highest-fee tx from either pool. The data premium emerges naturally from mempool pressure — zero during quiet periods, equilibrium during congestion. No hardcoded rates.
 
 **The market finally differentiates between "I need this block" and "I'll be in the next one."**
 
@@ -90,17 +90,18 @@ Each pool fills by fee-rate within its own class. Financial transactions compete
 
 ## What About Cheaters?
 
-The pool doesn't blindly trust your 4 bytes. Every declared-"financial" transaction passes a **lightweight structural backcheck**:
+The pool doesn't trust your 4 bytes — it *verifies* them. Every declared-"financial" transaction passes a **lightweight structural backcheck** at template assembly time:
 
-- Witness size too large? Suspicious.
-- Ordinal envelope detected? Override to DATA.
-- Inscription-specific opcodes in outputs? Override to DATA.
-- Input from a known inscriber address? You know the drill.
+| Check | What it detects | Cost |
+|-------|----------------|------|
+| **Witness ratio** | `witness_size / vsize > 0.3` → data-like | O(1) |
+| **Ordinal envelope** | `0x00 0x63 "ord" ... 0x68` in witness → DATA | O(witness size) |
+| **Runestone marker** | `0x6a 0x5d` in outputs → DATA (if block ≥ 840K) | O(output count) |
+| **Inscriber history** | Input from known inscriber → DATA | O(1) lookup |
 
-**First offense:** warning, tx downgraded to DATA allocation.
-**Repeat offender:** rate-limited or blacklisted.
+**Why this works:** A liar gets reclassified before the template is built — same outcome as telling the truth. The game shifts from "can you lie?" to "why would you bother?" Honest wallets never hit the checks.
 
-Honest wallets never hit the checks. Liars get caught by simple heuristics that cost nearly nothing to run.
+Pools can optionally share a lightweight bloom filter of repeat offenders. No central database, no privacy loss.
 
 ---
 
@@ -149,10 +150,11 @@ gh issue create --repo prateekposwal/bitcoin-priority-oracle --title "I want to 
 
 This is a real project.
 
-- **4-byte OP_RETURN format:** Magic `0x7072` ("pr" = priority), version `0x01`, flags byte (bit 0: 0 = financial, 1 = data). Total overhead: ~10 vB with the output.
-- **Allocation algorithm:** `min_financial = min(4M x 0.30, F_total)`. Remaining space split proportional to fee ratio. Math is in the [architecture doc](bitcoin-oracle-arch.md).
-- **No consensus change required.** Pools opt in. Wallets opt in. The protocol stays exactly as Satoshi designed it.
-- **Stratum v2 compatibility:** 3 new optional messages over the Template Distribution Protocol: `SetClassificationRules`, `ClassifiedTemplate`, `PriorityPreference`.
+- **4-byte OP_RETURN format:** Magic `0x7072` ("pr" = priority), version `0x01`, flags byte (bit 0: 0 = financial, 1 = data). Total overhead: ~10 vB with the output. Gets pruned.
+- **Structural backcheck:** Pool verifies declaration against witness ratio, ordinal envelopes, and runestone markers. Liars get reclassified at template assembly time — same outcome as telling the truth.
+- **Allocation:** Blind batch auction — financial floor (30%) filled first, remaining space filled by highest-fee tx from either pool. Data premium emerges from mempool pressure, not a hardcoded rate.
+- **No consensus change required.** Pools opt in. Wallets opt in. Non-adopting pools see zero change.
+- **Works with Stratum v1 today.** v2 gets optional transparency tags as a bonus.
 
 The README is funny. The idea is serious.
 

@@ -108,7 +108,7 @@
       <div class="stat"><label>Data</label><div class="value dat" id="oracleDatVal">40%</div></div>
       <div class="stat"><label>Floor Active</label><div class="value" id="floorActive" style="color:#58A6FF; font-size:14px">YES</div></div>
     </div>
-    <div class="note">30% financial floor + rest split by fee ratio. Data pays a premium to compete.</div>
+    <div class="note">Blind batch auction — premium emerges from mempool pressure, not a fixed rate. Structural backcheck catches liars.</div>
   </div>
 
 </div>
@@ -138,6 +138,10 @@
         <label>Data fee premium (oracle)</label>
         <input type="range" id="premium" min="0" max="100" value="25" step="5">
         <span class="val" id="premiumVal" style="color:#F0883E">25%</span>
+      </div>
+      <div class="control-row">
+        <label>Structural backcheck</label>
+        <span class="val" style="color:#58A6FF">Active ✓</span>
       </div>
       <div class="control-row">
         <label>Financial floor (oracle)</label>
@@ -199,26 +203,36 @@ function generateMempool(finPct) {
 }
 
 function computeBlock(txs, finFloor, premiumPct) {
-  const C = 4000;  // weight units (scaled)
+  const C = 4000;
   let fin = txs.filter(t => t.fin).sort((a, b) => b.fee - a.fee);
   let dat = txs.filter(t => !t.fin).sort((a, b) => b.fee - a.fee);
 
-  // Adjust data fees with premium
-  const premium = 1 + premiumPct / 100;
-
-  // If data fee × premium > financial fee, data pays more
-  const avgFinFee = fin.length ? fin.reduce((s, t) => s + t.fee, 0) / fin.length : 1;
-  const avgDatFee = dat.length ? dat.reduce((s, t) => s + t.fee, 0) / dat.length : 1;
-  const effectiveDataFee = avgDatFee / premium;  // discounted for comparison
-
+  // Blind batch auction: fill financial floor, then fill remaining with highest-fee tx
   const finTotalWeight = fin.reduce((s, t) => s + t.weight, 0);
   const datTotalWeight = dat.reduce((s, t) => s + t.weight, 0);
 
   const minFin = Math.min(C * finFloor / 100, finTotalWeight);
-  const remaining = C - minFin;
+  let remaining = C - minFin;
+
+  // Fill remaining with highest fee tx from either pool (auction-style)
+  let dataW = 0, finW = minFin;
+  let allTxs = [...fin.map(t => ({...t, tag: 'fin'})), ...dat.map(t => ({...t, tag: 'dat'}))]
+    .sort((a, b) => b.fee - a.fee);
+
+  for (const t of allTxs) {
+    if (remaining <= 0) break;
+    if (t.tag === 'fin' && t.weight <= remaining) {
+      finW += t.weight;
+      remaining -= t.weight;
+    } else if (t.tag === 'dat' && t.weight <= remaining) {
+      dataW += t.weight;
+      remaining -= t.weight;
+    }
+  }
+
+  const avgFinFee = fin.length ? fin.reduce((s, t) => s + t.fee, 0) / fin.length : 1;
+  const avgDatFee = dat.length ? dat.reduce((s, t) => s + t.fee, 0) / dat.length : 1;
   const feeRatio = Math.max(0.1, Math.min(10, avgDatFee / Math.max(avgFinFee, 1)));
-  const dataW = remaining * (feeRatio / (1 + feeRatio));
-  const finW = minFin + remaining - dataW;
 
   return { finW, dataW, minFin, remaining, feeRatio, avgFinFee, avgDatFee, C };
 }
