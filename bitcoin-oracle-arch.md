@@ -489,3 +489,5 @@ They are **not worse off than today** — they just miss the upside. No downside
 - Bitcoin Core node (archive, mainnet)
 - Mining simulator (regtest + Stratum v1/v2)
 - Wallet SDK test harness (Electrum, BlueWallet, Sparrow)
+
+> *Bitcoin Has a 4 MWU Apartment. Your Inscription Is the Roommate Who Won't Pay Rent.*

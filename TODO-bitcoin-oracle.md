@@ -54,4 +54,4 @@
 - [ ] MEV resistance (commit-reveal)
 - [ ] zk-SNARK classification proofs (Phase 3)
 
-
+> *Bitcoin Has a 4 MWU Apartment. Your Inscription Is the Roommate Who Won't Pay Rent.*
