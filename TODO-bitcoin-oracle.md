@@ -58,7 +58,7 @@
 - [ ] Explore only if A/B prove insufficient
 - [ ] Requires P2P protocol changes and wallet routing logic
 
-## Key Distinction (from Laukess Critique)
+## Key Distinction (from Community Feedback)
 
 The research hinges on one question that emerged from community feedback:
 
