@@ -164,6 +164,22 @@ The research above identifies the problem but doesn't solve it. Below are three 
 
 ---
 
+## Consensus Change Feasibility
+
+This research does not propose any consensus change. However, if the problem it documents is significant enough, various levels of protocol change could be considered. This section maps what would be required for each potential approach, for reference only.
+
+| Approach | Fork Type | Feasibility | Community Readiness |
+|----------|-----------|-------------|---------------------|
+| SegWit weight formula re-parameterization | **Soft fork** | Low (requires economic majority) | Not ready — problem not widely recognized |
+| State expiry (UTXO pruning) | **Hard or soft fork** | Very low (complex, contentious) | Discussed since 2020, no consensus |
+| Native token primitives (CashTokens-style) | **Hard fork** | Near-zero | Bitcoin explicitly rejects hard forks |
+| Relay-level fee policy | **No fork** | High | Already exists informally (ordinal filtering nodes) |
+| Fee estimator API / wallet-side heuristics | **No fork** | Very high | Works today, zero coordination needed |
+
+**Constraint adopted by this research:** No document produced by this project shall propose a consensus change. All deliverables are problem framings, simulations, and open questions. Solutions belong to the community, not to this project.
+
+---
+
 ## License
 
 MIT

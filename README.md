@@ -18,7 +18,7 @@ The repo now documents existing BIPs, research papers, discussion forums, and op
 
 | File | What It Is |
 |------|-----------|
-| [Architecture](bitcoin-oracle-arch.md) | Research survey of state expiry, UTXO pricing, and block weight open problems |
+| [Research survey](bitcoin-oracle-arch.md) | State expiry, UTXO pricing, SegWit discount, and relay policy open problems |
 | [TODO](TODO-bitcoin-oracle.md) | Research reading list and open questions |
 
 ## License

@@ -8,18 +8,28 @@
 - [ ] Search Delving Bitcoin for "state expiry" threads
 - [ ] Search bitcoin-dev mailing list for UTXO growth discussions
 
-## Phase R2: Understanding
+## Phase R2: UTXO Cost Function (PRIORITY)
 
-- [ ] Formalize: what would a "state pricing mechanism" for Bitcoin look like?
-- [ ] Understand: why can't existing fee market handle data permanence costs?
-- [ ] Map: which existing proposals touch on state pricing (even indirectly)
-- [ ] Document: the design constraints any solution must satisfy
+- [ ] Estimate: what does it cost to run a full Bitcoin node per year? (HW + bandwidth + electricity)
+- [ ] Calculate: how many bytes of UTXO data does the average inscription add?
+- [ ] Model: node cost / byte / year → what should a data transaction pay to cover its storage cost?
+- [ ] Document: the SegWit weight formula's impact on inscription economics
+- [ ] Simulate: how UTXO set growth affects node operator costs at different adoption rates
 
 ## Phase R3: Problem Statement
 
 - [ ] Write a clear, concise problem statement (1 page max)
 - [ ] Publish as a research note (no solution, just the framing)
 - [ ] Share on Delving Bitcoin for feedback
+- [ ] Write "Bitcoin can't price its own memory" LinkedIn post (after R2 produces numbers)
+
+## Monitoring
+
+- [ ] Subscribe to Bitcoin Optech newsletter
+- [ ] Follow Delving Bitcoin for "state expiry" discussions
+- [ ] Track bitcoin-dev mailing list for UTXO/state threads
+- [ ] Watch covenant proposal discussions (CTV, APO, OP_VAULT, OP_CAT)
+- [ ] Note: if the state expiry conversation restarts, we should contribute our UTXO cost data
 
 ## Phase R4: Contribution (if warranted)
 
