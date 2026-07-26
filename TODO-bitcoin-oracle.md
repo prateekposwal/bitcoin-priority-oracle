@@ -58,6 +58,24 @@
 - [ ] Explore only if A/B prove insufficient
 - [ ] Requires P2P protocol changes and wallet routing logic
 
+## Key Distinction (from Laukess Critique)
+
+The research hinges on one question that emerged from community feedback:
+
+> **Is the "data permanence externality" a real, economically significant problem — or is the existing fee market sufficient?**
+
+The fee market prices **congestion** (inclusion in the next block). It does not price **permanence** (lifetime storage in every full node's UTXO set). These are two different market failures.
+
+| | Congestion pricing | Permanence cost |
+|---|---|---|
+| What it prices | Entry into the next block | Lifetime storage in every node |
+| Who pays | Sender (once) | All future node operators (forever) |
+| Time horizon | ~10 min (1 block) | Indefinite |
+| Market failure | None — works well | Tragedy of the commons — no marginal cost signal |
+| Handled by fee market? | ✅ Yes | ❌ No — unpriced externality |
+
+**Open question:** Is the permanence externality significant enough to matter, or do most node operators run pruned nodes and not care about historical data?
+
 ## Open Questions
 
 1. Does the SegWit weight formula need to be parameterized differently for data vs financial transactions?

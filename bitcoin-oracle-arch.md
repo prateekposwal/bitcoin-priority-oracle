@@ -180,6 +180,31 @@ This research does not propose any consensus change. However, if the problem it 
 
 ---
 
+## The Key Distinction: Congestion vs Permanence
+
+The most productive criticism of this research came from a Reddit user (Laukess) who argued:
+
+> *"The fee market is frustratingly simple. You want to jump the queue, you pay. That's why it's so damn powerful."*
+>
+> *"I think you're trying to solve a problem that's already been solved."*
+
+This critique forced a critical distinction that the research had been conflating:
+
+| | **Congestion pricing** (the fee market) | **Permanence cost** (the externality) |
+|---|---|---|
+| What it prices | Entry into the next block (~10 min) | Lifetime storage in every full node (forever) |
+| Who pays | Transaction sender (once) | All future node operators (distributed, unpriced) |
+| Market failure | None — works as designed | **Tragedy of the commons** — no price signal for the externality |
+| Handled by fee market? | ✅ Yes — "you want in, you pay" | ❌ No — the fee doesn't cover 20 years of node storage |
+
+**Laukess is right that the fee market handles congestion.** A $100/tx fee makes inscriptions uneconomical at scale. But the fee market does not price the lifetime cost of permanently storing that transaction's data in every future node's UTXO set. These are two separate market failures.
+
+The open question, which this research has not settled: **is the permanence externality economically significant?** If most node operators run pruned nodes and don't maintain historical UTXO data, then the externality is theoretical and the fee market is sufficient. If UTXO growth from inscriptions creates material costs that push people off full nodes, there's a genuine market failure that the fee market doesn't address.
+
+This research does not have a definitive answer. It documents the question.
+
+---
+
 ## License
 
 MIT
