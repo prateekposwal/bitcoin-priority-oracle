@@ -104,6 +104,49 @@ No more premature solutions. No more plausible-sounding architecture that doesn'
 
 ---
 
+## Exploratory Directions
+
+The research above identifies the problem but doesn't solve it. Below are three directions being explored. These are **sketches, not proposals** — they may fail the same way v1 and v2 did.
+
+### Direction A: UTXO-Aware Relay Minimum Fee
+
+**Mechanism:** Extend Bitcoin Core's existing `minrelaytxfee` so relay nodes can apply a **fee multiplier** for transactions that exceed a "state footprint" threshold. The multiplier is per-node and voluntary.
+
+- Define `state_density = (witness_size + output_script_size) / vsize`
+- Relay nodes set a threshold (e.g., `state_density > 0.5`) and a multiplier (e.g., 2× or 3×)
+- Transactions above threshold need a higher fee rate to propagate through that node
+- No consensus change — purely relay policy
+- Miners unaffected — they mine whatever reaches them
+
+**Why it could work:** Relay nodes bear storage costs → they can rationally price them. Existing practice (`minrelaytxfee`, ordinal filtering nodes) proves the mechanism. Avoids v1 mistake (no classification oracle — structural metrics, not semantic labels). Avoids v2 mistake (no formula tax — each node sets their own multiplier).
+
+**Key risk:** Low adoption by relay node operators. Without critical mass, friction is too low.
+
+### Direction B: BIP for State-Conscious Relay Policy
+
+**Mechanism:** A BIP that standardizes what Direction A implements. Defines the metrics, recommends fee multipliers, and provides wallet-side fee estimation.
+
+- BIP defines: `state_impact_score = f(witness_ratio, utxo_delta, output_script_complexity)`
+- Recommends a tiered relay fee schedule
+- Wallet authors implement fee estimation referencing the BIP
+- Node operators implement relay policy referencing the BIP
+
+**Why it could work:** BIPs are the standard Bitcoin improvement mechanism. A BIP provides a single reference point for wallet authors, node operators, and exchanges. Creates ecosystem alignment without requiring anyone to adopt. Documents existing practice (ordinal filtering nodes) and formalizes it.
+
+**Key risk:** BIPs face high scrutiny and take time. But that scrutiny also ensures the mechanism survives incentive analysis.
+
+### Direction C: Multi-Tier Relay Fee Market (Speculative)
+
+**Mechanism:** Relay nodes advertise **tiered fee schedules** for different transaction classes during peer handshake. Wallets discover the cheapest relay path.
+
+- New P2P message type for fee schedule advertisement
+- Wallets query multiple relay nodes and select best price for their tx class
+- Creates a genuine market for relay services
+
+**Why speculative:** Requires P2P protocol changes and wallet routing logic. Higher complexity. Only worth exploring if A/B prove insufficient.
+
+---
+
 ## License
 
 MIT
