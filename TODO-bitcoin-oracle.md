@@ -1,57 +1,36 @@
-# Bitcoin Block Priority Oracle — Task List
+# Bitcoin Block Space — Research TODO
 
-## 📋 Phase 1: Foundation
+## Phase R1: Reading
 
-- [x] Write tech architecture doc (`bitcoin-oracle-arch.md`)
-- [ ] Refine architecture doc (diagrams, sections, feedback)
-- [x] Create GitHub repo with README
-- [x] Create interactive block allocation demo (`interactive-block.html`)
-- [x] Deploy interactive demo (vercel)
+- [ ] Read BIP-141 rationale for witness discount (malleability vs state economics)
+- [ ] Read Moser, Eyal, Gün Sirer — covenant paper (FC 2017)
+- [ ] Read Poelstra — CAT and Schnorr Tricks series
+- [ ] Search Delving Bitcoin for "state expiry" threads
+- [ ] Search bitcoin-dev mailing list for UTXO growth discussions
 
-## 🦀 Phase 2: Oracle Core (Weeks 1-4)
+## Phase R2: Understanding
 
-- [ ] Set up Rust crate (`cargo new bitcoin-priority-oracle`)
-- [ ] Implement transaction struct wrappers (`rust-bitcoin`)
-- [ ] Implement Rule Engine (ordered rules, first-match)
-- [ ] Implement Confidence Scorer (0.0-1.0 per tx)
-- [ ] Implement Threshold Gate (≥0.7 → emit tag)
-- [ ] Bitcoin Core RPC client (`getrawmempool`, `decoderawtransaction`)
-- [ ] Unit tests: classification rules against known tx types
-- [ ] Test against mainnet mempool snapshot (100K tx)
-- [ ] Benchmark: classification throughput target >1,000 tx/s
+- [ ] Formalize: what would a "state pricing mechanism" for Bitcoin look like?
+- [ ] Understand: why can't existing fee market handle data permanence costs?
+- [ ] Map: which existing proposals touch on state pricing (even indirectly)
+- [ ] Document: the design constraints any solution must satisfy
 
-## 📊 Phase 3: Fee Market + Template Builder (Weeks 5-7)
+## Phase R3: Problem Statement
 
-- [ ] Implement Financial Pool (sorted by fee-rate)
-- [ ] Implement Data Pool (sorted by fee-rate)
-- [ ] Implement Allocation Algorithm (30% floor variant)
-- [ ] Implement Allocation Algorithm (proportional variant)
-- [ ] Implement Template Assembler (merge + sort)
-- [ ] Benchmark: template generation <100ms
-- [ ] Backtest against historical mainnet data
+- [ ] Write a clear, concise problem statement (1 page max)
+- [ ] Publish as a research note (no solution, just the framing)
+- [ ] Share on Delving Bitcoin for feedback
 
-## ⛏️ Phase 4: Stratum v2 Plugin (Weeks 8-10)
+## Phase R4: Contribution (if warranted)
 
-- [ ] Stratum v2 protocol extension scaffolding
-- [ ] Implement `SetClassificationRules` message
-- [ ] Implement `ClassifiedTemplate` message
-- [ ] Implement `PriorityPreference` message handler
-- [ ] Integration test with mining simulator (regtest)
+- [ ] Only if feedback suggests a genuine gap exists
+- [ ] Only if the problem can be addressed without consensus change (v1 principle)
+- [ ] Only if the proposed mechanism survives incentive analysis
 
-## 🌐 Phase 5: Fee Estimator + Polish (Weeks 10-12)
+## Open Questions
 
-- [ ] REST API endpoint `GET /v1/fees`
-- [ ] Prometheus metrics
-- [ ] Grafana dashboard
-- [ ] Documentation + deployment guide
-- [ ] Historical backtest report
-
-## 🔮 Future / Stretch
-
-- [ ] Classification proofs (Merkle + opcode commitment)
-- [ ] Multi-oracle with median selection (Phase 2 trust model)
-- [ ] Wallet-side client classification
-- [ ] MEV resistance (commit-reveal)
-- [ ] zk-SNARK classification proofs (Phase 3)
-
-> *Bitcoin Has a 4 MWU Apartment. Your Inscription Is the Roommate Who Won't Pay Rent.*
+1. Does the SegWit weight formula need to be parameterized differently for data vs financial transactions?
+2. Is state expiry viable for Bitcoin without soft fork?
+3. Can covenant proposals reduce UTXO churn from inscriptions?
+4. What would a "storage cost oracle" look like — and is it even possible without trust?
+5. Is the "externality of data permanence" actually a problem with economic significance, or is the existing fee market sufficient?

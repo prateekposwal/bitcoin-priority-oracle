@@ -1,9 +1,9 @@
 .vercel
+*.png
+*.py
+linkedin-posts.md
+grant-applications.md
+reddit-posts.md
 spiral-email.txt
 bitcoin-bounties.md
-bitcoin_priority_post2.png
-gen_post2_image.py
-
-linkedin-posts.md
-reddit-posts.md
-grant-applications.md
+bitcoin-oracle-explained.md
