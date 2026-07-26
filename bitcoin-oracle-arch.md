@@ -71,6 +71,23 @@ The question of whether Bitcoin's block weight formula appropriately prices stat
 | bitcoin-dev Mailing List | https://lists.linuxfoundation.org/pipermail/bitcoin-dev/ |
 | Bitcoin Stack Exchange | https://bitcoin.stackexchange.com/ |
 
+### Reference Architecture: CashTokens (Bitcoin Cash)
+
+Bitcoin Cash's **CashTokens** (CHIP-2022-02, deployed May 2023) is worth studying as an alternative approach to on-chain tokens.
+
+**How it differs from Ordinals:**
+- Native token primitives at the consensus level — not an envelope hack
+- NFT commitment limited to **40 bytes** per output
+- No SegWit → no 4× witness discount artificially subsidizing data
+- Token categories are known to the protocol — no classification needed
+
+**What it validates:** The SegWit 4× witness discount is a significant enabler of inscription-related state growth. BCH has neither the discount nor the congestion — even with 32 MB blocks, usage is ~0.5% of capacity. The absence of an artificial data subsidy removes the economic incentive to spam.
+
+**Limitations for Bitcoin:**
+- CashTokens required a hard fork (not applicable to Bitcoin without consensus)
+- BCH's 32 MB blocks mask whether token activity would create congestion under Bitcoin's block space constraints
+- The 40-byte commitment limit is a protocol choice, not a technical necessity
+
 ### Key People to Follow
 
 | Name | Work |
