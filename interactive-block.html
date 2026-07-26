@@ -19,6 +19,23 @@
   }
   .panel h2 { font-size: 14px; font-weight: 600; margin-bottom: 12px; color: #8B949E; text-transform: uppercase; letter-spacing: 0.5px; }
 
+  .dir-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; margin-top: 20px; }
+  .dir-card {
+    background: #161B22; border: 1px solid #30363D; border-radius: 10px; padding: 18px;
+    transition: border-color 0.2s;
+  }
+  .dir-card:hover { border-color: #58A6FF; }
+  .dir-card h3 { font-size: 14px; font-weight: 600; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+  .dir-card .tag {
+    font-size: 9px; font-weight: 700; padding: 2px 8px; border-radius: 10px; text-transform: uppercase; letter-spacing: 0.3px;
+  }
+  .tag.rec { background: #3FB95020; color: #3FB950; border: 1px solid #3FB95040; }
+  .tag.exp { background: #58A6FF20; color: #58A6FF; border: 1px solid #58A6FF40; }
+  .tag.spec { background: #D2992220; color: #D29922; border: 1px solid #D2992240; }
+  .dir-card .desc { font-size: 12px; color: #8B949E; line-height: 1.5; margin: 6px 0; }
+  .dir-card .why { font-size: 11px; color: #3FB950; margin-top: 8px; }
+  .dir-card .risk { font-size: 11px; color: #F0883E; margin-top: 4px; }
+
   .block-vis {
     position: relative; height: 50px; border-radius: 8px; overflow: hidden; display: flex; margin: 8px 0; border: 1px solid #30363D;
   }
@@ -35,312 +52,137 @@
   .stat .value.fin { color: #3FB950; }
   .stat .value.dat { color: #F0883E; }
 
-  .controls { margin: 12px 0 0; }
-  .control-row { display: flex; align-items: center; gap: 10px; margin: 6px 0; }
-  .control-row label { font-size: 12px; color: #8B949E; min-width: 100px; }
-  .control-row input[type="range"] { flex: 1; accent-color: #58A6FF; height: 4px; }
-  .control-row .val { font-size: 13px; font-weight: 600; min-width: 50px; text-align: right; }
-  .control-row .val.fin { color: #3FB950; }
-  .control-row .val.dat { color: #F0883E; }
-
-  .mempool { margin-top: 12px; }
-  .mempool h3 { font-size: 11px; color: #8B949E; text-transform: uppercase; letter-spacing: 0.3px; margin-bottom: 6px; }
-  .tx-list { display: flex; flex-direction: column; gap: 3px; max-height: 180px; overflow-y: auto; }
-  .tx {
-    display: flex; align-items: center; gap: 8px; padding: 4px 8px; border-radius: 4px; font-size: 11px; background: #0D1117;
-    border-left: 3px solid #30363D;
-  }
-  .tx.fin { border-left-color: #3FB950; }
-  .tx.dat { border-left-color: #F0883E; }
-  .tx .tag { font-size: 9px; font-weight: 700; padding: 1px 5px; border-radius: 3px; text-transform: uppercase; }
-  .tx .tag.fin { background: #1a7f3740; color: #3FB950; }
-  .tx .tag.dat { background: #d2751f40; color: #F0883E; }
-  .tx .fee { margin-left: auto; font-weight: 600; }
-  .tx .sel { color: #58A6FF; font-size: 10px; font-weight: 600; }
-
   .note { font-size: 11px; color: #8B949E; margin-top: 10px; line-height: 1.4; }
   .note a { color: #58A6FF; text-decoration: none; }
   .note a:hover { text-decoration: underline; }
-
-  .legend { display: flex; gap: 16px; justify-content: center; margin: 6px 0; font-size: 11px; }
-  .legend-item { display: flex; align-items: center; gap: 5px; }
-  .legend-item .dot { width: 10px; height: 10px; border-radius: 3px; }
 
   .badge {
     display: inline-block; font-size: 9px; font-weight: 700; padding: 2px 8px; border-radius: 10px; text-transform: uppercase;
     letter-spacing: 0.3px; margin-bottom: 8px;
   }
-  .badge.today { background: #F0883E20; color: #F0883E; border: 1px solid #F0883E40; }
-  .badge.oracle { background: #3FB95020; color: #3FB950; border: 1px solid #3FB95040; }
+  .badge.v1 { background: #F8514920; color: #F85149; border: 1px solid #F8514940; }
+  .badge.v2 { background: #D2992220; color: #D29922; border: 1px solid #D2992240; }
+  .badge.v3 { background: #58A6FF20; color: #58A6FF; border: 1px solid #58A6FF40; }
 </style>
 </head>
 <body>
 <div class="container">
 <h1>Bitcoin Block Space</h1>
-<p class="subtitle">Exploring open questions — does the fee market price data permanence?</p>
+<p class="subtitle">Open research — pricing data permanence in Bitcoin's fee market</p>
 
 <div class="panels">
-
-  <!-- Left: Today -->
-  <div class="panel">
-    <div class="badge today">Today — No Oracle</div>
-    <div class="block-vis" id="blockToday">
-      <div class="seg financial" id="todayFin" style="width:50%">50%</div>
-      <div class="seg data" id="todayDat" style="width:50%">50%</div>
-    </div>
-    <div class="stats">
-      <div class="stat"><label>Financial</label><div class="value fin" id="todayFinVal">50%</div></div>
-      <div class="stat"><label>Data</label><div class="value dat" id="todayDatVal">50%</div></div>
-      <div class="stat"><label>Block Fill</label><div class="value" id="todayFill" style="color:#58A6FF">100%</div></div>
-    </div>
-    <div class="note">Highest fee-rate wins. Data tx dominate → financial tx get pushed out.</div>
-  </div>
-
-  <!-- Right: With Oracle -->
-  <div class="panel">
-    <div class="badge oracle">With Priority Oracle</div>
-    <div class="block-vis" id="blockOracle">
-      <div class="seg financial" id="oracleFin" style="width:60%">60%</div>
-      <div class="seg data" id="oracleDat" style="width:40%">40%</div>
-    </div>
-    <div class="stats">
-      <div class="stat"><label>Financial</label><div class="value fin" id="oracleFinVal">60%</div></div>
-      <div class="stat"><label>Data</label><div class="value dat" id="oracleDatVal">40%</div></div>
-      <div class="stat"><label>Floor Active</label><div class="value" id="floorActive" style="color:#58A6FF; font-size:14px">YES</div></div>
-    </div>
-    <div class="note">Blind batch auction — premium emerges from mempool pressure, not a fixed rate. Structural backcheck catches liars.</div>
-  </div>
-
-</div>
-
-<!-- Controls -->
-<div class="panels" style="margin-top:20px">
   <div class="panel" style="max-width:1140px; flex:2">
-    <h2>Block Market Controls</h2>
-
-    <div class="controls">
-      <div class="control-row">
-        <label>Financial tx fee-rate (avg)</label>
-        <input type="range" id="finFee" min="20" max="500" value="190" step="5">
-        <span class="val fin" id="finFeeVal">190 sat/vB</span>
-      </div>
-      <div class="control-row">
-        <label>Data tx fee-rate (avg)</label>
-        <input type="range" id="datFee" min="20" max="500" value="250" step="5">
-        <span class="val dat" id="datFeeVal">250 sat/vB</span>
-      </div>
-      <div class="control-row">
-        <label>Financial demand (% of mempool)</label>
-        <input type="range" id="finDemand" min="10" max="90" value="55" step="5">
-        <span class="val" id="finDemandVal" style="color:#3FB950">55%</span>
-      </div>
-      <div class="control-row">
-        <label>Data fee premium (oracle)</label>
-        <input type="range" id="premium" min="0" max="100" value="25" step="5">
-        <span class="val" id="premiumVal" style="color:#F0883E">25%</span>
-      </div>
-      <div class="control-row">
-        <label>Structural backcheck</label>
-        <span class="val" style="color:#58A6FF">Active ✓</span>
-      </div>
-      <div class="control-row">
-        <label>Financial floor (oracle)</label>
-        <input type="range" id="floor" min="10" max="50" value="30" step="5">
-        <span class="val" id="floorVal" style="color:#3FB950">30%</span>
-      </div>
+    <h2>Problem: The Fee Market Prices Congestion, Not Storage</h2>
+    <p style="font-size:12px;color:#8B949E;line-height:1.5;margin-bottom:12px">
+    Every inscription that enters a block adds data every full node must store forever.
+    The miner who included it captured the fee — but the cost of storing that data for the next 20+ years
+    is borne by every future node operator. The SegWit 4× witness discount (BIP-141) was designed
+    for malleability, not state economics. It accidentally made data inscriptions viable at scale.
+    </p>
+    <div class="block-vis">
+      <div class="seg financial" style="width:42%">Financial: 42%</div>
+      <div class="seg data" style="width:58%">Data: 58%</div>
     </div>
-
-    <!-- Mempool tx list -->
-    <div class="mempool">
-      <h3>Mempool (transactions competing for next block)</h3>
-      <div class="tx-list" id="txList"></div>
+    <div class="stats">
+      <div class="stat"><label>Financial</label><div class="value fin">42%</div></div>
+      <div class="stat"><label>Data</label><div class="value dat">58%</div></div>
     </div>
-
-    <div class="legend">
-      <div class="legend-item"><div class="dot financial"></div> Financial</div>
-      <div class="legend-item"><div class="dot data"></div> Data</div>
-      <div class="legend-item" style="color:#58A6FF">✦ Selected for block</div>
-    </div>
-
-    <div class="note" style="text-align:center; margin-top:14px">
-      Built for <a href="https://github.com/prateekposwal/bitcoin-priority-oracle">Bitcoin Block Space Research</a> —
-      surveying open problems in state pricing
+    <div class="note">
+    These proportions shift during inscription mania. The question: should data-heavy transactions
+    face higher fees because they impose permanent storage costs on the network?
     </div>
   </div>
 </div>
+
+<h2 style="font-size:14px;font-weight:600;color:#8B949E;text-transform:uppercase;letter-spacing:0.5px;margin:24px 0 12px">
+  Exploratory Directions
+</h2>
+<div class="note" style="margin-bottom:16px;max-width:800px">
+  After two failed attempts (v1: Priority Oracle, v2: Externality Fee), the community feedback pointed
+  to relay policy as the only viable lever. Relay nodes are the only participants who both bear storage
+  costs and have pricing power (they set relay policy). Below are three directions being explored.
 </div>
 
-<script>
-const TX_TEMPLATES = [
-  { name: 'Payment', fin: true, fee: [80, 160], weight: [200, 400] },
-  { name: 'Withdrawal', fin: true, fee: [140, 280], weight: [300, 500] },
-  { name: 'LN Open', fin: true, fee: [100, 220], weight: [400, 700] },
-  { name: 'DEX Swap', fin: true, fee: [120, 250], weight: [250, 450] },
-  { name: 'HTLC Settle', fin: true, fee: [90, 200], weight: [300, 500] },
-  { name: 'Ordinal', fin: false, fee: [200, 400], weight: [300, 800] },
-  { name: 'BRC-20', fin: false, fee: [150, 350], weight: [200, 400] },
-  { name: 'Rune Etch', fin: false, fee: [180, 350], weight: [180, 300] },
-  { name: 'Rune Mint', fin: false, fee: [130, 300], weight: [160, 280] },
-  { name: 'Inscription', fin: false, fee: [220, 450], weight: [400, 1200] },
-];
-
-function rand(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
-
-function generateMempool(finPct) {
-  const txs = [];
-  for (let i = 0; i < 25; i++) {
-    const isFin = Math.random() * 100 < finPct;
-    const pool = isFin ? TX_TEMPLATES.filter(t => t.fin) : TX_TEMPLATES.filter(t => !t.fin);
-    const tmpl = pool[Math.floor(Math.random() * pool.length)];
-    txs.push({
-      id: i, name: tmpl.name, fin: tmpl.fin,
-      fee: rand(tmpl.fee[0], tmpl.fee[1]),
-      weight: rand(tmpl.weight[0], tmpl.weight[1]),
-      selected: false
-    });
-  }
-  return txs;
-}
-
-function computeBlock(txs, finFloor, premiumPct) {
-  const C = 4000;
-  let fin = txs.filter(t => t.fin).sort((a, b) => b.fee - a.fee);
-  let dat = txs.filter(t => !t.fin).sort((a, b) => b.fee - a.fee);
-
-  // Blind batch auction: fill financial floor, then fill remaining with highest-fee tx
-  const finTotalWeight = fin.reduce((s, t) => s + t.weight, 0);
-  const datTotalWeight = dat.reduce((s, t) => s + t.weight, 0);
-
-  const minFin = Math.min(C * finFloor / 100, finTotalWeight);
-  let remaining = C - minFin;
-
-  // Fill remaining with highest fee tx from either pool (auction-style)
-  let dataW = 0, finW = minFin;
-  let allTxs = [...fin.map(t => ({...t, tag: 'fin'})), ...dat.map(t => ({...t, tag: 'dat'}))]
-    .sort((a, b) => b.fee - a.fee);
-
-  for (const t of allTxs) {
-    if (remaining <= 0) break;
-    if (t.tag === 'fin' && t.weight <= remaining) {
-      finW += t.weight;
-      remaining -= t.weight;
-    } else if (t.tag === 'dat' && t.weight <= remaining) {
-      dataW += t.weight;
-      remaining -= t.weight;
-    }
-  }
-
-  const avgFinFee = fin.length ? fin.reduce((s, t) => s + t.fee, 0) / fin.length : 1;
-  const avgDatFee = dat.length ? dat.reduce((s, t) => s + t.fee, 0) / dat.length : 1;
-  const feeRatio = Math.max(0.1, Math.min(10, avgDatFee / Math.max(avgFinFee, 1)));
-
-  return { finW, dataW, minFin, remaining, feeRatio, avgFinFee, avgDatFee, C };
-}
-
-function renderMempool(txs) {
-  const el = document.getElementById('txList');
-  el.innerHTML = txs.map(t => `
-    <div class="tx ${t.fin ? 'fin' : 'dat'}">
-      <span class="tag ${t.fin ? 'fin' : 'dat'}">${t.fin ? 'FIN' : 'DAT'}</span>
-      <span>${t.name}</span>
-      <span class="fee">${t.fee} sat/vB</span>
-      <span>${t.weight} wu</span>
-      ${t.selected ? '<span class="sel">✦ in block</span>' : ''}
+<div class="dir-grid">
+  <div class="dir-card">
+    <h3>
+      <span>UTXO-Aware Relay Fee</span>
+      <span class="tag rec">Recommended</span>
+    </h3>
+    <div class="desc">
+      Extend Bitcoin Core's <code style="color:#58A6FF">minrelaytxfee</code> so relay nodes can apply
+      a fee multiplier for transactions exceeding a state footprint threshold. Each node sets their own multiplier.
     </div>
-  `).join('');
-}
+    <div class="why">✅ Each node sets its own price — market mechanism, not a tax</div>
+    <div class="why">✅ No consensus change — purely relay policy</div>
+    <div class="why">✅ Miners unaffected — they mine whatever reaches them</div>
+    <div class="risk">⚠ Risk: low adoption by relay node operators</div>
+  </div>
 
-function selectTxs(txs, target, isFin) {
-  const pool = txs.filter(t => t.fin === isFin).sort((a, b) => b.fee - a.fee);
-  let used = 0;
-  for (const t of pool) {
-    if (used + t.weight <= target) {
-      t.selected = true;
-      used += t.weight;
-    } else {
-      t.selected = false;
-    }
-  }
-}
+  <div class="dir-card">
+    <h3>
+      <span>BIP for State-Conscious Relay</span>
+      <span class="tag exp">Exploring</span>
+    </h3>
+    <div class="desc">
+      A BIP that standardizes what Direction A implements — defines state impact metrics,
+      recommends fee schedules, and provides wallet-side fee estimation guidance.
+    </div>
+    <div class="why">✅ Creates ecosystem alignment without requiring anyone to adopt</div>
+    <div class="why">✅ Formalizes existing practice (ordinal filtering nodes)</div>
+    <div class="why">✅ BIP process ensures thorough incentive analysis</div>
+    <div class="risk">⚠ Scrutiny is high — but that's the point</div>
+  </div>
 
-function update() {
-  const finFee = parseInt(document.getElementById('finFee').value);
-  const datFee = parseInt(document.getElementById('datFee').value);
-  const finDemand = parseInt(document.getElementById('finDemand').value);
-  const premium = parseInt(document.getElementById('premium').value);
-  const floor = parseInt(document.getElementById('floor').value);
+  <div class="dir-card">
+    <h3>
+      <span>Multi-Tier Relay Market</span>
+      <span class="tag spec">Speculative</span>
+    </h3>
+    <div class="desc">
+      Relay nodes advertise tiered fee schedules during peer handshake. Wallets discover the
+      cheapest relay path for their transaction type. A genuine market for relay services.
+    </div>
+    <div class="why">✅ Most market-driven approach</div>
+    <div class="risk">⚠ Requires P2P protocol changes</div>
+    <div class="risk">⚠ Higher complexity — only worth exploring if A/B prove insufficient</div>
+  </div>
+</div>
 
-  document.getElementById('finFeeVal').textContent = finFee + ' sat/vB';
-  document.getElementById('datFeeVal').textContent = datFee + ' sat/vB';
-  document.getElementById('finDemandVal').textContent = finDemand + '%';
-  document.getElementById('premiumVal').textContent = premium + '%';
-  document.getElementById('floorVal').textContent = floor + '%';
+<h2 style="font-size:14px;font-weight:600;color:#8B949E;text-transform:uppercase;letter-spacing:0.5px;margin:24px 0 12px">
+  The Journey
+</h2>
+<div class="panels">
+  <div class="panel" style="max-width:1140px;flex:2">
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div style="display:flex;align-items:flex-start;gap:10px">
+        <span class="badge v1">v1</span>
+        <div><strong style="color:#F85149">Priority Oracle</strong><br>
+        <span style="font-size:11px;color:#8B949E">Classify tx as financial/data, allocate 30% floor.
+        Failure: miners won't leave fees on the table. Voluntary classification with no economic consequence
+        is a signaling game with zero equilibrium.</span></div>
+      </div>
+      <div style="display:flex;align-items:flex-start;gap:10px">
+        <span class="badge v2">v2</span>
+        <div><strong style="color:#D29922">Externality Fee</strong><br>
+        <span style="font-size:11px;color:#8B949E">Price the "true storage cost" of data permanence via formula.
+        Failure: any formula-based fee is an arbitrary tax, not a market price. No mechanism exists to
+        discover the "true cost" of a transaction to the network.</span></div>
+      </div>
+      <div style="display:flex;align-items:flex-start;gap:10px">
+        <span class="badge v3">v3</span>
+        <div><strong style="color:#58A6FF">Relay Policy Research</strong><br>
+        <span style="font-size:11px;color:#8B949E">Surveying existing work on state expiry, UTXO commitment,
+        and block weight reform. Three exploratory directions above. No premature solutions — just open research.
+        <a href="https://github.com/prateekposwal/bitcoin-priority-oracle" style="color:#58A6FF">Full survey on GitHub</a>.</span></div>
+      </div>
+    </div>
+  </div>
+</div>
 
-  // Generate mempool
-  const txs = generateMempool(finDemand);
-  const C = 4000;
-
-  // Today (no oracle) — pure fee market
-  const allSorted = [...txs].sort((a, b) => (b.fee) - (a.fee));
-  let used = 0;
-  for (const t of allSorted) { t.selected = false; }
-  for (const t of allSorted) {
-    if (used + t.weight <= C) { t.selected = true; used += t.weight; } else break;
-  }
-  const todayFin = txs.filter(t => t.selected && t.fin).reduce((s, t) => s + t.weight, 0);
-  const todayDat = txs.filter(t => t.selected && !t.fin).reduce((s, t) => s + t.weight, 0);
-  const todayFinPct = used ? (todayFin / used * 100) : 50;
-  const todayDatPct = used ? (todayDat / used * 100) : 50;
-
-  // Oracle
-  for (const t of txs) { t.selected = false; }
-  const r = computeBlock(txs, floor, premium);
-  selectTxs(txs, r.finW, true);
-  selectTxs(txs, r.dataW, false);
-  const oracleFin = txs.filter(t => t.selected && t.fin).reduce((s, t) => s + t.weight, 0);
-  const oracleDat = txs.filter(t => t.selected && !t.fin).reduce((s, t) => s + t.weight, 0);
-  const oracleTotal = oracleFin + oracleDat;
-  const oracleFinPct = oracleTotal ? (oracleFin / oracleTotal * 100) : 0;
-  const oracleDatPct = oracleTotal ? (oracleDat / oracleTotal * 100) : 0;
-  const floorActive = oracleFin / Math.max(C * floor / 100, 1) >= 1;
-
-  // Update visuals
-  const anim = 0.4;
-
-  // Today block
-  document.getElementById('todayFin').style.transition = `width ${anim}s ease`;
-  document.getElementById('todayFin').style.width = todayFinPct + '%';
-  document.getElementById('todayFin').textContent = Math.round(todayFinPct) + '%';
-  document.getElementById('todayDat').style.transition = `width ${anim}s ease`;
-  document.getElementById('todayDat').style.width = todayDatPct + '%';
-  document.getElementById('todayDat').textContent = Math.round(todayDatPct) + '%';
-
-  document.getElementById('todayFinVal').textContent = Math.round(todayFinPct) + '%';
-  document.getElementById('todayDatVal').textContent = Math.round(todayDatPct) + '%';
-  document.getElementById('todayFill').textContent = Math.round(used / C * 100) + '%';
-
-  // Oracle block
-  document.getElementById('oracleFin').style.transition = `width ${anim}s ease`;
-  document.getElementById('oracleFin').style.width = oracleFinPct + '%';
-  document.getElementById('oracleFin').textContent = Math.round(oracleFinPct) + '%';
-  document.getElementById('oracleDat').style.transition = `width ${anim}s ease`;
-  document.getElementById('oracleDat').style.width = oracleDatPct + '%';
-  document.getElementById('oracleDat').textContent = Math.round(oracleDatPct) + '%';
-
-  document.getElementById('oracleFinVal').textContent = Math.round(oracleFinPct) + '%';
-  document.getElementById('oracleDatVal').textContent = Math.round(oracleDatPct) + '%';
-  document.getElementById('floorActive').textContent = floorActive ? 'YES' : 'NO';
-  document.getElementById('floorActive').style.color = floorActive ? '#3FB950' : '#F85149';
-
-  renderMempool(txs);
-}
-
-// Bind sliders
-['finFee', 'datFee', 'finDemand', 'premium', 'floor'].forEach(id => {
-  document.getElementById(id).addEventListener('input', update);
-});
-
-update();
-</script>
+<div class="note" style="text-align:center;margin-top:24px">
+  <a href="https://github.com/prateekposwal/bitcoin-priority-oracle">github.com/prateekposwal/bitcoin-priority-oracle</a>
+</div>
+</div>
 </body>
 </html>
