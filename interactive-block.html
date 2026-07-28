@@ -79,6 +79,20 @@
     is borne by every future node operator. The SegWit 4× witness discount (BIP-141) was designed
     for malleability, not state economics. It accidentally made data inscriptions viable at scale.
     </p>
+
+    <div style="background:#0D1117;border-radius:8px;padding:14px;margin:12px 0;border:1px solid #30363D">
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;text-align:center">
+        <div><div style="font-size:10px;color:#8B949E">Annual node cost</div><div style="font-size:20px;font-weight:700;color:#3FB950">$925</div></div>
+        <div><div style="font-size:10px;color:#8B949E">Storage cost / inscription</div><div style="font-size:20px;font-weight:700;color:#F0883E">$0.008</div></div>
+        <div><div style="font-size:10px;color:#8B949E">Unpriced externality / yr</div><div style="font-size:20px;font-weight:700;color:#58A6FF">$9.2K</div></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;text-align:center;margin-top:8px;padding-top:8px;border-top:1px solid #30363D">
+        <div><div style="font-size:10px;color:#8B949E">Current fee (low activity)</div><div style="font-size:14px;font-weight:600;color:#8B949E">$0.06</div></div>
+        <div><div style="font-size:10px;color:#8B949E">Current fee (peak)</div><div style="font-size:14px;font-weight:600;color:#8B949E">$25</div></div>
+        <div><div style="font-size:10px;color:#8B949E">Fee-to-storage ratio</div><div style="font-size:14px;font-weight:600;color:#8B949E">8× – 3,000×</div></div>
+      </div>
+    </div>
+
     <div class="block-vis">
       <div class="seg financial" style="width:42%">Financial: 42%</div>
       <div class="seg data" style="width:58%">Data: 58%</div>
@@ -88,8 +102,7 @@
       <div class="stat"><label>Data</label><div class="value dat">58%</div></div>
     </div>
     <div class="note">
-    These proportions shift during inscription mania. The question: should data-heavy transactions
-    face higher fees because they impose permanent storage costs on the network?
+    These proportions shift during inscription mania. <a href="https://delvingbitcoin.org/t/2750" style="color:#58A6FF">Discuss on Delving Bitcoin</a>.
     </div>
   </div>
 </div>

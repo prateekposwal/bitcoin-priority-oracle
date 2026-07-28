@@ -59,5 +59,7 @@ Would love feedback from people who have thought more deeply about this — part
 2. The pruned vs archival node ratio — most estimates I've seen suggest ~30% of nodes are archival. If that's wrong the externality changes significantly.
 3. Whether the SegWit weight formula was ever intended to be revisited, or if it's considered settled architecture.
 
-Research repo with full model, verification appendix, and sensitivity analysis:
+Discussion: https://delvingbitcoin.org/t/does-bitcoins-fee-market-price-permanence-or-just-congestion/2750
+
+Research repo with full model, verification appendix, charts, and sensitivity analysis:
 **[github.com/prateekposwal/bitcoin-priority-oracle](https://github.com/prateekposwal/bitcoin-priority-oracle)**

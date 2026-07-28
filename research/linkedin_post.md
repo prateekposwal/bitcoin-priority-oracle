@@ -25,6 +25,7 @@ I posted the full framing on Delving Bitcoin and the discussion is already surfa
 
 **Delving Bitcoin discussion:** https://delvingbitcoin.org/t/does-bitcoins-fee-market-price-permanence-or-just-congestion/2750
 
+**Delving Bitcoin discussion:** https://delvingbitcoin.org/t/does-bitcoins-fee-market-price-permanence-or-just-congestion/2750\
 **Full research and model:** github.com/prateekposwal/bitcoin-priority-oracle
 
 #Bitcoin #BitcoinResearch #BlockSpace #UTXO #SegWit
