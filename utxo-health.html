@@ -144,15 +144,20 @@ footer .links { display: flex; gap: 16px; justify-content: center; flex-wrap: wr
 <body>
 
 <nav>
-  <span class="brand">BITCOIN <span>SAHI</span></span>
-  <a href="/">Home</a>
-  <a href="/live">Dashboard</a>
-  <a href="/blockspace">Explorer</a>
-  <a href="/research-graph">Graph</a>
-  <a href="/calculator">Calculator</a>
-  <a href="/utxo-health">UTXO</a>
-  <a href="/lightning-sim">Lightning</a>
-  <a href="/decide">Decide</a><a href="/articles">Articles</a>
+  <a href="/" class="brand">BITCOIN <span>SAHI</span></a>
+  <div class="dropdown">
+    <button class="dropbtn">☰ Explore ⬇</button>
+    <div class="dropdown-content">
+      <a href="/live">📊 Dashboard</a>
+      <a href="/decide">🎯 Decision Center</a>
+      <a href="/blockspace">🔍 Blockspace Explorer</a>
+      <a href="/research-graph">🕸️ Research Graph</a>
+      <a href="/calculator">🧮 Node Cost Calculator</a>
+      <a href="/utxo-health">❤️ UTXO Health</a>
+      <a href="/lightning-sim">⚡ Lightning Simulator</a>
+      <a href="/articles">📝 Articles</a>
+    </div>
+  </div>
   <span class="spacer"></span>
   <a href="https://reddit.com/r/BitcoinEngineering" class="cta">r/BitcoinEngineering</a>
 </nav>
