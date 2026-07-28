@@ -1,0 +1,30 @@
+name: Daily Research Monitor
+
+on:
+  schedule:
+    - cron: '0 12 * * *'   # 12:00 UTC daily
+  workflow_dispatch:        # manual trigger
+
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Run research monitor
+        run: python3 tools/research_monitor.py
+
+      - name: Run UTXO cost model
+        run: python3 research/utxo_cost_model.py
+
+      - name: Commit updated data
+        run: |
+          git config user.name "research-bot"
+          git config user.email "bot@bitcoinsahi.com"
+          git add tools/live_data.json research/*.md
+          git diff --quiet && git diff --staged --quiet || \
+            git commit -m "chore: daily research update $(date +%Y-%m-%d)"
+          git push
