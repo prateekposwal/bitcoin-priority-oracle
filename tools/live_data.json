@@ -1,24 +1,28 @@
 {
-  "timestamp": "2026-07-28T18:27:37.468100+00:00",
+  "timestamp": "2026-07-28T18:34:33.675059+00:00",
   "fees": {
-    "fastestFee": 3,
-    "halfHourFee": 3,
+    "fastestFee": 2,
+    "halfHourFee": 2,
     "hourFee": 1,
     "economyFee": 1,
     "minimumFee": 1
   },
-  "btc_price": 63612.46,
+  "btc_price": 63639.84,
   "mempool": {
-    "unconfirmed_tx": 104578,
-    "vsize": 45916886,
-    "total_fee_sats": 12324716
+    "unconfirmed_tx": 102901,
+    "vsize": 45483639,
+    "total_fee_sats": 10709002
   },
-  "block_height": 960005,
+  "block_height": 960006,
   "bip110_signaling": {
     "status": "check failed",
     "error": "HTTP Error 404: Not Found",
     "last_known": "~0.1-0.8%, dropping (Jul 2026)"
   },
   "utxo_set": null,
-  "alerts": []
+  "alerts": [],
+  "hash_rate": 847125304395.6471,
+  "difficulty": 126231507121868,
+  "tx_count_24h": 619267,
+  "miners_revenue_usd": 0.0
 }

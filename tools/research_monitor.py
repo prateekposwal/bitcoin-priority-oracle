@@ -62,6 +62,16 @@ def main():
     except Exception as e:
         report['alerts'].append(f"blockstream.info height API: {e}")
 
+    # 5. Hash rate & mining stats from blockchain.info
+    stats = fetch_json('https://api.blockchain.info/stats')
+    if isinstance(stats, dict) and 'hash_rate' in stats:
+        report['hash_rate'] = stats['hash_rate']
+        report['difficulty'] = stats.get('difficulty')
+        report['tx_count_24h'] = stats.get('n_tx', 0)
+        report['miners_revenue_usd'] = stats.get('miners_revenue_usd', 0)
+    else:
+        report['alerts'].append("blockchain.info stats API failed")
+
     # 5. BIP-110 signaling — checked directly from block version bits via blockstream.info
     try:
         r = urllib.request.urlopen(

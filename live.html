@@ -117,6 +117,25 @@
     <div id="alerts"></div>
   </div>
 
+  <div class="section">
+    <div class="section-header">Data Sources & Transparency</div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:20px;font-size:13px;color:var(--muted);line-height:1.6;">
+      <table style="width:100%;border-collapse:collapse;">
+        <tr><th style="text-align:left;padding:8px 6px;color:var(--text);border-bottom:1px solid var(--border);">Data Point</th><th style="text-align:left;padding:8px 6px;color:var(--text);border-bottom:1px solid var(--border);">Source</th><th style="text-align:left;padding:8px 6px;color:var(--text);border-bottom:1px solid var(--border);">Refresh</th><th style="text-align:left;padding:8px 6px;color:var(--text);border-bottom:1px solid var(--border);">How It's Used</th></tr>
+        <tr><td style="padding:6px">BTC Price</td><td style="padding:6px"><a href="https://blockchain.info/ticker">blockchain.info/ticker</a></td><td style="padding:6px">Daily</td><td style="padding:6px">Computes fee-to-storage ratio, sat/$ rate, inscription fee in USD</td></tr>
+        <tr><td style="padding:6px">Fee Estimates</td><td style="padding:6px"><a href="https://mempool.space/api/v1/fees/recommended">mempool.space</a></td><td style="padding:6px">Daily</td><td style="padding:6px">Fee bar chart, history trend, alert conditions</td></tr>
+        <tr><td style="padding:6px">Mempool Size</td><td style="padding:6px"><a href="https://mempool.space/api/mempool">mempool.space</a></td><td style="padding:6px">Daily</td><td style="padding:6px">Displays unconfirmed tx count — network congestion proxy</td></tr>
+        <tr><td style="padding:6px">Block Height</td><td style="padding:6px"><a href="https://blockstream.info/api/blocks/tip/height">blockstream.info</a></td><td style="padding:6px">Daily</td><td style="padding:6px">Block height display, BIP-110 signaling check via version bits</td></tr>
+        <tr><td style="padding:6px">BIP-110 Signal</td><td style="padding:6px">Derived from version bit 4 in last 25 blocks via blockstream.info</td><td style="padding:6px">Daily</td><td style="padding:6px">Tracks miner support for BIP-110 soft fork proposal</td></tr>
+      </table>
+      <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border);font-size:12px;">
+        <strong style="color:var(--text);">What we do NOT collect:</strong> No user data, IP addresses, cookies, analytics, wallet addresses, or transaction data. All API calls are server-side via GitHub Actions. The only stored data is <code>live_data.json</code> (current snapshot) and <code>fee_history.json</code> (rolling 14-day history) — both are public and open source.
+        <br><br>
+        <strong style="color:var(--text);">Why we collect this:</strong> To quantify the gap between what Bitcoin's fee market prices (congestion) and what node operators collectively bear (permanent storage). The UTXO cost model is the only open, verifiable model of its kind. Every number is reproducible — run <code>python3 research/utxo_cost_model.py</code> to verify.
+      </div>
+    </div>
+  </div>
+
   <div class="footer" id="timestamp"></div>
 </div>
 
@@ -197,17 +216,22 @@ fetch('tools/live_data.json?_=' + Date.now())
     var spd = btc > 0 ? (100000000 / btc).toFixed(1) : '—';
     var ifs = (fees.economyFee || 1) * 100;
     var ifu = btc > 0 ? (ifs * btc / 100000000).toFixed(4) : '—';
-    var utxos = d.utxo_set && d.utxo_set.utxo_count ? Number(d.utxo_set.utxo_count).toLocaleString() : '—';
     var bh = d.block_height || '—';
     var mt = d.mempool ? Number(d.mempool.unconfirmed_tx).toLocaleString() : '—';
     var bs = d.bip110_signaling;
     var bsVal = bs && bs.signaling_percent !== undefined ? bs.signaling_percent + '%' : (bs && bs.last_known ? bs.last_known : 'N/A');
+    var hr = d.hash_rate ? (d.hash_rate / 1e9).toFixed(1) + ' EH/s' : '—';
+    var diff = d.difficulty ? (d.difficulty / 1e12).toFixed(2) + 'T' : '—';
+    var tx24 = d.tx_count_24h ? Number(d.tx_count_24h).toLocaleString() : '—';
+    var rev = d.miners_revenue_usd ? '$' + (d.miners_revenue_usd / 1000).toFixed(0) + 'K' : '—';
     document.getElementById('market-row').innerHTML = [
-      { lbl: 'Satoshis per USD', val: spd + ' sat' },
-      { lbl: 'Inscription Fee (slow)', val: '$' + ifu },
+      { lbl: 'Hash Rate (7d avg)', val: hr },
+      { lbl: 'Mining Difficulty', val: diff },
+      { lbl: 'Tx / 24h', val: tx24 },
+      { lbl: 'Miner Revenue / Day', val: rev },
       { lbl: 'Unconfirmed Tx', val: mt },
       { lbl: 'Block Height', val: bh },
-      { lbl: 'BIP-110 Signaling', val: bsVal },
+      { lbl: 'BIP-110 Signal', val: bsVal },
     ].map(m => '<div class="stat-card"><div class="label">' + m.lbl + '</div><div class="value">' + m.val + '</div></div>').join('');
 
     // ── Alerts ──
