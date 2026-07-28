@@ -8,76 +8,76 @@
 <style>
   :root { --orange: #F7931A; --bg: #0A0A0F; --surface: #161B22; --border: #30363D; --text: #F0F6FC; --muted: #8B949E; }
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 16px; line-height: 1.5; }
+  body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 20px; line-height: 1.5; }
   a { color: var(--orange); text-decoration: none; }
 
   nav { display: flex; align-items: center; gap: 24px; padding: 14px 32px; border-bottom: 1px solid var(--border); background: var(--bg); flex-wrap: wrap; }
-  nav .brand { font-weight: 800; font-size: 18px; letter-spacing: -0.3px; }
+  nav .brand { font-weight: 800; font-size: 20px; letter-spacing: -0.3px; }
   nav .brand span { color: var(--orange); }
-  nav a { color: var(--muted); text-decoration: none; font-size: 14px; }
+  nav a { color: var(--muted); text-decoration: none; font-size: 20px; }
   nav a:hover { color: var(--text); }
   nav .spacer { flex: 1; }
-  nav .cta { background: var(--orange); color: #000; font-weight: 700; padding: 8px 18px; border-radius: 8px; font-size: 13px; }
+  nav .cta { background: var(--orange); color: #000; font-weight: 700; padding: 8px 18px; border-radius: 8px; font-size: 17px; }
 
   .container { max-width: 1200px; margin: 0 auto; padding: 32px 24px; }
-  .page-title { font-size: 28px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 4px; }
-  .page-sub { color: var(--muted); font-size: 15px; margin-bottom: 28px; }
+  .page-title { font-size: 30px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 4px; }
+  .page-sub { color: var(--muted); font-size: 17px; margin-bottom: 28px; }
 
   /* ── KPI Cards ── */
   .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 28px; }
-  .kpi-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; text-align: center; }
-  .kpi-card .label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.8px; font-weight: 600; margin-bottom: 6px; }
-  .kpi-card .value { font-size: 32px; font-weight: 800; margin: 2px 0; letter-spacing: -0.5px; }
-  .kpi-card .sub { font-size: 12px; color: #555; }
+  .kpi-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 24px; text-align: center; }
+  .kpi-card .label { font-size: 17px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.8px; font-weight: 600; margin-bottom: 6px; }
+  .kpi-card .value { font-size: 34px; font-weight: 800; margin: 2px 0; letter-spacing: -0.5px; }
+  .kpi-card .sub { font-size: 20px; color: #555; }
 
   /* ── Section ── */
   .section { margin-bottom: 28px; }
   .section-header {
-    font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
-    color: var(--orange); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;
+    font-size: 17px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
+    color: var(--orange); margin-bottom: 12px; display: flex; align-items: center; gap: 12px;
   }
   .section-header::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 
   /* ── Stat row ── */
-  .stat-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; }
-  .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
-  .stat-card .label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
-  .stat-card .value { font-size: 18px; font-weight: 700; margin-top: 2px; }
+  .stat-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 14px; }
+  .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px 20px; }
+  .stat-card .label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+  .stat-card .value { font-size: 20px; font-weight: 700; margin-top: 2px; }
 
   /* ── Fee bars ── */
-  .fee-chart { display: flex; align-items: flex-end; gap: 6px; height: 60px; margin-top: 10px; padding: 8px 0; }
+  .fee-chart { display: flex; align-items: flex-end; gap: 6px; height: 100px; margin-top: 10px; padding: 8px 0; }
   .fee-chart .bar { flex: 1; border-radius: 3px 3px 0 0; min-width: 40px; transition: height 0.5s; position: relative; }
   .fee-chart .bar .bar-label { position: absolute; bottom: -18px; left: 50%; transform: translateX(-50%); font-size: 10px; color: var(--muted); white-space: nowrap; }
 
-  .history-chart { display: flex; align-items: flex-end; gap: 6px; height: 120px; margin-top: 8px; padding: 10px 0; }
+  .history-chart { display: flex; align-items: flex-end; gap: 6px; height: 160px; margin-top: 8px; padding: 10px 0; }
   .history-chart .day { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 3px; }
   .history-chart .day .bar-fast { width: 100%; min-width: 10px; border-radius: 3px 3px 0 0; background: var(--orange); }
   .history-chart .day .bar-econ { width: 80%; min-width: 8px; border-radius: 3px 3px 0 0; background: #58A6FF; }
   .history-chart .day .date-label { font-size: 9px; color: #555; transform: rotate(-30deg); margin-top: 4px; white-space: nowrap; }
 
-  .chart-legend { display: flex; gap: 16px; font-size: 12px; color: var(--muted); margin-top: 4px; }
+  .chart-legend { display: flex; gap: 16px; font-size: 20px; color: var(--muted); margin-top: 4px; }
   .chart-legend span::before { content: '■ '; }
 
   /* ── Interactive Model Sliders ── */
-  .model-panel { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
-  .model-panel h3 { font-size: 14px; font-weight: 700; margin-bottom: 16px; color: var(--text); }
+  .model-panel { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 24px; }
+  .model-panel h3 { font-size: 20px; font-weight: 700; margin-bottom: 16px; color: var(--text); }
   .slider-group { margin-bottom: 14px; }
-  .slider-group .row { display: flex; justify-content: space-between; font-size: 13px; color: var(--muted); margin-bottom: 2px; }
+  .slider-group .row { display: flex; justify-content: space-between; font-size: 17px; color: var(--muted); margin-bottom: 2px; }
   .slider-group .row .val { color: var(--orange); font-weight: 700; }
   .slider-group input[type=range] { width: 100%; height: 4px; -webkit-appearance: none; background: var(--border); border-radius: 2px; outline: none; }
   .slider-group input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--orange); cursor: pointer; }
-  .model-output { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border); }
+  .model-output { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border); }
   .model-output .stat { background: #0D1117; border: 1px solid var(--border); border-radius: 6px; padding: 8px 10px; text-align: center; }
   .model-output .stat .lbl { font-size: 9px; color: var(--muted); text-transform: uppercase; }
-  .model-output .stat .val { font-size: 16px; font-weight: 700; color: var(--orange); }
+  .model-output .stat .val { font-size: 20px; font-weight: 700; color: var(--orange); }
 
   /* ── Alerts ── */
-  .alert { padding: 12px 16px; border-radius: 8px; font-size: 14px; margin-bottom: 6px; background: var(--surface); border-left: 4px solid; }
+  .alert { padding: 12px 16px; border-radius: 8px; font-size: 20px; margin-bottom: 6px; background: var(--surface); border-left: 4px solid; }
   .alert.good { border-color: #3FB950; color: #3FB950; }
   .alert.warn { border-color: #D29922; color: #D29922; }
   .alert.error { border-color: #F85149; color: #F85149; }
 
-  .footer { font-size: 12px; color: #555; text-align: center; margin-top: 32px; padding-top: 20px; border-top: 1px solid var(--border); }
+  .footer { font-size: 20px; color: #555; text-align: center; margin-top: 32px; padding-top: 20px; border-top: 1px solid var(--border); }
 
   @media (max-width: 700px) {
     .kpi-grid { grid-template-columns: repeat(2, 1fr); }
@@ -182,7 +182,7 @@
         <div class="stat"><div class="lbl">Storage Cost / Inscription</div><div class="val" id="mo-storage">$0.008</div></div>
         <div class="stat"><div class="lbl">Your Externality / Yr</div><div class="val" id="mo-ext">$9.2K</div></div>
       </div>
-      <div style="margin-top:12px;font-size:12px;color:#555;text-align:center;">
+      <div style="margin-top:16px;padding:16px;background:#0D1117;border:1px solid var(--border);border-radius:8px;font-size:15px;color:#888;text-align:center;line-height:1.6;">
         ⚡ A Lightning channel open = ~1,000 vbytes = ~$0.63 at current economy fees. 
         The storage externality for that channel (~0.02 cents/yr) is negligible — 
         but the cumulative effect of 100K inscriptions/mo is not. 

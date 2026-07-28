@@ -8,66 +8,66 @@
 <style>
   :root { --orange: #F7931A; --bg: #0A0A0F; --surface: #12121A; --border: #1E1E2E; --text: #E0E0E0; --muted: #888; }
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 16px; line-height: 1.6; }
+  body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 20px; line-height: 1.6; }
   a { color: var(--orange); text-decoration: none; }
   a:hover { text-decoration: underline; }
 
   nav {
     position: sticky; top: 0; z-index: 100; background: #0A0A0FF0; backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 20px;
-    padding: 14px 32px; font-size: 14px;
+    padding: 14px 32px; font-size: 20px;
   }
-  nav .logo { font-weight: 800; font-size: 18px; letter-spacing: -0.3px; }
+  nav .logo { font-weight: 800; font-size: 20px; letter-spacing: -0.3px; }
   nav .logo span { color: var(--orange); }
   nav a { color: var(--muted); transition: color 0.2s; }
   nav a:hover { color: var(--text); text-decoration: none; }
   nav a.active { color: var(--orange); font-weight: 600; }
   nav .spacer { flex: 1; }
-  nav .cta { background: var(--orange); color: #000; font-weight: 700; padding: 8px 18px; border-radius: 8px; font-size: 13px; }
+  nav .cta { background: var(--orange); color: #000; font-weight: 700; padding: 8px 18px; border-radius: 8px; font-size: 17px; }
 
   .container { max-width: 960px; margin: 0 auto; padding: 40px 24px; }
 
-  h1 { font-size: 32px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 8px; }
-  .subtitle { color: var(--muted); font-size: 16px; margin-bottom: 40px; max-width: 600px; }
+  h1 { font-size: 36px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 8px; }
+  .subtitle { color: var(--muted); font-size: 20px; margin-bottom: 40px; max-width: 600px; }
 
-  .section-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--orange); margin: 40px 0 16px; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+  .section-title { font-size: 20px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--orange); margin: 40px 0 16px; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
 
-  .article { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 24px; margin-bottom: 16px; transition: border-color 0.3s; }
+  .article { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 28px; margin-bottom: 16px; transition: border-color 0.3s; }
   .article:hover { border-color: var(--orange); }
-  .article .meta { font-size: 12px; color: var(--muted); margin-bottom: 6px; display: flex; gap: 12px; flex-wrap: wrap; }
+  .article .meta { font-size: 20px; color: var(--muted); margin-bottom: 6px; display: flex; gap: 12px; flex-wrap: wrap; }
   .article .meta .tag { display: inline-block; font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 4px; text-transform: uppercase; }
   .tag-research { background: #58A6FF20; color: #58A6FF; }
   .tag-analysis { background: #3FB95020; color: #3FB950; }
   .tag-opinion { background: #F7931A20; color: var(--orange); }
   .tag-debate { background: #BC8CFF20; color: #BC8CFF; }
-  .article h3 { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+  .article h3 { font-size: 20px; font-weight: 700; margin-bottom: 6px; }
   .article h3 a { color: var(--text); }
   .article h3 a:hover { color: var(--orange); text-decoration: none; }
-  .article p { font-size: 14px; color: var(--muted); line-height: 1.6; }
-  .article .author { font-size: 12px; color: var(--muted); margin-top: 10px; }
+  .article p { font-size: 20px; color: var(--muted); line-height: 1.6; }
+  .article .author { font-size: 20px; color: var(--muted); margin-top: 10px; }
   .article .author strong { color: var(--text); }
 
   /* ── Contribute ── */
   .contribute-box { background: linear-gradient(135deg, #F7931A08, #58A6FF08); border: 1px solid var(--border); border-radius: 16px; padding: 32px; margin: 32px 0; }
   .contribute-box h3 { font-size: 20px; font-weight: 800; margin-bottom: 8px; }
-  .contribute-box p { font-size: 14px; color: var(--muted); margin-bottom: 16px; max-width: 600px; }
+  .contribute-box p { font-size: 20px; color: var(--muted); margin-bottom: 16px; max-width: 600px; }
 
   .rules { margin: 16px 0; }
-  .rule { display: flex; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 14px; }
+  .rule { display: flex; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 20px; }
   .rule:last-child { border: none; }
-  .rule .icon { font-size: 16px; min-width: 24px; }
+  .rule .icon { font-size: 20px; min-width: 24px; }
   .rule .ok { color: #3FB950; }
   .rule .no { color: #F85149; }
 
-  .btn-primary { display: inline-block; background: var(--orange); color: #000; font-weight: 700; padding: 12px 28px; border-radius: 10px; font-size: 15px; margin-top: 8px; }
+  .btn-primary { display: inline-block; background: var(--orange); color: #000; font-weight: 700; padding: 12px 28px; border-radius: 10px; font-size: 17px; margin-top: 8px; }
   .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 20px #F7931A40; text-decoration: none; }
-  .btn-secondary { display: inline-block; background: var(--surface); color: var(--text); font-weight: 600; padding: 10px 20px; border-radius: 8px; font-size: 13px; border: 1px solid var(--border); margin-top: 8px; }
+  .btn-secondary { display: inline-block; background: var(--surface); color: var(--text); font-weight: 600; padding: 10px 20px; border-radius: 8px; font-size: 17px; border: 1px solid var(--border); margin-top: 8px; }
   .btn-secondary:hover { border-color: var(--orange); text-decoration: none; }
 
-  footer { border-top: 1px solid var(--border); padding: 40px 24px; text-align: center; font-size: 13px; color: var(--muted); }
+  footer { border-top: 1px solid var(--border); padding: 40px 24px; text-align: center; font-size: 17px; color: var(--muted); }
   footer .links { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin-bottom: 12px; }
 
-  @media (max-width: 700px) { nav { padding: 10px 16px; gap: 10px; font-size: 13px; } nav a.nav-link { display: none; } }
+  @media (max-width: 700px) { nav { padding: 10px 16px; gap: 10px; font-size: 17px; } nav a.nav-link { display: none; } }
 </style>
 </head>
 <body>
