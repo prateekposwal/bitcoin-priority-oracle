@@ -4,28 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Bitcoin Block Space — Permanence vs Congestion</title>
-<style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
-    background: #0D1117; color: #F0F6FC;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    font-size: 15px; line-height: 1.6;
-  }
-  a { color: #58A6FF; text-decoration: none; }
-  a:hover { text-decoration: underline; }
+<link rel="stylesheet" href="/style.css">
+<style>a:hover { text-decoration: underline; }
 
   /* ── Nav ── */
-  nav {
-    position: sticky; top: 0; z-index: 100;
-    background: #0D1117F0; backdrop-filter: blur(8px);
-    border-bottom: 1px solid #30363D;
-    display: flex; align-items: center; gap: 20px;
-    padding: 10px 24px; font-size: 13px;
-  }
   nav .brand { font-weight: 700; font-size: 14px; color: #F0F6FC; }
-  nav a { color: #8B949E; }
   nav a:hover { color: #F0F6FC; text-decoration: none; }
-  nav .spacer { flex: 1; }
   nav .discuss {
     background: #238636; color: #fff; padding: 6px 14px; border-radius: 6px;
     font-weight: 600; font-size: 12px;
@@ -167,12 +151,10 @@
     .kpi-grid, .fee-row, .cost-detail { grid-template-columns: 1fr; }
     .dir-grid { grid-template-columns: 1fr; }
     .hero h1 { font-size: 22px; }
-    nav { gap: 10px; font-size: 12px; padding: 8px 14px; flex-wrap: wrap; }
     nav .brand { font-size: 13px; }
     .cmp-table { font-size: 12px; }
     .cmp-table th, .cmp-table td { padding: 6px 8px; }
-  }
-</style>
+  }</style>
 <script>
 if (window.location.hostname.includes("vercel.app")) {
   window.location.replace("https://bitcoinsahi.com" + window.location.pathname);

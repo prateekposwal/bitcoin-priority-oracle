@@ -4,41 +4,20 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Bitcoin Sahi — Blockchain Research & Development</title>
+<link rel="stylesheet" href="/style.css">
 <script>
 if (window.location.hostname.includes('vercel.app')) {
   window.location.replace('https://bitcoinsahi.com' + window.location.pathname);
 }
 </script>
-<style>
-  :root { --orange: #F7931A; --orange-dim: #F7931A20; --bg: #0A0A0F; --surface: #12121A; --border: #1E1E2E; --text: #E0E0E0; --muted: #888; }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
-  body {
-    background: var(--bg); color: var(--text);
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    font-size: 20px; line-height: 1.6; overflow-x: hidden;
-  }
-  a { color: var(--orange); text-decoration: none; }
+<style>html { scroll-behavior: smooth; }
   a:hover { text-decoration: underline; }
 
   /* ── Nav ── */
-  nav {
-    position: sticky; top: 0; z-index: 100;
-    background: #0A0A0FF0; backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--border);
-    display: flex; align-items: center; gap: 24px;
-    padding: 14px 32px; font-size: 20px;
-  }
   nav .logo { font-weight: 800; font-size: 20px; color: var(--text); letter-spacing: -0.3px; }
   nav .logo span { color: var(--orange); }
   nav a.nav-link { color: var(--muted); transition: color 0.2s; }
   nav a.nav-link:hover { color: var(--text); text-decoration: none; }
-  nav .spacer { flex: 1; }
-  nav .cta {
-    background: var(--orange); color: #000; font-weight: 700;
-    padding: 8px 18px; border-radius: 8px; font-size: 19px;
-    transition: transform 0.2s, box-shadow 0.2s;
-  }
   nav .cta:hover { transform: translateY(-1px); box-shadow: 0 4px 20px #F7931A40; text-decoration: none; }
 
   .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
@@ -167,11 +146,9 @@ if (window.location.hostname.includes('vercel.app')) {
     .grid-2, .grid-3 { grid-template-columns: 1fr; }
     .stats { grid-template-columns: repeat(2, 1fr); }
     .hero { padding: 60px 20px 60px; }
-    nav { padding: 10px 16px; gap: 12px; font-size: 19px; }
     nav a.nav-link { display: none; }
     .project-hero { padding: 24px; }
-  }
-</style>
+  }</style>
 </head>
 <body>
 
