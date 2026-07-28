@@ -23,7 +23,6 @@
 - [x] Write a clear, concise problem statement (1 page max) → `research/problem_statement.md`
 - [x] Publish as a research note (no solution, just the framing) → `research/problem_statement.md`
 - [x] Share on r/BitcoinEngineering for feedback → https://reddit.com/r/BitcoinEngineering
-- [x] Write "Bitcoin can't price its own memory" LinkedIn post → `research/bitcoin_cant_price_its_own_memory.md`
 
 ## Monitoring
 
