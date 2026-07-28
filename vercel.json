@@ -21,6 +21,10 @@
     {
       "src": "interactive-block.html",
       "use": "@vercel/static"
+    },
+    {
+      "src": "tools/fee_history.json",
+      "use": "@vercel/static"
     }
   ],
   "routes": [
