@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 """
-Continuous Research Monitor — Bitcoin Priority Oracle
-Runs daily: fetches live data, checks for new discussions, updates model output.
+Continuous Research Monitor — Bitcoin Sahi
+Runs daily: fetches live data, stores 7-day history, updates model output.
 """
-import json, urllib.request, os, sys
-from datetime import datetime
+import json, urllib.request, os
+from datetime import datetime, timezone
 
 BASE = os.path.dirname(os.path.abspath(__file__))
 OUTPUT = os.path.join(BASE, 'live_data.json')
+HISTORY = os.path.join(BASE, 'fee_history.json')
 
 def fetch_json(url, timeout=15):
     try:
@@ -17,12 +18,14 @@ def fetch_json(url, timeout=15):
         return {"error": str(e)}
 
 def main():
+    now = datetime.now(timezone.utc)
     report = {
-        "timestamp": datetime.utcnow().isoformat(),
+        "timestamp": now.isoformat(),
         "fees": {},
         "btc_price": None,
+        "mempool": None,
+        "block_height": None,
         "bip110_signaling": None,
-        "inscriptions": None,
         "utxo_set": None,
         "alerts": []
     }
@@ -32,7 +35,7 @@ def main():
     if 'fastestFee' in fees:
         report['fees'] = fees
     else:
-        report['alerts'].append(f"mempool.space fee API failed: {fees.get('error', 'unknown')}")
+        report['alerts'].append(f"Fee API failed: {fees.get('error', 'unknown')}")
 
     # 2. BTC price from blockchain.info
     ticker = fetch_json('https://blockchain.info/ticker')
@@ -41,23 +44,68 @@ def main():
     else:
         report['alerts'].append("blockchain.info ticker failed")
 
-    # 3. BIP-110 signaling — previously from wickedsmartbitcoin.com API (now defunct)
-    # The dashboard at wickedsmartbitcoin.com still tracks this but has no public API.
-    # Last known value from Reddit discussion: ~0.1-0.8% signaling, dropping.
-    # See: https://old.reddit.com/r/Bitcoin/comments/1uhzk8o/bip_110_thoughts/
-    report['bip110_signaling'] = {"status": "API no longer available", "last_known": "~0.1-0.8%, dropping (Jul 2026)"}
+    # 3. Mempool data from mempool.space
+    mempool = fetch_json('https://mempool.space/api/mempool')
+    if 'count' in mempool:
+        report['mempool'] = {
+            "unconfirmed_tx": mempool['count'],
+            "vsize": mempool.get('vsize', 0),
+            "total_fee_sats": mempool.get('total_fee', 0),
+        }
+    else:
+        report['alerts'].append("mempool.space mempool API failed")
 
-    # 4. Check r/BitcoinEngineering thread for new replies (heuristic: title match)
-    # Note: r/BitcoinEngineering has no public JSON API. Web scraping would be fragile.
-    # This is a placeholder for when an API becomes available.
+    # 4. Block height from blockstream.info
+    try:
+        r = urllib.request.urlopen('https://blockstream.info/api/blocks/tip/height', timeout=10)
+        report['block_height'] = int(r.read().strip())
+    except Exception as e:
+        report['alerts'].append(f"blockstream.info height API: {e}")
+
+    # 5. BIP-110 signaling — no public API available since wickedsmartbitcoin removed it
+    report['bip110_signaling'] = {
+        "status": "no public API",
+        "last_known": "~0.1-0.8%, dropping (Jul 2026)",
+        "note": "Last tracked on wickedsmartbitcoin.com before API was removed"
+    }
 
     # Write output
     with open(OUTPUT, 'w') as f:
         json.dump(report, f, indent=2)
+
+    # ── Fee History (7-day rolling) ──
+    history = []
+    if os.path.exists(HISTORY):
+        try:
+            with open(HISTORY) as f:
+                history = json.load(f)
+        except: pass
     
+    if 'fastestFee' in fees:
+        entry = {
+            "date": now.strftime('%Y-%m-%d'),
+            "fastestFee": fees['fastestFee'],
+            "halfHourFee": fees.get('halfHourFee', 0),
+            "hourFee": fees.get('hourFee', 0),
+            "economyFee": fees.get('economyFee', 0),
+            "btc_price": report['btc_price'],
+            "mempool_tx": mempool.get('count', 0) if isinstance(mempool, dict) else 0,
+        }
+        # Only add if not already today
+        if not history or history[-1].get('date') != entry['date']:
+            history.append(entry)
+        # Keep last 14 entries
+        history = history[-14:]
+    
+    with open(HISTORY, 'w') as f:
+        json.dump(history, f, indent=2)
+
     print(f"Research monitor updated: {OUTPUT}")
-    print(f"  BTC: ${report['btc_price']}" if report['btc_price'] else "  BTC price: unavailable")
-    print(f"  Fees: {report['fees']}")
+    print(f"  BTC: ${report['btc_price'] or '?'}")
+    print(f"  Fees: fastest={fees.get('fastestFee','?')}  economy={fees.get('economyFee','?')} sat/vB")
+    print(f"  Mempool: {mempool.get('count','?')} unconfirmed tx" if isinstance(mempool, dict) else "")
+    print(f"  Block height: {report['block_height']}")
+    print(f"  Fee history: {len(history)} entries")
     if report['alerts']:
         for a in report['alerts']:
             print(f"  ALERT: {a}")

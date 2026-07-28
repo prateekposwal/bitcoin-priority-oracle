@@ -1,0 +1,11 @@
+[
+  {
+    "date": "2026-07-28",
+    "fastestFee": 3,
+    "halfHourFee": 3,
+    "hourFee": 1,
+    "economyFee": 1,
+    "btc_price": 63670.02,
+    "mempool_tx": 104676
+  }
+]

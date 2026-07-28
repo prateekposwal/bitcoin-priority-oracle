@@ -71,6 +71,16 @@
   </div>
 
   <div class="section">
+    <h2>Fee Trend (7-day)</h2>
+    <div class="fee-bar" id="fee-history-bar" style="height:80px;align-items:flex-end;gap:4px;"></div>
+    <div style="display:flex;justify-content:space-between;font-size:9px;color:#555;margin-top:4px;">
+      <span id="history-start"></span>
+      <span>← Older · Newer →</span>
+      <span id="history-end"></span>
+    </div>
+  </div>
+
+  <div class="section">
     <h2>Model Output</h2>
     <div class="row" id="model-row"></div>
   </div>
@@ -122,6 +132,37 @@ fetch('tools/live_data.json?_=' + Date.now())
       '<div class="bar" style="height:' + (v / maxFee * 100 * 0.9 + 10) + '%;background:' + barColors[i] + ';min-width:40px;" title="' + barLabels[i] + ': ' + v + ' sat/vB"></div>'
     ).join('');
 
+    // ── Fee history chart (7-day) ──
+    fetch('tools/fee_history.json?_=' + Date.now())
+      .then(r => r.json())
+      .then(hist => {
+        if (!hist || hist.length < 2) {
+          document.getElementById('fee-history-bar').innerHTML = '<div style="color:#555;font-size:12px;">Building history — need 2+ data points</div>';
+          return;
+        }
+        var fastest = hist.map(d => d.fastestFee || 0);
+        var economy = hist.map(d => d.economyFee || 0);
+        var maxH = Math.max(1, ...fastest);
+        var html = '';
+        for (var i = 0; i < hist.length; i++) {
+          var fh = (fastest[i] / maxH * 100 * 0.85 + 8);
+          var eh = (economy[i] / maxH * 100 * 0.85 + 4);
+          html += '<div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:2px;">';
+          html += '<div class="bar" style="height:' + fh + '%;background:#F7931A;min-width:8px;width:100%;" title="Fastest: ' + fastest[i] + ' sat/vB (' + hist[i].date + ')"></div>';
+          html += '<div class="bar" style="height:' + eh + '%;background:#58A6FF;min-width:8px;width:100%;" title="Economy: ' + economy[i] + ' sat/vB"></div>';
+          html += '<span style="font-size:7px;color:#555;transform:rotate(-45deg);white-space:nowrap;margin-top:2px;">' + hist[i].date.slice(5) + '</span>';
+          html += '</div>';
+        }
+        document.getElementById('fee-history-bar').innerHTML = html;
+        if (hist.length > 0) {
+          document.getElementById('history-start').textContent = hist[0].date;
+          document.getElementById('history-end').textContent = hist[hist.length-1].date;
+        }
+      })
+      .catch(function(e) {
+        // No history yet — expected on first run
+      });
+
     // ── Model output (computed from live params) ──
     var nodeCost = 924.35;
     var bytesPerInsc = 400;
@@ -145,11 +186,14 @@ fetch('tools/live_data.json?_=' + Date.now())
     var satPerDollar = btc > 0 ? (100000000 / btc).toFixed(1) : '—';
     var inscFeeSats = (fees.economyFee || 1) * 100; // 100 vbytes per inscription
     var inscFeeUsd = btc > 0 ? (inscFeeSats * btc / 100000000).toFixed(4) : '—';
+    var blockHeight = d.block_height || '—';
+    var mempoolTx = d.mempool ? Number(d.mempool.unconfirmed_tx).toLocaleString() : '—';
     document.getElementById('market-row').innerHTML = [
       { lbl: 'Sat/$ Ratio', val: satPerDollar + ' sat' },
       { lbl: 'Insc Fee (economy)', val: '$' + inscFeeUsd },
       { lbl: 'Fee ÷ Storage Cost', val: (inscFeeUsd / Math.max(storage10yr, 0.0001)).toFixed(0) + '×' },
-      { lbl: 'BTC Dominance', val: '—', sub: 'data pending' },
+      { lbl: 'Unconfirmed Tx', val: mempoolTx },
+      { lbl: 'Block Height', val: blockHeight },
     ].map(m => '<div class="stat"><div class="lbl">' + m.lbl + '</div><div class="val">' + m.val + '</div></div>').join('');
 
     // ── Alerts ──
