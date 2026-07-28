@@ -47,28 +47,25 @@ nav .nav-link:hover { color: var(--text); }
 nav .nav-link.active { color: var(--orange); }
 
 nav .dropbtn {
-  background: none; border: none; color: var(--muted); font-size: 14px; cursor: pointer;
-  display: flex; align-items: center; gap: 4px; padding: 4px 0; font-weight: 500;
+  background: none; border: 1px solid var(--border); border-radius: 6px;
+  color: var(--muted); font-size: 13px; cursor: pointer; padding: 4px 10px;
+  display: flex; align-items: center; gap: 4px; transition: border-color 0.2s;
 }
-nav .dropbtn:hover { color: var(--text); }
+nav .dropbtn:hover { border-color: var(--orange); color: var(--text); }
 nav .dropdown { position: relative; display: inline-block; }
 nav .dropdown-content {
-  display: none; position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
-  min-width: 180px; background: var(--surface); border: 1px solid var(--border);
-  border-radius: 10px; padding: 5px; z-index: 200; margin-top: 8px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.5);
-}
-nav .dropdown-content::before {
-  content: ''; position: absolute; top: -6px; left: 50%; transform: translateX(-50%);
-  border-left: 6px solid transparent; border-right: 6px solid transparent;
-  border-bottom: 6px solid var(--border);
+  display: none; position: absolute; top: 100%; left: 0; min-width: 160px;
+  background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+  padding: 4px; z-index: 200; margin-top: 4px; box-shadow: 0 8px 24px rgba(0,0,0,0.4);
 }
 nav .dropdown-content a {
-  display: block; padding: 7px 12px; border-radius: 6px; font-size: 13px;
-  color: var(--muted); text-decoration: none; transition: all 0.15s;
+  display: block; padding: 6px 12px; border-radius: 4px; font-size: 13px;
+  color: var(--muted); text-decoration: none;
 }
 nav .dropdown-content a:hover { background: var(--orange); color: #000; }
-nav .dropdown:hover .dropdown-content { display: block; }
+nav .dropdown:hover .dropdown-content,
+nav .dropdown:focus-within .dropdown-content { display: block; }
+nav .dropdown-content a:active { background: var(--orange); color: #000; }
 
 @media (max-width: 700px) {
   nav { padding: 10px 14px; gap: 8px; font-size: 13px; }
