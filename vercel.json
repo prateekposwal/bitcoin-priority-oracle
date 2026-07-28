@@ -73,6 +73,10 @@
     {
       "src": "style.css",
       "use": "@vercel/static"
+    },
+    {
+      "src": "decide.html",
+      "use": "@vercel/static"
     }
   ],
   "routes": [
@@ -123,6 +127,10 @@
     {
       "src": "/lightning-sim",
       "dest": "/lightning-sim.html"
+    },
+    {
+      "src": "/decide",
+      "dest": "/decide.html"
     }
   ]
 }

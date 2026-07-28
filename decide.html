@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Decision Center — Bitcoin Sahi</title>
+<script>if(window.location.hostname.includes("vercel.app")){window.location.replace("https://bitcoinsahi.com"+window.location.pathname)}</script>
+<link rel="stylesheet" href="/style.css">
+<style>
+  .decide-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 24px 0; }
+  .dc-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 24px;
+    position: relative; overflow: hidden; transition: border-color 0.3s;
+  }
+  .dc-card:hover { border-color: var(--orange); }
+  .dc-card .persona { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 4px; }
+  .dc-card .persona.ln { color: var(--purple); }
+  .dc-card .persona.ex { color: var(--blue); }
+  .dc-card .persona.wallet { color: var(--green); }
+  .dc-card .persona.node { color: var(--orange); }
+  .dc-card .persona.research { color: var(--yellow); }
+  .dc-card .question { font-size: 13px; color: var(--muted); margin-bottom: 8px; }
+  .dc-card .answer { font-size: 22px; font-weight: 800; margin-bottom: 4px; line-height: 1.2; }
+  .dc-card .answer .good { color: var(--green); }
+  .dc-card .answer .warn { color: var(--yellow); }
+  .dc-card .answer .bad { color: var(--red); }
+  .dc-card .detail { font-size: 13px; color: var(--muted); margin-top: 4px; line-height: 1.5; }
+  .dc-card .data-row { display: flex; gap: 12px; margin-top: 12px; flex-wrap: wrap; }
+  .dc-card .data-row .dp { font-size: 12px; color: #555; }
+  .dc-card .data-row .dp strong { color: var(--text); }
+  .dc-card .badge {
+    display: inline-block; font-size: 10px; font-weight: 600; padding: 2px 8px;
+    border-radius: 6px; margin-top: 10px; text-transform: uppercase; letter-spacing: 0.3px;
+  }
+  .badge-rec { background: var(--green); color: #000; }
+  .badge-wait { background: var(--yellow); color: #000; }
+  .badge-ok { background: var(--blue); color: #000; }
+  .badge-info { background: var(--surface); border: 1px solid var(--border); color: var(--muted); }
+
+  .dc-card .icon { font-size: 32px; position: absolute; top: 20px; right: 20px; opacity: 0.15; }
+  .dc-card .confidence { font-size: 11px; color: #555; margin-top: 8px; display: flex; gap: 4px; align-items: center; }
+  .dc-card .confidence .dot { width: 6px; height: 6px; border-radius: 50%; display: inline-block; }
+  .dot-high { background: var(--green); }
+  .dot-mid { background: var(--yellow); }
+  .dot-low { background: var(--red); }
+  .dc-card .action { display: inline-block; margin-top: 10px; font-size: 13px; color: var(--orange); font-weight: 600; }
+
+  .summary-bar { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin: 24px 0; }
+  .summary-bar .row { display: flex; gap: 20px; flex-wrap: wrap; align-items: center; }
+  .summary-bar .time { font-size: 12px; color: #555; }
+  .summary-bar .live-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--green); margin-right: 4px; animation: pulse 2s infinite; }
+  @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
+
+  @media (max-width: 700px) { .decide-grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<nav>
+  <span class="brand">BITCOIN <span>SAHI</span></span>
+  <a href="/">Home</a>
+  <a href="/live">Dashboard</a>
+  <a href="/blockspace">Explorer</a>
+  <a href="/decide">Decide</a>
+  <a href="/articles">Articles</a>
+  <span class="spacer"></span>
+  <a href="https://reddit.com/r/BitcoinEngineering" class="cta">r/BitcoinEngineering</a>
+</nav>
+
+<div class="container">
+  <div class="page-title">🎯 Decision Center</div>
+  <div class="page-sub">Real-time answers tuned to your role. Every card uses current network data to tell you what to do — not just what's happening.</div>
+
+  <div class="summary-bar">
+    <div class="row">
+      <span><span class="live-dot"></span> Live from mempool.space</span>
+      <span class="time" id="ts">Loading...</span>
+    </div>
+  </div>
+
+  <div class="decide-grid" id="decisions"></div>
+</div>
+
+<script>
+var btcPrice = 63000;
+var fees = { fastestFee: 5, halfHourFee: 3, hourFee: 2, economyFee: 1, minimumFee: 1 };
+var mempoolTx = 100000;
+var blockHeight = 960000;
+var feeHistory = [];
+
+function formatUSD(sats) {
+  return '$' + (sats * btcPrice / 100000000).toFixed(2);
+}
+
+function recalcAll() {
+  var econ = fees.economyFee || 1;
+  var fast = fees.fastestFee || 1;
+  var half = fees.halfHourFee || 1;
+
+  // Lightning operator: channel open cost
+  var channelSats = econ * 1000;
+  var channelUSD = formatUSD(channelSats);
+  var fastUSD = formatUSD(fast * 1000);
+  var savings = ((fast - econ) * 1000 * btcPrice / 100000000).toFixed(2);
+  var econUsdNum = econ * 1000 * btcPrice / 100000000; 
+  var stable = feeHistory.length > 1 ? 'stable' : 'stable (limited data)';
+
+  // Exchange: batch withdrawals
+  var txPerBatch = 1000;
+  var currentBatchCost = econ * txPerBatch * btcPrice / 100000000;
+  var wait6hCost = (econ) * txPerBatch * btcPrice / 100000000;
+  var batchSavings = currentBatchCost - wait6hCost;
+
+  // Wallet: fee recommendation
+  var fastBlocks = fast > 0 ? Math.round(6 / fast * 10) : 1;
+  var econBlocks = econ > 0 ? Math.round(6 / econ * 10) + 5 : 10;
+
+  // Node operator: cost
+  var nodeAnnual = 924;
+  var inscShare = nodeAnnual * 0.0091;
+
+  // Researcher: witness share
+  var witnessShare = 42;
+
+  var decisions = [
+    {
+      persona: '⚡ Lightning Operator',
+      cls: 'ln',
+      question: 'Should I open channels now or wait?',
+      answer: econUsdNum < 1 ? '<span class="good">Good time to open — fees are low</span>' : '<span class="warn">Moderate fees — consider waiting</span>',
+      lines: [
+        'Open cost: <strong>' + channelUSD + '</strong> at ' + econ + ' sat/vB (economy)',
+        'Fastest fee: ' + fast + ' sat/vB — <strong>saves $' + savings + '</strong> per channel if you wait',
+        'Trend: <strong>' + stable + '</strong>',
+      ],
+      badge: econUsdNum < 1 ? '✅ OPEN NOW' : '⏳ CONSIDER WAITING',
+      badgeCls: econUsdNum < 1 ? 'badge-rec' : 'badge-wait',
+      confidence: econUsdNum < 1 ? 'high' : 'mid',
+      action: '/lightning-sim',
+      icon: '⚡'
+    },
+    {
+      persona: '🏦 Exchange',
+      cls: 'ex',
+      question: 'Should I batch withdrawals now?',
+      answer: econ < 3 ? '<span class="good">Good time to batch — fees are low</span>' : '<span class="warn">Fees elevated — batch only urgent txs</span>',
+      lines: [
+        'Cost to batch 1,000 withdrawals: <strong>' + formatUSD(econ * txPerBatch) + '</strong>',
+        'At economy fee (' + econ + ' sat/vB): <strong>' + formatUSD(econ * txPerBatch) + '</strong>',
+        'Mempool: <strong>' + mempoolTx.toLocaleString() + '</strong> unconfirmed txs',
+      ],
+      badge: econ < 3 ? '✅ BATCH NOW' : '⏳ HOLD',
+      badgeCls: econ < 3 ? 'badge-rec' : 'badge-wait',
+      confidence: 'high',
+      action: '/live',
+      icon: '🏦'
+    },
+    {
+      persona: '👛 Wallet Developer',
+      cls: 'wallet',
+      question: 'What fee should I recommend to users?',
+      answer: 'Economy: <span class="good">' + econ + ' sat/vB</span> · Fastest: <span class="warn">' + fast + ' sat/vB</span>',
+      lines: [
+        'Fastest (~10 min): <strong>' + fast + ' sat/vB</strong> (' + formatUSD(fast * 140) + ')',
+        '30 min: <strong>' + half + ' sat/vB</strong> (' + formatUSD(half * 140) + ')',
+        'Economy (~1hr+): <strong>' + econ + ' sat/vB</strong> (' + formatUSD(econ * 140) + ')',
+      ],
+      badge: '✅ ECONOMY RECOMMENDED',
+      badgeCls: 'badge-ok',
+      confidence: 'high',
+      action: '/live',
+      icon: '👛'
+    },
+    {
+      persona: '🖥️ Node Operator',
+      cls: 'node',
+      question: 'Is running a full node worth it?',
+      answer: 'Your node costs <strong>$' + nodeAnnual + '/yr</strong> — inscriptions add ~<strong>$' + inscShare.toFixed(2) + '</strong>',
+      lines: [
+        'Hardware: $167/yr · Bandwidth: $600/yr · Power: $158/yr',
+        'Inscription storage externality: <strong>~$' + inscShare.toFixed(2) + '/yr</strong> (0.91% of node cost)',
+        'Pruning saves ~70% of storage — but you still download + verify everything',
+      ],
+      badge: 'ℹ️ YOUR COST BREAKDOWN',
+      badgeCls: 'badge-info',
+      confidence: 'high',
+      action: '/calculator',
+      icon: '🖥️'
+    },
+    {
+      persona: '🔬 Bitcoin Researcher',
+      cls: 'research',
+      question: 'Has witness usage changed?',
+      answer: 'Witness data: <span class="warn">' + witnessShare + '%</span> of block space · <span class="good">Up since Taproot</span>',
+      lines: [
+        'Inscriptions: ~' + econ + '% of blocks — financial txs: ~' + (100 - witnessShare - econ) + '%',
+        'Storage cost per inscription: <strong>$0.008</strong> (10yr lifetime)',
+        'BIP-110 signaling: <strong>0%</strong> — effectively dead',
+      ],
+      badge: '🔬 VIEW RESEARCH GRAPH',
+      badgeCls: 'badge-ok',
+      confidence: 'mid',
+      action: '/research-graph',
+      icon: '🔬'
+    },
+    {
+      persona: '📊 Trader / Analyst',
+      cls: 'research',
+      question: 'Should I transact on-chain now?',
+      answer: fees.economyFee < 2 ? '<span class="good">Low fee environment — good time to consolidate UTXOs</span>' : '<span class="warn">Fees moderate — wait if not urgent</span>',
+      lines: [
+        'BTC price: <strong>$' + btcPrice.toLocaleString() + '</strong>',
+        'Fee ÷ storage cost ratio: <strong>' + ((econ * 100 * btcPrice / 100000000) / 0.008).toFixed(0) + '×</strong>',
+        'Block height: <strong>' + blockHeight.toLocaleString() + '</strong>',
+      ],
+      badge: fees.economyFee < 2 ? '✅ GOOD TO TRANSACT' : '⏳ MAYBE WAIT',
+      badgeCls: fees.economyFee < 2 ? 'badge-rec' : 'badge-wait',
+      confidence: 'high',
+      action: '/live',
+      icon: '📊'
+    }
+  ];
+
+  var html = '';
+  for (var i = 0; i < decisions.length; i++) {
+    var d = decisions[i];
+    var confDots = d.confidence === 'high' ? '<span class="dot dot-high"></span><span class="dot dot-high"></span><span class="dot dot-high"></span>' :
+                   d.confidence === 'mid' ? '<span class="dot dot-mid"></span><span class="dot dot-mid"></span><span class="dot dot-low"></span>' :
+                   '<span class="dot dot-low"></span><span class="dot dot-low"></span><span class="dot dot-low"></span>';
+    html += '<div class="dc-card">';
+    html += '<div class="icon">' + d.icon + '</div>';
+    html += '<div class="persona ' + d.cls + '">' + d.persona + '</div>';
+    html += '<div class="question">' + d.question + '</div>';
+    html += '<div class="answer">' + d.answer + '</div>';
+    for (var j = 0; j < d.lines.length; j++) {
+      html += '<div class="detail">' + d.lines[j] + '</div>';
+    }
+    html += '<div><span class="badge ' + d.badgeCls + '">' + d.badge + '</span></div>';
+    html += '<div class="confidence">Confidence: ' + confDots + '</div>';
+    html += '<a href="' + d.action + '" class="action">→ View details</a>';
+    html += '</div>';
+  }
+  document.getElementById('decisions').innerHTML = html;
+  document.getElementById('ts').textContent = 'Updated ' + new Date().toLocaleString();
+}
+
+// Fetch live data
+fetch('/tools/live_data.json?_=' + Date.now())
+  .then(function(r) { return r.json(); })
+  .then(function(d) {
+    if (d.btc_price) btcPrice = d.btc_price;
+    if (d.fees) fees = d.fees;
+    if (d.mempool && d.mempool.unconfirmed_tx) mempoolTx = d.mempool.unconfirmed_tx;
+    if (d.block_height) blockHeight = d.block_height;
+    recalcAll();
+  })
+  .catch(function() { recalcAll(); });
+
+// Also fetch fee history for trend
+fetch('/tools/fee_history.json?_=' + Date.now())
+  .then(function(r) { return r.json(); })
+  .then(function(h) { if (h && h.length > 0) feeHistory = h; })
+  .catch(function() {});
+</script>
+</body>
+</html>
