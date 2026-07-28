@@ -24,29 +24,28 @@ if (window.location.hostname.includes('vercel.app')) {
 
   /* ── Hero ── */
   .hero {
-    text-align: center; padding: 70px 24px 50px;
-    background: radial-gradient(ellipse at 50% 0%, #F7931A12 0%, transparent 65%);
-    display: flex; flex-direction: column; align-items: center; gap: 16px;
+    text-align: center; padding: 80px 24px 60px;
+    background: radial-gradient(ellipse at 50% 0%, #F7931A10 0%, transparent 60%);
   }
   .hero .badge {
-    display: inline-block; font-size: 12px; font-weight: 600; color: var(--orange);
-    border: 1px solid var(--orange); border-radius: 20px; padding: 6px 16px;
-    letter-spacing: 0.8px; text-transform: uppercase; margin-bottom: 4px;
+    display: inline-block; font-size: 13px; font-weight: 600; color: var(--orange);
+    border: 1px solid var(--orange); border-radius: 20px; padding: 5px 15px;
+    margin-bottom: 18px; letter-spacing: 0.5px;
   }
-  .hero h1 { font-size: clamp(34px, 5vw, 56px); font-weight: 800; letter-spacing: -1px; line-height: 1.2; max-width: 800px; }
+  .hero h1 { font-size: clamp(34px, 5.5vw, 56px); font-weight: 800; letter-spacing: -1px; line-height: 1.15; margin-bottom: 14px; }
   .hero h1 span { background: linear-gradient(135deg, var(--orange), #FFB347); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-  .hero p { font-size: 17px; color: var(--muted); max-width: 560px; line-height: 1.6; margin: 4px 0 8px; }
-  .hero .actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 4px; }
+  .hero p { font-size: 18px; color: var(--muted); max-width: 600px; margin: 0 auto 28px; line-height: 1.65; }
+  .hero .actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
   .hero .btn-primary {
-    background: var(--orange); color: #000; font-weight: 700; padding: 14px 32px;
-    border-radius: 12px; font-size: 15px; transition: all 0.25s; letter-spacing: 0.2px;
+    background: var(--orange); color: #000; font-weight: 700; padding: 12px 28px;
+    border-radius: 10px; font-size: 15px; transition: transform 0.2s, box-shadow 0.2s;
   }
-  .hero .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(247,147,26,0.35); text-decoration: none; }
+  .hero .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 24px #F7931A40; text-decoration: none; }
   .hero .btn-secondary {
-    background: transparent; color: var(--text); font-weight: 600; padding: 14px 32px;
-    border-radius: 12px; font-size: 15px; border: 1px solid var(--border); transition: all 0.25s;
+    background: var(--surface); color: var(--text); font-weight: 600; padding: 12px 28px;
+    border-radius: 10px; font-size: 15px; border: 1px solid var(--border); transition: border-color 0.2s;
   }
-  .hero .btn-secondary:hover { border-color: var(--orange); background: #FFFFFF08; text-decoration: none; }
+  .hero .btn-secondary:hover { border-color: var(--orange); text-decoration: none; }
 
   /* ── Stats bar ── */
   .stats {
@@ -174,14 +173,16 @@ if (window.location.hostname.includes('vercel.app')) {
 <!-- ─── HERO ─── -->
 <div class="hero">
   <div class="badge">Blockchain Research & Development</div>
-  <h1>We don't fully understand<br>Bitcoin yet. <span>But we're<br>learning — and building.</span></h1>
+  <h1>Bitcoin blocks are a market.<br>Everyone sees the price.<br><span>We study what isn't priced.</span></h1>
   <p>
-    Understanding Bitcoin is a long-term endeavor. We build tools, publish research, 
-    and create visualizations that help make its complexity easier to explore.
+    Every transaction competes for 4 million weight units per block. The fee you pay 
+    gets you into the next one. But the data you leave behind lives in every full node 
+    forever — and nobody prices that cost. We built the first open model to quantify it. 
+    The results surprised us. They might surprise you too.
   </p>
   <div class="actions">
-    <a href="#project" class="btn-primary">Our First Project →</a>
-    <a href="#research" class="btn-secondary">Read the Research</a>
+    <a href="#project" class="btn-primary">See What We Found →</a>
+    <a href="/decide" class="btn-secondary">Use the Decision Center</a>
   </div>
 </div>
 
