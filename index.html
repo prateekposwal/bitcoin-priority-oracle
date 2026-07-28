@@ -3,431 +3,381 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bitcoin Block Space — Permanence vs Congestion</title>
-<style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
-    background: #0D1117; color: #F0F6FC;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    font-size: 15px; line-height: 1.6;
-  }
-  a { color: #58A6FF; text-decoration: none; }
-  a:hover { text-decoration: underline; }
-
-  /* ── Nav ── */
-  nav {
-    position: sticky; top: 0; z-index: 100;
-    background: #0D1117F0; backdrop-filter: blur(8px);
-    border-bottom: 1px solid #30363D;
-    display: flex; align-items: center; gap: 20px;
-    padding: 10px 24px; font-size: 13px;
-  }
-  nav .brand { font-weight: 700; font-size: 14px; color: #F0F6FC; }
-  nav a { color: #8B949E; }
-  nav a:hover { color: #F0F6FC; text-decoration: none; }
-  nav .spacer { flex: 1; }
-  nav .discuss {
-    background: #238636; color: #fff; padding: 6px 14px; border-radius: 6px;
-    font-weight: 600; font-size: 12px;
-  }
-  nav .discuss:hover { background: #2EA043; text-decoration: none; }
-
-  .container { max-width: 960px; margin: 0 auto; padding: 32px 20px 60px; }
-
-  /* ── Hero ── */
-  .hero { text-align: center; margin-bottom: 40px; }
-  .hero h1 { font-size: 28px; font-weight: 800; letter-spacing: -0.3px; }
-  .hero .tagline {
-    font-size: 15px; color: #8B949E; margin: 8px 0 16px;
-    max-width: 680px; margin-left: auto; margin-right: auto;
-  }
-  .hero .oneliner {
-    background: #161B22; border: 1px solid #30363D; border-radius: 10px;
-    padding: 16px 20px; font-size: 14px; color: #F0F6FC;
-    max-width: 720px; margin: 0 auto;
-  }
-  .hero .oneliner strong { color: #F0883E; }
-
-  /* ── Section headers ── */
-  .section-header {
-    font-size: 13px; font-weight: 700; text-transform: uppercase;
-    letter-spacing: 0.8px; color: #8B949E; margin: 40px 0 16px;
-    padding-bottom: 8px; border-bottom: 1px solid #30363D;
-  }
-
-  /* ── Key numbers grid ── */
-  .kpi-grid {
-    display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
-    margin-bottom: 20px;
-  }
-  .kpi-card {
-    background: #161B22; border: 1px solid #30363D; border-radius: 10px;
-    padding: 18px; text-align: center;
-  }
-  .kpi-card .lbl { font-size: 10px; color: #8B949E; text-transform: uppercase; letter-spacing: 0.5px; }
-  .kpi-card .val { font-size: 28px; font-weight: 800; margin: 4px 0 2px; }
-  .kpi-card .sub { font-size: 11px; color: #8B949E; }
-  .kpi-card .val.green { color: #3FB950; }
-  .kpi-card .val.orange { color: #F0883E; }
-  .kpi-card .val.blue { color: #58A6FF; }
-  .kpi-card .val.purple { color: #BC8CFF; }
-
-  .fee-row {
-    display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
-  }
-  .fee-card {
-    background: #0D1117; border: 1px solid #30363D; border-radius: 8px;
-    padding: 12px; text-align: center;
-  }
-  .fee-card .lbl { font-size: 10px; color: #8B949E; }
-  .fee-card .val { font-size: 16px; font-weight: 700; margin-top: 2px; }
-
-  /* ── Block vis ── */
-  .block-vis {
-    height: 44px; border-radius: 8px; overflow: hidden; display: flex;
-    margin: 14px 0; border: 1px solid #30363D;
-  }
-  .block-vis .seg {
-    display: flex; align-items: center; justify-content: center;
-    font-size: 12px; font-weight: 700; transition: width 0.4s ease;
-  }
-  .seg.fin { background: linear-gradient(135deg, #1a7f37, #3FB950); color: #fff; }
-  .seg.dat { background: linear-gradient(135deg, #d2751f, #F0883E); color: #fff; }
-
-  .block-stats { display: flex; gap: 12px; margin: 8px 0; }
-  .block-stat {
-    background: #0D1117; border-radius: 6px; padding: 8px 12px; flex: 1;
-  }
-  .block-stat label { font-size: 10px; color: #8B949E; display: block; text-transform: uppercase; }
-  .block-stat .val { font-size: 18px; font-weight: 700; margin-top: 2px; }
-  .block-stat .val.fin { color: #3FB950; }
-  .block-stat .val.dat { color: #F0883E; }
-
-  /* ── Comparison table ── */
-  .cmp-table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 14px 0; }
-  .cmp-table th { text-align: left; padding: 10px 12px; border-bottom: 2px solid #30363D; color: #8B949E; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; }
-  .cmp-table td { padding: 10px 12px; border-bottom: 1px solid #21262D; }
-  .cmp-table tr:last-child td { border-bottom: none; }
-  .cmp-table .lbl { color: #F0F6FC; font-weight: 600; }
-  .cmp-table .cong { color: #3FB950; }
-  .cmp-table .perm { color: #F0883E; }
-  .cmp-table .bad { color: #F85149; }
-  .cmp-table .good { color: #3FB950; }
-
-  /* ── Cost detail ── */
-  .cost-detail { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 14px 0; }
-  .cost-box { background: #161B22; border: 1px solid #30363D; border-radius: 8px; padding: 16px; }
-  .cost-box h3 { font-size: 12px; color: #8B949E; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
-  .cost-box .row { display: flex; justify-content: space-between; font-size: 13px; padding: 4px 0; color: #C9D1D9; }
-  .cost-box .row .amt { font-weight: 600; }
-  .cost-box .total { display: flex; justify-content: space-between; font-size: 14px; padding: 8px 0 0; margin-top: 6px; border-top: 1px solid #30363D; font-weight: 700; color: #F0F6FC; }
-
-  /* ── Journey timeline ── */
-  .journey { display: flex; flex-direction: column; gap: 0; margin: 14px 0; }
-  .step { display: flex; gap: 14px; padding: 14px 0; border-left: 2px solid #30363D; padding-left: 20px; margin-left: 10px; position: relative; }
-  .step:last-child { border-left-color: transparent; }
-  .step .dot { position: absolute; left: -6px; top: 18px; width: 10px; height: 10px; border-radius: 50%; border: 2px solid; }
-  .step.v1 .dot { background: #F8514920; border-color: #F85149; }
-  .step.v2 .dot { background: #D2992220; border-color: #D29922; }
-  .step.v3 .dot { background: #58A6FF20; border-color: #58A6FF; }
-  .step .tag { font-size: 10px; font-weight: 700; padding: 1px 8px; border-radius: 8px; text-transform: uppercase; letter-spacing: 0.3px; display: inline-block; margin-bottom: 4px; }
-  .tag-r { background: #F8514920; color: #F85149; border: 1px solid #F8514940; }
-  .tag-y { background: #D2992220; color: #D29922; border: 1px solid #D2992240; }
-  .tag-b { background: #58A6FF20; color: #58A6FF; border: 1px solid #58A6FF40; }
-  .step .title { font-size: 14px; font-weight: 700; }
-  .step .desc { font-size: 12px; color: #8B949E; margin-top: 2px; line-height: 1.5; }
-
-  /* ── Directions ── */
-  .dir-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 14px 0; }
-  .dir-card {
-    background: #161B22; border: 1px solid #30363D; border-radius: 10px; padding: 16px;
-    transition: border-color 0.2s;
-  }
-  .dir-card:hover { border-color: #58A6FF; }
-  .dir-card h3 { font-size: 13px; font-weight: 700; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
-  .dir-card .tag {
-    font-size: 9px; font-weight: 700; padding: 1px 7px; border-radius: 8px; text-transform: uppercase; letter-spacing: 0.3px;
-  }
-  .tag-rec { background: #3FB95020; color: #3FB950; border: 1px solid #3FB95040; }
-  .tag-exp { background: #58A6FF20; color: #58A6FF; border: 1px solid #58A6FF40; }
-  .tag-spec { background: #D2992220; color: #D29922; border: 1px solid #D2992240; }
-  .dir-card p { font-size: 12px; color: #8B949E; line-height: 1.5; margin: 6px 0; }
-  .dir-card .pro { font-size: 11px; color: #3FB950; margin-top: 6px; }
-  .dir-card .con { font-size: 11px; color: #F0883E; margin-top: 3px; }
-
-  /* ── Footer ── */
-  .footer { text-align: center; margin-top: 48px; padding-top: 24px; border-top: 1px solid #30363D; font-size: 12px; color: #8B949E; }
-  .footer .btn {
-    display: inline-block; background: #238636; color: #fff; padding: 10px 24px;
-    border-radius: 8px; font-weight: 700; font-size: 14px; margin: 8px 0 16px;
-  }
-  .footer .btn:hover { background: #2EA043; text-decoration: none; }
-
-  @media (max-width: 700px) {
-    .kpi-grid, .fee-row, .cost-detail { grid-template-columns: 1fr; }
-    .dir-grid { grid-template-columns: 1fr; }
-    .hero h1 { font-size: 22px; }
-    nav { gap: 10px; font-size: 12px; padding: 8px 14px; flex-wrap: wrap; }
-    nav .brand { font-size: 13px; }
-    .cmp-table { font-size: 12px; }
-    .cmp-table th, .cmp-table td { padding: 6px 8px; }
-  }
-</style>
+<title>Bitcoin Sahi — Blockchain Research & Development</title>
 <script>
 if (window.location.hostname.includes('vercel.app')) {
   window.location.replace('https://bitcoinsahi.com' + window.location.pathname);
 }
 </script>
+<style>
+  :root { --orange: #F7931A; --orange-dim: #F7931A20; --bg: #0A0A0F; --surface: #12121A; --border: #1E1E2E; --text: #E0E0E0; --muted: #888; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 16px; line-height: 1.6; overflow-x: hidden;
+  }
+  a { color: var(--orange); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  /* ── Nav ── */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: #0A0A0FF0; backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 24px;
+    padding: 14px 32px; font-size: 14px;
+  }
+  nav .logo { font-weight: 800; font-size: 18px; color: var(--text); letter-spacing: -0.3px; }
+  nav .logo span { color: var(--orange); }
+  nav a.nav-link { color: var(--muted); transition: color 0.2s; }
+  nav a.nav-link:hover { color: var(--text); text-decoration: none; }
+  nav .spacer { flex: 1; }
+  nav .cta {
+    background: var(--orange); color: #000; font-weight: 700;
+    padding: 8px 18px; border-radius: 8px; font-size: 13px;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  nav .cta:hover { transform: translateY(-1px); box-shadow: 0 4px 20px #F7931A40; text-decoration: none; }
+
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+  /* ── Hero ── */
+  .hero {
+    text-align: center; padding: 100px 24px 80px;
+    background: radial-gradient(ellipse at 50% 0%, #F7931A10 0%, transparent 60%);
+  }
+  .hero .badge {
+    display: inline-block; font-size: 12px; font-weight: 600; color: var(--orange);
+    border: 1px solid var(--orange); border-radius: 20px; padding: 4px 14px;
+    margin-bottom: 20px; letter-spacing: 0.5px;
+  }
+  .hero h1 { font-size: clamp(32px, 5vw, 56px); font-weight: 800; letter-spacing: -1px; line-height: 1.15; margin-bottom: 16px; }
+  .hero h1 span { background: linear-gradient(135deg, var(--orange), #FFB347); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .hero p { font-size: 18px; color: var(--muted); max-width: 650px; margin: 0 auto 32px; line-height: 1.7; }
+  .hero .actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .hero .btn-primary {
+    background: var(--orange); color: #000; font-weight: 700; padding: 12px 28px;
+    border-radius: 10px; font-size: 15px; transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .hero .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 24px #F7931A40; text-decoration: none; }
+  .hero .btn-secondary {
+    background: var(--surface); color: var(--text); font-weight: 600; padding: 12px 28px;
+    border-radius: 10px; font-size: 15px; border: 1px solid var(--border); transition: border-color 0.2s;
+  }
+  .hero .btn-secondary:hover { border-color: var(--orange); text-decoration: none; }
+
+  /* ── Stats bar ── */
+  .stats {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px;
+    background: var(--border); border-radius: 12px; overflow: hidden;
+    margin: -40px auto 60px; max-width: 900px;
+  }
+  .stat { background: var(--surface); padding: 20px; text-align: center; }
+  .stat .num { font-size: 24px; font-weight: 800; }
+  .stat .num.orange { color: var(--orange); }
+  .stat .num.green { color: #3FB950; }
+  .stat .num.blue { color: #58A6FF; }
+  .stat .num.purple { color: #BC8CFF; }
+  .stat .lbl { font-size: 12px; color: var(--muted); margin-top: 2px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+  /* ── Section ── */
+  .section { padding: 60px 0; }
+  .section-header {
+    font-size: 12px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 1px; color: var(--orange); margin-bottom: 8px;
+  }
+  .section-title { font-size: clamp(24px, 3vw, 36px); font-weight: 800; margin-bottom: 16px; letter-spacing: -0.5px; }
+  .section-text { font-size: 16px; color: var(--muted); max-width: 650px; line-height: 1.7; margin-bottom: 24px; }
+
+  /* ── Problem / Solution grid ── */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 24px 0; }
+  .card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+    padding: 28px; transition: border-color 0.3s, transform 0.3s;
+  }
+  .card:hover { border-color: var(--orange); transform: translateY(-2px); }
+  .card .icon { font-size: 28px; margin-bottom: 12px; }
+  .card h3 { font-size: 17px; font-weight: 700; margin-bottom: 8px; }
+  .card p { font-size: 14px; color: var(--muted); line-height: 1.6; }
+  .card .stat-row { display: flex; gap: 16px; margin-top: 14px; flex-wrap: wrap; }
+  .card .stat-item { font-size: 13px; }
+  .card .stat-item strong { color: var(--text); }
+
+  /* ── Project showcase ── */
+  .project-hero {
+    background: linear-gradient(135deg, #F7931A08, #58A6FF08);
+    border: 1px solid var(--border); border-radius: 16px; padding: 40px;
+    margin: 24px 0; position: relative; overflow: hidden;
+  }
+  .project-hero::before {
+    content: ''; position: absolute; top: -50%; right: -20%;
+    width: 300px; height: 300px; background: radial-gradient(circle, #F7931A10, transparent);
+    border-radius: 50%;
+  }
+  .project-hero .tag {
+    display: inline-block; font-size: 11px; font-weight: 600; color: var(--orange);
+    border: 1px solid var(--orange); border-radius: 6px; padding: 3px 10px;
+    margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .project-hero h3 { font-size: 24px; font-weight: 800; margin-bottom: 8px; }
+  .project-hero p { font-size: 15px; color: var(--muted); max-width: 600px; line-height: 1.6; }
+  .project-hero .links { display: flex; gap: 12px; margin-top: 16px; flex-wrap: wrap; }
+
+  /* ── Approach list ── */
+  .approach-item { display: flex; gap: 16px; padding: 16px 0; border-bottom: 1px solid var(--border); }
+  .approach-item:last-child { border: none; }
+  .approach-item .icon { font-size: 20px; width: 36px; text-align: center; flex-shrink: 0; }
+  .approach-item h4 { font-size: 15px; font-weight: 700; margin-bottom: 2px; }
+  .approach-item p { font-size: 13px; color: var(--muted); }
+
+  /* ── Research grid ── */
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 20px 0; }
+  .research-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+    padding: 20px; transition: border-color 0.3s;
+  }
+  .research-card:hover { border-color: var(--orange); }
+  .research-card h4 { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+  .research-card p { font-size: 12px; color: var(--muted); line-height: 1.5; }
+  .research-card .type {
+    display: inline-block; font-size: 10px; font-weight: 600; padding: 2px 8px;
+    border-radius: 4px; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.3px;
+  }
+  .type-model { background: #3FB95020; color: #3FB950; }
+  .type-paper { background: #58A6FF20; color: #58A6FF; }
+  .type-data { background: #BC8CFF20; color: #BC8CFF; }
+  .type-tool { background: #F7931A20; color: var(--orange); }
+
+  /* ── Footer ── */
+  footer {
+    border-top: 1px solid var(--border); padding: 40px 24px;
+    text-align: center; font-size: 13px; color: var(--muted);
+  }
+  footer .links { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin-bottom: 12px; }
+  footer .btn-live {
+    display: inline-block; background: var(--orange); color: #000; font-weight: 700;
+    padding: 12px 32px; border-radius: 10px; font-size: 15px; margin: 20px 0;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  footer .btn-live:hover { transform: translateY(-2px); box-shadow: 0 6px 24px #F7931A40; text-decoration: none; }
+
+  @media (max-width: 700px) {
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    .stats { grid-template-columns: repeat(2, 1fr); }
+    .hero { padding: 60px 20px 60px; }
+    nav { padding: 10px 16px; gap: 12px; font-size: 13px; }
+    nav a.nav-link { display: none; }
+    .project-hero { padding: 24px; }
+  }
+</style>
 </head>
 <body>
 
 <nav>
-  <span class="brand">Bitcoin Block Space</span>
-  <a href="#numbers">Numbers</a>
-  <a href="#distinction">Distinction</a>
-  <a href="#costs">Costs</a>
-  <a href="#bip110">BIP-110</a>
-  <a href="#directions">Directions</a>
-  <a href="/live" style="color:#3FB950;font-weight:600;">📊 Live</a>
+  <div class="logo">BITCOIN <span>SAHI</span></div>
+  <a class="nav-link" href="#problem">Problem</a>
+  <a class="nav-link" href="#project">Project</a>
+  <a class="nav-link" href="#research">Research</a>
+  <a class="nav-link" href="#approach">Approach</a>
   <span class="spacer"></span>
-  <a class="discuss" href="https://delvingbitcoin.org/t/does-bitcoins-fee-market-price-permanence-or-just-congestion/2750">Discuss on Delving Bitcoin</a>
+  <a href="/live" class="cta">📊 Live Dashboard</a>
 </nav>
-
-<div class="container">
 
 <!-- ─── HERO ─── -->
 <div class="hero">
-  <h1>Does Bitcoin's fee market price permanence, or just congestion?</h1>
-  <p class="tagline">
-    BIP-141 gave witness data a 4× weight discount. It was designed to fix malleability —
-    not to create a pricing structure for permanent data storage. The result: an unpriced
-    externality that grows with every inscription.
+  <div class="badge">Blockchain Research & Development</div>
+  <h1>Understand Bitcoin.<br>Build for <span>Bitcoin.</span><br>Secure Bitcoin's future.</h1>
+  <p>
+    We identify fundamental problems in Bitcoin's economic architecture — 
+    and build open, data-driven solutions. No hype. No tokens. Just research 
+    that survives contact with reality.
   </p>
-  <div class="oneliner">
-    <strong>The fee market prices inclusion in the next block (~10 min).</strong>
-    It does <em>not</em> price lifetime storage in every full node's UTXO set (indefinite).
-    These are different market failures.
+  <div class="actions">
+    <a href="#project" class="btn-primary">Our First Project →</a>
+    <a href="#research" class="btn-secondary">Read the Research</a>
   </div>
 </div>
 
-<!-- ─── KEY NUMBERS ─── -->
-<div class="section-header" id="numbers">Key Numbers</div>
-
-<div class="kpi-grid">
-  <div class="kpi-card">
-    <div class="lbl">Annual node cost</div>
-    <div class="val green">$925</div>
-    <div class="sub">Hardware + bandwidth + electricity</div>
-  </div>
-  <div class="kpi-card">
-    <div class="lbl">Storage cost / inscription</div>
-    <div class="val orange">$0.008</div>
-    <div class="sub">Lifetime (10yr) UTXO storage cost</div>
-  </div>
-  <div class="kpi-card">
-    <div class="lbl">Unpriced externality</div>
-    <div class="val blue">$9.2K</div>
-    <div class="sub">Per year at 100K inscriptions/mo</div>
-  </div>
+<!-- ─── STATS ─── -->
+<div class="container">
+<div class="stats">
+  <div class="stat"><div class="num orange">$925</div><div class="lbl">Node Cost / Yr</div></div>
+  <div class="stat"><div class="num green">$0.008</div><div class="lbl">Storage / Inscription</div></div>
+  <div class="stat"><div class="num blue">$9.2K</div><div class="lbl">Externality / Yr</div></div>
+  <div class="stat"><div class="num purple">8×–3,000×</div><div class="lbl">Fee-to-Storage Ratio</div></div>
+</div>
 </div>
 
-<div class="fee-row">
-  <div class="fee-card"><div class="lbl">Fee (low activity)</div><div class="val">$0.06</div></div>
-  <div class="fee-card"><div class="lbl">Fee (peak mania)</div><div class="val">$25</div></div>
-  <div class="fee-card"><div class="lbl">Fee-to-storage ratio</div><div class="val">8× – 3,000×</div></div>
-</div>
+<!-- ─── PROBLEM ─── -->
+<div class="container">
+<div class="section" id="problem">
+  <div class="section-header">The Problem</div>
+  <h2 class="section-title">Bitcoin's fee market prices congestion. It does not price permanence.</h2>
+  <p class="section-text">
+    BIP-141 (SegWit) created a 4× weight discount for witness data. It was designed to fix 
+    transaction malleability — not to create a pricing structure for permanent data storage. 
+    The result: an unpriced externality that grows with every inscription.
+  </p>
 
-<div class="block-vis" style="margin-top:18px">
-  <div class="seg fin" style="width:42%">Financial: 42%</div>
-  <div class="seg dat" style="width:58%">Data: 58%</div>
-</div>
-<div class="block-stats">
-  <div class="block-stat"><label>Financial transactions</label><div class="val fin">42%</div></div>
-  <div class="block-stat"><label>Data / inscriptions</label><div class="val dat">58%</div></div>
-</div>
-
-<!-- ─── DISTINCTION ─── -->
-<div class="section-header" id="distinction">Congestion vs Permanence</div>
-
-<table class="cmp-table">
-  <tr><th></th><th style="color:#3FB950">Congestion pricing</th><th style="color:#F0883E">Permanence cost</th></tr>
-  <tr><td class="lbl">What it prices</td><td class="cong">Entry into the next block</td><td class="perm">Lifetime storage in every node</td></tr>
-  <tr><td class="lbl">Who pays</td><td class="cong">Sender (once)</td><td class="perm">All future node operators (forever)</td></tr>
-  <tr><td class="lbl">Time horizon</td><td class="cong">~10 minutes</td><td class="perm">Indefinite (decades+)</td></tr>
-  <tr><td class="lbl">Handled by fee market?</td><td class="good">✅ Yes — works well</td><td class="bad">❌ Unpriced externality</td></tr>
-</table>
-
-<!-- ─── COST MODEL ─── -->
-<div class="section-header" id="costs">Cost Model</div>
-
-<div class="cost-detail">
-  <div class="cost-box">
-    <h3>Annual Node Operation</h3>
-    <div class="row"><span>Hardware (deprec.)</span><span class="amt">$167/yr</span></div>
-    <div class="row"><span>Bandwidth ($50/mo)</span><span class="amt">$600/yr</span></div>
-    <div class="row"><span>Electricity (150W)</span><span class="amt">$158/yr</span></div>
-    <div class="total"><span>Total</span><span>$925/yr</span></div>
-  </div>
-  <div class="cost-box">
-    <h3>Inscription Storage Burden</h3>
-    <div class="row"><span>Avg inscription data</span><span class="amt">400 bytes</span></div>
-    <div class="row"><span>Cost per byte per year</span><span class="amt">$0.0000019</span></div>
-    <div class="row"><span>Cost per inscription/yr</span><span class="amt">$0.00077</span></div>
-    <div class="row"><span>SegWit discount applied</span><span class="amt">4:1 (tx→witness)</span></div>
-    <div class="total"><span>Lifetime (10yr)</span><span>$0.008</span></div>
-  </div>
-</div>
-
-<!-- ─── VERIFICATION ─── -->
-<div class="section-header">Live Verification</div>
-
-<div class="cost-detail">
-  <div class="cost-box">
-    <h3>From mempool.space (Jul 2026)</h3>
-    <div class="row"><span>BTC price</span><span class="amt">~$63,400</span></div>
-    <div class="row"><span>Fastest fee</span><span class="amt">2 sat/vB</span></div>
-    <div class="row"><span>Economy fee</span><span class="amt">1 sat/vB</span></div>
-    <div class="row"><span>Inscription at 1 sat/vB</span><span class="amt">~$0.06</span></div>
-    <div class="total"><span>Fee ÷ storage cost</span><span>~8×</span></div>
-  </div>
-  <div class="cost-box">
-    <h3>Sensitivity Analysis</h3>
-    <div class="row"><span>Low hardware scenario</span><span class="amt">$700/yr</span></div>
-    <div class="row"><span>High hardware scenario</span><span class="amt">$1,400/yr</span></div>
-    <div class="row"><span>Low inscription volume (50K/mo)</span><span class="amt">$0.016/ins</span></div>
-    <div class="row"><span>High volume (300K/mo)</span><span class="amt">$0.003/ins</span></div>
-    <div class="total"><span>Conclusion</span><span>Robust within 2×</span></div>
-  </div>
-</div>
-
-<div style="background:#0D1117;border:1px solid #30363D;border-radius:8px;padding:14px;margin:14px 0;font-size:12px;color:#8B949E;line-height:1.5">
-  <strong style="color:#F0F6FC">Methodology:</strong> All numbers from the open-source model at
-  <a href="https://bitcoinsahi.com">bitcoinsahi.com</a>.
-  Hardware: $500/3yr (RPi 4 8GB + 1TB SSD). Bandwidth: $50/mo unlimited (Bitcoin.org reports ~200 GB/mo upload).
-  Electricity: 150W × 24h × 365 × $0.12/kWh. Inscription: ~400 bytes envelope data in witness (BIP-141 4:1 discount).
-  <a href="https://github.com/prateekposwal/bitcoin-priority-oracle/blob/main/research/verification_appendix.md">Full verification appendix →</a>
-</div>
-
-<!-- ─── EXPLORATORY DIRECTIONS ─── -->
-<div class="section-header" id="directions">Exploratory Directions</div>
-
-<p style="font-size:13px;color:#8B949E;margin-bottom:14px">
-  After two failed proposals (v1: Priority Oracle, v2: Externality Fee), the community feedback
-  pointed to <strong>relay policy</strong> as the only viable lever. Relay nodes both bear storage
-  costs and set relay policy — they're the natural pricing point.
-</p>
-
-<div class="dir-grid">
-  <div class="dir-card">
-    <h3><span>UTXO-Aware Relay Fee</span> <span class="tag tag-rec">Recommended</span></h3>
-    <p>Extend <code>minrelaytxfee</code> so relay nodes apply a fee multiplier for transactions above a state footprint threshold. Each node sets their own multiplier.</p>
-    <div class="pro">✅ Each node prices itself — market mechanism</div>
-    <div class="pro">✅ No consensus change — purely relay policy</div>
-    <div class="pro">✅ Miners unaffected</div>
-    <div class="con">⚠ Risk: low adoption by relay operators</div>
-  </div>
-  <div class="dir-card">
-    <h3><span>BIP for State-Conscious Relay</span> <span class="tag tag-exp">Exploring</span></h3>
-    <p>A BIP standardizing state impact metrics and recommending fee schedules. Wallet-side fee estimation guidance for users.</p>
-    <div class="pro">✅ Ecosystem alignment without mandating adoption</div>
-    <div class="pro">✅ Formalizes existing ordinal-filtering practice</div>
-    <div class="pro">✅ BIP process ensures thorough incentive analysis</div>
-    <div class="con">⚠ High scrutiny — but that's the point</div>
-  </div>
-  <div class="dir-card">
-    <h3><span>Multi-Tier Relay Market</span> <span class="tag tag-spec">Speculative</span></h3>
-    <p>Relay nodes advertise tiered fee schedules during peer handshake. Wallets discover the cheapest path for their transaction type.</p>
-    <div class="pro">✅ Most market-driven approach</div>
-    <div class="con">⚠ Requires P2P protocol changes</div>
-    <div class="con">⚠ Higher complexity — explore only if A/B insufficient</div>
-  </div>
-</div>
-
-<!-- ─── JOURNEY ─── -->
-<div class="section-header" id="journey">The Journey</div>
-
-<div class="journey">
-  <div class="step v1">
-    <div class="dot"></div>
-    <div>
-      <span class="tag tag-r">v1 — Failed</span>
-      <div class="title">Priority Oracle</div>
-      <div class="desc">Classify tx as financial/data, allocate 30% block floor. Miners won't leave fees on the table. Classification with no economic consequence is a signaling game with zero equilibrium.</div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="icon">⚡</div>
+      <h3>Congestion Pricing</h3>
+      <p>The fee market works well for its designed purpose: allocating block space among competing transactions. A higher fee gets you confirmed faster.</p>
+      <div class="stat-row">
+        <div class="stat-item">⏱ <strong>~10 min</strong> horizon</div>
+        <div class="stat-item">✅ <strong>Works</strong> as designed</div>
+      </div>
     </div>
-  </div>
-  <div class="step v2">
-    <div class="dot"></div>
-    <div>
-      <span class="tag tag-y">v2 — Failed</span>
-      <div class="title">Externality Fee</div>
-      <div class="desc">Price the "true storage cost" via formula. Any formula-based fee is an arbitrary tax. No mechanism to discover the "true cost" of a transaction to the network.</div>
-    </div>
-  </div>
-  <div class="step v3">
-    <div class="dot"></div>
-    <div>
-      <span class="tag tag-b">v3 — Open Research</span>
-      <div class="title">Relay Policy Research + Cost Model</div>
-      <div class="desc">Built a complete UTXO cost model with live verification. Surveyed state expiry, covenant proposals, and relay policy. Three directions being explored above. <strong style="color:#F0F6FC">The question is still open.</strong></div>
+    <div class="card">
+      <div class="icon">💾</div>
+      <h3>Permanence Cost</h3>
+      <p>Every inscription adds data that every full node must store forever. The miner captured the fee — but the storage cost is borne by every future node operator.</p>
+      <div class="stat-row">
+        <div class="stat-item">♾ <strong>Indefinite</strong> horizon</div>
+        <div class="stat-item">❌ <strong>Unpriced</strong> externality</div>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- ─── BIP-110 ─── -->
-<div class="section-header" id="bip110">Related Proposal: BIP-110</div>
-<div style="font-size:13px;color:#8B949E;line-height:1.6;margin-bottom:10px">
-  <a href="https://github.com/bitcoin/bips/blob/master/bip-0110.mediawiki">BIP-110</a> is a <strong>temporary 1-year soft fork</strong> that bans most inscription methods at the consensus level:
-  limits witness data pushes to 256 bytes, bans <code>OP_IF</code>/<code>OP_NOTIF</code> in Tapscripts
-  (the inscription vector), limits scriptPubKeys to 34 bytes, and bans Taproot annexes.
-  It uses a controversial 55% miner threshold instead of Bitcoin's usual 95%.
-</div>
+<!-- ─── FIRST PROJECT ─── -->
+<div class="section" id="project">
+  <div class="section-header">Our First Project</div>
+  <h2 class="section-title">Bitcoin Block Space Economics</h2>
+  <p class="section-text">
+    A complete, open-source research project quantifying the gap between what the fee market prices 
+    and what node operators collectively bear. Three phases of work, all publicly documented.
+  </p>
 
-<div class="cost-detail" style="margin-bottom:14px">
-  <div class="cost-box">
-    <h3>Same diagnosis</h3>
-    <div style="font-size:12px;color:#8B949E;line-height:1.5">
-      Both BIP-110 and this research agree that data inscriptions create costs for node operators that the fee market doesn't price. The 4× SegWit witness discount (BIP-141) was never designed as a state-pricing mechanism.
+  <div class="project-hero">
+    <div class="tag">Phase R1 · R2 · R3 — Complete</div>
+    <h3>Does the fee market price permanence, or just congestion?</h3>
+    <p>
+      We built a UTXO cost model from public data, verified it against live blockchain APIs, 
+      published the full verification appendix, and opened the question for community discussion 
+      on Delving Bitcoin. The model is adjustable — anyone can plug in their own assumptions.
+    </p>
+    <div class="links">
+      <a href="https://delvingbitcoin.org/t/does-bitcoins-fee-market-price-permanence-or-just-congestion/2750" class="btn-primary" style="font-size:13px;padding:10px 20px;">Discuss on Delving Bitcoin →</a>
+      <a href="/live" class="btn-secondary" style="font-size:13px;padding:10px 20px;">📊 Live Dashboard</a>
     </div>
-    <div class="total" style="margin-top:10px;font-size:12px;color:#3FB950">✅ Same problem identification</div>
   </div>
-  <div class="cost-box">
-    <h3>Different prescription</h3>
-    <div style="font-size:12px;color:#8B949E;line-height:1.5">
-      BIP-110 uses a <strong>consensus-level ban</strong> (temporary soft fork, 55% threshold).
-      This research explores <strong>relay-level pricing</strong> (each node sets its own fee multiplier, no consensus change).
-      Our cost model provides the economic data BIP-110's rationale lacks.
+
+  <div class="grid-2" style="margin-top:20px;">
+    <div class="card">
+      <div class="icon">📖</div>
+      <h3>Phase R1: Reading</h3>
+      <p>BIP-141 analysis, covenant survey, Delving Bitcoin threads, bitcoin-dev discussions. Understanding the problem before proposing solutions.</p>
     </div>
-    <div class="total" style="margin-top:10px;font-size:12px;color:#F0883E">⚠ Different approaches to same problem</div>
+    <div class="card">
+      <div class="icon">🔬</div>
+      <h3>Phase R2: Cost Model</h3>
+      <p>Open-source UTXO cost function with full verification. 6 node scenarios (RPi pruned at $416/yr to desktop archival at $918/yr).</p>
+    </div>
+    <div class="card">
+      <div class="icon">📢</div>
+      <h3>Phase R3: Problem Statement</h3>
+      <p>1-page framing, LinkedIn post, Reddit discussion (28 pts, 126 comments), Delving Bitcoin thread. Community feedback integrated.</p>
+    </div>
+    <div class="card">
+      <div class="icon">🤖</div>
+      <h3>Phase R4: Deployment</h3>
+      <p>Live at bitcoinsahi.com. Daily research monitor fetches live fee data. GitHub Issues auto-created on anomaly detection.</p>
+    </div>
   </div>
 </div>
 
-<div style="background:#0D1117;border:1px solid #30363D;border-radius:8px;padding:14px;margin:14px 0;font-size:12px;color:#8B949E;line-height:1.5">
-  <strong style="color:#F0F6FC">How our research fills BIP-110's gap:</strong>
-  BIP-110's rationale is ideological ("Bitcoin is money, not data storage") — it has no economic model showing <em>why</em> data storage is harmful. Our cost model provides the missing data: $0.008/inscription lifetime storage cost, $9.2K/yr aggregate externality, sensitivity analysis across adoption scenarios. These numbers give both supporters and critics of BIP-110 a shared factual basis for the debate.
+<!-- ─── RESEARCH ─── -->
+<div class="section" id="research">
+  <div class="section-header">Research Library</div>
+  <h2 class="section-title">Open Source. Fully Documented. Community Reviewed.</h2>
+  <p class="section-text">
+    Every number on this site is reproducible. Every assumption is documented. Every script is on GitHub.
+  </p>
+
+  <div class="grid-3">
+    <div class="research-card">
+      <span class="type type-model">Model</span>
+      <h4>UTXO Cost Model</h4>
+      <p>Python model with adjustable parameters. Run it yourself: <code>python3 research/utxo_cost_model.py</code></p>
+    </div>
+    <div class="research-card">
+      <span class="type type-paper">Paper</span>
+      <h4>Problem Statement</h4>
+      <p>1-page framing of the open question. No solution — just the clearest possible statement of the gap.</p>
+    </div>
+    <div class="research-card">
+      <span class="type type-data">Data</span>
+      <h4>Live Data Pipeline</h4>
+      <p>Daily GitHub Action fetches fees, BTC price, and model output. Data auto-commits to the repo.</p>
+    </div>
+    <div class="research-card">
+      <span class="type type-paper">Paper</span>
+      <h4>Verification Appendix</h4>
+      <p>Full source documentation for every parameter. Hardware costs, power draw, inscription sizes — all sourced.</p>
+    </div>
+    <div class="research-card">
+      <span class="type type-tool">Tool</span>
+      <h4>Pruned Analysis</h4>
+      <p>Answer: do pruned nodes avoid the externality? No — unavoidable cost is ~$2.53/yr per node.</p>
+    </div>
+    <div class="research-card">
+      <span class="type type-paper">Paper</span>
+      <h4>BIP-110 Analysis</h4>
+      <p>Analysis of the Reduced Data Temporary Softfork. Same diagnosis, different prescription.</p>
+    </div>
+  </div>
+
+  <div style="text-align:center;margin-top:12px;">
+    <a href="https://github.com/prateekposwal/bitcoin-priority-oracle" class="btn-secondary" style="padding:10px 24px;font-size:14px;">View All Research on GitHub →</a>
+  </div>
 </div>
 
-<!-- ─── REFERENCE: CASHTTOKENS ─── -->
-<div class="section-header">Reference: CashTokens (Bitcoin Cash)</div>
-<div style="font-size:13px;color:#8B949E;line-height:1.6;margin-bottom:20px">
-  Bitcoin Cash's native token protocol (CHIP-2022-02) offers an interesting contrast.
-  Tokens are consensus-enforced with 40-byte NFT commitments — no envelope hacks.
-  BCH has no SegWit, meaning no 4× witness discount subsidizing data. Result: inscription
-  activity on BCH (<strong style="color:#F0F6FC">0.5% of 32 MB blocks</strong>)
-  causes zero congestion. This validates our SegWit discount analysis but doesn't help
-  Bitcoin — CashTokens required a hard fork.
+<!-- ─── APPROACH ─── -->
+<div class="section" id="approach">
+  <div class="section-header">Our Approach</div>
+  <h2 class="section-title">How We Work</h2>
+  <p class="section-text">
+    A decade of engineering experience taught us that the best Bitcoin research starts with humility. 
+    We've been wrong twice — and we documented both failures.
+  </p>
+
+  <div class="approach-item">
+    <div class="icon">🔓</div>
+    <div><h4>Open Source First</h4><p>Every model, script, and dataset is public. No black boxes. No proprietary calculations.</p></div>
+  </div>
+  <div class="approach-item">
+    <div class="icon">🔬</div>
+    <div><h4>Data-Driven, Not Ideological</h4><p>We publish numbers, not narratives. The data says what it says — even when it contradicts our hypothesis.</p></div>
+  </div>
+  <div class="approach-item">
+    <div class="icon">🤝</div>
+    <div><h4>Peer-Reviewed by the Community</h4><p>We publish on Delving Bitcoin, engage on bitcoin-dev, and welcome critique on Reddit. The best insights come from being wrong publicly.</p></div>
+  </div>
+  <div class="approach-item">
+    <div class="icon">⚡</div>
+    <div><h4>No Consensus Changes Without Data</h4><p>We don't propose soft forks. We build the economic models that let the community decide whether a change is warranted.</p></div>
+  </div>
+  <div class="approach-item">
+    <div class="icon">♻️</div>
+    <div><h4>Self-Updating Research</h4><p>Our models run daily via GitHub Actions. If the numbers shift, the site updates automatically.</p></div>
+  </div>
+</div>
 </div>
 
 <!-- ─── FOOTER ─── -->
-<div class="footer">
-  <a class="btn" href="/live" style="background:#58A6FF;margin-bottom:8px;">📊 Live Dashboard — Real-Time Data</a>
-  <br>
-  <a class="btn" href="https://delvingbitcoin.org/t/does-bitcoins-fee-market-price-permanence-or-just-congestion/2750">Join the Discussion on Delving Bitcoin</a>
-  <br>
-  <a href="https://bitcoinsahi.com">bitcoinsahi.com</a> ·
-  <a href="https://github.com/prateekposwal/bitcoin-priority-oracle/blob/main/research/verification_appendix.md">Verification appendix</a> ·
-  <a href="https://github.com/prateekposwal/bitcoin-priority-oracle/blob/main/research/utxo_cost_model.py">Python model</a>
-</div>
+<footer>
+  <div class="links">
+    <a href="https://delvingbitcoin.org/t/does-bitcoins-fee-market-price-permanence-or-just-congestion/2750">Delving Bitcoin</a>
+    <a href="https://github.com/prateekposwal/bitcoin-priority-oracle">GitHub</a>
+    <a href="https://bitcoinsahi.com/live">Live Dashboard</a>
+  </div>
+  <a href="/live" class="btn-live">📊 Explore the Live Dashboard</a>
+  <p>Bitcoin Sahi — Blockchain Research & Development. Built in public.</p>
+</footer>
 
-</div>
 </body>
 </html>
