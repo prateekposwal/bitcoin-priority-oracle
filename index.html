@@ -24,28 +24,29 @@ if (window.location.hostname.includes('vercel.app')) {
 
   /* ── Hero ── */
   .hero {
-    text-align: center; padding: 50px 24px 40px;
-    background: radial-gradient(ellipse at 50% 0%, #F7931A10 0%, transparent 60%);
+    text-align: center; padding: 70px 24px 50px;
+    background: radial-gradient(ellipse at 50% 0%, #F7931A12 0%, transparent 65%);
+    display: flex; flex-direction: column; align-items: center; gap: 16px;
   }
   .hero .badge {
-    display: inline-block; font-size: 20px; font-weight: 600; color: var(--orange);
-    border: 1px solid var(--orange); border-radius: 20px; padding: 4px 14px;
-    margin-bottom: 20px; letter-spacing: 0.5px;
+    display: inline-block; font-size: 12px; font-weight: 600; color: var(--orange);
+    border: 1px solid var(--orange); border-radius: 20px; padding: 6px 16px;
+    letter-spacing: 0.8px; text-transform: uppercase; margin-bottom: 4px;
   }
-  .hero h1 { font-size: clamp(36px, 5.5vw, 60px); font-weight: 800; letter-spacing: -1px; line-height: 1.15; margin-bottom: 16px; }
+  .hero h1 { font-size: clamp(34px, 5vw, 56px); font-weight: 800; letter-spacing: -1px; line-height: 1.2; max-width: 800px; }
   .hero h1 span { background: linear-gradient(135deg, var(--orange), #FFB347); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-  .hero p { font-size: 20px; color: var(--muted); max-width: 650px; margin: 0 auto 32px; line-height: 1.7; }
-  .hero .actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .hero p { font-size: 17px; color: var(--muted); max-width: 560px; line-height: 1.6; margin: 4px 0 8px; }
+  .hero .actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 4px; }
   .hero .btn-primary {
-    background: var(--orange); color: #000; font-weight: 700; padding: 12px 28px;
-    border-radius: 10px; font-size: 19px; transition: transform 0.2s, box-shadow 0.2s;
+    background: var(--orange); color: #000; font-weight: 700; padding: 14px 32px;
+    border-radius: 12px; font-size: 15px; transition: all 0.25s; letter-spacing: 0.2px;
   }
-  .hero .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 24px #F7931A40; text-decoration: none; }
+  .hero .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(247,147,26,0.35); text-decoration: none; }
   .hero .btn-secondary {
-    background: var(--surface); color: var(--text); font-weight: 600; padding: 12px 28px;
-    border-radius: 10px; font-size: 19px; border: 1px solid var(--border); transition: border-color 0.2s;
+    background: transparent; color: var(--text); font-weight: 600; padding: 14px 32px;
+    border-radius: 12px; font-size: 15px; border: 1px solid var(--border); transition: all 0.25s;
   }
-  .hero .btn-secondary:hover { border-color: var(--orange); text-decoration: none; }
+  .hero .btn-secondary:hover { border-color: var(--orange); background: #FFFFFF08; text-decoration: none; }
 
   /* ── Stats bar ── */
   .stats {
