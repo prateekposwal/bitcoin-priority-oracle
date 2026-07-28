@@ -1,0 +1,24 @@
+{
+  "generated_at": "2026-07-28T20:30:00Z",
+  "data_points": 1,
+  "slope": 0,
+  "trend": "stable (insufficient data)",
+  "forecast": [
+    {
+      "day_offset": 1,
+      "predicted_fastest_fee": "N/A",
+      "trend": "need more data"
+    },
+    {
+      "day_offset": 2,
+      "predicted_fastest_fee": "N/A",
+      "trend": "need more data"
+    },
+    {
+      "day_offset": 3,
+      "predicted_fastest_fee": "N/A",
+      "trend": "need more data"
+    }
+  ],
+  "disclaimer": "Need 2+ days of data for meaningful forecast. The daily GitHub Action will accumulate data automatically."
+}
