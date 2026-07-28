@@ -16,7 +16,7 @@
 - [BIP-110 signaling](https://wickedsmartbitcoin.com/api/bip110)
 
 ### Community
-- [Delving Bitcoin thread](https://delvingbitcoin.org/t/does-bitcoins-fee-market-price-permanence-or-just-congestion/2750)
+- [r/BitcoinEngineering](https://reddit.com/r/BitcoinEngineering)
 - [r/Bitcoin](https://old.reddit.com/r/Bitcoin/search?q=BIP-110&t=year)
 - [r/BitcoinEngineering](https://old.reddit.com/r/BitcoinEngineering/search?q=fee+market+permanence&t=week)
 - bitcoin-dev mailing list

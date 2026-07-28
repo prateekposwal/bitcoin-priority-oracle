@@ -23,9 +23,9 @@ I'm not proposing a fix. I don't know if one is needed. But I think the question
 
 I posted the full framing on Delving Bitcoin and the discussion is already surfacing exactly the right critiques (pruned node ratio, UTXO lifetime assumptions, whether the externality is actually priced in via opportunity cost). Come join the thread.
 
-**Delving Bitcoin discussion:** https://delvingbitcoin.org/t/does-bitcoins-fee-market-price-permanence-or-just-congestion/2750
+**Delving Bitcoin discussion:** https://reddit.com/r/BitcoinEngineering
 
-**Delving Bitcoin discussion:** https://delvingbitcoin.org/t/does-bitcoins-fee-market-price-permanence-or-just-congestion/2750\
+**Delving Bitcoin discussion:** https://reddit.com/r/BitcoinEngineering\
 **Full research and model:** bitcoinsahi.com
 
 #Bitcoin #BitcoinResearch #BlockSpace #UTXO #SegWit

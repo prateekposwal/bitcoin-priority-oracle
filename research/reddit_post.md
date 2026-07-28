@@ -40,6 +40,6 @@ These are different:
 
 Not a proposal. Not a BIP. Not claiming the problem is urgent. Just asking whether there's a gap worth discussing.
 
-Discussion on Delving Bitcoin is already surfacing good critiques: https://delvingbitcoin.org/t/does-bitcoins-fee-market-price-permanence-or-just-congestion/2750
+Discussion on r/BitcoinEngineering is surfacing good critiques: https://reddit.com/r/BitcoinEngineering
 
 Full research with code and verification: https://bitcoinsahi.com

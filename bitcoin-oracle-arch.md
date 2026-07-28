@@ -68,7 +68,7 @@ The question of whether Bitcoin's block weight formula appropriately prices stat
 | Resource | URL |
 |----------|-----|
 | Bitcoin Optech Newsletter | https://bitcoinops.org/ |
-| Delving Bitcoin | https://delvingbitcoin.org/ |
+| r/BitcoinEngineering | https://reddit.com/r/BitcoinEngineering |
 | bitcoin-dev Mailing List | https://lists.linuxfoundation.org/pipermail/bitcoin-dev/ |
 | Bitcoin Stack Exchange | https://bitcoin.stackexchange.com/ |
 
