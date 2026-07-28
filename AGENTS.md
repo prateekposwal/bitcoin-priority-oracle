@@ -5,7 +5,6 @@
 - **Domain:** Bitcoin block space economics
 - **Repo:** bitcoinsahi.com
 - **Deployed URL:** bitcoinsahi.com (DNS pending)
-- **Key People:** Prateek (owner), Dathon Ohm (BIP-110 author), Greg Maxwell (critic)
 
 ## Domain Sources
 ### Primary Sources (fetch before answering)
@@ -37,7 +36,6 @@
 - **All 3 research phases complete** — R1 (Reading), R2 (Cost Model), R3 (Problem Statement)
 - **BIP-110 analyzed** — ~0.1% miner signaling, DOA. Michael Saylor called it "iatrogenic."
 - **r/BitcoinEngineering discussion live** — /t/2750
-- **Reddit engagement** — 2 posts on r/BitcoinEngineering, 1 on r/Bitcoin (28pts, 126 comments)
 - **Monetization plan** — Phase R4 in TODO: API tiers ($50–$500/mo), consulting, annual report
 - **Domain ready** — bitcoinsahi.com, DNS not yet pointed
 - **Pruned analysis completed** — Inscriptions are 0.91% of block space. Unavoidable cost: ~$2.53/yr/node. Negligible at current volumes.
@@ -53,9 +51,7 @@
 
 ## Next Session
 - Point bitcoinsahi.com DNS to GitHub Pages
-- Check Reddit replies (community members have replied)
 - Run the economics simulator (Monte Carlo)
-- Post LinkedIn article with charts
 
 ## Security (manual steps needed)
 1. **Rotate Vercel token** — Go to vercel.com/account/tokens, create new, delete old
