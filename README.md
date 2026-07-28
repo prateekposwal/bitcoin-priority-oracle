@@ -50,7 +50,6 @@ The fee market prices **congestion** (space in the next block). It does **not** 
 
 - **r/BitcoinEngineering:** [does-bitcoins-fee-market-price-permanence-or-just-congestion/2750](https://reddit.com/r/BitcoinEngineering)
 - **BIP-110:** [Reduced Data Temporary Softfork](https://github.com/bitcoin/bips/blob/master/bip-0110.mediawiki) — temporary 1-year soft fork banning inscriptions at consensus level. Shares our diagnosis, different prescription.
-- **LinkedIn:** [Post with charts](https://www.linkedin.com/)
 
 ## Community Discussion
 
