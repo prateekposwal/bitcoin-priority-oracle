@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:#0D1117;color:#F0F6FC;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:13px;padding:12px}
+  .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  .stat{background:#161B22;border:1px solid #30363D;border-radius:8px;padding:8px 12px;text-align:center;flex:1;min-width:80px}
+  .lbl{font-size:9px;color:#8B949E;text-transform:uppercase;letter-spacing:0.5px}
+  .val{font-size:18px;font-weight:700;margin-top:2px}
+  .val.green{color:#3FB950}.val.orange{color:#F7931A}
+  a{color:#F7931A;text-decoration:none;font-size:10px;display:block;text-align:center;margin-top:6px}
+</style></head><body>
+<div class="row"><div class="stat"><div class="lbl">BTC</div><div class="val green" id="btc">—</div></div>
+<div class="stat"><div class="lbl">Fastest Fee</div><div class="val orange" id="fee">—</div></div>
+<div class="stat"><div class="lbl">Storage/Insc</div><div class="val orange">$0.008</div></div></div>
+<a href="https://bitcoinsahi.com" target="_blank">bitcoinsahi.com →</a>
+<script>
+fetch('https://bitcoinsahi.com/tools/live_data.json?_='+Date.now())
+  .then(r=>r.json()).then(d=>{
+    document.getElementById('btc').textContent='$'+Number(d.btc_price||0).toLocaleString();
+    document.getElementById('fee').textContent=(d.fees?.fastestFee||'—')+' sat/vB';
+  }).catch(()=>{});
+</script></body></html>
