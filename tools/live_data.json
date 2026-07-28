@@ -1,15 +1,16 @@
 {
-  "timestamp": "2026-07-28T16:41:40.791740",
+  "timestamp": "2026-07-28T16:48:06.544899",
   "fees": {
-    "fastestFee": 2,
+    "fastestFee": 3,
     "halfHourFee": 1,
     "hourFee": 1,
     "economyFee": 1,
     "minimumFee": 1
   },
-  "btc_price": 63796.51,
+  "btc_price": 63836.94,
   "bip110_signaling": {
-    "error": "HTTP Error 404: Not Found"
+    "status": "API no longer available",
+    "last_known": "~0.1-0.8%, dropping (Jul 2026)"
   },
   "inscriptions": null,
   "utxo_set": null,
