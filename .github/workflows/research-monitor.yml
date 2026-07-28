@@ -20,6 +20,51 @@ jobs:
       - name: Run UTXO cost model
         run: python3 research/utxo_cost_model.py
 
+      - name: Check for significant changes and create alert
+        run: |
+          python3 -c "
+          import json
+          try:
+            with open('tools/live_data.json') as f:
+              d = json.load(f)
+            alerts = d.get('alerts', [])
+            fees = d.get('fees', {})
+            btc = d.get('btc_price')
+            if alerts:
+              print('API_ALERT')
+              for a in alerts:
+                print(f'  {a}')
+            if fees.get('fastestFee', 0) > 100:
+              print('HIGH_FEE_ALERT: fastestFee > 100 sat/vB')
+            if fees.get('fastestFee', 0) < 1 and btc and btc > 80000:
+              print('LOW_FEE_HIGH_PRICE_ALERT: fees unusually low for current BTC price')
+          except:
+            pass
+          " > alert_output.txt
+          if [ -s alert_output.txt ]; then
+            echo "ALERTS FOUND:"
+            cat alert_output.txt
+          else
+            echo "No alerts"
+          fi
+
+      - name: Create GitHub Issue for alerts
+        if: hashFiles('alert_output.txt') != ''
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            let alerts = '';
+            try { alerts = fs.readFileSync('alert_output.txt', 'utf8'); } catch(e) {}
+            if (alerts && alerts.trim()) {
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: 'Research Monitor Alert - ' + new Date().toISOString().slice(0,10),
+                body: alerts
+              });
+            }
+
       - name: Commit updated data
         run: |
           git config user.name "research-bot"
