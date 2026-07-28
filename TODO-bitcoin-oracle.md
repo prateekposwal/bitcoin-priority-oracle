@@ -34,7 +34,37 @@
 - [x] Watch covenant proposal discussions (CTV, APO, OP_VAULT, OP_CAT)
 - [x] Note: BIP-110 validates our problem diagnosis. Our cost model provides the economic data BIP-110's rationale lacks.
 
-## Phase R4: Contribution (if warranted)
+## Phase R4: Deployment & Business (bitcoinsahi.com)
+
+### Stage 1: Static Site (Week 1)
+- [ ] Enable GitHub Pages on the repo (Settings → Pages)
+- [ ] Add CNAME file with `bitcoinsahi.com`
+- [ ] Point DNS: A records to GitHub Pages IPs + CNAME www → prateekposwal.github.io
+- [ ] Verify site loads at https://bitcoinsahi.com
+- [ ] Add Google Analytics or Plausible for visitor tracking
+
+### Stage 2: Live Data Pipeline (Week 2-3)
+- [ ] Create `.github/workflows/refresh-data.yml` — daily Python run that fetches fees, inscription count, UTXO size
+- [ ] Script outputs `research/live_data.json` committed to repo
+- [ ] HTML page reads `live_data.json` via JavaScript for always-current numbers
+- [ ] Add "Last updated: X hours ago" timestamp to site
+
+### Stage 3: Full Stack Backend (Month 2)
+- [ ] Set up Flask/FastAPI backend on VPS ($6–$12/mo)
+- [ ] API endpoints: `/api/fees`, `/api/inscriptions`, `/api/utxo-cost-model`
+- [ ] Add interactive model UI (sliders for parameters, live recalculation in browser)
+- [ ] Add newsletter signup (free email service: SendGrid / Mailchimp free tier)
+
+### Stage 4: Monetization (Month 3+)
+- [ ] Draft sponsorship deck for Bitcoin mining pools and Lightning companies
+- [ ] Launch Developer API tier at $50/mo (history, projections, custom runs)
+- [ ] Enterprise API tier at $500/mo (real-time, webhooks, dedicated support)
+- [ ] Publish first "State of Block Space" annual report ($500/copy)
+- [ ] Begin consulting outreach to ETF providers, mining companies, L2 protocols
+
+### Revenue Target: $50K–$150K/year by Month 12
+
+## Phase R5: Contribution (if warranted)
 
 - [ ] Only if feedback suggests a genuine gap exists
 - [ ] Only if the problem can be addressed without consensus change (v1 principle)
