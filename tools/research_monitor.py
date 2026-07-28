@@ -75,12 +75,12 @@ def main():
     # 5. BIP-110 signaling — checked directly from block version bits via blockstream.info
     try:
         r = urllib.request.urlopen(
-            f'https://blockstream.info/api/blocks/{report["block_height"]}/25', timeout=15)
+            'https://blockstream.info/api/blocks', timeout=15)
         blocks = json.loads(r.read())
         signaling_blocks = sum(1 for b in blocks if b.get('version', 0) & 0x10)
         total_checked = len(blocks)
         report['bip110_signaling'] = {
-            "source": "blockstream.info (version bit 4, last 25 blocks)",
+            "source": "blockstream.info (version bit 4, last 10 blocks)",
             "signaling_count": signaling_blocks,
             "total_checked": total_checked,
             "signaling_percent": round(signaling_blocks / max(total_checked, 1) * 100, 1),
