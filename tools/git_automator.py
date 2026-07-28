@@ -12,7 +12,7 @@ Requires GITHUB_TOKEN env var or ~/.github_token file.
 """
 import os, sys, subprocess, json, urllib.request
 
-REPO = 'prateekposwal/bitcoin-priority-oracle'
+REPO = 'prateekposwal/block-space-economics'
 
 def get_token():
     token = os.environ.get('GITHUB_TOKEN')
