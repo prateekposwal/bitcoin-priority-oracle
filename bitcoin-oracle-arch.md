@@ -118,7 +118,7 @@ We're pivoting from "solution building" to **open research**. The repo now conta
 2. A bibliography of relevant BIPs, papers, and discussions
 3. An interactive visualization of the block weight / UTXO growth problem
 
-No more premature solutions. No more plausible-sounding architecture that doesn't survive contact with Bitcoin's incentive structure. Just honest research, documented publicly.
+No more premature solutions. Just honest research, documented publicly.
 
 ---
 
