@@ -5,7 +5,6 @@
 - **Domain:** Bitcoin block space economics
 - **Repo:** bitcoinsahi.com
 - **Deployed URL:** bitcoinsahi.com (DNS pending)
-- **Key People:** Dathon Ohm (BIP-110 author), Greg Maxwell (critic)
 
 ## Domain Sources
 ### Primary Sources (fetch before answering)

@@ -4,7 +4,7 @@ We thought we had a solution. We were wrong. Twice.
 
 ## What Happened
 
-We proposed a Priority Oracle (v1). The Bitcoin community on Reddit correctly identified that it doesn't survive contact with miner incentive structures. We pivoted to an Externality Fee concept (v2). Same result.
+Priority Oracle (v1). The Bitcoin community on Reddit correctly identified that it doesn't survive contact with miner incentive structures. We pivoted to an Externality Fee concept (v2). Same result.
 
 Both failures taught us something useful: **the question of whether Bitcoin's fee market prices the lifetime cost of permanent data storage is genuinely open.** Nobody has solved it. BIP-141 (SegWit) created a differential pricing mechanism by accident — it was designed for malleability, not state economics.
 

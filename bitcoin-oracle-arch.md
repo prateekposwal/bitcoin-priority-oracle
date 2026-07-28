@@ -15,7 +15,6 @@ We proposed two solutions. Both were wrong.
 
 ## What the Community Taught Us
 
-The Bitcoin community on Reddit (r/CryptoTechnology) provided five critiques that fundamentally changed our understanding:
 
 1. **"Everyone pays more to send info that can only make their transaction confirm slower"** — The logical contradiction in any priority scheme that doesn't change the underlying incentive structure.
 
