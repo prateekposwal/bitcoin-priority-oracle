@@ -33,6 +33,14 @@
     {
       "src": "api/v1/index.html",
       "use": "@vercel/static"
+    },
+    {
+      "src": "embed.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "tools/fee_history.csv",
+      "use": "@vercel/static"
     }
   ],
   "routes": [
@@ -59,6 +67,10 @@
     {
       "src": "/api/v1",
       "dest": "/api/v1/index.html"
+    },
+    {
+      "src": "/embed",
+      "dest": "/embed.html"
     }
   ]
 }
