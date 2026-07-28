@@ -1,19 +1,19 @@
 {
-  "timestamp": "2026-07-28T18:18:28.771325+00:00",
+  "timestamp": "2026-07-28T18:27:37.468100+00:00",
   "fees": {
-    "fastestFee": 4,
+    "fastestFee": 3,
     "halfHourFee": 3,
-    "hourFee": 3,
-    "economyFee": 2,
+    "hourFee": 1,
+    "economyFee": 1,
     "minimumFee": 1
   },
-  "btc_price": 63624.29,
+  "btc_price": 63612.46,
   "mempool": {
-    "unconfirmed_tx": 106372,
-    "vsize": 46302393,
-    "total_fee_sats": 15547984
+    "unconfirmed_tx": 104578,
+    "vsize": 45916886,
+    "total_fee_sats": 12324716
   },
-  "block_height": 960004,
+  "block_height": 960005,
   "bip110_signaling": {
     "status": "check failed",
     "error": "HTTP Error 404: Not Found",

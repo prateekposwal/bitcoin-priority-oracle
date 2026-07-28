@@ -6,46 +6,71 @@
 <title>Live Dashboard — Bitcoin Sahi Research</title>
 <script>if(window.location.hostname.includes("vercel.app")){window.location.replace("https://bitcoinsahi.com"+window.location.pathname)}</script>
 <style>
-  :root { --orange: #F7931A; --bg: #0A0A0F; --surface: #12121A; --border: #1E1E2E; --text: #E0E0E0; --muted: #888; }
+  :root { --orange: #F7931A; --bg: #0A0A0F; --surface: #161B22; --border: #30363D; --text: #F0F6FC; --muted: #8B949E; }
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 15px; }
-  nav { display: flex; align-items: center; gap: 20px; padding: 12px 24px; border-bottom: 1px solid var(--border); background: var(--bg); }
-  nav .brand { font-weight: 800; font-size: 16px; }
+  body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 16px; line-height: 1.5; }
+  a { color: var(--orange); text-decoration: none; }
+
+  nav { display: flex; align-items: center; gap: 24px; padding: 14px 32px; border-bottom: 1px solid var(--border); background: var(--bg); flex-wrap: wrap; }
+  nav .brand { font-weight: 800; font-size: 18px; letter-spacing: -0.3px; }
   nav .brand span { color: var(--orange); }
-  nav a { color: var(--muted); text-decoration: none; font-size: 13px; }
+  nav a { color: var(--muted); text-decoration: none; font-size: 14px; }
   nav a:hover { color: var(--text); }
   nav .spacer { flex: 1; }
-  nav .cta { background: var(--orange); color: #000; font-weight: 700; padding: 6px 14px; border-radius: 6px; font-size: 12px; }
-  .container { max-width: 1100px; margin: 0 auto; padding: 24px 20px; }
-  h1 { font-size: 24px; margin-bottom: 4px; }
-  .subtitle { color: var(--muted); font-size: 13px; margin-bottom: 20px; }
+  nav .cta { background: var(--orange); color: #000; font-weight: 700; padding: 8px 18px; border-radius: 8px; font-size: 13px; }
 
-  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 16px; }
-  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px; text-align: center; }
-  .card .lbl { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
-  .card .val { font-size: 24px; font-weight: 800; margin: 4px 0 2px; }
-  .card .sub { font-size: 11px; color: #555; }
-  .card .change { font-size: 11px; font-weight: 600; }
+  .container { max-width: 1200px; margin: 0 auto; padding: 32px 24px; }
+  .page-title { font-size: 28px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 4px; }
+  .page-sub { color: var(--muted); font-size: 15px; margin-bottom: 28px; }
 
-  .section { margin: 20px 0; }
-  .section h2 { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid var(--border); padding-bottom: 6px; margin-bottom: 10px; }
+  /* ── KPI Cards ── */
+  .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 28px; }
+  .kpi-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; text-align: center; }
+  .kpi-card .label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.8px; font-weight: 600; margin-bottom: 6px; }
+  .kpi-card .value { font-size: 32px; font-weight: 800; margin: 2px 0; letter-spacing: -0.5px; }
+  .kpi-card .sub { font-size: 12px; color: #555; }
 
-  .row { display: flex; gap: 8px; flex-wrap: wrap; }
-  .stat { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; flex: 1; min-width: 120px; }
-  .stat .lbl { font-size: 10px; color: #555; }
-  .stat .val { font-size: 15px; font-weight: 600; }
+  /* ── Section ── */
+  .section { margin-bottom: 28px; }
+  .section-header {
+    font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
+    color: var(--orange); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;
+  }
+  .section-header::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 
-  .fee-bar { display: flex; align-items: flex-end; gap: 3px; height: 50px; margin-top: 10px; padding: 6px 0; }
-  .fee-bar .bar { flex: 1; border-radius: 2px 2px 0 0; min-width: 4px; transition: height 0.5s; }
+  /* ── Stat row ── */
+  .stat-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; }
+  .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+  .stat-card .label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+  .stat-card .value { font-size: 18px; font-weight: 700; margin-top: 2px; }
 
-  .alerts { margin-top: 12px; }
-  .alert-item { font-size: 12px; color: var(--muted); padding: 6px 10px; background: var(--surface); border-radius: 6px; margin-bottom: 4px; border-left: 3px solid var(--orange); }
-  .alert-item.warn { border-left-color: #D29922; }
-  .alert-item.good { border-left-color: #3FB950; }
+  /* ── Fee bars ── */
+  .fee-chart { display: flex; align-items: flex-end; gap: 6px; height: 60px; margin-top: 10px; padding: 8px 0; }
+  .fee-chart .bar { flex: 1; border-radius: 3px 3px 0 0; min-width: 40px; transition: height 0.5s; position: relative; }
+  .fee-chart .bar .bar-label { position: absolute; bottom: -18px; left: 50%; transform: translateX(-50%); font-size: 10px; color: var(--muted); white-space: nowrap; }
 
-  .timestamp { font-size: 11px; color: #555; text-align: center; margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border); }
+  .history-chart { display: flex; align-items: flex-end; gap: 6px; height: 120px; margin-top: 8px; padding: 10px 0; }
+  .history-chart .day { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 3px; }
+  .history-chart .day .bar-fast { width: 100%; min-width: 10px; border-radius: 3px 3px 0 0; background: var(--orange); }
+  .history-chart .day .bar-econ { width: 80%; min-width: 8px; border-radius: 3px 3px 0 0; background: #58A6FF; }
+  .history-chart .day .date-label { font-size: 9px; color: #555; transform: rotate(-30deg); margin-top: 4px; white-space: nowrap; }
 
-  @media (max-width: 700px) { .grid-4 { grid-template-columns: repeat(2, 1fr); } }
+  .chart-legend { display: flex; gap: 16px; font-size: 12px; color: var(--muted); margin-top: 4px; }
+  .chart-legend span::before { content: '■ '; }
+
+  /* ── Alerts ── */
+  .alert { padding: 12px 16px; border-radius: 8px; font-size: 14px; margin-bottom: 6px; background: var(--surface); border-left: 4px solid; }
+  .alert.good { border-color: #3FB950; color: #3FB950; }
+  .alert.warn { border-color: #D29922; color: #D29922; }
+  .alert.error { border-color: #F85149; color: #F85149; }
+
+  .footer { font-size: 12px; color: #555; text-align: center; margin-top: 32px; padding-top: 20px; border-top: 1px solid var(--border); }
+
+  @media (max-width: 700px) {
+    .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+    .stat-row { grid-template-columns: repeat(2, 1fr); }
+    nav { padding: 10px 16px; gap: 12px; }
+  }
 </style>
 </head>
 <body>
@@ -59,43 +84,40 @@
 </nav>
 
 <div class="container">
-  <h1>📊 Live Data Dashboard</h1>
-  <p class="subtitle">Real-time blockchain metrics updated daily via GitHub Actions. All data from public APIs.</p>
+  <div class="page-title">📊 Live Data Dashboard</div>
+  <div class="page-sub">Real-time blockchain metrics from public APIs. Updated daily via GitHub Actions.</div>
 
-  <div class="grid-4" id="kpi-grid"></div>
+  <div class="kpi-grid" id="kpi-grid"></div>
 
   <div class="section">
-    <h2>Mempool Fees</h2>
-    <div class="row" id="fee-row"></div>
-    <div class="fee-bar" id="fee-bar"></div>
+    <div class="section-header">Mempool Fees (sat/vB)</div>
+    <div class="stat-row" id="fee-row"></div>
+    <div class="fee-chart" id="fee-bar"></div>
   </div>
 
   <div class="section">
-    <h2>Fee Trend (7-day)</h2>
-    <div class="fee-bar" id="fee-history-bar" style="height:80px;align-items:flex-end;gap:4px;"></div>
-    <div style="display:flex;justify-content:space-between;font-size:9px;color:#555;margin-top:4px;">
-      <span id="history-start"></span>
-      <span>← Older · Newer →</span>
-      <span id="history-end"></span>
-    </div>
+    <div class="section-header">Fee Trend — Last 14 Days</div>
+    <div class="history-chart" id="history-chart"></div>
+    <div class="chart-legend"><span style="color:var(--orange)">Fastest fee</span><span style="color:#58A6FF">Economy fee</span></div>
+    <div style="font-size:11px;color:#555;margin-top:4px;" id="history-dates"></div>
   </div>
 
   <div class="section">
-    <h2>Model Output</h2>
-    <div class="row" id="model-row"></div>
+    <div class="section-header">Model Output</div>
+    <div class="stat-row" id="model-row"></div>
   </div>
 
   <div class="section">
-    <h2>Market Context</h2>
-    <div class="row" id="market-row"></div>
+    <div class="section-header">Market Context</div>
+    <div class="stat-row" id="market-row"></div>
   </div>
 
   <div class="section">
-    <h2>Status & Alerts</h2>
-    <div class="alerts" id="alerts"><div class="alert-item good">✅ All systems nominal — waiting for data...</div></div>
+    <div class="section-header">Alerts</div>
+    <div id="alerts"></div>
   </div>
 
-  <div class="timestamp" id="timestamp"></div>
+  <div class="footer" id="timestamp"></div>
 </div>
 
 <script>
@@ -106,38 +128,38 @@ fetch('tools/live_data.json?_=' + Date.now())
     var btc = d.btc_price || 63000;
     var alerts = d.alerts || [];
 
-    // ── KPI Grid ──
+    // ── KPI Cards ──
     var kpis = [
-      { lbl: 'BTC Price', val: '$' + Number(btc).toLocaleString(), sub: 'blockchain.info', clr: btc > 50000 ? '#3FB950' : '#F0F6FC' },
-      { lbl: 'Fastest Fee', val: (fees.fastestFee || '—') + ' sat/vB', sub: 'next block (~10 min)', clr: fees.fastestFee > 50 ? '#F85149' : fees.fastestFee > 10 ? '#D29922' : '#3FB950' },
-      { lbl: 'Economy Fee', val: (fees.economyFee || '—') + ' sat/vB', sub: 'slow (~1+ hr)', clr: '#8B949E' },
-      { lbl: 'Storage Cost', val: '$0.008', sub: 'per inscription (10yr)', clr: '#F7931A' },
+      { lbl: 'BTC Price', val: '$' + Number(btc).toLocaleString(), sub: 'Live from blockchain.info', clr: btc > 50000 ? '#3FB950' : '#F0F6FC' },
+      { lbl: 'Fastest Fee', val: (fees.fastestFee || '—') + ' sat/vB', sub: 'Next block ~10 min', clr: fees.fastestFee > 50 ? '#F85149' : fees.fastestFee > 10 ? '#D29922' : '#3FB950' },
+      { lbl: 'Economy Fee', val: (fees.economyFee || '—') + ' sat/vB', sub: 'Slow confirmation ~1hr+', clr: '#8B949E' },
+      { lbl: 'Storage Cost', val: '$0.008', sub: 'Per inscription (10yr lifetime)', clr: '#F7931A' },
     ];
-    document.getElementById('kpi-grid').innerHTML = kpis.map(k => 
-      '<div class="card"><div class="lbl">' + k.lbl + '</div><div class="val" style="color:' + k.clr + '">' + k.val + '</div><div class="sub">' + k.sub + '</div></div>'
+    document.getElementById('kpi-grid').innerHTML = kpis.map(k =>
+      '<div class="kpi-card"><div class="label">' + k.lbl + '</div><div class="value" style="color:' + k.clr + '">' + k.val + '</div><div class="sub">' + k.sub + '</div></div>'
     ).join('');
 
-    // ── Fee estimates row ──
-    var feeLabels = { fastestFee: 'Fastest', halfHourFee: '30 min', hourFee: '1 hour', economyFee: 'Economy', minimumFee: 'Minimum' };
+    // ── Fee estimates ──
+    var feeLabels = { fastestFee: 'Fastest', halfHourFee: '30 Min', hourFee: '1 Hour', economyFee: 'Economy', minimumFee: 'Minimum' };
     document.getElementById('fee-row').innerHTML = Object.entries(feeLabels).map(([k, lbl]) =>
-      '<div class="stat"><div class="lbl">' + lbl + '</div><div class="val">' + (fees[k] || '—') + ' sat/vB</div></div>'
+      '<div class="stat-card"><div class="label">' + lbl + '</div><div class="value">' + (fees[k] || '—') + ' sat/vB</div></div>'
     ).join('');
 
     // ── Fee bar chart ──
     var barData = [fees.fastestFee || 0, fees.halfHourFee || 0, fees.hourFee || 0, fees.economyFee || 0, fees.minimumFee || 0];
     var maxFee = Math.max(1, ...barData);
-    var barLabels = ['Fastest', '30min', '1hr', 'Econ', 'Min'];
+    var barLabels = ['Fastest', '30 Min', '1 Hour', 'Economy', 'Minimum'];
     var barColors = ['#F7931A', '#D29922', '#3FB950', '#58A6FF', '#8B949E'];
     document.getElementById('fee-bar').innerHTML = barData.map((v, i) =>
-      '<div class="bar" style="height:' + (v / maxFee * 100 * 0.9 + 10) + '%;background:' + barColors[i] + ';min-width:40px;" title="' + barLabels[i] + ': ' + v + ' sat/vB"></div>'
+      '<div class="bar" style="height:' + (v / maxFee * 100 * 0.85 + 15) + '%;background:' + barColors[i] + '" title="' + barLabels[i] + ': ' + v + ' sat/vB"><span class="bar-label">' + v + '</span></div>'
     ).join('');
 
-    // ── Fee history chart (7-day) ──
+    // ── Fee history trend ──
     fetch('tools/fee_history.json?_=' + Date.now())
       .then(r => r.json())
       .then(hist => {
-        if (!hist || hist.length < 2) {
-          document.getElementById('fee-history-bar').innerHTML = '<div style="color:#555;font-size:12px;">Building history — need 2+ data points</div>';
+        if (!hist || hist.length < 1) {
+          document.getElementById('history-chart').innerHTML = '<div style="color:#555;font-size:14px;">Building history — will populate over the coming days</div>';
           return;
         }
         var fastest = hist.map(d => d.fastestFee || 0);
@@ -145,78 +167,62 @@ fetch('tools/live_data.json?_=' + Date.now())
         var maxH = Math.max(1, ...fastest);
         var html = '';
         for (var i = 0; i < hist.length; i++) {
-          var fh = (fastest[i] / maxH * 100 * 0.85 + 8);
-          var eh = (economy[i] / maxH * 100 * 0.85 + 4);
-          html += '<div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:2px;">';
-          html += '<div class="bar" style="height:' + fh + '%;background:#F7931A;min-width:8px;width:100%;" title="Fastest: ' + fastest[i] + ' sat/vB (' + hist[i].date + ')"></div>';
-          html += '<div class="bar" style="height:' + eh + '%;background:#58A6FF;min-width:8px;width:100%;" title="Economy: ' + economy[i] + ' sat/vB"></div>';
-          html += '<span style="font-size:7px;color:#555;transform:rotate(-45deg);white-space:nowrap;margin-top:2px;">' + hist[i].date.slice(5) + '</span>';
+          var fh = Math.max(4, fastest[i] / maxH * 100 * 0.8);
+          var eh = Math.max(3, economy[i] / maxH * 100 * 0.7);
+          html += '<div class="day">';
+          html += '<div class="bar-fast" style="height:' + fh + '%;" title="Fastest: ' + fastest[i] + ' sat/vB (' + hist[i].date + ')"></div>';
+          html += '<div class="bar-econ" style="height:' + eh + '%;" title="Economy: ' + economy[i] + ' sat/vB"></div>';
+          html += '<div class="date-label">' + hist[i].date.slice(5) + '</div>';
           html += '</div>';
         }
-        document.getElementById('fee-history-bar').innerHTML = html;
-        if (hist.length > 0) {
-          document.getElementById('history-start').textContent = hist[0].date;
-          document.getElementById('history-end').textContent = hist[hist.length-1].date;
-        }
+        document.getElementById('history-chart').innerHTML = html;
+        document.getElementById('history-dates').textContent = 'Showing ' + hist.length + ' days — ' + hist[0].date + ' to ' + hist[hist.length-1].date;
       })
-      .catch(function(e) {
-        // No history yet — expected on first run
-      });
+      .catch(function() {});
 
-    // ── Model output (computed from live params) ──
-    var nodeCost = 924.35;
-    var bytesPerInsc = 400;
-    var inscPerMonth = 100000;
-    var bytesPerYear = bytesPerInsc * inscPerMonth * 12;
-    var costPerByteYear = nodeCost / bytesPerYear;
-    var storage10yr = costPerByteYear * bytesPerInsc * 10;
-    var extYear = storage10yr * inscPerMonth * 12 / 10;
-    var feeRatioLow = ((0.06) / storage10yr).toFixed(0);
-    var feeRatioHigh = ((25) / storage10yr).toFixed(0);
-
+    // ── Model output ──
+    var nc = 924.35, bpi = 400, ipm = 100000;
+    var cpb = nc / (bpi * ipm * 12);
+    var s10 = cpb * bpi * 10;
+    var ext = s10 * ipm * 12 / 10;
     document.getElementById('model-row').innerHTML = [
-      { lbl: 'Node Cost / Yr', val: '$' + nodeCost.toFixed(0) },
-      { lbl: 'Cost/Byte/Yr', val: '$' + costPerByteYear.toFixed(10) },
-      { lbl: 'Storage/Insc (10yr)', val: '$' + storage10yr.toFixed(4) },
-      { lbl: 'Externality / Yr', val: '$' + (extYear / 1000).toFixed(1) + 'K' },
-      { lbl: 'Fee Ratio (low–peak)', val: feeRatioLow + '×–' + feeRatioHigh + '×' },
-    ].map(m => '<div class="stat"><div class="lbl">' + m.lbl + '</div><div class="val">' + m.val + '</div></div>').join('');
+      { lbl: 'Node Cost / Year', val: '$' + nc.toFixed(0) },
+      { lbl: 'Cost per Byte / Year', val: '$' + cpb.toFixed(10) },
+      { lbl: 'Storage / Inscription (10yr)', val: '$' + s10.toFixed(4) },
+      { lbl: 'Total Externality / Year', val: '$' + (ext / 1000).toFixed(1) + 'K' },
+      { lbl: 'Fee ÷ Storage Ratio', val: ((0.06)/s10).toFixed(0) + '× – ' + ((25)/s10).toFixed(0) + '×' },
+    ].map(m => '<div class="stat-card"><div class="label">' + m.lbl + '</div><div class="value">' + m.val + '</div></div>').join('');
 
     // ── Market context ──
-    var satPerDollar = btc > 0 ? (100000000 / btc).toFixed(1) : '—';
-    var inscFeeSats = (fees.economyFee || 1) * 100; // 100 vbytes per inscription
-    var inscFeeUsd = btc > 0 ? (inscFeeSats * btc / 100000000).toFixed(4) : '—';
-    var blockHeight = d.block_height || '—';
-    var mempoolTx = d.mempool ? Number(d.mempool.unconfirmed_tx).toLocaleString() : '—';
+    var spd = btc > 0 ? (100000000 / btc).toFixed(1) : '—';
+    var ifs = (fees.economyFee || 1) * 100;
+    var ifu = btc > 0 ? (ifs * btc / 100000000).toFixed(4) : '—';
+    var utxos = d.utxo_set && d.utxo_set.utxo_count ? Number(d.utxo_set.utxo_count).toLocaleString() : '—';
+    var bh = d.block_height || '—';
+    var mt = d.mempool ? Number(d.mempool.unconfirmed_tx).toLocaleString() : '—';
+    var bs = d.bip110_signaling;
+    var bsVal = bs && bs.signaling_percent !== undefined ? bs.signaling_percent + '%' : (bs && bs.last_known ? bs.last_known : 'N/A');
     document.getElementById('market-row').innerHTML = [
-      { lbl: 'Sat/$ Ratio', val: satPerDollar + ' sat' },
-      { lbl: 'Insc Fee (economy)', val: '$' + inscFeeUsd },
-      { lbl: 'Fee ÷ Storage Cost', val: (inscFeeUsd / Math.max(storage10yr, 0.0001)).toFixed(0) + '×' },
-      { lbl: 'Unconfirmed Tx', val: mempoolTx },
-      { lbl: 'Block Height', val: blockHeight },
-      { lbl: 'BIP-110 Signal', val: d.bip110_signaling && d.bip110_signaling.signaling_percent !== undefined ? d.bip110_signaling.signaling_percent + '%' : 'N/A' },
-    ].map(m => '<div class="stat"><div class="lbl">' + m.lbl + '</div><div class="val">' + m.val + '</div></div>').join('');
+      { lbl: 'Satoshis per USD', val: spd + ' sat' },
+      { lbl: 'Inscription Fee (slow)', val: '$' + ifu },
+      { lbl: 'Unconfirmed Tx', val: mt },
+      { lbl: 'Block Height', val: bh },
+      { lbl: 'BIP-110 Signaling', val: bsVal },
+    ].map(m => '<div class="stat-card"><div class="label">' + m.lbl + '</div><div class="value">' + m.val + '</div></div>').join('');
 
     // ── Alerts ──
-    var alertHtml = '';
-    if (alerts.length > 0) {
-      alertHtml += alerts.map(a => '<div class="alert-item warn">⚠ ' + a + '</div>').join('');
-    }
-    if (fees.fastestFee > 100) {
-      alertHtml += '<div class="alert-item warn">🚨 High fees: ' + fees.fastestFee + ' sat/vB — possible inscription mania</div>';
-    } else if (fees.fastestFee < 2 && btc > 50000) {
-      alertHtml += '<div class="alert-item good">✅ Low fees at high BTC price — no congestion</div>';
-    } else {
-      alertHtml += '<div class="alert-item good">✅ All systems nominal — fees normal for current conditions</div>';
-    }
-    document.getElementById('alerts').innerHTML = alertHtml;
+    var ah = '';
+    if (alerts.length) alerts.forEach(a => { ah += '<div class="alert warn">⚠ ' + a + '</div>'; });
+    if (fees.fastestFee > 100) ah += '<div class="alert error">🚨 High fees: ' + fees.fastestFee + ' sat/vB — possible inscription mania</div>';
+    else if (fees.fastestFee < 2 && btc > 50000) ah += '<div class="alert good">✅ Low fees at high BTC price — network not congested</div>';
+    else ah += '<div class="alert good">✅ All systems nominal — fees normal for current conditions</div>';
+    document.getElementById('alerts').innerHTML = ah;
 
-    // Timestamp
     var ts = d.timestamp ? new Date(d.timestamp).toLocaleString() : '—';
-    document.getElementById('timestamp').textContent = 'Last updated: ' + ts + ' UTC · Data refreshes daily via GitHub Actions';
+    document.getElementById('timestamp').textContent = 'Last updated: ' + ts + ' UTC · Data refreshes daily via GitHub Actions · ' + (mt !== '—' ? mt + ' unconfirmed tx in mempool' : '');
   })
   .catch(function(e) {
-    document.getElementById('kpi-grid').innerHTML = '<div class="card" style="grid-column:span 4"><div class="lbl">Status</div><div class="val" style="color:#F85149;font-size:16px;">⚠ Could not load live data</div><div class="sub">The daily research monitor may not have run yet. Run it manually or wait for the next scheduled update.</div></div>';
+    document.getElementById('kpi-grid').innerHTML = '<div class="kpi-card" style="grid-column:span 4"><div class="label">Status</div><div class="value" style="color:#F85149;font-size:18px;">⚠ Could not load live data</div><div class="sub">Run python3 tools/research_monitor.py or wait for the next GitHub Action run.</div></div>';
   });
 </script>
 </body>
