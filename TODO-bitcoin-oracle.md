@@ -27,11 +27,12 @@
 
 ## Monitoring
 
-- [ ] Subscribe to Bitcoin Optech newsletter
-- [ ] Follow Delving Bitcoin for "state expiry" discussions
-- [ ] Track bitcoin-dev mailing list for UTXO/state threads
-- [ ] Watch covenant proposal discussions (CTV, APO, OP_VAULT, OP_CAT)
-- [ ] Note: if the state expiry conversation restarts, we should contribute our UTXO cost data
+- [x] Subscribe to Bitcoin Optech newsletter
+- [x] Follow Delving Bitcoin for "state expiry" discussions
+- [x] Track bitcoin-dev mailing list for UTXO/state threads
+- [x] Analyze BIP-110 (Reduced Data Temporary Softfork) — see bitcoin-oracle-arch.md
+- [x] Watch covenant proposal discussions (CTV, APO, OP_VAULT, OP_CAT)
+- [x] Note: BIP-110 validates our problem diagnosis. Our cost model provides the economic data BIP-110's rationale lacks.
 
 ## Phase R4: Contribution (if warranted)
 

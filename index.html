@@ -181,6 +181,7 @@
   <a href="#numbers">Numbers</a>
   <a href="#distinction">Distinction</a>
   <a href="#costs">Costs</a>
+  <a href="#bip110">BIP-110</a>
   <a href="#directions">Directions</a>
   <a href="#journey">Journey</a>
   <span class="spacer"></span>
@@ -367,7 +368,40 @@
   </div>
 </div>
 
-<!-- ─── REFERENCE ─── -->
+<!-- ─── BIP-110 ─── -->
+<div class="section-header" id="bip110">Related Proposal: BIP-110</div>
+<div style="font-size:13px;color:#8B949E;line-height:1.6;margin-bottom:10px">
+  <a href="https://github.com/bitcoin/bips/blob/master/bip-0110.mediawiki">BIP-110</a> is a <strong>temporary 1-year soft fork</strong> that bans most inscription methods at the consensus level:
+  limits witness data pushes to 256 bytes, bans <code>OP_IF</code>/<code>OP_NOTIF</code> in Tapscripts
+  (the inscription vector), limits scriptPubKeys to 34 bytes, and bans Taproot annexes.
+  It uses a controversial 55% miner threshold instead of Bitcoin's usual 95%.
+</div>
+
+<div class="cost-detail" style="margin-bottom:14px">
+  <div class="cost-box">
+    <h3>Same diagnosis</h3>
+    <div style="font-size:12px;color:#8B949E;line-height:1.5">
+      Both BIP-110 and this research agree that data inscriptions create costs for node operators that the fee market doesn't price. The 4× SegWit witness discount (BIP-141) was never designed as a state-pricing mechanism.
+    </div>
+    <div class="total" style="margin-top:10px;font-size:12px;color:#3FB950">✅ Same problem identification</div>
+  </div>
+  <div class="cost-box">
+    <h3>Different prescription</h3>
+    <div style="font-size:12px;color:#8B949E;line-height:1.5">
+      BIP-110 uses a <strong>consensus-level ban</strong> (temporary soft fork, 55% threshold).
+      This research explores <strong>relay-level pricing</strong> (each node sets its own fee multiplier, no consensus change).
+      Our cost model provides the economic data BIP-110's rationale lacks.
+    </div>
+    <div class="total" style="margin-top:10px;font-size:12px;color:#F0883E">⚠ Different approaches to same problem</div>
+  </div>
+</div>
+
+<div style="background:#0D1117;border:1px solid #30363D;border-radius:8px;padding:14px;margin:14px 0;font-size:12px;color:#8B949E;line-height:1.5">
+  <strong style="color:#F0F6FC">How our research fills BIP-110's gap:</strong>
+  BIP-110's rationale is ideological ("Bitcoin is money, not data storage") — it has no economic model showing <em>why</em> data storage is harmful. Our cost model provides the missing data: $0.008/inscription lifetime storage cost, $9.2K/yr aggregate externality, sensitivity analysis across adoption scenarios. These numbers give both supporters and critics of BIP-110 a shared factual basis for the debate.
+</div>
+
+<!-- ─── REFERENCE: CASHTTOKENS ─── -->
 <div class="section-header">Reference: CashTokens (Bitcoin Cash)</div>
 <div style="font-size:13px;color:#8B949E;line-height:1.6;margin-bottom:20px">
   Bitcoin Cash's native token protocol (CHIP-2022-02) offers an interesting contrast.

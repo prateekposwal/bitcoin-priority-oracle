@@ -49,7 +49,12 @@ The fee market prices **congestion** (space in the next block). It does **not** 
 ## Community
 
 - **Delving Bitcoin:** [does-bitcoins-fee-market-price-permanence-or-just-congestion/2750](https://delvingbitcoin.org/t/does-bitcoins-fee-market-price-permanence-or-just-congestion/2750)
+- **BIP-110:** [Reduced Data Temporary Softfork](https://github.com/bitcoin/bips/blob/master/bip-0110.mediawiki) — temporary 1-year soft fork banning inscriptions at consensus level. Shares our diagnosis, different prescription.
 - **LinkedIn:** [Post with charts](https://www.linkedin.com/)
+
+## Community Discussion
+
+BIP-110 was proposed after our research began. It validates that the problem is real and being discussed at the protocol level. Our cost model provides the economic data BIP-110's rationale lacks — a shared factual basis for the debate.
 
 ## License
 

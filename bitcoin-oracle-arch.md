@@ -53,6 +53,7 @@ The question of whether Bitcoin's block weight formula appropriately prices stat
 | BIP | Title | Relevance |
 |-----|-------|-----------|
 | [BIP-141](https://github.com/bitcoin/bips/blob/master/bip-0141.mediawiki) | Segregated Witness | The only differential pricing mechanism Bitcoin has. Witness discount of 4× was designed for malleability, not state. |
+| [BIP-110](https://github.com/bitcoin/bips/blob/master/bip-0110.mediawiki) | Reduced Data Temporary Softfork | Temporary 1-year soft fork banning inscriptions at consensus level. Limits witness data to 256 bytes, bans OP_IF/OP_NOTIF in Tapscripts. Uses 55% threshold. Same problem diagnosis, different prescription from our relay-pricing approach. |
 | [BIP-119](https://github.com/bitcoin/bips/blob/master/bip-0119.mediawiki) | OP_CHECKTEMPLATEVERIFY | Covenant proposal enabling output-constrained spending. Most mature covenant BIP. |
 | [BIP-347](https://github.com/bitcoin/bips/pull/1525) | OP_CAT | Re-enables concatenation. Combined with Schnorr, enables covenant constructions relevant to state management. |
 
