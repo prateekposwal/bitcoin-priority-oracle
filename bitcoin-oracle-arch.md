@@ -25,9 +25,9 @@ The Bitcoin community on Reddit (r/CryptoTechnology) provided five critiques tha
 
 4. **"Isn't this just how fees work already?"** — When the "solution" is indistinguishable from the existing mechanism, the problem wasn't properly identified.
 
-5. **"Heavy AI use means you don't understand the fundamentals"** — The most painful and most useful critique. Writing about Bitcoin protocol design requires deep understanding, not plausible-sounding prose.
-
 ---
+
+
 
 ## The Actual Problem
 
