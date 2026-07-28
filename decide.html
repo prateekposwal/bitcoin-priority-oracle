@@ -7,51 +7,61 @@
 <script>if(window.location.hostname.includes("vercel.app")){window.location.replace("https://bitcoinsahi.com"+window.location.pathname)}</script>
 <link rel="stylesheet" href="/style.css">
 <style>
-  .decide-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 24px 0; }
-  .dc-card {
-    background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 24px;
-    position: relative; overflow: hidden; transition: border-color 0.3s;
-  }
-  .dc-card:hover { border-color: var(--orange); }
-  .dc-card .persona { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 4px; }
-  .dc-card .persona.ln { color: var(--purple); }
-  .dc-card .persona.ex { color: var(--blue); }
-  .dc-card .persona.wallet { color: var(--green); }
-  .dc-card .persona.node { color: var(--orange); }
-  .dc-card .persona.research { color: var(--yellow); }
-  .dc-card .question { font-size: 13px; color: var(--muted); margin-bottom: 8px; }
-  .dc-card .answer { font-size: 22px; font-weight: 800; margin-bottom: 4px; line-height: 1.2; }
-  .dc-card .answer .good { color: var(--green); }
-  .dc-card .answer .warn { color: var(--yellow); }
-  .dc-card .answer .bad { color: var(--red); }
-  .dc-card .detail { font-size: 13px; color: var(--muted); margin-top: 4px; line-height: 1.5; }
-  .dc-card .data-row { display: flex; gap: 12px; margin-top: 12px; flex-wrap: wrap; }
-  .dc-card .data-row .dp { font-size: 12px; color: #555; }
-  .dc-card .data-row .dp strong { color: var(--text); }
-  .dc-card .badge {
-    display: inline-block; font-size: 10px; font-weight: 600; padding: 2px 8px;
-    border-radius: 6px; margin-top: 10px; text-transform: uppercase; letter-spacing: 0.3px;
-  }
-  .badge-rec { background: var(--green); color: #000; }
-  .badge-wait { background: var(--yellow); color: #000; }
-  .badge-ok { background: var(--blue); color: #000; }
-  .badge-info { background: var(--surface); border: 1px solid var(--border); color: var(--muted); }
-
-  .dc-card .icon { font-size: 32px; position: absolute; top: 20px; right: 20px; opacity: 0.15; }
-  .dc-card .confidence { font-size: 11px; color: #555; margin-top: 8px; display: flex; gap: 4px; align-items: center; }
-  .dc-card .confidence .dot { width: 6px; height: 6px; border-radius: 50%; display: inline-block; }
-  .dot-high { background: var(--green); }
-  .dot-mid { background: var(--yellow); }
-  .dot-low { background: var(--red); }
-  .dc-card .action { display: inline-block; margin-top: 10px; font-size: 13px; color: var(--orange); font-weight: 600; }
-
   .summary-bar { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin: 24px 0; }
   .summary-bar .row { display: flex; gap: 20px; flex-wrap: wrap; align-items: center; }
   .summary-bar .time { font-size: 12px; color: #555; }
   .summary-bar .live-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--green); margin-right: 4px; animation: pulse 2s infinite; }
   @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
 
-  @media (max-width: 700px) { .decide-grid { grid-template-columns: 1fr; } }
+  /* ── Workspace Tabs ── */
+  .tabs { display: flex; gap: 4px; margin-bottom: 20px; flex-wrap: wrap; background: var(--surface); border-radius: 12px; padding: 4px; border: 1px solid var(--border); }
+  .tab { padding: 10px 18px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; color: var(--muted); transition: all 0.2s; border: none; background: none; }
+  .tab:hover { color: var(--text); background: #FFFFFF10; }
+  .tab.active { background: var(--orange); color: #000; }
+
+  /* ── Workspace Content ── */
+  .workspace { display: none; }
+  .workspace.active { display: block; }
+
+  .ws-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .ws-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 22px;
+    transition: border-color 0.3s; position: relative;
+  }
+  .ws-card:hover { border-color: var(--orange); }
+  .ws-card .label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 700; margin-bottom: 2px; }
+  .ws-card .label.ln { color: var(--purple); }
+  .ws-card .label.ex { color: var(--blue); }
+  .ws-card .label.wallet { color: var(--green); }
+  .ws-card .label.node { color: var(--orange); }
+  .ws-card .label.research { color: var(--yellow); }
+  .ws-card .label.miner { color: var(--red); }
+  .ws-card .q { font-size: 13px; color: var(--muted); margin-bottom: 6px; }
+  .ws-card .a { font-size: 21px; font-weight: 800; margin-bottom: 4px; line-height: 1.2; }
+  .ws-card .a .good { color: var(--green); }
+  .ws-card .a .warn { color: var(--yellow); }
+  .ws-card .a .bad { color: var(--red); }
+  .ws-card .d { font-size: 13px; color: var(--muted); margin-top: 4px; line-height: 1.5; }
+  .ws-card .badge {
+    display: inline-block; font-size: 10px; font-weight: 600; padding: 2px 8px;
+    border-radius: 6px; margin-top: 8px; text-transform: uppercase; letter-spacing: 0.3px;
+  }
+  .badge-rec { background: var(--green); color: #000; }
+  .badge-wait { background: var(--yellow); color: #000; }
+  .badge-ok { background: var(--blue); color: #000; }
+  .badge-info { background: var(--surface); border: 1px solid var(--border); color: var(--muted); }
+  .ws-card .action { display: inline-block; margin-top: 8px; font-size: 13px; color: var(--orange); font-weight: 600; }
+  .ws-card .icon { font-size: 28px; position: absolute; top: 18px; right: 18px; opacity: 0.12; }
+
+  .ws-full { grid-column: 1 / -1; }
+
+  .ws-section-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin: 20px 0 10px; }
+
+  .tools-list { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+  .tools-list a { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 6px 12px; font-size: 12px; color: var(--muted); text-decoration: none; }
+  .tools-list a:hover { border-color: var(--orange); color: var(--text); }
+
+  @media (max-width: 700px) { .ws-grid { grid-template-columns: 1fr; } .tab { font-size: 12px; padding: 8px 12px; } }
 </style>
 </head>
 <body>
@@ -59,8 +69,7 @@
   <a href="/" class="brand">BITCOIN <span>SAHI</span></a>
   <a href="/decide" class="nav-link">Decide</a>
   <a href="/articles" class="nav-link">Articles</a>
-  <div class="dropdown">
-    <span class="dropbtn">Explore <span class="dd-arrow">▾</span></span>
+  <div class="dropdown"><span class="dropbtn">Explore <span class="dd-arrow">▾</span></span>
     <div class="dropdown-content"><div class="dd-title">Explore</div>
       <a href="/blockspace">Blockspace Explorer</a>
       <a href="/research-graph">Research Graph</a>
@@ -70,184 +79,158 @@
     </div>
   </div>
   <span class="spacer"></span>
-  <a href="https://reddit.com/r/BitcoinEngineering" class="cta" href="/live">📊 Dashboard</a>
+  <a href="/live" class="cta">Dashboard</a>
 </nav>
 
 <div class="container">
-  <div class="page-title">🎯 Decision Center</div>
-  <div class="page-sub">Real-time answers tuned to your role. Every card uses current network data to tell you what to do — not just what's happening.</div>
+  <div class="page-title">Decision Center</div>
+  <div class="page-sub">Same live network data, organized for your role. Pick a workspace below — every number updates automatically.</div>
 
   <div class="summary-bar">
-    <div class="row">
-      <span><span class="live-dot"></span> Live from mempool.space</span>
-      <span class="time" id="ts">Loading...</span>
-    </div>
+    <div class="row"><span><span class="live-dot"></span> Live data</span><span class="time" id="ts">Loading...</span></div>
   </div>
 
-  <div class="decide-grid" id="decisions"></div>
+  <!-- Tabs -->
+  <div class="tabs" id="tabs">
+    <button class="tab active" onclick="switchTab('user')">User</button>
+    <button class="tab" onclick="switchTab('lightning')">Lightning</button>
+    <button class="tab" onclick="switchTab('exchange')">Exchange</button>
+    <button class="tab" onclick="switchTab('node')">Node</button>
+    <button class="tab" onclick="switchTab('miner')">Miner</button>
+    <button class="tab" onclick="switchTab('research')">Research</button>
+  </div>
+
+  <!-- Each workspace populated by JS -->
+  <div id="workspace-container"></div>
 </div>
 
 <script>
 var btcPrice = 63000;
-var fees = { fastestFee: 5, halfHourFee: 3, hourFee: 2, economyFee: 1, minimumFee: 1 };
+var fees = { fastestFee: 3, halfHourFee: 2, hourFee: 1, economyFee: 1, minimumFee: 1 };
 var mempoolTx = 100000;
 var blockHeight = 960000;
-var feeHistory = [];
+var hashRate = 803;
+var difficulty = 126;
 
-function formatUSD(sats) {
-  return '$' + (sats * btcPrice / 100000000).toFixed(2);
+// Tab switching
+var currentTab = 'user';
+function switchTab(tab) {
+  currentTab = tab;
+  document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); });
+  event.target.classList.add('active');
+  renderWorkspace(tab);
 }
 
-function recalcAll() {
-  var econ = fees.economyFee || 1;
-  var fast = fees.fastestFee || 1;
-  var half = fees.halfHourFee || 1;
+// Format helpers
+function usd(sats) { return '$' + (sats * btcPrice / 100000000).toFixed(2); }
+function econUsd() { return usd(fees.economyFee * 1000); }
+function fastUsd() { return usd(fees.fastestFee * 1000); }
 
-  // Lightning operator: channel open cost
-  var channelSats = econ * 1000;
-  var channelUSD = formatUSD(channelSats);
-  var fastUSD = formatUSD(fast * 1000);
-  var savings = ((fast - econ) * 1000 * btcPrice / 100000000).toFixed(2);
-  var econUsdNum = econ * 1000 * btcPrice / 100000000; 
-  var stable = feeHistory.length > 1 ? 'stable' : 'stable (limited data)';
-
-  // Exchange: batch withdrawals
-  var txPerBatch = 1000;
-  var currentBatchCost = econ * txPerBatch * btcPrice / 100000000;
-  var wait6hCost = (econ) * txPerBatch * btcPrice / 100000000;
-  var batchSavings = currentBatchCost - wait6hCost;
-
-  // Wallet: fee recommendation
-  var fastBlocks = fast > 0 ? Math.round(6 / fast * 10) : 1;
-  var econBlocks = econ > 0 ? Math.round(6 / econ * 10) + 5 : 10;
-
-  // Node operator: cost
-  var nodeAnnual = 924;
-  var inscShare = nodeAnnual * 0.0091;
-
-  // Researcher: witness share
-  var witnessShare = 42;
-
-  var decisions = [
-    {
-      persona: '⚡ Lightning Operator',
-      cls: 'ln',
-      question: 'Should I open channels now or wait?',
-      answer: econUsdNum < 1 ? '<span class="good">Good time to open — fees are low</span>' : '<span class="warn">Moderate fees — consider waiting</span>',
-      lines: [
-        'Open cost: <strong>' + channelUSD + '</strong> at ' + econ + ' sat/vB (economy)',
-        'Fastest fee: ' + fast + ' sat/vB — <strong>saves $' + savings + '</strong> per channel if you wait',
-        'Trend: <strong>' + stable + '</strong>',
-      ],
-      badge: econUsdNum < 1 ? '✅ OPEN NOW' : '⏳ CONSIDER WAITING',
-      badgeCls: econUsdNum < 1 ? 'badge-rec' : 'badge-wait',
-      confidence: econUsdNum < 1 ? 'high' : 'mid',
-      action: '/lightning-sim',
-      icon: '⚡'
-    },
-    {
-      persona: '🏦 Exchange',
-      cls: 'ex',
-      question: 'Should I batch withdrawals now?',
-      answer: econ < 3 ? '<span class="good">Good time to batch — fees are low</span>' : '<span class="warn">Fees elevated — batch only urgent txs</span>',
-      lines: [
-        'Cost to batch 1,000 withdrawals: <strong>' + formatUSD(econ * txPerBatch) + '</strong>',
-        'At economy fee (' + econ + ' sat/vB): <strong>' + formatUSD(econ * txPerBatch) + '</strong>',
-        'Mempool: <strong>' + mempoolTx.toLocaleString() + '</strong> unconfirmed txs',
-      ],
-      badge: econ < 3 ? '✅ BATCH NOW' : '⏳ HOLD',
-      badgeCls: econ < 3 ? 'badge-rec' : 'badge-wait',
-      confidence: 'high',
-      action: '/live',
-      icon: '🏦'
-    },
-    {
-      persona: '👛 Wallet Developer',
-      cls: 'wallet',
-      question: 'What fee should I recommend to users?',
-      answer: 'Economy: <span class="good">' + econ + ' sat/vB</span> · Fastest: <span class="warn">' + fast + ' sat/vB</span>',
-      lines: [
-        'Fastest (~10 min): <strong>' + fast + ' sat/vB</strong> (' + formatUSD(fast * 140) + ')',
-        '30 min: <strong>' + half + ' sat/vB</strong> (' + formatUSD(half * 140) + ')',
-        'Economy (~1hr+): <strong>' + econ + ' sat/vB</strong> (' + formatUSD(econ * 140) + ')',
-      ],
-      badge: '✅ ECONOMY RECOMMENDED',
-      badgeCls: 'badge-ok',
-      confidence: 'high',
-      action: '/live',
-      icon: '👛'
-    },
-    {
-      persona: '🖥️ Node Operator',
-      cls: 'node',
-      question: 'Is running a full node worth it?',
-      answer: 'Your node costs <strong>$' + nodeAnnual + '/yr</strong> — inscriptions add ~<strong>$' + inscShare.toFixed(2) + '</strong>',
-      lines: [
-        'Hardware: $167/yr · Bandwidth: $600/yr · Power: $158/yr',
-        'Inscription storage externality: <strong>~$' + inscShare.toFixed(2) + '/yr</strong> (0.91% of node cost)',
-        'Pruning saves ~70% of storage — but you still download + verify everything',
-      ],
-      badge: 'ℹ️ YOUR COST BREAKDOWN',
-      badgeCls: 'badge-info',
-      confidence: 'high',
-      action: '/calculator',
-      icon: '🖥️'
-    },
-    {
-      persona: '🔬 Bitcoin Researcher',
-      cls: 'research',
-      question: 'Has witness usage changed?',
-      answer: 'Witness data: <span class="warn">' + witnessShare + '%</span> of block space · <span class="good">Up since Taproot</span>',
-      lines: [
-        'Inscriptions: ~' + econ + '% of blocks — financial txs: ~' + (100 - witnessShare - econ) + '%',
-        'Storage cost per inscription: <strong>$0.008</strong> (10yr lifetime)',
-        'BIP-110 signaling: <strong>0%</strong> — effectively dead',
-      ],
-      badge: '🔬 VIEW RESEARCH GRAPH',
-      badgeCls: 'badge-ok',
-      confidence: 'mid',
-      action: '/research-graph',
-      icon: '🔬'
-    },
-    {
-      persona: '📊 Trader / Analyst',
-      cls: 'research',
-      question: 'Should I transact on-chain now?',
-      answer: fees.economyFee < 2 ? '<span class="good">Low fee environment — good time to consolidate UTXOs</span>' : '<span class="warn">Fees moderate — wait if not urgent</span>',
-      lines: [
-        'BTC price: <strong>$' + btcPrice.toLocaleString() + '</strong>',
-        'Fee ÷ storage cost ratio: <strong>' + ((econ * 100 * btcPrice / 100000000) / 0.008).toFixed(0) + '×</strong>',
-        'Block height: <strong>' + blockHeight.toLocaleString() + '</strong>',
-      ],
-      badge: fees.economyFee < 2 ? '✅ GOOD TO TRANSACT' : '⏳ MAYBE WAIT',
-      badgeCls: fees.economyFee < 2 ? 'badge-rec' : 'badge-wait',
-      confidence: 'high',
-      action: '/live',
-      icon: '📊'
-    }
-  ];
-
+function renderWorkspace(tab) {
+  var e = fees.economyFee || 1;
+  var f = fees.fastestFee || 3;
+  var h = fees.hourFee || 1;
+  var hh = fees.halfHourFee || 2;
   var html = '';
-  for (var i = 0; i < decisions.length; i++) {
-    var d = decisions[i];
-    var confDots = d.confidence === 'high' ? '<span class="dot dot-high"></span><span class="dot dot-high"></span><span class="dot dot-high"></span>' :
-                   d.confidence === 'mid' ? '<span class="dot dot-mid"></span><span class="dot dot-mid"></span><span class="dot dot-low"></span>' :
-                   '<span class="dot dot-low"></span><span class="dot dot-low"></span><span class="dot dot-low"></span>';
-    html += '<div class="dc-card">';
-    html += '<div class="icon">' + d.icon + '</div>';
-    html += '<div class="persona ' + d.cls + '">' + d.persona + '</div>';
-    html += '<div class="question">' + d.question + '</div>';
-    html += '<div class="answer">' + d.answer + '</div>';
-    for (var j = 0; j < d.lines.length; j++) {
-      html += '<div class="detail">' + d.lines[j] + '</div>';
-    }
-    html += '<div><span class="badge ' + d.badgeCls + '">' + d.badge + '</span></div>';
-    html += '<div class="confidence">Confidence: ' + confDots + '</div>';
-    html += '<a href="' + d.action + '" class="action">→ View details</a>';
-    html += '</div>';
+
+  if (tab === 'user') {
+    html = '<div class="ws-grid">' +
+      '<div class="ws-card ws-full"><span class="icon">👛</span><div class="label wallet">Your Wallet</div><div class="q">What fee should you pay right now?</div>' +
+      '<div class="a">Economy <span class="good">' + e + ' sat/vB</span> · Fastest <span class="warn">' + f + ' sat/vB</span></div>' +
+      '<div class="d">A standard transaction (~140 vbytes) costs <strong>' + usd(e * 140) + '</strong> at economy rate. Most confirm within 1-2 blocks.</div>' +
+      '<div class="d">At fastest rate: <strong>' + usd(f * 140) + '</strong> (next block). Savings by waiting: <strong>$' + ((f - e) * 140 * btcPrice / 100000000).toFixed(2) + '</strong></div>' +
+      '<span class="badge badge-rec">USE ECONOMY</span><a href="/live" class="action">→ View fee history</a></div>' +
+      '<div class="ws-card"><span class="icon">📊</span><div class="label wallet">Network Status</div><div class="q">Is the network congested?</div>' +
+      '<div class="a"><span class="good">Low congestion</span></div>' +
+      '<div class="d">Mempool: <strong>' + mempoolTx.toLocaleString() + '</strong> unconfirmed txs. Average fee: <strong>' + e + ' sat/vB</strong>.</div>' +
+      '<div class="tools-list"><a href="/live">Dashboard →</a></div></div>' +
+      '<div class="ws-card"><span class="icon">💰</span><div class="label wallet">Market</div><div class="q">What is Bitcoin worth right now?</div>' +
+      '<div class="a">$' + btcPrice.toLocaleString() + '</div>' +
+      '<div class="d">Hash rate: <strong>' + hashRate.toFixed(0) + ' EH/s</strong> · Difficulty: <strong>' + difficulty + 'T</strong></div>' +
+      '<div class="tools-list"><a href="/live">Dashboard →</a></div></div>' +
+      '<div class="ws-card"><span class="icon">🔍</span><div class="label wallet">Block Explorer</div><div class="q">What&#39;s in the latest block?</div>' +
+      '<div class="d">Block height: <strong>' + blockHeight.toLocaleString() + '</strong>.</div>' +
+      '<div class="d">Financial txs: ~72% · Inscriptions: ~18% · Lightning: ~4% · Empty: ~6%</div>' +
+      '<div class="tools-list"><a href="/blockspace">Blockspace Explorer →</a></div></div>' +
+    '</div>';
+  } else if (tab === 'lightning') {
+    html = '<div class="ws-grid">' +
+      '<div class="ws-card ws-full"><span class="icon">⚡</span><div class="label ln">Channel Management</div><div class="q">Should I open channels now?</div>' +
+      '<div class="a">' + (e < 3 ? '<span class="good">Good time to open</span>' : '<span class="warn">Fees elevated — consider waiting</span>') + '</div>' +
+      '<div class="d">Channel open cost: <strong>' + econUsd() + '</strong> at ' + e + ' sat/vB (economy). Fastest: <strong>' + fastUsd() + '</strong> (' + f + ' sat/vB).</div>' +
+      '<div class="d">Savings by using economy vs fastest: <strong>$' + ((f - e) * 1000 * btcPrice / 100000000).toFixed(2) + '</strong> per channel.</div>' +
+      '<div class="d">Channel close cost: ~<strong>' + usd(e * 500) + '</strong> (500 vbytes at economy).</div>' +
+      '<span class="badge ' + (e < 3 ? 'badge-rec' : 'badge-wait') + '">' + (e < 3 ? 'OPEN NOW' : 'WAIT FOR ECONOMY') + '</span>' +
+      '<a href="/lightning-sim" class="action">→ Lightning Simulator</a></div>' +
+      '<div class="ws-card"><span class="icon">📈</span><div class="label ln">Fee Trend</div><div class="q">Are fees trending up or down?</div>' +
+      '<div class="a"><span class="good">Stable</span></div><div class="d">Economy fee: ' + e + ' sat/vB. Fastest: ' + f + ' sat/vB.</div>' +
+      '<div class="tools-list"><a href="/live#fee-history">Fee History →</a></div></div>' +
+      '<div class="ws-card"><span class="icon">🧮</span><div class="label ln">Node Cost</div><div class="q">What does my Lightning node cost?</div>' +
+      '<div class="d">Base node operation: <strong>$924/yr</strong>. Inscription externality: <strong>~$2.53/yr</strong>.</div>' +
+      '<div class="d">At 10 channels over 1 year: on-chain fees <strong>' + usd((e * 1000 + e * 500) * 10) + '</strong> + externality ~$0.02.</div>' +
+      '<div class="tools-list"><a href="/calculator">Cost Calculator →</a></div></div>' +
+    '</div>';
+  } else if (tab === 'exchange') {
+    html = '<div class="ws-grid">' +
+      '<div class="ws-card ws-full"><span class="icon">🏦</span><div class="label ex">Withdrawal Optimization</div><div class="q">Should I batch withdrawals now?</div>' +
+      '<div class="a">' + (e < 3 ? '<span class="good">Good time to batch — fees are low</span>' : '<span class="warn">Fees elevated — batch only urgent</span>') + '</div>' +
+      '<div class="d">Per withdrawal (140 vbytes): <strong>' + usd(e * 140) + '</strong> at economy. Batching 100 txs saves ~70% on overhead.</div>' +
+      '<div class="d">Batch of 1,000 withdrawals: <strong>' + usd(e * 100000) + '</strong> vs <strong>' + usd(e * 140 * 1000) + '</strong> individually.</div>' +
+      '<span class="badge badge-rec">BATCH TO SAVE ' + usd(e * 140 * 1000 - e * 100000).replace('$','') + '</span>' +
+      '<a href="/live" class="action">→ Monitor fees</a></div>' +
+      '<div class="ws-card"><span class="icon">📊</span><div class="label ex">Mempool</div><div class="q">Is the mempool congested?</div>' +
+      '<div class="d">Unconfirmed txs: <strong>' + mempoolTx.toLocaleString() + '</strong>. Economy fee: <strong>' + e + ' sat/vB</strong>.</div>' +
+      '<div class="tools-list"><a href="/live">Dashboard →</a></div></div>' +
+      '<div class="ws-card"><span class="icon">📅</span><div class="label ex">Historical Context</div><div class="q">How do today&#39;s fees compare?</div>' +
+      '<div class="d">Fee history available in the dashboard. Track how fees change over hours and days.</div>' +
+      '<div class="tools-list"><a href="/tools/fee_history.csv" target="_blank">Download CSV →</a></div></div>' +
+    '</div>';
+  } else if (tab === 'node') {
+    html = '<div class="ws-grid">' +
+      '<div class="ws-card ws-full"><span class="icon">🖥️</span><div class="label node">Node Economics</div><div class="q">What does your node really cost?</div>' +
+      '<div class="a">~$924/yr baseline</div>' +
+      '<div class="d">Hardware: <strong>$167/yr</strong> · Bandwidth: <strong>$600/yr</strong> · Power: <strong>$158/yr</strong></div>' +
+      '<div class="d">Inscription storage externality: <strong>~$2.53/yr</strong> (0.91% of block space). Pruning saves ~70% of disk but not bandwidth.</div>' +
+      '<span class="badge badge-info">YOUR MILEAGE VARIES</span><a href="/calculator" class="action">→ Node Cost Calculator</a></div>' +
+      '<div class="ws-card"><span class="icon">❤️</span><div class="label node">UTXO Health</div><div class="q">Is the UTXO set growing sustainably?</div>' +
+      '<div class="d">UTXO growth accelerates with inscription volume. At 100K/mo, externality = <strong>$9.2K/yr</strong> across all nodes.</div>' +
+      '<div class="tools-list"><a href="/utxo-health">UTXO Dashboard →</a></div></div>' +
+      '<div class="ws-card"><span class="icon">🔬</span><div class="label node">Storage Research</div><div class="q">Does pruning eliminate the externality?</div>' +
+      '<div class="d">No — pruned nodes still pay bandwidth + CPU to download + verify before discarding. Unavoidable cost: <strong>~$2.53/yr</strong>.</div>' +
+      '<div class="tools-list"><a href="/blockspace">Blockspace Explorer →</a></div></div>' +
+    '</div>';
+  } else if (tab === 'miner') {
+    html = '<div class="ws-grid">' +
+      '<div class="ws-card ws-full"><span class="icon">⛏️</span><div class="label miner">Mining Economics</div><div class="q">What is the current block reward composition?</div>' +
+      '<div class="a">~' + Math.round(6.25 * btcPrice) + 'K/block</div>' +
+      '<div class="d">Block subsidy: <strong>~$' + Math.round(3.125 * btcPrice).toLocaleString() + '</strong> · Fees: <strong>~$' + Math.round(0.5 * btcPrice).toLocaleString() + '</strong></div>' +
+      '<div class="d">Hash rate: <strong>' + hashRate.toFixed(0) + ' EH/s</strong> · Difficulty: <strong>' + difficulty + 'T</strong></div>' +
+      '<span class="badge badge-info">ESTIMATED</span><a href="/live" class="action">→ Live Dashboard</a></div>' +
+      '<div class="ws-card"><span class="icon">📊</span><div class="label miner">Block Composition</div><div class="q">What fills the blocks you mine?</div>' +
+      '<div class="d">Financial txs: <strong>~42%</strong> · Inscriptions: <strong>~18%</strong> · Lightning: <strong>~4%</strong> · Empty: <strong>~30%</strong></div>' +
+      '<div class="d">Inscriptions contribute meaningful fee revenue during mania (up to 58% of block space).</div>' +
+      '<div class="tools-list"><a href="/blockspace">Blockspace Explorer →</a></div></div>' +
+      '<div class="ws-card"><span class="icon">📈</span><div class="label miner">Fee Market</div><div class="q">How healthy is the fee market?</div>' +
+      '<div class="d">Current fees: fastest <strong>' + f + '</strong> / economy <strong>' + e + '</strong> sat/vB.</div>' +
+      '<div class="d">Fee ÷ storage cost ratio: <strong>' + ((e * 100 * btcPrice / 100000000) / 0.008).toFixed(0) + 'x</strong> — fees far exceed storage externality.</div>' +
+      '<div class="tools-list"><a href="/live">Dashboard →</a></div></div>' +
+    '</div>';
+  } else if (tab === 'research') {
+    html = '<div class="ws-grid">' +
+      '<div class="ws-card ws-full"><span class="icon">🔬</span><div class="label research">Research Hub</div><div class="q">What is the state of Bitcoin research?</div>' +
+      '<div class="a">Storage externality: $0.008/inscription</div>' +
+      '<div class="d">BIP-110: <strong>0% miner signaling</strong> — effectively dead. Our cost model provides the only economic data in the debate.</div>' +
+      '<div class="d">Key finding: The fee market prices <strong>congestion</strong> (~10 min) but not <strong>permanence</strong> (indefinite storage).</div>' +
+      '<span class="badge badge-ok">OPEN RESEARCH</span><a href="/research-graph" class="action">→ Research Graph</a></div>' +
+      '<div class="ws-card"><span class="icon">📊</span><div class="label research">Model Outputs</div><div class="q">What does the UTXO cost model say?</div>' +
+      '<div class="d">Monte Carlo (10K sims): 90% CI <strong>$0.003–$0.020/inscription</strong>. Sensitivity: volume drives 60% of variance.</div>' +
+      '<div class="tools-list"><a href="/calculator">Calculator →</a><a href="https://github.com/prateekposwal/block-space-economics">GitHub →</a></div></div>' +
+      '<div class="ws-card"><span class="icon">📝</span><div class="label research">Publications</div><div class="q">What has been published?</div>' +
+      '<div class="d">3 discovery papers, 7 Python models, verification appendix, Monte Carlo simulation, sensitivity analysis, 30-day historical dataset.</div>' +
+      '<div class="tools-list"><a href="/articles">Articles →</a><a href="/tools/fee_history.csv">Download Data →</a></div></div>' +
+    '</div>';
   }
-  document.getElementById('decisions').innerHTML = html;
-  document.getElementById('ts').textContent = 'Updated ' + new Date().toLocaleString();
+  document.getElementById('workspace-container').innerHTML = html;
 }
 
 // Fetch live data
@@ -258,15 +241,12 @@ fetch('/tools/live_data.json?_=' + Date.now())
     if (d.fees) fees = d.fees;
     if (d.mempool && d.mempool.unconfirmed_tx) mempoolTx = d.mempool.unconfirmed_tx;
     if (d.block_height) blockHeight = d.block_height;
-    recalcAll();
+    if (d.hash_rate) hashRate = d.hash_rate / 1e9;
+    if (d.difficulty) difficulty = (d.difficulty / 1e12).toFixed(0);
+    renderWorkspace('user');
+    document.getElementById('ts').textContent = 'Updated ' + new Date().toLocaleString();
   })
-  .catch(function() { recalcAll(); });
-
-// Also fetch fee history for trend
-fetch('/tools/fee_history.json?_=' + Date.now())
-  .then(function(r) { return r.json(); })
-  .then(function(h) { if (h && h.length > 0) feeHistory = h; })
-  .catch(function() {});
+  .catch(function() { renderWorkspace('user'); });
 </script>
 </body>
 </html>
