@@ -2,12 +2,43 @@
   "name": "bitcoin-priority-oracle",
   "version": 2,
   "builds": [
-    { "src": "index.html", "use": "@vercel/static" },
-    { "src": "live.html", "use": "@vercel/static" },
-    { "src": "tools/live_data.json", "use": "@vercel/static" }
+    {
+      "src": "index.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "live.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "tools/live_data.json",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "articles.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "interactive-block.html",
+      "use": "@vercel/static"
+    }
   ],
   "routes": [
-    { "src": "/live", "dest": "/live.html" },
-    { "src": "/", "dest": "/index.html" }
+    {
+      "src": "/live",
+      "dest": "/live.html"
+    },
+    {
+      "src": "/",
+      "dest": "/index.html"
+    },
+    {
+      "src": "/articles",
+      "dest": "/articles.html"
+    },
+    {
+      "src": "/old",
+      "dest": "/interactive-block.html"
+    }
   ]
 }
