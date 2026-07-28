@@ -43,6 +43,14 @@
       "use": "@vercel/static"
     },
     {
+      "src": "tools/fee_forecast.json",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "tools/alerts.json",
+      "use": "@vercel/static"
+    },
+    {
       "src": "blockspace.html",
       "use": "@vercel/static"
     },
