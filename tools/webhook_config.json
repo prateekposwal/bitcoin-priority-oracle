@@ -1,0 +1,4 @@
+{
+  "webhooks": [],
+  "note": "To enable: add your webhook URL. Example: {'url': 'https://your-server.com/hook', 'events': ['high_fee', 'low_fee', 'spike']}"
+}

@@ -57,6 +57,18 @@
     {
       "src": "research-graph.html",
       "use": "@vercel/static"
+    },
+    {
+      "src": "cost-calculator.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "utxo-health.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "lightning-sim.html",
+      "use": "@vercel/static"
     }
   ],
   "routes": [
@@ -95,6 +107,18 @@
     {
       "src": "/research-graph",
       "dest": "/research-graph.html"
+    },
+    {
+      "src": "/calculator",
+      "dest": "/cost-calculator.html"
+    },
+    {
+      "src": "/utxo-health",
+      "dest": "/utxo-health.html"
+    },
+    {
+      "src": "/lightning-sim",
+      "dest": "/lightning-sim.html"
     }
   ]
 }

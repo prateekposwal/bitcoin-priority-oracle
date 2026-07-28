@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Node Cost Calculator — Bitcoin Sahi Research</title>
+<script>if(window.location.hostname.includes("vercel.app")){window.location.replace("https://bitcoinsahi.com"+window.location.pathname)}</script>
+<style>
+  :root { --orange: #F7931A; --bg: #0A0A0F; --surface: #161B22; --border: #30363D; --text: #F0F6FC; --muted: #8B949E; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 16px; line-height: 1.5; }
+  a { color: var(--orange); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  nav { display: flex; align-items: center; gap: 24px; padding: 14px 32px; border-bottom: 1px solid var(--border); background: var(--bg); flex-wrap: wrap; }
+  nav .brand { font-weight: 800; font-size: 20px; letter-spacing: -0.3px; }
+  nav .brand span { color: var(--orange); }
+  nav a { color: var(--muted); text-decoration: none; font-size: 16px; }
+  nav a:hover { color: var(--text); }
+  nav .spacer { flex: 1; }
+  nav .cta { background: var(--orange); color: #000; font-weight: 700; padding: 8px 18px; border-radius: 8px; font-size: 14px; }
+
+  .container { max-width: 1400px; margin: 0 auto; padding: 32px 24px; }
+  .page-title { font-size: 28px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 4px; }
+  .page-sub { color: var(--muted); font-size: 14px; margin-bottom: 28px; max-width: 700px; }
+
+  .calc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 32px; }
+  @media (max-width: 900px) { .calc-grid { grid-template-columns: 1fr; } }
+
+  .panel { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 24px; }
+  .panel h2 { font-size: 16px; font-weight: 700; margin-bottom: 18px; color: var(--text); display: flex; align-items: center; gap: 8px; }
+  .panel h2 .badge { font-size: 10px; background: var(--orange); color: #000; padding: 2px 8px; border-radius: 10px; font-weight: 700; }
+
+  .param-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 20px; }
+  @media (max-width: 600px) { .param-grid { grid-template-columns: 1fr; } }
+
+  .slider-group { margin-bottom: 6px; }
+  .slider-group .row { display: flex; justify-content: space-between; font-size: 13px; color: var(--muted); margin-bottom: 1px; }
+  .slider-group .row .val { color: var(--orange); font-weight: 700; }
+  .slider-group input[type=range] { width: 100%; height: 4px; -webkit-appearance: none; background: var(--border); border-radius: 2px; outline: none; margin: 4px 0; }
+  .slider-group input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 14px; height: 14px; border-radius: 50%; background: var(--orange); cursor: pointer; }
+  .slider-group select { width: 100%; background: #0D1117; color: var(--text); border: 1px solid var(--border); border-radius: 6px; padding: 6px 8px; font-size: 13px; outline: none; }
+  .slider-group .hint { font-size: 10px; color: #555; margin-top: 0; }
+
+  .result-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 16px; }
+  .result-card { background: #0D1117; border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; text-align: center; }
+  .result-card .lbl { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+  .result-card .val { font-size: 24px; font-weight: 800; color: var(--orange); margin: 2px 0; }
+  .result-card .sub { font-size: 11px; color: #555; }
+
+  .breakdown-bar { margin: 12px 0 4px; }
+  .breakdown-bar .bar-track { height: 24px; border-radius: 6px; display: flex; overflow: hidden; background: #0D1117; }
+  .breakdown-bar .seg { display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 600; color: #000; transition: width 0.3s; min-width: fit-content; padding: 0 4px; }
+  .breakdown-bar .seg.hw { background: #F7931A; }
+  .breakdown-bar .seg.bw { background: #58A6FF; }
+  .breakdown-bar .seg.elec { background: #3FB950; }
+  .breakdown-bar .seg.sto { background: #D29922; }
+  .breakdown-bar .legend { display: flex; gap: 14px; margin-top: 6px; font-size: 11px; color: var(--muted); flex-wrap: wrap; }
+  .breakdown-bar .legend span::before { content: '■ '; }
+
+  .model-section { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--border); }
+  .model-section h3 { font-size: 14px; font-weight: 700; margin-bottom: 10px; color: var(--text); }
+  .model-metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .metric { background: #0D1117; border: 1px solid var(--border); border-radius: 6px; padding: 10px; text-align: center; }
+  .metric .lbl { font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+  .metric .val { font-size: 18px; font-weight: 700; color: var(--orange); margin: 2px 0; }
+  .metric .sub { font-size: 10px; color: #555; }
+
+  .externality-box { margin-top: 12px; padding: 14px 16px; background: linear-gradient(135deg, #F7931A10, #58A6FF10); border: 1px solid #F7931A40; border-radius: 8px; font-size: 13px; color: var(--muted); line-height: 1.5; }
+  .externality-box strong { color: var(--orange); }
+
+  .scenarios { margin-top: 12px; }
+  .scenarios h3 { font-size: 14px; font-weight: 700; margin-bottom: 10px; color: var(--text); }
+  .scenario-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  @media (max-width: 700px) { .scenario-grid { grid-template-columns: 1fr; } }
+  .scenario-card { background: #0D1117; border: 1px solid var(--border); border-radius: 8px; padding: 14px; }
+  .scenario-card h4 { font-size: 13px; font-weight: 700; margin-bottom: 6px; color: var(--text); }
+  .scenario-card .tag { font-size: 10px; color: var(--muted); margin-bottom: 8px; }
+  .scenario-card table { width: 100%; font-size: 11px; border-collapse: collapse; }
+  .scenario-card td { padding: 3px 0; }
+  .scenario-card td:last-child { text-align: right; font-weight: 600; color: var(--orange); }
+  .scenario-card .total-row td { border-top: 1px solid var(--border); padding-top: 5px; font-size: 13px; }
+  .scenario-card .total-row td:last-child { color: var(--text); font-size: 15px; }
+
+  .footer { font-size: 13px; color: #555; text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--border); }
+
+  .cta-links { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin-top: 20px; }
+  .cta-link { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 10px 20px; font-size: 13px; color: var(--text); transition: border-color 0.2s; }
+  .cta-link:hover { border-color: var(--orange); text-decoration: none; }
+  .cta-link .icon { color: var(--orange); }
+</style>
+</head>
+<body>
+<nav>
+  <span class="brand">BITCOIN <span>SAHI</span></span>
+  <a href="/">Home</a>
+  <a href="/live">Dashboard</a>
+  <a href="/blockspace">Explorer</a>
+  <a href="/research-graph">Graph</a>
+  <a href="/blockspace">Explorer</a>
+  <a href="/research-graph">Graph</a>
+  <a href="/articles">Articles</a>
+  <a href="/calculator" style="color:var(--orange);font-weight:600;">Calculator</a>
+  <span class="spacer"></span>
+  <a href="https://reddit.com/r/BitcoinEngineering" class="cta">r/BitcoinEngineering</a>
+</nav>
+
+<div class="container">
+  <div class="page-title">Node Cost Calculator</div>
+  <div class="page-sub">What does running a Bitcoin node really cost? This interactive model factors in hardware, bandwidth, power, and storage — and estimates your share of the inscription data externality. All parameters are adjustable.</div>
+
+  <div class="calc-grid">
+    <div class="panel">
+      <h2>Parameters <span class="badge">adjust to your setup</span></h2>
+      <div class="param-grid">
+        <div class="slider-group">
+          <div class="row"><span>Hardware Cost</span><span class="val" id="s-hw">$500</span></div>
+          <input type="range" id="p-hw" min="100" max="5000" value="500" oninput="calc()">
+          <div class="hint">One-time hardware purchase</div>
+        </div>
+        <div class="slider-group">
+          <div class="row"><span>Hardware Lifespan</span><span class="val" id="s-hl">3 yr</span></div>
+          <input type="range" id="p-hl" min="1" max="10" value="3" oninput="calc()">
+          <div class="hint">Years before replacement</div>
+        </div>
+        <div class="slider-group">
+          <div class="row"><span>Bandwidth Cost / Mo</span><span class="val" id="s-bw">$50</span></div>
+          <input type="range" id="p-bw" min="10" max="200" value="50" oninput="calc()">
+          <div class="hint">Internet service cost</div>
+        </div>
+        <div class="slider-group">
+          <div class="row"><span>Node Power Draw</span><span class="val" id="s-pw">150 W</span></div>
+          <input type="range" id="p-pw" min="5" max="500" value="150" oninput="calc()">
+          <div class="hint">Your node's wattage</div>
+        </div>
+        <div class="slider-group">
+          <div class="row"><span>Electricity Rate</span><span class="val" id="s-ec">$0.12/kWh</span></div>
+          <input type="range" id="p-ec" min="5" max="50" value="12" oninput="calc()">
+          <div class="hint">Your local rate</div>
+        </div>
+        <div class="slider-group">
+          <div class="row"><span>Uptime</span><span class="val" id="s-up">100%</span></div>
+          <input type="range" id="p-up" min="10" max="100" value="100" oninput="calc()">
+          <div class="hint">Hours per day ÷ 24</div>
+        </div>
+        <div class="slider-group">
+          <div class="row"><span>Inscription Volume / Mo</span><span class="val" id="s-iv">100K</span></div>
+          <input type="range" id="p-iv" min="10" max="500" value="100" oninput="calc()">
+          <div class="hint">Global inscription mint rate</div>
+        </div>
+        <div class="slider-group">
+          <div class="row"><span>Avg Inscription Size</span><span class="val" id="s-is">400 B</span></div>
+          <input type="range" id="p-is" min="100" max="2000" value="400" oninput="calc()">
+          <div class="hint">Average bytes per inscription</div>
+        </div>
+        <div class="slider-group">
+          <div class="row"><span>Blockchain Growth / Yr</span><span class="val" id="s-bg">50 GB</span></div>
+          <input type="range" id="p-bg" min="10" max="200" value="50" oninput="calc()">
+          <div class="hint">Total new data all nodes store</div>
+        </div>
+        <div class="slider-group">
+          <div class="row"><span>UTXO Lifetime</span><span class="val" id="s-ut">10 yr</span></div>
+          <input type="range" id="p-ut" min="1" max="50" value="10" oninput="calc()">
+          <div class="hint">How long UTXOs persist on average</div>
+        </div>
+        <div class="slider-group" style="grid-column:1/-1;">
+          <div class="row"><span>Storage Type</span><span class="val" id="s-st">SSD</span></div>
+          <select id="p-st" onchange="calc()">
+            <option value="hdd">HDD (large, slow, cheap)</option>
+            <option value="ssd" selected>SSD (balanced)</option>
+            <option value="nvme">NVMe (fast, expensive)</option>
+          </select>
+          <div class="hint">Affects annual storage maintenance cost</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>Results <span class="badge">updates live</span></h2>
+
+      <div class="result-cards">
+        <div class="result-card"><div class="lbl">Annual Node Cost</div><div class="val" id="r-total">$924</div><div class="sub">Total cost to run your node</div></div>
+        <div class="result-card"><div class="lbl">Monthly Cost</div><div class="val" id="r-mo">$77</div><div class="sub">Per month average</div></div>
+        <div class="result-card"><div class="lbl">Cost Per Day</div><div class="val" id="r-day">$2.53</div><div class="sub">Per day average</div></div>
+        <div class="result-card"><div class="lbl">Cost Per Byte / Yr</div><div class="val" id="r-cpb">$0.0000019</div><div class="sub">Annual cost per byte stored</div></div>
+      </div>
+
+      <div class="breakdown-bar">
+        <div class="bar-track">
+          <div class="seg hw" id="seg-hw" style="width:18%">HW</div>
+          <div class="seg bw" id="seg-bw" style="width:65%">BW</div>
+          <div class="seg elec" id="seg-el" style="width:17%">Elec</div>
+        </div>
+        <div class="legend">
+          <span style="color:#F7931A">Hardware: <span id="l-hw">$167</span></span>
+          <span style="color:#58A6FF">Bandwidth: <span id="l-bw">$600</span></span>
+          <span style="color:#3FB950">Electricity: <span id="l-el">$158</span></span>
+          <span style="color:#D29922">Storage: <span id="l-st">$0</span></span>
+        </div>
+      </div>
+
+      <div class="model-section">
+        <h3>UTXO Cost Model</h3>
+        <div class="model-metrics">
+          <div class="metric"><div class="lbl">Cost / Inscription (10yr)</div><div class="val" id="r-cpi">$0.0077</div><div class="sub">Lifetime storage cost per UTXO</div></div>
+          <div class="metric"><div class="lbl">Inscription Data / Yr</div><div class="val" id="r-ins-gb">0.5 GB</div><div class="sub">New inscription data per year</div></div>
+          <div class="metric"><div class="lbl">Inscription Share</div><div class="val" id="r-ins-pct">1.0%</div><div class="sub">Of total blockchain growth</div></div>
+        </div>
+      </div>
+
+      <div class="externality-box" id="externality-box">
+        Your node costs <strong id="ext-nodecost">$924/yr</strong>. Of that, ~<strong id="ext-pct">1.0%</strong> goes to storing inscription data (~<strong id="ext-dollars">$9.24/yr</strong>). Across all nodes, the cumulative inscription externality is substantial — every UTXO lives on every full node forever.
+      </div>
+    </div>
+  </div>
+
+  <div class="panel scenarios">
+    <h3>Scenario Comparison</h3>
+    <div class="scenario-grid">
+      <div class="scenario-card" id="sc-raspi">
+        <h4>Raspberry Pi Node</h4>
+        <div class="tag">Low cost · Minimal specs</div>
+        <table id="t-raspi"></table>
+      </div>
+      <div class="scenario-card" id="sc-desktop">
+        <h4>Desktop Node</h4>
+        <div class="tag">Mid range · Home server</div>
+        <table id="t-desktop"></table>
+      </div>
+      <div class="scenario-card" id="sc-enterprise">
+        <h4>Enterprise Node</h4>
+        <div class="tag">High end · Data center grade</div>
+        <table id="t-enterprise"></table>
+      </div>
+    </div>
+  </div>
+
+  <div class="cta-links">
+    <a href="https://github.com/prateekposwal/block-space-economics" class="cta-link"><span class="icon">&#9670;</span> Full UTXO Cost Model on GitHub</a>
+    <a href="/research-graph" class="cta-link"><span class="icon">&#9654;</span> Read the Research Paper</a>
+    <a href="https://github.com/prateekposwal/block-space-economics/blob/main/tools/monte_carlo_output.json" class="cta-link"><span class="icon">&#9632;</span> Compare with Monte Carlo Simulation</a>
+  </div>
+
+  <div class="footer">
+    <a href="https://bitcoinsahi.com">bitcoinsahi.com</a> &middot; Open source research &middot; Data-driven Bitcoin analysis
+  </div>
+</div>
+
+<script>
+function fmt(n) { return '$' + Number(n.toFixed(2)).toLocaleString(); }
+function fmtInt(n) { return '$' + Math.round(n).toLocaleString(); }
+
+var SCENARIOS = {
+  raspi: { hw: 150, hl: 5, bw: 30, pw: 15, ec: 12, up: 95, iv: 100, is: 400, bg: 50, ut: 10, st: 'hdd', name: 'Raspberry Pi Node', tag: 'Low cost' },
+  desktop: { hw: 800, hl: 3, bw: 50, pw: 120, ec: 12, up: 99, iv: 100, is: 400, bg: 50, ut: 10, st: 'ssd', name: 'Desktop Node', tag: 'Mid range' },
+  enterprise: { hw: 3000, hl: 2, bw: 200, pw: 400, ec: 12, up: 100, iv: 100, is: 400, bg: 50, ut: 10, st: 'nvme', name: 'Enterprise Node', tag: 'High end' }
+};
+
+var STORAGE_COST = { hdd: 0, ssd: 30, nvme: 80 };
+
+function compute(p) {
+  var elecRate = p.ec / 100;
+  var uptimeFrac = p.up / 100;
+  var hwAmort = p.hw / p.hl;
+  var bwAnnual = p.bw * 12;
+  var elecAnnual = (p.pw * uptimeFrac * 24 * 365 / 1000) * elecRate;
+  var stoAnnual = STORAGE_COST[p.st] || 0;
+  var total = hwAmort + bwAnnual + elecAnnual + stoAnnual;
+  var monthly = total / 12;
+  var daily = total / 365;
+
+  var volNum = p.iv * 1000;
+  var sizeNum = p.is;
+  var bytesPerYr = sizeNum * volNum * 12;
+  var costPerByte = bytesPerYr > 0 ? total / bytesPerYr : 0;
+  var costPerInscription = costPerByte * sizeNum * p.ut;
+
+  var totalGbYr = p.bg;
+  var insBytesYr = sizeNum * volNum * 12;
+  var insGbYr = insBytesYr / (1024*1024*1024);
+  var insPct = totalGbYr > 0 ? Math.min(100, insGbYr / totalGbYr * 100) : 0;
+  var insCostYr = total * (insPct / 100);
+
+  return {
+    hwAmort: hwAmort, bwAnnual: bwAnnual, elecAnnual: elecAnnual, stoAnnual: stoAnnual,
+    total: total, monthly: monthly, daily: daily,
+    costPerByte: costPerByte, costPerInscription: costPerInscription,
+    insGbYr: insGbYr, insPct: insPct, insCostYr: insCostYr
+  };
+}
+
+function renderScenario(id, p) {
+  var r = compute(p);
+  var t = document.getElementById('t-' + id);
+  t.innerHTML =
+    '<tr><td>HW / yr</td><td>' + fmtInt(r.hwAmort) + '</td></tr>' +
+    '<tr><td>BW / yr</td><td>' + fmtInt(r.bwAnnual) + '</td></tr>' +
+    '<tr><td>Elec / yr</td><td>' + fmtInt(r.elecAnnual) + '</td></tr>' +
+    '<tr><td>Storage / yr</td><td>' + fmtInt(r.stoAnnual) + '</td></tr>' +
+    '<tr class="total-row"><td>Total / yr</td><td>' + fmtInt(r.total) + '</td></tr>';
+}
+
+function calc() {
+  var hw = +document.getElementById('p-hw').value;
+  var hl = +document.getElementById('p-hl').value;
+  var bw = +document.getElementById('p-bw').value;
+  var pw = +document.getElementById('p-pw').value;
+  var ec = +document.getElementById('p-ec').value;
+  var up = +document.getElementById('p-up').value;
+  var iv = +document.getElementById('p-iv').value;
+  var is = +document.getElementById('p-is').value;
+  var bg = +document.getElementById('p-bg').value;
+  var ut = +document.getElementById('p-ut').value;
+  var st = document.getElementById('p-st').value;
+
+  document.getElementById('s-hw').textContent = fmtInt(hw);
+  document.getElementById('s-hl').textContent = hl + ' yr';
+  document.getElementById('s-bw').textContent = '$' + bw;
+  document.getElementById('s-pw').textContent = pw + ' W';
+  document.getElementById('s-ec').textContent = '$' + (ec/100).toFixed(2) + '/kWh';
+  document.getElementById('s-up').textContent = up + '%';
+  document.getElementById('s-iv').textContent = iv + 'K';
+  document.getElementById('s-is').textContent = is + ' B';
+  document.getElementById('s-bg').textContent = bg + ' GB';
+  document.getElementById('s-ut').textContent = ut + ' yr';
+  document.getElementById('s-st').textContent = {hdd:'HDD',ssd:'SSD',nvme:'NVMe'}[st];
+
+  var p = { hw: hw, hl: hl, bw: bw, pw: pw, ec: ec, up: up, iv: iv, is: is, bg: bg, ut: ut, st: st };
+  var r = compute(p);
+
+  document.getElementById('r-total').textContent = fmtInt(r.total);
+  document.getElementById('r-mo').textContent = fmtInt(r.monthly);
+  document.getElementById('r-day').textContent = '$' + r.daily.toFixed(2);
+  document.getElementById('r-cpb').textContent = '$' + r.costPerByte.toFixed(10);
+
+  var maxSeg = Math.max(r.hwAmort, r.bwAnnual, r.elecAnnual, r.stoAnnual, 1);
+  var sum = r.hwAmort + r.bwAnnual + r.elecAnnual + r.stoAnnual;
+  function pct(v) { return sum > 0 ? (v / sum * 100) : 0; }
+  document.getElementById('seg-hw').style.width = pct(r.hwAmort) + '%';
+  document.getElementById('seg-hw').textContent = pct(r.hwAmort) > 8 ? 'HW' : '';
+  document.getElementById('seg-bw').style.width = pct(r.bwAnnual) + '%';
+  document.getElementById('seg-bw').textContent = pct(r.bwAnnual) > 8 ? 'BW' : '';
+  document.getElementById('seg-el').style.width = pct(r.elecAnnual) + '%';
+  document.getElementById('seg-el').textContent = pct(r.elecAnnual) > 8 ? 'Elec' : '';
+  document.getElementById('l-hw').textContent = fmtInt(r.hwAmort);
+  document.getElementById('l-bw').textContent = fmtInt(r.bwAnnual);
+  document.getElementById('l-el').textContent = fmtInt(r.elecAnnual);
+  document.getElementById('l-st').textContent = fmtInt(r.stoAnnual);
+
+  document.getElementById('r-cpi').textContent = '$' + r.costPerInscription.toFixed(4);
+  document.getElementById('r-ins-gb').textContent = r.insGbYr.toFixed(1) + ' GB';
+  document.getElementById('r-ins-pct').textContent = r.insPct.toFixed(1) + '%';
+
+  document.getElementById('ext-nodecost').textContent = fmtInt(r.total) + '/yr';
+  document.getElementById('ext-pct').textContent = r.insPct.toFixed(1) + '%';
+  document.getElementById('ext-dollars').textContent = fmtInt(r.insCostYr) + '/yr';
+
+  renderScenario('raspi', SCENARIOS.raspi);
+  renderScenario('desktop', SCENARIOS.desktop);
+  renderScenario('enterprise', SCENARIOS.enterprise);
+}
+calc();
+</script>
+</body>
+</html>
