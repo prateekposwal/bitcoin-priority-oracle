@@ -21,6 +21,10 @@ But the SegWit discount was never designed to price state. It was a malleability
 
 I'm not proposing a fix. I don't know if one is needed. But I think the question itself — whether Bitcoin's fee market prices permanence or just congestion — is genuinely open and worth discussing.
 
-Full research and model: github.com/prateekposwal/bitcoin-priority-oracle
+I posted the full framing on Delving Bitcoin and the discussion is already surfacing exactly the right critiques (pruned node ratio, UTXO lifetime assumptions, whether the externality is actually priced in via opportunity cost). Come join the thread.
+
+**Delving Bitcoin discussion:** https://delvingbitcoin.org/t/does-bitcoins-fee-market-price-permanence-or-just-congestion/2750
+
+**Full research and model:** github.com/prateekposwal/bitcoin-priority-oracle
 
 #Bitcoin #BitcoinResearch #BlockSpace #UTXO #SegWit

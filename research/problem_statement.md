@@ -51,4 +51,6 @@ This research provides the cost data. The community decides whether it matters.
 
 ## Next Step
 
-Share this framing on Delving Bitcoin and bitcoin-dev for feedback. If the response suggests a genuine gap exists, explore relay-level policy responses (no consensus changes required).
+Shared on Delving Bitcoin: https://delvingbitcoin.org/t/does-bitcoins-fee-market-price-permanence-or-just-congestion/2750
+
+If the response suggests a genuine gap exists, explore relay-level policy responses (no consensus changes required).
