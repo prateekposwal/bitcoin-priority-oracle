@@ -430,62 +430,45 @@ function updateBlockSpace() {
   var vol = parseFloat(document.getElementById('sl-vol').value);
   document.getElementById('sl-vol-label').textContent = vol + 'K';
 
-  var BASE_TX = 3000;
-  var INS_SIZE = 400;
-  var TX_SIZE = 250;
-  var BLOCK_LIMIT = 4000000;
-  var INS_VB = INS_SIZE * 0.75;
-
+  var BASE_TX = 3000, INS_SIZE = 400, TX_SIZE = 250, BLOCK_LIMIT = 4000000, INS_VB = INS_SIZE * 0.75;
   var totalIns = vol * 1000;
   var insPerBlock = totalIns / (6 * 24 * 30.5);
-  var finPerBlock = BASE_TX - insPerBlock * 0.3;
-  if (finPerBlock < 200) finPerBlock = 200;
-
+  var finPerBlock = Math.max(200, BASE_TX - insPerBlock * 0.3);
   var insWeight = insPerBlock * INS_VB;
   var finWeight = finPerBlock * TX_SIZE;
-  var totalW = insWeight + finWeight;
-  if (totalW > BLOCK_LIMIT) {
-    var scale = BLOCK_LIMIT / totalW;
-    insWeight *= scale;
-    finWeight *= scale;
+  if (insWeight + finWeight > BLOCK_LIMIT) {
+    var s = BLOCK_LIMIT / (insWeight + finWeight);
+    insWeight *= s; finWeight *= s;
   }
-  var emptyW = BLOCK_LIMIT - insWeight - finWeight;
-  if (emptyW < 0) emptyW = 0;
+  var emptyW = Math.max(0, BLOCK_LIMIT - insWeight - finWeight);
 
-  var insPct = (insWeight / BLOCK_LIMIT * 100);
-  var finPct = (finWeight / BLOCK_LIMIT * 100);
-  var emptyPct = (emptyW / BLOCK_LIMIT * 100);
-  var lnPct = 4;
-  var otherPct = 6;
-  var scaleDown = 100 / (insPct + finPct + emptyPct + lnPct + otherPct);
-  insPct *= scaleDown;
-  finPct *= scaleDown;
-  emptyPct *= scaleDown;
-  lnPct *= scaleDown;
-  otherPct *= scaleDown;
+  var insPct = insWeight / BLOCK_LIMIT * 100;
+  var finPct = finWeight / BLOCK_LIMIT * 100;
+  var emptyPct = emptyW / BLOCK_LIMIT * 100;
+  var sd = 100 / (insPct + finPct + emptyPct + 10);
+  insPct *= sd; finPct *= sd; emptyPct *= sd;
 
-  document.getElementById('seg-fin').style.width = finPct + '%';
-  document.getElementById('seg-fin').querySelector('.seg-label').textContent = 'Financial ' + (finPct > 1 ? Math.round(finPct) : finPct.toFixed(1)) + '%';
-  document.getElementById('seg-ins').style.width = (insPct > 0.3 ? insPct : 0.3) + '%';
-  document.getElementById('seg-ins').querySelector('.seg-label').textContent = 'Inscriptions ' + (insPct > 1 ? Math.round(insPct) : insPct.toFixed(1)) + '%';
-  document.getElementById('seg-ln').style.width = (lnPct > 0.3 ? lnPct : 0.3) + '%';
-  document.getElementById('seg-ln').querySelector('.seg-label').textContent = 'Lightning ' + (lnPct > 1 ? Math.round(lnPct) : lnPct.toFixed(1)) + '%';
-  document.getElementById('seg-other').style.width = (otherPct > 0.3 ? otherPct : 0.3) + '%';
-  document.getElementById('seg-other').querySelector('.seg-label').textContent = 'Other ' + (otherPct > 1 ? Math.round(otherPct) : otherPct.toFixed(1)) + '%';
-  document.getElementById('seg-empty').style.width = (emptyPct > 0.3 ? emptyPct : 0.3) + '%';
-  document.getElementById('seg-empty').querySelector('.seg-label').textContent = 'Empty ' + (emptyPct > 1 ? Math.round(emptyPct) : emptyPct.toFixed(1)) + '%';
-  document.getElementById('total-pct').textContent = (finPct + insPct + lnPct + otherPct + emptyPct).toFixed(1) + '%';
+  var segs = [
+    ['seg-fin','Financial',finPct],['seg-ins','Inscriptions',insPct],
+    ['seg-ln','Lightning',4*sd],['seg-other','Other',6*sd],
+    ['seg-empty','Empty',emptyPct]
+  ];
+  for(var i=0;i<segs.length;i++){
+    var el=document.getElementById(segs[i][0]);
+    if(!el)continue;
+    el.style.width = Math.max(0.3,segs[i][2])+'%';
+    var lb=el.querySelector('.seg-label');
+    if(lb)lb.textContent = segs[i][1]+' '+(segs[i][2]>1?Math.round(segs[i][2]):segs[i][2].toFixed(1))+'%';
+  }
+  var tp=document.getElementById('total-pct');
+  if(tp)tp.textContent=(finPct+insPct+emptyPct+10*sd).toFixed(1)+'%';
 
-  var txCount = Math.round(finPerBlock * 0.85 + insPerBlock * 0.7);
-  var avgSize = (finWeight + insWeight + 0.1 * BLOCK_LIMIT) / 1000000;
-  document.getElementById('kpi-tx').textContent = '~' + txCount.toLocaleString();
-  document.getElementById('kpi-size').textContent = '~' + avgSize.toFixed(1) + ' MB';
-  document.getElementById('kpi-ins-pct').textContent = Math.round(insPct) + '%';
-
-  document.getElementById('so-fin').textContent = Math.round(finPct) + '%';
-  document.getElementById('so-ins').textContent = Math.round(insPct) + '%';
-  var ratio = insPct / (finPct || 1);
-  document.getElementById('so-ratio').textContent = ratio.toFixed(2);
+  try{document.getElementById('kpi-tx').textContent='~'+Math.round(finPerBlock*0.85+insPerBlock*0.7).toLocaleString();}catch(e){}
+  try{document.getElementById('kpi-size').textContent='~'+((finWeight+insWeight+0.1*BLOCK_LIMIT)/1000000).toFixed(1)+' MB';}catch(e){}
+  try{document.getElementById('kpi-ins-pct').textContent=Math.round(insPct)+'%';}catch(e){}
+  try{document.getElementById('so-fin').textContent=Math.round(finPct)+'%';}catch(e){}
+  try{document.getElementById('so-ins').textContent=Math.round(insPct)+'%';}catch(e){}
+  try{document.getElementById('so-ratio').textContent=(insPct/(finPct||1)).toFixed(2);}catch(e){}
 }
 </script>
 
