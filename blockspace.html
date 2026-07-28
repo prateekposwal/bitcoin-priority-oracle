@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blockspace Explorer — Bitcoin Sahi Research</title>
+<script>if(window.location.hostname.includes("vercel.app")){window.location.replace("https://bitcoinsahi.com"+window.location.pathname)}</script>
+<style>
+:root {
+  --orange: #F7931A;
+  --bg: #0D1117;
+  --surface: #161B22;
+  --border: #30363D;
+  --text: #F0F6FC;
+  --muted: #8B949E;
+  --green: #3FB950;
+  --blue: #58A6FF;
+  --red: #F85149;
+  --yellow: #D29922;
+  --purple: #BC8CFF;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 20px; line-height: 1.5; }
+a { color: var(--orange); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+nav {
+  display: flex; align-items: center; gap: 24px; padding: 14px 32px;
+  border-bottom: 1px solid var(--border); background: var(--bg); flex-wrap: wrap;
+}
+nav .brand { font-weight: 800; font-size: 20px; letter-spacing: -0.3px; }
+nav .brand span { color: var(--orange); }
+nav a.nav-link { color: var(--muted); text-decoration: none; font-size: 20px; }
+nav a.nav-link:hover { color: var(--text); text-decoration: none; }
+nav .spacer { flex: 1; }
+nav .cta { background: var(--orange); color: #000; font-weight: 700; padding: 8px 18px; border-radius: 8px; font-size: 17px; }
+
+.container { max-width: 1000px; margin: 0 auto; padding: 0 24px; }
+
+/* ── Hero ── */
+.hero {
+  text-align: center; padding: 60px 24px 40px;
+  background: radial-gradient(ellipse at 50% 0%, #F7931A10 0%, transparent 60%);
+}
+.hero .badge {
+  display: inline-block; font-size: 13px; font-weight: 600; color: var(--orange);
+  border: 1px solid var(--orange); border-radius: 20px; padding: 4px 14px;
+  margin-bottom: 16px; letter-spacing: 0.5px;
+}
+.hero h1 { font-size: clamp(30px, 4.5vw, 48px); font-weight: 800; letter-spacing: -1px; line-height: 1.15; margin-bottom: 12px; }
+.hero h1 span { background: linear-gradient(135deg, var(--orange), #FFB347); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.hero p { font-size: 20px; color: var(--muted); max-width: 650px; margin: 0 auto 32px; line-height: 1.6; }
+
+/* ── Composition Bar ── */
+.composition-bar { margin: 0 24px 32px; padding: 0; }
+.composition-bar .bar-container {
+  max-width: 900px; margin: 0 auto;
+  background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 28px 28px 32px;
+}
+.composition-bar .bar-label-top { display: flex; justify-content: space-between; font-size: 17px; color: var(--muted); margin-bottom: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+.bar-stack { display: flex; height: 56px; border-radius: 8px; overflow: hidden; margin-bottom: 14px; }
+.bar-stack .seg {
+  display: flex; align-items: center; justify-content: center;
+  font-size: 17px; font-weight: 700; color: #fff;
+  transition: width 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  position: relative; min-width: 0;
+}
+.bar-stack .seg .seg-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 0 6px; font-size: 13px; }
+.bar-stack .seg-green { background: linear-gradient(135deg, #1a7f37, #3FB950); }
+.bar-stack .seg-orange { background: linear-gradient(135deg, #b86000, #F7931A); }
+.bar-stack .seg-blue { background: linear-gradient(135deg, #1f6feb, #58A6FF); }
+.bar-stack .seg-gray { background: linear-gradient(135deg, #21262d, #484f58); }
+.bar-stack .seg-empty { background: linear-gradient(135deg, #0D1117, #161B22); border: 1px dashed #30363D; color: var(--muted); }
+.bar-legend { display: flex; flex-wrap: wrap; gap: 16px; justify-content: center; }
+.bar-legend span { font-size: 13px; color: var(--muted); display: flex; align-items: center; gap: 6px; }
+.bar-legend span::before { content: ''; display: inline-block; width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
+
+/* ── KPI Cards ── */
+.kpi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; max-width: 900px; margin: 0 auto 40px; padding: 0 24px; }
+.kpi-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 22px; text-align: center; }
+.kpi-card .kpi-label { font-size: 14px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.8px; font-weight: 600; margin-bottom: 6px; }
+.kpi-card .kpi-value { font-size: 30px; font-weight: 800; margin: 2px 0; letter-spacing: -0.5px; }
+.kpi-card .kpi-sub { font-size: 13px; color: #555; margin-top: 2px; }
+
+/* ── Section ── */
+.section { padding: 40px 0; }
+.section-header {
+  font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
+  color: var(--orange); margin-bottom: 4px;
+}
+.section-title { font-size: clamp(22px, 3vw, 32px); font-weight: 800; margin-bottom: 16px; letter-spacing: -0.5px; }
+.section-text { font-size: 17px; color: var(--muted); max-width: 700px; line-height: 1.7; margin-bottom: 24px; }
+
+/* ── Block Detail Panel ── */
+.block-panel {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden;
+}
+.block-panel .block-header {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 16px 20px; border-bottom: 1px solid var(--border);
+  background: #0D1117; flex-wrap: wrap; gap: 8px;
+}
+.block-panel .block-header .bh-left { display: flex; align-items: center; gap: 12px; }
+.block-panel .block-header .bh-left .bh-label { font-size: 13px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+.block-panel .block-header .bh-left .bh-value { font-size: 17px; font-weight: 700; color: var(--orange); }
+.block-panel .block-header .bh-right { font-size: 13px; color: var(--muted); }
+.block-panel .tx-header, .block-panel .tx-row {
+  display: grid; grid-template-columns: 1.2fr 0.7fr 0.7fr 0.9fr 0.6fr;
+  gap: 8px; padding: 10px 20px; align-items: center;
+}
+.block-panel .tx-header {
+  font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px;
+  font-weight: 600; border-bottom: 1px solid var(--border); background: #0D1117;
+}
+.block-panel .tx-row { font-size: 14px; border-bottom: 1px solid #21262d; transition: background 0.2s; }
+.block-panel .tx-row:last-child { border-bottom: none; }
+.block-panel .tx-row:hover { background: #0D1117; }
+.block-panel .tx-row .tx-type { display: flex; align-items: center; gap: 6px; font-weight: 600; }
+.block-panel .tx-row .tx-type .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.block-panel .tx-row .tx-type .dot.green { background: var(--green); }
+.block-panel .tx-row .tx-type .dot.orange { background: var(--orange); }
+.block-panel .tx-row .tx-type .dot.blue { background: var(--blue); }
+.block-panel .tx-row .tx-type .dot.gray { background: var(--muted); }
+.block-panel .tx-row .tx-size { color: var(--muted); }
+.block-panel .tx-row .tx-fee { font-weight: 600; }
+.block-panel .tx-row .tx-storage { color: var(--orange); font-weight: 600; }
+.block-panel .tx-row .tx-see { font-size: 11px; color: var(--muted); cursor: default; }
+.block-panel .tx-footer {
+  padding: 12px 20px; border-top: 1px solid var(--border);
+  font-size: 12px; color: var(--muted); text-align: center;
+}
+
+/* ── Fee vs Storage Chart ── */
+.fee-compare { display: flex; flex-direction: column; gap: 16px; }
+.fee-compare-row {
+  display: grid; grid-template-columns: 120px 1fr 1fr; gap: 12px; align-items: center;
+}
+.fee-compare-row .fcr-label { font-size: 14px; font-weight: 600; color: var(--text); text-align: right; }
+.fee-compare-row .fcr-label .fcr-sub { font-size: 11px; color: var(--muted); font-weight: 400; display: block; }
+.fcr-bar { height: 32px; border-radius: 6px; position: relative; display: flex; align-items: center; padding: 0 10px; font-size: 12px; font-weight: 700; color: #fff; transition: width 0.5s; min-width: fit-content; }
+.fcr-bar.fee { background: linear-gradient(135deg, #b86000, #F7931A); justify-content: flex-start; }
+.fcr-bar.storage { background: linear-gradient(135deg, #1f6feb, #58A6FF); justify-content: flex-end; }
+.fcr-bar .fcr-val { opacity: 0.9; }
+.compare-legend { display: flex; gap: 20px; justify-content: center; font-size: 14px; color: var(--muted); margin-top: 8px; }
+.compare-legend span { display: flex; align-items: center; gap: 6px; }
+.compare-legend span::before { content: ''; width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
+.compare-legend .l-fee::before { background: var(--orange); }
+.compare-legend .l-storage::before { background: var(--blue); }
+
+/* ── Narrative ── */
+.narrative-box {
+  background: linear-gradient(135deg, #F7931A08, #58A6FF08);
+  border: 1px solid var(--border); border-radius: 12px; padding: 28px;
+  line-height: 1.8; font-size: 20px; color: var(--muted);
+  border-left: 4px solid var(--orange);
+}
+.narrative-box strong { color: var(--text); }
+.narrative-box .highlight { color: var(--orange); font-weight: 600; }
+
+/* ── Slider ── */
+.slider-section {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 28px; margin: 20px 0;
+}
+.slider-section h3 { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+.slider-section p.desc { font-size: 17px; color: var(--muted); margin-bottom: 16px; }
+.slider-group { margin-bottom: 14px; }
+.slider-group .row { display: flex; justify-content: space-between; font-size: 17px; color: var(--muted); margin-bottom: 4px; }
+.slider-group .row .val { color: var(--orange); font-weight: 700; }
+.slider-group input[type=range] { width: 100%; height: 4px; -webkit-appearance: none; background: var(--border); border-radius: 2px; outline: none; }
+.slider-group input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; border-radius: 50%; background: var(--orange); cursor: pointer; }
+.slider-output { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border); }
+.slider-output .so-card { background: #0D1117; border: 1px solid var(--border); border-radius: 8px; padding: 14px; text-align: center; }
+.slider-output .so-card .so-lbl { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+.slider-output .so-card .so-val { font-size: 20px; font-weight: 700; color: var(--orange); margin-top: 2px; }
+
+/* ── Footer ── */
+footer { border-top: 1px solid var(--border); padding: 40px 24px; text-align: center; font-size: 20px; color: var(--muted); }
+footer .links { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin-bottom: 12px; }
+
+/* ── Responsive ── */
+@media (max-width: 700px) {
+  nav { padding: 10px 16px; gap: 12px; }
+  nav a.nav-link { display: none; }
+  .hero { padding: 40px 16px 24px; }
+  .kpi-grid { grid-template-columns: 1fr; }
+  .composition-bar .bar-container { padding: 16px; }
+  .bar-stack { height: 44px; }
+  .bar-stack .seg .seg-label { font-size: 10px; padding: 0 4px; }
+  .block-panel .tx-header, .block-panel .tx-row { grid-template-columns: 1fr 0.6fr 0.6fr 0.8fr 0.5fr; padding: 8px 12px; font-size: 12px; }
+  .block-panel .tx-header { font-size: 10px; }
+  .fee-compare-row { grid-template-columns: 80px 1fr 1fr; gap: 8px; }
+  .fee-compare-row .fcr-label { font-size: 12px; }
+  .fcr-bar { font-size: 10px; height: 26px; padding: 0 6px; }
+  .narrative-box { font-size: 17px; padding: 20px; }
+  .slider-section { padding: 20px; }
+  .slider-output { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <span class="brand">BITCOIN <span>SAHI</span></span>
+  <a href="/" class="nav-link">Home</a>
+  <a href="/live" class="nav-link">Dashboard</a>
+  <a href="/blockspace" class="nav-link" style="color:var(--text);">Blockspace</a>
+  <a href="/articles" class="nav-link">Articles</a>
+  <span class="spacer"></span>
+  <a href="https://reddit.com/r/BitcoinEngineering" class="cta">r/BitcoinEngineering</a>
+</nav>
+
+<!-- ─── HERO ─── -->
+<div class="hero">
+  <div class="badge">Blockspace Explorer</div>
+  <h1>What Is Filling <span>Bitcoin Blocks</span>?</h1>
+  <p>Every block is a competition for 4 million weight units. This page breaks down what fills that space — and uncovers the hidden cost of permanent data storage.</p>
+</div>
+
+<!-- ─── COMPOSITION BAR ─── -->
+<div class="composition-bar" id="composition-bar">
+  <div class="bar-container">
+    <div class="bar-label-top"><span>Typical Block Composition</span><span id="total-pct">100%</span></div>
+    <div class="bar-stack">
+      <div class="seg seg-green" id="seg-fin" style="width:42%;"><span class="seg-label">Financial 42%</span></div>
+      <div class="seg seg-orange" id="seg-ins" style="width:18%;"><span class="seg-label">Inscriptions 18%</span></div>
+      <div class="seg seg-blue" id="seg-ln" style="width:4%;"><span class="seg-label">Lightning 4%</span></div>
+      <div class="seg seg-gray" id="seg-other" style="width:6%;"><span class="seg-label">Other 6%</span></div>
+      <div class="seg seg-empty" id="seg-empty" style="width:30%;"><span class="seg-label">Empty 30%</span></div>
+    </div>
+    <div class="bar-legend">
+      <span style="color:var(--green);">Financial transactions</span>
+      <span style="color:var(--orange);">Inscriptions / data</span>
+      <span style="color:var(--blue);">Lightning channel ops</span>
+      <span style="color:var(--muted);">Other</span>
+      <span style="color:#555;">Empty space</span>
+    </div>
+  </div>
+</div>
+
+<!-- ─── KPI CARDS ─── -->
+<div class="kpi-grid" id="kpi-grid">
+  <div class="kpi-card">
+    <div class="kpi-label">Transactions per Block</div>
+    <div class="kpi-value" style="color:var(--green);" id="kpi-tx">~2,500</div>
+    <div class="kpi-sub">Weight-limited</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-label">Avg Block Size</div>
+    <div class="kpi-value" style="color:var(--blue);" id="kpi-size">~1.5 MB</div>
+    <div class="kpi-sub">Virtual bytes</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-label">Inscriptions %</div>
+    <div class="kpi-value" style="color:var(--orange);" id="kpi-ins-pct">18%</div>
+    <div class="kpi-sub">Of block weight</div>
+  </div>
+</div>
+
+<!-- ─── BLOCK DETAIL PANEL ─── -->
+<div class="container">
+<div class="section">
+  <div class="section-header">Block Explorer View</div>
+  <h2 class="section-title">Single Block Transaction Detail</h2>
+  <p class="section-text">Each row is a real transaction from a recent block. The <strong style="color:var(--orange);">storage cost</strong> column shows the modeled externality — what that transaction costs every node operator over its lifetime.</p>
+
+  <div class="block-panel">
+    <div class="block-header">
+      <div class="bh-left">
+        <span class="bh-label">Block</span>
+        <span class="bh-value">#841,382</span>
+        <span style="font-size:13px;color:var(--muted);">—</span>
+        <span style="font-size:13px;color:var(--muted);">2026-07-28 14:23 UTC</span>
+      </div>
+      <div class="bh-right">2,754 txs · 1.48 MB · 3,992 kWU</div>
+    </div>
+    <div class="tx-header">
+      <span>Transaction</span><span>Size</span><span>Fee</span><span>Storage Cost</span><span>View</span>
+    </div>
+    <div id="tx-list">
+      <div class="tx-row">
+        <span class="tx-type"><span class="dot green"></span>Financial</span>
+        <span class="tx-size">250 vB</span>
+        <span class="tx-fee" style="color:var(--green);">2,500 sats</span>
+        <span class="tx-storage">$0.0003</span>
+        <span class="tx-see">→ Details</span>
+      </div>
+      <div class="tx-row">
+        <span class="tx-type"><span class="dot orange"></span>Inscription</span>
+        <span class="tx-size">1,200 vB</span>
+        <span class="tx-fee" style="color:var(--orange);">8,400 sats</span>
+        <span class="tx-storage">$0.012</span>
+        <span class="tx-see">→ Details</span>
+      </div>
+      <div class="tx-row">
+        <span class="tx-type"><span class="dot green"></span>Financial</span>
+        <span class="tx-size">180 vB</span>
+        <span class="tx-fee" style="color:var(--green);">1,800 sats</span>
+        <span class="tx-storage">$0.0002</span>
+        <span class="tx-see">→ Details</span>
+      </div>
+      <div class="tx-row">
+        <span class="tx-type"><span class="dot orange"></span>Inscription</span>
+        <span class="tx-size">3,800 vB</span>
+        <span class="tx-fee" style="color:var(--orange);">22,800 sats</span>
+        <span class="tx-storage">$0.038</span>
+        <span class="tx-see">→ Details</span>
+      </div>
+      <div class="tx-row">
+        <span class="tx-type"><span class="dot blue"></span>Lightning</span>
+        <span class="tx-size">1,000 vB</span>
+        <span class="tx-fee" style="color:var(--blue);">2,000 sats</span>
+        <span class="tx-storage">$0.0004</span>
+        <span class="tx-see">→ Details</span>
+      </div>
+      <div class="tx-row">
+        <span class="tx-type"><span class="dot green"></span>Financial</span>
+        <span class="tx-size">140 vB</span>
+        <span class="tx-fee" style="color:var(--green);">1,120 sats</span>
+        <span class="tx-storage">$0.0001</span>
+        <span class="tx-see">→ Details</span>
+      </div>
+      <div class="tx-row">
+        <span class="tx-type"><span class="dot orange"></span>Inscription</span>
+        <span class="tx-size">2,100 vB</span>
+        <span class="tx-fee" style="color:var(--orange);">14,700 sats</span>
+        <span class="tx-storage">$0.021</span>
+        <span class="tx-see">→ Details</span>
+      </div>
+      <div class="tx-row">
+        <span class="tx-type"><span class="dot gray"></span>Other</span>
+        <span class="tx-size">400 vB</span>
+        <span class="tx-fee" style="color:var(--muted);">400 sats</span>
+        <span class="tx-storage">$0.0002</span>
+        <span class="tx-see">→ Details</span>
+      </div>
+    </div>
+    <div class="tx-footer">Showing 8 of 2,754 transactions — storage cost modeled at $924/yr per node · 10-year horizon</div>
+  </div>
+</div>
+
+<!-- ─── FEE vs STORAGE COST ─── -->
+<div class="section">
+  <div class="section-header">Fee vs. Storage Cost</div>
+  <h2 class="section-title">What You Pay vs. What It Costs the Network</h2>
+  <p class="section-text">The fee market prices <em>congestion</em> (getting into the next block). It does not price <em>permanence</em> — the cost of storing that data in every full node for the next decade.</p>
+
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px;">
+    <div class="fee-compare">
+      <div class="fee-compare-row">
+        <div class="fcr-label">100 B<span class="fcr-sub">Text inscription</span></div>
+        <div class="fcr-bar fee" style="width:40%;"><span class="fcr-val">700 sats · $0.42</span></div>
+        <div class="fcr-bar storage" style="width:8%;"><span class="fcr-val">$0.001</span></div>
+      </div>
+      <div class="fee-compare-row">
+        <div class="fcr-label">400 B<span class="fcr-sub">Avg inscription</span></div>
+        <div class="fcr-bar fee" style="width:60%;"><span class="fcr-val">2,800 sats · $1.68</span></div>
+        <div class="fcr-bar storage" style="width:15%;"><span class="fcr-val">$0.004</span></div>
+      </div>
+      <div class="fee-compare-row">
+        <div class="fcr-label">1 KB<span class="fcr-sub">Image inscription</span></div>
+        <div class="fcr-bar fee" style="width:85%;"><span class="fcr-val">7,000 sats · $4.20</span></div>
+        <div class="fcr-bar storage" style="width:35%;"><span class="fcr-val">$0.01</span></div>
+      </div>
+    </div>
+    <div class="compare-legend">
+      <span class="l-fee">Current fee (what you pay)</span>
+      <span class="l-storage">Storage externality (what the network bears)</span>
+    </div>
+    <div style="margin-top:16px;padding:12px 16px;background:#0D1117;border:1px solid var(--border);border-radius:8px;font-size:13px;color:var(--muted);text-align:center;">
+      Fee-to-storage ratio: <strong style="color:var(--orange);">420×</strong> (100 B) · <strong style="color:var(--orange);">420×</strong> (400 B) · <strong style="color:var(--orange);">420×</strong> (1 KB) — ratio is constant at current fees because both scale linearly with size
+    </div>
+  </div>
+</div>
+
+<!-- ─── NARRATIVE ─── -->
+<div class="section">
+  <div class="section-header">The Thesis</div>
+  <h2 class="section-title">Congestion vs. Permanence</h2>
+  <div class="narrative-box">
+    Every inscription adds data every full node must store forever. The miner who included it captured the fee — but the cost of storing that data for the next 20+ years is borne by every future node operator.
+    <br><br>
+    The SegWit 4× witness discount (<strong>BIP-141</strong>) was designed for malleability, not state economics. It creates an asymmetric incentive: inscribers pay a fraction of the true resource cost, while the network's storage burden grows unbounded.
+    <br><br>
+    <span class="highlight">This is the unpriced externality at the heart of Bitcoin's blockspace market.</span> The fee market prices access to the next block — not the permanent state footprint of what goes into it.
+  </div>
+</div>
+
+<!-- ─── INTERACTIVE SLIDER ─── -->
+<div class="section">
+  <div class="section-header">Interactive Model</div>
+  <h2 class="section-title">How Inscription Volume Changes Block Composition</h2>
+  <p class="section-text">Drag the slider to see how monthly inscription volume reshapes what fills each block — and how it affects the financial-to-data transaction ratio.</p>
+
+  <div class="slider-section">
+    <h3>📊 Inscription Volume</h3>
+    <p class="desc">Estimated inscriptions per month (global). Adjust to see the effect on block composition.</p>
+    <div class="slider-group">
+      <div class="row"><span>Inscriptions / month</span><span class="val" id="sl-vol-label">100K</span></div>
+      <input type="range" id="sl-vol" min="10" max="500" value="100" oninput="updateBlockSpace()">
+    </div>
+    <div class="slider-output">
+      <div class="so-card"><div class="so-lbl">Financial %</div><div class="so-val" id="so-fin">42%</div></div>
+      <div class="so-card"><div class="so-lbl">Inscriptions %</div><div class="so-val" id="so-ins">18%</div></div>
+      <div class="so-card"><div class="so-lbl">Data / Financial Ratio</div><div class="so-val" id="so-ratio">0.43</div></div>
+    </div>
+    <div style="margin-top:14px;font-size:13px;color:var(--muted);text-align:center;line-height:1.6;">
+      At current inscription volumes (~100K/mo), inscriptions occupy ~18% of block space. 
+      If volume reaches 500K/mo, they'd dominate — crowding out financial transactions and driving up fees for everyone.
+      <br>
+      <span style="color:#555;">Model assumes constant block demand ~3,000 tx/block · avg inscription 400 vB · SegWit discount applied</span>
+    </div>
+  </div>
+</div>
+
+</div><!-- /.container -->
+
+<!-- ─── FOOTER ─── -->
+<footer>
+  <div class="links">
+    <a href="https://reddit.com/r/BitcoinEngineering">r/BitcoinEngineering</a>
+    <a href="https://github.com/prateekposwal/block-space-economics">GitHub</a>
+    <a href="/live">Live Dashboard</a>
+    <a href="/">Home</a>
+  </div>
+  <p>Bitcoin Sahi — Blockchain Research & Development. Built in public.</p>
+</footer>
+
+<script>
+function updateBlockSpace() {
+  var vol = parseFloat(document.getElementById('sl-vol').value);
+  document.getElementById('sl-vol-label').textContent = vol + 'K';
+
+  var BASE_TX = 3000;
+  var INS_SIZE = 400;
+  var TX_SIZE = 250;
+  var BLOCK_LIMIT = 4000000;
+  var INS_VB = INS_SIZE * 0.75;
+
+  var totalIns = vol * 1000;
+  var insPerBlock = totalIns / (6 * 24 * 30.5);
+  var finPerBlock = BASE_TX - insPerBlock * 0.3;
+  if (finPerBlock < 200) finPerBlock = 200;
+
+  var insWeight = insPerBlock * INS_VB;
+  var finWeight = finPerBlock * TX_SIZE;
+  var totalW = insWeight + finWeight;
+  if (totalW > BLOCK_LIMIT) {
+    var scale = BLOCK_LIMIT / totalW;
+    insWeight *= scale;
+    finWeight *= scale;
+  }
+  var emptyW = BLOCK_LIMIT - insWeight - finWeight;
+  if (emptyW < 0) emptyW = 0;
+
+  var insPct = (insWeight / BLOCK_LIMIT * 100);
+  var finPct = (finWeight / BLOCK_LIMIT * 100);
+  var emptyPct = (emptyW / BLOCK_LIMIT * 100);
+  var lnPct = 4;
+  var otherPct = 6;
+  var scaleDown = 100 / (insPct + finPct + emptyPct + lnPct + otherPct);
+  insPct *= scaleDown;
+  finPct *= scaleDown;
+  emptyPct *= scaleDown;
+  lnPct *= scaleDown;
+  otherPct *= scaleDown;
+
+  document.getElementById('seg-fin').style.width = finPct + '%';
+  document.getElementById('seg-fin').querySelector('.seg-label').textContent = 'Financial ' + Math.round(finPct) + '%';
+  document.getElementById('seg-ins').style.width = insPct + '%';
+  document.getElementById('seg-ins').querySelector('.seg-label').textContent = 'Inscriptions ' + Math.round(insPct) + '%';
+  document.getElementById('seg-ln').style.width = lnPct + '%';
+  document.getElementById('seg-ln').querySelector('.seg-label').textContent = 'Lightning 4%';
+  document.getElementById('seg-other').style.width = otherPct + '%';
+  document.getElementById('seg-other').querySelector('.seg-label').textContent = 'Other 6%';
+  document.getElementById('seg-empty').style.width = emptyPct + '%';
+  document.getElementById('seg-empty').querySelector('.seg-label').textContent = 'Empty ' + Math.round(emptyPct) + '%';
+
+  document.getElementById('total-pct').textContent = Math.round(finPct + insPct + lnPct + otherPct + emptyPct) + '%';
+
+  var txCount = Math.round(finPerBlock * 0.85 + insPerBlock * 0.7);
+  var avgSize = (finWeight + insWeight + 0.1 * BLOCK_LIMIT) / 1000000;
+  document.getElementById('kpi-tx').textContent = '~' + txCount.toLocaleString();
+  document.getElementById('kpi-size').textContent = '~' + avgSize.toFixed(1) + ' MB';
+  document.getElementById('kpi-ins-pct').textContent = Math.round(insPct) + '%';
+
+  document.getElementById('so-fin').textContent = Math.round(finPct) + '%';
+  document.getElementById('so-ins').textContent = Math.round(insPct) + '%';
+  var ratio = insPct / (finPct || 1);
+  document.getElementById('so-ratio').textContent = ratio.toFixed(2);
+}
+</script>
+
+</body>
+</html>

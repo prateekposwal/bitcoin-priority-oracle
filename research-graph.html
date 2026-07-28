@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Research Graph — Bitcoin Sahi Research</title>
+<script>if(window.location.hostname.includes("vercel.app")){window.location.replace("https://bitcoinsahi.com"+window.location.pathname)}</script>
+<style>
+:root {
+  --orange: #F7931A;
+  --bg: #0D1117;
+  --surface: #161B22;
+  --border: #30363D;
+  --text: #F0F6FC;
+  --muted: #8B949E;
+  --green: #3FB950;
+  --blue: #58A6FF;
+  --red: #F85149;
+  --yellow: #D29922;
+  --purple: #BC8CFF;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 20px; line-height: 1.5; }
+a { color: var(--orange); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+nav {
+  display: flex; align-items: center; gap: 24px; padding: 14px 32px;
+  border-bottom: 1px solid var(--border); background: var(--bg); flex-wrap: wrap;
+}
+nav .brand { font-weight: 800; font-size: 20px; letter-spacing: -0.3px; }
+nav .brand span { color: var(--orange); }
+nav a.nav-link { color: var(--muted); text-decoration: none; font-size: 20px; }
+nav a.nav-link:hover { color: var(--text); text-decoration: none; }
+nav .spacer { flex: 1; }
+nav .cta { background: var(--orange); color: #000; font-weight: 700; padding: 8px 18px; border-radius: 8px; font-size: 17px; }
+
+.hero {
+  text-align: center; padding: 40px 24px 24px;
+  background: radial-gradient(ellipse at 50% 0%, #F7931A10 0%, transparent 60%);
+}
+.hero .badge {
+  display: inline-block; font-size: 13px; font-weight: 600; color: var(--orange);
+  border: 1px solid var(--orange); border-radius: 20px; padding: 4px 14px;
+  margin-bottom: 12px; letter-spacing: 0.5px;
+}
+.hero h1 { font-size: clamp(24px, 3.5vw, 38px); font-weight: 800; letter-spacing: -0.5px; line-height: 1.15; margin-bottom: 8px; }
+.hero h1 span { background: linear-gradient(135deg, var(--orange), #FFB347); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.hero p { font-size: 17px; color: var(--muted); max-width: 650px; margin: 0 auto; line-height: 1.6; }
+.hero .hint { font-size: 14px; color: #555; margin-top: 8px; }
+
+.graph-layout { display: flex; height: calc(100vh - 180px); min-height: 500px; margin: 0; }
+.canvas-wrap { flex: 1; position: relative; overflow: hidden; background: #0A0E14; border-right: 1px solid var(--border); }
+.canvas-wrap canvas { display: block; width: 100%; height: 100%; cursor: grab; }
+.canvas-wrap canvas:active { cursor: grabbing; }
+
+.info-panel {
+  width: 30%; min-width: 320px; max-width: 400px;
+  background: var(--surface); overflow-y: auto; padding: 0;
+  border-left: 1px solid var(--border);
+}
+.info-panel .panel-placeholder {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  height: 100%; color: var(--muted); font-size: 15px; text-align: center; padding: 40px;
+  opacity: 0.6;
+}
+.info-panel .panel-placeholder .icon { font-size: 40px; margin-bottom: 12px; opacity: 0.4; }
+.info-panel .panel-content { display: none; padding: 24px; }
+.info-panel .panel-content.active { display: block; }
+.info-panel .panel-content .pc-group {
+  font-size: 11px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; margin-bottom: 4px;
+}
+.info-panel .panel-content h2 { font-size: 20px; font-weight: 800; letter-spacing: -0.3px; margin-bottom: 12px; line-height: 1.3; }
+.info-panel .panel-content p { font-size: 15px; color: var(--muted); line-height: 1.7; margin-bottom: 16px; }
+.info-panel .panel-content .pc-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 14px; font-weight: 600; color: var(--orange);
+  border: 1px solid var(--orange); border-radius: 6px; padding: 8px 16px;
+  transition: background 0.2s;
+}
+.info-panel .panel-content .pc-link:hover { background: #F7931A15; text-decoration: none; }
+.info-panel .panel-content .pc-close {
+  float: right; background: none; border: 1px solid var(--border); color: var(--muted);
+  font-size: 14px; padding: 4px 10px; border-radius: 4px; cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+}
+.info-panel .panel-content .pc-close:hover { color: var(--text); border-color: var(--muted); }
+
+.legend {
+  position: absolute; bottom: 12px; left: 12px; z-index: 10;
+  display: flex; flex-wrap: wrap; gap: 8px;
+}
+.legend .leg-item {
+  font-size: 11px; color: var(--muted); display: flex; align-items: center; gap: 5px;
+  background: #161B22CC; padding: 4px 10px; border-radius: 4px; border: 1px solid #30363D44;
+}
+.legend .leg-item .leg-dot { width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0; }
+
+.zoom-controls {
+  position: absolute; top: 12px; right: 12px; z-index: 10;
+  display: flex; flex-direction: column; gap: 4px;
+}
+.zoom-controls button {
+  width: 32px; height: 32px; border: 1px solid var(--border); border-radius: 6px;
+  background: var(--surface); color: var(--text); font-size: 18px; font-weight: 700;
+  cursor: pointer; transition: background 0.2s; display: flex; align-items: center; justify-content: center;
+}
+.zoom-controls button:hover { background: #21262d; }
+
+footer { border-top: 1px solid var(--border); padding: 24px; text-align: center; font-size: 15px; color: var(--muted); }
+footer .links { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin-bottom: 8px; }
+
+@media (max-width: 800px) {
+  nav { padding: 10px 16px; gap: 12px; }
+  nav a.nav-link { display: none; }
+  .graph-layout { flex-direction: column; height: auto; }
+  .canvas-wrap { height: 60vh; border-right: none; border-bottom: 1px solid var(--border); }
+  .info-panel { width: 100%; min-width: unset; max-width: unset; border-left: none; }
+  .info-panel .panel-placeholder { padding: 24px; height: 120px; }
+  .hero { padding: 24px 16px 16px; }
+  .hero h1 { font-size: 22px; }
+  .legend { display: none; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <span class="brand">BITCOIN <span>SAHI</span></span>
+  <a href="/" class="nav-link">Home</a>
+  <a href="/live" class="nav-link">Dashboard</a>
+  <a href="/blockspace" class="nav-link">Blockspace</a>
+  <a href="/articles" class="nav-link">Articles</a>
+  <a href="/research-graph" class="nav-link" style="color:var(--text);">Research Graph</a>
+  <span class="spacer"></span>
+  <a href="https://reddit.com/r/BitcoinEngineering" class="cta">r/BitcoinEngineering</a>
+</nav>
+
+<div class="hero">
+  <div class="badge">Knowledge Graph</div>
+  <h1>Bitcoin Research Graph — <span>How Everything Connects</span></h1>
+  <p>Explore the relationships between Bitcoin protocol decisions, economic externalities, research models, and community proposals. Click nodes for details, drag to rearrange, scroll to zoom.</p>
+</div>
+
+<div class="graph-layout">
+  <div class="canvas-wrap" id="canvasWrap">
+    <canvas id="graphCanvas"></canvas>
+    <div class="legend">
+      <span class="leg-item"><span class="leg-dot" style="background:#58A6FF;"></span>Protocol</span>
+      <span class="leg-item"><span class="leg-dot" style="background:#F7931A;"></span>Mechanism</span>
+      <span class="leg-item"><span class="leg-dot" style="background:#3FB950;"></span>Application</span>
+      <span class="leg-item"><span class="leg-dot" style="background:#BC8CFF;"></span>Economics</span>
+      <span class="leg-item"><span class="leg-dot" style="background:#F85149;"></span>Proposal</span>
+      <span class="leg-item"><span class="leg-dot" style="background:#F0883E;"></span>Research</span>
+      <span class="leg-item"><span class="leg-dot" style="background:#8B949E;"></span>Discussion</span>
+    </div>
+    <div class="zoom-controls">
+      <button id="zoomIn" title="Zoom in">+</button>
+      <button id="zoomOut" title="Zoom out">−</button>
+      <button id="zoomReset" title="Reset">⟲</button>
+    </div>
+  </div>
+  <div class="info-panel" id="infoPanel">
+    <div class="panel-placeholder" id="panelPlaceholder">
+      <div class="icon">⊙</div>
+      <div>Click a node to explore</div>
+      <div style="font-size:13px;color:#555;margin-top:4px;">15 nodes · 15 connections</div>
+    </div>
+    <div class="panel-content" id="panelContent">
+      <button class="pc-close" id="panelClose">✕</button>
+      <div class="pc-group" id="pcGroup"></div>
+      <h2 id="pcTitle"></h2>
+      <p id="pcDesc"></p>
+      <a class="pc-link" id="pcLink" target="_blank" rel="noopener">→ Read more</a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="links">
+    <a href="https://reddit.com/r/BitcoinEngineering">r/BitcoinEngineering</a>
+    <a href="https://github.com/prateekposwal/block-space-economics">GitHub</a>
+    <a href="/live">Live Dashboard</a>
+    <a href="/">Home</a>
+  </div>
+  <p>Bitcoin Sahi — Blockchain Research & Development. Built in public.</p>
+</footer>
+
+<script>
+var nodes = [
+  { id: 'segwit', label: 'SegWit\n(BIP-141)', group: 'protocol', x: 400, y: 100 },
+  { id: 'witness', label: 'Witness\nDiscount', group: 'mechanism', x: 550, y: 180 },
+  { id: 'taproot', label: 'Taproot\n(BIP-341)', group: 'protocol', x: 250, y: 180 },
+  { id: 'inscriptions', label: 'Inscriptions\n(Ordinals)', group: 'application', x: 400, y: 280 },
+  { id: 'runes', label: 'Runes\nProtocol', group: 'application', x: 550, y: 280 },
+  { id: 'fee-market', label: 'Fee Market\nEconomics', group: 'economics', x: 300, y: 380 },
+  { id: 'storage-cost', label: 'Storage Cost\nExternality', group: 'economics', x: 500, y: 380 },
+  { id: 'bip110', label: 'BIP-110\n(Soft Fork)', group: 'proposal', x: 200, y: 480 },
+  { id: 'relay-policy', label: 'Relay Policy\n(Direction A)', group: 'proposal', x: 400, y: 480 },
+  { id: 'bip-for-state', label: 'BIP for State\n(Direction B)', group: 'proposal', x: 600, y: 480 },
+  { id: 'utxo-model', label: 'UTXO Cost\nModel', group: 'research', x: 300, y: 580 },
+  { id: 'monte-carlo', label: 'Monte Carlo\nSimulation', group: 'research', x: 500, y: 580 },
+  { id: 'verification', label: 'Verification\nAppendix', group: 'research', x: 400, y: 680 },
+  { id: 'bitcoin-dev', label: 'bitcoin-dev\nMailing List', group: 'discussion', x: 100, y: 380 },
+  { id: 'reddit', label: 'r/Bitcoin\nEngineering', group: 'discussion', x: 700, y: 380 },
+];
+
+var edges = [
+  { from: 'segwit', to: 'witness', label: 'creates' },
+  { from: 'witness', to: 'inscriptions', label: 'enables' },
+  { from: 'taproot', to: 'inscriptions', label: 'enables' },
+  { from: 'inscriptions', to: 'runes', label: 'inspired' },
+  { from: 'inscriptions', to: 'fee-market', label: 'impacts' },
+  { from: 'fee-market', to: 'storage-cost', label: 'ignores' },
+  { from: 'storage-cost', to: 'bip110', label: 'triggers' },
+  { from: 'storage-cost', to: 'relay-policy', label: 'motivates' },
+  { from: 'storage-cost', to: 'bip-for-state', label: 'motivates' },
+  { from: 'storage-cost', to: 'utxo-model', label: 'quantifies' },
+  { from: 'utxo-model', to: 'monte-carlo', label: 'extends' },
+  { from: 'utxo-model', to: 'verification', label: 'validates' },
+  { from: 'bip110', to: 'bitcoin-dev', label: 'debated on' },
+  { from: 'relay-policy', to: 'reddit', label: 'discussed on' },
+  { from: 'bip110', to: 'reddit', label: '126 comments' },
+];
+
+var nodeInfo = {
+  'segwit': { desc: 'BIP-141 created a 4× weight discount for witness data. Designed to fix malleability, not to price state growth.', link: 'https://github.com/bitcoin/bips/blob/master/bip-0141.mediawiki' },
+  'witness': { desc: 'The 4× weight discount means 1 witness byte costs 0.25 weight units vs 1 for legacy data. Core of the inscription storage externality.', link: '#' },
+  'taproot': { desc: 'BIP-341 deployed November 2021. Schnorr signatures + MAST improve privacy and script flexibility. Enables more efficient complex scripts used by inscriptions.', link: 'https://github.com/bitcoin/bips/blob/master/bip-0341.mediawiki' },
+  'inscriptions': { desc: 'Ordinals use OP_FALSE OP_IF to store arbitrary data in witness. Enabled by SegWit discount. ~100K/month at peak.', link: 'https://docs.ordinals.com/' },
+  'runes': { desc: 'A protocol for issuing fungible tokens on Bitcoin using UTXO-based messaging. Inspired by the inscription paradigm.', link: '#' },
+  'fee-market': { desc: 'Bitcoin\'s fee market prices congestion — access to the next block. It does not price permanence or storage externalities.', link: '#' },
+  'storage-cost': { desc: 'Our UTXO cost model: $0.008/inscription lifetime storage cost. The fee market prices congestion, not permanence.', link: 'https://bitcoinsahi.com' },
+  'bip110': { desc: 'Temporary 1-year soft fork banning most inscription methods. 55% threshold. 0% miner signaling. Effectively dead.', link: 'https://github.com/bitcoin/bips/blob/master/bip-0110.mediawiki' },
+  'relay-policy': { desc: 'Direction A: extend minrelaytxfee with state-density multipliers. Each node sets their own price. No consensus change needed.', link: '#' },
+  'bip-for-state': { desc: 'Direction B: A formal BIP introducing state-based fee accounting at the consensus layer. Harder to deploy but more comprehensive.', link: '#' },
+  'utxo-model': { desc: 'Open-source Python model. Adjustable parameters. Full verification appendix. Monte Carlo simulation available.', link: 'https://bitcoinsahi.com/live' },
+  'monte-carlo': { desc: 'Stochastic simulation of inscription volume scenarios. Models probability distributions for future block composition under varying fee environments.', link: '#' },
+  'verification': { desc: 'Mathematical verification of the UTXO cost model. Includes derivations, edge cases, and cross-validation against empirical data.', link: '#' },
+  'bitcoin-dev': { desc: 'The primary Bitcoin protocol development mailing list. Technical discussion of BIPs, consensus changes, and protocol proposals.', link: 'https://lists.linuxfoundation.org/mailman/listinfo/bitcoin-dev' },
+  'reddit': { desc: 'r/BitcoinEngineering — community discussion of technical Bitcoin topics, including relay policy, inscriptions, and state management proposals.', link: 'https://reddit.com/r/BitcoinEngineering' },
+};
+
+var groupColors = {
+  protocol: '#58A6FF',
+  mechanism: '#F7931A',
+  application: '#3FB950',
+  economics: '#BC8CFF',
+  proposal: '#F85149',
+  research: '#F0883E',
+  discussion: '#8B949E',
+};
+var groupLabels = {
+  protocol: 'Protocol',
+  mechanism: 'Mechanism',
+  application: 'Application',
+  economics: 'Economics',
+  proposal: 'Proposal',
+  research: 'Research',
+  discussion: 'Discussion',
+};
+
+var canvas = document.getElementById('graphCanvas');
+var wrap = document.getElementById('canvasWrap');
+var ctx = canvas.getContext('2d');
+
+var scale = 1;
+var offsetX = 0, offsetY = 0;
+var dragNode = null;
+var dragNodeOffX = 0, dragNodeOffY = 0;
+var hoveredNode = null;
+var selectedNode = null;
+var isDragging = false;
+var dragStartX, dragStartY, dragStartOffX, dragStartOffY;
+
+function resize() {
+  canvas.width = wrap.clientWidth;
+  canvas.height = wrap.clientHeight;
+  draw();
+}
+
+var nodeRadius = 12;
+
+function getNodePos(n) {
+  return { x: n.x * scale + offsetX, y: n.y * scale + offsetY };
+}
+
+function getNodeRect(n) {
+  var lines = n.label.split('\n');
+  var maxW = 0;
+  for (var i = 0; i < lines.length; i++) {
+    var w = ctx.measureText(lines[i]).width;
+    if (w > maxW) maxW = w;
+  }
+  var tw = maxW + 24;
+  var th = lines.length * 16 + 12;
+  var p = getNodePos(n);
+  return { x: p.x - tw / 2, y: p.y - th / 2, w: tw, h: th, cx: p.x, cy: p.y };
+}
+
+function draw() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.save();
+  ctx.font = '12px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+
+  var edgeMap = {};
+  for (var i = 0; i < edges.length; i++) {
+    var e = edges[i];
+    var src = getNodeById(e.from);
+    var dst = getNodeById(e.to);
+    if (!src || !dst) continue;
+    var sp = getNodePos(src);
+    var dp = getNodePos(dst);
+    var key = e.from + '-' + e.to;
+    var highlighted = hoveredNode && (e.from === hoveredNode.id || e.to === hoveredNode.id);
+    edgeMap[key] = { from: sp, to: dp, label: e.label, highlighted: highlighted };
+  }
+
+  for (var key in edgeMap) {
+    var ed = edgeMap[key];
+    ctx.beginPath();
+    ctx.moveTo(ed.from.x, ed.from.y);
+    ctx.lineTo(ed.to.x, ed.to.y);
+    ctx.strokeStyle = ed.highlighted ? '#F7931A' : '#21262D';
+    ctx.lineWidth = ed.highlighted ? 2.5 : 1.5;
+    ctx.stroke();
+
+    var mx = (ed.from.x + ed.to.x) / 2;
+    var my = (ed.from.y + ed.to.y) / 2;
+    var angle = Math.atan2(ed.to.y - ed.from.y, ed.to.x - ed.from.x);
+    ctx.save();
+    ctx.translate(mx, my);
+    ctx.rotate(angle);
+    ctx.fillStyle = ed.highlighted ? '#F7931A' : '#555';
+    ctx.font = '9px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'bottom';
+    ctx.fillText(ed.label, 0, -6);
+    ctx.restore();
+  }
+
+  for (var i = 0; i < nodes.length; i++) {
+    var n = nodes[i];
+    var rect = getNodeRect(n);
+    var isHover = hoveredNode && hoveredNode.id === n.id;
+    var isSelected = selectedNode && selectedNode.id === n.id;
+    var color = groupColors[n.group] || '#8B949E';
+
+    ctx.shadowColor = isHover ? color + '66' : 'transparent';
+    ctx.shadowBlur = isHover ? 16 : 0;
+
+    var bgColor = isHover ? '#1C2333' : (isSelected ? '#1C2333' : '#161B22');
+    ctx.fillStyle = bgColor;
+    ctx.strokeStyle = isHover || isSelected ? color : '#30363D';
+    ctx.lineWidth = isHover || isSelected ? 2 : 1;
+    var r = 8;
+    ctx.beginPath();
+    ctx.moveTo(rect.x + r, rect.y);
+    ctx.lineTo(rect.x + rect.w - r, rect.y);
+    ctx.quadraticCurveTo(rect.x + rect.w, rect.y, rect.x + rect.w, rect.y + r);
+    ctx.lineTo(rect.x + rect.w, rect.y + rect.h - r);
+    ctx.quadraticCurveTo(rect.x + rect.w, rect.y + rect.h, rect.x + rect.w - r, rect.y + rect.h);
+    ctx.lineTo(rect.x + r, rect.y + rect.h);
+    ctx.quadraticCurveTo(rect.x, rect.y + rect.h, rect.x, rect.y + rect.h - r);
+    ctx.lineTo(rect.x, rect.y + r);
+    ctx.quadraticCurveTo(rect.x, rect.y, rect.x + r, rect.y);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+
+    var lines = n.label.split('\n');
+    ctx.fillStyle = '#F0F6FC';
+    ctx.font = '11px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    var startY = rect.y + rect.h / 2 - (lines.length - 1) * 8;
+    for (var j = 0; j < lines.length; j++) {
+      ctx.fillText(lines[j], rect.cx, startY + j * 16);
+    }
+
+    ctx.beginPath();
+    ctx.arc(rect.cx, rect.y + rect.h + 6, 3, 0, Math.PI * 2);
+    ctx.fillStyle = color;
+    ctx.fill();
+  }
+
+  ctx.restore();
+}
+
+function getNodeById(id) {
+  for (var i = 0; i < nodes.length; i++) {
+    if (nodes[i].id === id) return nodes[i];
+  }
+  return null;
+}
+
+function getNodeAt(mx, my) {
+  for (var i = nodes.length - 1; i >= 0; i--) {
+    var rect = getNodeRect(nodes[i]);
+    if (mx >= rect.x && mx <= rect.x + rect.w && my >= rect.y && my <= rect.y + rect.h) {
+      return nodes[i];
+    }
+  }
+  return null;
+}
+
+function canvasCoords(e) {
+  var r = canvas.getBoundingClientRect();
+  return { x: e.clientX - r.left, y: e.clientY - r.top };
+}
+
+canvas.addEventListener('mousedown', function(e) {
+  var c = canvasCoords(e);
+  var n = getNodeAt(c.x, c.y);
+  if (n) {
+    dragNode = n;
+    var rect = getNodeRect(n);
+    dragNodeOffX = c.x - rect.cx;
+    dragNodeOffY = c.y - rect.cy;
+    isDragging = false;
+  } else {
+    dragNode = null;
+    isDragging = true;
+    dragStartX = c.x;
+    dragStartY = c.y;
+    dragStartOffX = offsetX;
+    dragStartOffY = offsetY;
+  }
+});
+
+canvas.addEventListener('mousemove', function(e) {
+  var c = canvasCoords(e);
+  if (dragNode) {
+    var dx = c.x - dragNodeOffX;
+    var dy = c.y - dragNodeOffY;
+    dragNode.x = (dx - offsetX) / scale;
+    dragNode.y = (dy - offsetY) / scale;
+    isDragging = true;
+    draw();
+  } else if (isDragging) {
+    offsetX = dragStartOffX + (c.x - dragStartX);
+    offsetY = dragStartOffY + (c.y - dragStartY);
+    draw();
+  } else {
+    var n = getNodeAt(c.x, c.y);
+    if (n !== hoveredNode) {
+      hoveredNode = n;
+      canvas.style.cursor = n ? 'pointer' : 'grab';
+      draw();
+    }
+  }
+});
+
+canvas.addEventListener('mouseup', function(e) {
+  if (!isDragging && dragNode) {
+    selectNode(dragNode);
+  }
+  dragNode = null;
+  isDragging = false;
+});
+
+canvas.addEventListener('mouseleave', function() {
+  hoveredNode = null;
+  dragNode = null;
+  isDragging = false;
+  draw();
+});
+
+canvas.addEventListener('wheel', function(e) {
+  e.preventDefault();
+  var c = canvasCoords(e);
+  var delta = e.deltaY > 0 ? 0.9 : 1.1;
+  var ns = scale * delta;
+  if (ns < 0.3 || ns > 3) return;
+  offsetX = c.x - (c.x - offsetX) * delta;
+  offsetY = c.y - (c.y - offsetY) * delta;
+  scale = ns;
+  draw();
+}, { passive: false });
+
+function selectNode(n) {
+  selectedNode = n;
+  var info = nodeInfo[n.id] || { desc: 'No description available.', link: '#' };
+  document.getElementById('panelPlaceholder').style.display = 'none';
+  var pc = document.getElementById('panelContent');
+  pc.classList.add('active');
+  document.getElementById('pcGroup').textContent = groupLabels[n.group] || n.group;
+  document.getElementById('pcGroup').style.color = groupColors[n.group] || '#8B949E';
+  document.getElementById('pcTitle').textContent = n.label.replace('\n', ' ');
+  document.getElementById('pcDesc').textContent = info.desc;
+  var link = document.getElementById('pcLink');
+  link.href = info.link;
+  draw();
+}
+
+document.getElementById('panelClose').addEventListener('click', function() {
+  selectedNode = null;
+  document.getElementById('panelContent').classList.remove('active');
+  document.getElementById('panelPlaceholder').style.display = 'flex';
+  draw();
+});
+
+document.getElementById('zoomIn').addEventListener('click', function() {
+  var cx = canvas.width / 2, cy = canvas.height / 2;
+  var ns = scale * 1.2;
+  if (ns > 3) return;
+  offsetX = cx - (cx - offsetX) * 1.2;
+  offsetY = cy - (cy - offsetY) * 1.2;
+  scale = ns;
+  draw();
+});
+
+document.getElementById('zoomOut').addEventListener('click', function() {
+  var cx = canvas.width / 2, cy = canvas.height / 2;
+  var ns = scale * 0.8;
+  if (ns < 0.3) return;
+  offsetX = cx - (cx - offsetX) * 0.8;
+  offsetY = cy - (cy - offsetY) * 0.8;
+  scale = ns;
+  draw();
+});
+
+document.getElementById('zoomReset').addEventListener('click', function() {
+  scale = 1;
+  offsetX = 0;
+  offsetY = 0;
+  draw();
+});
+
+window.addEventListener('resize', resize);
+resize();
+</script>
+</body>
+</html>

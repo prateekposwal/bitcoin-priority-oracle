@@ -41,6 +41,14 @@
     {
       "src": "tools/fee_history.csv",
       "use": "@vercel/static"
+    },
+    {
+      "src": "blockspace.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "research-graph.html",
+      "use": "@vercel/static"
     }
   ],
   "routes": [
@@ -71,6 +79,14 @@
     {
       "src": "/embed",
       "dest": "/embed.html"
+    },
+    {
+      "src": "/blockspace",
+      "dest": "/blockspace.html"
+    },
+    {
+      "src": "/research-graph",
+      "dest": "/research-graph.html"
     }
   ]
 }
