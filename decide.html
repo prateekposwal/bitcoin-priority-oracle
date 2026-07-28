@@ -68,7 +68,7 @@
 <body>
 <nav>
   <a href="/" class="brand">BITCOIN <span>SAHI</span></a>
-  <a href="/decide" class="nav-link">Decide</a>
+  <a href="/decide" class="nav-link">Decide<span id="decide-indicator" style="color:var(--orange);font-weight:400;margin-left:2px;"></span></a>
   <a href="/articles" class="nav-link">Articles</a>
   <div class="dropdown"><span class="dropbtn">Explore <span class="dd-arrow">▾</span></span>
     <div class="dropdown-content"><div class="dd-title">Explore</div>
@@ -119,6 +119,9 @@ function switchTab(tab) {
   document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); });
   event.target.classList.add('active');
   renderWorkspace(tab);
+  // Update nav indicator
+  var ind = document.getElementById('decide-indicator');
+  if (ind) ind.textContent = ' › ' + tab.charAt(0).toUpperCase() + tab.slice(1);
 }
 
 // Format helpers
@@ -245,8 +248,13 @@ fetch('/tools/live_data.json?_=' + Date.now())
     if (d.difficulty) difficulty = (d.difficulty / 1e12).toFixed(0);
     renderWorkspace('user');
     document.getElementById('ts').textContent = 'Updated ' + new Date().toLocaleString();
+    var ind = document.getElementById('decide-indicator');
+    if (ind) ind.textContent = ' › User';
   })
-  .catch(function() { renderWorkspace('user'); });
+  .catch(function() { renderWorkspace('user');
+    var ind = document.getElementById('decide-indicator');
+    if (ind) ind.textContent = ' › User';
+  });
 </script>
 </body>
 </html>
