@@ -123,10 +123,17 @@ def main():
         if not history or history[-1].get('date') != entry['date']:
             history.append(entry)
         # Keep last 14 entries
-        history = history[-14:]
+        history = history[-30:]
     
     with open(HISTORY, 'w') as f:
         json.dump(history, f, indent=2)
+    
+    # Generate CSV export
+    try:
+        from tools.generate_csv import generate_csv
+        generate_csv()
+    except:
+        pass
 
     print(f"Research monitor updated: {OUTPUT}")
     print(f"  BTC: ${report['btc_price'] or '?'}")

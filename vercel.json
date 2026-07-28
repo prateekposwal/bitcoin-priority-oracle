@@ -25,6 +25,14 @@
     {
       "src": "tools/fee_history.json",
       "use": "@vercel/static"
+    },
+    {
+      "src": "api/index.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "api/v1/index.html",
+      "use": "@vercel/static"
     }
   ],
   "routes": [
@@ -43,6 +51,14 @@
     {
       "src": "/old",
       "dest": "/interactive-block.html"
+    },
+    {
+      "src": "/api",
+      "dest": "/api/index.html"
+    },
+    {
+      "src": "/api/v1",
+      "dest": "/api/v1/index.html"
     }
   ]
 }

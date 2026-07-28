@@ -1,17 +1,17 @@
 {
-  "timestamp": "2026-07-28T20:10:28.330514+00:00",
+  "timestamp": "2026-07-28T20:16:27.055549+00:00",
   "fees": {
-    "fastestFee": 4,
+    "fastestFee": 5,
     "halfHourFee": 4,
     "hourFee": 3,
     "economyFee": 2,
     "minimumFee": 1
   },
-  "btc_price": 63839.62,
+  "btc_price": 63901.69,
   "mempool": {
-    "unconfirmed_tx": 108871,
-    "vsize": 47658641,
-    "total_fee_sats": 17343471
+    "unconfirmed_tx": 109865,
+    "vsize": 47892798,
+    "total_fee_sats": 18652904
   },
   "block_height": 960009,
   "bip110_signaling": {
@@ -28,37 +28,37 @@
       "avgHeight": 959882,
       "timestamp": 1785183978,
       "avgFees": 5109381,
-      "USD": 64944
+      "USD": 64927
     },
     {
       "avgHeight": 959883,
       "timestamp": 1785184465,
       "avgFees": 3354308,
-      "USD": 64944
+      "USD": 64927
     },
     {
       "avgHeight": 959884,
       "timestamp": 1785184881,
       "avgFees": 2526036,
-      "USD": 64944
+      "USD": 64927
     },
     {
       "avgHeight": 959885,
       "timestamp": 1785185073,
       "avgFees": 1667195,
-      "USD": 64944
+      "USD": 64927
     },
     {
       "avgHeight": 959886,
       "timestamp": 1785185267,
       "avgFees": 1441266,
-      "USD": 64944
+      "USD": 64927
     },
     {
       "avgHeight": 959887,
       "timestamp": 1785185856,
       "avgFees": 2093577,
-      "USD": 64944
+      "USD": 64927
     },
     {
       "avgHeight": 959888,
@@ -550,37 +550,37 @@
       "avgHeight": 959969,
       "timestamp": 1785240308,
       "avgFees": 3460932,
-      "USD": 63428
+      "USD": 63414
     },
     {
       "avgHeight": 959970,
       "timestamp": 1785240373,
       "avgFees": 1056088,
-      "USD": 63428
+      "USD": 63414
     },
     {
       "avgHeight": 959971,
       "timestamp": 1785241355,
       "avgFees": 2720561,
-      "USD": 63428
+      "USD": 63414
     },
     {
       "avgHeight": 959972,
       "timestamp": 1785241892,
       "avgFees": 1919188,
-      "USD": 63428
+      "USD": 63414
     },
     {
       "avgHeight": 959973,
       "timestamp": 1785242567,
       "avgFees": 2154693,
-      "USD": 63428
+      "USD": 63414
     },
     {
       "avgHeight": 959974,
       "timestamp": 1785242931,
       "avgFees": 1405343,
-      "USD": 63428
+      "USD": 63414
     },
     {
       "avgHeight": 959975,
@@ -610,43 +610,43 @@
       "avgHeight": 959979,
       "timestamp": 1785248445,
       "avgFees": 6360859,
-      "USD": 63029
+      "USD": 63062
     },
     {
       "avgHeight": 959980,
       "timestamp": 1785248465,
       "avgFees": 2076249,
-      "USD": 63029
+      "USD": 63062
     },
     {
       "avgHeight": 959981,
       "timestamp": 1785248870,
       "avgFees": 2454886,
-      "USD": 63029
+      "USD": 63062
     },
     {
       "avgHeight": 959982,
       "timestamp": 1785249317,
       "avgFees": 2039066,
-      "USD": 63029
+      "USD": 63062
     },
     {
       "avgHeight": 959983,
       "timestamp": 1785249424,
       "avgFees": 901047,
-      "USD": 63029
+      "USD": 63062
     },
     {
       "avgHeight": 959984,
       "timestamp": 1785249623,
       "avgFees": 1297389,
-      "USD": 63029
+      "USD": 63062
     },
     {
       "avgHeight": 959985,
       "timestamp": 1785250140,
       "avgFees": 1875650,
-      "USD": 63029
+      "USD": 63062
     },
     {
       "avgHeight": 959986,

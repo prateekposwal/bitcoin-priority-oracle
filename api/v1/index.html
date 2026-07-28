@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>API v1 — Bitcoin Sahi</title>
+<style>body{background:#0D1117;color:#F0F6FC;font-family:-apple-system,sans-serif;max-width:800px;margin:0 auto;padding:24px;}
+h1{font-size:24px}h2{font-size:18px;margin-top:24px;color:#F7931A}
+code{background:#161B22;padding:2px 6px;border-radius:4px;font-size:14px}
+pre{background:#161B22;padding:16px;border-radius:8px;overflow-x:auto;font-size:13px;border:1px solid #30363D}
+.endpoint{background:#161B22;border:1px solid #30363D;border-radius:8px;padding:16px;margin:12px 0}
+.endpoint .method{display:inline-block;background:#3FB95020;color:#3FB950;padding:2px 8px;border-radius:4px;font-weight:700;font-size:11px}
+.endpoint .url{font-size:15px;font-weight:600;margin-left:8px}
+a{color:#58A6FF}.tag{font-size:11px;padding:2px 8px;border-radius:4px;margin-left:6px}
+.tag.free{background:#3FB95020;color:#3FB950}.tag.live{background:#58A6FF20;color:#58A6FF}
+</style></head>
+<body>
+<h1>Bitcoin Sahi API <span class="tag live">LIVE</span></h1>
+<p style="color:#8B949E;font-size:15px;">Public REST API for Bitcoin fee data, market context, and the UTXO cost model. No authentication required.</p>
+
+<h2>Endpoints</h2>
+
+<div class="endpoint">
+<span class="method">GET</span><span class="url">/tools/live_data.json</span> <span class="tag free">Free</span>
+<p style="color:#8B949E;font-size:13px;margin-top:6px;">Current Bitcoin market data snapshot. Updated daily.</p>
+<pre>{
+  "btc_price": 63853,
+  "fees": { "fastestFee": 4, "economyFee": 2 },
+  "mempool": { "unconfirmed_tx": 107649 },
+  "block_height": 960009,
+  "hash_rate": 803200288612,
+  "difficulty": 126231507121868
+}</pre>
+</div>
+
+<div class="endpoint">
+<span class="method">GET</span><span class="url">/tools/fee_history.json</span> <span class="tag free">Free</span>
+<p style="color:#8B949E;font-size:13px;margin-top:6px;">14-day rolling fee history with BTC price and mempool size per day. Array of daily snapshots.</p>
+</div>
+
+<div class="endpoint">
+<span class="method">GET</span><span class="url">/tools/fee_forecast.json</span> <span class="tag free">Free</span>
+<p style="color:#8B949E;font-size:13px;margin-top:6px;">3-day fee forecast from linear regression on historical data. Trend direction (rising/falling/stable).</p>
+</div>
+
+<div class="endpoint">
+<span class="method">GET</span><span class="url">/tools/alerts.json</span> <span class="tag free">Free</span>
+<p style="color:#8B949E;font-size:13px;margin-top:6px;">Active alerts for high fees, low fees, and fee spikes. Empty array if all nominal.</p>
+</div>
+
+<div class="endpoint">
+<span class="method">GET</span><span class="url">/tools/fee_history.csv</span> <span class="tag free">Free</span>
+<p style="color:#8B949E;font-size:13px;margin-top:6px;">CSV export of fee history for analysis in spreadsheets. Columns: date, fastestFee, halfHourFee, hourFee, economyFee, btc_price, mempool_tx.</p>
+</div>
+
+<h2>Rate Limits</h2>
+<p style="color:#8B949E;font-size:13px;">Public endpoints: no rate limit currently. If you need higher throughput, <a href="https://github.com/prateekposwal/block-space-economics">open an issue</a>.</p>
+
+<h2>Example: cURL</h2>
+<pre>curl https://bitcoinsahi.com/tools/live_data.json</pre>
+
+<h2>Example: Python</h2>
+<pre>import requests, json
+data = requests.get('https://bitcoinsahi.com/tools/live_data.json').json()
+print(f"Fastest fee: {data['fees']['fastestFee']} sat/vB")</pre>
+
+<h2>Example: JavaScript</h2>
+<pre>const data = await fetch('https://bitcoinsahi.com/tools/live_data.json').then(r => r.json());
+console.log(`BTC: $${data.btc_price}`);</pre>
+
+<p style="color:#555;font-size:12px;margin-top:32px;">API v1 — Bitcoin Sahi. Data refreshes daily. <a href="https://bitcoinsahi.com">back to bitcoinsahi.com →</a></p>
+</body></html>

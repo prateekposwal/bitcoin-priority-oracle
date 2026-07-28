@@ -1,0 +1,9 @@
+{
+  "webhooks": [
+    {
+      "url": "https://your-server.com/webhook/bitcoin-alerts",
+      "events": ["high_fee", "low_fee", "spike"],
+      "description": "Example: replace with your webhook URL"
+    }
+  ]
+}
