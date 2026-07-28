@@ -28,44 +28,48 @@ nav {
   position: sticky; top: 0; z-index: 100;
   background: #0A0A0FF0; backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border);
-  display: flex; align-items: center; gap: 20px;
-  padding: 16px 28px; font-size: 15px;
+  display: flex; align-items: center; gap: 24px;
+  padding: 18px 32px; font-size: 16px;
 }
-nav .brand { font-weight: 800; font-size: 20px; letter-spacing: -0.3px; white-space: nowrap; flex-shrink: 0; }
+nav .brand { font-weight: 800; font-size: 24px; letter-spacing: -0.5px; white-space: nowrap; flex-shrink: 0; }
 nav .brand span { color: var(--orange); }
 nav .spacer { flex: 1; }
 nav .cta {
   background: var(--orange); color: #000; font-weight: 700;
-  padding: 10px 20px; border-radius: 8px; font-size: 14px;
+  padding: 12px 24px; border-radius: 10px; font-size: 15px;
   transition: transform 0.2s, box-shadow 0.2s; flex-shrink: 0;
 }
 nav .cta:hover { transform: translateY(-1px); box-shadow: 0 4px 20px #F7931A40; text-decoration: none; }
 
 /* ── Dropdown Nav ── */
-nav .nav-link { color: var(--muted); text-decoration: none; font-weight: 500; padding: 4px 0; }
+nav .nav-link { color: var(--muted); text-decoration: none; font-weight: 600; font-size: 16px; padding: 6px 0; }
 nav .nav-link:hover { color: var(--text); }
-nav .nav-link.active { color: var(--orange); }
 
 nav .dropbtn {
   background: none; border: 1px solid var(--border); border-radius: 6px;
-  color: var(--muted); font-size: 13px; cursor: pointer; padding: 4px 10px;
+  color: var(--muted); font-size: 14px; cursor: pointer; padding: 6px 14px;
   display: flex; align-items: center; gap: 4px; transition: border-color 0.2s;
 }
 nav .dropbtn:hover { border-color: var(--orange); color: var(--text); }
 nav .dropdown { position: relative; display: inline-block; }
 nav .dropdown-content {
-  display: none; position: absolute; top: 100%; left: 0; min-width: 160px;
-  background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
-  padding: 4px; z-index: 200; margin-top: 4px; box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  display: none; position: absolute; top: 100%; left: 0; min-width: 180px;
+  background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+  padding: 6px; z-index: 200;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+}
+/* Bridge the gap between button and menu */
+nav .dropdown::after {
+  content: ''; position: absolute; top: 100%; left: 0; width: 100%; height: 8px;
 }
 nav .dropdown-content a {
-  display: block; padding: 6px 12px; border-radius: 4px; font-size: 13px;
+  display: block; padding: 8px 14px; border-radius: 6px; font-size: 14px;
   color: var(--muted); text-decoration: none;
 }
 nav .dropdown-content a:hover { background: var(--orange); color: #000; }
 nav .dropdown:hover .dropdown-content,
 nav .dropdown:focus-within .dropdown-content { display: block; }
-nav .dropdown-content a:active { background: var(--orange); color: #000; }
+
 
 @media (max-width: 700px) {
   nav { padding: 10px 14px; gap: 8px; font-size: 13px; }
