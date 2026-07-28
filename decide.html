@@ -87,7 +87,10 @@
   <div class="page-title">Decision Center</div>
   <div class="page-sub">Same live network data, organized for your role. Pick a workspace below — every number updates automatically.</div>
 
-  <!-- Workspace Tabs — top of content -->
+  <!-- Live data + Tabs — stacked -->
+  <div class="summary-bar" style="margin-bottom:4px;">
+    <div class="row"><span><span class="live-dot"></span> Live data from mempool.space</span><span class="time" id="ts">Loading...</span></div>
+  </div>
   <div class="tabs" id="tabs">
     <button class="tab active" onclick="switchTab('user')">User</button>
     <button class="tab" onclick="switchTab('lightning')">Lightning</button>
@@ -99,10 +102,6 @@
 
   <!-- Each workspace populated by JS -->
   <div id="workspace-container"></div>
-
-  <div class="summary-bar" style="margin-top:8px;">
-    <div class="row"><span><span class="live-dot"></span> Live data from mempool.space</span><span class="time" id="ts">Loading...</span></div>
-  </div>
 </div>
 
 <script>
