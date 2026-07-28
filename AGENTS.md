@@ -56,3 +56,9 @@
 - Check Reddit replies (community members have replied)
 - Run the economics simulator (Monte Carlo)
 - Post LinkedIn article with charts
+
+## Security (manual steps needed)
+1. **Rotate Vercel token** — Go to vercel.com/account/tokens, create new, delete old
+2. **Branch protection** — GitHub → Settings → Branches → Add rule for `main`: require PR + status checks
+3. **Enable Dependabot** — GitHub → Insights → Dependency graph → Enable
+4. **Signed commits** (optional) — GitHub → Settings → SSH and GPG keys

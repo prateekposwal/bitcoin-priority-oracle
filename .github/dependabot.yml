@@ -1,0 +1,18 @@
+# Dependabot auto-updates for Bitcoin Sahi
+
+version: 2
+updates:
+  # GitHub Actions — keep workflow files current
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "UTC"
+    commit-message:
+      prefix: "chore"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "automated"

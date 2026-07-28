@@ -1,0 +1,24 @@
+# Code owners — these files require @prateekposwal's review
+# GitHub will automatically request review when PRs touch these files
+
+# Core website
+index.html                  @prateekposwal
+live.html                   @prateekposwal
+articles.html               @prateekposwal
+
+# Infrastructure
+vercel.json                 @prateekposwal
+.github/workflows/*.yml     @prateekposwal
+
+# Data pipeline
+tools/research_monitor.py   @prateekposwal
+tools/cross_ref_explorer.py @prateekposwal
+
+# Cost model
+research/utxo_cost_model.py @prateekposwal
+research/verification_appendix.md @prateekposwal
+
+# Root documents
+README.md                   @prateekposwal
+SECURITY.md                 @prateekposwal
+AGENTS.md                   @prateekposwal
