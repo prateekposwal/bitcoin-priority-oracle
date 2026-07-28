@@ -397,14 +397,17 @@ function updateAll() {
   insRatio /= adjTotal;
 
   document.getElementById('seg-fin').style.width = (finRatio * 100) + '%';
-  document.getElementById('seg-fin').querySelector('.seg-label').textContent = 'Financial ' + Math.round(finRatio * 100) + '%';
-  document.getElementById('seg-dust').style.width = (dustRatio * 100) + '%';
-  document.getElementById('seg-dust').querySelector('.seg-label').textContent = 'Dust ' + Math.round(dustRatio * 100) + '%';
-  document.getElementById('seg-ins').style.width = (insRatio * 100) + '%';
-  document.getElementById('seg-ins').querySelector('.seg-label').textContent = 'Inscriptions ' + Math.round(insRatio * 100) + '%';
-  document.getElementById('total-utxo-pct').textContent = Math.round((finRatio + dustRatio + insRatio) * 100) + '%';
+  var finPctDisp = finRatio * 100;
+  var dustPctDisp = dustRatio * 100;
+  var insPctDisp = insRatio * 100;
+  document.getElementById('seg-fin').querySelector('.seg-label').textContent = 'Financial ' + (finPctDisp > 1 ? Math.round(finPctDisp) : finPctDisp.toFixed(1)) + '%';
+  document.getElementById('seg-dust').style.width = (dustPctDisp > 0.3 ? dustPctDisp : 0.3) + '%';
+  document.getElementById('seg-dust').querySelector('.seg-label').textContent = 'Dust ' + (dustPctDisp > 1 ? Math.round(dustPctDisp) : dustPctDisp.toFixed(1)) + '%';
+  document.getElementById('seg-ins').style.width = (insPctDisp > 0.3 ? insPctDisp : 0.3) + '%';
+  document.getElementById('seg-ins').querySelector('.seg-label').textContent = 'Inscriptions ' + (insPctDisp > 1 ? Math.round(insPctDisp) : insPctDisp.toFixed(1)) + '%';
+   document.getElementById('total-utxo-pct').textContent = ((finRatio + dustRatio + insRatio) * 100).toFixed(1) + '%';
 
-  document.getElementById('kpi-ins').textContent = '~' + Math.round(insRatio * 100) + '%';
+  document.getElementById('kpi-ins').textContent = (insPctDisp > 0.1 ? '~' + Math.round(insPctDisp) : '< 0.5') + '%';
 
   var health = 95 - 10 * (insRatio / 0.10) - 5 * (dustRatio / 0.30);
   if (vol > 100) health -= (vol - 100) * 0.04;

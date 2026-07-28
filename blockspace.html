@@ -465,17 +465,16 @@ function updateBlockSpace() {
   otherPct *= scaleDown;
 
   document.getElementById('seg-fin').style.width = finPct + '%';
-  document.getElementById('seg-fin').querySelector('.seg-label').textContent = 'Financial ' + Math.round(finPct) + '%';
-  document.getElementById('seg-ins').style.width = insPct + '%';
-  document.getElementById('seg-ins').querySelector('.seg-label').textContent = 'Inscriptions ' + Math.round(insPct) + '%';
-  document.getElementById('seg-ln').style.width = lnPct + '%';
-  document.getElementById('seg-ln').querySelector('.seg-label').textContent = 'Lightning 4%';
-  document.getElementById('seg-other').style.width = otherPct + '%';
-  document.getElementById('seg-other').querySelector('.seg-label').textContent = 'Other 6%';
-  document.getElementById('seg-empty').style.width = emptyPct + '%';
-  document.getElementById('seg-empty').querySelector('.seg-label').textContent = 'Empty ' + Math.round(emptyPct) + '%';
-
-  document.getElementById('total-pct').textContent = Math.round(finPct + insPct + lnPct + otherPct + emptyPct) + '%';
+  document.getElementById('seg-fin').querySelector('.seg-label').textContent = 'Financial ' + (finPct > 1 ? Math.round(finPct) : finPct.toFixed(1)) + '%';
+  document.getElementById('seg-ins').style.width = (insPct > 0.3 ? insPct : 0.3) + '%';
+  document.getElementById('seg-ins').querySelector('.seg-label').textContent = 'Inscriptions ' + (insPct > 1 ? Math.round(insPct) : insPct.toFixed(1)) + '%';
+  document.getElementById('seg-ln').style.width = (lnPct > 0.3 ? lnPct : 0.3) + '%';
+  document.getElementById('seg-ln').querySelector('.seg-label').textContent = 'Lightning ' + (lnPct > 1 ? Math.round(lnPct) : lnPct.toFixed(1)) + '%';
+  document.getElementById('seg-other').style.width = (otherPct > 0.3 ? otherPct : 0.3) + '%';
+  document.getElementById('seg-other').querySelector('.seg-label').textContent = 'Other ' + (otherPct > 1 ? Math.round(otherPct) : otherPct.toFixed(1)) + '%';
+  document.getElementById('seg-empty').style.width = (emptyPct > 0.3 ? emptyPct : 0.3) + '%';
+  document.getElementById('seg-empty').querySelector('.seg-label').textContent = 'Empty ' + (emptyPct > 1 ? Math.round(emptyPct) : emptyPct.toFixed(1)) + '%';
+  document.getElementById('total-pct').textContent = (finPct + insPct + lnPct + otherPct + emptyPct).toFixed(1) + '%';
 
   var txCount = Math.round(finPerBlock * 0.85 + insPerBlock * 0.7);
   var avgSize = (finWeight + insWeight + 0.1 * BLOCK_LIMIT) / 1000000;
