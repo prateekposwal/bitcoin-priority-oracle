@@ -1,7 +1,37 @@
-# Bitcoin Priority Oracle — Session Context
+# Bitcoin Priority Oracle — Research Context
 
-## Project
-Bitcoin block space research: does the fee market price permanence or just congestion?
+## Project Identity
+- **Name:** Bitcoin Priority Oracle
+- **Domain:** Bitcoin block space economics
+- **Repo:** github.com/prateekposwal/bitcoin-priority-oracle
+- **Deployed URL:** bitcoinsahi.com (DNS pending)
+- **Key People:** Prateek (owner), Dathon Ohm (BIP-110 author), Greg Maxwell (critic), bitusher (Reddit)
+
+## Domain Sources
+### Primary Sources (fetch before answering)
+- [mempool.space fees](https://mempool.space/api/v1/fees/recommended)
+- [blockchain.info BTC price](https://blockchain.info/ticker)
+- [blockchain.info UTXO count](https://blockchain.info/q/utxocount)
+- [ordinals.com stats](https://ordinals.com/api/stats)
+- [BIP-110 signaling](https://wickedsmartbitcoin.com/api/bip110)
+
+### Community
+- [Delving Bitcoin thread](https://delvingbitcoin.org/t/does-bitcoins-fee-market-price-permanence-or-just-congestion/2750)
+- [r/Bitcoin](https://old.reddit.com/r/Bitcoin/search?q=BIP-110&t=year)
+- [r/BitcoinEngineering](https://old.reddit.com/r/BitcoinEngineering/search?q=fee+market+permanence&t=week)
+- bitcoin-dev mailing list
+
+### Related BIPs
+- BIP-141 (SegWit) — the weight formula at the center of the question
+- BIP-110 (Reduced Data Temporary Softfork) — consensus-level response
+- BIP-337 (Compressed Transactions) — alternative data reduction path
+
+## Research Checklist (do before every answer)
+- [x] Fetch latest fee data from mempool.space
+- [x] Check BIP-110 signaling status
+- [x] Cross-reference against current model parameters
+- [x] Update hypothesis if data contradicts current state
+- [x] Commit any changes to repo
 
 ## State (2026-07-28)
 - **All 3 research phases complete** — R1 (Reading), R2 (Cost Model), R3 (Problem Statement)
