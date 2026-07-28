@@ -125,48 +125,68 @@
     <div class="stat-row" id="market-row"></div>
   </div>
 
-    <div class="section">
-    <div class="section-header">Interactive Model — Adjust Parameters</div>
-    <div class="model-panel">
-      <h3>UTXO Cost Model Explorer</h3>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px 24px;">
+  <div class="section" style="background:linear-gradient(135deg,#F7931A08,#58A6FF08);border:1px solid var(--border);border-radius:12px;padding:24px;margin-bottom:28px;">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;margin-bottom:8px;">
+      <div>
+        <div style="font-size:10px;color:var(--orange);text-transform:uppercase;letter-spacing:1px;font-weight:700;">⚡ For Developers & Lightning Node Operators</div>
+        <div style="font-size:22px;font-weight:800;margin-top:4px;">Estimate Your Real Cost</div>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <span style="background:#F7931A20;color:var(--orange);padding:4px 12px;border-radius:6px;font-size:11px;font-weight:600;">Lightning Channels</span>
+        <span style="background:#58A6FF20;color:#58A6FF;padding:4px 12px;border-radius:6px;font-size:11px;font-weight:600;">UTXO Management</span>
+        <span style="background:#3FB95020;color:#3FB950;padding:4px 12px;border-radius:6px;font-size:11px;font-weight:600;">Node Operations</span>
+      </div>
+    </div>
+    <p style="color:var(--muted);font-size:14px;margin-bottom:16px;max-width:700px;">
+      Lightning nodes need to open channels (on-chain tx). Every channel open creates UTXOs that live in every full node forever. 
+      Use this model to estimate your <strong style="color:var(--text);">real storage cost contribution</strong> and how it compares to current fees. 
+      Adjust the sliders to match your setup — all parameters documented in <a href="https://github.com/prateekposwal/block-space-economics" style="color:var(--orange)">the open-source model</a>.
+    </p>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:20px;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px 24px;">
         <div class="slider-group">
-          <div class="row"><span>Inscription Volume / Month</span><span class="val" id="sl-vol">100K</span></div>
+          <div class="row"><span>📊 Inscription Volume / Month</span><span class="val" id="sl-vol">100K</span></div>
           <input type="range" id="param-vol" min="10" max="500" value="100" oninput="updateModel()">
         </div>
         <div class="slider-group">
-          <div class="row"><span>Inscription Size</span><span class="val" id="sl-size">400 B</span></div>
+          <div class="row"><span>📦 Avg Inscription Size</span><span class="val" id="sl-size">400 B</span></div>
           <input type="range" id="param-size" min="100" max="2000" value="400" oninput="updateModel()">
         </div>
         <div class="slider-group">
-          <div class="row"><span>Node Power Draw</span><span class="val" id="sl-power">150 W</span></div>
+          <div class="row"><span>⚡ Your Node Power Draw</span><span class="val" id="sl-power">150 W</span></div>
           <input type="range" id="param-power" min="10" max="300" value="150" oninput="updateModel()">
         </div>
         <div class="slider-group">
-          <div class="row"><span>Bandwidth Cost / Month</span><span class="val" id="sl-bw">$50</span></div>
+          <div class="row"><span>🌐 Your Bandwidth Cost / Month</span><span class="val" id="sl-bw">$50</span></div>
           <input type="range" id="param-bw" min="10" max="200" value="50" oninput="updateModel()">
         </div>
         <div class="slider-group">
-          <div class="row"><span>Hardware Cost</span><span class="val" id="sl-hw">$500</span></div>
+          <div class="row"><span>🖥️ Your Hardware Cost</span><span class="val" id="sl-hw">$500</span></div>
           <input type="range" id="param-hw" min="100" max="2000" value="500" oninput="updateModel()">
         </div>
         <div class="slider-group">
-          <div class="row"><span>Electricity Rate</span><span class="val" id="sl-elec">$0.12/kWh</span></div>
+          <div class="row"><span>💡 Electricity Rate</span><span class="val" id="sl-elec">$0.12/kWh</span></div>
           <input type="range" id="param-elec" min="3" max="40" value="12" oninput="updateModel()">
         </div>
         <div class="slider-group">
-          <div class="row"><span>UTXO Lifetime (years)</span><span class="val" id="sl-life">10 yr</span></div>
+          <div class="row"><span>⏳ UTXO Lifetime (years)</span><span class="val" id="sl-life">10 yr</span></div>
           <input type="range" id="param-life" min="1" max="50" value="10" oninput="updateModel()">
         </div>
         <div class="slider-group">
-          <div class="row"><span>Hardware Lifespan</span><span class="val" id="sl-hl">3 yr</span></div>
+          <div class="row"><span>🔧 Hardware Lifespan</span><span class="val" id="sl-hl">3 yr</span></div>
           <input type="range" id="param-hl" min="1" max="10" value="3" oninput="updateModel()">
         </div>
       </div>
-      <div class="model-output" id="model-slider-output">
-        <div class="stat"><div class="lbl">Node Cost / Yr</div><div class="val" id="mo-node">$924</div></div>
-        <div class="stat"><div class="lbl">Storage / Insc (10yr)</div><div class="val" id="mo-storage">$0.008</div></div>
-        <div class="stat"><div class="lbl">Externality / Yr</div><div class="val" id="mo-ext">$9.2K</div></div>
+      <div class="model-output">
+        <div class="stat"><div class="lbl">Your Node Cost / Yr</div><div class="val" id="mo-node">$924</div></div>
+        <div class="stat"><div class="lbl">Storage Cost / Inscription</div><div class="val" id="mo-storage">$0.008</div></div>
+        <div class="stat"><div class="lbl">Your Externality / Yr</div><div class="val" id="mo-ext">$9.2K</div></div>
+      </div>
+      <div style="margin-top:12px;font-size:12px;color:#555;text-align:center;">
+        ⚡ A Lightning channel open = ~1,000 vbytes = ~$0.63 at current economy fees. 
+        The storage externality for that channel (~0.02 cents/yr) is negligible — 
+        but the cumulative effect of 100K inscriptions/mo is not. 
+        <a href="https://github.com/prateekposwal/block-space-economics" style="color:var(--orange)">Run the model yourself →</a>
       </div>
     </div>
   </div>
