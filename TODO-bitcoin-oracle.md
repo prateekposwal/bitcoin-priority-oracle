@@ -1,27 +1,29 @@
 # Bitcoin Block Space — Research TODO
 
-## Phase R1: Reading
+## Phase R1: Reading ✅
 
-- [ ] Read BIP-141 rationale for witness discount (malleability vs state economics)
-- [ ] Read Moser, Eyal, Gün Sirer — covenant paper (FC 2017)
-- [ ] Read Poelstra — CAT and Schnorr Tricks series
-- [ ] Search Delving Bitcoin for "state expiry" threads
-- [ ] Search bitcoin-dev mailing list for UTXO growth discussions
+- [x] Read BIP-141 rationale for witness discount (malleability vs state economics) → `research/bip141_analysis.md`
+- [x] Read Moser, Eyal, Gün Sirer — covenant paper (FC 2017) → surveyed in bip141_analysis.md
+- [x] Read Poelstra — CAT and Schnorr Tricks series → surveyed in bip141_analysis.md
+- [x] Search Delving Bitcoin for "state expiry" threads → no active proposals since 2022
+- [x] Search bitcoin-dev mailing list for UTXO growth discussions → periodic threads, no consensus
 
-## Phase R2: UTXO Cost Function (PRIORITY)
+## Phase R2: UTXO Cost Function ✅
 
-- [ ] Estimate: what does it cost to run a full Bitcoin node per year? (HW + bandwidth + electricity)
-- [ ] Calculate: how many bytes of UTXO data does the average inscription add?
-- [ ] Model: node cost / byte / year → what should a data transaction pay to cover its storage cost?
-- [ ] Document: the SegWit weight formula's impact on inscription economics
-- [ ] Simulate: how UTXO set growth affects node operator costs at different adoption rates
+- [x] Estimate: what does it cost to run a full Bitcoin node per year? (HW + bandwidth + electricity) → `research/utxo_cost_model.py`, $925/yr
+- [x] Calculate: how many bytes of UTXO data does the average inscription add? → ~400 bytes (100 vbytes)
+- [x] Model: node cost / byte / year → $0.0000019/byte/yr, $0.008/inscription lifetime
+- [x] Document: the SegWit weight formula's impact on inscription economics → `research/bip141_analysis.md`
+- [x] Simulate: how UTXO set growth affects node operator costs → model handles 50K-300K/mo scenarios
+- [x] Verification appendix with source links → `research/verification_appendix.md`
+- [x] Live data fetch scripts → `research/fetch_inscription_stats.py`, `research/verify_inscription_size.py`
 
-## Phase R3: Problem Statement
+## Phase R3: Problem Statement ✅
 
-- [ ] Write a clear, concise problem statement (1 page max)
-- [ ] Publish as a research note (no solution, just the framing)
-- [ ] Share on Delving Bitcoin for feedback
-- [ ] Write "Bitcoin can't price its own memory" LinkedIn post (after R2 produces numbers)
+- [x] Write a clear, concise problem statement (1 page max) → `research/problem_statement.md`
+- [x] Publish as a research note (no solution, just the framing) → `research/problem_statement.md`
+- [ ] Share on Delving Bitcoin for feedback — waiting on review
+- [x] Write "Bitcoin can't price its own memory" LinkedIn post → `research/bitcoin_cant_price_its_own_memory.md`
 
 ## Monitoring
 
