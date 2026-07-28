@@ -1,0 +1,17 @@
+{
+  "timestamp": "2026-07-28T16:41:40.791740",
+  "fees": {
+    "fastestFee": 2,
+    "halfHourFee": 1,
+    "hourFee": 1,
+    "economyFee": 1,
+    "minimumFee": 1
+  },
+  "btc_price": 63796.51,
+  "bip110_signaling": {
+    "error": "HTTP Error 404: Not Found"
+  },
+  "inscriptions": null,
+  "utxo_set": null,
+  "alerts": []
+}
