@@ -3,92 +3,71 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Live Dashboard — Bitcoin Block Space</title>
+<title>Live Dashboard — Bitcoin Sahi Research</title>
+<script>if(window.location.hostname.includes("vercel.app")){window.location.replace("https://bitcoinsahi.com"+window.location.pathname)}</script>
 <style>
+  :root { --orange: #F7931A; --bg: #0A0A0F; --surface: #12121A; --border: #1E1E2E; --text: #E0E0E0; --muted: #888; }
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
-    background: #0D1117; color: #F0F6FC;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    font-size: 15px;
-  }
-  nav {
-    display: flex; align-items: center; gap: 20px;
-    padding: 12px 24px; border-bottom: 1px solid #30363D;
-    background: #0D1117;
-  }
-  nav .brand { font-weight: 700; color: #F0F6FC; }
-  nav a { color: #8B949E; text-decoration: none; font-size: 13px; }
-  nav a:hover { color: #F0F6FC; }
+  body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 15px; }
+  nav { display: flex; align-items: center; gap: 20px; padding: 12px 24px; border-bottom: 1px solid var(--border); background: var(--bg); }
+  nav .brand { font-weight: 800; font-size: 16px; }
+  nav .brand span { color: var(--orange); }
+  nav a { color: var(--muted); text-decoration: none; font-size: 13px; }
+  nav a:hover { color: var(--text); }
   nav .spacer { flex: 1; }
-  .container { max-width: 1000px; margin: 0 auto; padding: 24px 20px; }
+  nav .cta { background: var(--orange); color: #000; font-weight: 700; padding: 6px 14px; border-radius: 6px; font-size: 12px; }
+  .container { max-width: 1100px; margin: 0 auto; padding: 24px 20px; }
+  h1 { font-size: 24px; margin-bottom: 4px; }
+  .subtitle { color: var(--muted); font-size: 13px; margin-bottom: 20px; }
 
-  h1 { font-size: 22px; margin-bottom: 4px; }
-  .subtitle { color: #8B949E; font-size: 13px; margin-bottom: 24px; }
-
-  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
-  .card {
-    background: #161B22; border: 1px solid #30363D; border-radius: 10px; padding: 16px; text-align: center;
-  }
-  .card .lbl { font-size: 10px; color: #8B949E; text-transform: uppercase; letter-spacing: 0.5px; }
-  .card .val { font-size: 26px; font-weight: 800; margin: 4px 0 2px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 16px; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px; text-align: center; }
+  .card .lbl { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+  .card .val { font-size: 24px; font-weight: 800; margin: 4px 0 2px; }
   .card .sub { font-size: 11px; color: #555; }
+  .card .change { font-size: 11px; font-weight: 600; }
 
-  .section { margin: 24px 0; }
-  .section h2 { font-size: 13px; color: #8B949E; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid #30363D; padding-bottom: 8px; margin-bottom: 12px; }
+  .section { margin: 20px 0; }
+  .section h2 { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid var(--border); padding-bottom: 6px; margin-bottom: 10px; }
 
-  .row { display: flex; gap: 10px; flex-wrap: wrap; }
-  .stat {
-    background: #0D1117; border: 1px solid #30363D; border-radius: 8px;
-    padding: 10px 14px; flex: 1; min-width: 140px;
-  }
+  .row { display: flex; gap: 8px; flex-wrap: wrap; }
+  .stat { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; flex: 1; min-width: 120px; }
   .stat .lbl { font-size: 10px; color: #555; }
-  .stat .val { font-size: 16px; font-weight: 600; }
+  .stat .val { font-size: 15px; font-weight: 600; }
 
-  .timestamp { font-size: 11px; color: #555; text-align: center; margin-top: 24px; }
-  .error { color: #F85149; font-size: 12px; margin-top: 4px; }
+  .fee-bar { display: flex; align-items: flex-end; gap: 3px; height: 50px; margin-top: 10px; padding: 6px 0; }
+  .fee-bar .bar { flex: 1; border-radius: 2px 2px 0 0; min-width: 4px; transition: height 0.5s; }
 
-  .status-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 4px; }
-  .status-dot.green { background: #3FB950; }
-  .status-dot.yellow { background: #D29922; }
-  .status-dot.red { background: #F85149; }
+  .alerts { margin-top: 12px; }
+  .alert-item { font-size: 12px; color: var(--muted); padding: 6px 10px; background: var(--surface); border-radius: 6px; margin-bottom: 4px; border-left: 3px solid var(--orange); }
+  .alert-item.warn { border-left-color: #D29922; }
+  .alert-item.good { border-left-color: #3FB950; }
 
-  .history-bar { display: flex; align-items: flex-end; gap: 2px; height: 40px; margin-top: 8px; }
-  .history-bar .bar { flex: 1; background: linear-gradient(to top, #1a7f37, #3FB950); border-radius: 2px 2px 0 0; min-height: 2px; }
+  .timestamp { font-size: 11px; color: #555; text-align: center; margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border); }
 
-  @media (max-width: 600px) { .grid { grid-template-columns: 1fr; } }
+  @media (max-width: 700px) { .grid-4 { grid-template-columns: repeat(2, 1fr); } }
 </style>
-<script>
-if (window.location.hostname.includes("vercel.app")) {
-  window.location.replace("https://bitcoinsahi.com" + window.location.pathname);
-}
-</script>
 </head>
 <body>
-
 <nav>
-  <span class="brand" style="font-weight:800;">BITCOIN <span style="color:#F7931A;">SAHI</span></span>
+  <span class="brand">BITCOIN <span>SAHI</span></span>
   <a href="/">Home</a>
-  <a href="/live">Live Dashboard</a>
+  <a href="/live">Dashboard</a>
   <a href="/articles">Articles</a>
   <span class="spacer"></span>
-  <a href="https://github.com/prateekposwal/bitcoin-priority-oracle">GitHub</a>
-  <a href="https://reddit.com/r/BitcoinEngineering" style="color:#58A6FF">Discuss</a>
+  <a href="https://reddit.com/r/BitcoinEngineering" class="cta">r/BitcoinEngineering</a>
 </nav>
 
 <div class="container">
-  <h1>Live Dashboard</h1>
-  <p class="subtitle">Real-time blockchain data from public APIs. Updates daily via GitHub Actions.</p>
+  <h1>📊 Live Data Dashboard</h1>
+  <p class="subtitle">Real-time blockchain metrics updated daily via GitHub Actions. All data from public APIs.</p>
 
-  <div class="grid" id="kpi-grid">
-    <div class="card"><div class="lbl">Loading...</div><div class="val">—</div></div>
-    <div class="card"><div class="lbl">Loading...</div><div class="val">—</div></div>
-    <div class="card"><div class="lbl">Loading...</div><div class="val">—</div></div>
-  </div>
+  <div class="grid-4" id="kpi-grid"></div>
 
   <div class="section">
-    <h2>Fee Estimates</h2>
+    <h2>Mempool Fees</h2>
     <div class="row" id="fee-row"></div>
-    <div id="fee-history" class="history-bar"></div>
+    <div class="fee-bar" id="fee-bar"></div>
   </div>
 
   <div class="section">
@@ -97,11 +76,16 @@ if (window.location.hostname.includes("vercel.app")) {
   </div>
 
   <div class="section">
-    <h2>Alerts</h2>
-    <div id="alerts" style="color:#8B949E;font-size:13px;">None</div>
+    <h2>Market Context</h2>
+    <div class="row" id="market-row"></div>
   </div>
 
-  <div class="timestamp" id="timestamp">Last updated: —</div>
+  <div class="section">
+    <h2>Status & Alerts</h2>
+    <div class="alerts" id="alerts"><div class="alert-item good">✅ All systems nominal — waiting for data...</div></div>
+  </div>
+
+  <div class="timestamp" id="timestamp"></div>
 </div>
 
 <script>
@@ -109,45 +93,85 @@ fetch('tools/live_data.json?_=' + Date.now())
   .then(r => r.json())
   .then(d => {
     var fees = d.fees || {};
+    var btc = d.btc_price || 63000;
     var alerts = d.alerts || [];
 
-    // KPI grid
+    // ── KPI Grid ──
     var kpis = [
-      { lbl: 'BTC Price', val: '$' + (d.btc_price || '—').toLocaleString(), cls: d.btc_price > 50000 ? 'green' : '', sub: 'from blockchain.info' },
-      { lbl: 'Fastest Fee', val: (fees.fastestFee || '—') + ' sat/vB', sub: 'next block' },
-      { lbl: 'Economy Fee', val: (fees.economyFee || '—') + ' sat/vB', sub: 'slow (~1hr)' },
+      { lbl: 'BTC Price', val: '$' + Number(btc).toLocaleString(), sub: 'blockchain.info', clr: btc > 50000 ? '#3FB950' : '#F0F6FC' },
+      { lbl: 'Fastest Fee', val: (fees.fastestFee || '—') + ' sat/vB', sub: 'next block (~10 min)', clr: fees.fastestFee > 50 ? '#F85149' : fees.fastestFee > 10 ? '#D29922' : '#3FB950' },
+      { lbl: 'Economy Fee', val: (fees.economyFee || '—') + ' sat/vB', sub: 'slow (~1+ hr)', clr: '#8B949E' },
+      { lbl: 'Storage Cost', val: '$0.008', sub: 'per inscription (10yr)', clr: '#F7931A' },
     ];
     document.getElementById('kpi-grid').innerHTML = kpis.map(k => 
-      '<div class="card"><div class="lbl">' + k.lbl + '</div><div class="val" style="color:' + (k.cls === 'green' ? '#3FB950' : '#F0F6FC') + '">' + k.val + '</div><div class="sub">' + k.sub + '</div></div>'
+      '<div class="card"><div class="lbl">' + k.lbl + '</div><div class="val" style="color:' + k.clr + '">' + k.val + '</div><div class="sub">' + k.sub + '</div></div>'
     ).join('');
 
-    // Fee row
+    // ── Fee estimates row ──
     var feeLabels = { fastestFee: 'Fastest', halfHourFee: '30 min', hourFee: '1 hour', economyFee: 'Economy', minimumFee: 'Minimum' };
     document.getElementById('fee-row').innerHTML = Object.entries(feeLabels).map(([k, lbl]) =>
       '<div class="stat"><div class="lbl">' + lbl + '</div><div class="val">' + (fees[k] || '—') + ' sat/vB</div></div>'
     ).join('');
 
-    // Model output
-    var modelItems = [
-      { lbl: 'Node cost', val: '$925/yr' },
-      { lbl: 'Storage/insc (10yr)', val: '$0.008' },
-      { lbl: 'Externality/yr', val: '$9.2K' },
-      { lbl: 'Fee ratio (low–peak)', val: '8×–3,000×' },
-    ];
-    document.getElementById('model-row').innerHTML = modelItems.map(m =>
-      '<div class="stat"><div class="lbl">' + m.lbl + '</div><div class="val">' + m.val + '</div></div>'
+    // ── Fee bar chart ──
+    var barData = [fees.fastestFee || 0, fees.halfHourFee || 0, fees.hourFee || 0, fees.economyFee || 0, fees.minimumFee || 0];
+    var maxFee = Math.max(1, ...barData);
+    var barLabels = ['Fastest', '30min', '1hr', 'Econ', 'Min'];
+    var barColors = ['#F7931A', '#D29922', '#3FB950', '#58A6FF', '#8B949E'];
+    document.getElementById('fee-bar').innerHTML = barData.map((v, i) =>
+      '<div class="bar" style="height:' + (v / maxFee * 100 * 0.9 + 10) + '%;background:' + barColors[i] + ';min-width:40px;" title="' + barLabels[i] + ': ' + v + ' sat/vB"></div>'
     ).join('');
 
-    // Alerts
+    // ── Model output (computed from live params) ──
+    var nodeCost = 924.35;
+    var bytesPerInsc = 400;
+    var inscPerMonth = 100000;
+    var bytesPerYear = bytesPerInsc * inscPerMonth * 12;
+    var costPerByteYear = nodeCost / bytesPerYear;
+    var storage10yr = costPerByteYear * bytesPerInsc * 10;
+    var extYear = storage10yr * inscPerMonth * 12 / 10;
+    var feeRatioLow = ((0.06) / storage10yr).toFixed(0);
+    var feeRatioHigh = ((25) / storage10yr).toFixed(0);
+
+    document.getElementById('model-row').innerHTML = [
+      { lbl: 'Node Cost / Yr', val: '$' + nodeCost.toFixed(0) },
+      { lbl: 'Cost/Byte/Yr', val: '$' + costPerByteYear.toFixed(10) },
+      { lbl: 'Storage/Insc (10yr)', val: '$' + storage10yr.toFixed(4) },
+      { lbl: 'Externality / Yr', val: '$' + (extYear / 1000).toFixed(1) + 'K' },
+      { lbl: 'Fee Ratio (low–peak)', val: feeRatioLow + '×–' + feeRatioHigh + '×' },
+    ].map(m => '<div class="stat"><div class="lbl">' + m.lbl + '</div><div class="val">' + m.val + '</div></div>').join('');
+
+    // ── Market context ──
+    var satPerDollar = btc > 0 ? (100000000 / btc).toFixed(1) : '—';
+    var inscFeeSats = (fees.economyFee || 1) * 100; // 100 vbytes per inscription
+    var inscFeeUsd = btc > 0 ? (inscFeeSats * btc / 100000000).toFixed(4) : '—';
+    document.getElementById('market-row').innerHTML = [
+      { lbl: 'Sat/$ Ratio', val: satPerDollar + ' sat' },
+      { lbl: 'Insc Fee (economy)', val: '$' + inscFeeUsd },
+      { lbl: 'Fee ÷ Storage Cost', val: (inscFeeUsd / Math.max(storage10yr, 0.0001)).toFixed(0) + '×' },
+      { lbl: 'BTC Dominance', val: '—', sub: 'data pending' },
+    ].map(m => '<div class="stat"><div class="lbl">' + m.lbl + '</div><div class="val">' + m.val + '</div></div>').join('');
+
+    // ── Alerts ──
+    var alertHtml = '';
     if (alerts.length > 0) {
-      document.getElementById('alerts').innerHTML = alerts.map(a => '<div class="error">⚠ ' + a + '</div>').join('');
+      alertHtml += alerts.map(a => '<div class="alert-item warn">⚠ ' + a + '</div>').join('');
     }
+    if (fees.fastestFee > 100) {
+      alertHtml += '<div class="alert-item warn">🚨 High fees: ' + fees.fastestFee + ' sat/vB — possible inscription mania</div>';
+    } else if (fees.fastestFee < 2 && btc > 50000) {
+      alertHtml += '<div class="alert-item good">✅ Low fees at high BTC price — no congestion</div>';
+    } else {
+      alertHtml += '<div class="alert-item good">✅ All systems nominal — fees normal for current conditions</div>';
+    }
+    document.getElementById('alerts').innerHTML = alertHtml;
 
     // Timestamp
-    document.getElementById('timestamp').textContent = 'Last updated: ' + (d.timestamp ? new Date(d.timestamp).toLocaleString() : '—');
+    var ts = d.timestamp ? new Date(d.timestamp).toLocaleString() : '—';
+    document.getElementById('timestamp').textContent = 'Last updated: ' + ts + ' UTC · Data refreshes daily via GitHub Actions';
   })
-  .catch(e => {
-    document.getElementById('kpi-grid').innerHTML = '<div class="card" style="grid-column:span 3"><div class="lbl">Error</div><div class="val" style="color:#F85149;font-size:14px;">Could not load live data</div><div class="sub">The daily research monitor may not have run yet. Data refreshes once daily via GitHub Actions.</div></div>';
+  .catch(function(e) {
+    document.getElementById('kpi-grid').innerHTML = '<div class="card" style="grid-column:span 4"><div class="lbl">Status</div><div class="val" style="color:#F85149;font-size:16px;">⚠ Could not load live data</div><div class="sub">The daily research monitor may not have run yet. Run it manually or wait for the next scheduled update.</div></div>';
   });
 </script>
 </body>

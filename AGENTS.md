@@ -5,7 +5,7 @@
 - **Domain:** Bitcoin block space economics
 - **Repo:** bitcoinsahi.com
 - **Deployed URL:** bitcoinsahi.com (DNS pending)
-- **Key People:** Prateek (owner), Dathon Ohm (BIP-110 author), Greg Maxwell (critic), bitusher (Reddit)
+- **Key People:** Prateek (owner), Dathon Ohm (BIP-110 author), Greg Maxwell (critic)
 
 ## Domain Sources
 ### Primary Sources (fetch before answering)
@@ -53,6 +53,6 @@
 
 ## Next Session
 - Point bitcoinsahi.com DNS to GitHub Pages
-- Check Reddit replies (DangerHighVoltage111, Doublespeo, DrSpeckles have comments)
+- Check Reddit replies (community members have replied)
 - Run the economics simulator (Monte Carlo)
 - Post LinkedIn article with charts
