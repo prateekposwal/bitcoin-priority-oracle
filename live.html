@@ -58,6 +58,19 @@
   .chart-legend { display: flex; gap: 16px; font-size: 12px; color: var(--muted); margin-top: 4px; }
   .chart-legend span::before { content: '■ '; }
 
+  /* ── Interactive Model Sliders ── */
+  .model-panel { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+  .model-panel h3 { font-size: 14px; font-weight: 700; margin-bottom: 16px; color: var(--text); }
+  .slider-group { margin-bottom: 14px; }
+  .slider-group .row { display: flex; justify-content: space-between; font-size: 13px; color: var(--muted); margin-bottom: 2px; }
+  .slider-group .row .val { color: var(--orange); font-weight: 700; }
+  .slider-group input[type=range] { width: 100%; height: 4px; -webkit-appearance: none; background: var(--border); border-radius: 2px; outline: none; }
+  .slider-group input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--orange); cursor: pointer; }
+  .model-output { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border); }
+  .model-output .stat { background: #0D1117; border: 1px solid var(--border); border-radius: 6px; padding: 8px 10px; text-align: center; }
+  .model-output .stat .lbl { font-size: 9px; color: var(--muted); text-transform: uppercase; }
+  .model-output .stat .val { font-size: 16px; font-weight: 700; color: var(--orange); }
+
   /* ── Alerts ── */
   .alert { padding: 12px 16px; border-radius: 8px; font-size: 14px; margin-bottom: 6px; background: var(--surface); border-left: 4px solid; }
   .alert.good { border-color: #3FB950; color: #3FB950; }
@@ -110,6 +123,52 @@
   <div class="section">
     <div class="section-header">Market Context</div>
     <div class="stat-row" id="market-row"></div>
+  </div>
+
+    <div class="section">
+    <div class="section-header">Interactive Model — Adjust Parameters</div>
+    <div class="model-panel">
+      <h3>UTXO Cost Model Explorer</h3>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px 24px;">
+        <div class="slider-group">
+          <div class="row"><span>Inscription Volume / Month</span><span class="val" id="sl-vol">100K</span></div>
+          <input type="range" id="param-vol" min="10" max="500" value="100" oninput="updateModel()">
+        </div>
+        <div class="slider-group">
+          <div class="row"><span>Inscription Size</span><span class="val" id="sl-size">400 B</span></div>
+          <input type="range" id="param-size" min="100" max="2000" value="400" oninput="updateModel()">
+        </div>
+        <div class="slider-group">
+          <div class="row"><span>Node Power Draw</span><span class="val" id="sl-power">150 W</span></div>
+          <input type="range" id="param-power" min="10" max="300" value="150" oninput="updateModel()">
+        </div>
+        <div class="slider-group">
+          <div class="row"><span>Bandwidth Cost / Month</span><span class="val" id="sl-bw">$50</span></div>
+          <input type="range" id="param-bw" min="10" max="200" value="50" oninput="updateModel()">
+        </div>
+        <div class="slider-group">
+          <div class="row"><span>Hardware Cost</span><span class="val" id="sl-hw">$500</span></div>
+          <input type="range" id="param-hw" min="100" max="2000" value="500" oninput="updateModel()">
+        </div>
+        <div class="slider-group">
+          <div class="row"><span>Electricity Rate</span><span class="val" id="sl-elec">$0.12/kWh</span></div>
+          <input type="range" id="param-elec" min="3" max="40" value="12" oninput="updateModel()">
+        </div>
+        <div class="slider-group">
+          <div class="row"><span>UTXO Lifetime (years)</span><span class="val" id="sl-life">10 yr</span></div>
+          <input type="range" id="param-life" min="1" max="50" value="10" oninput="updateModel()">
+        </div>
+        <div class="slider-group">
+          <div class="row"><span>Hardware Lifespan</span><span class="val" id="sl-hl">3 yr</span></div>
+          <input type="range" id="param-hl" min="1" max="10" value="3" oninput="updateModel()">
+        </div>
+      </div>
+      <div class="model-output" id="model-slider-output">
+        <div class="stat"><div class="lbl">Node Cost / Yr</div><div class="val" id="mo-node">$924</div></div>
+        <div class="stat"><div class="lbl">Storage / Insc (10yr)</div><div class="val" id="mo-storage">$0.008</div></div>
+        <div class="stat"><div class="lbl">Externality / Yr</div><div class="val" id="mo-ext">$9.2K</div></div>
+      </div>
+    </div>
   </div>
 
   <div class="section">
@@ -248,6 +307,41 @@ fetch('tools/live_data.json?_=' + Date.now())
   .catch(function(e) {
     document.getElementById('kpi-grid').innerHTML = '<div class="kpi-card" style="grid-column:span 4"><div class="label">Status</div><div class="value" style="color:#F85149;font-size:18px;">⚠ Could not load live data</div><div class="sub">Run python3 tools/research_monitor.py or wait for the next GitHub Action run.</div></div>';
   });
+
+// ── Interactive Model Sliders ──
+function updateModel() {
+  var vol = document.getElementById('param-vol').value; // K/mo
+  var size = document.getElementById('param-size').value; // bytes
+  var power = document.getElementById('param-power').value; // W
+  var bw = document.getElementById('param-bw').value; // $/mo
+  var hw = document.getElementById('param-hw').value; // $
+  var elec = document.getElementById('param-elec').value / 100; // $/kWh
+  var life = document.getElementById('param-life').value; // years
+  var hl = document.getElementById('param-hl').value; // years
+  
+  document.getElementById('sl-vol').textContent = vol + 'K';
+  document.getElementById('sl-size').textContent = size + ' B';
+  document.getElementById('sl-power').textContent = power + ' W';
+  document.getElementById('sl-bw').textContent = '$' + bw;
+  document.getElementById('sl-hw').textContent = '$' + hw;
+  document.getElementById('sl-elec').textContent = '$' + (elec) + '/kWh';
+  document.getElementById('sl-life').textContent = life + ' yr';
+  document.getElementById('sl-hl').textContent = hl + ' yr';
+  
+  var volNum = parseFloat(vol) * 1000;
+  var sizeNum = parseFloat(size);
+  var nodeCost = hw/hl + bw*12 + (power * 24 * 365 / 1000) * elec;
+  var bytesPerYr = sizeNum * volNum * 12;
+  var costPerByte = nodeCost / bytesPerYr;
+  var storageCost = costPerByte * sizeNum * life;
+  var ext = storageCost * volNum * 12 / life;
+  
+  document.getElementById('mo-node').textContent = '$' + Math.round(nodeCost);
+  document.getElementById('mo-storage').textContent = '$' + storageCost.toFixed(4);
+  document.getElementById('mo-ext').textContent = '$' + (ext / 1000).toFixed(1) + 'K';
+}
+// Initial render
+updateModel();
 </script>
 </body>
 </html>
