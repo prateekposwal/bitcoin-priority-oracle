@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Live Dashboard — Bitcoin Block Space</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0D1117; color: #F0F6FC;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 15px;
+  }
+  nav {
+    display: flex; align-items: center; gap: 20px;
+    padding: 12px 24px; border-bottom: 1px solid #30363D;
+    background: #0D1117;
+  }
+  nav .brand { font-weight: 700; color: #F0F6FC; }
+  nav a { color: #8B949E; text-decoration: none; font-size: 13px; }
+  nav a:hover { color: #F0F6FC; }
+  nav .spacer { flex: 1; }
+  .container { max-width: 1000px; margin: 0 auto; padding: 24px 20px; }
+
+  h1 { font-size: 22px; margin-bottom: 4px; }
+  .subtitle { color: #8B949E; font-size: 13px; margin-bottom: 24px; }
+
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
+  .card {
+    background: #161B22; border: 1px solid #30363D; border-radius: 10px; padding: 16px; text-align: center;
+  }
+  .card .lbl { font-size: 10px; color: #8B949E; text-transform: uppercase; letter-spacing: 0.5px; }
+  .card .val { font-size: 26px; font-weight: 800; margin: 4px 0 2px; }
+  .card .sub { font-size: 11px; color: #555; }
+
+  .section { margin: 24px 0; }
+  .section h2 { font-size: 13px; color: #8B949E; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid #30363D; padding-bottom: 8px; margin-bottom: 12px; }
+
+  .row { display: flex; gap: 10px; flex-wrap: wrap; }
+  .stat {
+    background: #0D1117; border: 1px solid #30363D; border-radius: 8px;
+    padding: 10px 14px; flex: 1; min-width: 140px;
+  }
+  .stat .lbl { font-size: 10px; color: #555; }
+  .stat .val { font-size: 16px; font-weight: 600; }
+
+  .timestamp { font-size: 11px; color: #555; text-align: center; margin-top: 24px; }
+  .error { color: #F85149; font-size: 12px; margin-top: 4px; }
+
+  .status-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 4px; }
+  .status-dot.green { background: #3FB950; }
+  .status-dot.yellow { background: #D29922; }
+  .status-dot.red { background: #F85149; }
+
+  .history-bar { display: flex; align-items: flex-end; gap: 2px; height: 40px; margin-top: 8px; }
+  .history-bar .bar { flex: 1; background: linear-gradient(to top, #1a7f37, #3FB950); border-radius: 2px 2px 0 0; min-height: 2px; }
+
+  @media (max-width: 600px) { .grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<nav>
+  <span class="brand">Bitcoin Block Space</span>
+  <a href="/">Home</a>
+  <a href="/live">Live Dashboard</a>
+  <span class="spacer"></span>
+  <a href="https://github.com/prateekposwal/bitcoin-priority-oracle">GitHub</a>
+  <a href="https://delvingbitcoin.org/t/2750" style="color:#58A6FF">Discuss</a>
+</nav>
+
+<div class="container">
+  <h1>Live Dashboard</h1>
+  <p class="subtitle">Real-time blockchain data from public APIs. Updates daily via GitHub Actions.</p>
+
+  <div class="grid" id="kpi-grid">
+    <div class="card"><div class="lbl">Loading...</div><div class="val">—</div></div>
+    <div class="card"><div class="lbl">Loading...</div><div class="val">—</div></div>
+    <div class="card"><div class="lbl">Loading...</div><div class="val">—</div></div>
+  </div>
+
+  <div class="section">
+    <h2>Fee Estimates</h2>
+    <div class="row" id="fee-row"></div>
+    <div id="fee-history" class="history-bar"></div>
+  </div>
+
+  <div class="section">
+    <h2>Model Output</h2>
+    <div class="row" id="model-row"></div>
+  </div>
+
+  <div class="section">
+    <h2>Alerts</h2>
+    <div id="alerts" style="color:#8B949E;font-size:13px;">None</div>
+  </div>
+
+  <div class="timestamp" id="timestamp">Last updated: —</div>
+</div>
+
+<script>
+fetch('tools/live_data.json?_=' + Date.now())
+  .then(r => r.json())
+  .then(d => {
+    var fees = d.fees || {};
+    var alerts = d.alerts || [];
+
+    // KPI grid
+    var kpis = [
+      { lbl: 'BTC Price', val: '$' + (d.btc_price || '—').toLocaleString(), cls: d.btc_price > 50000 ? 'green' : '', sub: 'from blockchain.info' },
+      { lbl: 'Fastest Fee', val: (fees.fastestFee || '—') + ' sat/vB', sub: 'next block' },
+      { lbl: 'Economy Fee', val: (fees.economyFee || '—') + ' sat/vB', sub: 'slow (~1hr)' },
+    ];
+    document.getElementById('kpi-grid').innerHTML = kpis.map(k => 
+      '<div class="card"><div class="lbl">' + k.lbl + '</div><div class="val" style="color:' + (k.cls === 'green' ? '#3FB950' : '#F0F6FC') + '">' + k.val + '</div><div class="sub">' + k.sub + '</div></div>'
+    ).join('');
+
+    // Fee row
+    var feeLabels = { fastestFee: 'Fastest', halfHourFee: '30 min', hourFee: '1 hour', economyFee: 'Economy', minimumFee: 'Minimum' };
+    document.getElementById('fee-row').innerHTML = Object.entries(feeLabels).map(([k, lbl]) =>
+      '<div class="stat"><div class="lbl">' + lbl + '</div><div class="val">' + (fees[k] || '—') + ' sat/vB</div></div>'
+    ).join('');
+
+    // Model output
+    var modelItems = [
+      { lbl: 'Node cost', val: '$925/yr' },
+      { lbl: 'Storage/insc (10yr)', val: '$0.008' },
+      { lbl: 'Externality/yr', val: '$9.2K' },
+      { lbl: 'Fee ratio (low–peak)', val: '8×–3,000×' },
+    ];
+    document.getElementById('model-row').innerHTML = modelItems.map(m =>
+      '<div class="stat"><div class="lbl">' + m.lbl + '</div><div class="val">' + m.val + '</div></div>'
+    ).join('');
+
+    // Alerts
+    if (alerts.length > 0) {
+      document.getElementById('alerts').innerHTML = alerts.map(a => '<div class="error">⚠ ' + a + '</div>').join('');
+    }
+
+    // Timestamp
+    document.getElementById('timestamp').textContent = 'Last updated: ' + (d.timestamp ? new Date(d.timestamp).toLocaleString() : '—');
+  })
+  .catch(e => {
+    document.getElementById('kpi-grid').innerHTML = '<div class="card" style="grid-column:span 3"><div class="lbl">Error</div><div class="val" style="color:#F85149;font-size:14px;">Could not load live data</div><div class="sub">The daily research monitor may not have run yet. Data refreshes once daily via GitHub Actions.</div></div>';
+  });
+</script>
+</body>
+</html>
