@@ -31,7 +31,7 @@ The answer determines whether there's a gap worth discussing. If the answer is "
 
 ## What's next
 
-I've published the cost model and all source data. The next step is sharing the framing with the Bitcoin research community — Delving Bitcoin, bitcoin-dev, Optech — and seeing whether there's genuine interest in the question.
+I've published the cost model and all source data. The next step is sharing the framing with the Bitcoin research community — r/BitcoinEngineering, bitcoin-dev, Optech — and seeing whether there's genuine interest in the question.
 
 If you run a node, you're already paying this cost. How much does it bother you?
 

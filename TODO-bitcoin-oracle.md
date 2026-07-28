@@ -5,7 +5,7 @@
 - [x] Read BIP-141 rationale for witness discount (malleability vs state economics) → `research/bip141_analysis.md`
 - [x] Read Moser, Eyal, Gün Sirer — covenant paper (FC 2017) → surveyed in bip141_analysis.md
 - [x] Read Poelstra — CAT and Schnorr Tricks series → surveyed in bip141_analysis.md
-- [x] Search Delving Bitcoin for "state expiry" threads → no active proposals since 2022
+- [x] Search r/BitcoinEngineering for "state expiry" threads → no active proposals since 2022
 - [x] Search bitcoin-dev mailing list for UTXO growth discussions → periodic threads, no consensus
 
 ## Phase R2: UTXO Cost Function ✅
@@ -22,13 +22,13 @@
 
 - [x] Write a clear, concise problem statement (1 page max) → `research/problem_statement.md`
 - [x] Publish as a research note (no solution, just the framing) → `research/problem_statement.md`
-- [x] Share on Delving Bitcoin for feedback → https://reddit.com/r/BitcoinEngineering
+- [x] Share on r/BitcoinEngineering for feedback → https://reddit.com/r/BitcoinEngineering
 - [x] Write "Bitcoin can't price its own memory" LinkedIn post → `research/bitcoin_cant_price_its_own_memory.md`
 
 ## Monitoring
 
 - [x] Subscribe to Bitcoin Optech newsletter
-- [x] Follow Delving Bitcoin for "state expiry" discussions
+- [x] Follow r/BitcoinEngineering for "state expiry" discussions
 - [x] Track bitcoin-dev mailing list for UTXO/state threads
 - [x] Analyze BIP-110 (Reduced Data Temporary Softfork) — see bitcoin-oracle-arch.md
 - [x] Watch covenant proposal discussions (CTV, APO, OP_VAULT, OP_CAT)
@@ -82,7 +82,7 @@
 ### Direction B: BIP for State-Conscious Relay Policy
 
 - [ ] Draft BIP defining `state_impact_score` metrics
-- [ ] Engage with Bitcoin Optech, Delving Bitcoin, bitcoin-dev for feedback
+- [ ] Engage with Bitcoin Optech, r/BitcoinEngineering, bitcoin-dev for feedback
 - [ ] Provide wallet-side fee estimation guidance
 - [ ] Reference implementation in Core fork or alternative node
 

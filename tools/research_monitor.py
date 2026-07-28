@@ -47,8 +47,8 @@ def main():
     # See: https://old.reddit.com/r/Bitcoin/comments/1uhzk8o/bip_110_thoughts/
     report['bip110_signaling'] = {"status": "API no longer available", "last_known": "~0.1-0.8%, dropping (Jul 2026)"}
 
-    # 4. Check Delving Bitcoin thread for new replies (heuristic: title match)
-    # Note: Delving Bitcoin has no public JSON API. Web scraping would be fragile.
+    # 4. Check r/BitcoinEngineering thread for new replies (heuristic: title match)
+    # Note: r/BitcoinEngineering has no public JSON API. Web scraping would be fragile.
     # This is a placeholder for when an API becomes available.
 
     # Write output

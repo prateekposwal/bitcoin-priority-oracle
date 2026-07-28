@@ -51,6 +51,6 @@ This research provides the cost data. The community decides whether it matters.
 
 ## Next Step
 
-Shared on Delving Bitcoin: https://reddit.com/r/BitcoinEngineering
+Shared on r/BitcoinEngineering: https://reddit.com/r/BitcoinEngineering
 
 If the response suggests a genuine gap exists, explore relay-level policy responses (no consensus changes required).

@@ -36,7 +36,7 @@
 ## State (2026-07-28)
 - **All 3 research phases complete** — R1 (Reading), R2 (Cost Model), R3 (Problem Statement)
 - **BIP-110 analyzed** — ~0.1% miner signaling, DOA. Michael Saylor called it "iatrogenic."
-- **Delving Bitcoin discussion live** — /t/2750
+- **r/BitcoinEngineering discussion live** — /t/2750
 - **Reddit engagement** — 2 posts on r/BitcoinEngineering, 1 on r/Bitcoin (28pts, 126 comments)
 - **Monetization plan** — Phase R4 in TODO: API tiers ($50–$500/mo), consulting, annual report
 - **Domain ready** — bitcoinsahi.com, DNS not yet pointed

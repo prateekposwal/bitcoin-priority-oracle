@@ -13,9 +13,9 @@ Both failures taught us something useful: **the question of whether Bitcoin's fe
 **This is not a solution. This is a research survey with a complete cost model.**
 
 All 3 research phases are complete:
-- **Phase R1 (Reading)**: BIP-141 analysis, covenant survey, Delving Bitcoin threads → [analysis](research/bip141_analysis.md)
+- **Phase R1 (Reading)**: BIP-141 analysis, covenant survey, r/BitcoinEngineering threads → [analysis](research/bip141_analysis.md)
 - **Phase R2 (Cost Model)**: UTXO cost function with sensitivity analysis → [model](research/utxo_cost_model.py), [verification appendix](research/verification_appendix.md)
-- **Phase R3 (Framing)**: Problem statement + community posts → [problem statement](research/problem_statement.md), [Delving Bitcoin discussion](https://reddit.com/r/BitcoinEngineering)
+- **Phase R3 (Framing)**: Problem statement + community posts → [problem statement](research/problem_statement.md), [r/BitcoinEngineering discussion](https://reddit.com/r/BitcoinEngineering)
 
 ## Key Numbers
 
@@ -42,13 +42,13 @@ The fee market prices **congestion** (space in the next block). It does **not** 
 | [Cost model](research/utxo_cost_model.py) | Python model for UTXO cost function with adjustable parameters |
 | [Verification appendix](research/verification_appendix.md) | Full source documentation for every model parameter |
 | [Problem statement](research/problem_statement.md) | 1-page clear framing of the open question |
-| [Delving Bitcoin discussion](https://reddit.com/r/BitcoinEngineering) | Live community thread |
+| [r/BitcoinEngineering discussion](https://reddit.com/r/BitcoinEngineering) | Live community thread |
 | [Interactive page](interactive-block.html) | Visual landing page for the research |
 | [TODO](TODO-bitcoin-oracle.md) | Research reading list and open questions |
 
 ## Community
 
-- **Delving Bitcoin:** [does-bitcoins-fee-market-price-permanence-or-just-congestion/2750](https://reddit.com/r/BitcoinEngineering)
+- **r/BitcoinEngineering:** [does-bitcoins-fee-market-price-permanence-or-just-congestion/2750](https://reddit.com/r/BitcoinEngineering)
 - **BIP-110:** [Reduced Data Temporary Softfork](https://github.com/bitcoin/bips/blob/master/bip-0110.mediawiki) — temporary 1-year soft fork banning inscriptions at consensus level. Shares our diagnosis, different prescription.
 - **LinkedIn:** [Post with charts](https://www.linkedin.com/)
 
