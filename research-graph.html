@@ -195,11 +195,11 @@ var edges = [
 
 var nodeInfo = {
   'segwit': { desc: 'BIP-141 created a 4× weight discount for witness data. Designed to fix malleability, not to price state growth.', link: 'https://github.com/bitcoin/bips/blob/master/bip-0141.mediawiki' },
-  'witness': { desc: 'The 4× weight discount means 1 witness byte costs 0.25 weight units vs 1 for legacy data. Core of the inscription storage externality.', link: '#' },
+  'witness': { desc: 'The 4× weight discount means 1 witness byte costs 0.25 weight units vs 1 for legacy data. Core of the inscription storage externality.', link: 'https://github.com/bitcoin/bips/blob/master/bip-0141.mediawiki' },
   'taproot': { desc: 'BIP-341 deployed November 2021. Schnorr signatures + MAST improve privacy and script flexibility. Enables more efficient complex scripts used by inscriptions.', link: 'https://github.com/bitcoin/bips/blob/master/bip-0341.mediawiki' },
   'inscriptions': { desc: 'Ordinals use OP_FALSE OP_IF to store arbitrary data in witness. Enabled by SegWit discount. ~100K/month at peak.', link: 'https://docs.ordinals.com/' },
   'runes': { desc: 'A protocol for issuing fungible tokens on Bitcoin using UTXO-based messaging. Inspired by the inscription paradigm.', link: '#' },
-  'fee-market': { desc: 'Bitcoin\'s fee market prices congestion — access to the next block. It does not price permanence or storage externalities.', link: '#' },
+  'fee-market': { desc: 'Bitcoin\'s fee market prices congestion — access to the next block. It does not price permanence or storage externalities.', link: 'https://bitcoinsahi.com' },
   'storage-cost': { desc: 'Our UTXO cost model: $0.008/inscription lifetime storage cost. The fee market prices congestion, not permanence.', link: 'https://bitcoinsahi.com' },
   'bip110': { desc: 'Temporary 1-year soft fork banning most inscription methods. 55% threshold. 0% miner signaling. Effectively dead.', link: 'https://github.com/bitcoin/bips/blob/master/bip-0110.mediawiki' },
   'relay-policy': { desc: 'Direction A: extend minrelaytxfee with state-density multipliers. Each node sets their own price. No consensus change needed.', link: '#' },
@@ -460,7 +460,12 @@ function selectNode(n) {
   document.getElementById('pcTitle').textContent = n.label.replace('\n', ' ');
   document.getElementById('pcDesc').textContent = info.desc;
   var link = document.getElementById('pcLink');
-  link.href = info.link;
+  if (info.link && info.link !== '#') {
+    link.href = info.link;
+    link.style.display = 'block';
+  } else {
+    link.style.display = 'none';
+  }
   draw();
 }
 
