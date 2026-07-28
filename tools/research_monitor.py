@@ -62,12 +62,26 @@ def main():
     except Exception as e:
         report['alerts'].append(f"blockstream.info height API: {e}")
 
-    # 5. BIP-110 signaling — no public API available since wickedsmartbitcoin removed it
-    report['bip110_signaling'] = {
-        "status": "no public API",
-        "last_known": "~0.1-0.8%, dropping (Jul 2026)",
-        "note": "Last tracked on wickedsmartbitcoin.com before API was removed"
-    }
+    # 5. BIP-110 signaling — checked directly from block version bits via blockstream.info
+    try:
+        r = urllib.request.urlopen(
+            f'https://blockstream.info/api/blocks/{report["block_height"]}/25', timeout=15)
+        blocks = json.loads(r.read())
+        signaling_blocks = sum(1 for b in blocks if b.get('version', 0) & 0x10)
+        total_checked = len(blocks)
+        report['bip110_signaling'] = {
+            "source": "blockstream.info (version bit 4, last 25 blocks)",
+            "signaling_count": signaling_blocks,
+            "total_checked": total_checked,
+            "signaling_percent": round(signaling_blocks / max(total_checked, 1) * 100, 1),
+            "block_height": report["block_height"],
+        }
+    except Exception as e:
+        report['bip110_signaling'] = {
+            "status": "check failed",
+            "error": str(e)[:80],
+            "last_known": "~0.1-0.8%, dropping (Jul 2026)",
+        }
 
     # Write output
     with open(OUTPUT, 'w') as f:

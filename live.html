@@ -194,6 +194,7 @@ fetch('tools/live_data.json?_=' + Date.now())
       { lbl: 'Fee ÷ Storage Cost', val: (inscFeeUsd / Math.max(storage10yr, 0.0001)).toFixed(0) + '×' },
       { lbl: 'Unconfirmed Tx', val: mempoolTx },
       { lbl: 'Block Height', val: blockHeight },
+      { lbl: 'BIP-110 Signal', val: d.bip110_signaling && d.bip110_signaling.signaling_percent !== undefined ? d.bip110_signaling.signaling_percent + '%' : 'N/A' },
     ].map(m => '<div class="stat"><div class="lbl">' + m.lbl + '</div><div class="val">' + m.val + '</div></div>').join('');
 
     // ── Alerts ──

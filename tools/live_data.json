@@ -1,23 +1,23 @@
 {
-  "timestamp": "2026-07-28T18:09:02.158861+00:00",
+  "timestamp": "2026-07-28T18:18:28.771325+00:00",
   "fees": {
-    "fastestFee": 3,
+    "fastestFee": 4,
     "halfHourFee": 3,
-    "hourFee": 1,
-    "economyFee": 1,
+    "hourFee": 3,
+    "economyFee": 2,
     "minimumFee": 1
   },
-  "btc_price": 63670.02,
+  "btc_price": 63624.29,
   "mempool": {
-    "unconfirmed_tx": 104676,
-    "vsize": 45900273,
-    "total_fee_sats": 13483677
+    "unconfirmed_tx": 106372,
+    "vsize": 46302393,
+    "total_fee_sats": 15547984
   },
   "block_height": 960004,
   "bip110_signaling": {
-    "status": "no public API",
-    "last_known": "~0.1-0.8%, dropping (Jul 2026)",
-    "note": "Last tracked on wickedsmartbitcoin.com before API was removed"
+    "status": "check failed",
+    "error": "HTTP Error 404: Not Found",
+    "last_known": "~0.1-0.8%, dropping (Jul 2026)"
   },
   "utxo_set": null,
   "alerts": []
