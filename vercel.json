@@ -69,6 +69,10 @@
     {
       "src": "lightning-sim.html",
       "use": "@vercel/static"
+    },
+    {
+      "src": "style.css",
+      "use": "@vercel/static"
     }
   ],
   "routes": [

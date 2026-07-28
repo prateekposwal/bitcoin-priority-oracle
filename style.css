@@ -1,0 +1,89 @@
+/* Bitcoin Sahi — Unified Design System */
+:root {
+  --orange: #F7931A;
+  --orange-dim: #F7931A20;
+  --bg: #0A0A0F;
+  --surface: #161B22;
+  --border: #30363D;
+  --text: #F0F6FC;
+  --muted: #8B949E;
+  --green: #3FB950;
+  --blue: #58A6FF;
+  --red: #F85149;
+  --yellow: #D29922;
+  --purple: #BC8CFF;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 17px; line-height: 1.6;
+}
+a { color: var(--orange); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ── Navigation ── */
+nav {
+  position: sticky; top: 0; z-index: 100;
+  background: #0A0A0FF0; backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 20px;
+  padding: 14px 28px; font-size: 14px; flex-wrap: wrap;
+}
+nav .brand { font-weight: 800; font-size: 17px; letter-spacing: -0.3px; white-space: nowrap; }
+nav .brand span { color: var(--orange); }
+nav a { color: var(--muted); transition: color 0.2s; text-decoration: none; }
+nav a:hover { color: var(--text); }
+nav .spacer { flex: 1; }
+nav .cta {
+  background: var(--orange); color: #000; font-weight: 700;
+  padding: 8px 18px; border-radius: 8px; font-size: 13px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+nav .cta:hover { transform: translateY(-1px); box-shadow: 0 4px 20px #F7931A40; text-decoration: none; }
+
+/* ── Container ── */
+.container { max-width: 1100px; margin: 0 auto; padding: 32px 24px; }
+.page-title { font-size: 28px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 4px; }
+.page-sub { color: var(--muted); font-size: 15px; margin-bottom: 20px; max-width: 700px; }
+.section-header {
+  font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
+  color: var(--orange); margin: 32px 0 12px; padding-bottom: 6px; border-bottom: 1px solid var(--border);
+}
+
+/* ── Cards ── */
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 20px; }
+.card:hover { border-color: var(--orange); }
+
+/* ── Grids ── */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+@media (max-width: 700px) {
+  .grid-2, .grid-3 { grid-template-columns: 1fr; }
+  nav { padding: 10px 16px; gap: 10px; }
+  .container { padding: 20px 16px; }
+  nav a:not(.cta):not(.brand) { font-size: 12px; }
+}
+
+/* ── Buttons ── */
+.btn {
+  display: inline-block; font-weight: 700; padding: 10px 22px;
+  border-radius: 8px; font-size: 14px; transition: transform 0.2s, box-shadow 0.2s;
+}
+.btn:hover { transform: translateY(-1px); text-decoration: none; }
+.btn-primary { background: var(--orange); color: #000; }
+.btn-primary:hover { box-shadow: 0 4px 20px #F7931A40; }
+.btn-secondary { background: var(--surface); color: var(--text); border: 1px solid var(--border); }
+.btn-secondary:hover { border-color: var(--orange); }
+
+/* ── Stats ── */
+.stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; }
+.stat-card .lbl { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+.stat-card .value { font-size: 18px; font-weight: 700; margin-top: 2px; }
+
+/* ── Footer ── */
+footer { border-top: 1px solid var(--border); padding: 32px 24px; text-align: center; font-size: 13px; color: var(--muted); margin-top: 40px; }
+footer .links { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-bottom: 10px; }
+footer .links a { color: var(--muted); }
+footer .links a:hover { color: var(--text); }
