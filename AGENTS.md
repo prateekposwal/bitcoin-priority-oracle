@@ -3,7 +3,7 @@
 ## Project Identity
 - **Name:** Bitcoin Priority Oracle
 - **Domain:** Bitcoin block space economics
-- **Repo:** github.com/prateekposwal/bitcoin-priority-oracle
+- **Repo:** bitcoinsahi.com
 - **Deployed URL:** bitcoinsahi.com (DNS pending)
 - **Key People:** Prateek (owner), Dathon Ohm (BIP-110 author), Greg Maxwell (critic), bitusher (Reddit)
 

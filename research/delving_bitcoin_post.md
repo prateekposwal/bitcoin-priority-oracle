@@ -10,7 +10,7 @@ BIP-141 (SegWit) created a 4× weight discount for witness data. This was design
 
 ## The numbers
 
-I built a UTXO cost model using publicly available data. Source code and full verification appendix at [github.com/prateekposwal/bitcoin-priority-oracle](https://github.com/prateekposwal/bitcoin-priority-oracle).
+I built a UTXO cost model using publicly available data. Source code and full verification appendix at [bitcoinsahi.com](https://bitcoinsahi.com).
 
 | Metric | Value |
 |--------|-------|
@@ -62,4 +62,4 @@ Would love feedback from people who have thought more deeply about this — part
 Discussion: https://delvingbitcoin.org/t/does-bitcoins-fee-market-price-permanence-or-just-congestion/2750
 
 Research repo with full model, verification appendix, charts, and sensitivity analysis:
-**[github.com/prateekposwal/bitcoin-priority-oracle](https://github.com/prateekposwal/bitcoin-priority-oracle)**
+**[bitcoinsahi.com](https://bitcoinsahi.com)**

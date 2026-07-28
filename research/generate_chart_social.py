@@ -64,7 +64,7 @@ ax2.text(0.5, -65,
 plt.suptitle('Bitcoin Block Space: The Permanence Externality',
              fontsize=15, fontweight='bold', y=1.02)
 fig.text(0.5, -0.02,
-         'github.com/prateekposwal/bitcoin-priority-oracle  ·  delvingbitcoin.org/t/2750',
+         'bitcoinsahi.com  ·  delvingbitcoin.org/t/2750',
          ha='center', fontsize=8, color='#888')
 
 plt.tight_layout()

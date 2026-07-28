@@ -42,4 +42,4 @@ Not a proposal. Not a BIP. Not claiming the problem is urgent. Just asking wheth
 
 Discussion on Delving Bitcoin is already surfacing good critiques: https://delvingbitcoin.org/t/does-bitcoins-fee-market-price-permanence-or-just-congestion/2750
 
-Full research with code and verification: https://github.com/prateekposwal/bitcoin-priority-oracle
+Full research with code and verification: https://bitcoinsahi.com

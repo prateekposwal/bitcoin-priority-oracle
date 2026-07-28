@@ -37,4 +37,4 @@ If you run a node, you're already paying this cost. How much does it bother you?
 
 ---
 
-*Research repo: github.com/prateekposwal/bitcoin-priority-oracle*
+*Research repo: bitcoinsahi.com*
