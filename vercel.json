@@ -7,7 +7,7 @@
     { "src": "tools/live_data.json", "use": "@vercel/static" }
   ],
   "routes": [
-    { "src": "/", "dest": "/index.html" },
-    { "src": "/live", "dest": "/live.html" }
+    { "src": "/live", "dest": "/live.html" },
+    { "src": "/", "dest": "/index.html" }
   ]
 }
