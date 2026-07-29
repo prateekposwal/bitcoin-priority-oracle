@@ -154,15 +154,158 @@ var DATA_ENGINE = (function () {
     }
   }
 
+  var LOG_KEY = 'bsahi_data_log';
+  var MAX_LOG_ENTRIES = 50000;
+  var BYTES_PER_ENTRY = 1024;
+  var MAX_STORAGE_BYTES = 4500000;
+  var storageListeners = [];
+
+  function minimizeEntry(key, raw) {
+    var m = { t: Date.now(), k: key, d: {} };
+    switch (key) {
+      case 'fees':
+        m.d = { fr: raw.fastestFee, hf: raw.halfHourFee, hr: raw.hourFee, ec: raw.economyFee, mn: raw.minimumFee };
+        break;
+      case 'btc_price':
+        m.d = { p: raw.USD || 0 };
+        break;
+      case 'mempool':
+        m.d = { c: raw.count || 0, v: raw.vsize || 0 };
+        break;
+      case 'mempool_blocks':
+        m.d = { n: Array.isArray(raw) ? raw.length : 0 };
+        break;
+      case 'fee_history':
+        m.d = { n: Array.isArray(raw) ? raw.length : 0, l: raw.length > 0 ? (raw[raw.length-1].avgFees || 0) : 0 };
+        break;
+      case 'lightning':
+        var s = raw.latest || raw;
+        m.d = { nc: s.node_count || s.nodeCount || 0, cc: s.channel_count || s.channelCount || 0, cap: s.total_capacity || s.totalCapacity || 0 };
+        break;
+      case 'blocks':
+        m.d = { n: Array.isArray(raw) ? raw.length : 0, h: raw.length > 0 ? (raw[0].height || 0) : 0 };
+        break;
+      case 'block_height':
+        m.d = { h: (typeof raw === 'number') ? raw : parseInt(raw, 10) || 0 };
+        break;
+      default:
+        m.d = {};
+    }
+    return m;
+  }
+
+  function loadLog() {
+    try { return JSON.parse(localStorage.getItem(LOG_KEY) || '[]'); }
+    catch (e) { return []; }
+  }
+
+  function estimatedBytes(log) {
+    try { return new Blob([JSON.stringify(log)]).size; } catch (e) { return log.length * BYTES_PER_ENTRY; }
+  }
+
+  function saveLog(log) {
+    try {
+      while (log.length > MAX_LOG_ENTRIES) log.shift();
+      var est = estimatedBytes(log);
+      while (est > MAX_STORAGE_BYTES && log.length > 100) {
+        log.splice(0, Math.floor(log.length / 10));
+        est = estimatedBytes(log);
+      }
+      localStorage.setItem(LOG_KEY, JSON.stringify(log));
+    } catch (e) { /* storage full — aggressively trim */ }
+  }
+
+  function appendToLog(key, raw) {
+    var entry = minimizeEntry(key, raw);
+    var log = loadLog();
+    log.push(entry);
+    saveLog(log);
+  }
+
   function onUpdate(callback) {
     if (typeof callback === 'function') {
       listeners.push(callback);
     }
   }
 
+  function onStorageWarning(callback) {
+    if (typeof callback === 'function') storageListeners.push(callback);
+  }
+
   function get() {
     return DATA;
   }
 
-  return { start: start, stop: stop, onUpdate: onUpdate, get: get };
+  function getLog() {
+    return loadLog();
+  }
+
+  function clearLog() {
+    try { localStorage.removeItem(LOG_KEY); } catch (e) {}
+  }
+
+  function checkStorage() {
+    var log = loadLog();
+    var est = estimatedBytes(log);
+    var pct = Math.round((est / MAX_STORAGE_BYTES) * 100);
+    var quota = 0;
+    if (typeof navigator !== 'undefined' && navigator.storage && navigator.storage.estimate) {
+      navigator.storage.estimate().then(function(q) {
+        quota = Math.round(q.usage / q.quota * 100);
+        for (var i = 0; i < storageListeners.length; i++) {
+          try { storageListeners[i]({ used: est, max: MAX_STORAGE_BYTES, pct: pct, quotaPct: quota }); } catch (e) {}
+        }
+      }).catch(function() {});
+    }
+    return { used: est, max: MAX_STORAGE_BYTES, pct: pct };
+  }
+
+  function getLogStats() {
+    var log = loadLog();
+    if (log.length === 0) return { entries: 0, firstEntry: null, days: 0, keys: {}, storage: checkStorage() };
+    var first = log[0].t;
+    var keys = {};
+    for (var i = 0; i < log.length; i++) {
+      var k = log[i].k;
+      keys[k] = (keys[k] || 0) + 1;
+    }
+    return {
+      entries: log.length,
+      firstEntry: first,
+      days: Math.round((Date.now() - first) / 86400000 * 10) / 10,
+      keys: keys,
+      storage: checkStorage()
+    };
+  }
+
+  function exportLogCSV() {
+    var log = loadLog();
+    if (log.length === 0) return '';
+    var csv = 'timestamp,source,data\n';
+    for (var i = 0; i < log.length; i++) {
+      var e = log[i];
+      var dateStr = new Date(e.t).toISOString();
+      var dataStr = JSON.stringify(e.d).replace(/"/g, '""');
+      csv += dateStr + ',' + e.k + ',"' + dataStr + '"\n';
+      if (csv.length > 5000000) break;
+    }
+    return csv;
+  }
+
+  function exportLogJSON() {
+    return JSON.stringify(loadLog(), null, 2);
+  }
+
+  var originalNormalize = normalize;
+  normalize = function(key, raw) {
+    originalNormalize(key, raw);
+    appendToLog(key, raw);
+  };
+
+  return {
+    start: start, stop: stop, onUpdate: onUpdate, get: get,
+    getLog: getLog, clearLog: clearLog, getLogStats: getLogStats,
+    exportLogCSV: exportLogCSV, exportLogJSON: exportLogJSON,
+    checkStorage: checkStorage, onStorageWarning: onStorageWarning
+  };
 })();

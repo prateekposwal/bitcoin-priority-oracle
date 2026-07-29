@@ -75,7 +75,43 @@ var VIZ_Developer = (function() {
       if (card) card.classList.toggle('expanded');
     });
 
+    // Data management section
+    var dataMgmt = document.createElement('div');
+    dataMgmt.id = 'dev-data-mgmt';
+    dataMgmt.style.cssText = 'margin-top:16px;padding:16px;background:#1A1612;border-radius:10px;border:1px solid rgba(255,255,255,0.06);';
+    dataMgmt.innerHTML =
+      '<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px;">' +
+        '<span style="font-size:13px;font-weight:600;color:rgba(255,255,255,0.6);">📥 Local Data Capture</span>' +
+        '<div id="storage-bar-wrap" style="flex:1;min-width:100px;max-width:300px;height:4px;background:#2A2622;border-radius:2px;overflow:hidden;">' +
+          '<div id="storage-bar" style="height:100%;width:0%;background:#3FB950;border-radius:2px;transition:width 0.5s;"></div>' +
+        '</div>' +
+        '<span id="storage-text" style="font-size:10px;color:rgba(255,255,255,0.3);">--</span>' +
+      '</div>' +
+      '<div style="display:flex;gap:8px;flex-wrap:wrap;">' +
+        '<button class="data-btn" data-action="csv" style="padding:8px 16px;background:#2A2622;border:1px solid rgba(255,255,255,0.08);border-radius:8px;color:#F7931A;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;">⬇ CSV</button>' +
+        '<button class="data-btn" data-action="json" style="padding:8px 16px;background:#2A2622;border:1px solid rgba(255,255,255,0.08);border-radius:8px;color:#F7931A;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;">⬇ JSON</button>' +
+        '<button class="data-btn" data-action="clear" style="padding:8px 16px;background:rgba(248,81,73,0.1);border:1px solid rgba(248,81,73,0.2);border-radius:8px;color:#F85149;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;">🗑 Clear</button>' +
+      '</div>' +
+      '<div id="storage-warning" style="display:none;margin-top:8px;padding:8px 12px;background:rgba(248,81,73,0.1);border-radius:6px;font-size:11px;color:#F85149;line-height:1.5;"></div>';
+    container.appendChild(dataMgmt);
+
+    dataMgmt.addEventListener('click', function(e) {
+      var btn = e.target.closest('.data-btn');
+      if (!btn) return;
+      var action = btn.getAttribute('data-action');
+      if (action === 'csv') downloadData('csv');
+      else if (action === 'json') downloadData('json');
+      else if (action === 'clear') clearLocalData();
+    });
+
     renderOverview();
+    updateStorageUI();
+
+    if (typeof DATA_ENGINE !== 'undefined' && DATA_ENGINE.onStorageWarning) {
+      DATA_ENGINE.onStorageWarning(function(st) {
+        updateStorageUI();
+      });
+    }
   }
 
   function renderOverview() {
@@ -210,6 +246,58 @@ var VIZ_Developer = (function() {
     var toggle = document.getElementById('dev-mode-toggle');
     if (toggle) {
       toggle.textContent = devMode ? 'Developer mode ▾' : 'Developer mode ▸';
+    }
+  }
+
+  function updateStorageUI() {
+    var bar = document.getElementById('storage-bar');
+    var text = document.getElementById('storage-text');
+    var warning = document.getElementById('storage-warning');
+    if (!bar || !text) return;
+    var stats = { used: 0, pct: 0 };
+    if (typeof DATA_ENGINE !== 'undefined' && DATA_ENGINE.checkStorage) {
+      stats = DATA_ENGINE.checkStorage();
+    }
+    var pct = Math.min(100, stats.pct || 0);
+    bar.style.width = pct + '%';
+    bar.style.background = pct > 90 ? '#F85149' : pct > 70 ? '#D29922' : '#3FB950';
+    var usedKB = Math.round((stats.used || 0) / 1024);
+    var maxKB = Math.round((stats.max || 4500000) / 1024);
+    text.textContent = usedKB + 'KB / ' + maxKB + 'KB';
+    if (warning) {
+      if (pct > 85) {
+        warning.style.display = 'block';
+        warning.textContent = '⚠ Storage nearly full (' + pct + '%). Oldest entries will be trimmed automatically. Download your data to preserve it.';
+      } else if (pct > 60) {
+        warning.style.display = 'block';
+        warning.textContent = '📦 Storage at ' + pct + '%. Consider downloading and clearing old data.';
+        warning.style.background = 'rgba(210,153,34,0.1)';
+        warning.style.color = '#D29922';
+      } else {
+        warning.style.display = 'none';
+      }
+    }
+  }
+
+  function downloadData(format) {
+    if (typeof DATA_ENGINE === 'undefined') return;
+    var content = format === 'csv' ? DATA_ENGINE.exportLogCSV() : DATA_ENGINE.exportLogJSON();
+    if (!content || content.length === 0) return;
+    var blob = new Blob([content], { type: format === 'csv' ? 'text/csv' : 'application/json' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = 'bitcoin-sahi-data.' + (format === 'csv' ? 'csv' : 'json');
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(function() { a.remove(); URL.revokeObjectURL(url); }, 5000);
+  }
+
+  function clearLocalData() {
+    if (typeof DATA_ENGINE === 'undefined' || !DATA_ENGINE.clearLog) return;
+    if (confirm('Clear all locally captured data? This cannot be undone.')) {
+      DATA_ENGINE.clearLog();
+      updateStorageUI();
     }
   }
 
