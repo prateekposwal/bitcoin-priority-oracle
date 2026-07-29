@@ -76,7 +76,26 @@ def main():
         except Exception as e2:
             report['alerts'].append(f"mempool.space reward stats API: {e2}")
 
-    # 5. BIP-110 signaling — checked directly from block version bits via blockstream.info
+    # 6. Latest block data from mempool.space
+    try:
+        tip = int(urllib.request.urlopen('https://mempool.space/api/blocks/tip/height', timeout=10).read().strip())
+        hash_resp = urllib.request.urlopen(f'https://mempool.space/api/block-height/{tip}', timeout=10)
+        block_hash = hash_resp.read().decode().strip()
+        block_data = fetch_json(f'https://mempool.space/api/block/{block_hash}')
+        if 'height' in block_data:
+            report['latest_block'] = {
+                "height": block_data['height'],
+                "hash": block_data['id'],
+                "timestamp": block_data.get('timestamp'),
+                "tx_count": block_data.get('tx_count', 0),
+                "size": block_data.get('size', 0),
+                "weight": block_data.get('weight', 0),
+                "fee_range": block_data.get('extras', {}).get('reward', None),
+            }
+    except Exception as e:
+        report['alerts'].append(f"mempool.space block API: {e}")
+
+    # 7. BIP-110 signaling — checked directly from block version bits via blockstream.info
     try:
         r = urllib.request.urlopen(
             'https://blockstream.info/api/blocks', timeout=15)
