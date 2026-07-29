@@ -397,7 +397,16 @@ API.onData(function(d) {
     document.getElementById('net-economy').textContent = d.fees.economyFee + ' sat/vB';
   }
 });
+calc();
 API.start({ interval: 60000 });
 </script>
+<footer>
+  <div class="links">
+    <a href="/">Home</a>
+    <a href="/articles">Articles</a>
+    <a href="https://github.com/prateekposwal/block-space-economics">GitHub</a>
+  </div>
+  <p>Bitcoin Sahi — Blockchain Research & Development. Built in public.</p>
+</footer>
 </body>
 </html>
