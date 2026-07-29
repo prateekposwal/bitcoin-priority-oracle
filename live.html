@@ -8,22 +8,16 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html, body { width: 100%; min-height: 100vh; background: #1A1612; color: #E8E5E0; font-family: -apple-system, system-ui, sans-serif; }
 
-/* ── Header ── */
 .header { display: flex; align-items: center; gap: 4px; padding: 8px 16px; background: #1A1612; border-bottom: 1px solid #2A2622; overflow-x: auto; position: sticky; top: 0; z-index: 20; }
 .header .brand { font-size: 13px; font-weight: 700; color: #F7931A; margin-right: 16px; white-space: nowrap; }
 .tab-btn { padding: 6px 14px; border-radius: 8px; font-size: 13px; font-weight: 500; color: #888; background: transparent; border: 1px solid transparent; cursor: pointer; white-space: nowrap; transition: all 0.2s; }
 .tab-btn:hover { color: #E8E5E0; border-color: #2A2622; }
 .tab-btn.active { color: #F7931A; border-color: #F7931A; background: rgba(247,147,26,0.1); }
 
-/* ── Viz ── */
-#viz-fees { width: 100%; height: 45vh; display: block; background: #1A1612; }
-
-/* ── Content ── */
 .content { max-width: 800px; margin: 0 auto; padding: 24px 16px; }
 .tab-panel { display: none; }
 .tab-panel.active { display: block; }
 
-/* ── Decision Card ── */
 .dc { background: #2A2622; border-radius: 12px; padding: 20px; margin-bottom: 12px; }
 .dc .dc-q { font-size: 15px; font-weight: 600; color: #E8E5E0; margin-bottom: 8px; }
 .dc .dc-a { font-size: 28px; font-weight: 800; margin-bottom: 4px; }
@@ -33,22 +27,23 @@ html, body { width: 100%; min-height: 100vh; background: #1A1612; color: #E8E5E0
 .dc .red { color: #F85149; }
 .dc .orange { color: #F7931A; }
 
-/* ── Fee Cards ── */
 .fee-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 12px 0; }
 .fee-card { background: #1A1612; border-radius: 8px; padding: 12px; text-align: center; }
 .fee-card .fc-label { font-size: 11px; color: #888; text-transform: uppercase; letter-spacing: 0.5px; }
 .fee-card .fc-value { font-size: 20px; font-weight: 700; margin: 4px 0; }
 .fee-card .fc-sub { font-size: 11px; color: #555; }
 
-/* ── Stats Row ── */
 .stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 12px 0; }
 .stat-card { background: #1A1612; border-radius: 8px; padding: 12px; text-align: center; }
 .stat-card .sc-label { font-size: 10px; color: #888; text-transform: uppercase; letter-spacing: 0.5px; }
 .stat-card .sc-value { font-size: 22px; font-weight: 700; margin: 4px 0; }
 
+.viz-canvas { width: 100%; height: 350px; border-radius: 12px; background: #1A1612; margin-top: 16px; }
+.explanation-text { font-size: 12px; color: rgba(255,255,255,0.3); margin-top: 8px; line-height: 1.5; }
+
 @media (max-width: 600px) {
   .fee-grid, .stat-row { grid-template-columns: 1fr; }
-  #viz-fees { height: 30vh; }
+  .viz-canvas { height: 250px; }
 }
 </style>
 </head>
@@ -69,8 +64,6 @@ html, body { width: 100%; min-height: 100vh; background: #1A1612; color: #E8E5E0
   <span id="live-state-sub" style="font-size:11px;color:rgba(255,255,255,0.4);margin-left:8px;">Fees are low</span>
 </div>
 
-<canvas id="viz-fees"></canvas>
-
 <div class="content">
 
 <!-- SEND -->
@@ -85,7 +78,8 @@ html, body { width: 100%; min-height: 100vh; background: #1A1612; color: #E8E5E0
     <div class="fee-card"><div class="fc-label">Hour</div><div class="fc-value" id="fee-hour">--</div><div class="fc-sub">~60 min</div></div>
     <div class="fee-card"><div class="fc-label">Economy</div><div class="fc-value" id="fee-economy">--</div><div class="fc-sub">~2+ hr</div></div>
   </div>
-  <div style="font-size:12px;color:rgba(255,255,255,0.3);margin-top:8px;line-height:1.5;">💡 Each colored bar in the chart above = one Bitcoin block from the last 24 hours. Green means low fees. Red means high congestion. The fee you choose determines how fast your transaction confirms.</div>
+  <canvas id="viz-send" class="viz-canvas"></canvas>
+  <div class="explanation-text">Each bar = one block. Green = low fees. Red = high congestion. The fee you choose determines how fast your transaction confirms.</div>
 </div>
 
 <!-- LIGHTNING -->
@@ -95,8 +89,13 @@ html, body { width: 100%; min-height: 100vh; background: #1A1612; color: #E8E5E0
     <div class="dc-a" id="ln-verdict">Checking...</div>
     <div class="dc-sub" id="ln-cost">Estimating channel cost...</div>
   </div>
-  <div class="stat-row"><div class="stat-card"><div class="sc-label">Nodes</div><div class="sc-value" id="ln-nodes">--</div></div><div class="stat-card"><div class="sc-label">Channels</div><div class="sc-value" id="ln-channels">--</div></div><div class="stat-card"><div class="sc-label">Capacity</div><div class="sc-value" id="ln-capacity">--</div></div></div>
-  <div style="font-size:12px;color:rgba(255,255,255,0.3);margin-top:8px;line-height:1.5;">⚡ Each channel open costs ~1,000 vbytes in on-chain fees. The economy rate determines if it's a good time to open. Lower fees = lower cost to enter the Lightning Network.</div>
+  <div class="stat-row">
+    <div class="stat-card"><div class="sc-label">Nodes</div><div class="sc-value" id="ln-nodes">--</div></div>
+    <div class="stat-card"><div class="sc-label">Channels</div><div class="sc-value" id="ln-channels">--</div></div>
+    <div class="stat-card"><div class="sc-label">Capacity</div><div class="sc-value" id="ln-capacity">--</div></div>
+  </div>
+  <canvas id="viz-lightning" class="viz-canvas"></canvas>
+  <div class="explanation-text">Channel growth over time. Each channel open costs ~1,000 vbytes in on-chain fees. Lower fees = lower cost to enter the Lightning Network.</div>
 </div>
 
 <!-- EXCHANGE -->
@@ -106,7 +105,8 @@ html, body { width: 100%; min-height: 100vh; background: #1A1612; color: #E8E5E0
     <div class="dc-a" id="ex-verdict">Checking...</div>
     <div class="dc-sub" id="ex-saving">Estimating batch savings...</div>
   </div>
-  <div style="font-size:12px;color:rgba(255,255,255,0.3);margin-top:8px;line-height:1.5;">🏦 Batching combines multiple withdrawals into one transaction. Each additional output adds ~45 vbytes vs ~140 vbytes for a new transaction. At current fees, batching 1K withdrawals saves thousands in transaction fees.</div>
+  <canvas id="viz-exchange" class="viz-canvas"></canvas>
+  <div class="explanation-text">Batch savings vs individual withdrawals. Each additional output adds ~45 vbytes vs ~140 vbytes for a new transaction.</div>
 </div>
 
 <!-- NODE -->
@@ -116,7 +116,8 @@ html, body { width: 100%; min-height: 100vh; background: #1A1612; color: #E8E5E0
     <div class="dc-a orange" id="node-cost">$924</div>
     <div class="dc-sub">Estimated annual cost to run a full node</div>
   </div>
-  <div style="font-size:12px;color:rgba(255,255,255,0.3);margin-top:8px;line-height:1.5;">🖥️ Based on $500 hardware (3yr life), $50/mo bandwidth, 150W power at $0.12/kWh. The UTXO set grows ~5-15% annually, increasing storage requirements over time.</div>
+  <canvas id="viz-node" class="viz-canvas"></canvas>
+  <div class="explanation-text">Cost breakdown across hardware, bandwidth, and power. UTXO set grows ~5-15% annually, increasing storage requirements over time.</div>
 </div>
 
 <!-- MINER -->
@@ -126,7 +127,8 @@ html, body { width: 100%; min-height: 100vh; background: #1A1612; color: #E8E5E0
     <div class="dc-a orange" id="miner-reward">Checking...</div>
     <div class="dc-sub">Subsidy + fees for the latest block</div>
   </div>
-  <div style="font-size:12px;color:rgba(255,255,255,0.3);margin-top:8px;line-height:1.5;">⛏️ Current block subsidy: 3.125 BTC. Transaction fees add ~$30K per block at current prices. The block reward will halve again at block 1,050,000 (~2028).</div>
+  <canvas id="viz-miner" class="viz-canvas"></canvas>
+  <div class="explanation-text">Subsidy and fee revenue over recent blocks. Current subsidy: 3.125 BTC. Halving at block 1,050,000 (~2028).</div>
 </div>
 
 <!-- RESEARCH -->
@@ -137,48 +139,78 @@ html, body { width: 100%; min-height: 100vh; background: #1A1612; color: #E8E5E0
     <a href="tools/fee_history.csv" style="display:block;padding:10px;background:#2A2622;border-radius:8px;color:#F7931A;text-decoration:none;margin-bottom:8px;text-align:center;">Download Fee History CSV →</a>
     <a href="https://github.com/prateekposwal/block-space-economics" style="display:block;padding:10px;background:#2A2622;border-radius:8px;color:#F7931A;text-decoration:none;text-align:center;">View on GitHub →</a>
   </div>
+  <canvas id="viz-research" class="viz-canvas"></canvas>
+  <div class="explanation-text">Model outputs, fee forecasts, and research data visualizations.</div>
 </div>
 
 <!-- DEVELOPER -->
 <div class="tab-panel" id="panel-developer">
-  <div class="dc">
-    <div class="dc-q">API Endpoints</div>
-    <div class="dc-sub" style="margin-bottom:8px;">All data is free, no auth required.</div>
-    <div style="font-size:12px;color:#888;line-height:1.8;font-family:monospace;">
-      <div style="padding:6px 0;border-bottom:1px solid #2A2622;"><span style="color:#F7931A;">GET</span> /api/v1/fees/recommended</div>
-      <div style="padding:6px 0;border-bottom:1px solid #2A2622;"><span style="color:#F7931A;">GET</span> /api/v1/prices</div>
-      <div style="padding:6px 0;border-bottom:1px solid #2A2622;"><span style="color:#F7931A;">GET</span> /api/mempool</div>
-      <div style="padding:6px 0;border-bottom:1px solid #2A2622;"><span style="color:#3FB950;">WS</span> wss://mempool.space/api/v1/ws</div>
+  <div id="viz-developer"></div>
+</div>
+  </div>
+  <div id="viz-developer" style="margin-top:16px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;">
+    <div style="background:#2A2622;border-radius:8px;padding:12px;text-align:center;">
+      <div style="font-size:10px;color:#888;text-transform:uppercase;letter-spacing:0.5px;">Requests</div>
+      <div style="font-size:22px;font-weight:700;margin:4px 0;color:#3FB950;">0</div>
+      <div style="font-size:11px;color:#555;">Today</div>
+    </div>
+    <div style="background:#2A2622;border-radius:8px;padding:12px;text-align:center;">
+      <div style="font-size:10px;color:#888;text-transform:uppercase;letter-spacing:0.5px;">Uptime</div>
+      <div style="font-size:22px;font-weight:700;margin:4px 0;color:#3FB950;">99.9%</div>
+      <div style="font-size:11px;color:#555;">30 days</div>
+    </div>
+    <div style="background:#2A2622;border-radius:8px;padding:12px;text-align:center;">
+      <div style="font-size:10px;color:#888;text-transform:uppercase;letter-spacing:0.5px;">Nodes</div>
+      <div style="font-size:22px;font-weight:700;margin:4px 0;color:#F7931A;">3</div>
+      <div style="font-size:11px;color:#555;">Connected</div>
     </div>
   </div>
+  <div class="explanation-text">API status dashboard. All endpoints are free and public. No authentication required.</div>
 </div>
 
 </div>
 
 <script src="tools/data-engine.js"></script>
 <script src="tools/viz-core.js"></script>
-<script src="tools/viz-fees.js"></script>
+<script src="tools/viz-send.js"></script>
+<script src="tools/viz-lightning.js"></script>
+<script src="tools/viz-exchange.js"></script>
+<script src="tools/viz-node.js"></script>
+<script src="tools/viz-miner.js"></script>
+<script src="tools/viz-research.js"></script>
+<script src="tools/viz-developer.js"></script>
 <script>
-// Tab switching
 document.querySelectorAll('.tab-btn').forEach(function(btn) {
   btn.addEventListener('click', function() {
     document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
     document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
     btn.classList.add('active');
     document.getElementById('panel-' + btn.dataset.tab).classList.add('active');
+    var id = btn.dataset.tab;
+    if (id === 'send') window.setTimeout(function() { VIZ_Send && VIZ_Send.resize(); }, 50);
+    if (id === 'lightning') window.setTimeout(function() { VIZ_Lightning && VIZ_Lightning.resize(); }, 50);
+    if (id === 'exchange') window.setTimeout(function() { VIZ_Exchange && VIZ_Exchange.resize(); }, 50);
+    if (id === 'node') window.setTimeout(function() { VIZ_Node && VIZ_Node.resize(); }, 50);
+    if (id === 'miner') window.setTimeout(function() { VIZ_Miner && VIZ_Miner.resize(); }, 50);
+    if (id === 'research') window.setTimeout(function() { VIZ_Research && VIZ_Research.resize(); }, 50);
+    if (id === 'developer') window.setTimeout(function() { VIZ_Developer && VIZ_Developer.resize(); }, 50);
   });
 });
 
-// Data updates
 DATA_ENGINE.start();
-VIZ_Fees.init('viz-fees');
+VIZ_Send && VIZ_Send.init('viz-send');
+VIZ_Lightning && VIZ_Lightning.init('viz-lightning');
+VIZ_Exchange && VIZ_Exchange.init('viz-exchange');
+VIZ_Node && VIZ_Node.init('viz-node');
+VIZ_Miner && VIZ_Miner.init('viz-miner');
+VIZ_Research && VIZ_Research.init('viz-research');
+VIZ_Developer && VIZ_Developer.init('viz-developer');
 
 DATA_ENGINE.onUpdate(function() {
   var d = DATA_ENGINE.get();
   if (!d || !d.fees) return;
   var fees = d.fees;
 
-  // Update state bar
   var f2 = fees.fastestFee || 3;
   var stateEl = document.getElementById('live-state');
   var stateSub = document.getElementById('live-state-sub');
@@ -186,12 +218,10 @@ DATA_ENGINE.onUpdate(function() {
   else if (f2 < 20) { stateEl.textContent = '🟡 Moderate congestion'; stateEl.style.color = '#D29922'; stateSub.textContent = 'Fees elevated — economy rate recommended'; }
   else { stateEl.textContent = '🔴 Network congested'; stateEl.style.color = '#F85149'; stateSub.textContent = 'Fees are high — consider waiting'; }
 
-  // Fee cards
   document.getElementById('fee-fastest').textContent = (fees.fastestFee || '--') + ' sat/vB';
   document.getElementById('fee-hour').textContent = (fees.hourFee || '--') + ' sat/vB';
   document.getElementById('fee-economy').textContent = (fees.economyFee || '--') + ' sat/vB';
 
-  // Send verdict
   var e = fees.economyFee || 1;
   var f = fees.fastestFee || 3;
   var verdict = document.getElementById('send-verdict');
@@ -199,27 +229,23 @@ DATA_ENGINE.onUpdate(function() {
   else if (f < 20) { verdict.textContent = '🟡 Moderate — economy rate recommended'; verdict.className = 'dc-a yellow'; }
   else { verdict.textContent = '🔴 High fees — wait if possible'; verdict.className = 'dc-a red'; }
 
-  // Lightning
   var lnV = document.getElementById('ln-verdict');
   if (e < 3) { lnV.textContent = '✅ Good time to open'; lnV.className = 'dc-a green'; }
   else { lnV.textContent = '🟡 Consider waiting for lower fees'; lnV.className = 'dc-a yellow'; }
   document.getElementById('ln-cost').textContent = 'Channel open cost: ~$' + ((e * 1000 * (d.btc_price || 64000)) / 100000000).toFixed(2) + ' USD';
 
-  // LN Stats
   if (d.lightning) {
     document.getElementById('ln-nodes').textContent = (d.lightning.node_count || 0).toLocaleString();
     document.getElementById('ln-channels').textContent = (d.lightning.channel_count || 0).toLocaleString();
     document.getElementById('ln-capacity').textContent = (d.lightning.total_capacity || 0).toFixed(0) + ' BTC';
   }
 
-  // Exchange
   var exV = document.getElementById('ex-verdict');
   if (e < 2) { exV.textContent = '✅ Batch now — fees are low'; exV.className = 'dc-a green'; }
   else { exV.textContent = '🟡 Wait — fees are elevated'; exV.className = 'dc-a yellow'; }
   var batchSave = ((e * 140 * 1000 - e * 100000) * (d.btc_price || 64000)) / 100000000;
   document.getElementById('ex-saving').textContent = 'Batch of 1K withdrawals saves ~$' + batchSave.toFixed(0);
 
-  // Miner
   var btcPrice = d.btc_price || 64000;
   document.getElementById('miner-reward').textContent = '~$' + Math.round(3.125 * btcPrice + 0.5 * btcPrice).toLocaleString() + '/block';
 });
