@@ -306,6 +306,7 @@ footer .links { display: flex; gap: 16px; justify-content: center; flex-wrap: wr
         <div class="ex-s-sub">500K inscriptions/mo</div>
       </div>
     </div>
+    <div id="fee-note" style="margin-top:10px;font-size:12px;color:#555;text-align:center;"></div>
   </div>
 </div>
 
@@ -369,7 +370,8 @@ var DUST_RATIO = 0.30;
 var BASE_INS_RATIO = 0.02;
 var BASE_VOL = 100;
 var EXT_PER_K = 9240 / 100;
-var btcPrice = null;
+var btcPrice = 63900;
+var liveFees = null;
 var fees = null;
 var _uhBuilt = false;
 
@@ -391,6 +393,12 @@ API.onData(function(d) {
   if (d.fees) {
     document.getElementById('live-fastest').textContent = d.fees.fastestFee + ' sat';
     document.getElementById('live-economy').textContent = d.fees.economyFee + ' sat';
+    liveFees = d.fees;
+    if (d.btc_price) {
+      btcPrice = d.btc_price;
+      // Update externality estimate based on live BTC price
+      EXT_PER_K = 9240 / 100 * (btcPrice / 63900);
+    }
   }
   if (d.utxo_set && d.utxo_set.utxo_count) BASE_UTXOS = d.utxo_set.utxo_count;
   updateAll();
@@ -452,11 +460,17 @@ function updateAll() {
   document.getElementById('so-ins-pct').textContent = (insRatio * 100).toFixed(1) + '%';
 
   var extAnnual = vol * EXT_PER_K;
+  var liveFeeCost = liveFees ? ((liveFees.economyFee || 2) * btcPrice / 100000000) : 0;
   document.getElementById('ex-annual').textContent = '$' + extAnnual.toLocaleString('en-US', {maximumFractionDigits:0});
   document.getElementById('ex-current').textContent = '$' + (100 * EXT_PER_K).toLocaleString('en-US', {maximumFractionDigits:0});
   document.getElementById('ex-2x').textContent = '$' + (200 * EXT_PER_K).toLocaleString('en-US', {maximumFractionDigits:0});
   document.getElementById('ex-5x').textContent = '$' + (500 * EXT_PER_K).toLocaleString('en-US', {maximumFractionDigits:0});
   document.getElementById('so-ext').textContent = '$' + (extAnnual / 1000).toFixed(1) + 'K';
+  if (liveFeeCost > 0) {
+    var feeRatio = (liveFeeCost / (EXT_PER_K / 12)).toFixed(1);
+    var feeNote = document.getElementById('fee-note');
+    if (feeNote) feeNote.textContent = 'Current economy fee: $' + liveFeeCost.toFixed(4) + ' per vB — ' + feeRatio + 'x the per-channel monthly externality';
+  }
 
   var lowGrowth = 1.05;
   var highGrowthRate = 0.05 + 0.10 * (vol / BASE_VOL);
