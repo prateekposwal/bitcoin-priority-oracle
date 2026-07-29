@@ -136,11 +136,5 @@
       "src": "/decide",
       "dest": "/decide.html"
     }
-  ],
-  "rewrites": [
-    {
-      "source": "/interactive-block",
-      "destination": "/interactive-block.html"
-    }
   ]
 }
