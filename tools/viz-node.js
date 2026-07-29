@@ -282,7 +282,7 @@ var VIZ_Node = (function() {
   }
 
   function resize() {
-    var r = VIZ.responsiveSize(canvas, 500);
+    var r = VIZ.responsiveSize(canvas, 600);
     w = r.w;
     h = r.h;
     ctx = r.ctx;

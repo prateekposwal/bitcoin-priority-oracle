@@ -80,7 +80,7 @@ const VIZ_Research = (() => {
     var dpr = window.devicePixelRatio || 1;
     w = Math.min(pw, 1200);
     stacked = w < 768;
-    h = stacked ? 900 : 500;
+    h = stacked ? 1000 : 600;
     canvas.width = w * dpr;
     canvas.height = h * dpr;
     canvas.style.width = w + 'px';
