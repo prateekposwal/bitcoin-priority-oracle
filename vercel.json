@@ -85,6 +85,10 @@
     {
       "src": "beta.html",
       "use": "@vercel/static"
+    },
+    {
+      "src": "tools/blockspace.js",
+      "use": "@vercel/static"
     }
   ],
   "routes": [
