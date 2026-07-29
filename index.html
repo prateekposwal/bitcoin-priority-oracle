@@ -188,10 +188,10 @@ if (window.location.hostname.includes('vercel.app')) {
 <!-- ─── STATS ─── -->
 <div class="container">
 <div class="stats">
-  <div class="stat"><div class="num orange">$925</div><div class="lbl">Node Cost / Yr</div></div>
-  <div class="stat"><div class="num green">$0.008</div><div class="lbl">Storage / Inscription</div></div>
-  <div class="stat"><div class="num blue">$9.2K</div><div class="lbl">Externality / Yr</div></div>
-  <div class="stat"><div class="num purple">8×–3,000×</div><div class="lbl">Fee-to-Storage Ratio</div></div>
+  <div class="stat"><div class="num orange" id="stat-nodecost">$925</div><div class="lbl">Node Cost / Yr</div></div>
+  <div class="stat"><div class="num green" id="stat-storage">$0.008</div><div class="lbl">Storage / Inscription</div></div>
+  <div class="stat"><div class="num blue" id="stat-externality">$9.2K</div><div class="lbl">Externality / Yr</div></div>
+  <div class="stat"><div class="num purple" id="stat-ratio">8×–3,000×</div><div class="lbl">Fee-to-Storage Ratio</div></div>
 </div>
 </div>
 
@@ -363,5 +363,36 @@ if (window.location.hostname.includes('vercel.app')) {
   <p>Bitcoin Sahi — Blockchain Research & Development. Built in public.</p>
 </footer>
 
+<script src="/tools/api.js"></script>
+<script>
+API.onData(function(d) {
+  if (!d) return;
+  var btc = d.btc_price || 63900;
+  var fees = d.fees || {};
+  var economyFee = fees.economyFee || 2;
+  var fastestFee = fees.fastestFee || 5;
+
+  // Model computation using live BTC price and fees
+  var annualNodeCost = 924.35;
+  var avgInscBytes = 400;
+  var monthlyVolume = 100000;
+  var costPerBytePerYear = annualNodeCost / (avgInscBytes * monthlyVolume * 12);
+  var storagePerInsc = costPerBytePerYear * avgInscBytes * 10;
+
+  var economyFeeUsd = economyFee * btc / 100000000;
+  var fastestFeeUsd = fastestFee * btc / 100000000;
+  var lowestRatio = economyFeeUsd > 0 ? (economyFeeUsd * avgInscBytes / storagePerInsc).toFixed(0) : '8';
+  var highestRatio = fastestFeeUsd > 0 ? (fastestFeeUsd * avgInscBytes / storagePerInsc).toFixed(0) : '3000';
+
+  var yearlyExternality = storagePerInsc * monthlyVolume * 12 / 10;
+  var extK = (yearlyExternality / 1000).toFixed(1);
+
+  document.getElementById('stat-nodecost').textContent = '$' + annualNodeCost.toFixed(0);
+  document.getElementById('stat-storage').textContent = '$' + storagePerInsc.toFixed(4);
+  document.getElementById('stat-externality').textContent = '$' + extK + 'K';
+  document.getElementById('stat-ratio').textContent = lowestRatio + 'x - ' + highestRatio + 'x';
+});
+API.start({ interval: 60000 });
+</script>
 </body>
 </html>
