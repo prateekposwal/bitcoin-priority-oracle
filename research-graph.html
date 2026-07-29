@@ -96,6 +96,10 @@ footer .links { display: flex; gap: 16px; justify-content: center; flex-wrap: wr
 .live-clock { color:#666; font-family:monospace; min-width:60px; }
 .live-stat { color:#ccc; }
 .live-stat span { color:var(--orange); font-weight:600; }
+
+.live-pill { display: inline-flex; align-items: center; gap: 4px; font-size: 10px; color: #888; }
+.live-pill .dot { width: 5px; height: 5px; border-radius: 50%; background: #3FB950; display: inline-block; animation: livePulse 2s infinite; }
+@keyframes livePulse { 0%{opacity:1;box-shadow:0 0 0 0 rgba(63,185,80,0.4)} 50%{opacity:0.6} 100%{opacity:1;box-shadow:0 0 0 4px rgba(63,185,80,0)} }
 </style>
 </head>
 <body>
@@ -119,7 +123,8 @@ footer .links { display: flex; gap: 16px; justify-content: center; flex-wrap: wr
   <a href="/live">📊 Dashboard</a>
 </nav>
 
-<div class="hero">
+<div class="hero" style="position:relative;">
+  <div style="position:absolute;top:12px;right:24px;"><span class="live-pill"><span class="dot"></span> Live</span></div>
   <div class="badge">Knowledge Graph</div>
   <h1>Bitcoin Research Graph — <span>How Everything Connects</span></h1>
   <p>Explore the relationships between Bitcoin protocol decisions, economic externalities, research models, and community proposals. Click nodes for details, drag to rearrange, scroll to zoom.</p>
@@ -164,7 +169,6 @@ footer .links { display: flex; gap: 16px; justify-content: center; flex-wrap: wr
   </div>
 </div>
 
-<div class="live-badge" id="live-badge" style="display:none;"><span class="dot"></span><span>Live — updates every 60s</span><span class="clock" id="live-badge-clock"></span></div>
 <footer>
   <div class="links">
     <a href="/">Home</a>

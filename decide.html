@@ -69,6 +69,10 @@
   .live-clock { color:#666; font-family:monospace; min-width:50px; }
 
   @media (max-width: 700px) { .ws-grid { grid-template-columns: 1fr; } .tab { font-size: 12px; padding: 8px 12px; } }
+
+.live-pill { display: inline-flex; align-items: center; gap: 4px; font-size: 10px; color: #888; }
+.live-pill .dot { width: 5px; height: 5px; border-radius: 50%; background: #3FB950; display: inline-block; animation: livePulse 2s infinite; }
+@keyframes livePulse { 0%{opacity:1;box-shadow:0 0 0 0 rgba(63,185,80,0.4)} 50%{opacity:0.6} 100%{opacity:1;box-shadow:0 0 0 4px rgba(63,185,80,0)} }
 </style>
 </head>
 <body>
@@ -90,8 +94,7 @@
   <a href="/live" class="cta">Dashboard</a>
 </nav>
 
-  <div class="live-badge" id="live-badge" style="display:none;"><span class="dot"></span><span>Live — updates every 60s</span><span class="clock" id="live-badge-clock"></span></div>
-<div class="container">
+  <div class="container">
     <div class="hero">
     <div class="badge">Decision Center</div>
     <h1>Bitcoin Decisions — <span>For Your Role</span></h1>
