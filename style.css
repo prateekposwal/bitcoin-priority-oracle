@@ -118,13 +118,27 @@ nav .dd-arrow { font-size: 12px; opacity: 0.6; }
 .stat-card .lbl { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
 .stat-card .value { font-size: 20px; font-weight: 700; margin-top: 3px; }
 
-/* ── Live Data Animations ── */
+/* ── Continuous Motion — Data never sleeps ── */
 .data-flash { animation: liveFlash 0.6s ease; }
 @keyframes liveFlash { 0% { opacity: 1; } 30% { opacity: 0.6; filter: brightness(1.3); } 100% { opacity: 1; filter: brightness(1); } }
 
-[id^=seg-] { transition: width 0.8s ease, background 0.3s; }
-[id^=kpi-], [id^=stat-], [id^=fr-], [id^=mk-], [id^=md-], [id^=cc-], [id^=so-], [id^=proj-], [id^=ex-] { transition: color 0.3s; }
-.gauge-fg, [id^=proj-bar] { transition: stroke-dasharray 0.8s ease, width 0.8s ease; }
+/* Continuous subtle breathe on all data elements — like Google Maps blue dot */
+[id^=seg-] { transition: width 0.8s ease, background 0.3s; animation: barBreathe 3s ease-in-out infinite; }
+@keyframes barBreathe { 0%, 100% { opacity: 0.92; } 50% { opacity: 1; filter: brightness(1.05); } }
+
+[id^=kpi-], [id^=stat-], [id^=fr-], [id^=mk-], [id^=md-], [id^=cc-], [id^=so-], [id^=ex-], [id^=proj-] { transition: color 0.3s, opacity 0.3s; animation: numBreathe 4s ease-in-out infinite; }
+@keyframes numBreathe { 0%, 100% { opacity: 0.95; } 50% { opacity: 1; } }
+
+.gauge-fg, [id^=proj-bar] { transition: stroke-dasharray 0.8s ease, width 0.8s ease; animation: barBreathe 3s ease-in-out infinite; }
+
+/* Live ticker — scrolling data stream */
+.live-ticker { display: flex; align-items: center; gap: 16px; padding: 6px 14px; background: var(--surface); border: 1px solid var(--border); border-radius: 6px; font-size: 12px; color: #888; overflow: hidden; white-space: nowrap; margin-bottom: 16px; }
+.live-ticker .ticker-item { display: flex; align-items: center; gap: 4px; }
+.live-ticker .ticker-dot { width: 4px; height: 4px; border-radius: 50%; display: inline-block; animation: tickerPulse 1.5s ease-in-out infinite; }
+.ticker-dot.green { background: #3FB950; }
+.ticker-dot.orange { background: var(--orange); }
+.ticker-dot.blue { background: #58A6FF; }
+@keyframes tickerPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 
 /* ── Footer ── */
 footer { border-top: 1px solid var(--border); padding: 36px 24px; text-align: center; font-size: 14px; color: var(--muted); margin-top: 48px; }

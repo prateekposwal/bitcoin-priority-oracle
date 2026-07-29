@@ -78,6 +78,19 @@ var API = (function() {
       data = merged;
       ready = true;
       if (_debugEl) _debugEl.textContent = (merged.fees ? merged.fees.fastestFee + '/' + merged.fees.economyFee : '...') + ' sat/vB | ' + (merged.btc_price ? '$' + merged.btc_price : '...');
+
+      // Update live tickers on every page
+      var tickers = document.querySelectorAll('.live-ticker');
+      for (var t = 0; t < tickers.length; t++) {
+        if (merged.btc_price) {
+          tickers[t].innerHTML = '<span class="ticker-item"><span class="ticker-dot green"></span> BTC <strong>$' + Number(merged.btc_price).toLocaleString() + '</strong></span>'
+            + '<span class="ticker-item"><span class="ticker-dot orange"></span> Fastest <strong>' + (merged.fees ? merged.fees.fastestFee : '--') + '</strong> sat/vB</span>'
+            + '<span class="ticker-item"><span class="ticker-dot blue"></span> Economy <strong>' + (merged.fees ? merged.fees.economyFee : '--') + '</strong> sat/vB</span>'
+            + '<span class="ticker-item">Mempool <strong>' + (merged.mempool ? Number(merged.mempool.unconfirmed_tx).toLocaleString() : '--') + '</strong> txs</span>'
+            + '<span class="ticker-item">Block <strong>' + (merged.block_height || '--') + '</strong></span>';
+        }
+      }
+
       for (var i = 0; i < listeners.length; i++) { try { listeners[i](data); } catch(e) {} }
       flashDataElements();
     });
