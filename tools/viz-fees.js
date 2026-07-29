@@ -1,14 +1,13 @@
 // Bitcoin Sahi — Living Fee Visualization
-// Never static. Always breathing, flowing, pulsing.
+// Obviously alive — particles float, numbers animate, bars flow
 
 var VIZ_Fees = (function() {
-  var canvas, ctx;
-  var w = 0, h = 0;
+  var canvas, ctx, w = 0, h = 0;
   var bars = [];
-  var maxBars = 144;
-  var scrollSpeed = 0.3;
+  var particles = [];
+  var displayFee = 3;
+  var targetFee = 3;
   var scrollOffset = 0;
-  var ambientHue = 120; // starts green
 
   function init(canvasId) {
     canvas = document.getElementById(canvasId);
@@ -17,25 +16,41 @@ var VIZ_Fees = (function() {
     resize();
     window.addEventListener('resize', resize);
     
-    // Initialize bars with data
     DATA_ENGINE.onUpdate(function() {
       var data = DATA_ENGINE.get().fee_history || [];
-      for (var i = 0; i < Math.min(data.length, maxBars); i++) {
+      var fees = DATA_ENGINE.get().fees || {};
+      targetFee = fees.fastestFee || 3;
+      
+      for (var i = 0; i < Math.min(data.length, 144); i++) {
         var entry = data[data.length - 1 - i];
         var feeRate = Math.min(500, Math.max(0.1, entry.avgFees / 2500000));
-        if (!bars[i]) bars[i] = { fee: feeRate, targetFee: feeRate, height: 0, targetHeight: 0, age: 0 };
+        if (!bars[i]) bars[i] = { fee: 1, h: 0, age: 0 };
         bars[i].targetFee = feeRate;
-        bars[i].targetHeight = (feeRate / 50) * h * 0.7;
-        bars[i].age = 0;
+        bars[i].age = bars[i].age || 0;
       }
-      // Update ambient hue based on current fees
-      var fees = DATA_ENGINE.get().fees || {};
-      var fastest = fees.fastestFee || 3;
-      ambientHue = fastest > 20 ? 0 : fastest > 10 ? 30 : 120;
     });
-
-    // Start animation
+    
     DATA_ENGINE.start();
+    
+    // Spawn particles continuously
+    setInterval(function() {
+      for (var i = 0; i < 3; i++) {
+        var fee = Math.random() * 30 + 1;
+        var p = Math.min(1, fee / 50);
+        particles.push({
+          x: Math.random() * (w || 800),
+          y: (h || 600) + 20,
+          vx: (Math.random() - 0.5) * 0.3,
+          vy: -(Math.random() * 0.5 + 0.2),
+          r: Math.round(p * 248 + (1-p) * 63),
+          g: Math.round((1-p) * 185 + p * 81),
+          b: Math.round((1-p) * 80 + p * 73),
+          life: 1,
+          size: Math.random() * 3 + 1
+        });
+      }
+    }, 30);
+
     loop();
   }
 
@@ -47,75 +62,96 @@ var VIZ_Fees = (function() {
   function loop() {
     var t = Date.now() / 1000;
     
-    // Scroll bars continuously
-    scrollOffset = (scrollOffset + scrollSpeed) % 1;
+    // Smooth fee display
+    displayFee += (targetFee - displayFee) * 0.05;
+    scrollOffset = (scrollOffset + 0.4) % 1;
     
-    // Smooth bar transitions
+    // Clamp
+    if (Math.abs(displayFee - targetFee) < 0.01) displayFee = targetFee;
+    
+    // Update bars
     for (var i = 0; i < bars.length; i++) {
       var b = bars[i];
-      b.fee += (b.targetFee - b.fee) * 0.05;
-      b.height += (b.targetHeight - b.height) * 0.05;
+      b.fee += (b.targetFee - b.fee) * 0.03;
+      b.h = (b.fee / 50) * h * 0.7;
       b.age++;
     }
 
-    // Draw
+    // Draw background
     ctx.fillStyle = '#1A1612';
     ctx.fillRect(0, 0, w, h);
     
-    // Ambient glow based on fee level
-    var ambientR = ambientHue === 0 ? 248 : ambientHue === 30 ? 248 : 63;
-    var ambientG = ambientHue === 0 ? 81 : ambientHue === 30 ? 191 : 185;
-    var ambientB = ambientHue === 0 ? 73 : ambientHue === 30 ? 36 : 80;
-    var ambientGlow = Math.sin(t * 0.5) * 0.02 + 0.03;
-    ctx.fillStyle = 'rgba(' + ambientR + ',' + ambientG + ',' + ambientB + ',' + ambientGlow + ')';
+    // Ambient glow
+    var pct = Math.min(1, displayFee / 50);
+    var ar = Math.round(pct * 248 + (1-pct) * 63);
+    var ag = Math.round((1-pct) * 185 + pct * 81);
+    var ab = Math.round((1-pct) * 80 + pct * 73);
+    var aglow = Math.sin(t * 0.5) * 0.02 + 0.04;
+    ctx.fillStyle = 'rgba(' + ar + ',' + ag + ',' + ab + ',' + aglow + ')';
     ctx.fillRect(0, 0, w, h);
 
-    // Draw flowing bars
-    var barWidth = w / maxBars;
+    // Draw bars
+    var bw = w / 144;
     for (var i = 0; i < bars.length; i++) {
       var b = bars[i];
-      if (b.height < 1) continue;
-      
-      var x = w - ((i + scrollOffset) * barWidth);
-      var barH = b.height;
+      if (b.h < 2) continue;
+      var x = w - ((i + scrollOffset) * bw);
+      var barH = b.h;
       var y = h - barH;
+      var p = Math.min(1, b.fee / 50);
+      var r = Math.round(p * 248 + (1-p) * 63);
+      var g = Math.round((1-p) * 185 + p * 81);
+      var bl = Math.round((1-p) * 80 + p * 73);
+      var glow = Math.min(0.25, 0.05 + 0.2 * Math.exp(-b.age / 20));
       
-      // Color based on fee rate
-      var p = Math.min(1, Math.max(0, b.fee / 50));
-      var r = Math.round(p * 248 + (1 - p) * 63);
-      var g = Math.round((1 - p) * 185 + p * 81);
-      var blue = Math.round((1 - p) * 80 + p * 73);
-      
-      // New bars get a brighter glow
-      var ageFactor = Math.min(1, b.age / 30);
-      var glowAlpha = 0.15 * (1 - ageFactor) + 0.05;
-      
-      // Glow behind bar
-      ctx.fillStyle = 'rgba(' + r + ',' + g + ',' + blue + ',' + glowAlpha + ')';
-      ctx.fillRect(x - 2, y - 4, barWidth + 4, barH + 8);
-      
-      // The bar itself
-      ctx.fillStyle = 'rgb(' + r + ',' + g + ',' + blue + ')';
-      ctx.fillRect(x, y, barWidth - 1, barH);
-      
-      // Subtle highlight on top of bar
-      ctx.fillStyle = 'rgba(255,255,255,0.08)';
-      ctx.fillRect(x, y, barWidth - 1, 2);
+      ctx.fillStyle = 'rgba(' + r + ',' + g + ',' + bl + ',' + glow + ')';
+      ctx.fillRect(x - 2, y - 4, bw + 4, barH + 8);
+      ctx.fillStyle = 'rgb(' + r + ',' + g + ',' + bl + ')';
+      ctx.fillRect(x, y, bw - 1, barH);
     }
 
-    // Breathing pulse on the entire canvas
-    var breath = Math.sin(t * 1.5) * 0.015 + 1;
-    ctx.globalAlpha = breath;
+    // Draw floating particles
+    for (var i = particles.length - 1; i >= 0; i--) {
+      var p = particles[i];
+      p.x += p.vx;
+      p.y += p.vy;
+      p.life -= 0.005;
+      if (p.life <= 0) { particles.splice(i, 1); continue; }
+      ctx.globalAlpha = p.life;
+      ctx.fillStyle = 'rgb(' + p.r + ',' + p.g + ',' + p.b + ')';
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size * p.life, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+
+    // Fee counter — big, centered, smooth
+    var feeText = displayFee.toFixed(0);
+    var feeColor = displayFee > 20 ? '#F85149' : displayFee > 10 ? '#D29922' : '#3FB950';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
     
-    // Subtle vignette
-    var grad = ctx.createRadialGradient(w/2, h/2, h*0.2, w/2, h/2, h*0.8);
+    // Glow behind number
+    ctx.font = '120px -apple-system, sans-serif';
+    ctx.fillStyle = 'rgba(0,0,0,0.3)';
+    ctx.fillText(feeText, w/2 + 3, h/2 - 60 + 3);
+    
+    // Main fee number
+    ctx.fillStyle = feeColor;
+    ctx.fillText(feeText, w/2, h/2 - 60);
+    
+    // Label
+    ctx.font = '16px -apple-system, sans-serif';
+    ctx.fillStyle = 'rgba(255,255,255,0.4)';
+    ctx.fillText('sat/vB — fastest fee', w/2, h/2 - 60 + 80);
+
+    // Vignette
+    var grad = ctx.createRadialGradient(w/2, h/2, h*0.2, w/2, h/2, h*0.9);
     grad.addColorStop(0, 'rgba(0,0,0,0)');
-    grad.addColorStop(1, 'rgba(0,0,0,0.3)');
+    grad.addColorStop(1, 'rgba(0,0,0,0.4)');
     ctx.fillStyle = grad;
     ctx.fillRect(0, 0, w, h);
-    
-    ctx.globalAlpha = 1;
-    
+
     requestAnimationFrame(loop);
   }
 

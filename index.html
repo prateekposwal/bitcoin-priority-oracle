@@ -22,9 +22,10 @@
 </head>
 <body>
   <canvas id="viz-fees"></canvas>
-  <div class="overlay">
-    <h1>Bitcoin fees right now</h1>
-    <a href="/live" class="cta">Should I send now?</a>
+  <div style="position:fixed;bottom:48px;left:50%;transform:translateX(-50%);z-index:10;">
+    <a href="/live" style="display:inline-block;padding:14px 32px;background:#F7931A;color:#1A1612;font-size:17px;font-weight:700;border-radius:100px;text-decoration:none;transition:transform 0.2s;" 
+       onmouseover="this.style.transform='translateY(-2px)'" 
+       onmouseout="this.style.transform=''">Should I send now?</a>
   </div>
   <script src="tools/data-engine.js"></script>
   <script src="tools/viz-core.js"></script>
