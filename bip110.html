@@ -139,6 +139,8 @@
     </div>
   </div>
 
+  <div id="pool-section"></div>
+
   <div style="margin-top:20px;padding:16px;background:var(--surface);border:1px solid var(--border);border-radius:10px;font-size:13px;color:#888;line-height:1.6;">
     <strong style="color:#ccc;">🔗 Resources</strong><br>
     <a href="https://bip110.orange.surf" style="color:var(--orange);">bip110.orange.surf</a> — Live signaling tracker &amp; fork simulator<br>
@@ -159,57 +161,88 @@
 
 <script src="tools/app.js"></script>
 <script>
-// BIP-110 Fork Tracker
-// Activation: modified BIP9, 55% threshold, bit 4
-// Max activation height: 965,664
-// Mandatory signaling: 961,632 - 963,647
-var BLOCKS_TOTAL = 965664;
-var SIGNALING_START = 961632;
-var FORK_WINDOW_START = 963648;
-var CURRENT_BLOCK = 960100; // will update from API
+var BLOCKS_TOTAL = 965664, SIGNALING_START = 961632, FORK_WINDOW_START = 963648;
+var CURRENT_BLOCK = 960100, SIGNAL_PCT = 0, POOL_DATA = null;
+
+// Fetch real BIP-110 signaling data from bip110.orange.surf
+function fetchSignaling() {
+  var x = new XMLHttpRequest();
+  x.open('GET', 'https://bip110.orange.surf/api/signaling?_=' + Date.now(), true);
+  x.timeout = 10000;
+  x.onload = function() {
+    if (x.status !== 200) return;
+    try {
+      var d = JSON.parse(x.responseText);
+      if (!d.signals) return;
+      var signals = d.signals;
+      var total = signals.length;
+      var signaling = signals.split('1').length - 1;
+      SIGNAL_PCT = total > 0 ? (signaling / total * 100) : 0;
+      POOL_DATA = d.pools || null;
+      updateStatus();
+    } catch(e) {}
+  };
+  x.send();
+}
 
 function updateStatus() {
   var remaining = Math.max(0, SIGNALING_START - CURRENT_BLOCK);
-  var daysLeft = (remaining * 10) / (60 * 24); // ~10 min per block
-  var signalingPct = Math.random() * 8 + 1; // placeholder - need real data
+  var daysLeft = (remaining * 10) / (60 * 24);
   
   document.getElementById('status-grid').innerHTML = [
     { l: 'Status', v: 'Active', s: 'BIP in Complete status', c: '#F0883E' },
     { l: 'Threshold', v: '55%', s: 'BIP9-modified softfork', c: '#3FB950' },
-    { l: 'Signaling', v: signalingPct.toFixed(1) + '%', s: 'of last 2016 blocks', c: signalingPct > 30 ? '#3FB950' : '#F85149' },
-    { l: 'Blocks Left', v: remaining.toLocaleString(), s: '~' + daysLeft.toFixed(0) + ' days', c: daysLeft < 14 ? '#F85149' : '#F0883E' },
+    { l: 'Signaling', v: SIGNAL_PCT.toFixed(1) + '%', s: 'of last ~500 blocks', c: SIGNAL_PCT > 30 ? '#3FB950' : SIGNAL_PCT > 10 ? '#F0883E' : '#F85149' },
+    { l: 'Blocks Left', v: remaining.toLocaleString(), s: '~' + daysLeft.toFixed(0) + ' days', c: daysLeft < 14 ? '#F85149' : daysLeft < 30 ? '#F0883E' : '#3FB950' },
   ].map(function(s) {
     return '<div class="status-card"><div class="s-label">' + s.l + '</div><div class="s-value" style="color:' + s.c + '">' + s.v + '</div><div class="s-sub">' + s.s + '</div></div>';
   }).join('');
 
   // Timeline
   var pct = Math.min(100, (CURRENT_BLOCK / BLOCKS_TOTAL) * 100);
-  var sigPct = Math.max(0, Math.min(100, ((CURRENT_BLOCK - SIGNALING_START) / (FORK_WINDOW_START - SIGNALING_START)) * 100));
-  var forkPct = Math.max(0, Math.min(100, ((CURRENT_BLOCK - FORK_WINDOW_START) / (BLOCKS_TOTAL - FORK_WINDOW_START)) * 100));
-  
   document.getElementById('tl-passed').style.width = Math.max(0, pct - 1) + '%';
   document.getElementById('tl-passed').textContent = Math.round(pct) + '%';
   document.getElementById('tl-current').style.width = '2%';
   document.getElementById('tl-future').style.width = Math.max(0, 100 - pct - 2) + '%';
+
+  // Pool breakdown
+  if (POOL_DATA) {
+    var poolHtml = '<h3 style="font-size:14px;font-weight:700;margin:16px 0 8px;">⛏️ Mining Pool Signaling</h3><div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;font-size:13px;">';
+    var poolNames = Object.keys(POOL_DATA);
+    poolNames.sort(function(a,b) { return POOL_DATA[b].blocks - POOL_DATA[a].blocks; });
+    poolNames.forEach(function(name) {
+      var p = POOL_DATA[name];
+      var sigPct = p.blocks > 0 ? (p.signaling / p.blocks * 100) : 0;
+      var color = sigPct > 50 ? '#3FB950' : sigPct > 0 ? '#F0883E' : '#555';
+      poolHtml += '<div style="display:flex;justify-content:space-between;padding:6px 10px;background:var(--surface);border:1px solid var(--border);border-radius:6px;">'
+        + '<span>' + name + '</span>'
+        + '<span style="color:' + color + ';font-weight:600;">' + (sigPct > 0 ? sigPct.toFixed(0) + '% signal' : 'No signal') + '</span>'
+        + '<span style="color:#555;">' + p.blocks + ' blocks</span>'
+        + '</div>';
+    });
+    poolHtml += '</div>';
+    document.getElementById('pool-section').innerHTML = poolHtml;
+  }
 }
 
 APP.onData(function(d) {
   if (d && d.block_height) CURRENT_BLOCK = d.block_height;
-  else CURRENT_BLOCK = 960100;
+  fetchSignaling();
   updateStatus();
   
-  // Update ticker
   var ticker = document.getElementById('fork-ticker');
   if (ticker) {
     var remaining = Math.max(0, SIGNALING_START - CURRENT_BLOCK);
     ticker.innerHTML = '<span class="ticker-item"><span class="ticker-dot red"></span> Block <strong>' + CURRENT_BLOCK.toLocaleString() + '</strong></span>'
-      + '<span class="ticker-item">Signaling starts: <strong>961,632</strong> (~' + Math.round(remaining * 10 / 1440) + ' days)</span>'
-      + '<span class="ticker-item">Max activation: <strong>965,664</strong> (~Sep 1, 2026)</span>'
-      + '<span class="ticker-item">Threshold: <strong>55%</strong> hashrate</span>';
+      + '<span class="ticker-item">Signaling: <strong>' + SIGNAL_PCT.toFixed(1) + '%</strong></span>'
+      + '<span class="ticker-item">Mandatory signaling: <strong>961,632</strong> (~' + Math.round(remaining * 10 / 1440) + ' days)</span>'
+      + '<span class="ticker-item">Threshold: <strong>55%</strong></span>';
   }
 });
 
 APP.init();
+fetchSignaling();
+setInterval(fetchSignaling, 60000);
 </script>
 </body>
 </html>
