@@ -47,16 +47,42 @@ function setText(id, val) {
   if (el) el.textContent = val;
 }
 
+function fmtNum(n) { return Number(n).toLocaleString('en-US'); }
+
 function updateBlockUI(b) {
-  setText('block-height', '#' + (b.height || '').toLocaleString());
-  setText('block-hash', b.hash ? b.hash.substring(0, 16) + '...' : '---');
+  setText('block-height', '#' + fmtNum(b.height || 0));
+  var hashEl = document.getElementById('block-hash');
+  if (hashEl) hashEl.textContent = b.hash ? b.hash.substring(0, 12) + '...' : '---';
   if (b.timestamp) {
     var d2 = new Date((typeof b.timestamp === 'number' ? b.timestamp : Date.parse(b.timestamp)) * 1000);
     setText('block-time', isNaN(d2.getTime()) ? '---' : d2.toISOString().replace('T', ' ').substring(0, 19) + ' UTC');
   }
   var sizeMB = ((b.size || 0) / 1000000).toFixed(2);
-  setText('block-stats', (b.tx_count || 0).toLocaleString() + ' txs . ' + sizeMB + ' MB . ' + (b.weight || 0).toLocaleString() + ' kWU');
-  setText('tx-footer', 'Live block #' + (b.height || 0).toLocaleString() + ' --- ' + (b.tx_count || 0).toLocaleString() + ' transactions');
+  setText('block-stats', fmtNum(b.tx_count || 0) + ' txs . ' + sizeMB + ' MB . ' + fmtNum(b.weight || 0) + ' kWU');
+  setText('tx-footer', 'Live block #' + fmtNum(b.height || 0) + ' --- ' + fmtNum(b.tx_count || 0) + ' transactions');
+
+  // Update transaction rows with current fee data
+  if (fees && fees.economyFee) {
+    var e = fees.economyFee || 1, f = fees.fastestFee || 3;
+    var btc = btcPrice || 64000;
+    var txList = document.getElementById('tx-list');
+    if (!txList) return;
+    txList.innerHTML = [
+      { type: 'Financial', cls: 'green', size: 250, fee: f },
+      { type: 'Inscription', cls: 'orange', size: 1200, fee: f * 2 },
+      { type: 'Financial', cls: 'green', size: 180, fee: e },
+      { type: 'Inscription', cls: 'orange', size: 3800, fee: f * 3 },
+      { type: 'Lightning', cls: 'blue', size: 1000, fee: e },
+      { type: 'Financial', cls: 'green', size: 140, fee: e },
+      { type: 'Inscription', cls: 'orange', size: 2100, fee: f * 2 },
+      { type: 'Other', cls: 'gray', size: 400, fee: e },
+    ].map(function(tx) {
+      var sats = tx.fee * tx.size;
+      var usd = (sats * btc / 100000000).toFixed(4);
+      var storage = (0.0077 * tx.size / 400).toFixed(4);
+      return '<div class="tx-row"><span class="tx-type"><span class="dot ' + tx.cls + '"></span>' + tx.type + '</span><span class="tx-size">' + tx.size + ' vB</span><span class="tx-fee" style="color:' + (tx.fee > e ? 'var(--orange)' : 'var(--green)') + ';">' + sats.toLocaleString('en-US') + ' sats</span><span class="tx-storage">$' + storage + '</span><span class="tx-see">→ Details</span></div>';
+    }).join('');
+  }
 }
 
 function updateLiveIndicator(d) {
