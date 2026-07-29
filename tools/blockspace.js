@@ -60,11 +60,11 @@ function updateBlockUI(b) {
 }
 
 function updateLiveIndicator(d) {
-  if (!d || !d.timestamp) return;
-  var then = new Date(d.timestamp).getTime();
-  var secsAgo = Math.round((Date.now() - then) / 1000);
-  var ago = secsAgo < 60 ? secsAgo + 's' : Math.round(secsAgo / 60) + 'm';
+  if (!d) return;
   var el = document.getElementById('live-indicator');
+  if (el && !el.dataset.start) el.dataset.start = Date.now();
+  var secsAgo = el ? Math.floor((Date.now() - parseInt(el.dataset.start || Date.now())) / 1000) : 0;
+  var ago = secsAgo < 60 ? secsAgo + 's' : Math.round(secsAgo / 60) + 'm';
   if (el) el.innerHTML = '<span class="live-dot"></span> Live . ' + ago + ' ago';
   var feeEl = document.getElementById('live-fees');
   if (feeEl && fees) {
@@ -112,6 +112,9 @@ API.onData(function(d) {
   blockHeight = d.block_height || 0;
 
   updateBlockSpace();
+  // Reset live indicator on fresh data
+  var ind = document.getElementById('live-indicator');
+  if (ind) ind.dataset.start = Date.now();
   updateLiveIndicator(d);
 
   // Update block header from pipeline data if available, else direct API

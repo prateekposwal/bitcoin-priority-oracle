@@ -34,8 +34,10 @@ var API = (function() {
     xhr.send();
   }
 
+  var _loadStart = 0;
   function load() {
-    var merged = { timestamp: new Date().toISOString(), alerts: [], sources: {} };
+    _loadStart = Date.now();
+    var merged = { timestamp: new Date(_loadStart).toISOString(), alerts: [], sources: {} };
 
     fetchJson('https://mempool.space/api/v1/fees/recommended', function(f) {
       if (f.fastestFee != null) {
@@ -82,7 +84,19 @@ var API = (function() {
       // Update live tickers on every page
       var tickers = document.querySelectorAll('.live-ticker');
       for (var t = 0; t < tickers.length; t++) {
-        if (merged.btc_price) {
+        // Update elapsed time on all live indicators
+      var now = Date.now();
+      var elapsed = Math.floor((now - _loadStart) / 1000);
+      var indicators = document.querySelectorAll('.live-indicator, .live-clock, #live-ticker, #live-indicator');
+      for (var ind = 0; ind < indicators.length; ind++) {
+        if (indicators[ind].id === 'live-ticker') continue; // ticker is set above
+        var txt = indicators[ind].innerHTML || '';
+        if (txt.includes('Live')) {
+          indicators[ind].innerHTML = '<span class=\"live-dot\"></span> Live . ' + (elapsed < 60 ? elapsed + 's' : Math.round(elapsed/60) + 'm') + ' ago';
+        }
+      }
+
+      if (merged.btc_price) {
           tickers[t].innerHTML = '<span class="ticker-item"><span class="ticker-dot green"></span> BTC <strong>$' + Number(merged.btc_price).toLocaleString() + '</strong></span>'
             + '<span class="ticker-item"><span class="ticker-dot orange"></span> Fastest <strong>' + (merged.fees ? merged.fees.fastestFee : '--') + '</strong> sat/vB</span>'
             + '<span class="ticker-item"><span class="ticker-dot blue"></span> Economy <strong>' + (merged.fees ? merged.fees.economyFee : '--') + '</strong> sat/vB</span>'
