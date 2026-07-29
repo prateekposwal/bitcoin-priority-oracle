@@ -92,7 +92,7 @@ const VIZ_Research = (() => {
   function buildSeries(raw) {
     if (!raw || !Array.isArray(raw) || raw.length === 0) return [];
     return raw.map(function(e) {
-      var economy = e.avgFee / 2500000;
+      var economy = (e.avgFees || e.avgFee || 0) / 2500000;
       return {
         t: e.timestamp,
         economy: economy,
