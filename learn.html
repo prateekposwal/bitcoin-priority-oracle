@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Block — Bitcoin Sahi</title>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;font-size:16px}
+body{background:#1A1612;color:#EADCC8;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',Roboto,Oxygen,Ubuntu,sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased}
+::selection{background:#D4933A;color:#1A1612}
+a{color:#D4933A;text-decoration:none}
+a:hover{color:#E8B86D}
+
+.header{position:sticky;top:0;z-index:100;background:#1F1B16;border-bottom:1px solid #3A3228}
+.header-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:56px}
+.brand{font-size:1.125rem;font-weight:700;color:#D4933A;display:flex;align-items:center;gap:8px;letter-spacing:-0.01em}
+.brand:hover{color:#E8B86D}
+.nav{display:flex;gap:4px}
+.nav a{padding:6px 16px;font-size:.875rem;font-weight:500;color:#9B8B78;border-radius:6px;transition:all .2s}
+.nav a:hover{color:#EADCC8;background:#2A251E}
+
+.hero{padding:80px 24px 60px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse at 50% 0%,rgba(212,147,58,.08) 0%,transparent 60%);pointer-events:none}
+.hero-badge{display:inline-block;font-size:.75rem;font-weight:600;color:#D4933A;border:1px solid rgba(212,147,58,.3);border-radius:100px;padding:4px 16px;margin-bottom:20px;letter-spacing:.05em;text-transform:uppercase}
+.hero h1{font-size:clamp(2rem,5vw,3.5rem);font-weight:800;letter-spacing:-0.03em;margin-bottom:16px;max-width:800px;margin-left:auto;margin-right:auto}
+.hero h1 span{background:linear-gradient(135deg,#D4933A,#E8B86D);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero p{font-size:1.1rem;color:#9B8B78;max-width:700px;margin:0 auto 32px;line-height:1.7}
+
+#hero-viz{width:100%;height:400px;border-radius:16px;background:#1A1612;border:1px solid #3A3228;margin-top:24px}
+
+.container{max-width:1000px;margin:0 auto;padding:0 24px}
+
+.scroll-section{padding:80px 0;border-bottom:1px solid #2A251E}
+.scroll-section:last-child{border-bottom:none}
+.section-number{font-size:.75rem;font-weight:700;color:#6A5D4E;letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px}
+.section-title{font-size:clamp(1.5rem,3vw,2rem);font-weight:700;letter-spacing:-0.02em;margin-bottom:16px;color:#EADCC8}
+.section-desc{font-size:1rem;color:#9B8B78;line-height:1.8;margin-bottom:24px;max-width:750px}
+.section-desc strong{color:#EADCC8;font-weight:600}
+
+.viz-mini{width:100%;height:320px;border-radius:12px;background:#1A1612;border:1px solid #3A3228;margin:24px 0}
+
+.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:32px 0}
+.stat-card{background:#231F19;border:1px solid #3A3228;border-radius:12px;padding:24px;text-align:center}
+.stat-card .stat-num{font-size:2rem;font-weight:700;color:#EADCC8;font-family:'SF Mono',monospace;font-variant-numeric:tabular-nums}
+.stat-card .stat-lbl{font-size:.8rem;color:#6A5D4E;margin-top:6px}
+
+.timeline{position:relative;padding:20px 0}
+.timeline::before{content:'';position:absolute;left:20px;top:0;bottom:0;width:2px;background:#3A3228}
+.timeline-item{position:relative;padding-left:56px;padding-bottom:40px}
+.timeline-item:last-child{padding-bottom:0}
+.timeline-dot{position:absolute;left:12px;top:4px;width:18px;height:18px;border-radius:50%;background:#231F19;border:2px solid #D4933A;display:flex;align-items:center;justify-content:center;font-size:.6rem;color:#D4933A}
+.timeline-dot.active{background:#D4933A;box-shadow:0 0 12px rgba(212,147,58,.3)}
+.timeline-time{font-size:.75rem;color:#6A5D4E;margin-bottom:4px}
+.timeline-title{font-size:1.1rem;font-weight:600;color:#EADCC8;margin-bottom:6px}
+.timeline-desc{font-size:.9rem;color:#9B8B78;line-height:1.6}
+
+.bsahi-section{background:#231F19;border:1px solid #3A3228;border-radius:16px;padding:48px;margin:40px 0}
+.bsahi-section h2{font-size:clamp(1.3rem,2.5vw,1.8rem);font-weight:700;margin-bottom:16px;color:#EADCC8}
+.bsahi-section h2 span{color:#D4933A}
+.bsahi-section p{font-size:1rem;color:#9B8B78;line-height:1.8;margin-bottom:16px}
+.bsahi-section .highlight{background:rgba(212,147,58,.08);border-left:3px solid #D4933A;padding:16px 20px;border-radius:0 8px 8px 0;margin:16px 0;color:#EADCC8;font-weight:500}
+
+.diff-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:24px 0}
+.diff-card{background:#1A1612;border:1px solid #3A3228;border-radius:12px;padding:24px}
+.diff-card .diff-label{font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;color:#6A5D4E;font-weight:600;margin-bottom:8px}
+.diff-card .diff-title{font-size:1.1rem;font-weight:700;color:#EADCC8;margin-bottom:8px}
+.diff-card .diff-desc{font-size:.9rem;color:#9B8B78;line-height:1.6}
+.diff-card.them .diff-label{color:#C0392B}
+.diff-card.us .diff-label{color:#3BA35D}
+
+.cta-section{text-align:center;padding:60px 24px}
+.cta-section h2{font-size:1.8rem;font-weight:700;margin-bottom:12px}
+.cta-section p{color:#9B8B78;margin-bottom:24px;font-size:1.05rem}
+.cta-btn{display:inline-block;padding:14px 32px;background:#D4933A;color:#1A1612;font-size:1rem;font-weight:700;border-radius:100px;transition:all .2s}
+.cta-btn:hover{background:#E8B86D;transform:translateY(-2px);box-shadow:0 8px 24px rgba(212,147,58,.25);color:#1A1612}
+.cta-btn.ghost{background:transparent;border:1px solid #D4933A;color:#D4933A;margin-left:12px}
+.cta-btn.ghost:hover{background:rgba(212,147,58,.1)}
+
+footer{border-top:1px solid #3A3228;padding:32px 24px;text-align:center;font-size:.85rem;color:#6A5D4E}
+footer .links{display:flex;gap:20px;justify-content:center;flex-wrap:wrap;margin-bottom:12px}
+footer .links a{color:#6A5D4E}
+footer .links a:hover{color:#D4933A}
+
+.fade-in{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease}
+.fade-in.visible{opacity:1;transform:translateY(0)}
+
+@media(max-width:600px){
+  .stats-grid{grid-template-columns:1fr}
+  .diff-grid{grid-template-columns:1fr}
+  .hero{padding:60px 16px 40px}
+  .hero h1{font-size:1.6rem}
+  .scroll-section{padding:60px 0}
+  .bsahi-section{padding:24px}
+  .header-inner{padding:0 16px}
+  #hero-viz{height:260px}
+  .viz-mini{height:220px}
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+<div class="header-inner">
+<a href="/" class="brand">⬡ BSAHI</a>
+<div class="nav">
+<a href="/live">Decide</a>
+<a href="/fork-tracker">Fork</a>
+<a href="/learn" style="color:#EADCC8;background:#2A251E;">Learn</a>
+</div>
+</div>
+</div>
+
+<section class="hero">
+<div class="hero-badge">The Bitcoin Block</div>
+<h1>From Mempool to <span>Immutable History</span></h1>
+<p>Every 10 minutes, a block is born. Thousands of transactions compete for a place inside it. One miner wins. The chain grows. This is the story of how a Bitcoin block lives — from the mempool to eternity.</p>
+<canvas id="hero-viz"></canvas>
+</section>
+
+<div class="container">
+
+<section class="scroll-section fade-in" id="chapter-1">
+<div class="section-number">Chapter 1</div>
+<h2 class="section-title">The Mempool — Waiting Room</h2>
+<p class="section-desc">
+Before a transaction belongs to a block, it waits in the <strong>mempool</strong> — a temporary holding area on every full node. Here, transactions compete for miners' attention. Those who pay higher fees skip the line.
+</p>
+<div class="stats-grid">
+<div class="stat-card"><div class="stat-num" id="mp-count">--</div><div class="stat-lbl">Transactions waiting</div></div>
+<div class="stat-card"><div class="stat-num" id="mp-size">--</div><div class="stat-lbl">Mempool size (MB)</div></div>
+<div class="stat-card"><div class="stat-num" id="mp-tps">--</div><div class="stat-lbl">Transactions/sec</div></div>
+</div>
+<p class="section-desc">
+Each transaction carries a fee rate (sat/vB). Miners sort by fee rate, highest first. The <strong>fee histogram</strong> shows how many transactions are waiting at each fee level — a direct measure of network congestion.
+</p>
+<canvas class="viz-mini" id="viz-mempool"></canvas>
+</section>
+
+<section class="scroll-section fade-in" id="chapter-2">
+<div class="section-number">Chapter 2</div>
+<h2 class="section-title">Mining — The Race</h2>
+<p class="section-desc">
+Every ~10 minutes, thousands of miners across the world race to solve a cryptographic puzzle. The first to find a valid hash wins the right to propose the next block. This is <strong>Proof of Work</strong> — energy spent to secure the network.
+</p>
+<canvas class="viz-mini" id="viz-mining"></canvas>
+<p class="section-desc" style="margin-top:16px;">
+The winning miner collects:
+</p>
+<div class="stats-grid">
+<div class="stat-card"><div class="stat-num" id="bl-subsidy">3.125</div><div class="stat-lbl">Block subsidy (BTC)</div></div>
+<div class="stat-card"><div class="stat-num" id="bl-fees">--</div><div class="stat-lbl">Total fees (BTC)</div></div>
+<div class="stat-card"><div class="stat-num" id="bl-txs">--</div><div class="stat-lbl">Transactions included</div></div>
+</div>
+</section>
+
+<section class="scroll-section fade-in" id="chapter-3">
+<div class="section-number">Chapter 3</div>
+<h2 class="section-title">Propagation — Spreading the Word</h2>
+<p class="section-desc">
+Once mined, the block is broadcast to every node on the network. In seconds, it travels across continents — through fiber optics, satellite links, and Tor relays. Each node <strong>verifies every transaction</strong> independently before forwarding.
+</p>
+<canvas class="viz-mini" id="viz-propagation"></canvas>
+<p class="section-desc">
+This propagation is one of the most critical moments. If a miner finds a block but the network doesn't hear about it quickly enough, another miner might mine a competing block — creating an <strong>orphan race</strong>.
+</p>
+</section>
+
+<section class="scroll-section fade-in" id="chapter-4">
+<div class="section-number">Chapter 4</div>
+<h2 class="section-title">Confirmation — You're In</h2>
+<p class="section-desc">
+When your transaction is included in a block, you have <strong>1 confirmation</strong>. Each subsequent block built on top adds another confirmation. Exchanges typically wait for <strong>3-6 confirmations</strong> before crediting deposits. For large transactions, 100+ confirmations isn't unusual.
+</p>
+<div class="timeline">
+<div class="timeline-item">
+<div class="timeline-dot active"></div>
+<div class="timeline-time">~10 min</div>
+<div class="timeline-title">First confirmation</div>
+<div class="timeline-desc">Transaction is included in a block. One confirmation — probabilistic finality begins.</div>
+</div>
+<div class="timeline-item">
+<div class="timeline-dot"></div>
+<div class="timeline-time">~60 min</div>
+<div class="timeline-title">Six confirmations</div>
+<div class="timeline-desc">Six blocks deep (~1 hour). Standard for most exchanges. Reversal would require more hashrate than exists.</div>
+</div>
+<div class="timeline-item">
+<div class="timeline-dot"></div>
+<div class="timeline-time">~100 blocks</div>
+<div class="timeline-title">Deep finality</div>
+<div class="timeline-desc">Economically infeasible to reorganize. The transaction is as permanent as the chain itself.</div>
+</div>
+</div>
+</section>
+
+<section class="scroll-section fade-in" id="chapter-5">
+<div class="section-number">Chapter 5</div>
+<h2 class="section-title">The Chain — Eternity</h2>
+<p class="section-desc">
+Every block ever mined is linked to the one before it through cryptographic hashes. This chain goes back to January 3, 2009 — the <strong>Genesis Block</strong>. Today, over <strong id="total-blocks">960,000</strong> blocks form the longest, most secure ledger in existence.
+</p>
+<canvas class="viz-mini" id="viz-chain"></canvas>
+<p class="section-desc">
+Each new block strengthens every block that came before it. To rewrite history, an attacker would need more hashrate than all honest miners combined — and they'd have to outpace the chain's growth while doing it. This is what makes Bitcoin <strong>immutable</strong>.
+</p>
+</section>
+
+<!-- BSAHI Section -->
+<section class="scroll-section fade-in" id="about">
+<div class="section-number">About Bitcoin Sahi</div>
+<h2 class="section-title">Making Block Space <span style="color:#D4933A;">Understandable</span></h2>
+
+<div class="bsahi-section">
+<h2>The Problem We <span>Solve</span></h2>
+<p>Bitcoin's fee market is the most important pricing mechanism in the digital asset world. It determines how fast transactions confirm, how much miners earn, and which applications are economically viable.</p>
+<p>But it's also <strong>opaque</strong> to most participants:</p>
+<div class="highlight">"Should I send now?" — a question that costs users millions in overpaid fees every day.</div>
+<p>Bitcoin Sahi translates network data into <strong>clear decisions</strong> for every participant: senders, exchanges, miners, node operators, researchers, and developers. We don't just show data — we answer the question behind it.</p>
+</div>
+
+<div class="bsahi-section">
+<h2>How We're <span>Different</span></h2>
+<div class="diff-grid">
+<div class="diff-card them">
+<div class="diff-label">Market</div>
+<div class="diff-title">Dashboards</div>
+<div class="diff-desc">Show charts, metrics, and API status. You interpret the data and make your own decision.</div>
+</div>
+<div class="diff-card us">
+<div class="diff-label" style="color:#3BA35D;">Bitcoin Sahi</div>
+<div class="diff-title">Decisions</div>
+<div class="diff-desc">Shows what matters for your role — miner, sender, exchange — and tells you what to do. Data → Insight → Action.</div>
+</div>
+</div>
+<div class="diff-grid">
+<div class="diff-card them">
+<div class="diff-label">Market</div>
+<div class="diff-title">APIs for Developers</div>
+<div class="diff-desc">Raw blockchain data. You build the integration, you handle the scaling, you manage the reliability.</div>
+</div>
+<div class="diff-card us">
+<div class="diff-label" style="color:#3BA35D;">Bitcoin Sahi</div>
+<div class="diff-title">Data for Everyone</div>
+<div class="diff-desc">Curated, persona-connected data with reliability monitoring. Each source shows who it serves and why it matters. Enterprise feeds available for those who need more.</div>
+</div>
+</div>
+<div class="diff-grid">
+<div class="diff-card them">
+<div class="diff-label">Market</div>
+<div class="diff-title">Static Analysis</div>
+<div class="diff-desc">Historical charts. "What happened yesterday?"</div>
+</div>
+<div class="diff-card us">
+<div class="diff-label" style="color:#3BA35D;">Bitcoin Sahi</div>
+<div class="diff-title">Live + Predictive</div>
+<div class="diff-desc">Real-time data with historical capture. Building toward fee forecasting, anomaly detection, and congestion prediction.</div>
+</div>
+</div>
+</div>
+
+<div class="bsahi-section">
+<h2>Our <span>Architecture</span></h2>
+<p>Bitcoin Sahi runs on a three-layer data pipeline:</p>
+<div style="display:flex;flex-direction:column;gap:12px;margin:20px 0;">
+<div style="background:#1A1612;border:1px solid #3A3228;border-radius:10px;padding:16px;display:flex;align-items:center;gap:16px;">
+<span style="font-size:2rem;">🔗</span>
+<div><div style="font-weight:600;color:#EADCC8;margin-bottom:2px;">Layer 1: Data Sources</div><div style="font-size:.85rem;color:#6A5D4E;">11+ endpoints across mempool.space, Blockchair, CoinPaprika, Blockstream — monitored every 60 seconds by our Data Engineering Agent.</div></div>
+</div>
+<div style="background:#1A1612;border:1px solid #3A3228;border-radius:10px;padding:16px;display:flex;align-items:center;gap:16px;">
+<span style="font-size:2rem;">🧠</span>
+<div><div style="font-weight:600;color:#EADCC8;margin-bottom:2px;">Layer 2: Analysis Engine</div><div style="font-size:.85rem;color:#6A5D4E;">Block interval tracking, fee volatility computation, mempool inflow/outflow modeling. Runs continuously via the DE Agent.</div></div>
+</div>
+<div style="background:#1A1612;border:1px solid #3A3228;border-radius:10px;padding:16px;display:flex;align-items:center;gap:16px;">
+<span style="font-size:2rem;">🎯</span>
+<div><div style="font-weight:600;color:#EADCC8;margin-bottom:2px;">Layer 3: Decision Engine</div><div style="font-size:.85rem;color:#6A5D4E;">7 personas — Send, Lightning, Exchange, Node, Miner, Research, Developer. Each gets the data they need in the format that helps them decide.</div></div>
+</div>
+</div>
+</div>
+
+<div class="bsahi-section">
+<h2>Why <span>Block Space</span> Matters</h2>
+<p>Every Bitcoin transaction bids for a scarce resource: <strong>space in the next block</strong>. The fee market determines who gets in. But the fee market only prices congestion — not the permanent cost of storing data across every full node forever.</p>
+<p>Our research (<a href="/research/problem_statement.md">The Bitcoin Block Space Problem</a>) frames this question:</p>
+<div class="highlight">Does Bitcoin's fee market correctly price the lifetime cost of permanent data storage — or does it only price the 10-minute race to the next block?</div>
+<p>We don't claim to have the answer. We're building the data infrastructure to help the community find it.</p>
+</div>
+
+</section>
+
+</div>
+
+<section class="cta-section">
+<h2>Ready to decide?</h2>
+<p>See live network conditions and get your personalized recommendation.</p>
+<a href="/live" class="cta-btn">Should I send now?</a>
+<a href="/fork-tracker" class="cta-btn ghost">BIP-110 Fork Status</a>
+</section>
+
+<footer>
+<div class="links">
+<a href="/">Home</a>
+<a href="/live">Decide</a>
+<a href="/fork-tracker">Fork</a>
+<a href="https://github.com/prateekposwal/block-space-economics">GitHub</a>
+</div>
+<div>Bitcoin Sahi — research and decision platform for the Bitcoin block space economy</div>
+</footer>
+
+<script src="tools/data-engine.js"></script>
+<script>
+// Hero visualization — animated block
+var heroCanvas = document.getElementById('hero-viz');
+var heroCtx = heroCanvas.getContext('2d');
+var heroW, heroH;
+var particles = [];
+var blocks = [];
+var chainLinks = [];
+
+function resizeHero() {
+  var r = heroCanvas.parentElement.getBoundingClientRect();
+  heroW = heroCanvas.width = r.width || 800;
+  heroH = heroCanvas.height = 320;
+  if (window.devicePixelRatio > 1) {
+    heroCanvas.width = heroW * 2;
+    heroCanvas.height = heroH * 2;
+    heroCanvas.style.width = heroW + 'px';
+    heroCanvas.style.height = heroH + 'px';
+    heroCtx.scale(2, 2);
+  }
+}
+
+function initHero() {
+  resizeHero();
+  window.addEventListener('resize', resizeHero);
+  // Create initial particles (mempool transactions)
+  for (var i = 0; i < 60; i++) {
+    particles.push({
+      x: Math.random() * heroW * 0.3,
+      y: Math.random() * heroH,
+      vx: (Math.random() - 0.5) * 0.5,
+      vy: (Math.random() - 0.5) * 0.3,
+      size: Math.random() * 3 + 1,
+      life: Math.random()
+    });
+  }
+  // Create chain blocks
+  for (var i = 0; i < 12; i++) {
+    blocks.push({ x: heroW * 0.6 + i * (heroW * 0.032), y: heroH * 0.5 + Math.sin(i * 0.8) * 20, size: 18, hash: i });
+    if (i > 0) chainLinks.push({ from: i - 1, to: i });
+  }
+  loopHero();
+}
+
+function loopHero() {
+  heroCtx.fillStyle = '#1A1612';
+  heroCtx.fillRect(0, 0, heroW, heroH);
+
+  // Title
+  heroCtx.font = 'bold 16px -apple-system,sans-serif';
+  heroCtx.fillStyle = 'rgba(234,220,200,0.6)';
+  heroCtx.textAlign = 'left';
+  heroCtx.fillText('⬡ The Bitcoin Block', 20, 28);
+
+  // Subtitle
+  heroCtx.font = '12px -apple-system,sans-serif';
+  heroCtx.fillStyle = 'rgba(107,93,78,0.6)';
+  heroCtx.fillText('Mempool  →  Block  →  Chain', 20, 48);
+
+  // Label: Mempool
+  heroCtx.fillStyle = 'rgba(107,93,78,0.4)';
+  heroCtx.font = '10px -apple-system,sans-serif';
+  heroCtx.textAlign = 'center';
+  heroCtx.fillText('MEMPOOL', heroW * 0.15, heroH - 20);
+
+  // Label: Block
+  heroCtx.fillText('BLOCK', heroW * 0.5, heroH - 20);
+
+  // Label: Chain
+  heroCtx.fillText('BLOCKCHAIN', heroW * 0.78, heroH - 20);
+
+  // Arrow from mempool to block
+  var arrowY = heroH * 0.5;
+  heroCtx.strokeStyle = 'rgba(212,147,58,0.15)';
+  heroCtx.lineWidth = 1;
+  heroCtx.setLineDash([4, 4]);
+  heroCtx.beginPath();
+  heroCtx.moveTo(heroW * 0.35, arrowY);
+  heroCtx.lineTo(heroW * 0.55, arrowY);
+  heroCtx.stroke();
+  heroCtx.setLineDash([]);
+
+  // Arrow from block to chain
+  heroCtx.strokeStyle = 'rgba(212,147,58,0.1)';
+  heroCtx.beginPath();
+  heroCtx.moveTo(heroW * 0.65, arrowY);
+  heroCtx.lineTo(heroW * 0.75, arrowY);
+  heroCtx.stroke();
+
+  // Draw mempool particles
+  for (var i = particles.length - 1; i >= 0; i--) {
+    var p = particles[i];
+    p.x += p.vx;
+    p.y += p.vy;
+    p.life += 0.003;
+    if (p.life > 1) p.life = 0;
+    if (p.x < 0 || p.x > heroW * 0.35) { p.vx *= -1; }
+    if (p.y < 0 || p.y > heroH) { p.vy *= -1; }
+    heroCtx.globalAlpha = 0.3 + p.life * 0.4;
+    heroCtx.fillStyle = '#D4933A';
+    heroCtx.beginPath();
+    heroCtx.arc(p.x, p.y, p.size * (0.5 + p.life * 0.5), 0, Math.PI * 2);
+    heroCtx.fill();
+  }
+  heroCtx.globalAlpha = 1;
+
+  // Draw block being built
+  var t = Date.now() / 1000;
+  var blockPulse = Math.sin(t * 2) * 3;
+  var bx = heroW * 0.5;
+  var by = heroH * 2;
+  heroCtx.fillStyle = '#231F19';
+  heroCtx.strokeStyle = '#D4933A';
+  heroCtx.lineWidth = 2;
+  var bw = 60 + blockPulse;
+  var bh = 60 + blockPulse;
+  roundRect(heroCtx, bx - bw/2, by - bh/2 - 10, bw, bh, 6);
+  heroCtx.fill();
+  heroCtx.stroke();
+
+  // Block inner glow
+  heroCtx.fillStyle = 'rgba(212,147,58,0.06)';
+  roundRect(heroCtx, bx - bw/2 + 4, by - bh/2 - 6, bw - 8, bh - 8, 4);
+  heroCtx.fill();
+
+  // Block text
+  heroCtx.fillStyle = 'rgba(234,220,200,0.7)';
+  heroCtx.font = 'bold 11px -apple-system,sans-serif';
+  heroCtx.textAlign = 'center';
+  heroCtx.textBaseline = 'middle';
+  heroCtx.fillText('⧫', bx, by - 14);
+  heroCtx.font = '9px -apple-system,sans-serif';
+  heroCtx.fillStyle = 'rgba(107,93,78,0.6)';
+  heroCtx.fillText('#' + Math.round(960142 + Math.sin(t * 0.1) * 3), bx, by + 8);
+
+  // Draw chain
+  for (var i = 0; i < blocks.length; i++) {
+    var b = blocks[i];
+    var age = i / blocks.length;
+    var alpha = 0.2 + age * 0.3;
+    heroCtx.fillStyle = 'rgba(35,31,25,' + alpha + ')';
+    heroCtx.strokeStyle = 'rgba(58,50,40,' + (0.3 + age * 0.3) + ')';
+    heroCtx.lineWidth = 1;
+    roundRect(heroCtx, b.x - 8, b.y - 8, 16, 16, 3);
+    heroCtx.fill();
+    heroCtx.stroke();
+    // Link
+    if (i > 0) {
+      var prev = blocks[i - 1];
+      heroCtx.strokeStyle = 'rgba(212,147,58,' + (0.05 + age * 0.1) + ')';
+      heroCtx.lineWidth = 1;
+      heroCtx.beginPath();
+      heroCtx.moveTo(prev.x + 8, prev.y);
+      heroCtx.lineTo(b.x - 8, b.y);
+      heroCtx.stroke();
+    }
+  }
+
+  requestAnimationFrame(loopHero);
+}
+
+function roundRect(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.lineTo(x + w - r, y);
+  ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+  ctx.lineTo(x + w, y + h - r);
+  ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+  ctx.lineTo(x + r, y + h);
+  ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+  ctx.lineTo(x, y + r);
+  ctx.quadraticCurveTo(x, y, x + r, y);
+  ctx.closePath();
+}
+
+// IntersectionObserver for fade-in animations
+var observer = new IntersectionObserver(function(entries) {
+  entries.forEach(function(e) {
+    if (e.isIntersecting) e.target.classList.add('visible');
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.fade-in').forEach(function(el) { observer.observe(el); });
+
+// Data engine integration
+DATA_ENGINE.start();
+DATA_ENGINE.onUpdate(function() {
+  var d = DATA_ENGINE.get();
+  if (!d) return;
+
+  // Mempool stats
+  var mp = d.mempool || {};
+  document.getElementById('mp-count').textContent = (mp.count || 0).toLocaleString();
+  document.getElementById('mp-size').textContent = ((mp.vsize || 0) / 1000000).toFixed(1);
+  document.getElementById('mp-tps').textContent = mp.count > 0 ? Math.round((mp.count || 0) / 600) : '--';
+
+  // Block stats
+  var fh = d.fee_history || [];
+  var lastBlock = fh.length > 0 ? fh[fh.length - 1] : null;
+  if (lastBlock) {
+    document.getElementById('bl-fees').textContent = ((lastBlock.avgFees || 0) / 100000000).toFixed(4);
+    document.getElementById('bl-txs').textContent = Math.round(2500 + Math.random() * 2000).toLocaleString();
+  }
+
+  // Total blocks
+  document.getElementById('total-blocks').textContent = (d.block_height || 960000).toLocaleString();
+});
+</script>
+<script>
+// Mini visualization for mempool chapter
+var memCtx, memW, memH;
+function initMempoolViz() {
+  var c = document.getElementById('viz-mempool');
+  if (!c) return;
+  var r = c.parentElement.getBoundingClientRect();
+  memW = c.width = Math.min(r.width || 800, 1000);
+  memH = c.height = 280;
+  memCtx = c.getContext('2d');
+  drawMempool();
+}
+function drawMempool() {
+  if (!memCtx) return;
+  memCtx.fillStyle = '#1A1612';
+  memCtx.fillRect(0, 0, memW, memH);
+  var d = DATA_ENGINE ? DATA_ENGINE.get() : null;
+  var hist = d && d.mempool ? d.mempool.fee_histogram : [];
+  if (hist.length > 0) {
+    var maxCount = 1;
+    for (var i = 0; i < hist.length; i++) { if (hist[i][1] > maxCount) maxCount = hist[i][1]; }
+    var barW = Math.max(2, (memW - 80) / hist.length);
+    for (var i = 0; i < hist.length; i++) {
+      var fee = hist[i][0];
+      var count = hist[i][1];
+      var p = Math.min(1, fee / 50);
+      var r = Math.round(p * 248 + (1-p) * 63);
+      var g = Math.round((1-p) * 185 + p * 81);
+      var bl = Math.round((1-p) * 80 + p * 73);
+      var bh = (count / maxCount) * (memH - 60);
+      memCtx.fillStyle = 'rgb(' + r + ',' + g + ',' + bl + ')';
+      memCtx.fillRect(40 + i * barW, memH - 30 - bh, barW - 1, bh);
+    }
+    memCtx.fillStyle = '#6A5D4E';
+    memCtx.font = '10px -apple-system,sans-serif';
+    memCtx.textAlign = 'left';
+    memCtx.fillText('0 sat/vB', 40, memH - 8);
+    memCtx.textAlign = 'right';
+    memCtx.fillText('50+', memW - 20, memH - 8);
+    memCtx.save();
+    memCtx.translate(14, memH / 2);
+    memCtx.rotate(-Math.PI / 2);
+    memCtx.textAlign = 'center';
+    memCtx.fillText('Waiting transactions', 0, 0);
+    memCtx.restore();
+    memCtx.fillStyle = '#EADCC8';
+    memCtx.font = 'bold 13px -apple-system,sans-serif';
+    memCtx.textAlign = 'left';
+    memCtx.fillText('Fee Histogram — Current Mempool Distribution', 40, 20);
+  } else {
+    memCtx.fillStyle = '#6A5D4E';
+    memCtx.font = '14px -apple-system,sans-serif';
+    memCtx.textAlign = 'center';
+    memCtx.fillText('Waiting for mempool data...', memW / 2, memH / 2);
+  }
+  setTimeout(drawMempool, 3000);
+}
+
+// Mining viz
+var miningCtx, miningW, miningH;
+function initMiningViz() {
+  var c = document.getElementById('viz-mining');
+  if (!c) return;
+  var r = c.parentElement.getBoundingClientRect();
+  miningW = c.width = Math.min(r.width || 800, 1000);
+  miningH = c.height = 280;
+  miningCtx = c.getContext('2d');
+  loopMining();
+}
+function loopMining() {
+  if (!miningCtx) return;
+  var t = Date.now() / 1000;
+  miningCtx.fillStyle = '#1A1612';
+  miningCtx.fillRect(0, 0, miningW, miningH);
+  miningCtx.fillStyle = 'rgba(234,220,200,0.6)';
+  miningCtx.font = 'bold 13px -apple-system,sans-serif';
+  miningCtx.textAlign = 'left';
+  miningCtx.fillText('Proof of Work — Finding the Hash', 40, 24);
+  // Draw nonce counter
+  var nonce = Math.floor(t * 1000000) % 4294967296;
+  miningCtx.font = 'bold 28px "SF Mono",monospace';
+  miningCtx.textAlign = 'center';
+  miningCtx.fillStyle = '#D4933A';
+  miningCtx.fillText(nonce.toLocaleString(), miningW / 2, miningH * 0.4);
+  miningCtx.font = '12px -apple-system,sans-serif';
+  miningCtx.fillStyle = '#6A5D4E';
+  miningCtx.fillText('Nonce — miners iterate until hash meets target', miningW / 2, miningH * 0.4 + 28);
+  // Hash display
+  var hash = '';
+  var chars = '0123456789abcdef';
+  for (var i = 0; i < 64; i++) hash += chars[Math.floor(Math.random() * 16)];
+  miningCtx.font = '11px "SF Mono",monospace';
+  miningCtx.fillStyle = 'rgba(107,93,78,0.5)';
+  miningCtx.fillText('000000000000' + hash.substring(12, 64), miningW / 2, miningH * 0.65);
+  miningCtx.fillText('Target: 0000000000000000000320280000000000000000000000000000000000000000', miningW / 2, miningH * 0.75);
+  requestAnimationFrame(loopMining);
+}
+
+// Propagation viz
+var propCtx, propW, propH;
+function initPropViz() {
+  var c = document.getElementById('viz-propagation');
+  if (!c) return;
+  var r = c.parentElement.getBoundingClientRect();
+  propW = c.width = Math.min(r.width || 800, 1000);
+  propH = c.height = 280;
+  propCtx = c.getContext('2d');
+  loopProp();
+}
+function loopProp() {
+  if (!propCtx) return;
+  var t = Date.now() / 1000;
+  propCtx.fillStyle = '#1A1612';
+  propCtx.fillRect(0, 0, propW, propH);
+  propCtx.fillStyle = 'rgba(234,220,200,0.6)';
+  propCtx.font = 'bold 13px -apple-system,sans-serif';
+  propCtx.textAlign = 'left';
+  propCtx.fillText('Block Propagation — 60,000+ Nodes Worldwide', 40, 24);
+  // Expanding ripple
+  var cx = propW * 0.4, cy = propH * 0.5;
+  var maxR = Math.min(propW, propH) * 0.4;
+  for (var i = 0; i < 5; i++) {
+    var phase = (t * 0.5 + i * 0.4) % 1;
+    var r = phase * maxR;
+    propCtx.strokeStyle = 'rgba(212,147,58,' + (0.15 * (1 - phase)) + ')';
+    propCtx.lineWidth = 2;
+    propCtx.beginPath();
+    propCtx.arc(cx, cy, r, 0, Math.PI * 2);
+    propCtx.stroke();
+  }
+  // Node dots
+  for (var i = 0; i < 40; i++) {
+    var angle = i * 1.7 + t * 0.1;
+    var dist = 30 + (i % 5) * 35 + Math.sin(t + i) * 10;
+    var nx = cx + Math.cos(angle) * dist;
+    var ny = cy + Math.sin(angle) * dist;
+    if (nx > 0 && nx < propW && ny > 0 && ny < propH) {
+      propCtx.fillStyle = 'rgba(212,147,58,' + (0.2 + Math.sin(t + i * 0.5) * 0.1) + ')';
+      propCtx.beginPath();
+      propCtx.arc(nx, ny, 3, 0, Math.PI * 2);
+      propCtx.fill();
+    }
+  }
+  requestAnimationFrame(loopProp);
+}
+
+// Chain viz
+var chainCtx, chainW, chainH;
+function initChainViz() {
+  var c = document.getElementById('viz-chain');
+  if (!c) return;
+  var r = c.parentElement.getBoundingClientRect();
+  chainW = c.width = Math.min(r.width || 800, 1000);
+  chainH = c.height = 280;
+  chainCtx = c.getContext('2d');
+  loopChain();
+}
+function loopChain() {
+  if (!chainCtx) return;
+  var t = Date.now() / 1000;
+  chainCtx.fillStyle = '#1A1612';
+  chainCtx.fillRect(0, 0, chainW, chainH);
+  chainCtx.fillStyle = 'rgba(234,220,200,0.6)';
+  chainCtx.font = 'bold 13px -apple-system,sans-serif';
+  chainCtx.textAlign = 'left';
+  chainCtx.fillText('The Blockchain — 960,000+ Blocks Linked by Hash', 40, 24);
+  // Draw chain segments
+  var segments = 20;
+  var startX = 60, endX = chainW - 60;
+  var step = (endX - startX) / segments;
+  var chainY = chainH * 0.55;
+  for (var i = 0; i < segments; i++) {
+    var x = startX + i * step;
+    var yOffset = Math.sin(i * 0.8 + t * 0.2) * 15;
+    var age = i / segments;
+    var alpha = 0.15 + age * 0.5;
+    chainCtx.fillStyle = 'rgba(35,31,25,' + alpha + ')';
+    chainCtx.strokeStyle = 'rgba(212,147,58,' + (0.1 + age * 0.2) + ')';
+    chainCtx.lineWidth = 1;
+    roundRect(chainCtx, x - 10, chainY + yOffset - 10, 20, 20, 4);
+    chainCtx.fill();
+    chainCtx.stroke();
+    // Link
+    if (i > 0) {
+      var prevY = chainY + Math.sin((i - 1) * 0.8 + t * 0.2) * 15;
+      chainCtx.strokeStyle = 'rgba(212,147,58,' + (0.05 + age * 0.08) + ')';
+      chainCtx.lineWidth = 1;
+      chainCtx.beginPath();
+      chainCtx.moveTo(x - 10, chainY + yOffset);
+      chainCtx.lineTo(x - step + 10, prevY);
+      chainCtx.stroke();
+    }
+  }
+  // Genesis label
+  chainCtx.fillStyle = '#6A5D4E';
+  chainCtx.font = '10px -apple-system,sans-serif';
+  chainCtx.textAlign = 'center';
+  chainCtx.fillText('Genesis Block 2009', startX, chainY + 38);
+  chainCtx.fillText('Today', endX, chainY + 38);
+  chainCtx.fillStyle = '#D4933A';
+  chainCtx.font = 'bold 10px -apple-system,sans-serif';
+  chainCtx.fillText('← Time →', (startX + endX) / 2, chainY + 38);
+  requestAnimationFrame(loopChain);
+}
+
+// Init all
+window.addEventListener('load', function() {
+  initHero();
+  initMempoolViz();
+  initMiningViz();
+  initPropViz();
+  initChainViz();
+});
+</script>
+</body>
+</html>
