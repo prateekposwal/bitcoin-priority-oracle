@@ -8,7 +8,7 @@ var VIZ_Fees = (function() {
   var displayFee = 3;
   var targetFee = 3;
   var scrollOffset = 0;
-  var bottomMargin = 120;
+  var bottomMargin = 90;
 
   function init(canvasId) {
     canvas = document.getElementById(canvasId);
@@ -84,7 +84,7 @@ var VIZ_Fees = (function() {
     for (var i = 0; i < bars.length; i++) {
       var b = bars[i];
       b.fee += (b.targetFee - b.fee) * 0.03;
-      b.h = (b.fee / 50) * maxBarArea * 0.8;
+      b.h = (b.fee / 50) * maxBarArea * 0.9;
       b.age++;
     }
 
