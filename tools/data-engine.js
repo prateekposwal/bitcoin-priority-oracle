@@ -219,6 +219,9 @@ var DATA_ENGINE = (function () {
           };
         });
         break;
+      case 'blockchair':
+        DATA.blockchair = typeof raw === 'object' && raw.data ? raw.data : raw;
+        break;
       case 'block_height':
         DATA.block_height = (typeof raw === 'number') ? raw : parseInt(raw, 10) || 0;
         break;
@@ -279,7 +282,7 @@ var DATA_ENGINE = (function () {
         m.d = { p: raw.USD || 0 };
         break;
       case 'mempool':
-        m.d = { c: raw.count || 0, v: raw.vsize || 0 };
+        m.d = { c: raw.count || 0, v: raw.vsize || 0, fh: Array.isArray(raw.fee_histogram) ? raw.fee_histogram.slice(0, 50) : [] };
         break;
       case 'mempool_blocks':
         m.d = { n: Array.isArray(raw) ? raw.length : 0 };
@@ -293,6 +296,12 @@ var DATA_ENGINE = (function () {
         break;
       case 'blocks':
         m.d = { n: Array.isArray(raw) ? raw.length : 0, h: raw.length > 0 ? (raw[0].height || 0) : 0 };
+        break;
+      case 'blockchair':
+        if (raw && raw.data) {
+          var bd = raw.data;
+          m.d = { blocks: bd.blocks, txs24h: bd.transactions_24h, mempoolTxs: bd.mempool_transactions, mempoolSize: bd.mempool_size, mempoolTps: bd.mempool_tps, difficulty: bd.difficulty, blockchainSize: bd.blockchain_size, bestHeight: bd.best_block_height };
+        }
         break;
       case 'block_height':
         m.d = { h: (typeof raw === 'number') ? raw : parseInt(raw, 10) || 0 };
