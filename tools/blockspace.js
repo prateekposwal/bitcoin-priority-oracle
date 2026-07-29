@@ -152,4 +152,4 @@ API.onData(function(d) {
 // Initial render
 updateBlockSpace();
 fetchLiveBlock(); // fetch block data directly from mempool.space
-API.start({ interval: 60000 });
+API.start();
