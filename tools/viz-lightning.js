@@ -57,21 +57,22 @@ var VIZ_Lightning = (function() {
 
     buildNodes();
 
-    DATA_ENGINE.onUpdate(function() {
-      var d = DATA_ENGINE.get().lightning || {};
-      stats.capacity = d.total_capacity || 0;
-      stats.nodes = d.node_count || 0;
-      stats.channels = d.channel_count || 0;
-      if (stats.nodes > 0) reconcileNodeCount(stats.nodes);
-    });
-
-    DATA_ENGINE.start();
+    if (typeof DATA_ENGINE !== 'undefined') {
+      DATA_ENGINE.onUpdate(function() {
+        var d = DATA_ENGINE.get().lightning || {};
+        stats.capacity = d.total_capacity || 0;
+        stats.nodes = d.node_count || 0;
+        stats.channels = d.channel_count || 0;
+        if (stats.nodes > 0) reconcileNodeCount(stats.nodes);
+      });
+    }
 
     loop();
   }
 
   function resize() {
     var rect = canvas.parentElement ? canvas.parentElement.getBoundingClientRect() : { width: 800, height: 400 };
+    if (rect.width < 100) rect = { width: window.innerWidth, height: 600 };
     w = canvas.width = rect.width || window.innerWidth;
     h = canvas.height = Math.max(200, rect.height || 600);
     canvas.style.width = '100%';
@@ -79,7 +80,8 @@ var VIZ_Lightning = (function() {
   }
 
   function buildNodes() {
-    var d = DATA_ENGINE.get().lightning || {};
+    var d = {};
+    if (typeof DATA_ENGINE !== 'undefined') { d = DATA_ENGINE.get().lightning || {}; }
     stats.capacity = d.total_capacity || 0;
     stats.nodes = d.node_count || 42;
     stats.channels = d.channel_count || 0;

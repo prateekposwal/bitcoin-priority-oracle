@@ -20,13 +20,14 @@ var VIZ_Send = (function() {
     canvas.addEventListener('touchstart', onTouchStart, { passive: false });
     canvas.addEventListener('touchmove', onTouchMove, { passive: false });
     canvas.addEventListener('touchend', onTouchEnd);
-    DATA_ENGINE.onUpdate(function() {
-      var s = DATA_ENGINE.get();
-      bars = (s.fee_history || []).slice(-144);
-      economyFee = s.fees.economyFee || 0;
-      btcPrice = s.btc_price || 0;
-    });
-    DATA_ENGINE.start();
+    if (typeof DATA_ENGINE !== 'undefined') {
+      DATA_ENGINE.onUpdate(function() {
+        var s = DATA_ENGINE.get();
+        bars = (s.fee_history || []).slice(-144);
+        economyFee = s.fees.economyFee || 0;
+        btcPrice = s.btc_price || 0;
+      });
+    }
     tick();
   }
 

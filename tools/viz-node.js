@@ -29,10 +29,17 @@ var VIZ_Node = (function() {
     ctx = canvas.getContext('2d');
 
     if (typeof DATA_ENGINE !== 'undefined') {
-      var btcPrice = DATA_ENGINE.get().btc_price;
-      if (btcPrice && btcPrice > 0) {
-        values.hardware = Math.round(Math.min(2000, Math.max(200, btcPrice * 0.025)));
+      var initPrice = DATA_ENGINE.get().btc_price;
+      if (initPrice && initPrice > 0) {
+        values.hardware = Math.round(Math.min(2000, Math.max(200, initPrice * 0.025)));
       }
+      DATA_ENGINE.onUpdate(function(state) {
+        var newPrice = state.btc_price;
+        if (newPrice && newPrice > 0) {
+          values.hardware = Math.round(Math.min(2000, Math.max(200, newPrice * 0.025)));
+          draw();
+        }
+      });
     }
 
     createControls();

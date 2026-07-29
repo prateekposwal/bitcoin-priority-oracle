@@ -414,7 +414,9 @@ document.getElementById('csv-download-btn').addEventListener('click', function()
   }
 });
 
-DATA_ENGINE.start();
+if (typeof DATA_ENGINE !== 'undefined') {
+  DATA_ENGINE.start();
+}
 VIZ_Send && VIZ_Send.init('viz-send');
 VIZ_Lightning && VIZ_Lightning.init('viz-lightning');
 VIZ_Exchange && VIZ_Exchange.init('viz-exchange');
@@ -423,7 +425,8 @@ VIZ_Miner && VIZ_Miner.init('viz-miner');
 VIZ_Research && VIZ_Research.init('viz-research');
 VIZ_Developer && VIZ_Developer.init('viz-developer');
 
-DATA_ENGINE.onUpdate(function() {
+if (typeof DATA_ENGINE !== 'undefined') {
+  DATA_ENGINE.onUpdate(function() {
   var d = DATA_ENGINE.get();
   if (!d || !d.fees) return;
   var fees = d.fees;
@@ -484,11 +487,11 @@ DATA_ENGINE.onUpdate(function() {
   if (d.lightning) {
     var lnNodes = d.lightning.node_count || 0;
     var lnChannels = d.lightning.channel_count || 0;
-    var lnCap = d.lightning.total_capacity || 0;
+    var lnCapBtc = (d.lightning.total_capacity || 0) / 100000000;
     var chanCost = (e * 1000 * btcPrice) / 100000000;
     document.getElementById('ln-insight').textContent =
       'With ' + lnChannels.toLocaleString() + ' channels across ' + lnNodes.toLocaleString() + ' nodes and ' +
-      lnCap.toFixed(0) + ' BTC capacity, the Lightning Network continues to grow. ' +
+      lnCapBtc.toFixed(1) + ' BTC capacity, the Lightning Network continues to grow. ' +
       'Channel opens cost approximately $' + chanCost.toFixed(2) + ' at current fee rates.';
   }
 
@@ -520,12 +523,16 @@ DATA_ENGINE.onUpdate(function() {
   document.getElementById('ex-savings').textContent = '$' + batchSave.toFixed(0);
 
   // --- Node Stat Cards ---
-  var hwCost = Math.round(Math.min(2000, Math.max(200, btcPrice * 0.025)));
-  var bwCost = 50;
-  var powerCost = 150;
-  document.getElementById('node-hw').textContent = '$' + Math.round(hwCost / 3);
-  document.getElementById('node-bw').textContent = '$' + (bwCost * 12);
-  document.getElementById('node-power').textContent = '$' + Math.round((powerCost * 24 * 365 / 1000) * 0.12);
+  var hwCostNode = Math.round(Math.min(2000, Math.max(200, btcPrice * 0.025)));
+  var bwCostNode = 50;
+  var powerCostNode = 150;
+  var storageCostNode = 50;
+  var totalNodeCost = Math.round(hwCostNode / 3 + bwCostNode * 12 + (powerCostNode * 24 * 365 / 1000) * 0.12 + storageCostNode);
+  document.getElementById('node-hw').textContent = '$' + Math.round(hwCostNode / 3);
+  document.getElementById('node-bw').textContent = '$' + (bwCostNode * 12);
+  document.getElementById('node-power').textContent = '$' + Math.round((powerCostNode * 24 * 365 / 1000) * 0.12);
+  var nodeCostEl = document.getElementById('node-cost');
+  if (nodeCostEl) nodeCostEl.textContent = '$' + totalNodeCost;
 
   // --- Miner Stat Cards ---
   document.getElementById('miner-subsidy').textContent = '3.125 BTC';
@@ -566,6 +573,7 @@ DATA_ENGINE.onUpdate(function() {
   document.getElementById('tkr-ln-cap').textContent = lnCap;
   document.getElementById('tkr-updated').textContent = updated;
 });
+}
 </script>
 </body>
 </html>
