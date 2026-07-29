@@ -27,10 +27,14 @@ html, body { width: 100%; min-height: 100vh; background: #1A1612; color: #E8E5E0
 .dc .red { color: #F85149; }
 .dc .orange { color: #F7931A; }
 
-.fee-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 16px 0; }
-.fee-card { background: #1A1612; border-radius: 10px; padding: 20px; text-align: center; }
-.fee-card .fc-label { font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 0.5px; }
-.fee-card .fc-value { font-size: 28px; font-weight: 700; margin: 8px 0; }
+.fee-grid { display: flex; gap: 10px; margin: 16px 0; }
+.fee-grid > * { flex: 1; min-width: 0; }
+.fee-card { background: #1A1612; border-radius: 10px; padding: 20px; text-align: center; border-top: 3px solid transparent; position: relative; }
+.fee-card.fastest { border-top-color: #F85149; }
+.fee-card.hour { border-top-color: #D29922; }
+.fee-card.economy { border-top-color: #3FB950; }
+.fee-card .fc-label { font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+.fee-card .fc-value { font-size: 28px; font-weight: 700; margin: 6px 0; font-family: 'SF Mono', 'Fira Code', monospace; font-variant-numeric: tabular-nums; }
 .fee-card .fc-sub { font-size: 12px; color: #555; }
 
 .dollar-cost { text-align: center; font-size: 16px; color: rgba(255,255,255,0.5); padding: 12px 0 8px; letter-spacing: 0.3px; }
@@ -156,9 +160,9 @@ html, body { width: 100%; min-height: 100vh; background: #1A1612; color: #E8E5E0
     <div class="dc-sub">Based on current network conditions</div>
   </div>
   <div class="fee-grid" id="fee-grid">
-    <div class="fee-card"><div class="fc-label">Fastest</div><div class="fc-value" id="fee-fastest">--</div><div class="fc-sub">~10 min</div></div>
-    <div class="fee-card"><div class="fc-label">Hour</div><div class="fc-value" id="fee-hour">--</div><div class="fc-sub">~60 min</div></div>
-    <div class="fee-card"><div class="fc-label">Economy</div><div class="fc-value" id="fee-economy">--</div><div class="fc-sub">~2+ hr</div></div>
+    <div class="fee-card fastest"><div class="fc-label">Fastest</div><div class="fc-value" id="fee-fastest">--</div><div class="fc-sub">~10 min</div></div>
+    <div class="fee-card hour"><div class="fc-label">Hour</div><div class="fc-value" id="fee-hour">--</div><div class="fc-sub">~60 min</div></div>
+    <div class="fee-card economy"><div class="fc-label">Economy</div><div class="fc-value" id="fee-economy">--</div><div class="fc-sub">~2+ hr</div></div>
   </div>
   <div class="dollar-cost" id="dollar-cost">Fastest: $0.56 │ Hour: $0.28 │ Economy: $0.14</div>
   <div class="viz-section">
