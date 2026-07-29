@@ -24,11 +24,11 @@ function updateBlockSpace() {
   var sf = document.getElementById('so-fin');
   if (sf) sf.textContent = Math.round(fp) + '%';
   var si = document.getElementById('so-ins');
-  if (si) si.textContent = Math.round(ip) + '%';
+  if (si) si.textContent = (ip >= 1 ? Math.round(ip) : ip.toFixed(1)) + '%';
   var sr = document.getElementById('so-ratio');
   if (sr) sr.textContent = (finPerBlock > 0 ? (ip / fp) : 0).toFixed(2);
   var narr = document.getElementById('narrative-text');
-  if (narr) narr.textContent = 'At current inscription volumes (~' + vol + 'K/mo), inscriptions occupy ~' + Math.round(ip) + '% of block space.';
+  if (narr) narr.textContent = 'At current inscription volumes (~' + vol + 'K/mo), inscriptions occupy ~' + (ip >= 1 ? Math.round(ip) : ip.toFixed(1)) + '% of block space.';
 }
 
 API.onData(function(d) {
