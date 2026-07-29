@@ -10,7 +10,10 @@ var ENDPOINTS = [
   { key: 'fee_history',     url: 'https://mempool.space/api/v1/mining/blocks/fees/24h' },
   { key: 'lightning',       url: 'https://mempool.space/api/v1/lightning/statistics/latest' },
   { key: 'blocks',          url: 'https://mempool.space/api/blocks?limit=10' },
-  { key: 'block_height',    url: 'https://blockstream.info/api/blocks/tip/height' }
+  { key: 'block_height',    url: 'https://blockstream.info/api/blocks/tip/height' },
+  { key: 'coinpaprika',     url: 'https://api.coinpaprika.com/v1/coins/btc-bitcoin' },
+  { key: 'fear_greed',      url: 'https://api.alternative.me/fng/' },
+  { key: 'blockchair',      url: 'https://api.blockchair.com/bitcoin/stats' }
 ];
 
 var results = {};

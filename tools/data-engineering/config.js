@@ -45,7 +45,10 @@ var CONFIG = {
     { key: 'fee_history', url: 'https://mempool.space/api/v1/mining/blocks/fees/24h', method: 'GET', category: 'fees', priority: 1, maxLatency: 5000 },
     { key: 'lightning', url: 'https://mempool.space/api/v1/lightning/statistics/latest', method: 'GET', category: 'lightning', priority: 2, maxLatency: 3000 },
     { key: 'blocks', url: 'https://mempool.space/api/blocks?limit=10', method: 'GET', category: 'blocks', priority: 2, maxLatency: 3000 },
-    { key: 'block_height', url: 'https://blockstream.info/api/blocks/tip/height', method: 'GET', category: 'blocks', priority: 2, maxLatency: 3000 },
+    { key: 'block_height',    url: 'https://blockstream.info/api/blocks/tip/height', method: 'GET', category: 'blocks', priority: 2, maxLatency: 3000 },
+    { key: 'coinpaprika',     url: 'https://api.coinpaprika.com/v1/coins/btc-bitcoin', method: 'GET', category: 'price', priority: 3, maxLatency: 5000 },
+    { key: 'fear_greed',      url: 'https://api.alternative.me/fng/', method: 'GET', category: 'sentiment', priority: 3, maxLatency: 5000 },
+    { key: 'blockchair',      url: 'https://api.blockchair.com/bitcoin/stats', method: 'GET', category: 'general', priority: 3, maxLatency: 5000 },
   ],
 };
 

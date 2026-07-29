@@ -7,5 +7,6 @@
     "category": "sentiment"
   },
   "stagedAt": "2026-07-29T20:14:21.437Z",
-  "status": "pending_review"
+  "status": "deployed",
+  "deployedAt": "2026-07-29T20:27:22.175Z"
 }

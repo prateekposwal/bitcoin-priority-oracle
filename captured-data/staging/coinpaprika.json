@@ -7,5 +7,6 @@
     "category": "price"
   },
   "stagedAt": "2026-07-29T20:14:21.434Z",
-  "status": "pending_review"
+  "status": "deployed",
+  "deployedAt": "2026-07-29T20:27:22.134Z"
 }
