@@ -114,7 +114,15 @@
 
 <div class="container">
 
-  <div class="page-title">Lightning Channel Cost Calculator</div>
+    <div class="hero">
+    <div class="badge">Lightning Simulator</div>
+    <h1>Lightning Channel — <span>Cost Simulator</span></h1>
+    <p>Estimate the full cost of opening and managing Lightning channels — including the storage externality that most calculators miss.</p>
+    <div class="actions">
+      <a href="/live" class="btn-primary">📊 Live Dashboard</a>
+      <a href="/calculator" class="btn-secondary">Node Cost Calculator →</a>
+    </div>
+  </div>
   <div class="page-sub">What does it cost to open and operate Lightning channels? This simulator estimates real on-chain costs, storage externalities, and compares Lightning vs on-chain payments — all adjustable to your setup.</div>
 
   <div class="live-indicator" id="live-indicator" style="display:none">
@@ -383,5 +391,15 @@ function calc() {
 calc();
 API.start({ interval: 60000 });
 </script>
+
+<footer>
+  <div class="links">
+    <a href="/articles">Articles</a>
+    <a href="https://github.com/prateekposwal/block-space-economics">GitHub</a>
+    <a href="/live">Live Dashboard</a>
+  </div>
+  <a href="/live" class="btn-live">📊 Explore the Live Dashboard</a>
+  <p>Bitcoin Sahi — Blockchain Research & Development. Built in public.</p>
+</footer>
 </body>
 </html>
