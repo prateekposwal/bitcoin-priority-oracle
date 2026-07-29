@@ -6,6 +6,8 @@
 <title>Lightning Simulator — Bitcoin Sahi Research</title>
 <link rel="stylesheet" href="style.css">
 <script>if(window.location.hostname.includes("vercel.app")){window.location.replace("https://bitcoinsahi.com"+window.location.pathname)}</script>
+<script src="tools/viz-core.js"></script>
+<script src="tools/viz-lightning.js"></script>
 <script src="tools/app.js"></script>
 <style>a:hover { text-decoration: underline; }
   nav .brand { font-weight: 800; font-size: 20px; letter-spacing: -0.3px; }
@@ -124,7 +126,8 @@
     <div class="badge">Lightning Simulator</div>
     <h1>Lightning Channel — <span>Cost Simulator</span></h1>
     <p>Estimate the full cost of opening and managing Lightning channels — including the storage externality that most calculators miss.</p></div>
-  <div class="page-sub">What does it cost to open and operate Lightning channels? This simulator estimates real on-chain costs, storage externalities, and compares Lightning vs on-chain payments — all adjustable to your setup.</div>
+  <div style="max-width:900px;margin:0 auto 16px;"><canvas id="lightning-canvas" width="800" height="400" style="width:100%;height:400px;border-radius:12px;"></canvas></div>
+<div class="page-sub">What does it cost to open and operate Lightning channels? This simulator estimates real on-chain costs, storage externalities, and compares Lightning vs on-chain payments — all adjustable to your setup.</div>
 
   <div class="live-indicator" id="live-indicator" style="display:none">
     <span class="live-dot"></span>

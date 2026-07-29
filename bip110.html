@@ -78,6 +78,7 @@
   <p>BIP-110 would restrict data-carving (inscriptions) by limiting scriptPubKeys to 34 bytes and data pushes to 256 bytes. With only ~55% miner threshold and ~6 weeks until mandatory signaling, the chain may split.</p>
 </div>
 
+<div style="max-width:900px;margin:0 auto 16px;"><canvas id="bip110-viz" width="800" height="500" style="width:100%;height:500px;border-radius:12px;"></canvas></div>
 <div class="section">
   <div class="live-ticker" id="fork-ticker"><span class="ticker-item"><span class="ticker-dot red"></span> Loading fork data...</span></div>
 
@@ -159,6 +160,8 @@
   <p>Bitcoin Sahi — Blockchain Research & Development. Built in public.</p>
 </footer>
 
+<script src="tools/viz-core.js"></script>
+<script src="tools/viz-bip110.js"></script>
 <script src="tools/app.js"></script>
 <script>
 var BLOCKS_TOTAL = 965664, SIGNALING_START = 961632, FORK_WINDOW_START = 963648;

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bitcoin Sahi — Blockchain Research & Development</title>
+<title>Bitcoin Sahi — Understand Bitcoin. Make Better Decisions.</title>
 <link rel="stylesheet" href="style.css">
 <script>
 if (window.location.hostname.includes('vercel.app')) {
@@ -11,158 +11,192 @@ if (window.location.hostname.includes('vercel.app')) {
 }
 </script>
 <style>html { scroll-behavior: smooth; }
-  a:hover { text-decoration: underline; }
 
-  /* ── Nav ── */
-  nav .logo { font-weight: 800; font-size: 20px; color: var(--text); letter-spacing: -0.3px; }
-  nav .logo span { color: var(--orange); }
-  nav a.nav-link { color: var(--muted); transition: color 0.2s; }
-  nav a.nav-link:hover { color: var(--text); text-decoration: none; }
-  nav .cta:hover { transform: translateY(-1px); box-shadow: 0 4px 20px #F7931A40; text-decoration: none; }
+/* ── Persona Grid ── */
+.persona-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin: 20px 0;
+}
+.persona-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 28px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+.persona-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--orange);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.persona-card:hover {
+  border-color: var(--orange);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 30px rgba(247,147,26,0.08);
+}
+.persona-card:hover::before {
+  opacity: 1;
+}
+.persona-card .emoji {
+  font-size: 32px;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.persona-card h3 {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0;
+}
+.persona-card .question {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.5;
+  margin: 0 0 8px;
+}
+.persona-card .card-cta {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--orange);
+  margin-top: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: gap 0.2s;
+}
+.persona-card:hover .card-cta {
+  gap: 8px;
+}
 
-  .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+/* ── Fee canvas wrapper ── */
+.viz-wrap {
+  max-width: 900px;
+  margin: 0 auto 28px;
+  position: relative;
+}
+.viz-wrap canvas {
+  width: 100%;
+  height: 200px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  display: block;
+}
+.viz-overlay {
+  position: absolute;
+  bottom: 10px;
+  right: 14px;
+  font-size: 10px;
+  color: #555;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  pointer-events: none;
+}
 
-  /* ── Hero ── */
-  .hero {
-    text-align: center; padding: 80px 24px 60px;
-    background: radial-gradient(ellipse at 50% 0%, #F7931A10 0%, transparent 60%);
-  }
-  .hero .badge {
-    display: inline-block; font-size: 13px; font-weight: 600; color: var(--orange);
-    border: 1px solid var(--orange); border-radius: 20px; padding: 5px 15px;
-    margin-bottom: 18px; letter-spacing: 0.5px;
-  }
+/* ── Nav overrides ── */
+nav .logo { font-weight: 800; font-size: 20px; color: var(--text); letter-spacing: -0.3px; }
+nav .logo span { color: var(--orange); }
+nav a.nav-link { color: var(--muted); transition: color 0.2s; }
+nav a.nav-link:hover { color: var(--text); text-decoration: none; }
+nav .cta:hover { transform: translateY(-1px); box-shadow: 0 4px 20px #F7931A40; text-decoration: none; }
+
+.container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+/* ── Hero ── */
+.hero {
+  text-align: center; padding: 80px 24px 50px;
+  background: radial-gradient(ellipse at 50% 0%, #F7931A10 0%, transparent 60%);
+}
+.hero .badge {
+  display: inline-block; font-size: 13px; font-weight: 600; color: var(--orange);
+  border: 1px solid var(--orange); border-radius: 20px; padding: 5px 15px;
+  margin-bottom: 18px; letter-spacing: 0.5px;
+}
 .hero h1 { font-size: clamp(36px, 5.5vw, 58px); font-weight: 800; letter-spacing: -1px; line-height: 1.25; margin-bottom: 16px; max-width: 900px; margin-left: auto; margin-right: auto; }
 .hero h1 span { background: linear-gradient(135deg, var(--orange), #FFB347); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
 .hero p { font-size: 20px; color: var(--muted); max-width: 860px; margin: 0 auto 30px; line-height: 1.7; }
-  .hero .actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
-  .hero .btn-primary {
-    background: var(--orange); color: #000; font-weight: 700; padding: 12px 28px;
-    border-radius: 10px; font-size: 15px; transition: transform 0.2s, box-shadow 0.2s;
-  }
-  .hero .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 24px #F7931A40; text-decoration: none; }
-  .hero .btn-secondary {
-    background: var(--surface); color: var(--text); font-weight: 600; padding: 12px 28px;
-    border-radius: 10px; font-size: 15px; border: 1px solid var(--border); transition: border-color 0.2s;
-  }
-  .hero .btn-secondary:hover { border-color: var(--orange); text-decoration: none; }
+.hero .actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+.hero .btn-primary {
+  background: var(--orange); color: #000; font-weight: 700; padding: 12px 28px;
+  border-radius: 10px; font-size: 15px; transition: transform 0.2s, box-shadow 0.2s;
+}
+.hero .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 24px #F7931A40; text-decoration: none; }
+.hero .btn-secondary {
+  background: var(--surface); color: var(--text); font-weight: 600; padding: 12px 28px;
+  border-radius: 10px; font-size: 15px; border: 1px solid var(--border); transition: border-color 0.2s;
+}
+.hero .btn-secondary:hover { border-color: var(--orange); text-decoration: none; }
 
-  /* ── Stats bar ── */
-  .stats {
-    display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px;
-    background: var(--border); border-radius: 12px; overflow: hidden;
-    margin: -40px auto 60px; max-width: 900px;
-  }
-  .stat { background: var(--surface); padding: 24px; text-align: center; }
-  .stat .num { font-size: 24px; font-weight: 800; }
-  .stat .num.orange { color: var(--orange); }
-  .stat .num.green { color: #3FB950; }
-  .stat .num.blue { color: #58A6FF; }
-  .stat .num.purple { color: #BC8CFF; }
-  .stat .lbl { font-size: 20px; color: var(--muted); margin-top: 2px; text-transform: uppercase; letter-spacing: 0.5px; }
+/* ── Stats bar ── */
+.stats {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px;
+  background: var(--border); border-radius: 12px; overflow: hidden;
+  margin: -20px auto 60px; max-width: 900px;
+}
+.stat { background: var(--surface); padding: 24px; text-align: center; }
+.stat .num { font-size: 24px; font-weight: 800; }
+.stat .num.orange { color: var(--orange); }
+.stat .num.green { color: #3FB950; }
+.stat .num.blue { color: #58A6FF; }
+.stat .num.purple { color: #BC8CFF; }
+.stat .lbl { font-size: 20px; color: var(--muted); margin-top: 2px; text-transform: uppercase; letter-spacing: 0.5px; }
 
-  /* ── Section ── */
-  .section { padding: 60px 0; }
-  .section-header {
-    font-size: 20px; font-weight: 700; text-transform: uppercase;
-    letter-spacing: 1px; color: var(--orange); margin-bottom: 8px;
-  }
-  .section-title { font-size: clamp(28px, 3.5vw, 40px); font-weight: 800; margin-bottom: 16px; letter-spacing: -0.5px; }
-  .section-text { font-size: 20px; color: var(--muted); max-width: 650px; line-height: 1.7; margin-bottom: 24px; }
+/* ── Section ── */
+.section { padding: 40px 0; }
+.section-header {
+  font-size: 20px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 1px; color: var(--orange); margin-bottom: 8px;
+}
+.section-sub {
+  font-size: 17px; color: var(--muted); max-width: 600px; line-height: 1.6; margin-bottom: 4px;
+}
 
-  /* ── Problem / Solution grid ── */
-  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 24px 0; }
-  .card {
-    background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
-    padding: 32px; transition: border-color 0.3s, transform 0.3s;
-  }
-  .card:hover { border-color: var(--orange); transform: translateY(-2px); }
-  .card .icon { font-size: 28px; margin-bottom: 12px; }
-  .card h3 { font-size: 19px; font-weight: 700; margin-bottom: 8px; }
-  .card p { font-size: 20px; color: var(--muted); line-height: 1.6; }
-  .card .stat-row { display: flex; gap: 16px; margin-top: 14px; flex-wrap: wrap; }
-  .card .stat-item { font-size: 19px; }
-  .card .stat-item strong { color: var(--text); }
+/* ── Footer ── */
+footer {
+  border-top: 1px solid var(--border); padding: 40px 24px;
+  text-align: center; font-size: 19px; color: var(--muted);
+}
+footer .links { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin-bottom: 12px; }
+footer .links a { color: var(--muted); }
+footer .links a:hover { color: var(--text); }
 
-  /* ── Project showcase ── */
-  .project-hero {
-    background: linear-gradient(135deg, #F7931A08, #58A6FF08);
-    border: 1px solid var(--border); border-radius: 16px; padding: 40px;
-    margin: 24px 0; position: relative; overflow: hidden;
-  }
-  .project-hero::before {
-    content: ''; position: absolute; top: -50%; right: -20%;
-    width: 300px; height: 300px; background: radial-gradient(circle, #F7931A10, transparent);
-    border-radius: 50%;
-  }
-  .project-hero .tag {
-    display: inline-block; font-size: 19px; font-weight: 600; color: var(--orange);
-    border: 1px solid var(--orange); border-radius: 6px; padding: 3px 10px;
-    margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px;
-  }
-  .project-hero h3 { font-size: 24px; font-weight: 800; margin-bottom: 8px; }
-  .project-hero p { font-size: 19px; color: var(--muted); max-width: 600px; line-height: 1.6; }
-  .project-hero .links { display: flex; gap: 12px; margin-top: 16px; flex-wrap: wrap; }
-
-  /* ── Approach list ── */
-  .approach-item { display: flex; gap: 16px; padding: 16px 0; border-bottom: 1px solid var(--border); }
-  .approach-item:last-child { border: none; }
-  .approach-item .icon { font-size: 20px; width: 36px; text-align: center; flex-shrink: 0; }
-  .approach-item h4 { font-size: 19px; font-weight: 700; margin-bottom: 2px; }
-  .approach-item p { font-size: 19px; color: var(--muted); }
-
-  /* ── Research grid ── */
-  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 20px 0; }
-  .research-card {
-    background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
-    padding: 24px; transition: border-color 0.3s;
-  }
-  .research-card:hover { border-color: var(--orange); }
-  .research-card h4 { font-size: 20px; font-weight: 700; margin-bottom: 6px; }
-  .research-card p { font-size: 20px; color: var(--muted); line-height: 1.5; }
-  .research-card .type {
-    display: inline-block; font-size: 10px; font-weight: 600; padding: 2px 8px;
-    border-radius: 4px; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.3px;
-  }
-  .type-model { background: #3FB95020; color: #3FB950; }
-  .type-paper { background: #58A6FF20; color: #58A6FF; }
-  .type-data { background: #BC8CFF20; color: #BC8CFF; }
-  .type-tool { background: #F7931A20; color: var(--orange); }
-
-  /* ── Footer ── */
-  footer {
-    border-top: 1px solid var(--border); padding: 40px 24px;
-    text-align: center; font-size: 19px; color: var(--muted);
-  }
-  footer .links { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin-bottom: 12px; }
-  footer .btn-live {
-    display: inline-block; background: var(--orange); color: #000; font-weight: 700;
-    padding: 12px 32px; border-radius: 10px; font-size: 19px; margin: 20px 0;
-    transition: transform 0.2s, box-shadow 0.2s;
-  }
-  footer .btn-live:hover { transform: translateY(-2px); box-shadow: 0 6px 24px #F7931A40; text-decoration: none; }
-
-  @media (max-width: 700px) {
-    .grid-2, .grid-3 { grid-template-columns: 1fr; }
-    .stats { grid-template-columns: repeat(2, 1fr); }
-    .hero { padding: 60px 20px 60px; }
-    nav a.nav-link { display: none; }
-    .project-hero { padding: 24px; }
-  }
 .live-pill { display: inline-flex; align-items: center; gap: 4px; font-size: 10px; color: #888; }
 .live-pill .dot { width: 5px; height: 5px; border-radius: 50%; background: #3FB950; display: inline-block; animation: livePulse 2s infinite; }
 @keyframes livePulse { 0%{opacity:1;box-shadow:0 0 0 0 rgba(63,185,80,0.4)} 50%{opacity:0.6} 100%{opacity:1;box-shadow:0 0 0 4px rgba(63,185,80,0)} }
+
+@media (max-width: 900px) {
+  .persona-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 600px) {
+  .persona-grid { grid-template-columns: 1fr; }
+  .stats { grid-template-columns: repeat(2, 1fr); }
+  .hero { padding: 60px 20px 40px; }
+  nav a.nav-link { display: none; }
+}
 </style>
 </head>
 <body>
 
 <nav>
   <a href="/" class="brand">BITCOIN <span>SAHI</span></a>
-  <a href="/bip110" class="nav-link" style="color:#F85149;font-weight:700;">⚠️ BIP-110</a>
+  <a href="/bip110" class="nav-link" style="color:#F85149;font-weight:700;">&#x26A0;&#xFE0F; BIP-110</a>
   <a href="/decide" class="nav-link">Decide<span id="decide-indicator" style="color:var(--orange);font-weight:400;margin-left:2px;"></span></a>
   <a href="/articles" class="nav-link">Articles</a>
   <div class="dropdown">
-    <span class="dropbtn">Explore <span class="dd-arrow">▾</span></span>
+    <span class="dropbtn">Explore <span class="dd-arrow">&#x25BE;</span></span>
     <div class="dropdown-content"><div class="dd-title">Explore</div>
       <a href="/blockspace">Blockspace Explorer</a>
       <a href="/research-graph">Research Graph</a>
@@ -172,25 +206,91 @@ if (window.location.hostname.includes('vercel.app')) {
     </div>
   </div>
   <span class="spacer"></span>
-  <a href="/live" class="cta">📊 Dashboard</a>
+  <a href="/live" class="cta">&#x1F4CA; Dashboard</a>
 </nav>
 
 <!-- ─── HERO ─── -->
 <div class="hero">
-  <div class="badge">Blockchain Research & Development</div>
-  <h1>Bitcoin blocks are a market.<br>Everyone sees the price.<br><span>We study what isn't priced.</span></h1>
-  <p>
-    Every transaction competes for 4 million weight units per block. The fee you pay 
-    gets you into the next one. But the data you leave behind lives in every full node 
-    forever — and nobody prices that cost. We built the first open model to quantify it. 
-    The results surprised us. They might surprise you too.
-  </p>
+  <div class="badge">Blockchain Research &amp; Development</div>
+  <h1>Understand Bitcoin. <span>Make Better Decisions.</span></h1>
+  <p>Bitcoin Sahi quantifies the gap between what the fee market prices and what node operators collectively bear. Live data, open research, actionable insights for everyone who touches the chain.</p>
   <div class="actions">
-    <a href="#project" class="btn-primary">See What We Found →</a>
-    <a href="/bip110" class="nav-link" style="color:#F85149;font-weight:700;">⚠️ BIP-110</a>
-  <a href="/decide" class="btn-secondary">Use the Decision Center</a>
+    <a href="#personas" class="btn-primary">What brings you here? &darr;</a>
+    <a href="/bip110" class="btn-secondary" style="color:#F85149;border-color:#F85149;">&#x26A0;&#xFE0F; BIP-110 Status</a>
   </div>
+</div>
+
+<!-- ─── LIVE FEE WAVEFORM ─── -->
+<div class="viz-wrap">
+  <canvas id="viz-fees" width="800" height="200"></canvas>
+  <div class="viz-overlay">Fee Rate &middot; sat/vB</div>
+</div>
+
+<!-- ─── PERSONA GRID ─── -->
+<div class="container" id="personas">
+<div class="section">
+  <div class="section-header">What brings you here?</div>
+  <div class="section-sub">Pick your role. We'll show you what matters.</div>
+
+  <div class="persona-grid">
+    <a href="/send" class="persona-card" style="text-decoration:none;">
+      <div class="emoji">&#x1F9DB;</div>
+      <h3>Send Bitcoin</h3>
+      <div class="question">Should I send now, or wait for lower fees?</div>
+      <span class="card-cta">Check fee conditions &rarr;</span>
+    </a>
+
+    <a href="/lightning" class="persona-card" style="text-decoration:none;">
+      <div class="emoji">&#x26A1;</div>
+      <h3>Lightning</h3>
+      <div class="question">Should I open channels at current on-chain rates?</div>
+      <span class="card-cta">Evaluate channel costs &rarr;</span>
+    </a>
+
+    <a href="/decide#exchange" class="persona-card" style="text-decoration:none;">
+      <div class="emoji">&#x1F3E6;</div>
+      <h3>Exchange</h3>
+      <div class="question">Should I batch withdrawals now or defer?</div>
+      <span class="card-cta">Batch analysis &rarr;</span>
+    </a>
+
+    <a href="/calculator" class="persona-card" style="text-decoration:none;">
+      <div class="emoji">&#x1F5A5;&#xFE0F;</div>
+      <h3>Node Operator</h3>
+      <div class="question">What does my node actually cost me per year?</div>
+      <span class="card-cta">Run the calculator &rarr;</span>
+    </a>
+
+    <a href="/blockspace" class="persona-card" style="text-decoration:none;">
+      <div class="emoji">&#x26CF;&#xFE0F;</div>
+      <h3>Miner</h3>
+      <div class="question">What's in the blocks right now? What's the composition?</div>
+      <span class="card-cta">Explore block space &rarr;</span>
+    </a>
+
+    <a href="/articles" class="persona-card" style="text-decoration:none;">
+      <div class="emoji">&#x1F52C;</div>
+      <h3>Research</h3>
+      <div class="question">What changed in the fee market this week?</div>
+      <span class="card-cta">Read the research &rarr;</span>
+    </a>
+
+    <a href="/live" class="persona-card" style="text-decoration:none;">
+      <div class="emoji">&#x1F468;&#x200D;&#x1F4BB;</div>
+      <h3>Developer</h3>
+      <div class="question">What's the API? How do I integrate this data?</div>
+      <span class="card-cta">View live endpoints &rarr;</span>
+    </a>
+
+    <a href="/bip110" class="persona-card" style="text-decoration:none;">
+      <div class="emoji">&#x26A0;&#xFE0F;</div>
+      <h3>BIP-110 Monitor</h3>
+      <div class="question">Is the chain forking? What's signaling?</div>
+      <span class="card-cta" style="color:#F85149;">Check BIP-110 &rarr;</span>
+    </a>
   </div>
+</div>
+</div>
 
 <!-- ─── STATS ─── -->
 <div class="container">
@@ -199,165 +299,7 @@ if (window.location.hostname.includes('vercel.app')) {
   <div class="stat"><div class="num orange" id="stat-nodecost">$925</div><div class="lbl">Node Cost / Yr</div></div>
   <div class="stat"><div class="num green" id="stat-storage">$0.008</div><div class="lbl">Storage / Inscription</div></div>
   <div class="stat"><div class="num blue" id="stat-externality">$9.2K</div><div class="lbl">Externality / Yr</div></div>
-  <div class="stat"><div class="num purple" id="stat-ratio">8×–3,000×</div><div class="lbl">Fee-to-Storage Ratio</div></div>
-</div>
-</div>
-
-<!-- ─── PROBLEM ─── -->
-<div class="container">
-  <div class="section" id="problem">
-  <div class="section-header">The Problem</div>
-  <h2 class="section-title">Bitcoin's fee market prices congestion. It does not price permanence.</h2>
-  <p class="section-text">
-    BIP-141 (SegWit) created a 4× weight discount for witness data. It was designed to fix 
-    transaction malleability — not to create a pricing structure for permanent data storage. 
-    The result: an unpriced externality that grows with every inscription.
-  </p>
-
-  <div class="grid-2">
-    <div class="card">
-      <div class="icon">⚡</div>
-      <h3>Congestion Pricing</h3>
-      <p>The fee market works well for its designed purpose: allocating block space among competing transactions during congestion. A higher fee rate (sat/vB) generally increases the likelihood of faster confirmation.</p>
-      <div class="stat-row">
-        <div class="stat-item">⏱ <strong>~10 min</strong> horizon</div>
-        <div class="stat-item">✅ <strong>Works</strong> as designed</div>
-      </div>
-    </div>
-    <div class="card">
-      <div class="icon">💾</div>
-      <h3>Permanence Cost</h3>
-      <p>Inscriptions add data that archival full nodes must store indefinitely. The miner captured the fee — but the ongoing storage cost is borne by future node operators who choose to run archival nodes.</p>
-      <div class="stat-row">
-        <div class="stat-item">♾ <strong>Indefinite</strong> horizon</div>
-        <div class="stat-item">❌ <strong>Unpriced</strong> externality</div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ─── FIRST PROJECT ─── -->
-<div class="section" id="project">
-  <div class="section-header">Our First Project</div>
-  <h2 class="section-title">Bitcoin Block Space Economics</h2>
-  <p class="section-text">
-    A complete, open-source research project quantifying the gap between what the fee market prices 
-    and what node operators collectively bear. Three phases of work, all publicly documented.
-  </p>
-
-  <div class="project-hero">
-    <div class="tag">Phase R1 · R2 · R3 — Complete</div>
-    <h3>Does the fee market price permanence, or just congestion?</h3>
-    <p>
-      We built a UTXO cost model from public data, verified it against live blockchain APIs, 
-      published the full verification appendix, and opened the question for community discussion 
-      on r/BitcoinEngineering. The model is adjustable — anyone can plug in their own assumptions.
-    </p>
-    <div class="links">
-      <a href="https://reddit.com/r/BitcoinEngineering" class="btn-primary" style="font-size:13px;padding:10px 20px;">Join r/BitcoinEngineering →</a>
-      <a href="/live" class="btn-secondary" style="font-size:13px;padding:10px 20px;">📊 Dashboard</a>
-    </div>
-  </div>
-
-  <div class="grid-2" style="margin-top:20px;">
-    <div class="card">
-      <div class="icon">📖</div>
-      <h3>Phase R1: Reading</h3>
-      <p>BIP-141 analysis, covenant survey, r/BitcoinEngineering threads, bitcoin-dev discussions. Understanding the problem before proposing solutions.</p>
-    </div>
-    <div class="card">
-      <div class="icon">🔬</div>
-      <h3>Phase R2: Cost Model</h3>
-      <p>Open-source UTXO cost function with full verification. 6 node scenarios (RPi pruned at $416/yr to desktop archival at $918/yr).</p>
-    </div>
-    <div class="card">
-      <div class="icon">📢</div>
-      <h3>Phase R3: Problem Statement</h3>
-      <p>1-page framing, r/BitcoinEngineering discussion. Community feedback integrated.</p>
-    </div>
-    <div class="card">
-      <div class="icon">🤖</div>
-      <h3>Phase R4: Deployment</h3>
-      <p>Live at bitcoinsahi.com. Daily research monitor fetches live fee data. GitHub Issues auto-created on anomaly detection.</p>
-    </div>
-  </div>
-</div>
-
-<!-- ─── RESEARCH ─── -->
-<div class="section" id="research">
-  <div class="section-header">Research Library</div>
-  <h2 class="section-title">Open Source. Fully Documented. Community Reviewed.</h2>
-  <p class="section-text">
-    Every number on this site is reproducible. Every assumption is documented. Every script is on GitHub.
-  </p>
-
-  <div class="grid-3">
-    <div class="research-card">
-      <span class="type type-model">Model</span>
-      <h4>UTXO Cost Model</h4>
-      <p>Python model with adjustable parameters. Run it yourself: <code>python3 research/utxo_cost_model.py</code></p>
-    </div>
-    <div class="research-card">
-      <span class="type type-paper">Paper</span>
-      <h4>Problem Statement</h4>
-      <p>1-page framing of the open question. No solution — just the clearest possible statement of the gap.</p>
-    </div>
-    <div class="research-card">
-      <span class="type type-data">Data</span>
-      <h4>Live Data Pipeline</h4>
-      <p>Daily GitHub Action fetches fees, BTC price, and model output. Data auto-commits to the repo.</p>
-    </div>
-    <div class="research-card">
-      <span class="type type-paper">Paper</span>
-      <h4>Verification Appendix</h4>
-      <p>Full source documentation for every parameter. Hardware costs, power draw, inscription sizes — all sourced.</p>
-    </div>
-    <div class="research-card">
-      <span class="type type-tool">Tool</span>
-      <h4>Pruned Analysis</h4>
-      <p>Answer: do pruned nodes avoid the externality? No — unavoidable cost is ~$2.53/yr per node.</p>
-    </div>
-    <div class="research-card">
-      <span class="type type-paper">Paper</span>
-      <h4>BIP-110 Analysis</h4>
-      <p>Analysis of the Reduced Data Temporary Softfork. Same diagnosis, different prescription.</p>
-    </div>
-  </div>
-
-  <div style="text-align:center;margin-top:12px;">
-    <a href="https://github.com/prateekposwal/block-space-economics" class="btn-secondary" style="padding:10px 24px;font-size:14px;">View All Research on GitHub →</a>
-  </div>
-</div>
-
-<!-- ─── APPROACH ─── -->
-<div class="section" id="approach">
-  <div class="section-header">Our Approach</div>
-  <h2 class="section-title">How We Work</h2>
-  <p class="section-text">
-    A decade of engineering experience taught us that the best Bitcoin research starts with humility. 
-    We've been wrong twice — and we documented both failures.
-  </p>
-
-  <div class="approach-item">
-    <div class="icon">🔓</div>
-    <div><h4>Open Source First</h4><p>Every model, script, and dataset is public. No black boxes. No proprietary calculations.</p></div>
-  </div>
-  <div class="approach-item">
-    <div class="icon">🔬</div>
-    <div><h4>Data-Driven, Not Ideological</h4><p>We publish numbers, not narratives. The data says what it says — even when it contradicts our hypothesis.</p></div>
-  </div>
-  <div class="approach-item">
-    <div class="icon">🤝</div>
-    <div><h4>Peer-Reviewed by the Community</h4><p>We publish on r/BitcoinEngineering and engage on bitcoin-dev. The best insights come from being wrong publicly.</p></div>
-  </div>
-  <div class="approach-item">
-    <div class="icon">⚡</div>
-    <div><h4>No Consensus Changes Without Data</h4><p>We don't propose soft forks. We build the economic models that let the community decide whether a change is warranted.</p></div>
-  </div>
-  <div class="approach-item">
-    <div class="icon">♻️</div>
-    <div><h4>Self-Updating Research</h4><p>Our models run daily via GitHub Actions. If the numbers shift, the site updates automatically.</p></div>
-  </div>
+  <div class="stat"><div class="num purple" id="stat-ratio">8x &ndash; 3,000x</div><div class="lbl">Fee-to-Storage Ratio</div></div>
 </div>
 </div>
 
@@ -368,10 +310,12 @@ if (window.location.hostname.includes('vercel.app')) {
     <a href="/articles">Articles</a>
     <a href="https://github.com/prateekposwal/block-space-economics">GitHub</a>
   </div>
-  <p>Bitcoin Sahi — Blockchain Research & Development. Built in public.</p>
+  <p>Bitcoin Sahi &mdash; Blockchain Research &amp; Development. Built in public.</p>
 </footer>
 
 <script src="tools/app.js"></script>
+<script src="tools/viz-core.js"></script>
+<script src="tools/viz-fees.js"></script>
 <script>
 APP.onData(function(d) {
   if (!d) return;
@@ -380,7 +324,6 @@ APP.onData(function(d) {
   var economyFee = fees.economyFee || 2;
   var fastestFee = fees.fastestFee || 5;
 
-  // Model computation using live BTC price and fees
   var annualNodeCost = 924.35;
   var avgInscBytes = 400;
   var monthlyVolume = 100000;
@@ -401,30 +344,7 @@ APP.onData(function(d) {
   document.getElementById('stat-ratio').textContent = lowestRatio + 'x - ' + highestRatio + 'x';
 });
 APP.init();
-</script>
-<script>
-(function(){
-  var el = document.getElementById('live-badge');
-  var cl = document.getElementById('live-badge-clock');
-  if (!el) return;
-  el.style.display = 'inline-flex';
-  var start = Date.now();
-  function tick() {
-    var s = Math.floor((Date.now() - start) / 1000);
-    if (cl) cl.textContent = s < 5 ? 'just now' : s + 's ago';
-  }
-  tick();
-  setInterval(tick, 2000);
-  // Reset on API data
-  if (typeof API !== 'undefined') {
-    var origStart = API.start;
-    API.start = function(opts) {
-      start = Date.now();
-      tick();
-      if (origStart) origStart(opts);
-    };
-  }
-})();
+VIZ_Fees.init('viz-fees');
 </script>
 </body>
 </html>

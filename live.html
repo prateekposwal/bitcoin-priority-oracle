@@ -6,6 +6,8 @@
 <title>Live Dashboard — Bitcoin Sahi Research</title>
 <link rel="stylesheet" href="style.css">
 <script>if(window.location.hostname.includes("vercel.app")){window.location.replace("https://bitcoinsahi.com"+window.location.pathname)}</script>
+<script src="tools/viz-core.js"></script>
+<script src="tools/viz-fees.js"></script>
 <script src="tools/app.js"></script>
 <style>
   nav .brand { font-weight: 800; font-size: 20px; letter-spacing: -0.3px; }
@@ -85,7 +87,8 @@
   <a href="/live" class="cta">Dashboard</a>
 </nav>
 
-  <div class="container">
+  <div style="max-width:1200px;margin:0 auto 16px;"><canvas id="fees-canvas" width="800" height="200" style="width:100%;height:200px;border-radius:12px;"></canvas></div>
+<div class="container">
 <div class="live-ticker" id="live-ticker"><span class="ticker-item"><span class="ticker-dot green"></span> Loading live data...</span></div>
   <div class="hero">
     <div class="badge">Live Dashboard</div>
@@ -367,6 +370,7 @@ APP.onData(function(d) {
   loadHistory();
 });
 
+VIZ_Fees.init("fees-canvas");
 APP.init();
 
 // Fee history
