@@ -5,6 +5,7 @@ var discover = require('./discover.js');
 var integrate = require('./integrate.js');
 var monitor = require('./monitor.js');
 var report = require('./report.js');
+var tracker = require('../../tools/agents/03-block-interval-tracker.js');
 
 var STATE = { lastRun: null, cycleCount: 0, discoveredSources: [], issues: [] };
 var STATE_FILE = path.resolve(__dirname, '..', '..', CONFIG.agent.stateFile);
@@ -45,7 +46,15 @@ async function runCycle() {
   var freshness = monitor.getFreshnessReport ? await monitor.getFreshnessReport('captured-data') : { sources: {} };
   log('Freshness checked');
 
-  // Step 3: Get quality score
+  // Step 3: Run block interval tracker
+  try {
+    var blockMetrics = tracker.track ? await tracker.track() : null;
+    if (blockMetrics) {
+      log('Block intervals: ' + (blockMetrics.blocks ? blockMetrics.blocks.avgInterval + 's avg' : 'N/A'));
+    }
+  } catch (e) { log('Tracker error: ' + e.message); }
+
+  // Step 4: Get quality score
   var quality = monitor.getDataQualityScore ? monitor.getDataQualityScore() : { score: 0 };
   log('Data quality score: ' + (quality.score || 'N/A') + '/100');
 
