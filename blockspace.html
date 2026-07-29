@@ -11,18 +11,18 @@
 <style>.hero .badge {
   display: inline-block; font-size: 13px; font-weight: 600; color: var(--orange);
   border: 1px solid var(--orange); border-radius: 20px; padding: 4px 14px;
-  margin-bottom: 16px; letter-spacing: 0.5px;
+  margin-bottom: 10px; letter-spacing: 0.5px;
 }
-.hero { text-align: center; padding: 60px 24px 40px; }
+.hero { text-align: center; padding: 24px 24px 16px; }
 .hero h1 { font-size: clamp(30px, 4.5vw, 48px); font-weight: 800; letter-spacing: -1px; line-height: 1.15; margin-bottom: 12px; }
 .hero h1 span { background: linear-gradient(135deg, var(--orange), #FFB347); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-.hero p { font-size: 18px; color: var(--muted); max-width: 650px; margin: 0 auto 32px; line-height: 1.6; }
+.hero p { font-size: 18px; color: var(--muted); max-width: 650px; margin: 0 auto 20px; line-height: 1.6; }
 
 /* ── Composition Bar ── */
-.composition-bar { margin: 0 24px 32px; padding: 0; }
+.composition-bar { margin: 0 24px 20px; padding: 0; }
 .composition-bar .bar-container {
   max-width: 900px; margin: 0 auto;
-  background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 28px 28px 32px;
+  background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px 20px 24px;
 }
 .composition-bar .bar-label-top { display: flex; justify-content: space-between; font-size: 17px; color: var(--muted); margin-bottom: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
 .bar-stack { display: flex; height: 56px; border-radius: 8px; overflow: hidden; margin-bottom: 14px; }
@@ -43,19 +43,19 @@
 .bar-legend span::before { content: ''; display: inline-block; width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
 
 /* ── KPI Cards ── */
-.kpi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; max-width: 900px; margin: 0 auto 40px; padding: 0 24px; }
+.kpi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; max-width: 900px; margin: 0 auto 28px; padding: 0 24px; }
 .kpi-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 22px; text-align: center; }
 .kpi-card .kpi-label { font-size: 14px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.8px; font-weight: 600; margin-bottom: 6px; }
 .kpi-card .kpi-value { font-size: 30px; font-weight: 800; margin: 2px 0; letter-spacing: -0.5px; }
 .kpi-card .kpi-sub { font-size: 13px; color: #555; margin-top: 2px; }
 
 /* ── Section ── */
-.section { padding: 40px 0; }
+.section { padding: 24px 0; }
 .section-header {
   font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
   color: var(--orange); margin-bottom: 4px;
 }
-.section-title { font-size: clamp(22px, 3vw, 32px); font-weight: 800; margin-bottom: 16px; letter-spacing: -0.5px; }
+.section-title { font-size: clamp(22px, 3vw, 32px); font-weight: 800; margin-bottom: 10px; letter-spacing: -0.5px; }
 .section-text { font-size: 17px; color: var(--muted); max-width: 700px; line-height: 1.7; margin-bottom: 24px; }
 
 /* ── Block Detail Panel ── */
@@ -129,7 +129,7 @@
   background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 28px; margin: 20px 0;
 }
 .slider-section h3 { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
-.slider-section p.desc { font-size: 17px; color: var(--muted); margin-bottom: 16px; }
+.slider-section p.desc { font-size: 17px; color: var(--muted); margin-bottom: 10px; }
 .slider-group { margin-bottom: 14px; }
 .slider-group .row { display: flex; justify-content: space-between; font-size: 17px; color: var(--muted); margin-bottom: 4px; }
 .slider-group .row .val { color: var(--orange); font-weight: 700; }
