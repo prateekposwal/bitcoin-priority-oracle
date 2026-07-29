@@ -35,8 +35,17 @@ var VIZ_Miner = (function() {
   }
 
   function resize() {
-    w = canvas.width = canvas.clientWidth || window.innerWidth;
-    h = canvas.height = 400;
+    var parent = canvas.parentElement;
+    var pw = parent ? parent.clientWidth : window.innerWidth;
+    var dpr = window.devicePixelRatio || 1;
+    w = Math.min(pw, 1200);
+    h = w < 500 ? 600 : 400;
+    canvas.width = w * dpr;
+    canvas.height = h * dpr;
+    canvas.style.width = w + 'px';
+    canvas.style.height = h + 'px';
+    ctx = canvas.getContext('2d');
+    ctx.scale(dpr, dpr);
   }
 
   function loop() {
@@ -49,8 +58,13 @@ var VIZ_Miner = (function() {
     ctx.fillStyle = '#1A1612';
     ctx.fillRect(0, 0, w, h);
 
-    drawDonut(w * 0.6, h, t);
-    drawTrend(w * 0.6, w * 0.4, h, t);
+    if (w < 500) {
+      drawDonut(w, h * 0.5, t);
+      drawTrend(0, w, h * 0.5, t);
+    } else {
+      drawDonut(w * 0.6, h, t);
+      drawTrend(w * 0.6, w * 0.4, h, t);
+    }
     drawTitle(w);
 
     // Subtle vignette

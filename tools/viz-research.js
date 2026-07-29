@@ -26,6 +26,9 @@ const VIZ_Research = (() => {
 
     canvas.addEventListener('mousemove', onMove);
     canvas.addEventListener('mouseleave', () => { hovered = null; draw(); });
+    canvas.addEventListener('touchstart', onTouchStart, { passive: false });
+    canvas.addEventListener('touchmove', onTouchMove, { passive: false });
+    canvas.addEventListener('touchend', onTouchEnd);
 
     const engine = window.DATA_ENGINE;
     if (engine && engine.get) {
@@ -44,17 +47,12 @@ const VIZ_Research = (() => {
   }
 
   function resize() {
-    const rect = canvas.parentElement
-      ? canvas.parentElement.getBoundingClientRect()
-      : { width: window.innerWidth, height: 400 };
-    const dpr = window.devicePixelRatio || 1;
-    w = rect.width;
-    h = 400;
-    canvas.width = w * dpr;
-    canvas.height = h * dpr;
-    canvas.style.width = w + 'px';
-    canvas.style.height = h + 'px';
-    ctx.scale(dpr, dpr);
+    const r = VIZ.responsiveSize(canvas, 400);
+    w = r.w;
+    h = r.h;
+    ctx = r.ctx;
+    if (w < 480) PADDING.right = 20;
+    else PADDING.right = 30;
     chartW = w - PADDING.left - PADDING.right;
     chartH = h - PADDING.top - PADDING.bottom;
   }
@@ -261,7 +259,7 @@ const VIZ_Research = (() => {
     ctx.fillStyle = 'rgba(0,0,0,0.55)';
     ctx.strokeStyle = 'rgba(255,255,255,0.1)';
     ctx.lineWidth = 1;
-    roundRect(ctx, lx, ly, boxW, boxH, 6);
+    VIZ.roundRect(ctx, lx, ly, boxW, boxH, 6);
     ctx.fill();
     ctx.stroke();
 
@@ -277,30 +275,11 @@ const VIZ_Research = (() => {
     }
   }
 
-  function roundRect(ctx, x, y, w, h, r) {
-    ctx.beginPath();
-    ctx.moveTo(x + r, y);
-    ctx.lineTo(x + w - r, y);
-    ctx.quadraticCurveTo(x + w, y, x + w, y + r);
-    ctx.lineTo(x + w, y + h - r);
-    ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
-    ctx.lineTo(x + r, y + h);
-    ctx.quadraticCurveTo(x, y + h, x, y + h - r);
-    ctx.lineTo(x, y + r);
-    ctx.quadraticCurveTo(x, y, x + r, y);
-    ctx.closePath();
-  }
-
-  function onMove(e) {
-    const rect = canvas.getBoundingClientRect();
-    const mx = e.clientX - rect.left;
-    const my = e.clientY - rect.top;
-
+  function handleHover(mx, my) {
     if (mx < PADDING.left || mx > w - PADDING.right || my < PADDING.top || my > h - PADDING.bottom) {
       hovered = null;
       return;
     }
-
     let closest = null;
     let minDist = Infinity;
     for (const d of data) {
@@ -311,12 +290,34 @@ const VIZ_Research = (() => {
         closest = d;
       }
     }
-
     if (closest && minDist < 40) {
       hovered = { point: closest, mx, my };
     } else {
       hovered = null;
     }
+  }
+
+  function onMove(e) {
+    const rect = canvas.getBoundingClientRect();
+    handleHover(e.clientX - rect.left, e.clientY - rect.top);
+  }
+
+  function onTouchStart(e) {
+    e.preventDefault();
+    const rect = canvas.getBoundingClientRect();
+    const t = e.touches[0];
+    handleHover(t.clientX - rect.left, t.clientY - rect.top);
+  }
+
+  function onTouchMove(e) {
+    e.preventDefault();
+    const rect = canvas.getBoundingClientRect();
+    const t = e.touches[0];
+    handleHover(t.clientX - rect.left, t.clientY - rect.top);
+  }
+
+  function onTouchEnd() {
+    setTimeout(() => { hovered = null; }, 2000);
   }
 
   function drawCrosshair() {
@@ -347,7 +348,7 @@ const VIZ_Research = (() => {
     ctx.fillStyle = 'rgba(0,0,0,0.8)';
     ctx.strokeStyle = 'rgba(255,255,255,0.15)';
     ctx.lineWidth = 1;
-    roundRect(ctx, tx, ty, tooltipW, tooltipH, 6);
+    VIZ.roundRect(ctx, tx, ty, tooltipW, tooltipH, 6);
     ctx.fill();
     ctx.stroke();
 

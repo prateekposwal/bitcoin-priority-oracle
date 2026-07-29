@@ -1702,3 +1702,13 @@ footer .links a:hover {
     grid-template-columns: 1fr 1fr;
   }
 }
+
+@media (max-width: 480px) {
+  .viz-canvas { height: 250px !important; }
+  .canvas-wrap canvas { height: 180px !important; }
+  .persona-tab { font-size: 11px; padding: 6px 10px; }
+  .ws-card .a { font-size: 20px; }
+  .ws-card .q { font-size: 14px; }
+  .fee-pill { font-size: 16px; padding: 6px 12px; }
+  .page-title { font-size: 22px; }
+}

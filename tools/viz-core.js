@@ -24,5 +24,43 @@ var VIZ = (function() {
     }, interval);
   }
 
-  return { create: create, start: start };
+  function responsiveSize(canvas, maxHeight) {
+    var parent = canvas.parentElement;
+    var pw = parent ? parent.clientWidth : window.innerWidth;
+    var dpr = window.devicePixelRatio || 1;
+    var w = Math.min(pw, 1200);
+    var h = Math.min(maxHeight || 350, w < 480 ? 250 : w < 768 ? 300 : 350);
+    canvas.width = w * dpr;
+    canvas.height = h * dpr;
+    canvas.style.width = w + 'px';
+    canvas.style.height = h + 'px';
+    var ctx = canvas.getContext('2d');
+    ctx.scale(dpr, dpr);
+    return { w: w, h: h, ctx: ctx };
+  }
+
+  function feeColor(fee) {
+    var p = Math.min(1, Math.max(0, (fee || 0) / 50));
+    return {
+      r: Math.round(p * 248 + (1-p) * 63),
+      g: Math.round((1-p) * 185 + p * 81),
+      b: Math.round((1-p) * 80 + p * 73)
+    };
+  }
+
+  function roundRect(ctx, x, y, w, h, r) {
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.lineTo(x + w - r, y);
+    ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+    ctx.lineTo(x + w, y + h - r);
+    ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+    ctx.lineTo(x + r, y + h);
+    ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+    ctx.lineTo(x, y + r);
+    ctx.quadraticCurveTo(x, y, x + r, y);
+    ctx.closePath();
+  }
+
+  return { create: create, start: start, responsiveSize: responsiveSize, feeColor: feeColor, roundRect: roundRect };
 })();

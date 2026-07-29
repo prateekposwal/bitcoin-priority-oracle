@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BIP-110 Fork Tracker — BSAHI</title>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{font-size:16px;-webkit-font-smoothing:antialiased}
+body{background:#1A1612;color:#EADCC8;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',Roboto,Oxygen,Ubuntu,sans-serif;min-height:100vh;line-height:1.5}
+a{color:#D4933A;text-decoration:none;transition:color .2s}
+a:hover{color:#E8B86D}
+::selection{background:#D4933A;color:#1A1612}
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:#1A1612}
+::-webkit-scrollbar-thumb{background:#3A3228;border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:#4A4034}
+
+.container{max-width:1200px;margin:0 auto;padding:0 24px}
+
+/* Header */
+.header{background:#1F1B16;border-bottom:1px solid #3A3228;position:sticky;top:0;z-index:100;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.header-inner{display:flex;align-items:center;justify-content:space-between;height:56px}
+.brand{font-size:1.125rem;font-weight:600;color:#EADCC8;display:flex;align-items:center;gap:8px;letter-spacing:-0.01em}
+.brand:hover{color:#E8B86D}
+.brand-icon{font-size:1.25rem}
+.nav{display:flex;gap:0}
+.nav-item{padding:6px 16px;font-size:.875rem;font-weight:500;color:#9B8B78;border-radius:6px;transition:all .2s}
+.nav-item.active{background:#2A251E;color:#EADCC8}
+
+/* Status Bar */
+.status-bar{background:#14110E;border-bottom:1px solid #3A3228;padding:8px 0}
+.status-inner{display:flex;align-items:center;justify-content:space-between;font-size:.75rem;color:#9B8B78}
+.status-left{display:flex;align-items:center;gap:10px}
+.status-dot{width:8px;height:8px;border-radius:50%;background:#3BA35D;display:inline-block;animation:pulse-dot 2s infinite}
+.status-dot.offline{background:#C0392B;animation:none}
+@keyframes pulse-dot{0%,100%{opacity:1}50%{opacity:.4}}
+.status-label{text-transform:uppercase;letter-spacing:.05em;font-weight:500}
+.status-time{font-variant-numeric:tabular-nums}
+.network-badge{background:#2A251E;padding:2px 10px;border-radius:4px;font-weight:500;color:#EADCC8;font-size:.7rem;letter-spacing:.04em;border:1px solid #3A3228}
+
+/* Hero */
+.hero{padding:48px 0 32px;text-align:center}
+.hero-title{font-size:2rem;font-weight:700;letter-spacing:-0.02em;color:#EADCC8;margin-bottom:12px}
+.hero-desc{max-width:700px;margin:0 auto 24px;color:#9B8B78;font-size:.95rem;line-height:1.7}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;padding:8px 20px;border-radius:100px;font-size:.85rem;font-weight:600;letter-spacing:.03em;text-transform:uppercase}
+.hero-badge.inactive{background:rgba(212,118,42,.15);color:#D4762A;border:1px solid rgba(212,118,42,.3)}
+.hero-badge.locked-in{background:rgba(59,163,93,.15);color:#3BA35D;border:1px solid rgba(59,163,93,.3)}
+.hero-badge.activated{background:rgba(59,163,93,.15);color:#3BA35D;border:1px solid rgba(59,163,93,.3)}
+
+/* Status Cards */
+.cards-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:40px}
+@media(max-width:600px){.cards-grid{grid-template-columns:repeat(2,1fr)}}
+.card{background:#231F19;border:1px solid #3A3228;border-radius:12px;padding:20px;transition:all .3s;position:relative;overflow:hidden}
+.card:hover{border-color:#4A4034;background:#28231C}
+.card.pulse{animation:card-pulse .6s ease-out}
+@keyframes card-pulse{0%{box-shadow:0 0 0 0 rgba(212,147,58,.2)}50%{box-shadow:0 0 0 8px rgba(212,147,58,.05)}100%{box-shadow:0 0 0 0 rgba(212,147,58,0)}}
+.card-label{font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;color:#6A5D4E;font-weight:600;margin-bottom:8px}
+.card-value{font-size:1.5rem;font-weight:700;color:#EADCC8;letter-spacing:-0.02em}
+.card-value.small{font-size:1.15rem}
+.card-value.green{color:#3BA35D}
+.card-value.orange{color:#D4762A}
+.card-sub{font-size:.75rem;color:#6A5D4E;margin-top:4px}
+
+/* Signaling Timeline */
+.timeline-section{margin-bottom:40px}
+.timeline-section h2{font-size:1rem;font-weight:600;margin-bottom:16px;color:#EADCC8}
+.timeline-track{position:relative;height:48px;background:#1A1612;border-radius:8px;border:1px solid #3A3228;overflow:hidden}
+.timeline-past{position:absolute;left:0;top:0;bottom:0;background:#3A3228;transition:width .8s ease;border-radius:7px 0 0 7px}
+.timeline-future{position:absolute;left:0;top:0;bottom:0;right:0;background:transparent}
+.timeline-now{position:absolute;top:-4px;width:3px;height:calc(100% + 8px);background:#D4933A;transition:left .8s ease;z-index:2}
+.timeline-now::after{content:'';position:absolute;top:-4px;left:50%;transform:translateX(-50%);border-left:6px solid transparent;border-right:6px solid transparent;border-top:6px solid #D4933A}
+.timeline-marker{position:absolute;top:0;width:2px;height:100%;background:rgba(212,147,58,.4);z-index:1;transition:left .8s ease}
+.timeline-marker::after{content:'55%';position:absolute;top:-18px;left:50%;transform:translateX(-50%);font-size:.6rem;color:#D4933A;font-weight:600}
+.timeline-labels{display:flex;justify-content:space-between;margin-top:8px;font-size:.7rem;color:#6A5D4E}
+.timeline-labels span.now-label{color:#D4933A;font-weight:600}
+
+/* Block Table */
+.table-section{margin-bottom:40px}
+.table-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.table-header h2{font-size:1rem;font-weight:600;color:#EADCC8}
+.table-count{font-size:.75rem;color:#6A5D4E;background:#231F19;padding:2px 10px;border-radius:100px}
+.table-wrap{overflow-x:auto;border:1px solid #3A3228;border-radius:12px}
+table{width:100%;border-collapse:collapse;font-size:.85rem}
+thead{background:#1F1B16}
+th{padding:12px 16px;text-align:left;font-weight:600;color:#6A5D4E;font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;border-bottom:1px solid #3A3228;white-space:nowrap}
+td{padding:10px 16px;border-bottom:1px solid #2A251E;color:#C4B8A6;white-space:nowrap}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#28231C}
+td.height{font-weight:600;color:#EADCC8;font-variant-numeric:tabular-nums}
+td.time{color:#9B8B78;font-variant-numeric:tabular-nums}
+td.version{font-family:'SF Mono','Fira Code','Cascadia Code',monospace;font-size:.8rem;color:#9B8B78}
+td.signal{text-align:center;font-size:1rem}
+td.fee{font-variant-numeric:tabular-nums;font-weight:500}
+.table-empty td{padding:32px;text-align:center;color:#6A5D4E;font-style:italic}
+
+/* Impact Cards */
+.impact-section{margin-bottom:48px}
+.impact-section h2{font-size:1rem;font-weight:600;margin-bottom:16px;color:#EADCC8}
+.impact-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media(max-width:600px){.impact-grid{grid-template-columns:1fr}}
+.impact-card{background:#231F19;border:1px solid #3A3228;border-radius:12px;padding:24px;transition:border-color .3s}
+.impact-card:hover{border-color:#4A4034}
+.impact-icon{font-size:1.5rem;margin-bottom:12px}
+.impact-card h3{font-size:.9rem;font-weight:600;color:#EADCC8;margin-bottom:8px}
+.impact-card p{font-size:.82rem;color:#9B8B78;line-height:1.7}
+
+/* Loading / Error */
+.loading{text-align:center;padding:40px;color:#6A5D4E}
+.loading-spinner{display:inline-block;width:24px;height:24px;border:2px solid #3A3228;border-top-color:#D4933A;border-radius:50%;animation:spin .8s linear infinite;margin-bottom:12px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.error-banner{background:rgba(192,57,43,.12);border:1px solid rgba(192,57,43,.3);border-radius:8px;padding:12px 16px;color:#E0746A;font-size:.82rem;margin-bottom:24px;display:none}
+</style>
+</head>
+<body>
+
+<header class="header">
+<div class="container header-inner">
+<a href="/" class="brand"><span class="brand-icon">⬡</span> BSAHI</a>
+<nav class="nav">
+<span class="nav-item active">Fork Tracker</span>
+</nav>
+</div>
+</header>
+
+<div class="status-bar" id="statusBar">
+<div class="container status-inner">
+<div class="status-left">
+<span class="status-dot" id="statusDot"></span>
+<span class="status-label">Last updated:</span>
+<span class="status-time" id="statusTime">—</span>
+</div>
+<span class="network-badge">Mainnet</span>
+</div>
+</div>
+
+<main class="container">
+
+<div class="error-banner" id="errorBanner"></div>
+
+<section class="hero" id="heroSection">
+<div class="loading" id="heroLoading">
+<div class="loading-spinner"></div>
+<div>Loading fork data...</div>
+</div>
+<div id="heroContent" style="display:none">
+<h1 class="hero-title">BIP-110 — ASICBoost Fork</h1>
+<p class="hero-desc">BIP-110 removes the quadruple SHA256 from the Proof-of-Work function, effectively banning ASICBoost. 55% miner signaling required in a 2-week period for lock-in.</p>
+<span class="hero-badge" id="statusBadge">—</span>
+</div>
+</section>
+
+<div class="error-banner" id="dataWarning" style="display:none"></div>
+
+<section class="cards-grid" id="cardsGrid">
+<div class="card" id="cardStatus">
+<div class="card-label">Status</div>
+<div class="card-value" id="cardStatusValue">—</div>
+<div class="card-sub" id="cardStatusSub">Tracking BIP-110</div>
+</div>
+<div class="card" id="cardSignaling">
+<div class="card-label">Signaling</div>
+<div class="card-value" id="cardSignalValue">—</div>
+<div class="card-sub" id="cardSignalSub">of sampled blocks</div>
+</div>
+<div class="card" id="cardRequired">
+<div class="card-label">Required</div>
+<div class="card-value green">55%</div>
+<div class="card-sub">Threshold for lock-in</div>
+</div>
+<div class="card" id="cardRemaining">
+<div class="card-label">Remaining</div>
+<div class="card-value" id="cardRemainValue">—</div>
+<div class="card-sub" id="cardRemainSub">in current period</div>
+</div>
+</section>
+
+<section class="timeline-section" id="timelineSection">
+<h2>Signaling Timeline</h2>
+<div class="loading" id="timelineLoading" style="padding:24px;text-align:center">
+<div class="loading-spinner" style="margin:0 auto 8px"></div>
+</div>
+<div id="timelineContent" style="display:none">
+<div class="timeline-track" id="timelineTrack">
+<div class="timeline-past" id="tlPast" style="width:0%"></div>
+<div class="timeline-marker" id="tlMarker55" style="left:55%"></div>
+<div class="timeline-now" id="tlNow" style="left:0%"></div>
+</div>
+<div class="timeline-labels">
+<span id="tlStartLabel">Start of period</span>
+<span id="tlNowLabel">Now</span>
+<span id="tlEndLabel">End of period</span>
+</div>
+</div>
+</section>
+
+<section class="table-section" id="tableSection">
+<div class="table-header">
+<h2>Recent Blocks</h2>
+<span class="table-count" id="blockCount">0</span>
+</div>
+<div class="loading" id="tableLoading" style="padding:24px;text-align:center">
+<div class="loading-spinner" style="margin:0 auto 8px"></div>
+</div>
+<div class="table-wrap" id="tableContent" style="display:none">
+<table>
+<thead>
+<tr>
+<th>Height</th>
+<th>Time</th>
+<th>Version</th>
+<th>Signal</th>
+<th>Fee Rate</th>
+</tr>
+</thead>
+<tbody id="blockBody"></tbody>
+</table>
+</div>
+</section>
+
+<section class="impact-section" id="impactSection">
+<h2>Impact Analysis</h2>
+<div class="impact-grid">
+<div class="impact-card">
+<div class="impact-icon">⚙️</div>
+<h3>If Activated</h3>
+<p>ASICBoost miners must upgrade or shut down. Estimated 10–20 EH/s of hashrate affected, potentially causing a temporary difficulty adjustment and shifting mining power distribution.</p>
+</div>
+<div class="impact-card">
+<div class="impact-icon">📈</div>
+<h3>Price Impact</h3>
+<p>Lower issuance security premium from ASICBoost phase-out. Historically, network upgrades that level the playing field are neutral-to-bullish for Bitcoin price.</p>
+</div>
+<div class="impact-card">
+<div class="impact-icon">⏳</div>
+<h3>Timeline</h3>
+<p>Minimum 1 year from initial signaling to full activation after lock-in. Includes 2016-block signaling period, 2016-block grace period, then mandatory enforcement.</p>
+</div>
+</div>
+</section>
+
+</main>
+
+<script>
+(function() {
+const MEMPOOL_API = 'https://mempool.space/api';
+const BLOCKSTREAM_API = 'https://blockstream.info/api';
+const FETCH_INTERVAL = 60000;
+const UPDATE_INTERVAL = 1000;
+const PERIOD_BLOCKS = 2016;
+const SIGNAL_THRESHOLD = 55;
+const BIT4_MASK = 0x10;
+
+let state = {
+tipHeight: 0,
+periodStart: 0,
+blocks: [],
+signalingBlocks: [],
+lastFetch: 0,
+error: null
+};
+
+const $ = id => document.getElementById(id);
+
+function timeAgo(ts) {
+const secs = Math.floor((Date.now() / 1000) - ts);
+if (secs < 0) return 'now';
+if (secs < 60) return secs + 's ago';
+const mins = Math.floor(secs / 60);
+if (mins < 60) return mins + 'm ago';
+const hrs = Math.floor(mins / 60);
+if (hrs < 24) return hrs + 'h ago';
+return Math.floor(hrs / 24) + 'd ago';
+}
+
+function formatTimeSince(timestampMs) {
+const diff = Math.floor((Date.now() - timestampMs) / 1000);
+if (diff < 5) return 'just now';
+if (diff < 60) return diff + 's ago';
+const mins = Math.floor(diff / 60);
+if (mins < 60) return mins + 'm ' + (diff % 60) + 's ago';
+return mins + 'm ago';
+}
+
+function formatNumber(n) {
+return n.toLocaleString();
+}
+
+function isSignaling(version) {
+return (version & BIT4_MASK) !== 0;
+}
+
+async function fetchJSON(url, timeout = 10000) {
+const controller = new AbortController();
+const id = setTimeout(() => controller.abort(), timeout);
+try {
+const resp = await fetch(url, { signal: controller.signal });
+clearTimeout(id);
+if (!resp.ok) throw new Error('HTTP ' + resp.status);
+return await resp.json();
+} catch(e) {
+clearTimeout(id);
+throw e;
+}
+}
+
+async function fetchTipHeight() {
+const h = await fetchJSON(MEMPOOL_API + '/blocks/tip/height');
+return parseInt(h, 10);
+}
+
+async function fetchRecentBlocks(count = 20) {
+const tip = await fetchTipHeight();
+const blocks = [];
+let remaining = count;
+
+async function fetchBatch(startHeight) {
+const url = BLOCKSTREAM_API + '/blocks/' + startHeight;
+const batch = await fetchJSON(url);
+return batch;
+}
+
+const firstBatch = await fetchBatch(tip);
+blocks.push(...firstBatch);
+remaining -= firstBatch.length;
+
+while (remaining > 0 && blocks.length > 0) {
+const last = blocks[blocks.length - 1];
+const nextHeight = last.height - 1;
+if (nextHeight < 0) break;
+const batch = await fetchBatch(nextHeight);
+if (batch.length === 0) break;
+const dup = batch.findIndex(b => b.height === last.height);
+const newBlocks = dup >= 0 ? batch.slice(dup + 1) : batch;
+if (newBlocks.length === 0) break;
+blocks.push(...newBlocks);
+remaining -= newBlocks.length;
+}
+
+return { tip, blocks: blocks.slice(0, count) };
+}
+
+async function fetchFeeData() {
+return await fetchJSON(MEMPOOL_API + '/v1/mining/blocks/fees/24h');
+}
+
+function computeStats(blocks, tipHeight) {
+const periodStart = Math.floor(tipHeight / PERIOD_BLOCKS) * PERIOD_BLOCKS;
+const periodProgress = tipHeight - periodStart;
+const blocksRemaining = PERIOD_BLOCKS - periodProgress;
+
+const periodBlocks = blocks.filter(b => b.height > periodStart && b.height <= tipHeight);
+let signaling = 0;
+const signalDetails = [];
+for (const b of periodBlocks) {
+const sig = isSignaling(b.version);
+if (sig) signaling++;
+signalDetails.push({ height: b.height, version: b.version, signaling: sig, timestamp: b.timestamp });
+}
+const total = periodBlocks.length;
+const pct = total > 0 ? (signaling / total) * 100 : 0;
+
+let status = 'inactive';
+if (pct >= SIGNAL_THRESHOLD && total >= 144) status = 'locked-in';
+
+const sorted = [...blocks].sort((a, b) => b.height - a.height);
+
+return {
+tipHeight,
+periodStart,
+periodProgress,
+blocksRemaining,
+signalingBlocks: signalDetails,
+totalSampled: total,
+signalingCount: signaling,
+signalPct: pct,
+status,
+blocks: sorted
+};
+}
+
+function showError(msg) {
+const banner = $('errorBanner');
+if (!banner) return;
+banner.textContent = msg;
+banner.style.display = 'block';
+setTimeout(() => { banner.style.display = 'none'; }, 8000);
+}
+
+function showDataWarning(msg) {
+const banner = $('dataWarning');
+if (!banner) return;
+banner.textContent = msg;
+banner.style.display = 'block';
+}
+
+function renderHero(stats) {
+const badge = $('statusBadge');
+$('heroLoading').style.display = 'none';
+$('heroContent').style.display = '';
+
+badge.className = 'hero-badge';
+if (stats.status === 'inactive') {
+badge.classList.add('inactive');
+badge.textContent = '● Inactive';
+} else if (stats.status === 'locked-in') {
+badge.classList.add('locked-in');
+badge.textContent = '● Locked In';
+} else {
+badge.classList.add('activated');
+badge.textContent = '● Activated';
+}
+}
+
+function renderCards(stats) {
+const cards = document.querySelectorAll('.card');
+cards.forEach(c => { c.classList.remove('pulse'); void c.offsetWidth; c.classList.add('pulse'); });
+
+const statusEl = $('cardStatusValue');
+if (stats.status === 'inactive') {
+statusEl.textContent = 'Inactive';
+statusEl.className = 'card-value orange';
+$('cardStatusSub').textContent = 'Not yet signaling';
+} else {
+statusEl.textContent = 'Locked In';
+statusEl.className = 'card-value green';
+$('cardStatusSub').textContent = 'Threshold reached';
+}
+
+const signalEl = $('cardSignalValue');
+signalEl.textContent = stats.totalSampled > 0 ? stats.signalPct.toFixed(1) + '%' : '—';
+signalEl.className = 'card-value ' + (stats.signalPct >= SIGNAL_THRESHOLD ? 'green' : 'orange');
+$('cardSignalSub').textContent = stats.totalSampled > 0 ? stats.signalingCount + ' of ' + stats.totalSampled + ' blocks' : 'No data';
+
+const remainEl = $('cardRemainValue');
+remainEl.textContent = '~' + formatNumber(stats.blocksRemaining) + ' blocks';
+remainEl.className = 'card-value small';
+$('cardRemainSub').textContent = 'Period ends at height ' + formatNumber(stats.periodStart + PERIOD_BLOCKS);
+}
+
+function renderTimeline(stats) {
+$('timelineLoading').style.display = 'none';
+$('timelineContent').style.display = '';
+
+const pct = stats.periodProgress / PERIOD_BLOCKS * 100;
+$('tlPast').style.width = pct + '%';
+$('tlNow').style.left = pct + '%';
+$('tlStartLabel').textContent = formatNumber(stats.periodStart);
+$('tlNowLabel').textContent = 'Now (' + formatNumber(stats.tipHeight) + ')';
+$('tlEndLabel').textContent = formatNumber(stats.periodStart + PERIOD_BLOCKS);
+}
+
+function renderBlockList(stats) {
+const loading = $('tableLoading');
+const content = $('tableContent');
+loading.style.display = 'none';
+content.style.display = '';
+
+const tbody = $('blockBody');
+const count = $('blockCount');
+
+const rows = stats.blocks.slice(0, 20);
+count.textContent = rows.length;
+
+if (rows.length === 0) {
+tbody.innerHTML = '<tr class="table-empty"><td colspan="5">No block data available</td></tr>';
+return;
+}
+
+tbody.innerHTML = rows.map(b => {
+const sig = isSignaling(b.version);
+const timeStr = b.timestamp ? timeAgo(b.timestamp) : '—';
+const verStr = '0x' + (b.version >>> 0).toString(16).padStart(8, '0');
+return '<tr>' +
+'<td class="height">' + formatNumber(b.height) + '</td>' +
+'<td class="time">' + timeStr + '</td>' +
+'<td class="version">' + verStr + '</td>' +
+'<td class="signal">' + (sig ? '✅' : '❌') + '</td>' +
+'<td class="fee">' + (b.avgFeeRate != null ? b.avgFeeRate + ' sat/vB' : '—') + '</td>' +
+'</tr>';
+}).join('');
+}
+
+function updateStatusBar() {
+const timeEl = $('statusTime');
+if (state.lastFetch > 0) {
+timeEl.textContent = formatTimeSince(state.lastFetch);
+} else {
+timeEl.textContent = '—';
+}
+}
+
+function mergeFeeData(blocks, feeData) {
+const feeMap = {};
+if (Array.isArray(feeData)) {
+for (const entry of feeData) {
+if (entry.height != null) {
+feeMap[entry.height] = entry.avgFeeRate;
+}
+}
+}
+for (const b of blocks) {
+if (feeMap[b.height] != null) {
+b.avgFeeRate = feeMap[b.height];
+}
+}
+return blocks;
+}
+
+async function fetchData() {
+try {
+const rawBlocks = await fetchRecentBlocks(20);
+let blocks = rawBlocks.blocks;
+const tipHeight = rawBlocks.tip;
+
+try {
+const feeData = await fetchFeeData();
+blocks = mergeFeeData(blocks, feeData);
+} catch(e) {
+showDataWarning('Fee rate data unavailable; some columns may show "—"');
+}
+
+const stats = computeStats(blocks, tipHeight);
+state = { ...state, tipHeight: stats.tipHeight, periodStart: stats.periodStart, blocks: stats.blocks, signalingBlocks: stats.signalingBlocks, lastFetch: Date.now(), error: null };
+
+renderHero(stats);
+renderCards(stats);
+renderTimeline(stats);
+renderBlockList(stats);
+updateStatusBar();
+
+$('dataWarning').style.display = 'none';
+
+} catch(e) {
+state.error = e.message || 'Unknown error';
+showError('Failed to fetch data: ' + state.error + '. Will retry.');
+console.error('Fork tracker error:', e);
+}
+}
+
+let updateTimer = null;
+let fetchTimer = null;
+
+function startTimers() {
+if (updateTimer) clearInterval(updateTimer);
+updateTimer = setInterval(updateStatusBar, UPDATE_INTERVAL);
+if (fetchTimer) clearInterval(fetchTimer);
+fetchTimer = setInterval(fetchData, FETCH_INTERVAL);
+}
+
+function init() {
+fetchData();
+startTimers();
+}
+
+if (document.readyState === 'loading') {
+document.addEventListener('DOMContentLoaded', init);
+} else {
+init();
+}
+
+})();
+</script>
+</body>
+</html>

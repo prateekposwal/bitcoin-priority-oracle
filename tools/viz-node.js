@@ -248,14 +248,10 @@ var VIZ_Node = (function () {
   }
 
   function resize() {
-    var rect = canvas.getBoundingClientRect();
-    var cw = rect.width || canvas.clientWidth || 800;
-    if (cw !== w) {
-      canvas.width = cw;
-      w = cw;
-    }
-    canvas.height = 350;
-    h = 350;
+    var r = VIZ.responsiveSize(canvas, 350);
+    w = r.w;
+    h = r.h;
+    ctx = r.ctx;
     if (ctx) draw();
   }
 

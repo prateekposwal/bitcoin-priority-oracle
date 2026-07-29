@@ -60,6 +60,11 @@ html, body { width: 100%; min-height: 100vh; background: #1A1612; color: #E8E5E0
   .fee-grid, .stat-row { grid-template-columns: 1fr; }
   .viz-canvas { height: 250px; }
 }
+
+@media (max-width: 480px) {
+  .tab-btn { font-size: 11px; padding: 4px 8px; }
+  .header { overflow-x: auto; }
+}
 </style>
 </head>
 <body>
@@ -152,7 +157,8 @@ html, body { width: 100%; min-height: 100vh; background: #1A1612; color: #E8E5E0
   <div class="dc">
     <div class="dc-q">Latest data</div>
     <div class="dc-sub" style="margin-bottom:12px;">Fee history, model outputs, and datasets</div>
-    <a href="tools/fee_history.csv" style="display:block;padding:10px;background:#2A2622;border-radius:8px;color:#F7931A;text-decoration:none;margin-bottom:8px;text-align:center;">Download Fee History CSV →</a>
+    <button id="csv-download-btn" style="display:block;width:100%;padding:10px;background:#2A2622;border:1px solid transparent;border-radius:8px;color:#F7931A;font-size:14px;font-weight:600;cursor:pointer;transition:all 0.2s;font-family:inherit;margin-bottom:8px;text-align:center;">⬇ Download Fee History CSV</button>
+    <div id="data-freshness" style="font-size:10px;color:rgba(255,255,255,0.25);text-align:center;margin-top:4px;">Data refreshes every 60s from mempool.space</div>
     <a href="https://github.com/prateekposwal/block-space-economics" style="display:block;padding:10px;background:#2A2622;border-radius:8px;color:#F7931A;text-decoration:none;text-align:center;">View on GitHub →</a>
   </div>
   <canvas id="viz-research" class="viz-canvas"></canvas>
@@ -227,6 +233,22 @@ document.querySelectorAll('.tab-btn').forEach(function(btn) {
     if (id === 'research') window.setTimeout(function() { VIZ_Research && VIZ_Research.resize(); }, 50);
     if (id === 'developer') window.setTimeout(function() { VIZ_Developer && VIZ_Developer.resize(); }, 50);
   });
+});
+
+document.getElementById('csv-download-btn').addEventListener('click', function() {
+  var btn = this;
+  var link = VIZ_Research.downloadCSV();
+  if (link) {
+    document.body.appendChild(link);
+    link.click();
+    setTimeout(function() { link.remove(); }, 100);
+    btn.textContent = '✅ Downloaded!';
+    btn.style.borderColor = '#3FB950';
+    setTimeout(function() {
+      btn.textContent = '⬇ Download Fee History CSV';
+      btn.style.borderColor = 'transparent';
+    }, 3000);
+  }
 });
 
 DATA_ENGINE.start();

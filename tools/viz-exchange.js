@@ -36,13 +36,10 @@ var VIZ_Exchange = (function() {
   }
 
   function resize() {
-    var parent = canvas.parentElement;
-    var pw = parent ? parent.clientWidth : window.innerWidth;
-    if (pw < 100) pw = window.innerWidth;
-    canvas.width = pw;
-    canvas.height = 350;
-    w = canvas.width;
-    h = canvas.height;
+    var r = VIZ.responsiveSize(canvas, 350);
+    w = r.w;
+    h = r.h;
+    ctx = r.ctx;
   }
 
   function costIndividual(n) {
@@ -301,7 +298,8 @@ var VIZ_Exchange = (function() {
     var t = e.touches[0];
     var rect = canvas.getBoundingClientRect();
     var pos = { x: t.clientX - rect.left, y: t.clientY - rect.top };
-    if (Math.abs(pos.x - mapX(dragX)) < 40) {
+    var threshold = w < 480 ? 60 : 40;
+    if (Math.abs(pos.x - mapX(dragX)) < threshold) {
       isDragging = true;
       showTooltip = true;
     }

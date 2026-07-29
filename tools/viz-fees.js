@@ -34,7 +34,8 @@ var VIZ_Fees = (function() {
     
     // Spawn particles continuously
     setInterval(function() {
-      for (var i = 0; i < 3; i++) {
+      var count = w < 480 ? 1 : w < 768 ? 2 : 3;
+      for (var i = 0; i < count; i++) {
         var fee = Math.random() * 30 + 1;
         var p = Math.min(1, fee / 50);
         particles.push({
@@ -55,8 +56,15 @@ var VIZ_Fees = (function() {
   }
 
   function resize() {
-    w = canvas.width = window.innerWidth;
-    h = canvas.height = window.innerHeight;
+    var dpr = window.devicePixelRatio || 1;
+    w = window.innerWidth;
+    h = window.innerHeight;
+    canvas.width = w * dpr;
+    canvas.height = h * dpr;
+    canvas.style.width = w + 'px';
+    canvas.style.height = h + 'px';
+    ctx = canvas.getContext('2d');
+    ctx.scale(dpr, dpr);
   }
 
   function loop() {

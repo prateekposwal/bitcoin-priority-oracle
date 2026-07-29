@@ -29,6 +29,27 @@ var VIZ_Lightning = (function() {
       tooltipEl.style.display = 'none';
     });
 
+    canvas.addEventListener('touchstart', function(e) {
+      e.preventDefault();
+      var t = e.touches[0];
+      mouseX = t.clientX;
+      mouseY = t.clientY;
+    }, { passive: false });
+    canvas.addEventListener('touchmove', function(e) {
+      e.preventDefault();
+      var t = e.touches[0];
+      mouseX = t.clientX;
+      mouseY = t.clientY;
+    }, { passive: false });
+    canvas.addEventListener('touchend', function() {
+      setTimeout(function() {
+        mouseX = -1;
+        mouseY = -1;
+        hoverNode = null;
+        tooltipEl.style.display = 'none';
+      }, 2000);
+    });
+
     window.addEventListener('resize', resize);
 
     buildNodes();

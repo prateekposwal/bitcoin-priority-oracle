@@ -15,6 +15,9 @@ var VIZ_Send = (function() {
     window.addEventListener('resize', resize);
     canvas.addEventListener('mousemove', onMove);
     canvas.addEventListener('mouseleave', onLeave);
+    canvas.addEventListener('touchstart', onTouchStart, { passive: false });
+    canvas.addEventListener('touchmove', onTouchMove, { passive: false });
+    canvas.addEventListener('touchend', onTouchEnd);
     DATA_ENGINE.onUpdate(function() {
       var s = DATA_ENGINE.get();
       bars = (s.fee_history || []).slice(-144);
@@ -26,11 +29,12 @@ var VIZ_Send = (function() {
   }
 
   function resize() {
-    var r = canvas.parentElement
-      ? canvas.parentElement.getBoundingClientRect()
-      : { width: window.innerWidth };
-    w = canvas.width = r.width || window.innerWidth;
-    h = canvas.height = 350;
+    var r = VIZ.responsiveSize(canvas, 350);
+    w = r.w;
+    h = r.h;
+    ctx = r.ctx;
+    if (w < 480) PAD.right = 120;
+    else PAD.right = 150;
   }
 
   function onMove(e) {
@@ -42,6 +46,30 @@ var VIZ_Send = (function() {
   }
 
   function onLeave() { hoverIdx = -1; }
+
+  function onTouchStart(e) {
+    e.preventDefault();
+    var r = canvas.getBoundingClientRect();
+    var t = e.touches[0];
+    mouseX = t.clientX - r.left;
+    mouseY = t.clientY - r.top;
+    var i = hitTest(mouseX, mouseY);
+    if (i !== hoverIdx) { hoverIdx = i; }
+  }
+
+  function onTouchMove(e) {
+    e.preventDefault();
+    var r = canvas.getBoundingClientRect();
+    var t = e.touches[0];
+    mouseX = t.clientX - r.left;
+    mouseY = t.clientY - r.top;
+    var i = hitTest(mouseX, mouseY);
+    if (i !== hoverIdx) { hoverIdx = i; }
+  }
+
+  function onTouchEnd() {
+    setTimeout(function() { hoverIdx = -1; }, 2000);
+  }
 
   function hitTest(mx) {
     var n = bars.length;
@@ -205,7 +233,7 @@ var VIZ_Send = (function() {
       ctx.fillStyle = 'rgba(16,14,10,0.96)';
       ctx.strokeStyle = 'rgba(255,255,255,0.12)';
       ctx.lineWidth = 1;
-      roundRect(ctx, tx, ty, tw, th, 6);
+      VIZ.roundRect(ctx, tx, ty, tw, th, 6);
       ctx.fill();
       ctx.stroke();
 
@@ -229,19 +257,5 @@ var VIZ_Send = (function() {
     requestAnimationFrame(tick);
   }
 
-  function roundRect(ctx, x, y, w, h, r) {
-    ctx.beginPath();
-    ctx.moveTo(x + r, y);
-    ctx.lineTo(x + w - r, y);
-    ctx.quadraticCurveTo(x + w, y, x + w, y + r);
-    ctx.lineTo(x + w, y + h - r);
-    ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
-    ctx.lineTo(x + r, y + h);
-    ctx.quadraticCurveTo(x, y + h, x, y + h - r);
-    ctx.lineTo(x, y + r);
-    ctx.quadraticCurveTo(x, y, x + r, y);
-    ctx.closePath();
-  }
-
-  return { init: init };
+  return { init: init, resize: resize };
 })();
