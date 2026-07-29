@@ -270,10 +270,12 @@ APP.onData(function(d) {
   liveFees = d;
   document.getElementById('live-indicator').style.display = 'flex';
   var start = Date.now();
-  document.getElementById('live-clock').textContent = '0s ago';
-  if (window._liveClock) clearInterval(window._liveClock);
-  window._liveClock = setInterval(function() {
-    document.getElementById('live-clock').textContent = Math.floor((Date.now() - start) / 1000) + 's ago';
+    var lc = document.getElementById('live-clock');
+    if (lc) lc.textContent = '0s ago';
+    if (window._liveClock) clearInterval(window._liveClock);
+    window._liveClock = setInterval(function() {
+      var lc2 = document.getElementById('live-clock');
+      if (lc2) lc2.textContent = Math.floor((Date.now() - start) / 1000) + 's ago';
   }, 1000);
   if (d.fees) {
     document.getElementById('live-data').style.display = 'inline-block';

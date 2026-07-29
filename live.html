@@ -131,6 +131,7 @@ function niceNum(v, decimals) { return Number(v).toLocaleString(undefined, {maxi
 
 function updateClock() {
   var el = document.getElementById('live-clock');
+  if (!el) return;
   if (!el._start) el._start = Date.now();
   var s = Math.floor((Date.now() - el._start) / 1000);
   el.textContent = 'Live · ' + s + 's ago';
