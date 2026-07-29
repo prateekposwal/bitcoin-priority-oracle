@@ -79,20 +79,21 @@ var VIZ_Developer = (function() {
     var dataMgmt = document.createElement('div');
     dataMgmt.id = 'dev-data-mgmt';
     dataMgmt.style.cssText = 'margin-top:16px;padding:16px;background:#1A1612;border-radius:10px;border:1px solid rgba(255,255,255,0.06);';
+    var isNarrow = window.innerWidth < 480;
     dataMgmt.innerHTML =
       '<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px;">' +
-        '<span style="font-size:13px;font-weight:600;color:rgba(255,255,255,0.6);">📥 Local Data Capture</span>' +
-        '<div id="storage-bar-wrap" style="flex:1;min-width:100px;max-width:300px;height:4px;background:#2A2622;border-radius:2px;overflow:hidden;">' +
+        '<span style="font-size:' + (isNarrow ? '11px' : '13px') + ';font-weight:600;color:rgba(255,255,255,0.6);">📥 Local Data Capture</span>' +
+        '<div id="storage-bar-wrap" style="flex:1;min-width:' + (isNarrow ? '60px' : '100px') + ';max-width:' + (isNarrow ? '200px' : '300px') + ';height:4px;background:#2A2622;border-radius:2px;overflow:hidden;">' +
           '<div id="storage-bar" style="height:100%;width:0%;background:#3FB950;border-radius:2px;transition:width 0.5s;"></div>' +
         '</div>' +
-        '<span id="storage-text" style="font-size:10px;color:rgba(255,255,255,0.3);">--</span>' +
+        '<span id="storage-text" style="font-size:' + (isNarrow ? '8px' : '10px') + ';color:rgba(255,255,255,0.3);">--</span>' +
       '</div>' +
-      '<div style="display:flex;gap:8px;flex-wrap:wrap;">' +
-        '<button class="data-btn" data-action="csv" style="padding:8px 16px;background:#2A2622;border:1px solid rgba(255,255,255,0.08);border-radius:8px;color:#F7931A;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;">⬇ CSV</button>' +
-        '<button class="data-btn" data-action="json" style="padding:8px 16px;background:#2A2622;border:1px solid rgba(255,255,255,0.08);border-radius:8px;color:#F7931A;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;">⬇ JSON</button>' +
-        '<button class="data-btn" data-action="clear" style="padding:8px 16px;background:rgba(248,81,73,0.1);border:1px solid rgba(248,81,73,0.2);border-radius:8px;color:#F85149;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;">🗑 Clear</button>' +
+      '<div style="display:flex;gap:6px;flex-wrap:wrap;">' +
+        '<button class="data-btn" data-action="csv" style="padding:6px 10px;background:#2A2622;border:1px solid rgba(255,255,255,0.08);border-radius:6px;color:#F7931A;font-size:' + (isNarrow ? '10px' : '12px') + ';font-weight:600;cursor:pointer;font-family:inherit;">⬇ CSV</button>' +
+        '<button class="data-btn" data-action="json" style="padding:6px 10px;background:#2A2622;border:1px solid rgba(255,255,255,0.08);border-radius:6px;color:#F7931A;font-size:' + (isNarrow ? '10px' : '12px') + ';font-weight:600;cursor:pointer;font-family:inherit;">⬇ JSON</button>' +
+        '<button class="data-btn" data-action="clear" style="padding:6px 10px;background:rgba(248,81,73,0.1);border:1px solid rgba(248,81,73,0.2);border-radius:6px;color:#F85149;font-size:' + (isNarrow ? '10px' : '12px') + ';font-weight:600;cursor:pointer;font-family:inherit;">🗑 Clear</button>' +
       '</div>' +
-      '<div id="storage-warning" style="display:none;margin-top:8px;padding:8px 12px;background:rgba(248,81,73,0.1);border-radius:6px;font-size:11px;color:#F85149;line-height:1.5;"></div>';
+      '<div id="storage-warning" style="display:none;margin-top:8px;padding:6px 8px;background:rgba(248,81,73,0.1);border-radius:6px;font-size:' + (isNarrow ? '9px' : '11px') + ';color:#F85149;line-height:1.5;"></div>';
     container.appendChild(dataMgmt);
 
     dataMgmt.addEventListener('click', function(e) {

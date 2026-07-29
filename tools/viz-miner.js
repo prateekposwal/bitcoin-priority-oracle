@@ -10,6 +10,8 @@ var VIZ_Miner = (function() {
   var spawnTimer = 0;
   var sparklineData = [];
 
+  function isMobile() { return w < 480; }
+
   function init(canvasId) {
     canvas = document.getElementById(canvasId);
     if (!canvas) return;
@@ -56,12 +58,12 @@ var VIZ_Miner = (function() {
   function resize() {
     var parent = canvas.parentElement;
     var pw = parent ? parent.clientWidth : window.innerWidth;
-    var dpr = window.devicePixelRatio || 1;
+    var dpr = Math.min(window.devicePixelRatio || 1, 3);
     w = pw;
     h = 600;
-    if (w < 480) h = 450;
-    canvas.width = w * dpr;
-    canvas.height = h * dpr;
+    if (isMobile()) h = 500;
+    canvas.width = Math.round(w * dpr);
+    canvas.height = Math.round(h * dpr);
     canvas.style.width = w + 'px';
     canvas.style.height = h + 'px';
     ctx = canvas.getContext('2d');
@@ -92,8 +94,8 @@ var VIZ_Miner = (function() {
           x: -24,
           y: h * 0.14 + Math.random() * (h * 0.45),
           fee: fee,
-          w: 20,
-          h: 24 + Math.random() * 14,
+          w: isMobile() ? 14 : 20,
+          h: (isMobile() ? 18 : 24) + Math.random() * (isMobile() ? 10 : 14),
           speed: 1.2 + Math.random() * 0.8
         });
         blockIndex = (blockIndex + 1) % feeHistory.length;
@@ -140,7 +142,7 @@ var VIZ_Miner = (function() {
   function drawStream(areaW, areaH, t) {
     ctx.textAlign = 'center';
     ctx.textBaseline = 'top';
-    ctx.font = 'bold 12px -apple-system, sans-serif';
+    ctx.font = (isMobile() ? 'bold 10px' : 'bold 12px') + ' -apple-system, sans-serif';
     ctx.fillStyle = 'rgba(255,255,255,0.4)';
     ctx.fillText('Block Reward Stream', areaW / 2, 8);
 
@@ -207,22 +209,22 @@ var VIZ_Miner = (function() {
 
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.font = 'bold 16px -apple-system, sans-serif';
+    ctx.font = (isMobile() ? 'bold 12px' : 'bold 16px') + ' -apple-system, sans-serif';
     ctx.fillStyle = '#E8E5E0';
-    ctx.fillText(feeBTC.toFixed(4), poolCX, poolCY - 6);
-    ctx.font = '8px -apple-system, sans-serif';
+    ctx.fillText(feeBTC.toFixed(4), poolCX, poolCY - (isMobile() ? 4 : 6));
+    ctx.font = (isMobile() ? '7px' : '8px') + ' -apple-system, sans-serif';
     ctx.fillStyle = 'rgba(255,255,255,0.35)';
-    ctx.fillText('BTC fees', poolCX, poolCY + 16);
+    ctx.fillText('BTC fees', poolCX, poolCY + (isMobile() ? 12 : 16));
 
     ctx.textBaseline = 'top';
-    ctx.font = '10px -apple-system, sans-serif';
+    ctx.font = (isMobile() ? '8px' : '10px') + ' -apple-system, sans-serif';
     ctx.fillStyle = 'rgba(255,255,255,0.25)';
     ctx.fillText('Fee Pool', poolCX, poolCY + pulseR + 8);
   }
 
   function drawStats(leftX, areaW, areaH, t) {
-    var cardW = areaW - 24;
-    var cardX = leftX + 12;
+    var cardW = areaW - (isMobile() ? 16 : 24);
+    var cardX = leftX + (isMobile() ? 8 : 12);
     var cardGap = 6;
     var cardH = (areaH - 28 - cardGap * 2) / 3;
     var totalBTC = 3.125 + poolDisplay / 100000000;
@@ -235,17 +237,17 @@ var VIZ_Miner = (function() {
 
     ctx.textAlign = 'left';
     ctx.textBaseline = 'top';
-    ctx.font = '10px -apple-system, sans-serif';
+    ctx.font = (isMobile() ? '8px' : '10px') + ' -apple-system, sans-serif';
     ctx.fillStyle = 'rgba(255,255,255,0.35)';
-    ctx.fillText('Block Reward', cardX + 14, y1 + 10);
+    ctx.fillText('Block Reward', cardX + (isMobile() ? 10 : 14), y1 + (isMobile() ? 8 : 10));
 
-    ctx.font = 'bold 26px -apple-system, sans-serif';
+    ctx.font = (isMobile() ? 'bold 18px' : 'bold 26px') + ' -apple-system, sans-serif';
     ctx.fillStyle = '#E8E5E0';
-    ctx.fillText(fmtUSD(totalUSD), cardX + 14, y1 + 26);
+    ctx.fillText(fmtUSD(totalUSD), cardX + (isMobile() ? 10 : 14), y1 + (isMobile() ? 18 : 26));
 
-    ctx.font = '11px -apple-system, sans-serif';
+    ctx.font = (isMobile() ? '9px' : '11px') + ' -apple-system, sans-serif';
     ctx.fillStyle = 'rgba(255,255,255,0.3)';
-    ctx.fillText(totalBTC.toFixed(4) + ' BTC', cardX + 14, y1 + 58);
+    ctx.fillText(totalBTC.toFixed(4) + ' BTC', cardX + (isMobile() ? 10 : 14), y1 + (isMobile() ? 40 : 58));
 
     var y2 = y1 + cardH + cardGap;
     ctx.fillStyle = 'rgba(255,255,255,0.04)';

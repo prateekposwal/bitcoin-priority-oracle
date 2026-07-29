@@ -7,6 +7,8 @@ var VIZ_Send = (function() {
   var hoverIdx = -1;
   var mouseX = 0, mouseY = 0;
 
+  function isMobile() { return w < 480; }
+
   function init(canvasId) {
     canvas = document.getElementById(canvasId);
     if (!canvas) return;
@@ -33,8 +35,8 @@ var VIZ_Send = (function() {
     w = r.w;
     h = r.h;
     ctx = r.ctx;
-    if (w < 480) PAD.right = 120;
-    else PAD.right = 150;
+    if (isMobile()) PAD.right = 80;
+    else PAD.right = 120;
   }
 
   function onMove(e) {
@@ -101,7 +103,7 @@ var VIZ_Send = (function() {
     ctx.fillRect(0, 0, w, h);
 
     ctx.fillStyle = '#F0F0F0';
-    ctx.font = '18px -apple-system, "SF Pro Display", Helvetica, sans-serif';
+    ctx.font = (isMobile() ? '15px' : '18px') + ' -apple-system, "SF Pro Display", Helvetica, sans-serif';
     ctx.textAlign = 'left';
     ctx.textBaseline = 'top';
     ctx.fillText('Last 24 Hours of Bitcoin Fees', cL, 16);
@@ -117,7 +119,7 @@ var VIZ_Send = (function() {
       ctx.lineTo(cR, y);
       ctx.stroke();
       ctx.fillStyle = 'rgba(255,255,255,0.45)';
-      ctx.font = '11px -apple-system, Helvetica, sans-serif';
+      ctx.font = (isMobile() ? '9px' : '11px') + ' -apple-system, Helvetica, sans-serif';
       ctx.textAlign = 'right';
       ctx.textBaseline = 'middle';
       ctx.fillText(v < 1 ? v.toFixed(1) : v.toFixed(0), cL - 8, y);
@@ -129,7 +131,7 @@ var VIZ_Send = (function() {
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillStyle = 'rgba(255,255,255,0.35)';
-    ctx.font = '11px -apple-system, Helvetica, sans-serif';
+    ctx.font = (isMobile() ? '9px' : '11px') + ' -apple-system, Helvetica, sans-serif';
     ctx.fillText('sat/vB', 0, 0);
     ctx.restore();
 
@@ -214,7 +216,7 @@ var VIZ_Send = (function() {
       ctx.fillStyle = items[i].color;
       ctx.fillRect(lx, yy, 10, 10);
       ctx.fillStyle = 'rgba(255,255,255,0.65)';
-      ctx.font = '11px -apple-system, Helvetica, sans-serif';
+      ctx.font = (isMobile() ? '9px' : '11px') + ' -apple-system, Helvetica, sans-serif';
       ctx.fillText(items[i].label, lx + 16, yy + 5);
     }
 
@@ -224,7 +226,7 @@ var VIZ_Send = (function() {
       var ts = e.timestamp != null ? e.timestamp : e.date ? new Date(e.date).getTime() / 1000 : 0;
       var d = new Date(ts * 1000);
       var feeUSD = (fr * btcPrice) / 100000000;
-      var tw = 210, th = 86;
+      var tw = isMobile() ? 180 : 210, th = 86;
       var tx = mouseX + 16, ty = mouseY - 12;
       if (tx + tw > w - 8) tx = mouseX - tw - 16;
       if (ty + th > h - 8) ty = h - th - 8;
@@ -240,17 +242,17 @@ var VIZ_Send = (function() {
       ctx.textAlign = 'left';
       ctx.textBaseline = 'top';
       ctx.fillStyle = 'rgba(255,255,255,0.45)';
-      ctx.font = '11px -apple-system, Helvetica, sans-serif';
+      ctx.font = (isMobile() ? '9px' : '11px') + ' -apple-system, Helvetica, sans-serif';
       ctx.fillText(
         d.toLocaleDateString([], { month: 'short', day: 'numeric' }) + ' ' +
         d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
         tx + 12, ty + 10
       );
       ctx.fillStyle = '#F0F0F0';
-      ctx.font = 'bold 18px -apple-system, Helvetica, sans-serif';
+      ctx.font = (isMobile() ? 'bold 15px' : 'bold 18px') + ' -apple-system, Helvetica, sans-serif';
       ctx.fillText(fr.toFixed(1) + ' sat/vB', tx + 12, ty + 28);
       ctx.fillStyle = 'rgba(255,255,255,0.55)';
-      ctx.font = '12px -apple-system, Helvetica, sans-serif';
+      ctx.font = (isMobile() ? '10px' : '12px') + ' -apple-system, Helvetica, sans-serif';
       ctx.fillText('$' + feeUSD.toFixed(2) + ' USD/vB', tx + 12, ty + 54);
     }
 

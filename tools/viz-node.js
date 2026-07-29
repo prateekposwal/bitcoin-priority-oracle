@@ -3,6 +3,8 @@ var VIZ_Node = (function() {
   var animFrame = null;
   var pulseTime = 0;
 
+  function isMobile() { return w < 480; }
+
   var values = {
     hardware: 500,
     bandwidth: 50,
@@ -175,8 +177,8 @@ var VIZ_Node = (function() {
 
     var totalCost = c.total || 1;
     var cx = w / 2;
-    var cy = h / 2 - 20;
-    var outerR = Math.min(w, h) * 0.3;
+    var cy = h / 2 - (isMobile() ? 10 : 20);
+    var outerR = Math.min(w, h) * (isMobile() ? 0.22 : 0.3);
     var innerR = outerR * 0.55;
     var pulse = 1 + Math.sin(pulseTime) * 0.008;
     outerR *= pulse;
@@ -221,16 +223,16 @@ var VIZ_Node = (function() {
 
     ctx.textAlign = 'center';
     ctx.textBaseline = 'bottom';
-    ctx.font = 'bold 34px -apple-system, sans-serif';
+    ctx.font = (isMobile() ? 'bold 24px' : 'bold 34px') + ' -apple-system, sans-serif';
     ctx.fillStyle = '#E6EDF3';
-    ctx.fillText('$' + totalCost.toFixed(0), cx, cy + 4);
+    ctx.fillText('$' + totalCost.toFixed(0), cx, cy + (isMobile() ? 2 : 4));
 
     ctx.textBaseline = 'top';
-    ctx.font = '16px -apple-system, sans-serif';
+    ctx.font = (isMobile() ? '13px' : '16px') + ' -apple-system, sans-serif';
     ctx.fillStyle = '#8B949E';
-    ctx.fillText('/ year', cx, cy + 8);
+    ctx.fillText('/ year', cx, cy + (isMobile() ? 6 : 8));
 
-    var labelR = outerR + 28;
+    var labelR = outerR + (isMobile() ? 18 : 28);
     startAngle = -Math.PI / 2;
     segs.forEach(function(s) {
       var segAngle = (s.cost / totalCost) * Math.PI * 2;
@@ -241,16 +243,16 @@ var VIZ_Node = (function() {
 
       ctx.textAlign = midAngle > Math.PI / 2 && midAngle < Math.PI * 1.5 ? 'right' : 'left';
       ctx.textBaseline = 'middle';
-      ctx.font = '11px -apple-system, sans-serif';
+      ctx.font = (isMobile() ? '9px' : '11px') + ' -apple-system, sans-serif';
       ctx.fillStyle = 'rgba(255,255,255,0.7)';
       ctx.fillText('$' + s.cost.toFixed(0), lx, ly);
       startAngle += segAngle;
     });
 
-    var legendY = cy + outerR + 60;
-    var legendX = cx - 180;
-    var itemHeight = 20;
-    var colW = 180;
+    var legendY = cy + outerR + (isMobile() ? 40 : 60);
+    var legendX = cx - (isMobile() ? 120 : 180);
+    var itemHeight = isMobile() ? 16 : 20;
+    var colW = isMobile() ? 130 : 180;
 
     segs.forEach(function(s, idx) {
       var col = Math.floor(idx / 2);
@@ -265,11 +267,11 @@ var VIZ_Node = (function() {
 
       ctx.textAlign = 'left';
       ctx.textBaseline = 'middle';
-      ctx.font = '12px -apple-system, sans-serif';
+      ctx.font = (isMobile() ? '10px' : '12px') + ' -apple-system, sans-serif';
       ctx.fillStyle = '#8B949E';
       ctx.fillText(s.label, lx + 16, ly + 6);
 
-      ctx.font = 'bold 12px -apple-system, sans-serif';
+      ctx.font = (isMobile() ? 'bold 10px' : 'bold 12px') + ' -apple-system, sans-serif';
       ctx.fillStyle = '#E6EDF3';
       ctx.textAlign = 'right';
       ctx.fillText('$' + s.cost.toFixed(0), lx + colW - 10, ly + 6);

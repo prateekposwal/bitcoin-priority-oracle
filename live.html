@@ -84,11 +84,31 @@ html, body { width: 100%; min-height: 100vh; background: #1A1612; color: #E8E5E0
 }
 
 @media (max-width: 480px) {
-  .header { padding: 10px 12px; gap: 4px; }
-  .tab-btn { font-size: 13px; padding: 8px 12px; }
-  .header .brand { font-size: 15px; margin-right: 12px; }
-  .header { overflow-x: auto; }
-  .content { padding: 16px 12px 60px; }
+  .header { padding: 8px 8px; gap: 3px; }
+  .tab-btn { font-size: 12px; padding: 6px 10px; }
+  .header .brand { font-size: 14px; margin-right: 8px; }
+  .header { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .header::after { content: ''; flex-shrink: 0; width: 8px; }
+  .content { padding: 12px 10px 50px; }
+  .viz-canvas { height: 300px; }
+  .dc { padding: 16px; margin-bottom: 12px; }
+  .dc .dc-q { font-size: 15px; }
+  .dc .dc-a { font-size: 24px; }
+  .dc .dc-sub { font-size: 12px; }
+  .fee-card { padding: 12px; }
+  .fee-card .fc-label { font-size: 10px; }
+  .fee-card .fc-value { font-size: 18px; }
+  .fee-card .fc-sub { font-size: 10px; }
+  .stat-card { padding: 12px; }
+  .stat-card .sc-label { font-size: 9px; }
+  .stat-card .sc-value { font-size: 20px; }
+  .dollar-cost { font-size: 11px; }
+  .viz-section-title { font-size: 14px; }
+  .viz-section-desc { font-size: 11px; }
+  .insight-card { padding: 14px; }
+  .insight-icon { font-size: 22px; }
+  .insight-title { font-size: 13px; }
+  .insight-text { font-size: 12px; }
 }
 
 .ds-card { background:#2A2622;border-radius:12px;padding:16px;margin-bottom:10px;border:1px solid transparent;transition:all 0.2s;cursor:pointer; }

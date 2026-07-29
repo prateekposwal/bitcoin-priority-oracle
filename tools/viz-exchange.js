@@ -18,6 +18,8 @@ var VIZ_Exchange = (function() {
   var poolY = 0;
   var titleOpacity = 1;
 
+  function isMobile() { return w < 480; }
+
   function init(canvasId) {
     canvas = document.getElementById(canvasId);
     if (!canvas) return;
@@ -73,12 +75,13 @@ var VIZ_Exchange = (function() {
   function spawnDroplet() {
     var isIndividual = Math.random() < 0.4;
     var x = w * 0.15 + Math.random() * w * 0.7;
+    var rScale = isMobile() ? 0.7 : 1;
     return {
       x: x,
       y: -10 - Math.random() * 40,
       vx: (Math.random() - 0.5) * 0.3,
       vy: Math.random() * 0.5 + 0.3,
-      radius: 2 + Math.random() * 2,
+      radius: (2 + Math.random() * 2) * rScale,
       isIndividual: isIndividual,
       life: 1,
       splashed: false,
@@ -115,7 +118,7 @@ var VIZ_Exchange = (function() {
 
     ctx.textAlign = 'center';
     ctx.textBaseline = 'top';
-    ctx.font = 'bold 16px -apple-system, sans-serif';
+    ctx.font = (isMobile() ? 'bold 13px' : 'bold 16px') + ' -apple-system, sans-serif';
     ctx.fillStyle = 'rgba(255,255,255,0.8)';
     ctx.fillText('Batch vs Individual — Savings Waterfall', w / 2, 14);
 
@@ -198,7 +201,7 @@ var VIZ_Exchange = (function() {
     ctx.ellipse(w * 0.75, poolBaseY, 4 + batchedPct * poolMaxW * 0.5, 8 + batchedPct * 30, 0, 0, Math.PI * 2);
     ctx.fill();
 
-    ctx.font = '12px -apple-system, sans-serif';
+    ctx.font = (isMobile() ? '10px' : '12px') + ' -apple-system, sans-serif';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'top';
 
@@ -208,31 +211,31 @@ var VIZ_Exchange = (function() {
     ctx.fillStyle = '#3FB950';
     ctx.fillText('Batched ($' + batchedPool.toFixed(2) + ')', w * 0.75, poolBaseY + 14);
 
-    ctx.font = 'bold 14px -apple-system, sans-serif';
+    ctx.font = (isMobile() ? 'bold 11px' : 'bold 14px') + ' -apple-system, sans-serif';
     ctx.fillStyle = '#24C778';
     ctx.fillText('Total saved: $' + totalSaved.toFixed(2), w / 2, poolBaseY + 32);
 
-    var savingsBarW = Math.min(300, w * 0.5);
+    var savingsBarW = Math.min(isMobile() ? 200 : 300, w * 0.5);
     var savingsBarX = (w - savingsBarW) / 2;
     var savingsBarY = poolBaseY + 52;
     var savingsPct = Math.min(1, totalSaved / Math.max(0.01, totalSaved + individualPool + batchedPool) * 3);
 
     ctx.fillStyle = 'rgba(255,255,255,0.1)';
-    VIZ.roundRect(ctx, savingsBarX, savingsBarY, savingsBarW, 10, 5);
+    VIZ.roundRect(ctx, savingsBarX, savingsBarY, savingsBarW, isMobile() ? 6 : 10, 5);
     ctx.fill();
 
     ctx.fillStyle = '#3FB950';
-    VIZ.roundRect(ctx, savingsBarX, savingsBarY, savingsBarW * savingsPct, 10, 5);
+    VIZ.roundRect(ctx, savingsBarX, savingsBarY, savingsBarW * savingsPct, isMobile() ? 6 : 10, 5);
     ctx.fill();
 
-    ctx.font = '11px -apple-system, sans-serif';
+    ctx.font = (isMobile() ? '9px' : '11px') + ' -apple-system, sans-serif';
     ctx.fillStyle = 'rgba(255,255,255,0.35)';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'top';
-    ctx.fillText('Savings efficiency', w / 2, savingsBarY + 14);
+    ctx.fillText('Savings efficiency', w / 2, savingsBarY + (isMobile() ? 10 : 14));
 
-    var discountLabel = 'Batch efficiency: ' + Math.round(batchDiscount * 100) + '%';
-    ctx.font = '12px -apple-system, sans-serif';
+    var discountLabel = 'Batch: ' + Math.round(batchDiscount * 100) + '%';
+    ctx.font = (isMobile() ? '10px' : '12px') + ' -apple-system, sans-serif';
     ctx.fillStyle = 'rgba(255,255,255,0.5)';
     ctx.textAlign = 'right';
     ctx.textBaseline = 'top';

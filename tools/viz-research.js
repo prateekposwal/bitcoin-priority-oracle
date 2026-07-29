@@ -22,6 +22,8 @@ const VIZ_Research = (() => {
   let btcPrice = 64000;
   let stacked = false;
 
+  function isMobile() { return w < 480; }
+
   function init(canvasId) {
     canvas = document.getElementById(canvasId);
     if (!canvas) return;
@@ -163,11 +165,11 @@ const VIZ_Research = (() => {
 
     ctx.textAlign = 'left';
     ctx.textBaseline = 'top';
-    ctx.font = 'bold 12px -apple-system, sans-serif';
+    ctx.font = (isMobile() ? 'bold 10px' : 'bold 12px') + ' -apple-system, sans-serif';
     ctx.fillStyle = 'rgba(255,255,255,0.5)';
     ctx.fillText('Fee Distribution', px + 10, py + 8);
 
-    var margin = { top: 34, right: 10, bottom: 28, left: 36 };
+    var margin = { top: isMobile() ? 28 : 34, right: 10, bottom: isMobile() ? 22 : 28, left: isMobile() ? 30 : 36 };
     var plotX = px + margin.left;
     var plotY = py + margin.top;
     var plotW = pw - margin.left - margin.right;
@@ -192,7 +194,7 @@ const VIZ_Research = (() => {
 
       ctx.textAlign = 'right';
       ctx.textBaseline = 'middle';
-      ctx.font = '9px -apple-system, sans-serif';
+      ctx.font = (isMobile() ? '8px' : '9px') + ' -apple-system, sans-serif';
       ctx.fillStyle = 'rgba(255,255,255,0.2)';
       ctx.fillText(Math.round(maxCount - (g / 3) * maxCount) + '', plotX - 4, gy);
     }
@@ -217,12 +219,12 @@ const VIZ_Research = (() => {
 
       ctx.textAlign = 'center';
       ctx.textBaseline = 'bottom';
-      ctx.font = 'bold 9px -apple-system, sans-serif';
+      ctx.font = (isMobile() ? 'bold 8px' : 'bold 9px') + ' -apple-system, sans-serif';
       ctx.fillStyle = 'rgba(255,255,255,0.6)';
       ctx.fillText(histData[i], bx + barW / 2, by - 3);
 
       ctx.textBaseline = 'top';
-      ctx.font = '8px -apple-system, sans-serif';
+      ctx.font = (isMobile() ? '7px' : '8px') + ' -apple-system, sans-serif';
       ctx.fillStyle = 'rgba(255,255,255,0.3)';
       ctx.fillText(BUCKET_LABELS[i], bx + barW / 2, plotY + plotH + 4);
     }
@@ -231,7 +233,7 @@ const VIZ_Research = (() => {
   function drawChartPanel(px, py, pw, ph) {
     if (pw < 60 || ph < 40 || data.length < 2) return;
 
-    var chartPad = { top: 34, right: 10, bottom: 30, left: 46 };
+    var chartPad = { top: isMobile() ? 28 : 34, right: 10, bottom: isMobile() ? 24 : 30, left: isMobile() ? 38 : 46 };
     var chartX = px + chartPad.left;
     var chartY = py + chartPad.top;
     var chartW = pw - chartPad.left - chartPad.right;
@@ -241,7 +243,7 @@ const VIZ_Research = (() => {
 
     ctx.textAlign = 'left';
     ctx.textBaseline = 'top';
-    ctx.font = 'bold 12px -apple-system, sans-serif';
+    ctx.font = (isMobile() ? 'bold 10px' : 'bold 12px') + ' -apple-system, sans-serif';
     ctx.fillStyle = 'rgba(255,255,255,0.5)';
     ctx.fillText('Fee History — Last 24h', px + 10, py + 8);
 
@@ -279,7 +281,7 @@ const VIZ_Research = (() => {
 
       ctx.textAlign = 'right';
       ctx.textBaseline = 'middle';
-      ctx.font = '9px -apple-system, sans-serif';
+      ctx.font = (isMobile() ? '8px' : '9px') + ' -apple-system, sans-serif';
       ctx.fillStyle = 'rgba(255,255,255,0.25)';
       ctx.fillText(Math.round(v) + '', chartX - 5, gy);
     }
@@ -296,7 +298,7 @@ const VIZ_Research = (() => {
 
       ctx.textAlign = 'center';
       ctx.textBaseline = 'top';
-      ctx.font = '9px -apple-system, sans-serif';
+      ctx.font = (isMobile() ? '7px' : '9px') + ' -apple-system, sans-serif';
       ctx.fillStyle = 'rgba(255,255,255,0.25)';
       var dd = new Date(d.t);
       ctx.fillText(String(dd.getHours()).padStart(2, '0') + ':' + String(dd.getMinutes()).padStart(2, '0'), gx, chartY + chartH + 4);
@@ -357,8 +359,8 @@ const VIZ_Research = (() => {
   }
 
   function drawLegend(lx, ly, keys) {
-    var boxW = 80;
-    var boxH = keys.length * 22 + 10;
+    var boxW = isMobile() ? 70 : 80;
+    var boxH = keys.length * (isMobile() ? 18 : 22) + 10;
     ctx.fillStyle = 'rgba(0,0,0,0.5)';
     ctx.strokeStyle = 'rgba(255,255,255,0.08)';
     ctx.lineWidth = 1;
@@ -366,7 +368,7 @@ const VIZ_Research = (() => {
     ctx.fill();
     ctx.stroke();
 
-    ctx.font = '11px -apple-system, sans-serif';
+    ctx.font = (isMobile() ? '9px' : '11px') + ' -apple-system, sans-serif';
     ctx.textBaseline = 'middle';
     for (var i = 0; i < keys.length; i++) {
       var y = ly + 10 + i * 22 + 11;
@@ -384,13 +386,13 @@ const VIZ_Research = (() => {
 
     ctx.textAlign = 'left';
     ctx.textBaseline = 'top';
-    ctx.font = 'bold 12px -apple-system, sans-serif';
+    ctx.font = (isMobile() ? 'bold 10px' : 'bold 12px') + ' -apple-system, sans-serif';
     ctx.fillStyle = 'rgba(255,255,255,0.5)';
     ctx.fillText('Fee Stats', px + 10, py + 8);
 
     var cardGap = 6;
-    var cardY = py + 32;
-    var cardH = (ph - 36 - cardGap * 2) / 3;
+    var cardY = py + (isMobile() ? 26 : 32);
+    var cardH = (ph - (isMobile() ? 30 : 36) - cardGap * 2) / 3;
     var cardW = pw - 16;
 
     if (data.length < 2) return;
@@ -413,16 +415,16 @@ const VIZ_Research = (() => {
     ctx.fill();
     ctx.textAlign = 'left';
     ctx.textBaseline = 'top';
-    ctx.font = '10px -apple-system, sans-serif';
+    ctx.font = (isMobile() ? '8px' : '10px') + ' -apple-system, sans-serif';
     ctx.fillStyle = 'rgba(255,255,255,0.35)';
-    ctx.fillText('Volatility', px + 20, cardY + 10);
-    ctx.font = 'bold 22px -apple-system, sans-serif';
+    ctx.fillText('Volatility', px + (isMobile() ? 14 : 20), cardY + (isMobile() ? 8 : 10));
+    ctx.font = (isMobile() ? 'bold 16px' : 'bold 22px') + ' -apple-system, sans-serif';
     ctx.fillStyle = volColor;
-    ctx.fillText(volPct.toFixed(1) + '%', px + 20, cardY + 28);
-    ctx.font = '9px -apple-system, sans-serif';
+    ctx.fillText(volPct.toFixed(1) + '%', px + (isMobile() ? 14 : 20), cardY + (isMobile() ? 20 : 28));
+    ctx.font = (isMobile() ? '8px' : '9px') + ' -apple-system, sans-serif';
     ctx.fillStyle = 'rgba(255,255,255,0.2)';
     ctx.textBaseline = 'bottom';
-    ctx.fillText(volPct < 30 ? 'low volatility' : volPct < 60 ? 'moderate' : 'high volatility', px + 20, cardY + cardH - 8);
+    ctx.fillText(volPct < 30 ? 'low volatility' : volPct < 60 ? 'moderate' : 'high volatility', px + (isMobile() ? 14 : 20), cardY + cardH - 8);
 
     var cardY2 = cardY + cardH + cardGap;
     ctx.fillStyle = 'rgba(255,255,255,0.04)';
@@ -430,16 +432,16 @@ const VIZ_Research = (() => {
     ctx.fill();
     ctx.textAlign = 'left';
     ctx.textBaseline = 'top';
-    ctx.font = '10px -apple-system, sans-serif';
+    ctx.font = (isMobile() ? '8px' : '10px') + ' -apple-system, sans-serif';
     ctx.fillStyle = 'rgba(255,255,255,0.35)';
-    ctx.fillText('Avg Fee', px + 20, cardY2 + 10);
-    ctx.font = 'bold 22px -apple-system, sans-serif';
+    ctx.fillText('Avg Fee', px + (isMobile() ? 14 : 20), cardY2 + (isMobile() ? 8 : 10));
+    ctx.font = (isMobile() ? 'bold 16px' : 'bold 22px') + ' -apple-system, sans-serif';
     ctx.fillStyle = '#E8E5E0';
-    ctx.fillText(avgFee.toFixed(1), px + 20, cardY2 + 28);
-    ctx.font = '11px -apple-system, sans-serif';
+    ctx.fillText(avgFee.toFixed(1), px + (isMobile() ? 14 : 20), cardY2 + (isMobile() ? 20 : 28));
+    ctx.font = (isMobile() ? '9px' : '11px') + ' -apple-system, sans-serif';
     ctx.fillStyle = 'rgba(255,255,255,0.3)';
     ctx.textBaseline = 'bottom';
-    ctx.fillText('sat/vB', px + 20, cardY2 + cardH - 8);
+    ctx.fillText('sat/vB', px + (isMobile() ? 14 : 20), cardY2 + cardH - 8);
 
     var cardY3 = cardY2 + cardH + cardGap;
     ctx.fillStyle = 'rgba(255,255,255,0.04)';
@@ -447,16 +449,16 @@ const VIZ_Research = (() => {
     ctx.fill();
     ctx.textAlign = 'left';
     ctx.textBaseline = 'top';
-    ctx.font = '10px -apple-system, sans-serif';
+    ctx.font = (isMobile() ? '8px' : '10px') + ' -apple-system, sans-serif';
     ctx.fillStyle = 'rgba(255,255,255,0.35)';
-    ctx.fillText('Range', px + 20, cardY3 + 10);
-    ctx.font = 'bold 18px -apple-system, sans-serif';
+    ctx.fillText('Range', px + (isMobile() ? 14 : 20), cardY3 + (isMobile() ? 8 : 10));
+    ctx.font = (isMobile() ? 'bold 13px' : 'bold 18px') + ' -apple-system, sans-serif';
     ctx.fillStyle = '#E8E5E0';
-    ctx.fillText(minFee.toFixed(1) + ' — ' + maxFee.toFixed(1), px + 20, cardY3 + 28);
-    ctx.font = '11px -apple-system, sans-serif';
+    ctx.fillText(minFee.toFixed(1) + ' — ' + maxFee.toFixed(1), px + (isMobile() ? 14 : 20), cardY3 + (isMobile() ? 20 : 28));
+    ctx.font = (isMobile() ? '9px' : '11px') + ' -apple-system, sans-serif';
     ctx.fillStyle = 'rgba(255,255,255,0.3)';
     ctx.textBaseline = 'bottom';
-    ctx.fillText('sat/vB', px + 20, cardY3 + cardH - 8);
+    ctx.fillText('sat/vB', px + (isMobile() ? 14 : 20), cardY3 + cardH - 8);
   }
 
   function drawCrosshair() {
@@ -489,8 +491,8 @@ const VIZ_Research = (() => {
     ctx.stroke();
     ctx.restore();
 
-    var tooltipW = 220;
-    var tooltipH = 112;
+    var tooltipW = isMobile() ? 180 : 220;
+    var tooltipH = isMobile() ? 90 : 112;
     var tx = cx + 12;
     var ty = chartY + 4;
     if (tx + tooltipW > histW + 18 + chartW) tx = cx - tooltipW - 12;
@@ -506,7 +508,7 @@ const VIZ_Research = (() => {
     var dd = new Date(p.t);
     var timeStr = String(dd.getHours()).padStart(2, '0') + ':' + String(dd.getMinutes()).padStart(2, '0');
 
-    ctx.font = '11px -apple-system, sans-serif';
+    ctx.font = (isMobile() ? '9px' : '11px') + ' -apple-system, sans-serif';
     ctx.textAlign = 'left';
     ctx.textBaseline = 'top';
     ctx.fillStyle = '#94a3b8';

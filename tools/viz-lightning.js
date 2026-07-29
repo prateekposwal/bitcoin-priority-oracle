@@ -7,6 +7,9 @@ var VIZ_Lightning = (function() {
   var mouseX = -1, mouseY = -1, hoverNode = null;
   var tooltipEl = null;
   var animId = null;
+  var frameCount = 0;
+
+  function isMobile() { return w < 480; }
 
   function init(canvasId) {
     canvas = document.getElementById(canvasId);
@@ -171,24 +174,27 @@ var VIZ_Lightning = (function() {
     var t = Date.now() / 1000;
 
     // Force-directed physics
-    var repulsion = 40000;
+    var repulsion = isMobile() ? 20000 : 40000;
     var attraction = 0.001;
     var damping = 0.98;
     var maxSpeed = 1.5;
+    var skipPhysics = isMobile() && (frameCount % 2 === 0);
 
     for (var i = 0; i < nodes.length; i++) {
       var a = nodes[i];
       var fx = 0, fy = 0;
 
       // Repulsion between all pairs
-      for (var j = 0; j < nodes.length; j++) {
-        if (i === j) continue;
-        var b = nodes[j];
-        var dx = a.x - b.x;
-        var dy = a.y - b.y;
-        var dist = Math.sqrt(dx * dx + dy * dy) + 1;
-        fx += (dx / dist) * repulsion / (dist * dist);
-        fy += (dy / dist) * repulsion / (dist * dist);
+      if (!skipPhysics) {
+        for (var j = 0; j < nodes.length; j++) {
+          if (i === j) continue;
+          var b = nodes[j];
+          var dx = a.x - b.x;
+          var dy = a.y - b.y;
+          var dist = Math.sqrt(dx * dx + dy * dy) + 1;
+          fx += (dx / dist) * repulsion / (dist * dist);
+          fy += (dy / dist) * repulsion / (dist * dist);
+        }
       }
 
       // Attraction along links
@@ -292,7 +298,7 @@ var VIZ_Lightning = (function() {
 
     // Draw nodes
     hoverNode = null;
-    var maxSize = 20, minSize = 4;
+    var maxSize = isMobile() ? 14 : 20, minSize = isMobile() ? 3 : 4;
 
     for (var i = 0; i < nodes.length; i++) {
       var n = nodes[i];
@@ -364,8 +370,8 @@ var VIZ_Lightning = (function() {
 
       // Update tooltip
       tooltipEl.style.display = 'block';
-      tooltipEl.style.left = Math.min(mouseX + 16, window.innerWidth - 270) + 'px';
-      tooltipEl.style.top = Math.min(mouseY + 16, window.innerHeight - 160) + 'px';
+      tooltipEl.style.left = Math.min(mouseX + 16, window.innerWidth - (isMobile() ? 200 : 270)) + 'px';
+      tooltipEl.style.top = Math.min(mouseY + 16, window.innerHeight - (isMobile() ? 130 : 160)) + 'px';
       var capBtc = (n.capacity / 100000000).toFixed(4);
       tooltipEl.innerHTML =
         '<b>' + n.alias + '</b><br>' +
@@ -380,9 +386,9 @@ var VIZ_Lightning = (function() {
     // Stats label — total capacity, node count, channel count
     ctx.textAlign = 'left';
     ctx.textBaseline = 'top';
-    ctx.font = '12px -apple-system, sans-serif';
+    ctx.font = (isMobile() ? '10px' : '12px') + ' -apple-system, sans-serif';
     ctx.fillStyle = 'rgba(0,0,0,0.75)';
-    ctx.fillRect(14, 14, 350, 20);
+    ctx.fillRect(14, 14, isMobile() ? 260 : 350, 20);
     ctx.fillStyle = 'rgba(255,255,255,0.7)';
     var capBtc = (stats.capacity / 100000000).toFixed(1);
     ctx.fillText('Capacity: ' + capBtc + ' BTC | Nodes: ' + stats.nodes + ' | Channels: ' + stats.channels, 16, 16);
@@ -433,6 +439,7 @@ var VIZ_Lightning = (function() {
     ctx.fillStyle = vig;
     ctx.fillRect(0, 0, w, h);
 
+    frameCount++;
     animId = requestAnimationFrame(loop);
   }
 
