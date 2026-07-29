@@ -12,12 +12,7 @@ var VIZ_Developer = (function() {
     { key: 'fee_history', name: 'Fee History', url: 'https://mempool.space/api/v1/mining/blocks/fees/24h', method: 'GET',
       purpose: '24-hour fee history for trend analysis and research',
       personas: ['Research', 'Miner'], icon: '📊' },
-    { key: 'lightning', name: 'Lightning Stats', url: 'https://mempool.space/api/v1/lightning/statistics/latest', method: 'GET',
-      purpose: 'Network growth metrics: nodes, channels, capacity',
-      personas: ['Lightning', 'Research'], icon: '🌩' },
-    { key: 'blocks', name: 'Recent Blocks', url: 'https://mempool.space/api/blocks?limit=10', method: 'GET',
-      purpose: 'Latest block details: height, fees, timestamps',
-      personas: ['Miner', 'Research'], icon: '🧱' },
+
   ];
 
   var states = {};
@@ -50,11 +45,11 @@ var VIZ_Developer = (function() {
   function buildDOM() {
     var overview = document.createElement('div');
     overview.id = 'dev-overview';
-    overview.style.cssText = 'display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:16px;padding:12px 16px;background:#1A1612;border-radius:10px;font-size:12px;';
+    overview.style.cssText = 'display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px;padding:16px 24px;background:#1A1612;border-radius:12px;font-size:14px;';
     container.appendChild(overview);
 
     cardsEl = document.createElement('div');
-    cardsEl.style.cssText = 'display:grid;grid-template-columns:1fr 1fr;gap:10px;';
+    cardsEl.style.cssText = 'display:grid;grid-template-columns:1fr;gap:16px;';
     container.appendChild(cardsEl);
 
     DATA_SOURCES.forEach(function(s) {
@@ -168,7 +163,7 @@ var VIZ_Developer = (function() {
     var freshness = newestCheck > 0 ? Math.floor((Date.now() - newestCheck) / 1000) + 's ago' : 'just now';
 
     el.innerHTML =
-      '<span style="font-weight:600;color:#E8E5E0;">6 core sources</span>' +
+      '<span style="font-weight:600;color:#E8E5E0;">4 core sources</span>' +
       '<span style="color:rgba(255,255,255,0.4);">Avg ' + avgLat + ' ms</span>' +
       '<span style="color:rgba(255,255,255,0.4);"><span style="color:#3FB950;">' + uptime + '%</span> uptime</span>' +
       '<span style="color:rgba(255,255,255,0.3);font-size:11px;">Updated ' + freshness + '</span>';
@@ -244,17 +239,17 @@ var VIZ_Developer = (function() {
       }
 
       card.innerHTML =
-        '<div class="ds-top">' +
-          '<div><span class="ds-name">' + s.icon + ' ' + s.name + '</span></div>' +
-          '<div style="display:flex;align-items:center;gap:8px;">' +
-            '<span class="ds-status" style="color:' + statusDot + ';">● ' + statusText + '</span>' +
-            '<span style="font-size:11px;color:rgba(255,255,255,0.4);">' + latencyText + '</span>' +
-            '<span style="font-size:10px;color:rgba(255,255,255,0.25);">' + agoText + '</span>' +
+        '<div class="ds-top" style="margin-bottom:12px;">' +
+          '<div><span class="ds-name" style="font-size:18px;font-weight:700;">' + s.icon + ' ' + s.name + '</span></div>' +
+          '<div style="display:flex;align-items:center;gap:12px;">' +
+            '<span class="ds-status" style="font-size:14px;color:' + statusDot + ';">● ' + statusText + '</span>' +
+            '<span style="font-size:13px;color:rgba(255,255,255,0.4);">' + latencyText + '</span>' +
+            '<span style="font-size:12px;color:rgba(255,255,255,0.25);">' + agoText + '</span>' +
           '</div>' +
         '</div>' +
-        '<div class="ds-purpose">' + s.purpose + '</div>' +
-        '<div class="ds-personas">' + s.personas.map(function(p) {
-          return '<span class="ds-persona-tag">' + p + '</span>';
+        '<div class="ds-purpose" style="font-size:15px;color:rgba(255,255,255,0.5);margin-bottom:10px;line-height:1.6;">' + s.purpose + '</div>' +
+        '<div class="ds-personas" style="margin-bottom:8px;">' + s.personas.map(function(p) {
+          return '<span class="ds-persona-tag" style="font-size:11px;padding:4px 12px;border-radius:12px;background:rgba(247,147,26,0.12);color:rgba(247,147,26,0.8);font-weight:600;">' + p + '</span>';
         }).join('') + '</div>' +
         '<div class="ds-detail">' +
           'URL: <a class="ds-url" href="' + s.url + '" target="_blank">' + s.url.replace('https://', '') + '</a><br>' +
@@ -336,11 +331,7 @@ var VIZ_Developer = (function() {
     }
   }
 
-  function resize() {
-    if (cardsEl) {
-      cardsEl.style.gridTemplateColumns = window.innerWidth < 700 ? '1fr' : '1fr 1fr';
-    }
-  }
+  function resize() {} // single column always — big cards
 
   return { init: init, resize: resize };
 })();
