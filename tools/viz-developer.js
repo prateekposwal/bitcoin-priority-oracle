@@ -113,6 +113,39 @@ var VIZ_Developer = (function() {
         updateStorageUI();
       });
     }
+
+    var deAgent = document.createElement('div');
+    deAgent.id = 'dev-de-agent';
+    deAgent.style.cssText = 'margin-top:12px;padding:12px 16px;background:rgba(247,147,26,0.04);border-radius:10px;border:1px solid rgba(247,147,26,0.1);';
+    deAgent.innerHTML =
+      '<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;">' +
+        '<span style="font-size:12px;font-weight:600;color:rgba(247,147,26,0.7);">\u{1F916} Data Engineering Agent</span>' +
+        '<span id="de-agent-status" style="font-size:11px;color:rgba(255,255,255,0.35);">Status unknown</span>' +
+      '</div>' +
+      '<div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:6px;font-size:11px;color:rgba(255,255,255,0.3);">' +
+        '<span>Sources: <strong id="de-agent-sources" style="color:rgba(255,255,255,0.6);">--</strong></span>' +
+        '<span>Quality: <strong id="de-agent-quality" style="color:#3FB950;">--</strong></span>' +
+        '<span>Updated: <strong id="de-agent-cycle" style="color:rgba(255,255,255,0.6);">--</strong></span>' +
+      '</div>';
+    container.appendChild(deAgent);
+    fetchDEStatus();
+    setInterval(fetchDEStatus, 60000);
+  }
+
+  function fetchDEStatus() {
+    var el = document.getElementById('de-agent-status');
+    if (!el) return;
+    fetch('http://localhost:3456/status').then(function(r) { return r.json(); }).then(function(data) {
+      el.textContent = '\u{1F7E2} Online \u00B7 ' + (data.cycles || 0) + ' cycles';
+      el.style.color = '#3FB950';
+      var sEl = document.getElementById('de-agent-sources');
+      if (sEl) sEl.textContent = (data.endpoints || '--');
+      var cEl = document.getElementById('de-agent-cycle');
+      if (cEl) cEl.textContent = data.lastRun ? new Date(data.lastRun).toLocaleTimeString() : '--';
+    }).catch(function() {
+      el.textContent = '\u26AA Agent offline';
+      el.style.color = 'rgba(255,255,255,0.3)';
+    });
   }
 
   function renderOverview() {
