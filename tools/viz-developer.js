@@ -9,9 +9,6 @@ var VIZ_Developer = (function() {
     { key: 'mempool', name: 'Mempool State', url: 'https://mempool.space/api/mempool', method: 'GET',
       purpose: 'Tracks pending transactions waiting for confirmation',
       personas: ['Send', 'Exchange'], icon: '📦' },
-    { key: 'mempool_blocks', name: 'Mempool Blocks', url: 'https://mempool.space/api/v1/fees/mempool-blocks', method: 'GET',
-      purpose: 'Forecasts which blocks your transaction will land in',
-      personas: ['Send', 'Lightning', 'Exchange'], icon: '🔮' },
     { key: 'fee_history', name: 'Fee History', url: 'https://mempool.space/api/v1/mining/blocks/fees/24h', method: 'GET',
       purpose: '24-hour fee history for trend analysis and research',
       personas: ['Research', 'Miner'], icon: '📊' },
@@ -21,9 +18,6 @@ var VIZ_Developer = (function() {
     { key: 'blocks', name: 'Recent Blocks', url: 'https://mempool.space/api/blocks?limit=10', method: 'GET',
       purpose: 'Latest block details: height, fees, timestamps',
       personas: ['Miner', 'Research'], icon: '🧱' },
-    { key: 'block_height', name: 'Chain Tip', url: 'https://blockstream.info/api/blocks/tip/height', method: 'GET',
-      purpose: 'Current blockchain height for status and fork detection',
-      personas: ['Miner', 'Node'], icon: '⛓' },
   ];
 
   var states = {};
@@ -128,6 +122,16 @@ var VIZ_Developer = (function() {
         '<span>Updated: <strong id="de-agent-cycle" style="color:rgba(255,255,255,0.6);">--</strong></span>' +
       '</div>';
     container.appendChild(deAgent);
+
+    // CTA — contact for more data
+    var cta = document.createElement('div');
+    cta.style.cssText = 'margin-top:16px;padding:16px;background:rgba(247,147,26,0.06);border:1px solid rgba(247,147,26,0.15);border-radius:12px;text-align:center;';
+    cta.innerHTML =
+      '<div style="font-size:14px;font-weight:600;color:rgba(255,255,255,0.7);margin-bottom:6px;">Need more block data?</div>' +
+      '<div style="font-size:13px;color:rgba(255,255,255,0.4);margin-bottom:12px;line-height:1.5;">We maintain 11+ data sources privately. Historical feeds, custom integrations, API access available for research and enterprise.</div>' +
+      '<a href="mailto:prateek@block-space-economics.com" style="display:inline-block;padding:10px 24px;background:#F7931A;color:#1A1612;font-size:14px;font-weight:700;border-radius:100px;text-decoration:none;">Contact about block data →</a>';
+    container.appendChild(cta);
+
     fetchDEStatus();
     setInterval(fetchDEStatus, 60000);
   }
@@ -164,7 +168,7 @@ var VIZ_Developer = (function() {
     var freshness = newestCheck > 0 ? Math.floor((Date.now() - newestCheck) / 1000) + 's ago' : 'just now';
 
     el.innerHTML =
-      '<span style="font-weight:600;color:#E8E5E0;">' + total + ' Data Sources</span>' +
+      '<span style="font-weight:600;color:#E8E5E0;">6 core sources</span>' +
       '<span style="color:rgba(255,255,255,0.4);">Avg ' + avgLat + ' ms</span>' +
       '<span style="color:rgba(255,255,255,0.4);"><span style="color:#3FB950;">' + uptime + '%</span> uptime</span>' +
       '<span style="color:rgba(255,255,255,0.3);font-size:11px;">Updated ' + freshness + '</span>';
