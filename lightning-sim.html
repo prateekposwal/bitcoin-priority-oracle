@@ -6,7 +6,7 @@
 <title>Lightning Simulator — Bitcoin Sahi Research</title>
 <link rel="stylesheet" href="/style.css">
 <script>if(window.location.hostname.includes("vercel.app")){window.location.replace("https://bitcoinsahi.com"+window.location.pathname)}</script>
-<script src="/tools/api.js"></script>
+<script src="/tools/app.js"></script>
 <style>a:hover { text-decoration: underline; }
   nav .brand { font-weight: 800; font-size: 20px; letter-spacing: -0.3px; }
   nav .brand span { color: var(--orange); }
@@ -265,7 +265,7 @@ function btcToUsd(sats) {
   return sats / SATS_PER_BTC * BTC_PRICE;
 }
 
-API.onData(function(d) {
+APP.onData(function(d) {
   if (d.btc_price) BTC_PRICE = d.btc_price;
   liveFees = d;
   document.getElementById('live-indicator').style.display = 'flex';
@@ -407,7 +407,7 @@ function calc() {
 
 calc();
 calc();
-API.start();
+APP.init();
 </script>
 
 <footer>

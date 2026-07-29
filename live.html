@@ -6,7 +6,7 @@
 <title>Live Dashboard — Bitcoin Sahi Research</title>
 <link rel="stylesheet" href="/style.css">
 <script>if(window.location.hostname.includes("vercel.app")){window.location.replace("https://bitcoinsahi.com"+window.location.pathname)}</script>
-<script src="/tools/api.js"></script>
+<script src="/tools/app.js"></script>
 <style>
   nav .brand { font-weight: 800; font-size: 20px; letter-spacing: -0.3px; }
   nav .brand span { color: var(--orange); }
@@ -352,7 +352,7 @@ function updateModel() {
   ].join('');
 }
 
-API.onData(function(d) {
+APP.onData(function(d) {
   if (d.btc_price) { btcPrice = d.btc_price; }
   if (d.fees) { prevFees = JSON.parse(JSON.stringify(fees)); fees = d.fees; }
   if (d.mempool && d.mempool.unconfirmed_tx) mempoolTx = d.mempool.unconfirmed_tx;
@@ -365,7 +365,7 @@ API.onData(function(d) {
   loadHistory();
 });
 
-API.start();
+APP.init();
 
 // Fee history
 function loadHistory() {

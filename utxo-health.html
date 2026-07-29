@@ -6,7 +6,7 @@
 <title>UTXO Health — Bitcoin Sahi Research</title>
 <link rel="stylesheet" href="/style.css">
 <script>if(window.location.hostname.includes("vercel.app")){window.location.replace("https://bitcoinsahi.com"+window.location.pathname)}</script>
-<script src="/tools/api.js"></script>
+<script src="/tools/app.js"></script>
 <style>.hero .badge {
   display: inline-block; font-size: 13px; font-weight: 600; color: var(--orange);
   border: 1px solid var(--orange); border-radius: 20px; padding: 4px 14px;
@@ -385,7 +385,7 @@ var liveFees = null;
 var fees = null;
 var _uhBuilt = false;
 
-API.onData(function(d) {
+APP.onData(function(d) {
   document.getElementById('live-indicator').style.display = 'flex';
   if (d.timestamp) {
     var then = new Date(d.timestamp).getTime();
@@ -524,7 +524,7 @@ function formatNum(n) {
 }
 
 updateAll();
-API.start();
+APP.init();
 </script>
 
 <script>
