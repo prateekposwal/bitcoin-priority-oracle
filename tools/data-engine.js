@@ -1,4 +1,4 @@
-(function () {
+var DATA_ENGINE = (function () {
   'use strict';
 
   var DATA = {
@@ -14,47 +14,46 @@
   };
 
   var listeners = [];
+  var timer = null;
   var FETCH_INTERVAL = 60000;
-  var TIMEOUT = 10000;
-  var timerId = null;
 
   var ENDPOINTS = [
-    { key: 'fees', url: 'https://mempool.space/api/v1/fees/recommended' },
-    { key: 'btc_price', url: 'https://mempool.space/api/v1/prices' },
-    { key: 'mempool', url: 'https://mempool.space/api/mempool' },
-    { key: 'mempool_blocks', url: 'https://mempool.space/api/v1/fees/mempool-blocks' },
-    { key: 'fee_history', url: 'https://mempool.space/api/v1/mining/blocks/fees/24h' },
-    { key: 'lightning', url: 'https://mempool.space/api/v1/lightning/statistics/latest' },
-    { key: 'blocks', url: 'https://mempool.space/api/blocks?limit=10' },
-    { key: 'block_height', url: 'https://blockstream.info/api/blocks/tip/height' }
+    { key: 'fees',            url: 'https://mempool.space/api/v1/fees/recommended' },
+    { key: 'btc_price',       url: 'https://mempool.space/api/v1/prices' },
+    { key: 'mempool',         url: 'https://mempool.space/api/mempool' },
+    { key: 'mempool_blocks',  url: 'https://mempool.space/api/v1/fees/mempool-blocks' },
+    { key: 'fee_history',     url: 'https://mempool.space/api/v1/mining/blocks/fees/24h' },
+    { key: 'lightning',       url: 'https://mempool.space/api/v1/lightning/statistics/latest' },
+    { key: 'blocks',          url: 'https://mempool.space/api/blocks?limit=10' },
+    { key: 'block_height',    url: 'https://blockstream.info/api/blocks/tip/height' }
   ];
 
-  function fetchOne(url, cb) {
+  function xhrGet(url, cb) {
     var xhr = new XMLHttpRequest();
-    var fired = false;
+    var done = false;
     xhr.open('GET', url, true);
-    xhr.timeout = TIMEOUT;
+    xhr.timeout = 10000;
 
-    function done(err, result) {
-      if (fired) return;
-      fired = true;
-      cb(err, result);
+    function finish(err, data) {
+      if (done) return;
+      done = true;
+      cb(err, data);
     }
 
     xhr.onload = function () {
       if (xhr.status >= 200 && xhr.status < 300) {
-        try { done(null, JSON.parse(xhr.responseText)); }
-        catch (e) { done(e, null); }
+        try { finish(null, JSON.parse(xhr.responseText)); }
+        catch (e) { finish(e, null); }
       } else {
-        done(new Error('HTTP ' + xhr.status + ' for ' + url), null);
+        finish(new Error('HTTP ' + xhr.status), null);
       }
     };
-    xhr.onerror = function () { done(new Error('Network error for ' + url), null); };
-    xhr.ontimeout = function () { done(new Error('Timeout for ' + url), null); };
+    xhr.onerror = function () { finish(new Error('Network error'), null); };
+    xhr.ontimeout = function () { finish(new Error('Timeout'), null); };
     xhr.send();
   }
 
-  function applyEndpoint(key, raw) {
+  function normalize(key, raw) {
     switch (key) {
       case 'fees':
         DATA.fees = {
@@ -120,38 +119,39 @@
     }
   }
 
-  function fetchAll(done) {
+  function fetchAll() {
     var remaining = ENDPOINTS.length;
 
-    function onComplete(err, key, raw) {
+    function done(err, key, raw) {
       if (err) {
         console.warn('DATA_ENGINE [' + key + ']', err.message);
       } else {
-        applyEndpoint(key, raw);
+        normalize(key, raw);
       }
       remaining--;
-      if (remaining === 0 && done) done();
+      if (remaining === 0) notify();
     }
 
     for (var i = 0; i < ENDPOINTS.length; i++) {
       (function (ep) {
-        fetchOne(ep.url, function (err, result) {
-          onComplete(err, ep.key, result);
+        xhrGet(ep.url, function (err, result) {
+          done(err, ep.key, result);
         });
       })(ENDPOINTS[i]);
     }
   }
 
   function start() {
-    if (timerId) return;
-    fetchAll(function () {
-      notify();
-    });
-    timerId = setInterval(function () {
-      fetchAll(function () {
-        notify();
-      });
-    }, FETCH_INTERVAL);
+    if (timer) return;
+    fetchAll();
+    timer = setInterval(fetchAll, FETCH_INTERVAL);
+  }
+
+  function stop() {
+    if (timer) {
+      clearInterval(timer);
+      timer = null;
+    }
   }
 
   function onUpdate(callback) {
@@ -164,9 +164,5 @@
     return DATA;
   }
 
-  window.DATA_ENGINE = {
-    start: start,
-    onUpdate: onUpdate,
-    get: get
-  };
+  return { start: start, stop: stop, onUpdate: onUpdate, get: get };
 })();
