@@ -163,7 +163,7 @@ var VIZ_Developer = (function() {
     var freshness = newestCheck > 0 ? Math.floor((Date.now() - newestCheck) / 1000) + 's ago' : 'just now';
 
     el.innerHTML =
-      '<span style="font-weight:600;color:#E8E5E0;">4 core sources</span>' +
+      '<span style="font-weight:600;color:#E8E5E0;">4 featured</span>' +
       '<span style="color:rgba(255,255,255,0.4);">Avg ' + avgLat + ' ms</span>' +
       '<span style="color:rgba(255,255,255,0.4);"><span style="color:#3FB950;">' + uptime + '%</span> uptime</span>' +
       '<span style="color:rgba(255,255,255,0.3);font-size:11px;">Updated ' + freshness + '</span>';
