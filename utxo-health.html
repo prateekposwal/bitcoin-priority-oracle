@@ -6,6 +6,7 @@
 <title>UTXO Health — Bitcoin Sahi Research</title>
 <link rel="stylesheet" href="/style.css">
 <script>if(window.location.hostname.includes("vercel.app")){window.location.replace("https://bitcoinsahi.com"+window.location.pathname)}</script>
+<script src="/tools/api.js"></script>
 <style>.hero .badge {
   display: inline-block; font-size: 13px; font-weight: 600; color: var(--orange);
   border: 1px solid var(--orange); border-radius: 20px; padding: 4px 14px;
@@ -118,6 +119,12 @@
 .narrative-box strong { color: var(--text); }
 .narrative-box .highlight { color: var(--orange); font-weight: 600; }
 
+/* ── Live Indicator ── */
+.live-indicator { display:flex; align-items:center; gap:6px; font-size:11px; color:#555; margin-bottom:12px; justify-content:center; flex-wrap:wrap; }
+.live-dot { width:7px; height:7px; border-radius:50%; background:#3FB950; display:inline-block; animation: breathe 2s infinite; flex-shrink:0; }
+@keyframes breathe { 0%{opacity:1;box-shadow:0 0 0 0 rgba(63,185,80,0.4)} 50%{opacity:0.6} 100%{opacity:1;box-shadow:0 0 0 5px rgba(63,185,80,0)} }
+.live-clock { color:#666; font-family:monospace; }
+
 /* ── Footer ── */
 footer { border-top: 1px solid var(--border); padding: 40px 24px; text-align: center; font-size: 20px; color: var(--muted); }
 footer .links { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin-bottom: 12px; }
@@ -166,6 +173,16 @@ footer .links { display: flex; gap: 16px; justify-content: center; flex-wrap: wr
   <div class="badge">UTXO Health Dashboard</div>
   <h1><span>How Healthy Is</span> Bitcoin's UTXO Set?</h1>
   <p>Every UTXO must be stored by every full node on fast storage. The UTXO set is Bitcoin's collective memory — and it's growing faster than ever.</p>
+  <div class="live-indicator" id="live-indicator" style="display:none;">
+    <span class="live-dot"></span>
+    <span class="live-clock" id="live-clock">Live</span>
+    <span>·</span>
+    <span>BTC <strong id="live-btc">—</strong></span>
+    <span>·</span>
+    <span>Fastest <strong id="live-fastest">—</strong></span>
+    <span>·</span>
+    <span>Economy <strong id="live-economy">—</strong></span>
+  </div>
 </div>
 
 <!-- ─── HEALTH SCORE + KPI ─── -->
@@ -354,6 +371,31 @@ var DUST_RATIO = 0.30;
 var BASE_INS_RATIO = 0.02;
 var BASE_VOL = 100;
 var EXT_PER_K = 9240 / 100;
+var btcPrice = null;
+var fees = null;
+
+API.onData(function(d) {
+  document.getElementById('live-indicator').style.display = 'flex';
+  if (d.timestamp) {
+    var then = new Date(d.timestamp).getTime();
+    var update = function() {
+      var s = Math.round((Date.now() - then) / 1000);
+      document.getElementById('live-clock').textContent = (s < 60 ? s + 's' : Math.round(s/60) + 'm') + ' ago';
+    };
+    update();
+    if (window._liveTick) clearInterval(window._liveTick);
+    window._liveTick = setInterval(update, 10000);
+  }
+  if (d.btc_price) {
+    document.getElementById('live-btc').textContent = '$' + Math.round(d.btc_price).toLocaleString();
+  }
+  if (d.fees) {
+    document.getElementById('live-fastest').textContent = d.fees.fastestFee + ' sat';
+    document.getElementById('live-economy').textContent = d.fees.economyFee + ' sat';
+  }
+  if (d.utxo_set && d.utxo_set.utxo_count) BASE_UTXOS = d.utxo_set.utxo_count;
+  updateAll();
+});
 
 function updateAll() {
   var vol = parseFloat(document.getElementById('sl-vol').value);
@@ -442,6 +484,8 @@ function formatNum(n) {
   if (n >= 1e3) return (n / 1e3).toFixed(0) + 'K';
   return n.toString();
 }
+
+API.start({ interval: 60000 });
 </script>
 
 </body>

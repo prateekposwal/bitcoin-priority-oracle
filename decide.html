@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Decision Center — Bitcoin Sahi</title>
 <script>if(window.location.hostname.includes("vercel.app")){window.location.replace("https://bitcoinsahi.com"+window.location.pathname)}</script>
+<script src="/tools/api.js"></script>
 <link rel="stylesheet" href="/style.css">
 <style>
   .summary-bar { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin: 24px 0; }
@@ -62,6 +63,11 @@
   .tools-list a { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 6px 12px; font-size: 12px; color: var(--muted); text-decoration: none; }
   .tools-list a:hover { border-color: var(--orange); color: var(--text); }
 
+  .live-indicator { display:flex; align-items:center; gap:8px; font-size:12px; color:#555; margin-bottom:16px; }
+  .live-dot { width:7px; height:7px; border-radius:50%; background:#3FB950; display:inline-block; animation: breathe 2s infinite; }
+  @keyframes breathe { 0%{opacity:1;box-shadow:0 0 0 0 rgba(63,185,80,0.4)} 50%{opacity:0.6} 100%{opacity:1;box-shadow:0 0 0 5px rgba(63,185,80,0)} }
+  .live-clock { color:#666; font-family:monospace; min-width:50px; }
+
   @media (max-width: 700px) { .ws-grid { grid-template-columns: 1fr; } .tab { font-size: 12px; padding: 8px 12px; } }
 </style>
 </head>
@@ -86,6 +92,8 @@
 <div class="container">
   <div class="page-title">Workspace Hub</div>
   <div class="page-sub">One dashboard, six perspectives. Pick your role and get live answers — channel costs, batch savings, fee recommendations, UTXO health, mining economics, or research data. Everything updates from the same network feed.</div>
+
+  <div class="live-indicator"><span class="live-dot"></span> <span>Live</span> <span class="live-clock" id="live-clock"></span></div>
 
   <!-- Live data + Tabs — stacked -->
   <div class="summary-bar" style="margin-bottom:4px;">
@@ -236,25 +244,22 @@ function renderWorkspace(tab) {
   document.getElementById('workspace-container').innerHTML = html;
 }
 
-// Fetch live data
-fetch('/tools/live_data.json?_=' + Date.now())
-  .then(function(r) { return r.json(); })
-  .then(function(d) {
-    if (d.btc_price) btcPrice = d.btc_price;
-    if (d.fees) fees = d.fees;
-    if (d.mempool && d.mempool.unconfirmed_tx) mempoolTx = d.mempool.unconfirmed_tx;
-    if (d.block_height) blockHeight = d.block_height;
-    if (d.hash_rate) hashRate = d.hash_rate / 1e9;
-    if (d.difficulty) difficulty = (d.difficulty / 1e12).toFixed(0);
-    renderWorkspace('user');
-    document.getElementById('ts').textContent = 'Updated ' + new Date().toLocaleString();
-    var ind = document.getElementById('decide-indicator');
-    if (ind) ind.textContent = ' › User';
-  })
-  .catch(function() { renderWorkspace('user');
-    var ind = document.getElementById('decide-indicator');
-    if (ind) ind.textContent = ' › User';
-  });
+// Live data via shared API module
+API.start({interval: 60000});
+API.onData(function(d) {
+  if (d.btc_price) btcPrice = d.btc_price;
+  if (d.fees) fees = d.fees;
+  if (d.mempool && d.mempool.unconfirmed_tx) mempoolTx = d.mempool.unconfirmed_tx;
+  if (d.block_height) blockHeight = d.block_height;
+  if (d.hash_rate) hashRate = d.hash_rate / 1e9;
+  if (d.difficulty) difficulty = (d.difficulty / 1e12).toFixed(0);
+  renderWorkspace(currentTab);
+  document.getElementById('ts').textContent = 'Updated ' + new Date().toLocaleString();
+  var clock = document.getElementById('live-clock');
+  if (clock) clock.textContent = new Date().toLocaleTimeString();
+  var ind = document.getElementById('decide-indicator');
+  if (ind) ind.textContent = ' › ' + currentTab.charAt(0).toUpperCase() + currentTab.slice(1);
+});
 </script>
 </body>
 </html>

@@ -6,6 +6,7 @@
 <title>Live Dashboard — Bitcoin Sahi Research</title>
 <link rel="stylesheet" href="/style.css">
 <script>if(window.location.hostname.includes("vercel.app")){window.location.replace("https://bitcoinsahi.com"+window.location.pathname)}</script>
+<script src="/tools/api.js"></script>
 <style>
   nav .brand { font-weight: 800; font-size: 20px; letter-spacing: -0.3px; }
   nav .brand span { color: var(--orange); }
@@ -242,29 +243,20 @@ function updateModel() {
   ].join('');
 }
 
-// Fetch + auto-refresh
-var prevData = null;
+API.onData(function(d) {
+  if (d.btc_price) { btcPrice = d.btc_price; }
+  if (d.fees) { prevFees = JSON.parse(JSON.stringify(fees)); fees = d.fees; }
+  if (d.mempool && d.mempool.unconfirmed_tx) mempoolTx = d.mempool.unconfirmed_tx;
+  if (d.block_height) blockHeight = d.block_height;
+  if (d.hash_rate) hashRate = d.hash_rate / 1e9;
+  if (d.difficulty) difficulty = (d.difficulty / 1e12).toFixed(0);
+  renderDashboard();
+  document.getElementById('live-clock')._start = Date.now();
+  document.getElementById('live-clock').textContent = 'Live · 0s ago';
+  loadHistory();
+});
 
-function fetchData() {
-  fetch('/tools/live_data.json?_=' + Date.now())
-    .then(function(r) { return r.json(); })
-    .then(function(d) {
-      prevData = d;
-      if (d.btc_price) { btcPrice = d.btc_price; }
-      if (d.fees) { prevFees = JSON.parse(JSON.stringify(fees)); fees = d.fees; }
-      if (d.mempool && d.mempool.unconfirmed_tx) mempoolTx = d.mempool.unconfirmed_tx;
-      if (d.block_height) blockHeight = d.block_height;
-      if (d.hash_rate) hashRate = d.hash_rate / 1e9;
-      if (d.difficulty) difficulty = (d.difficulty / 1e12).toFixed(0);
-      renderDashboard();
-      document.getElementById('live-clock')._start = Date.now();
-      document.getElementById('live-clock').textContent = 'Live · 0s ago';
-    })
-    .catch(function() { renderDashboard(); });
-}
-
-fetchData();
-setInterval(fetchData, 30000);
+API.start({ interval: 30000 });
 
 // Fee history
 function loadHistory() {
@@ -289,7 +281,6 @@ function loadHistory() {
     })
     .catch(function() {});
 }
-loadHistory();
 </script>
 </body>
 </html>

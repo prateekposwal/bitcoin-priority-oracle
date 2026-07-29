@@ -3,6 +3,10 @@
   "version": 2,
   "builds": [
     {
+      "src": "tools/*",
+      "use": "@vercel/static"
+    },
+    {
       "src": "index.html",
       "use": "@vercel/static"
     },
