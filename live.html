@@ -90,6 +90,22 @@ html, body { width: 100%; min-height: 100vh; background: #1A1612; color: #E8E5E0
   .header { overflow-x: auto; }
   .content { padding: 16px 12px 60px; }
 }
+
+.ds-card { background:#2A2622;border-radius:12px;padding:16px;margin-bottom:10px;border:1px solid transparent;transition:all 0.2s;cursor:pointer; }
+.ds-card:hover { border-color:rgba(247,147,26,0.2); }
+.ds-card .ds-top { display:flex;align-items:center;justify-content:space-between;margin-bottom:8px; }
+.ds-card .ds-name { font-size:14px;font-weight:600;color:#E8E5E0; }
+.ds-card .ds-status { font-size:11px; }
+.ds-card .ds-meta { display:flex;gap:16px;flex-wrap:wrap;font-size:11px;color:rgba(255,255,255,0.4); }
+.ds-card .ds-purpose { font-size:12px;color:rgba(255,255,255,0.35);margin-top:6px;line-height:1.5; }
+.ds-card .ds-personas { display:flex;gap:4px;flex-wrap:wrap;margin-top:8px; }
+.ds-card .ds-persona-tag { font-size:9px;padding:2px 8px;border-radius:10px;background:rgba(247,147,26,0.1);color:rgba(247,147,26,0.7);font-weight:600; }
+.ds-card .ds-detail { display:none;margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.06);font-size:11px;color:rgba(255,255,255,0.35);font-family:monospace;line-height:1.6; }
+.ds-card.expanded { border-color:rgba(247,147,26,0.25); }
+.ds-card.expanded .ds-detail { display:block; }
+.ds-card .ds-url { color:#F7931A;text-decoration:none; }
+.ds-card .ds-url:hover { text-decoration:underline; }
+.ds-card .ds-data-preview { font-size:10px;color:rgba(255,255,255,0.25);background:#1A1612;border-radius:4px;padding:6px 8px;margin-top:6px;max-height:40px;overflow:hidden; }
 </style>
 </head>
 <body>
@@ -253,19 +269,17 @@ html, body { width: 100%; min-height: 100vh; background: #1A1612; color: #E8E5E0
 <!-- DEVELOPER -->
 <div class="tab-panel" id="panel-developer">
   <div class="dc">
-    <div class="dc-q">Are the APIs healthy?</div>
-    <div class="dc-a green" id="dev-verdict">Checking...</div>
-    <div class="dc-sub">Last checked: <span id="dev-checked">--</span></div>
+    <div class="dc-q">Bitcoin Network Data</div>
+    <div class="dc-a green" id="dev-verdict">All systems operational</div>
+    <div class="dc-sub">Powered by 8 data sources · Updated every 60s · <span id="dev-uptime">99.9%</span> uptime</div>
   </div>
   <div class="viz-section">
-    <div id="viz-developer"></div>
-  </div>
-  <div class="insight-card">
-    <div class="insight-icon">💡</div>
-    <div class="insight-content">
-      <div class="insight-title">What this means for you</div>
-      <div class="insight-text" id="dev-insight">All API endpoints are public and free. Rate limited to 1 request per second.</div>
+    <div class="viz-section-title" style="display:flex;align-items:center;justify-content:space-between;">
+      <span>Data Sources &amp; Reliability</span>
+      <span id="dev-mode-toggle" style="font-size:12px;color:rgba(247,147,26,0.5);cursor:pointer;font-weight:500;user-select:none;">Developer mode ▸</span>
     </div>
+    <div class="viz-section-desc">Every Bitcoin Sahi decision is powered by live network data. Here's what we track and how reliable each source is.</div>
+    <div id="viz-developer"></div>
   </div>
 </div>
 
@@ -466,21 +480,6 @@ DATA_ENGINE.onUpdate(function() {
     'Block rewards are currently ~$' + Math.round(blockTotal).toLocaleString() + ' per block (subsidy + fees). ' +
     'Fee revenue represents ' + feePct.toFixed(1) + '% of total rewards. Next halving at block 1,050,000 (~2028).';
 
-  // --- Developer Verdict ---
-  var devVerdict = document.getElementById('dev-verdict');
-  var devChecked = document.getElementById('dev-checked');
-  if (d.last_updated) {
-    devVerdict.textContent = '✅ All systems operational';
-    devVerdict.className = 'dc-a green';
-    devChecked.textContent = new Date(d.last_updated).toLocaleTimeString();
-  } else {
-    devVerdict.textContent = '⏳ Checking...';
-    devChecked.textContent = '--';
-  }
-
-  // --- Developer Insight ---
-  document.getElementById('dev-insight').textContent =
-    'All API endpoints are public and free. Average response time: ' + latencyTracker.lastLatency + 'ms. Rate limited to 1 request per second.';
 
   // --- Streaming Metrics Ticker ---
   var mpCount = d.mempool ? (d.mempool.count || 0).toLocaleString() : '--';

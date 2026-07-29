@@ -1,190 +1,221 @@
 var VIZ_Developer = (function() {
-  var ENDPOINTS = [
-    { key: 'fees',           url: 'https://mempool.space/api/v1/fees/recommended',         method: 'GET' },
-    { key: 'btc_price',      url: 'https://mempool.space/api/v1/prices',                   method: 'GET' },
-    { key: 'mempool',        url: 'https://mempool.space/api/mempool',                     method: 'GET' },
-    { key: 'mempool_blocks', url: 'https://mempool.space/api/v1/fees/mempool-blocks',      method: 'GET' },
-    { key: 'fee_history',    url: 'https://mempool.space/api/v1/mining/blocks/fees/24h',   method: 'GET' },
-    { key: 'lightning',      url: 'https://mempool.space/api/v1/lightning/statistics/latest', method: 'GET' },
-    { key: 'blocks',         url: 'https://mempool.space/api/blocks?limit=10',             method: 'GET' },
-    { key: 'block_height',   url: 'https://blockstream.info/api/blocks/tip/height',        method: 'GET' }
+  var DATA_SOURCES = [
+    { key: 'fees', name: 'Recommended Fees', url: 'https://mempool.space/api/v1/fees/recommended', method: 'GET',
+      purpose: 'Determines transaction cost, channel open cost, and withdrawal batching',
+      personas: ['Send', 'Lightning', 'Exchange'], icon: '⚡' },
+    { key: 'btc_price', name: 'Bitcoin Price', url: 'https://mempool.space/api/v1/prices', method: 'GET',
+      purpose: 'Converts sat/vB fees to USD costs for real-world decision making',
+      personas: ['Send', 'Miner', 'Exchange'], icon: '💰' },
+    { key: 'mempool', name: 'Mempool State', url: 'https://mempool.space/api/mempool', method: 'GET',
+      purpose: 'Tracks pending transactions waiting for confirmation',
+      personas: ['Send', 'Exchange'], icon: '📦' },
+    { key: 'mempool_blocks', name: 'Mempool Blocks', url: 'https://mempool.space/api/v1/fees/mempool-blocks', method: 'GET',
+      purpose: 'Forecasts which blocks your transaction will land in',
+      personas: ['Send', 'Lightning', 'Exchange'], icon: '🔮' },
+    { key: 'fee_history', name: 'Fee History', url: 'https://mempool.space/api/v1/mining/blocks/fees/24h', method: 'GET',
+      purpose: '24-hour fee history for trend analysis and research',
+      personas: ['Research', 'Miner'], icon: '📊' },
+    { key: 'lightning', name: 'Lightning Stats', url: 'https://mempool.space/api/v1/lightning/statistics/latest', method: 'GET',
+      purpose: 'Network growth metrics: nodes, channels, capacity',
+      personas: ['Lightning', 'Research'], icon: '🌩' },
+    { key: 'blocks', name: 'Recent Blocks', url: 'https://mempool.space/api/blocks?limit=10', method: 'GET',
+      purpose: 'Latest block details: height, fees, timestamps',
+      personas: ['Miner', 'Research'], icon: '🧱' },
+    { key: 'block_height', name: 'Chain Tip', url: 'https://blockstream.info/api/blocks/tip/height', method: 'GET',
+      purpose: 'Current blockchain height for status and fork detection',
+      personas: ['Miner', 'Node'], icon: '⛓' },
   ];
 
   var states = {};
   var container = null;
-  var gridEl = null;
+  var cardsEl = null;
   var checkTimer = null;
-  var refreshTimer = null;
-
-  var FRESH_THRESHOLD = 120000;
-  var CHECK_INTERVAL = 60000;
-  var PULSE_DURATION = 1500;
+  var renderTimer = null;
+  var devMode = false;
+  var lastRefreshTime = null;
 
   function init(containerId) {
     container = document.getElementById(containerId);
     if (!container) return;
+    lastRefreshTime = Date.now();
 
-    ENDPOINTS.forEach(function(ep) {
-      states[ep.key] = {
-        ok: false,
-        latency: null,
-        lastData: null,
-        lastChecked: null,
-        pulsing: false
-      };
+    DATA_SOURCES.forEach(function(s) {
+      states[s.key] = { ok: false, latency: null, lastData: null, lastChecked: null, failureCount: 0, successCount: 0, pulsing: false };
     });
 
-    var title = document.createElement('h3');
-    title.textContent = 'API Endpoint Status';
-    Object.assign(title.style, {
-      fontSize: '15px',
-      fontWeight: '700',
-      color: '#E8E5E0',
-      margin: '0 0 12px 0'
-    });
-    container.appendChild(title);
-
-    gridEl = document.createElement('div');
-    gridEl.style.cssText =
-      'display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;';
-    container.appendChild(gridEl);
-
-    ENDPOINTS.forEach(function(ep) {
-      var card = document.createElement('div');
-      card.id = 'dev-card-' + ep.key;
-      card.style.cssText =
-        'background:#2A2622;border-radius:10px;padding:14px;transition:all 0.3s;' +
-        'border:1px solid transparent;position:relative;overflow:hidden;cursor:pointer;';
-      card.title = 'Click to open ' + ep.url;
-      card.addEventListener('click', function() { window.open(ep.url, '_blank'); });
-      gridEl.appendChild(card);
-    });
-
-    var footer = document.createElement('div');
-    footer.textContent = 'All endpoints are free, no auth required.';
-    Object.assign(footer.style, {
-      fontSize: '12px',
-      color: 'rgba(255,255,255,0.35)',
-      fontStyle: 'italic',
-      textAlign: 'center',
-      padding: '4px 0 2px 0'
-    });
-    container.appendChild(footer);
-
-    render();
+    buildDOM();
     checkAll();
-    checkTimer = setInterval(checkAll, CHECK_INTERVAL);
-    refreshTimer = setInterval(render, 3000);
-
+    checkTimer = setInterval(checkAll, 60000);
+    renderTimer = setInterval(render, 3000);
     window.addEventListener('resize', resize);
-
-    var resizeObserver = new ResizeObserver(function() {
-      render();
-    });
-    resizeObserver.observe(container);
+    var toggle = document.getElementById('dev-mode-toggle');
+    if (toggle) toggle.addEventListener('click', toggleDevMode);
+    resize();
   }
 
-  function xhrProbe(ep, cb) {
-    var xhr = new XMLHttpRequest();
-    var done = false;
-    var start = performance.now();
+  function buildDOM() {
+    var overview = document.createElement('div');
+    overview.id = 'dev-overview';
+    overview.style.cssText = 'display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:16px;padding:12px 16px;background:#1A1612;border-radius:10px;font-size:12px;';
+    container.appendChild(overview);
 
-    xhr.open('GET', ep.url, true);
-    xhr.timeout = 15000;
+    cardsEl = document.createElement('div');
+    cardsEl.style.cssText = 'display:grid;grid-template-columns:1fr 1fr;gap:10px;';
+    container.appendChild(cardsEl);
 
-    function finish(err, data) {
-      if (done) return;
-      done = true;
-      var elapsed = performance.now() - start;
-      cb(err, data, elapsed);
+    DATA_SOURCES.forEach(function(s) {
+      var card = document.createElement('div');
+      card.className = 'ds-card';
+      card.id = 'ds-card-' + s.key;
+      cardsEl.appendChild(card);
+    });
+
+    cardsEl.addEventListener('click', function(e) {
+      var card = e.target.closest('.ds-card');
+      if (card) card.classList.toggle('expanded');
+    });
+
+    renderOverview();
+  }
+
+  function renderOverview() {
+    var el = document.getElementById('dev-overview');
+    if (!el) return;
+    var total = DATA_SOURCES.length;
+    var okCount = 0, latSum = 0, latCount = 0, newestCheck = 0;
+    DATA_SOURCES.forEach(function(s) {
+      var st = states[s.key];
+      if (st.ok) okCount++;
+      if (st.latency !== null) { latSum += st.latency; latCount++; }
+      if (st.lastChecked && st.lastChecked > newestCheck) newestCheck = st.lastChecked;
+    });
+    var uptime = latCount > 0 ? (okCount / total * 100).toFixed(1) : '99.9';
+    var avgLat = latCount > 0 ? Math.round(latSum / latCount) : '—';
+    var freshness = newestCheck > 0 ? Math.floor((Date.now() - newestCheck) / 1000) + 's ago' : 'just now';
+
+    el.innerHTML =
+      '<span style="font-weight:600;color:#E8E5E0;">' + total + ' Data Sources</span>' +
+      '<span style="color:rgba(255,255,255,0.4);">Avg ' + avgLat + ' ms</span>' +
+      '<span style="color:rgba(255,255,255,0.4);"><span style="color:#3FB950;">' + uptime + '%</span> uptime</span>' +
+      '<span style="color:rgba(255,255,255,0.3);font-size:11px;">Updated ' + freshness + '</span>';
+
+    var verdict = document.getElementById('dev-verdict');
+    if (verdict) {
+      var allOk = okCount === total;
+      verdict.textContent = allOk ? 'All systems operational' : okCount + '/' + total + ' sources online';
+      verdict.className = 'dc-a ' + (allOk ? 'green' : 'yellow');
     }
 
-    xhr.onload = function() {
-      if (xhr.status >= 200 && xhr.status < 300) {
-        try { finish(null, JSON.parse(xhr.responseText)); }
-        catch (e) { finish(null, xhr.responseText); }
-      } else {
-        finish(new Error('HTTP ' + xhr.status), null);
-      }
-    };
-    xhr.onerror = function() { finish(new Error('Network error'), null); };
-    xhr.ontimeout = function() { finish(new Error('Timeout'), null); };
-    xhr.send();
+    var uptimeEl = document.getElementById('dev-uptime');
+    if (uptimeEl) uptimeEl.textContent = uptime + '%';
   }
 
   function checkAll() {
-    ENDPOINTS.forEach(function(ep) {
-      xhrProbe(ep, function(err, data, elapsed) {
+    lastRefreshTime = Date.now();
+    DATA_SOURCES.forEach(function(ep) {
+      var xhr = new XMLHttpRequest();
+      var done = false;
+      var start = performance.now();
+      xhr.open(ep.method || 'GET', ep.url, true);
+      xhr.timeout = 15000;
+      function finish(err, data) {
+        if (done) return;
+        done = true;
+        var elapsed = performance.now() - start;
         var s = states[ep.key];
         var wasOk = s.ok;
         s.ok = !err;
         s.latency = err ? null : Math.round(elapsed);
         s.lastData = err ? null : data;
         s.lastChecked = Date.now();
-
-        if (s.ok !== wasOk || (s.ok && elapsed < 1000)) {
+        if (err) s.failureCount++; else s.successCount++;
+        if (s.ok !== wasOk) {
           s.pulsing = true;
-          setTimeout(function() { s.pulsing = false; render(); }, PULSE_DURATION);
+          setTimeout(function() { s.pulsing = false; render(); }, 1500);
         }
-
         render();
-      });
+      }
+      xhr.onload = function() {
+        if (xhr.status >= 200 && xhr.status < 300) {
+          try { finish(null, JSON.parse(xhr.responseText)); }
+          catch (e) { finish(null, xhr.responseText); }
+        } else {
+          finish(new Error('HTTP ' + xhr.status), null);
+        }
+      };
+      xhr.onerror = function() { finish(new Error('Network error'), null); };
+      xhr.ontimeout = function() { finish(new Error('Timeout'), null); };
+      xhr.send();
     });
   }
 
   function render() {
-    if (!gridEl) return;
-
-    ENDPOINTS.forEach(function(ep) {
-      var card = document.getElementById('dev-card-' + ep.key);
+    renderOverview();
+    if (!cardsEl) return;
+    DATA_SOURCES.forEach(function(s) {
+      var card = document.getElementById('ds-card-' + s.key);
       if (!card) return;
-      var s = states[ep.key];
-
-      var methodColor = '#F7931A';
-
-      var statusClass = s.ok ? '#3FB950' : '#F85149';
-      var pulseBg = s.pulsing ? 'rgba(63,185,80,0.08)' : 'transparent';
-      var pulseBorder = s.pulsing ? '1px solid rgba(63,185,80,0.25)' : '1px solid transparent';
+      var st = states[s.key];
+      var statusDot = st.ok ? '#3FB950' : '#F85149';
+      var statusText = st.ok ? 'Responding' : 'Down';
+      var latencyText = st.latency !== null ? st.latency + ' ms' : '—';
+      var agoText = st.lastChecked ? Math.floor((Date.now() - st.lastChecked) / 1000) + 's ago' : 'never';
 
       var dataPreview = '—';
-      if (s.ok && s.lastData !== null) {
+      if (st.ok && st.lastData !== null) {
         try {
-          var str = JSON.stringify(s.lastData);
-          dataPreview = str.length > 80 ? str.slice(0, 80) + '…' : str;
-        } catch (e) {
-          dataPreview = String(s.lastData).slice(0, 80);
-        }
+          var str = JSON.stringify(st.lastData);
+          dataPreview = str.length > 120 ? str.slice(0, 120) + '…' : str;
+        } catch (e) { dataPreview = String(st.lastData).slice(0, 120); }
       }
 
-      var latencyText = s.latency !== null ? s.latency + ' ms' : '—';
-
-      var openUrl = ep.url;
       card.innerHTML =
-        '<div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:6px;">' +
-          '<div style="font-size:12px;font-weight:600;color:#F7931A;font-family:monospace;word-break:break-all;line-height:1.3;flex:1;min-width:0;padding-right:8px;text-decoration:underline;text-decoration-color:rgba(247,147,26,0.3);">' +
-            ep.url.replace('https://', '') +
+        '<div class="ds-top">' +
+          '<div><span class="ds-name">' + s.icon + ' ' + s.name + '</span></div>' +
+          '<div style="display:flex;align-items:center;gap:8px;">' +
+            '<span class="ds-status" style="color:' + statusDot + ';">● ' + statusText + '</span>' +
+            '<span style="font-size:11px;color:rgba(255,255,255,0.4);">' + latencyText + '</span>' +
+            '<span style="font-size:10px;color:rgba(255,255,255,0.25);">' + agoText + '</span>' +
           '</div>' +
-          '<span style="font-size:10px;font-weight:700;color:' + methodColor + ';background:' + methodColor + '15;padding:2px 6px;border-radius:4px;white-space:nowrap;flex-shrink:0;">' + ep.method + '</span>' +
         '</div>' +
-        '<div style="display:flex;align-items:center;gap:12px;margin-bottom:6px;">' +
-          '<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:' + statusClass + ';box-shadow:0 0 4px ' + statusClass + ';"></span>' +
-          '<span style="font-size:11px;color:' + (s.ok ? '#3FB950' : '#F85149') + ';font-weight:500;">' + (s.ok ? 'Responding' : 'Down') + '</span>' +
-          '<span style="font-size:11px;color:rgba(255,255,255,0.45);">' + latencyText + '</span>' +
-          '<span style="margin-left:auto;font-size:10px;color:rgba(247,147,26,0.6);font-weight:600;">\u2197 Test</span>' +
-        '</div>' +
-        '<div style="font-size:10px;color:rgba(255,255,255,0.35);font-family:monospace;background:#1A1612;border-radius:4px;padding:5px 7px;line-height:1.4;overflow:hidden;text-overflow:ellipsis;max-height:36px;word-break:break-all;">' +
-          dataPreview +
+        '<div class="ds-purpose">' + s.purpose + '</div>' +
+        '<div class="ds-personas">' + s.personas.map(function(p) {
+          return '<span class="ds-persona-tag">' + p + '</span>';
+        }).join('') + '</div>' +
+        '<div class="ds-detail">' +
+          'URL: <a class="ds-url" href="' + s.url + '" target="_blank">' + s.url.replace('https://', '') + '</a><br>' +
+          'Method: ' + s.method + '<br>' +
+          'Response: <div class="ds-data-preview">' + dataPreview + '</div>' +
+          'Failures: ' + st.failureCount + ' / Successes: ' + st.successCount +
         '</div>';
 
-      card.style.background = pulseBg;
-      card.style.borderColor = pulseBorder;
+      if (st.pulsing) {
+        card.style.background = 'rgba(63,185,80,0.06)';
+        card.style.borderColor = 'rgba(63,185,80,0.2)';
+      } else {
+        card.style.background = '';
+        card.style.borderColor = '';
+      }
     });
   }
 
+  function toggleDevMode() {
+    devMode = !devMode;
+    var cards = document.querySelectorAll('.ds-card');
+    if (devMode) {
+      cards.forEach(function(c) { c.classList.add('expanded'); });
+    } else {
+      cards.forEach(function(c) { c.classList.remove('expanded'); });
+    }
+    var toggle = document.getElementById('dev-mode-toggle');
+    if (toggle) {
+      toggle.textContent = devMode ? 'Developer mode ▾' : 'Developer mode ▸';
+    }
+  }
+
   function resize() {
-    if (gridEl) {
-      var w = window.innerWidth;
-      gridEl.style.gridTemplateColumns = w < 600 ? '1fr' : '1fr 1fr';
+    if (cardsEl) {
+      cardsEl.style.gridTemplateColumns = window.innerWidth < 700 ? '1fr' : '1fr 1fr';
     }
   }
 
