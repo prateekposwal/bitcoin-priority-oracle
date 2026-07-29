@@ -59,6 +59,10 @@
   .alert-item { padding: 10px 14px; border-radius: 8px; font-size: 13px; margin-bottom: 4px; border-left: 3px solid; background: var(--surface); }
 
   @media (max-width: 700px) { .kpi-grid { grid-template-columns: repeat(2, 1fr); } .row { flex-direction: column; } }
+
+.live-pill { display: inline-flex; align-items: center; gap: 4px; font-size: 10px; color: #888; }
+.live-pill .dot { width: 5px; height: 5px; border-radius: 50%; background: #3FB950; display: inline-block; animation: livePulse 2s infinite; }
+@keyframes livePulse { 0%{opacity:1;box-shadow:0 0 0 0 rgba(63,185,80,0.4)} 50%{opacity:0.6} 100%{opacity:1;box-shadow:0 0 0 4px rgba(63,185,80,0)} }
 </style>
 </head>
 <body>
@@ -90,10 +94,9 @@
     <div class="live-indicator"><span class="live-dot"></span><span id="live-clock">updating...</span></div>
   </div>
 
-  <div class="live-badge" id="live-badge" style="display:none;"><span class="dot"></span><span>Live — updates every 60s</span><span class="clock" id="live-badge-clock"></span></div>
   <div class="kpi-grid" id="kpi-grid"></div>
 
-  <div class="section-header">Fee Estimates <span class="time" id="fee-timestamp"></span></div>
+  <div class="section-header"><span class="live-pill"><span class="dot"></span> Live</span> Fee Estimates <span class="time" id="fee-timestamp"></span></div>
   <div class="row" id="fee-row"></div>
   <div class="fee-chart" id="fee-bar"></div>
 
@@ -101,7 +104,7 @@
   <div class="history-chart" id="history-chart"></div>
   <div style="display:flex;gap:14px;font-size:11px;color:var(--muted);margin-top:4px;"><span>■ <span style="color:var(--orange)">Fastest fee</span></span><span>■ <span style="color:#58A6FF">Economy fee</span></span><span style="flex:1;text-align:right;" id="history-dates"></span></div>
 
-  <div class="section-header" style="margin-top:28px;">Model Output</div>
+  <div class="section-header" style="margin-top:28px;"><span class="live-pill"><span class="dot"></span> Live</span> Model Output</div>
   <div class="row" id="model-row"></div>
 
   <div class="section-header" style="margin-top:28px;">Market Context</div>

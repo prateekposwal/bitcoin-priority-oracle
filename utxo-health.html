@@ -146,7 +146,11 @@ footer .links { display: flex; gap: 16px; justify-content: center; flex-wrap: wr
   .slider-section { padding: 20px; }
   .slider-output { grid-template-columns: 1fr; }
   .externality-box .ex-hero { font-size: 30px; }
-}</style>
+}
+.live-pill { display: inline-flex; align-items: center; gap: 4px; font-size: 10px; color: #888; }
+.live-pill .dot { width: 5px; height: 5px; border-radius: 50%; background: #3FB950; display: inline-block; animation: livePulse 2s infinite; }
+@keyframes livePulse { 0%{opacity:1;box-shadow:0 0 0 0 rgba(63,185,80,0.4)} 50%{opacity:0.6} 100%{opacity:1;box-shadow:0 0 0 4px rgba(63,185,80,0)} }
+</style>
 </head>
 <body>
 
@@ -245,8 +249,7 @@ footer .links { display: flex; gap: 16px; justify-content: center; flex-wrap: wr
 
 <!-- ─── GROWTH PROJECTION ─── -->
 <div class="container">
-  <div class="live-badge" id="live-badge" style="display:none;"><span class="dot"></span><span>Live — updates every 60s</span><span class="clock" id="live-badge-clock"></span></div>
-<div class="section">
+  <div class="section">
   <div class="section-header">5-Year Outlook</div>
   <h2 class="section-title">UTXO Set Growth Projection</h2>
   <p class="section-text">How the UTXO set could grow over 5 years under different inscription volume scenarios.</p>
