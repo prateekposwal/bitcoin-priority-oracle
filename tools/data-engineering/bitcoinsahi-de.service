@@ -1,0 +1,16 @@
+[Unit]
+Description=Bitcoin Sahi Data Engineering Agent
+After=network.target
+
+[Service]
+Type=simple
+User=deploy
+WorkingDirectory=/opt/bitcoinsahi
+ExecStart=/usr/bin/node /opt/bitcoinsahi/tools/data-engineering/server.js
+Restart=always
+RestartSec=30
+Environment=NODE_ENV=production
+Environment=PORT=3456
+
+[Install]
+WantedBy=multi-user.target

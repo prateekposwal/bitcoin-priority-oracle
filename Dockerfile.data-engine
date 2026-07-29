@@ -1,0 +1,14 @@
+FROM node:20-alpine
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm install --production 2>/dev/null || true
+
+COPY . .
+
+RUN mkdir -p captured-data reports/data-engineering reports/architect
+
+EXPOSE 3456
+
+CMD ["node", "tools/data-engineering/server.js"]
