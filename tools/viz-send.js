@@ -29,7 +29,7 @@ var VIZ_Send = (function() {
   }
 
   function resize() {
-    var r = VIZ.responsiveSize(canvas, 350);
+    var r = VIZ.responsiveSize(canvas, 500);
     w = r.w;
     h = r.h;
     ctx = r.ctx;
@@ -92,7 +92,7 @@ var VIZ_Send = (function() {
 
     var maxF = 1;
     for (var i = 0; i < n; i++) {
-      var fr = bars[i].avgFeeRate || bars[i].avg_fee_rate || 0;
+      var fr = (bars[i].avgFees || bars[i].avg_fees || (bars[i].avgFeeRate ? bars[i].avgFeeRate * 2500000 : 0)) / 2500000;
       if (fr > maxF) maxF = fr;
     }
     maxF = Math.ceil(maxF * 1.15) || 1;
@@ -168,7 +168,7 @@ var VIZ_Send = (function() {
 
     var bw = cW / n;
     for (var i = 0; i < n; i++) {
-      var fr = bars[i].avgFeeRate || bars[i].avg_fee_rate || 0;
+      var fr = (bars[i].avgFees || bars[i].avg_fees || (bars[i].avgFeeRate ? bars[i].avgFeeRate * 2500000 : 0)) / 2500000;
       var bh = (fr / maxF) * cH;
       var x = cL + i * bw;
       var y = cB - bh;
@@ -220,7 +220,7 @@ var VIZ_Send = (function() {
 
     if (hoverIdx >= 0 && hoverIdx < n) {
       var e = bars[hoverIdx];
-      var fr = e.avgFeeRate || e.avg_fee_rate || 0;
+      var fr = (e.avgFees || e.avg_fees || (e.avgFeeRate ? e.avgFeeRate * 2500000 : 0)) / 2500000;
       var ts = e.timestamp != null ? e.timestamp : e.date ? new Date(e.date).getTime() / 1000 : 0;
       var d = new Date(ts * 1000);
       var feeUSD = (fr * btcPrice) / 100000000;

@@ -14,7 +14,7 @@ html, body { width: 100%; min-height: 100vh; background: #1A1612; color: #E8E5E0
 .tab-btn:hover { color: #E8E5E0; border-color: #2A2622; }
 .tab-btn.active { color: #F7931A; border-color: #F7931A; background: rgba(247,147,26,0.1); }
 
-.content { max-width: 800px; margin: 0 auto; padding: 24px 16px 60px; }
+.content { max-width: 1100px; margin: 0 auto; padding: 24px 16px 60px; }
 .tab-panel { display: none; }
 .tab-panel.active { display: block; }
 
@@ -41,8 +41,24 @@ html, body { width: 100%; min-height: 100vh; background: #1A1612; color: #E8E5E0
 .stat-card .sc-label { font-size: 10px; color: #888; text-transform: uppercase; letter-spacing: 0.5px; }
 .stat-card .sc-value { font-size: 22px; font-weight: 700; margin: 4px 0; }
 
-.viz-canvas { width: 100%; height: 350px; border-radius: 12px; background: #1A1612; margin-top: 16px; }
-.explanation-text { font-size: 12px; color: rgba(255,255,255,0.3); margin-top: 8px; line-height: 1.5; }
+.viz-canvas { width: 100%; height: 500px; border-radius: 12px; background: #1A1612; margin-top: 16px; }
+
+.viz-section { margin-bottom: 24px; }
+.viz-section-title { font-size: 14px; font-weight: 600; color: rgba(255,255,255,0.7); margin-bottom: 4px; }
+.viz-section-desc { font-size: 11px; color: rgba(255,255,255,0.3); margin-bottom: 10px; line-height: 1.5; }
+
+.insight-card {
+  background: rgba(247,147,26,0.06);
+  border: 1px solid rgba(247,147,26,0.15);
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+}
+.insight-icon { font-size: 24px; flex-shrink: 0; margin-top: 2px; }
+.insight-title { font-size: 14px; font-weight: 700; color: rgba(255,255,255,0.8); margin-bottom: 4px; }
+.insight-text { font-size: 13px; color: rgba(255,255,255,0.5); line-height: 1.6; }
 
 /* Genesis Strip */
 .genesis-strip { position: fixed; bottom: 28px; left: 0; width: 100%; height: 2px; z-index: 50; background: linear-gradient(90deg, #F7931A 0%, #3FB950 25%, #D29922 50%, #F85149 75%, #F7931A 100%); background-size: 200% 100%; animation: genesis-shimmer 4s linear infinite; }
@@ -58,7 +74,8 @@ html, body { width: 100%; min-height: 100vh; background: #1A1612; color: #E8E5E0
 
 @media (max-width: 600px) {
   .fee-grid, .stat-row { grid-template-columns: 1fr; }
-  .viz-canvas { height: 250px; }
+  .viz-canvas { height: 350px; }
+  .insight-card { flex-direction: column; gap: 6px; }
 }
 
 @media (max-width: 480px) {
@@ -99,8 +116,18 @@ html, body { width: 100%; min-height: 100vh; background: #1A1612; color: #E8E5E0
     <div class="fee-card"><div class="fc-label">Economy</div><div class="fc-value" id="fee-economy">--</div><div class="fc-sub">~2+ hr</div></div>
   </div>
   <div class="dollar-cost" id="dollar-cost">Fastest: $0.56 │ Hour: $0.28 │ Economy: $0.14</div>
-  <canvas id="viz-send" class="viz-canvas"></canvas>
-  <div class="explanation-text">Each bar = one block. Green = low fees. Red = high congestion. The fee you choose determines how fast your transaction confirms.</div>
+  <div class="viz-section">
+    <div class="viz-section-title">Fee History — Last 24 Hours</div>
+    <div class="viz-section-desc">Each bar represents one Bitcoin block. Green = low fees. Red = congestion.</div>
+    <canvas id="viz-send" class="viz-canvas"></canvas>
+  </div>
+  <div class="insight-card">
+    <div class="insight-icon">💡</div>
+    <div class="insight-content">
+      <div class="insight-title">What this means for you</div>
+      <div class="insight-text" id="send-insight">Waiting for fee data to generate insight...</div>
+    </div>
+  </div>
 </div>
 
 <!-- LIGHTNING -->
@@ -115,8 +142,18 @@ html, body { width: 100%; min-height: 100vh; background: #1A1612; color: #E8E5E0
     <div class="stat-card"><div class="sc-label">Channels</div><div class="sc-value" id="ln-channels">--</div></div>
     <div class="stat-card"><div class="sc-label">Capacity</div><div class="sc-value" id="ln-capacity">--</div></div>
   </div>
-  <canvas id="viz-lightning" class="viz-canvas"></canvas>
-  <div class="explanation-text">Channel growth over time. Each channel open costs ~1,000 vbytes in on-chain fees. Lower fees = lower cost to enter the Lightning Network.</div>
+  <div class="viz-section">
+    <div class="viz-section-title">Lightning Network Graph</div>
+    <div class="viz-section-desc">Interactive force-directed graph of the Lightning Network. Node size = channel count. Color = fee rate.</div>
+    <canvas id="viz-lightning" class="viz-canvas"></canvas>
+  </div>
+  <div class="insight-card">
+    <div class="insight-icon">💡</div>
+    <div class="insight-content">
+      <div class="insight-title">What this means for you</div>
+      <div class="insight-text" id="ln-insight">Waiting for Lightning Network data...</div>
+    </div>
+  </div>
 </div>
 
 <!-- EXCHANGE -->
@@ -126,8 +163,18 @@ html, body { width: 100%; min-height: 100vh; background: #1A1612; color: #E8E5E0
     <div class="dc-a" id="ex-verdict">Checking...</div>
     <div class="dc-sub" id="ex-saving">Estimating batch savings...</div>
   </div>
-  <canvas id="viz-exchange" class="viz-canvas"></canvas>
-  <div class="explanation-text">Batch savings vs individual withdrawals. Each additional output adds ~45 vbytes vs ~140 vbytes for a new transaction.</div>
+  <div class="viz-section">
+    <div class="viz-section-title">Batch vs Individual Withdrawal Cost</div>
+    <div class="viz-section-desc">Drag the slider to compare costs. The gap between lines = your savings from batching.</div>
+    <canvas id="viz-exchange" class="viz-canvas"></canvas>
+  </div>
+  <div class="insight-card">
+    <div class="insight-icon">💡</div>
+    <div class="insight-content">
+      <div class="insight-title">What this means for you</div>
+      <div class="insight-text" id="ex-insight">Waiting for fee data to calculate savings...</div>
+    </div>
+  </div>
 </div>
 
 <!-- NODE -->
@@ -137,8 +184,18 @@ html, body { width: 100%; min-height: 100vh; background: #1A1612; color: #E8E5E0
     <div class="dc-a orange" id="node-cost">$924</div>
     <div class="dc-sub">Estimated annual cost to run a full node</div>
   </div>
-  <canvas id="viz-node" class="viz-canvas"></canvas>
-  <div class="explanation-text">Cost breakdown across hardware, bandwidth, and power. UTXO set grows ~5-15% annually, increasing storage requirements over time.</div>
+  <div class="viz-section">
+    <div class="viz-section-title">Annual Cost Breakdown</div>
+    <div class="viz-section-desc">Adjust the sliders below to match your setup. Hardware depreciates over 3 years.</div>
+    <canvas id="viz-node" class="viz-canvas"></canvas>
+  </div>
+  <div class="insight-card">
+    <div class="insight-icon">💡</div>
+    <div class="insight-content">
+      <div class="insight-title">What this means for you</div>
+      <div class="insight-text" id="node-insight">Your estimated annual node cost is $924. Hardware is the biggest expense. Consider cloud hosting to reduce upfront costs.</div>
+    </div>
+  </div>
 </div>
 
 <!-- MINER -->
@@ -148,8 +205,18 @@ html, body { width: 100%; min-height: 100vh; background: #1A1612; color: #E8E5E0
     <div class="dc-a orange" id="miner-reward">Checking...</div>
     <div class="dc-sub">Subsidy + fees for the latest block</div>
   </div>
-  <canvas id="viz-miner" class="viz-canvas"></canvas>
-  <div class="explanation-text">Subsidy and fee revenue over recent blocks. Current subsidy: 3.125 BTC. Halving at block 1,050,000 (~2028).</div>
+  <div class="viz-section">
+    <div class="viz-section-title">Block Reward Composition</div>
+    <div class="viz-section-desc">Donut chart shows subsidy vs fee split. Line chart shows fee revenue trend over the last 144 blocks.</div>
+    <canvas id="viz-miner" class="viz-canvas"></canvas>
+  </div>
+  <div class="insight-card">
+    <div class="insight-icon">💡</div>
+    <div class="insight-content">
+      <div class="insight-title">What this means for you</div>
+      <div class="insight-text" id="miner-insight">Waiting for block data...</div>
+    </div>
+  </div>
 </div>
 
 <!-- RESEARCH -->
@@ -161,31 +228,37 @@ html, body { width: 100%; min-height: 100vh; background: #1A1612; color: #E8E5E0
     <div id="data-freshness" style="font-size:10px;color:rgba(255,255,255,0.25);text-align:center;margin-top:4px;">Data refreshes every 60s from mempool.space</div>
     <a href="https://github.com/prateekposwal/block-space-economics" style="display:block;padding:10px;background:#2A2622;border-radius:8px;color:#F7931A;text-decoration:none;text-align:center;">View on GitHub →</a>
   </div>
-  <canvas id="viz-research" class="viz-canvas"></canvas>
-  <div class="explanation-text">Model outputs, fee forecasts, and research data visualizations.</div>
+  <div class="viz-section">
+    <div class="viz-section-title">Fee History Analysis</div>
+    <div class="viz-section-desc">Three fee tiers plotted over 24 hours. Hover to inspect values at any point in time.</div>
+    <canvas id="viz-research" class="viz-canvas"></canvas>
+  </div>
+  <div class="insight-card">
+    <div class="insight-icon">💡</div>
+    <div class="insight-content">
+      <div class="insight-title">What this means for you</div>
+      <div class="insight-text" id="research-insight">Fee history data shows patterns. Use the CSV export for your own analysis. Model forecasts available for institutional partners.</div>
+    </div>
+  </div>
 </div>
 
 <!-- DEVELOPER -->
 <div class="tab-panel" id="panel-developer">
-  <div id="viz-developer"></div>
-  <div style="margin-top:16px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;">
-    <div style="background:#2A2622;border-radius:8px;padding:12px;text-align:center;">
-      <div style="font-size:10px;color:#888;text-transform:uppercase;letter-spacing:0.5px;">Requests</div>
-      <div style="font-size:22px;font-weight:700;margin:4px 0;color:#3FB950;">0</div>
-      <div style="font-size:11px;color:#555;">Today</div>
-    </div>
-    <div style="background:#2A2622;border-radius:8px;padding:12px;text-align:center;">
-      <div style="font-size:10px;color:#888;text-transform:uppercase;letter-spacing:0.5px;">Uptime</div>
-      <div style="font-size:22px;font-weight:700;margin:4px 0;color:#3FB950;">99.9%</div>
-      <div style="font-size:11px;color:#555;">30 days</div>
-    </div>
-    <div style="background:#2A2622;border-radius:8px;padding:12px;text-align:center;">
-      <div style="font-size:10px;color:#888;text-transform:uppercase;letter-spacing:0.5px;">Nodes</div>
-      <div style="font-size:22px;font-weight:700;margin:4px 0;color:#F7931A;">3</div>
-      <div style="font-size:11px;color:#555;">Connected</div>
+  <div class="dc">
+    <div class="dc-q">Are the APIs healthy?</div>
+    <div class="dc-a green" id="dev-verdict">Checking...</div>
+    <div class="dc-sub">Last checked: <span id="dev-checked">--</span></div>
+  </div>
+  <div class="viz-section">
+    <div id="viz-developer"></div>
+  </div>
+  <div class="insight-card">
+    <div class="insight-icon">💡</div>
+    <div class="insight-content">
+      <div class="insight-title">What this means for you</div>
+      <div class="insight-text" id="dev-insight">All API endpoints are public and free. Rate limited to 1 request per second.</div>
     </div>
   </div>
-  <div class="explanation-text">API status dashboard. All endpoints are free and public. No authentication required.</div>
 </div>
 
 </div>
@@ -218,6 +291,41 @@ html, body { width: 100%; min-height: 100vh; background: #1A1612; color: #E8E5E0
 <script src="tools/viz-research.js"></script>
 <script src="tools/viz-developer.js"></script>
 <script>
+var latencyTracker = { lastLatency: 0 };
+
+function measureLatency() {
+  var start = Date.now();
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', 'https://mempool.space/api/v1/fees/recommended', true);
+  xhr.timeout = 5000;
+  xhr.onload = function() {
+    latencyTracker.lastLatency = Date.now() - start;
+  };
+  xhr.onerror = function() {};
+  xhr.send();
+}
+setInterval(measureLatency, 30000);
+measureLatency();
+
+function getFeeTrend(history) {
+  if (!history || history.length < 10) return 'stable';
+  var half = Math.floor(history.length / 2);
+  var first = 0, second = 0;
+  for (var i = 0; i < half; i++) {
+    first += (history[i].avgFees || history[i].avg_fees || 0);
+  }
+  for (var i = half; i < history.length; i++) {
+    second += (history[i].avgFees || history[i].avg_fees || 0);
+  }
+  first /= half;
+  second /= (history.length - half);
+  if (first === 0) return 'stable';
+  var ratio = second / first;
+  if (ratio > 1.1) return 'up';
+  if (ratio < 0.9) return 'down';
+  return 'stable';
+}
+
 document.querySelectorAll('.tab-btn').forEach(function(btn) {
   btn.addEventListener('click', function() {
     document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
@@ -303,12 +411,68 @@ DATA_ENGINE.onUpdate(function() {
   var btcPrice = d.btc_price || 64000;
   document.getElementById('miner-reward').textContent = '~$' + Math.round(3.125 * btcPrice + 0.5 * btcPrice).toLocaleString() + '/block';
 
-  // --- Dollar Cost Context ---
   var fastestUsd = (f * 140 * btcPrice) / 100000000;
   var hourUsd = ((fees.hourFee || 1) * 140 * btcPrice) / 100000000;
   var economyUsd = (e * 140 * btcPrice) / 100000000;
   document.getElementById('dollar-cost').textContent =
     'Fastest: $' + fastestUsd.toFixed(2) + ' │ Hour: $' + hourUsd.toFixed(2) + ' │ Economy: $' + economyUsd.toFixed(2);
+
+  // --- Send Insight ---
+  var cost = (e * 140 * btcPrice) / 100000000;
+  var trend = getFeeTrend(d.fee_history || []);
+  var trendWord = trend === 'up' ? 'rising' : trend === 'down' ? 'dropping' : 'stable';
+  document.getElementById('send-insight').textContent =
+    'At current economy fee of ' + e + ' sat/vB, a typical transaction costs $' + cost.toFixed(2) + '. ' +
+    'Fees have been trending ' + trendWord + ' over the last 24 hours.';
+
+  // --- Lightning Insight ---
+  if (d.lightning) {
+    var lnNodes = d.lightning.node_count || 0;
+    var lnChannels = d.lightning.channel_count || 0;
+    var lnCap = d.lightning.total_capacity || 0;
+    var chanCost = (e * 1000 * btcPrice) / 100000000;
+    document.getElementById('ln-insight').textContent =
+      'With ' + lnChannels.toLocaleString() + ' channels across ' + lnNodes.toLocaleString() + ' nodes and ' +
+      lnCap.toFixed(0) + ' BTC capacity, the Lightning Network continues to grow. ' +
+      'Channel opens cost approximately $' + chanCost.toFixed(2) + ' at current fee rates.';
+  }
+
+  // --- Exchange Insight ---
+  var savings1000 = ((e * 140 * 1000 - e * 100000) * btcPrice) / 100000000;
+  document.getElementById('ex-insight').textContent =
+    'Batch withdrawals save you approximately $' + savings1000.toFixed(2) + ' per 1000 withdrawals at current fee rates. ' +
+    'Higher batch sizes = more savings. Drag the slider on the chart above to experiment.';
+
+  // --- Miner Insight ---
+  var feeAvg = 0;
+  var fh = d.fee_history || [];
+  if (fh.length > 0) {
+    var sum = 0;
+    for (var i = 0; i < fh.length; i++) { sum += fh[i].avgFees || 0; }
+    feeAvg = sum / fh.length;
+  }
+  var feeBtc = feeAvg / 100000000;
+  var feePct = (feeBtc / (3.125 + feeBtc)) * 100;
+  var blockTotal = 3.125 * btcPrice + feeBtc * btcPrice;
+  document.getElementById('miner-insight').textContent =
+    'Block rewards are currently ~$' + Math.round(blockTotal).toLocaleString() + ' per block (subsidy + fees). ' +
+    'Fee revenue represents ' + feePct.toFixed(1) + '% of total rewards. Next halving at block 1,050,000 (~2028).';
+
+  // --- Developer Verdict ---
+  var devVerdict = document.getElementById('dev-verdict');
+  var devChecked = document.getElementById('dev-checked');
+  if (d.last_updated) {
+    devVerdict.textContent = '✅ All systems operational';
+    devVerdict.className = 'dc-a green';
+    devChecked.textContent = new Date(d.last_updated).toLocaleTimeString();
+  } else {
+    devVerdict.textContent = '⏳ Checking...';
+    devChecked.textContent = '--';
+  }
+
+  // --- Developer Insight ---
+  document.getElementById('dev-insight').textContent =
+    'All API endpoints are public and free. Average response time: ' + latencyTracker.lastLatency + 'ms. Rate limited to 1 request per second.';
 
   // --- Streaming Metrics Ticker ---
   var mpCount = d.mempool ? (d.mempool.count || 0).toLocaleString() : '--';

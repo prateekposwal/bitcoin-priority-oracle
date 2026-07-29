@@ -12,23 +12,33 @@
     .state-bar .state-label { font-size: 12px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; }
     .state-bar .state-desc { font-size: 13px; color: rgba(255,255,255,0.5); margin-top: 4px; }
 
-    .bottom-area { position: fixed; bottom: 48px; left: 50%; transform: translateX(-50%); z-index: 10; text-align: center; }
+    .bottom-area { position: fixed; bottom: 48px; left: 50%; transform: translateX(-50%); z-index: 20; text-align: center; }
     .bottom-area .cta { display: inline-block; padding: 14px 32px; background: #F7931A; color: #1A1612; font-size: 17px; font-weight: 700; border-radius: 100px; text-decoration: none; transition: transform 0.2s, box-shadow 0.2s; }
     .bottom-area .cta:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(247,147,26,0.3); }
+    .bottom-area .cta.low-fees { animation: ctaPulse 2s ease-in-out infinite; }
     .bottom-area .hint { font-size: 11px; color: rgba(255,255,255,0.3); margin-top: 8px; }
 
-    .legend-toggle { position: fixed; bottom: 120px; right: 20px; z-index: 30; width: 32px; height: 32px; border-radius: 50%; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.4); font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+    @keyframes ctaPulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(247,147,26,0.4); }
+      50% { box-shadow: 0 0 0 12px rgba(247,147,26,0); }
+    }
+
+    .legend-toggle { position: fixed; bottom: 100px; right: 20px; z-index: 30; width: 32px; height: 32px; border-radius: 50%; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.4); font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
     .legend-toggle:hover { background: rgba(255,255,255,0.15); color: rgba(255,255,255,0.8); }
-    .legend-panel { position: fixed; bottom: 160px; right: 20px; z-index: 30; background: #2A2622; border: 1px solid #3A3632; border-radius: 10px; padding: 16px; width: 220px; display: none; }
+    .legend-panel { position: fixed; bottom: 140px; right: 20px; z-index: 30; background: #2A2622; border: 1px solid #3A3632; border-radius: 10px; padding: 16px; width: 220px; display: none; }
     .legend-panel.visible { display: block; }
     .legend-panel .l-item { display: flex; align-items: center; gap: 10px; padding: 4px 0; font-size: 12px; color: rgba(255,255,255,0.6); }
     .legend-panel .l-dot { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
     .legend-panel .l-title { font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.8); margin-bottom: 8px; }
 
-    #genesis-strip { position: fixed; bottom: 100px; left: 0; width: 100vw; height: 2px; z-index: 15; }
+    #genesis-strip { position: fixed; bottom: 42px; left: 0; width: 100vw; height: 2px; z-index: 15; pointer-events: none; }
     #genesis-strip canvas { display: block; width: 100%; height: 100%; }
 
-    #dollar-context { position: fixed; top: 55%; left: 50%; transform: translateX(-50%); z-index: 15; text-align: center; font-size: 14px; color: rgba(255,255,255,0.4); pointer-events: none; font-variant-numeric: tabular-nums; }
+    #dollar-context { position: fixed; top: 58%; left: 50%; transform: translateX(-50%); z-index: 15; text-align: center; font-size: 14px; color: rgba(255,255,255,0.4); pointer-events: none; font-variant-numeric: tabular-nums; animation: fadeInOut 3s ease-in-out infinite; }
+    @keyframes fadeInOut {
+      0%, 100% { opacity: 0.4; }
+      50% { opacity: 0.7; }
+    }
 
     #metrics-ticker { position: fixed; bottom: 0; left: 0; width: 100vw; z-index: 15; overflow: hidden; white-space: nowrap; font-size: 11px; color: rgba(255,255,255,0.3); padding: 4px 0; background: #1A1612; border-top: 1px solid rgba(255,255,255,0.05); font-variant-numeric: tabular-nums; letter-spacing: 0.3px; }
     .ticker-track { display: inline-block; white-space: nowrap; padding-left: 0; animation: ticker-scroll 45s linear infinite; }
@@ -43,14 +53,15 @@
       .bottom-area { width: 90%; bottom: 42px; }
       .bottom-area .cta { display: block; }
       .legend-panel { right: 10px; width: 180px; }
-      .legend-toggle { bottom: 110px; right: 10px; }
-      .legend-panel { bottom: 150px; right: 10px; }
-      #dollar-context { font-size: 12px; top: 52%; }
+      .legend-toggle { bottom: 90px; right: 10px; }
+      .legend-panel { bottom: 130px; right: 10px; }
+      #dollar-context { font-size: 12px; top: 54%; }
     }
 
     @media (max-width: 480px) {
-      #genesis-strip { bottom: 80px; }
-      #dollar-context { top: 48%; font-size: 11px; }
+      #dollar-context { top: 54%; font-size: 11px; }
+      .bottom-area .cta { padding: 12px 24px; font-size: 15px; }
+      .legend-panel { width: 160px; font-size: 11px; }
     }
 
     @media (max-width: 400px) {
@@ -187,6 +198,7 @@
 
     var stateLabel = document.getElementById('state-label');
     var stateDesc = document.getElementById('state-desc');
+    var ctaEl = document.querySelector('.bottom-area .cta');
 
     function refreshUI() {
       var f = DATA_ENGINE.get().fees || {};
@@ -195,14 +207,17 @@
         stateLabel.textContent = '\uD83D\uDFE2 Network calm';
         stateLabel.style.color = '#3FB950';
         stateDesc.textContent = 'Fees are low. Good time to send.';
+        ctaEl.classList.add('low-fees');
       } else if (fastest < 20) {
         stateLabel.textContent = '\uD83D\uDFE1 Moderate congestion';
         stateLabel.style.color = '#D29922';
         stateDesc.textContent = 'Fees are elevated. Economy rate recommended.';
+        ctaEl.classList.remove('low-fees');
       } else {
         stateLabel.textContent = '\uD83D\uDD34 Network congested';
         stateLabel.style.color = '#F85149';
         stateDesc.textContent = 'Fees are high. Consider waiting.';
+        ctaEl.classList.remove('low-fees');
       }
       drawGenesisStrip();
       updateDollarContext();

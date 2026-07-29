@@ -70,7 +70,7 @@ var VIZ_Lightning = (function() {
   function resize() {
     var rect = canvas.parentElement ? canvas.parentElement.getBoundingClientRect() : { width: 800, height: 400 };
     w = canvas.width = rect.width || window.innerWidth;
-    h = canvas.height = Math.max(200, rect.height || 400);
+    h = canvas.height = Math.max(200, rect.height || 500);
     canvas.style.width = '100%';
     canvas.style.height = h + 'px';
   }

@@ -36,7 +36,7 @@ var VIZ_Exchange = (function() {
   }
 
   function resize() {
-    var r = VIZ.responsiveSize(canvas, 350);
+    var r = VIZ.responsiveSize(canvas, 450);
     w = r.w;
     h = r.h;
     ctx = r.ctx;

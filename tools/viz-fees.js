@@ -149,7 +149,7 @@ var VIZ_Fees = (function() {
     ctx.fillText(feeText, w/2, h/2 - 60);
     
     // Label
-    ctx.font = '16px -apple-system, sans-serif';
+    ctx.font = '18px -apple-system, sans-serif';
     ctx.fillStyle = 'rgba(255,255,255,0.4)';
     ctx.fillText('sat/vB — fastest fee', w/2, h/2 - 60 + 80);
 

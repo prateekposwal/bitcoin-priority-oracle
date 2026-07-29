@@ -47,7 +47,7 @@ const VIZ_Research = (() => {
   }
 
   function resize() {
-    const r = VIZ.responsiveSize(canvas, 400);
+    const r = VIZ.responsiveSize(canvas, 500);
     w = r.w;
     h = r.h;
     ctx = r.ctx;
