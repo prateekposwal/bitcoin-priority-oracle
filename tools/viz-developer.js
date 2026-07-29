@@ -254,23 +254,20 @@ var VIZ_Developer = (function() {
     var text = document.getElementById('storage-text');
     var warning = document.getElementById('storage-warning');
     if (!bar || !text) return;
-    var stats = { used: 0, pct: 0 };
+    var stats = { entries: 0, bytes: 0 };
     if (typeof DATA_ENGINE !== 'undefined' && DATA_ENGINE.checkStorage) {
       stats = DATA_ENGINE.checkStorage();
     }
-    var pct = Math.min(100, stats.pct || 0);
-    bar.style.width = pct + '%';
-    bar.style.background = pct > 90 ? '#F85149' : pct > 70 ? '#D29922' : '#3FB950';
-    var usedKB = Math.round((stats.used || 0) / 1024);
-    var maxKB = Math.round((stats.max || 4500000) / 1024);
-    text.textContent = usedKB + 'KB / ' + maxKB + 'KB';
+    var entries = stats.entries || 0;
+    var bytes = stats.bytes || 0;
+    var mb = (bytes / (1024 * 1024)).toFixed(1);
+    bar.style.width = entries > 0 ? '100%' : '0%';
+    bar.style.background = '#3FB950';
+    text.textContent = entries.toLocaleString() + ' entries · ' + mb + ' MB';
     if (warning) {
-      if (pct > 85) {
+      if (entries > 50000) {
         warning.style.display = 'block';
-        warning.textContent = '⚠ Storage nearly full (' + pct + '%). Oldest entries will be trimmed automatically. Download your data to preserve it.';
-      } else if (pct > 60) {
-        warning.style.display = 'block';
-        warning.textContent = '📦 Storage at ' + pct + '%. Consider downloading and clearing old data.';
+        warning.textContent = '📦 ' + entries.toLocaleString() + ' entries stored. IndexedDB has no fixed limit, but consider exporting if you need to analyze this data.';
         warning.style.background = 'rgba(210,153,34,0.1)';
         warning.style.color = '#D29922';
       } else {

@@ -14,6 +14,7 @@ var DATA_ENGINE = (function () {
   };
 
   var listeners = [];
+  var storageListeners = [];
   var timer = null;
   var FETCH_INTERVAL = 60000;
 
@@ -27,6 +28,118 @@ var DATA_ENGINE = (function () {
     { key: 'blocks',          url: 'https://mempool.space/api/blocks?limit=10' },
     { key: 'block_height',    url: 'https://blockstream.info/api/blocks/tip/height' }
   ];
+
+  var DB_NAME = 'BSahiDataLog';
+  var DB_VERSION = 1;
+  var STORE_NAME = 'logs';
+  var db = null;
+  var dbPending = null;
+  var writeQueue = [];
+  var logCache = [];
+  var cacheLoaded = false;
+  var FALLBACK_KEY = 'bsahi_log_fb';
+
+  function openDB() {
+    if (db) return Promise.resolve(db);
+    if (dbPending) return dbPending;
+    if (typeof indexedDB === 'undefined') {
+      dbPending = Promise.resolve(null);
+      return dbPending;
+    }
+    dbPending = new Promise(function(resolve) {
+      var req = indexedDB.open(DB_NAME, DB_VERSION);
+      req.onupgradeneeded = function(e) {
+        var store = e.target.result.createObjectStore(STORE_NAME, { keyPath: 'id', autoIncrement: true });
+        store.createIndex('k', 'k', { unique: false });
+        store.createIndex('t', 't', { unique: false });
+      };
+      req.onsuccess = function(e) {
+        db = e.target.result;
+        db.onerror = function() {};
+        resolve(db);
+        flushQueue();
+      };
+      req.onerror = function() {
+        db = null;
+        dbPending = null;
+        resolve(null);
+      };
+      req.onblocked = function() {
+        db = null;
+        dbPending = null;
+        resolve(null);
+      };
+    });
+    return dbPending;
+  }
+
+  function flushQueue() {
+    if (writeQueue.length === 0) return;
+    var q = writeQueue.slice();
+    writeQueue = [];
+    for (var i = 0; i < q.length; i++) {
+      writeToDB(q[i]);
+    }
+  }
+
+  function writeToDB(entry) {
+    if (!db) return;
+    try {
+      var tx = db.transaction(STORE_NAME, 'readwrite');
+      tx.objectStore(STORE_NAME).add(entry);
+    } catch (e) {}
+  }
+
+  function loadFromDB() {
+    openDB().then(function(d) {
+      if (!d) {
+        loadLocalStorageFallback();
+        return;
+      }
+      try {
+        var tx = d.transaction(STORE_NAME, 'readonly');
+        var store = tx.objectStore(STORE_NAME);
+        var all = store.getAll();
+        all.onsuccess = function() {
+          logCache = all.result || [];
+          cacheLoaded = true;
+          migrateFromLocalStorage();
+        };
+        all.onerror = function() {
+          loadLocalStorageFallback();
+        };
+      } catch (e) {
+        loadLocalStorageFallback();
+      }
+    });
+  }
+
+  function loadLocalStorageFallback() {
+    try {
+      var raw = localStorage.getItem(FALLBACK_KEY);
+      if (raw) {
+        logCache = JSON.parse(raw);
+        localStorage.removeItem(FALLBACK_KEY);
+      }
+    } catch (e) {}
+    cacheLoaded = true;
+  }
+
+  function migrateFromLocalStorage() {
+    try {
+      var raw = localStorage.getItem(FALLBACK_KEY);
+      if (raw) {
+        var old = JSON.parse(raw);
+        if (old.length > 0 && logCache.length === 0) {
+          logCache = old;
+          for (var i = 0; i < old.length; i++) {
+            writeToDB(old[i]);
+          }
+        }
+        localStorage.removeItem(FALLBACK_KEY);
+      }
+    } catch (e) {}
+  }
 
   function xhrGet(url, cb) {
     var xhr = new XMLHttpRequest();
@@ -115,7 +228,7 @@ var DATA_ENGINE = (function () {
   function notify() {
     DATA.last_updated = new Date().toISOString();
     for (var i = 0; i < listeners.length; i++) {
-      try { listeners[i](DATA); } catch (e) { /* swallow */ }
+      try { listeners[i](DATA); } catch (e) {}
     }
   }
 
@@ -143,6 +256,8 @@ var DATA_ENGINE = (function () {
 
   function start() {
     if (timer) return;
+    openDB();
+    if (!cacheLoaded) loadFromDB();
     fetchAll();
     timer = setInterval(fetchAll, FETCH_INTERVAL);
   }
@@ -153,12 +268,6 @@ var DATA_ENGINE = (function () {
       timer = null;
     }
   }
-
-  var LOG_KEY = 'bsahi_data_log';
-  var MAX_LOG_ENTRIES = 50000;
-  var BYTES_PER_ENTRY = 1024;
-  var MAX_STORAGE_BYTES = 4500000;
-  var storageListeners = [];
 
   function minimizeEntry(key, raw) {
     var m = { t: Date.now(), k: key, d: {} };
@@ -194,38 +303,29 @@ var DATA_ENGINE = (function () {
     return m;
   }
 
-  function loadLog() {
-    try { return JSON.parse(localStorage.getItem(LOG_KEY) || '[]'); }
-    catch (e) { return []; }
-  }
-
-  function estimatedBytes(log) {
-    try { return new Blob([JSON.stringify(log)]).size; } catch (e) { return log.length * BYTES_PER_ENTRY; }
-  }
-
-  function saveLog(log) {
-    try {
-      while (log.length > MAX_LOG_ENTRIES) log.shift();
-      var est = estimatedBytes(log);
-      while (est > MAX_STORAGE_BYTES && log.length > 100) {
-        log.splice(0, Math.floor(log.length / 10));
-        est = estimatedBytes(log);
-      }
-      localStorage.setItem(LOG_KEY, JSON.stringify(log));
-    } catch (e) { /* storage full — aggressively trim */ }
-  }
-
   function appendToLog(key, raw) {
     var entry = minimizeEntry(key, raw);
-    var log = loadLog();
-    log.push(entry);
-    saveLog(log);
+    logCache.push(entry);
+    if (db) {
+      writeToDB(entry);
+    } else if (dbPending) {
+      writeQueue.push(entry);
+    } else {
+      tryLocalStorageFallback(entry);
+    }
+  }
+
+  function tryLocalStorageFallback(entry) {
+    try {
+      var arr = JSON.parse(localStorage.getItem(FALLBACK_KEY) || '[]');
+      arr.push(entry);
+      if (arr.length > 10000) arr.splice(0, 5000);
+      localStorage.setItem(FALLBACK_KEY, JSON.stringify(arr));
+    } catch (e) {}
   }
 
   function onUpdate(callback) {
-    if (typeof callback === 'function') {
-      listeners.push(callback);
-    }
+    if (typeof callback === 'function') listeners.push(callback);
   }
 
   function onStorageWarning(callback) {
@@ -237,40 +337,48 @@ var DATA_ENGINE = (function () {
   }
 
   function getLog() {
-    return loadLog();
+    return logCache;
   }
 
   function clearLog() {
-    try { localStorage.removeItem(LOG_KEY); } catch (e) {}
+    logCache = [];
+    if (db) {
+      try {
+        var tx = db.transaction(STORE_NAME, 'readwrite');
+        tx.objectStore(STORE_NAME).clear();
+      } catch (e) {}
+    }
+    try { localStorage.removeItem(FALLBACK_KEY); } catch (e) {}
   }
 
   function checkStorage() {
-    var log = loadLog();
-    var est = estimatedBytes(log);
-    var pct = Math.round((est / MAX_STORAGE_BYTES) * 100);
-    var quota = 0;
+    try {
+      var est = new Blob([JSON.stringify(logCache)]).size;
+    } catch (e) {
+      var est = logCache.length * 80;
+    }
+    var pct = 0;
     if (typeof navigator !== 'undefined' && navigator.storage && navigator.storage.estimate) {
       navigator.storage.estimate().then(function(q) {
-        quota = Math.round(q.usage / q.quota * 100);
+        var qpct = q.quota > 0 ? Math.round(q.usage / q.quota * 100) : 0;
         for (var i = 0; i < storageListeners.length; i++) {
-          try { storageListeners[i]({ used: est, max: MAX_STORAGE_BYTES, pct: pct, quotaPct: quota }); } catch (e) {}
+          try { storageListeners[i]({ entries: logCache.length, bytes: est, quotaPct: qpct }); } catch (e) {}
         }
       }).catch(function() {});
     }
-    return { used: est, max: MAX_STORAGE_BYTES, pct: pct };
+    return { entries: logCache.length, bytes: est };
   }
 
   function getLogStats() {
-    var log = loadLog();
-    if (log.length === 0) return { entries: 0, firstEntry: null, days: 0, keys: {}, storage: checkStorage() };
-    var first = log[0].t;
+    if (logCache.length === 0) return { entries: 0, firstEntry: null, days: 0, keys: {}, storage: checkStorage() };
+    var first = logCache[0].t;
     var keys = {};
-    for (var i = 0; i < log.length; i++) {
-      var k = log[i].k;
+    for (var i = 0; i < logCache.length; i++) {
+      var k = logCache[i].k;
       keys[k] = (keys[k] || 0) + 1;
     }
     return {
-      entries: log.length,
+      entries: logCache.length,
       firstEntry: first,
       days: Math.round((Date.now() - first) / 86400000 * 10) / 10,
       keys: keys,
@@ -279,21 +387,18 @@ var DATA_ENGINE = (function () {
   }
 
   function exportLogCSV() {
-    var log = loadLog();
-    if (log.length === 0) return '';
+    if (logCache.length === 0) return '';
     var csv = 'timestamp,source,data\n';
-    for (var i = 0; i < log.length; i++) {
-      var e = log[i];
-      var dateStr = new Date(e.t).toISOString();
-      var dataStr = JSON.stringify(e.d).replace(/"/g, '""');
-      csv += dateStr + ',' + e.k + ',"' + dataStr + '"\n';
+    for (var i = 0; i < logCache.length; i++) {
+      var e = logCache[i];
+      csv += new Date(e.t).toISOString() + ',' + e.k + ',"' + JSON.stringify(e.d).replace(/"/g, '""') + '"\n';
       if (csv.length > 5000000) break;
     }
     return csv;
   }
 
   function exportLogJSON() {
-    return JSON.stringify(loadLog(), null, 2);
+    return JSON.stringify(logCache, null, 2);
   }
 
   var originalNormalize = normalize;
@@ -301,6 +406,9 @@ var DATA_ENGINE = (function () {
     originalNormalize(key, raw);
     appendToLog(key, raw);
   };
+
+  openDB();
+  loadFromDB();
 
   return {
     start: start, stop: stop, onUpdate: onUpdate, get: get,
