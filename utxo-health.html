@@ -440,6 +440,8 @@ function updateAll() {
   document.getElementById('seg-ins').querySelector('.seg-label').textContent = 'Inscriptions ' + (insPctDisp > 1 ? Math.round(insPctDisp) : insPctDisp.toFixed(1)) + '%';
    document.getElementById('total-utxo-pct').textContent = ((finRatio + dustRatio + insRatio) * 100).toFixed(1) + '%';
 
+  document.getElementById('kpi-total').textContent = formatNum(Math.round(BASE_UTXOS));
+  document.getElementById('kpi-dust').textContent = (dustPctDisp > 0.1 ? Math.round(dustPctDisp) : '< 0.5') + '%';
   document.getElementById('kpi-ins').textContent = (insPctDisp > 0.1 ? '~' + Math.round(insPctDisp) : '< 0.5') + '%';
 
   var health = 95 - 10 * (insRatio / 0.10) - 5 * (dustRatio / 0.30);
