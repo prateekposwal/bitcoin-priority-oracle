@@ -183,6 +183,11 @@ if (window.location.hostname.includes('vercel.app')) {
   <div class="actions">
     <a href="#project" class="btn-primary">See What We Found →</a>
     <a href="/decide" class="btn-secondary">Use the Decision Center</a>
+  </div>
+  <div class="live-badge" id="live-badge" style="display:none;">
+    <span class="dot"></span>
+    <span>Live — updates every 60s</span>
+    <span class="clock" id="live-badge-clock"></span>
   </div></div>
 
 <!-- ─── STATS ─── -->
@@ -394,5 +399,25 @@ API.onData(function(d) {
 });
 API.start({ interval: 60000 });
 </script>
+<script>
+// Live badge update
+var _badgeEl = document.getElementById('live-badge');
+var _badgeClock = document.getElementById('live-badge-clock');
+function updateBadge() {
+  if (_badgeEl && _badgeClock) {
+    _badgeEl.style.display = 'inline-flex';
+    if (!_badgeEl._start) _badgeEl._start = Date.now();
+    var s = Math.floor((Date.now() - _badgeEl._start) / 1000);
+    _badgeClock.textContent = s < 5 ? 'just now' : s + 's ago';
+  }
+}
+setInterval(updateBadge, 2000);
+updateBadge();
+// Also update badge timestamp when API data arrives
+var _origOnData = API.onData;
+API.onData = function(cb) {
+  _origOnData(cb);
+  API.onData = _origOnData; // restore
+};</script>
 </body>
 </html>
