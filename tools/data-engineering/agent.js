@@ -6,6 +6,7 @@ var integrate = require('./integrate.js');
 var monitor = require('./monitor.js');
 var report = require('./report.js');
 var tracker = require('../../tools/agents/03-block-interval-tracker.js');
+var btcRpc = require('../../tools/agents/06-bitcoin-core-rpc.js');
 
 var STATE = { lastRun: null, cycleCount: 0, discoveredSources: [], issues: [] };
 var STATE_FILE = path.resolve(__dirname, '..', '..', CONFIG.agent.stateFile);
@@ -46,7 +47,22 @@ async function runCycle() {
   var freshness = monitor.getFreshnessReport ? await monitor.getFreshnessReport('captured-data') : { sources: {} };
   log('Freshness checked');
 
-  // Step 3: Run block interval tracker
+  // Step 3: Check Bitcoin Core node (if running)
+  try {
+    var btcResult = await btcRpc.run();
+    if (btcResult.ok) {
+      var bp = btcResult.blockchain;
+      log('Bitcoin Core: ' + bp.blocks + ' blocks, ' + btcResult.blocks.length + ' fee stats, ' + btcResult.peerCount + ' peers');
+      if (btcResult.blocks.length > 0) {
+        var latest = btcResult.blocks[0];
+        if (latest.feePercentiles && latest.feePercentiles.length === 5) {
+          log('  Fee percentiles (p10/p25/p50/p75/p90): ' + latest.feePercentiles.map(function(v) { return (v / 1000).toFixed(1); }).join('/') + ' sat/vB');
+        }
+      }
+    }
+  } catch (e) { log('Bitcoin Core: offline (' + e.message + ')'); }
+
+  // Step 4: Run block interval tracker
   try {
     var blockMetrics = tracker.track ? await tracker.track() : null;
     if (blockMetrics) {
