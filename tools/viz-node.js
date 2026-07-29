@@ -1,9 +1,6 @@
 var VIZ_Node = (function() {
   var canvas, ctx, w = 0, h = 0;
   var animFrame = null;
-  var pulseTime = 0;
-
-  function isMobile() { return w < 480; }
 
   var values = {
     hardware: 500,
@@ -15,27 +12,16 @@ var VIZ_Node = (function() {
   var STORAGE_FIXED = 50;
   var DEPRECIATION_YEARS = 3;
 
-  var COLORS = {
-    hw: '#F7931A',
-    bw: '#58A6FF',
-    elec: '#3FB950',
-    storage: '#BC8CFF'
-  };
-
-  var SEG_ORDER = ['hw', 'bw', 'elec', 'storage'];
-  var SEG_LABELS = {
-    hw: 'Hardware',
-    bw: 'Bandwidth',
-    elec: 'Electricity',
-    storage: 'Storage'
-  };
-
-  var targetCosts = { hw: 0, bw: 0, elec: 0, storage: 0, total: 0 };
-  var currentCosts = { hw: 0, bw: 0, elec: 0, storage: 0, total: 0 };
+  var targetCosts = { hardware: 0, bandwidth: 0, electricity: 0, storage: 0, total: 0 };
+  var currentCosts = { hardware: 0, bandwidth: 0, electricity: 0, storage: 0, total: 0 };
   var animating = false;
   var animStart = 0;
   var animDuration = 300;
-  var prevCosts = { hw: 0, bw: 0, elec: 0, storage: 0, total: 0 };
+  var prevCosts = { hardware: 0, bandwidth: 0, electricity: 0, storage: 0, total: 0 };
+
+  function isMobile() {
+    return w < 480;
+  }
 
   function init(canvasId) {
     canvas = document.getElementById(canvasId);
@@ -120,7 +106,7 @@ var VIZ_Node = (function() {
   }
 
   function onSliderChange() {
-    prevCosts = { hw: currentCosts.hw, bw: currentCosts.bw, elec: currentCosts.elec, storage: currentCosts.storage, total: currentCosts.total };
+    prevCosts = { hardware: currentCosts.hardware, bandwidth: currentCosts.bandwidth, electricity: currentCosts.electricity, storage: currentCosts.storage, total: currentCosts.total };
     computeTarget();
     animStart = performance.now();
     animating = true;
@@ -132,7 +118,7 @@ var VIZ_Node = (function() {
     var elec = (values.power * 24 * 365 / 1000) * values.rate;
     var storage = STORAGE_FIXED;
     var total = hw + bw + elec + storage;
-    targetCosts = { hw: hw, bw: bw, elec: elec, storage: storage, total: total };
+    targetCosts = { hardware: hw, bandwidth: bw, electricity: elec, storage: storage, total: total };
   }
 
   function lerp(a, b, t) {
@@ -144,15 +130,29 @@ var VIZ_Node = (function() {
     var elapsed = performance.now() - animStart;
     var t = Math.min(1, elapsed / animDuration);
     var ease = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
-    currentCosts.hw = lerp(prevCosts.hw, targetCosts.hw, ease);
-    currentCosts.bw = lerp(prevCosts.bw, targetCosts.bw, ease);
-    currentCosts.elec = lerp(prevCosts.elec, targetCosts.elec, ease);
+    currentCosts.hardware = lerp(prevCosts.hardware, targetCosts.hardware, ease);
+    currentCosts.bandwidth = lerp(prevCosts.bandwidth, targetCosts.bandwidth, ease);
+    currentCosts.electricity = lerp(prevCosts.electricity, targetCosts.electricity, ease);
     currentCosts.storage = lerp(prevCosts.storage, targetCosts.storage, ease);
     currentCosts.total = lerp(prevCosts.total, targetCosts.total, ease);
     if (t >= 1) {
-      currentCosts = { hw: targetCosts.hw, bw: targetCosts.bw, elec: targetCosts.elec, storage: targetCosts.storage, total: targetCosts.total };
+      currentCosts = { hardware: targetCosts.hardware, bandwidth: targetCosts.bandwidth, electricity: targetCosts.electricity, storage: targetCosts.storage, total: targetCosts.total };
       animating = false;
     }
+  }
+
+  function roundRect(ctx, x, y, w, h, r) {
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.lineTo(x + w - r, y);
+    ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+    ctx.lineTo(x + w, y + h - r);
+    ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+    ctx.lineTo(x + r, y + h);
+    ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+    ctx.lineTo(x, y + r);
+    ctx.quadraticCurveTo(x, y, x + r, y);
+    ctx.closePath();
   }
 
   function draw() {
@@ -160,135 +160,108 @@ var VIZ_Node = (function() {
     updateAnimation();
 
     var c = currentCosts;
-    pulseTime += 0.02;
+    var mobile = isMobile();
 
     ctx.clearRect(0, 0, w, h);
     ctx.fillStyle = '#1A1612';
     ctx.fillRect(0, 0, w, h);
 
-    var segs = SEG_ORDER.map(function(k) {
-      return {
-        key: k,
-        label: SEG_LABELS[k],
-        cost: c[k],
-        color: COLORS[k]
-      };
-    }).filter(function(s) { return s.cost > 0; });
-
-    var totalCost = c.total || 1;
-    var cx = w / 2;
-    var cy = h * 0.42;
-    var baseOuterR = Math.min(w * 0.2, h * 0.45);
-    var pulse = 1 + Math.sin(pulseTime) * 0.008;
-    var outerR = baseOuterR * pulse;
-    var innerR = outerR * 0.55;
-
-    ctx.strokeStyle = 'rgba(58,50,40,0.3)';
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.arc(cx, cy, baseOuterR + 4, 0, Math.PI * 2);
-    ctx.stroke();
-
-    var pulseR = baseOuterR + 8 + Math.sin(pulseTime * 0.5) * 6;
-    ctx.strokeStyle = 'rgba(212,147,58,' + (0.06 + Math.sin(pulseTime * 0.5) * 0.03) + ')';
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    ctx.arc(cx, cy, pulseR, 0, Math.PI * 2);
-    ctx.stroke();
-
-    var startAngle = -Math.PI / 2;
-    var glowGap = 0.04;
-
-    segs.forEach(function(s) {
-      var segAngle = (s.cost / totalCost) * Math.PI * 2;
-      if (segAngle < 0.001) return;
-
-      var endAngle = startAngle + segAngle - glowGap;
-
-      ctx.save();
-      ctx.shadowColor = s.color;
-      ctx.shadowBlur = 20;
-      ctx.shadowOffsetX = 0;
-      ctx.shadowOffsetY = 0;
-
-      ctx.beginPath();
-      ctx.arc(cx, cy, outerR, startAngle, endAngle);
-      ctx.arc(cx, cy, innerR, endAngle, startAngle, true);
-      ctx.closePath();
-
-      ctx.fillStyle = s.color;
-      ctx.globalAlpha = 0.85;
-      ctx.fill();
-      ctx.globalAlpha = 1;
-      ctx.shadowBlur = 0;
-      ctx.restore();
-
-      startAngle += segAngle;
-    });
-
-    var centerGlow = ctx.createRadialGradient(cx, cy, innerR * 0.1, cx, cy, innerR * 0.9);
-    centerGlow.addColorStop(0, 'rgba(26,22,18,0)');
-    centerGlow.addColorStop(1, 'rgba(26,22,18,0.6)');
-    ctx.fillStyle = centerGlow;
-    ctx.beginPath();
-    ctx.arc(cx, cy, innerR, 0, Math.PI * 2);
-    ctx.fill();
-
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'bottom';
-    ctx.font = (isMobile() ? 'bold 24px' : 'bold 34px') + ' -apple-system, sans-serif';
-    ctx.fillStyle = '#E6EDF3';
-    ctx.fillText('$' + totalCost.toFixed(0), cx, cy + (isMobile() ? 2 : 4));
-
+    ctx.textAlign = 'left';
     ctx.textBaseline = 'top';
-    ctx.font = (isMobile() ? '13px' : '16px') + ' -apple-system, sans-serif';
-    ctx.fillStyle = '#8B949E';
-    ctx.fillText('/ year', cx, cy + (isMobile() ? 6 : 8));
+    ctx.font = '18px -apple-system, sans-serif';
+    ctx.fillStyle = '#EADCC8';
+    ctx.fillText('⬡ Your Node\'s Impact', 30, 14);
 
-    ctx.textBaseline = 'top';
-    ctx.font = (isMobile() ? '11px' : '13px') + ' -apple-system, sans-serif';
+    ctx.font = '12px -apple-system, sans-serif';
     ctx.fillStyle = '#6A5D4E';
-    ctx.fillText('~$' + (totalCost / 12).toFixed(0) + '/month', cx, cy + (isMobile() ? 24 : 30));
+    ctx.fillText('What running a full Bitcoin node accomplishes', 30, 40);
 
-    var labelR = outerR + (isMobile() ? 18 : 28);
-    startAngle = -Math.PI / 2;
-    segs.forEach(function(s) {
-      var segAngle = (s.cost / totalCost) * Math.PI * 2;
-      if (segAngle < 0.001) return;
-      var midAngle = startAngle + segAngle / 2;
-      var lx = cx + Math.cos(midAngle) * labelR;
-      var ly = cy + Math.sin(midAngle) * labelR;
+    var cardW = mobile ? w - 80 : Math.min(200, (w - 80) / 3);
+    var cardGap = mobile ? 16 : (w - 80 - cardW * 3) / 2;
+    var cardsStartY = 90;
 
-      ctx.textAlign = midAngle > Math.PI / 2 && midAngle < Math.PI * 1.5 ? 'right' : 'left';
-      ctx.textBaseline = 'middle';
-      ctx.font = (isMobile() ? '9px' : '11px') + ' -apple-system, sans-serif';
-      ctx.fillStyle = 'rgba(255,255,255,0.7)';
-      ctx.fillText('$' + s.cost.toFixed(0), lx, ly);
-      startAngle += segAngle;
-    });
+    var cardData = [
+      { value: '$924', label: 'Annual Cost', sub: 'hardware + bandwidth + power' },
+      { value: '4,426', label: 'Tx/Block', sub: 'avg transactions verified' },
+      { value: '960K', label: 'Blocks', sub: 'processed since genesis' }
+    ];
 
-    var legendY = cy + outerR + 30;
-    var legendItems = segs.map(function(s) {
-      return { label: s.label, cost: s.cost, color: s.color, pct: (s.cost / totalCost * 100).toFixed(1) };
-    });
-    for (var i = 0; i < legendItems.length; i++) {
-      var col = i % 2;
-      var row = Math.floor(i / 2);
-      var lx = (col === 0 ? 40 : w / 2 + 10);
-      var ly = legendY + row * (isMobile() ? 22 : 26);
-      ctx.fillStyle = legendItems[i].color;
-      ctx.beginPath();
-      ctx.arc(lx + 6, ly + 6, 5, 0, Math.PI * 2);
+    for (var i = 0; i < 3; i++) {
+      var cx = mobile ? 40 : 40 + i * (cardW + cardGap);
+      var cy = mobile ? cardsStartY + i * 90 : cardsStartY;
+
+      ctx.fillStyle = '#231F19';
+      ctx.strokeStyle = '#3A3228';
+      ctx.lineWidth = 1;
+      roundRect(ctx, cx, cy, cardW, 80, 10);
       ctx.fill();
-      ctx.textAlign = 'left';
+      ctx.stroke();
+
+      ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.font = (isMobile() ? '10px' : '12px') + ' -apple-system, sans-serif';
-      ctx.fillStyle = '#9B8B78';
-      ctx.fillText(legendItems[i].label, lx + 16, ly + 6);
-      ctx.textAlign = 'right';
-      ctx.font = (isMobile() ? 'bold 10px' : 'bold 13px') + ' -apple-system, sans-serif';
+      ctx.font = 'bold 28px -apple-system, sans-serif';
       ctx.fillStyle = '#EADCC8';
-      ctx.fillText('$' + legendItems[i].cost.toFixed(0) + '/yr (' + legendItems[i].pct + '%)', lx + (col === 0 ? w/2 - 50 : w - 50), ly + 6);
+      ctx.fillText(cardData[i].value, cx + cardW / 2, cy + 30);
+
+      ctx.font = '11px -apple-system, sans-serif';
+      ctx.fillStyle = '#6A5D4E';
+      ctx.fillText(cardData[i].label, cx + cardW / 2, cy + 58);
+
+      ctx.font = '9px -apple-system, sans-serif';
+      ctx.fillStyle = '#6A5D4E';
+      ctx.fillText(cardData[i].sub, cx + cardW / 2, cy + 72);
+    }
+
+    var barY = mobile ? cardsStartY + 3 * 90 + 16 : 200;
+    var barH = 36;
+    var barPad = 40;
+    var barW = w - barPad * 2;
+
+    var segs = [
+      { key: 'hardware', label: 'Hardware', color: '#D4933A', cost: c.hardware },
+      { key: 'bandwidth', label: 'Bandwidth', color: '#58A6FF', cost: c.bandwidth },
+      { key: 'electricity', label: 'Electricity', color: '#3BA35D', cost: c.electricity },
+      { key: 'storage', label: 'Storage', color: '#BC8CFF', cost: c.storage }
+    ];
+
+    var total = segs.reduce(function(s, seg) { return s + seg.cost; }, 0);
+    if (total < 1) total = 1;
+    var x = barPad;
+
+    segs.forEach(function(seg) {
+      var segW = (seg.cost / total) * barW;
+      if (segW < 1 && seg.cost > 0) segW = 1;
+      ctx.fillStyle = seg.color;
+      ctx.fillRect(x, barY, segW, barH);
+
+      if (segW > 80) {
+        ctx.fillStyle = '#1A1612';
+        ctx.font = 'bold 11px -apple-system, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('$' + Math.round(seg.cost) + ' ' + seg.label, x + segW / 2, barY + barH / 2);
+      } else {
+        ctx.fillStyle = '#9B8B78';
+        ctx.font = '10px -apple-system, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'top';
+        ctx.fillText(seg.label + ' $' + Math.round(seg.cost), x + segW / 2, barY + barH + 4);
+      }
+      x += segW;
+    });
+
+    var textY = mobile ? barY + barH + 36 : 280;
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'top';
+    ctx.font = (mobile ? '11px' : '13px') + ' -apple-system, sans-serif';
+    ctx.fillStyle = '#9B8B78';
+    var lines = [
+      'Your node has verified 960,142 blocks and relayed',
+      '1.4 billion transactions. Running a full node',
+      'strengthens the network\'s security and decentralization.'
+    ];
+    for (var li = 0; li < lines.length; li++) {
+      ctx.fillText(lines[li], 40, textY + li * 20);
     }
   }
 
