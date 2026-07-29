@@ -30,7 +30,7 @@ function updateBlockSpace() {
   var blockSizeMB = ((fw + iw) / 1000000).toFixed(1);
   setText('kpi-tx', '~' + totalTx.toLocaleString());
   setText('kpi-size', '~' + blockSizeMB + ' MB');
-  setText('kpi-ins-pct', Math.round(ip) + '%');
+  setText('kpi-ins-pct', (ip >= 1 ? Math.round(ip) : ip.toFixed(1)) + '%');
 
   // Update slider output values
   setText('so-fin', Math.round(fp) + '%');
