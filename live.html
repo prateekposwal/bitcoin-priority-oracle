@@ -454,7 +454,7 @@ DATA_ENGINE.onUpdate(function() {
   if (d.lightning) {
     document.getElementById('ln-nodes').textContent = (d.lightning.node_count || 0).toLocaleString();
     document.getElementById('ln-channels').textContent = (d.lightning.channel_count || 0).toLocaleString();
-    document.getElementById('ln-capacity').textContent = (d.lightning.total_capacity || 0).toFixed(0) + ' BTC';
+    document.getElementById('ln-capacity').textContent = ((d.lightning.total_capacity || 0) / 100000000).toFixed(1) + ' BTC';
   }
 
   var exV = document.getElementById('ex-verdict');
@@ -552,7 +552,7 @@ DATA_ENGINE.onUpdate(function() {
   var mpCount = d.mempool ? (d.mempool.count || 0).toLocaleString() : '--';
   var blockH = d.block_height ? d.block_height.toLocaleString() : '--';
   var lnNodes = d.lightning ? (d.lightning.node_count || 0).toLocaleString() : '--';
-  var lnCap = d.lightning ? (d.lightning.total_capacity || 0).toFixed(0) + ' BTC' : '--';
+  var lnCap = d.lightning ? ((d.lightning.total_capacity || 0) / 100000000).toFixed(1) + ' BTC' : '--';
   var updated = d.last_updated ? new Date(d.last_updated).toLocaleTimeString() : '--';
   var btcDisplay = btcPrice ? '$' + btcPrice.toLocaleString() : '--';
 
