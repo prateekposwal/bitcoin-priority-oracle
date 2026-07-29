@@ -409,7 +409,13 @@ footer .links { display: flex; gap: 16px; justify-content: center; flex-wrap: wr
 var liveFees = null, liveMempoolTx = null, liveBtcPrice = null;
 var LIVE_BASE_TX = 3000;
 var debugEl = document.getElementById('debug-log');
-if (debugEl) debugEl.textContent = 'Script loaded at ' + new Date().toLocaleTimeString();
+if (debugEl) { debugEl.textContent = 'Script loaded at ' + new Date().toLocaleTimeString() + ' | API=' + (typeof API); }
+
+// If API module is not available, render composition with defaults immediately
+if (typeof API === 'undefined') {
+  if (debugEl) debugEl.textContent += ' | API not found, using direct render';
+  updateBlockSpace();
+}
 
 function updateBlockSpace() {
   try {
