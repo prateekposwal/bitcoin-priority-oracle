@@ -423,7 +423,7 @@ var VIZ_Lightning = (function() {
     ctx.fillText('Expensive (>25)', lx + 14, ly + 42);
 
     // Node size hint
-    ctx.fillStyle = 'rgba(255,255,255,0.25)';
+    ctx.fillStyle = 'rgba(255,255,255,0.6)';
     ctx.fillText('○ size = channel count', lx, ly + 60);
 
     // Vignette
@@ -436,5 +436,5 @@ var VIZ_Lightning = (function() {
     animId = requestAnimationFrame(loop);
   }
 
-  return { init: init };
+  return { init: init, resize: resize };
 })();
