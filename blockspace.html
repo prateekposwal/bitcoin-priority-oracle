@@ -408,10 +408,14 @@ footer .links { display: flex; gap: 16px; justify-content: center; flex-wrap: wr
 <script>
 var liveFees = null, liveMempoolTx = null, liveBtcPrice = null;
 var LIVE_BASE_TX = 3000;
+var debugEl = document.getElementById('debug-log');
+if (debugEl) debugEl.textContent = 'Script loaded at ' + new Date().toLocaleTimeString();
 
 function updateBlockSpace() {
   try {
-  var vol = parseFloat(document.getElementById('sl-vol').value);
+  var sl = document.getElementById('sl-vol');
+  if (!sl) { var dbg = document.getElementById('debug-log'); if (dbg) dbg.textContent = 'Error: sl-vol not found'; return; }
+  var vol = parseFloat(sl.value);
   document.getElementById('sl-vol-label').textContent = vol + 'K';
 
   var BASE_TX = liveMempoolTx ? Math.max(500, Math.round(liveMempoolTx / 144)) : LIVE_BASE_TX;
@@ -453,17 +457,18 @@ function updateBlockSpace() {
   try{document.getElementById('kpi-ins-pct').textContent=Math.round(insPct)+'%';}catch(e){}
   try{document.getElementById('so-fin').textContent=Math.round(finPct)+'%';}catch(e){}
   try{document.getElementById('so-ins').textContent=Math.round(insPct)+'%';}catch(e){}
-  try{document.getElementById('so-ratio').textContent=(insPct/(finPct||1)).toFixed(2);}catch(e){}
+  try{document.getElementById('so-ratio').textContent=(insPct/(finPct||1)).toFixed(2);}catch(e2){}
   } catch(e) {
     var dbg = document.getElementById('debug-log');
-    if (dbg) dbg.textContent = 'Error: ' + e.message;
+    if (dbg) dbg.textContent = 'Error: ' + (e && e.message ? e.message : String(e));
+    console.error('[blockspace]', e);
   }
 }
 
 API.onData(function(d) {
-  liveFees = d.fees;
-  liveMempoolTx = d.mempool.unconfirmed_tx;
-  liveBtcPrice = d.btc_price;
+  if (d && d.fees) liveFees = d.fees;
+  if (d && d.mempool) liveMempoolTx = d.mempool.unconfirmed_tx;
+  if (d) liveBtcPrice = d.btc_price;
   var now = Date.now();
   var then = new Date(d.timestamp).getTime();
   var secsAgo = Math.round((now - then) / 1000);
@@ -500,9 +505,13 @@ API.onData(function(d) {
   }
   updateBlockSpace();
 });
-
-updateBlockSpace();
-API.start({ interval: 60000 });
+try {
+  updateBlockSpace();
+  API.start({ interval: 60000 });
+} catch(e) {
+  var d2 = document.getElementById('debug-log');
+  if (d2) d2.textContent = 'Init error: ' + (e && e.message ? e.message : String(e));
+}
 </script>
 
 </body>
