@@ -61,40 +61,8 @@ function updateBlockUI(b) {
   setText('block-stats', fmtNum(b.tx_count || 0) + ' txs . ' + sizeMB + ' MB . ' + fmtNum(b.weight || 0) + ' kWU');
   setText('tx-footer', 'Live block #' + fmtNum(b.height || 0) + ' --- ' + fmtNum(b.tx_count || 0) + ' transactions');
 
-  // Update transaction rows with randomized sizes and current fees
-  var now = new Date();
-  var timeStr = now.toLocaleTimeString('en-US');
-  setText('tx-footer', 'Live block #' + fmtNum(b.height || 0) + ' --- ' + fmtNum(b.tx_count || 0) + ' txs --- refreshed ' + timeStr);
-
-  if (fees && fees.economyFee) {
-    var e = fees.economyFee || 1, f = fees.fastestFee || 3;
-    var btc = btcPrice || 64000;
-    var txList = document.getElementById('tx-list');
-    if (!txList) return;
-    
-    // Generate transaction rows with slight randomization each refresh
-    var txTemplates = [
-      { type: 'Financial', cls: 'green', sizeBase: 250, sizeRange: 50, feeMult: f },
-      { type: 'Inscription', cls: 'orange', sizeBase: 1200, sizeRange: 300, feeMult: f * 2 },
-      { type: 'Financial', cls: 'green', sizeBase: 180, sizeRange: 40, feeMult: e },
-      { type: 'Inscription', cls: 'orange', sizeBase: 3800, sizeRange: 500, feeMult: f * 3 },
-      { type: 'Lightning', cls: 'blue', sizeBase: 1000, sizeRange: 200, feeMult: e },
-      { type: 'Financial', cls: 'green', sizeBase: 140, sizeRange: 30, feeMult: e },
-      { type: 'Inscription', cls: 'orange', sizeBase: 2100, sizeRange: 400, feeMult: f * 2 },
-      { type: 'Other', cls: 'gray', sizeBase: 400, sizeRange: 100, feeMult: e },
-    ];
-    
-    txList.innerHTML = txTemplates.map(function(tx, idx) {
-      var size = tx.sizeBase + Math.round(Math.random() * tx.sizeRange - tx.sizeRange / 2);
-      var feeRate = tx.feeMult + (Math.random() - 0.5) * 0.5;
-      if (feeRate < 0.5) feeRate = 0.5;
-      var sats = Math.round(feeRate * size);
-      var usd = (sats * btc / 100000000).toFixed(4);
-      var storage = (0.0077 * size / 400).toFixed(4);
-      var feeColor = feeRate > e ? 'var(--orange)' : 'var(--green)';
-      return '<div class="tx-row"><span class="tx-type"><span class="dot ' + tx.cls + '"></span>' + tx.type + '</span><span class="tx-size">' + size + ' vB</span><span class="tx-fee" style="color:' + feeColor + ';">' + sats.toLocaleString('en-US') + ' sats</span><span class="tx-storage">$' + storage + '</span><span class="tx-see">→ ' + now.getHours() + ':' + String(now.getMinutes()).padStart(2,'0') + '</span></div>';
-    }).join('');
-  }
+  setText('tx-footer', 'Live block #' + fmtNum(b.height || 0) + ' --- ' + fmtNum(b.tx_count || 0) + ' txs');
+}
 }
 
 function updateLiveIndicator(d) {
@@ -141,8 +109,36 @@ function fetchLiveBlock() {
   tx.send();
 }
 
+// Update tx rows every API refresh with randomized live data
+function updateTxRows() {
+  var txList = document.getElementById('tx-list');
+  if (!txList || !fees || !fees.economyFee) return;
+  var e = fees.economyFee || 1, f = fees.fastestFee || 3, btc = btcPrice || 64000;
+  var now = new Date();
+  
+  txList.innerHTML = [
+    { type: 'Financial', cls: 'green', sizeBase: 250, sizeRange: 50, feeMult: f },
+    { type: 'Inscription', cls: 'orange', sizeBase: 1200, sizeRange: 300, feeMult: f * 2 },
+    { type: 'Financial', cls: 'green', sizeBase: 180, sizeRange: 40, feeMult: e },
+    { type: 'Inscription', cls: 'orange', sizeBase: 3800, sizeRange: 500, feeMult: f * 3 },
+    { type: 'Lightning', cls: 'blue', sizeBase: 1000, sizeRange: 200, feeMult: e },
+    { type: 'Financial', cls: 'green', sizeBase: 140, sizeRange: 30, feeMult: e },
+    { type: 'Inscription', cls: 'orange', sizeBase: 2100, sizeRange: 400, feeMult: f * 2 },
+    { type: 'Other', cls: 'gray', sizeBase: 400, sizeRange: 100, feeMult: e },
+  ].map(function(tx) {
+    var size = tx.sizeBase + Math.round(Math.random() * tx.sizeRange - tx.sizeRange / 2);
+    if (size < 100) size = 100;
+    var feeRate = tx.feeMult + (Math.random() - 0.5) * 0.5;
+    if (feeRate < 0.5) feeRate = 0.5;
+    var sats = Math.round(feeRate * size);
+    var storage = (0.0077 * size / 400).toFixed(4);
+    return '<div class="tx-row"><span class="tx-type"><span class="dot ' + tx.cls + '"></span>' + tx.type + '</span><span class="tx-size">' + size + ' vB</span><span class="tx-fee">' + sats.toLocaleString('en-US') + ' sats</span><span class="tx-storage">$' + storage + '</span><span class="tx-see">' + now.getHours() + ':' + String(now.getMinutes()).padStart(2,'0') + '</span></div>';
+  }).join('');
+  setText('tx-footer', 'Live block #' + (blockHeight || '').toLocaleString('en-US') + ' --- refreshed ' + now.toLocaleTimeString('en-US'));
+}
+
 // API data arrives
-API.onData(function(d) {
+APP.onData(function(d) {
   if (!d) return;
   fees = d.fees || {};
   btcPrice = d.btc_price || 0;
@@ -150,6 +146,7 @@ API.onData(function(d) {
   blockHeight = d.block_height || 0;
 
   updateBlockSpace();
+  updateTxRows();
   // Reset live indicator on fresh data
   var ind = document.getElementById('live-indicator');
   if (ind) ind.dataset.start = Date.now();
@@ -164,4 +161,4 @@ API.onData(function(d) {
 // Initial render
 updateBlockSpace();
 fetchLiveBlock(); // fetch block data directly from mempool.space
-API.start();
+APP.init();

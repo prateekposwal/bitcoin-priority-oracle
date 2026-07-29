@@ -369,9 +369,9 @@ if (window.location.hostname.includes('vercel.app')) {
   <p>Bitcoin Sahi — Blockchain Research & Development. Built in public.</p>
 </footer>
 
-<script src="/tools/api.js"></script>
+<script src="/tools/app.js"></script>
 <script>
-API.onData(function(d) {
+APP.onData(function(d) {
   if (!d) return;
   var btc = d.btc_price || 63900;
   var fees = d.fees || {};
@@ -398,7 +398,7 @@ API.onData(function(d) {
   document.getElementById('stat-externality').textContent = '$' + extK + 'K';
   document.getElementById('stat-ratio').textContent = lowestRatio + 'x - ' + highestRatio + 'x';
 });
-API.start();
+APP.init();
 </script>
 <script>
 (function(){
