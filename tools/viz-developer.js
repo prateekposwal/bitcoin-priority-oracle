@@ -53,8 +53,10 @@ var VIZ_Developer = (function() {
       var card = document.createElement('div');
       card.id = 'dev-card-' + ep.key;
       card.style.cssText =
-        'background:#2A2622;border-radius:10px;padding:14px;transition:background 0.3s;' +
-        'border:1px solid transparent;position:relative;overflow:hidden;';
+        'background:#2A2622;border-radius:10px;padding:14px;transition:all 0.3s;' +
+        'border:1px solid transparent;position:relative;overflow:hidden;cursor:pointer;';
+      card.title = 'Click to open ' + ep.url;
+      card.addEventListener('click', function() { window.open(ep.url, '_blank'); });
       gridEl.appendChild(card);
     });
 
@@ -73,6 +75,8 @@ var VIZ_Developer = (function() {
     checkAll();
     checkTimer = setInterval(checkAll, CHECK_INTERVAL);
     refreshTimer = setInterval(render, 3000);
+
+    window.addEventListener('resize', resize);
 
     var resizeObserver = new ResizeObserver(function() {
       render();
@@ -154,9 +158,10 @@ var VIZ_Developer = (function() {
 
       var latencyText = s.latency !== null ? s.latency + ' ms' : '—';
 
+      var openUrl = ep.url;
       card.innerHTML =
         '<div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:6px;">' +
-          '<div style="font-size:12px;font-weight:600;color:#E8E5E0;font-family:monospace;word-break:break-all;line-height:1.3;flex:1;min-width:0;padding-right:8px;">' +
+          '<div style="font-size:12px;font-weight:600;color:#F7931A;font-family:monospace;word-break:break-all;line-height:1.3;flex:1;min-width:0;padding-right:8px;text-decoration:underline;text-decoration-color:rgba(247,147,26,0.3);">' +
             ep.url.replace('https://', '') +
           '</div>' +
           '<span style="font-size:10px;font-weight:700;color:' + methodColor + ';background:' + methodColor + '15;padding:2px 6px;border-radius:4px;white-space:nowrap;flex-shrink:0;">' + ep.method + '</span>' +
@@ -165,6 +170,7 @@ var VIZ_Developer = (function() {
           '<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:' + statusClass + ';box-shadow:0 0 4px ' + statusClass + ';"></span>' +
           '<span style="font-size:11px;color:' + (s.ok ? '#3FB950' : '#F85149') + ';font-weight:500;">' + (s.ok ? 'Responding' : 'Down') + '</span>' +
           '<span style="font-size:11px;color:rgba(255,255,255,0.45);">' + latencyText + '</span>' +
+          '<span style="margin-left:auto;font-size:10px;color:rgba(247,147,26,0.6);font-weight:600;">\u2197 Test</span>' +
         '</div>' +
         '<div style="font-size:10px;color:rgba(255,255,255,0.35);font-family:monospace;background:#1A1612;border-radius:4px;padding:5px 7px;line-height:1.4;overflow:hidden;text-overflow:ellipsis;max-height:36px;word-break:break-all;">' +
           dataPreview +
@@ -175,7 +181,12 @@ var VIZ_Developer = (function() {
     });
   }
 
-  function resize() {}
+  function resize() {
+    if (gridEl) {
+      var w = window.innerWidth;
+      gridEl.style.gridTemplateColumns = w < 600 ? '1fr' : '1fr 1fr';
+    }
+  }
 
   return { init: init, resize: resize };
 })();

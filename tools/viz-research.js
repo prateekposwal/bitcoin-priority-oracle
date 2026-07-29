@@ -78,7 +78,7 @@ const VIZ_Research = (() => {
     var pw = parent ? parent.clientWidth : window.innerWidth;
     if (!pw || pw < 100) pw = window.innerWidth;
     var dpr = window.devicePixelRatio || 1;
-    w = Math.min(pw, 1200);
+    w = pw;
     stacked = w < 768;
     h = stacked ? 1000 : 600;
     canvas.width = w * dpr;
