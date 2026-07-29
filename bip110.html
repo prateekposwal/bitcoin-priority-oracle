@@ -164,24 +164,22 @@
 var BLOCKS_TOTAL = 965664, SIGNALING_START = 961632, FORK_WINDOW_START = 963648;
 var CURRENT_BLOCK = 960100, SIGNAL_PCT = 0, POOL_DATA = null;
 
-// Fetch real BIP-110 signaling data from bip110.orange.surf
+// Fetch BIP-110 signaling from blockstream.info (CORS-enabled)
 function fetchSignaling() {
   var x = new XMLHttpRequest();
-  x.open('GET', 'https://bip110.orange.surf/api/signaling?_=' + Date.now(), true);
+  x.open('GET', 'https://blockstream.info/api/blocks?limit=100', true);
   x.timeout = 10000;
   x.onload = function() {
     if (x.status !== 200) return;
     try {
-      var d = JSON.parse(x.responseText);
-      if (d.signals) {
-        var sigStr = d.signals;
-        var sigCount = 0;
-        for (var si = 0; si < sigStr.length; si++) {
-          if (sigStr[si] === '1') sigCount++;
-        }
-        SIGNAL_PCT = sigStr.length > 0 ? (sigCount / sigStr.length * 100) : 0;
+      var blocks = JSON.parse(x.responseText);
+      if (!blocks || !blocks.length) return;
+      var total = blocks.length;
+      var signaling = 0;
+      for (var bi = 0; bi < blocks.length; bi++) {
+        if (blocks[bi].version & 0x10) signaling++;  // bit 4
       }
-      if (d.pools) POOL_DATA = d.pools;
+      SIGNAL_PCT = total > 0 ? (signaling / total * 100) : 0;
       updateStatus();
     } catch(e) {}
   };
