@@ -196,7 +196,7 @@ footer .links { display: flex; gap: 16px; justify-content: center; flex-wrap: wr
         transform="rotate(-90 130 130)" />
     </svg>
     <div class="gauge-center">
-      <div class="score" id="gauge-score" style="color:var(--green);">85</div>
+      <div class="score" id="gauge-score" style="color:var(--green);">---</div>
       <div class="label">/ 100 Health</div>
     </div>
   </div>
@@ -206,22 +206,22 @@ footer .links { display: flex; gap: 16px; justify-content: center; flex-wrap: wr
 <div class="kpi-grid">
   <div class="kpi-card">
     <div class="kpi-label">Total UTXOs</div>
-    <div class="kpi-value" style="color:var(--blue);" id="kpi-total">~80M</div>
+    <div class="kpi-value" style="color:var(--blue);" id="kpi-total">---</div>
     <div class="kpi-sub">Active outputs</div>
   </div>
   <div class="kpi-card">
     <div class="kpi-label">Growth Rate</div>
-    <div class="kpi-value" style="color:var(--green);" id="kpi-growth">~5%/yr</div>
+    <div class="kpi-value" style="color:var(--green);" id="kpi-growth">---</div>
     <div class="kpi-sub">12-month trailing</div>
   </div>
   <div class="kpi-card">
     <div class="kpi-label">Dust UTXOs</div>
-    <div class="kpi-value" style="color:var(--yellow);" id="kpi-dust">~30%</div>
+    <div class="kpi-value" style="color:var(--yellow);" id="kpi-dust">---</div>
     <div class="kpi-sub">Below economic spend</div>
   </div>
   <div class="kpi-card">
     <div class="kpi-label">Inscription UTXOs</div>
-    <div class="kpi-value" style="color:var(--orange);" id="kpi-ins">~2%</div>
+    <div class="kpi-value" style="color:var(--orange);" id="kpi-ins">---</div>
     <div class="kpi-sub">And growing</div>
   </div>
 </div>
@@ -229,11 +229,11 @@ footer .links { display: flex; gap: 16px; justify-content: center; flex-wrap: wr
 <!-- ─── UTXO COMPOSITION ─── -->
 <div class="composition-bar">
   <div class="bar-container">
-    <div class="bar-label-top"><span>UTXO Set Composition</span><span id="total-utxo-pct">100%</span></div>
+    <div class="bar-label-top"><span>UTXO Set Composition</span><span id="total-utxo-pct">---</span></div>
     <div class="bar-stack">
-      <div class="seg seg-green" id="seg-fin" style="width:68%;"><span class="seg-label">Financial 68%</span></div>
-      <div class="seg seg-orange" id="seg-dust" style="width:30%;"><span class="seg-label">Dust 30%</span></div>
-      <div class="seg seg-blue" id="seg-ins" style="width:2%;"><span class="seg-label">Inscriptions 2%</span></div>
+      <div class="seg seg-green" id="seg-fin" style="width:0%;"><span class="seg-label">---</span></div>
+      <div class="seg seg-orange" id="seg-dust" style="width:0%;"><span class="seg-label">---</span></div>
+      <div class="seg seg-blue" id="seg-ins" style="width:0%;"><span class="seg-label">---</span></div>
     </div>
     <div class="bar-legend">
       <span style="color:var(--green);">Financial UTXOs</span>
@@ -255,12 +255,12 @@ footer .links { display: flex; gap: 16px; justify-content: center; flex-wrap: wr
       <h3>Low Growth</h3>
       <div class="proj-desc">Current trend — organic adoption, ~100K inscriptions/mo</div>
       <div class="proj-bar-wrap">
-        <div class="proj-bar-label"><span>Today</span><span class="strong" id="proj-today">80M</span></div>
-        <div class="proj-bar-track"><div class="proj-bar-fill green" id="proj-bar-today" style="width:76%;">80M</div></div>
+        <div class="proj-bar-label"><span>Today</span><span class="strong" id="proj-today">---</span></div>
+        <div class="proj-bar-track"><div class="proj-bar-fill green" id="proj-bar-today" style="width:0%;">---</div></div>
       </div>
       <div class="proj-bar-wrap">
-        <div class="proj-bar-label"><span>Year 5</span><span class="strong" id="proj-low-val">102M</span></div>
-        <div class="proj-bar-track"><div class="proj-bar-fill green" id="proj-bar-low" style="width:97%;">+28%</div></div>
+        <div class="proj-bar-label"><span>Year 5</span><span class="strong" id="proj-low-val">---</span></div>
+        <div class="proj-bar-track"><div class="proj-bar-fill green" id="proj-bar-low" style="width:0%;">---</div></div>
       </div>
       <div class="proj-note">5% annual growth — consistent with historical averages</div>
     </div>
@@ -268,12 +268,12 @@ footer .links { display: flex; gap: 16px; justify-content: center; flex-wrap: wr
       <h3>High Growth</h3>
       <div class="proj-desc">Inscription mania — elevated volume drives UTXO explosion</div>
       <div class="proj-bar-wrap">
-        <div class="proj-bar-label"><span>Today</span><span class="strong">80M</span></div>
-        <div class="proj-bar-track"><div class="proj-bar-fill orange" style="width:44%;">80M</div></div>
+        <div class="proj-bar-label"><span>Today</span><span class="strong" id="proj-high-today">---</span></div>
+        <div class="proj-bar-track"><div class="proj-bar-fill orange" id="proj-bar-high-today" style="width:0%;">---</div></div>
       </div>
       <div class="proj-bar-wrap">
-        <div class="proj-bar-label"><span>Year 5</span><span class="strong" id="proj-high-val">161M</span></div>
-        <div class="proj-bar-track"><div class="proj-bar-fill orange" id="proj-bar-high" style="width:89%;">+101%</div></div>
+        <div class="proj-bar-label"><span>Year 5</span><span class="strong" id="proj-high-val">---</span></div>
+        <div class="proj-bar-track"><div class="proj-bar-fill orange" id="proj-bar-high" style="width:0%;">---</div></div>
       </div>
       <div class="proj-note">15% annual growth — driven by sustained inscription demand</div>
     </div>
@@ -287,22 +287,22 @@ footer .links { display: flex; gap: 16px; justify-content: center; flex-wrap: wr
   <p class="section-text">Each inscription UTXO must be tracked by every full node forever. The fee market prices block space — not permanent storage.</p>
 
   <div class="externality-box">
-    <div class="ex-hero" id="ex-annual" style="color:var(--orange);">$9,240</div>
+    <div class="ex-hero" id="ex-annual" style="color:var(--orange);">---</div>
     <div class="ex-desc">Estimated annual storage cost of inscription UTXOs, <strong>spread across all node operators</strong> and NOT priced into transaction fees.</div>
     <div class="ex-scenarios">
       <div class="ex-scenario">
         <div class="ex-s-lbl">Current (100K/mo)</div>
-        <div class="ex-s-val" id="ex-current">$9,240</div>
+        <div class="ex-s-val" id="ex-current">---</div>
         <div class="ex-s-sub">~1.2M new inscription UTXOs/yr</div>
       </div>
       <div class="ex-scenario">
         <div class="ex-s-lbl">2× Volume</div>
-        <div class="ex-s-val" id="ex-2x">$18,480</div>
+        <div class="ex-s-val" id="ex-2x">---</div>
         <div class="ex-s-sub">200K inscriptions/mo</div>
       </div>
       <div class="ex-scenario">
         <div class="ex-s-lbl">5× Volume</div>
-        <div class="ex-s-val" id="ex-5x">$46,200</div>
+        <div class="ex-s-val" id="ex-5x">---</div>
         <div class="ex-s-sub">500K inscriptions/mo</div>
       </div>
     </div>
@@ -323,9 +323,9 @@ footer .links { display: flex; gap: 16px; justify-content: center; flex-wrap: wr
       <input type="range" id="sl-vol" min="10" max="500" value="100" oninput="updateAll()">
     </div>
     <div class="slider-output">
-      <div class="so-card"><div class="so-lbl">Health Score</div><div class="so-val" id="so-health">85</div></div>
-      <div class="so-card"><div class="so-lbl">Inscription UTXOs</div><div class="so-val" id="so-ins-pct">2.0%</div></div>
-      <div class="so-card"><div class="so-lbl">Annual Externality</div><div class="so-val" id="so-ext">$9.2K</div></div>
+      <div class="so-card"><div class="so-lbl">Health Score</div><div class="so-val" id="so-health">---</div></div>
+      <div class="so-card"><div class="so-lbl">Inscription UTXOs</div><div class="so-val" id="so-ins-pct">---</div></div>
+      <div class="so-card"><div class="so-lbl">Annual Externality</div><div class="so-val" id="so-ext">---</div></div>
     </div>
     <div style="margin-top:14px;font-size:13px;color:var(--muted);text-align:center;line-height:1.6;">
       Every <strong style="color:var(--orange);">10,000</strong> additional inscriptions per month reduce the health score by ~1 point,
@@ -371,6 +371,7 @@ var BASE_VOL = 100;
 var EXT_PER_K = 9240 / 100;
 var btcPrice = null;
 var fees = null;
+var _uhBuilt = false;
 
 API.onData(function(d) {
   document.getElementById('live-indicator').style.display = 'flex';
@@ -396,6 +397,10 @@ API.onData(function(d) {
 });
 
 function updateAll() {
+  if (!_uhBuilt) {
+    _uhBuilt = true;
+  }
+
   var vol = parseFloat(document.getElementById('sl-vol').value);
   document.getElementById('sl-vol-label').textContent = vol + 'K';
 
@@ -464,6 +469,7 @@ function updateAll() {
   var maxVal = Math.max(today, lowVal, highVal);
 
   document.getElementById('proj-today').textContent = formatNum(Math.round(today));
+  document.getElementById('proj-bar-today').textContent = formatNum(Math.round(today));
   document.getElementById('proj-low-val').textContent = formatNum(Math.round(lowVal));
   document.getElementById('proj-high-val').textContent = formatNum(Math.round(highVal));
 
@@ -472,6 +478,10 @@ function updateAll() {
   document.getElementById('proj-bar-low').textContent = '+' + Math.round((lowVal/today - 1) * 100) + '%';
   document.getElementById('proj-bar-high').style.width = (highVal / maxVal * 100) + '%';
   document.getElementById('proj-bar-high').textContent = '+' + Math.round((highVal/today - 1) * 100) + '%';
+
+  document.getElementById('proj-high-today').textContent = formatNum(Math.round(today));
+  document.getElementById('proj-bar-high-today').style.width = (today / maxVal * 100) + '%';
+  document.getElementById('proj-bar-high-today').textContent = formatNum(Math.round(today));
 
   document.getElementById('kpi-growth').textContent = '~' + Math.round(highGrowthRate * 100) + '%/yr';
 }

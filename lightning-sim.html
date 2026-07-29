@@ -160,15 +160,15 @@
       <h2>Results <span class="badge">live</span></h2>
 
       <div class="result-cards">
-        <div class="result-card"><div class="lbl">Cost to Open 1 Channel</div><div class="val" id="r-open">$0.84</div><div class="sub">1000 vbytes × fee rate</div></div>
-        <div class="result-card"><div class="lbl">Cost to Close 1 Channel</div><div class="val" id="r-close">$0.42</div><div class="sub">500 vbytes × fee rate</div></div>
-        <div class="result-card"><div class="lbl">Total On-chain Cost</div><div class="val" id="r-total-onchain">$12.60</div><div class="sub">(open + close) × channels</div></div>
-        <div class="result-card"><div class="lbl">Storage Externality</div><div class="val" id="r-externality">$0.08</div><div class="sub">~$0.0007/channel/yr × lifetime</div></div>
+        <div class="result-card"><div class="lbl">Cost to Open 1 Channel</div><div class="val" id="r-open">---</div><div class="sub">1000 vbytes × fee rate</div></div>
+        <div class="result-card"><div class="lbl">Cost to Close 1 Channel</div><div class="val" id="r-close">---</div><div class="sub">500 vbytes × fee rate</div></div>
+        <div class="result-card"><div class="lbl">Total On-chain Cost</div><div class="val" id="r-total-onchain">---</div><div class="sub">(open + close) × channels</div></div>
+        <div class="result-card"><div class="lbl">Storage Externality</div><div class="val" id="r-externality">---</div><div class="sub">~$0.0007/channel/yr × lifetime</div></div>
       </div>
 
       <div class="result-big">
         <div class="lbl">Total Cost Including Externality</div>
-        <div class="val" id="r-grand">$12.68</div>
+        <div class="val" id="r-grand">---</div>
         <div class="sub" id="r-grand-sub">For all channels over their lifetime</div>
       </div>
     </div>
@@ -184,18 +184,18 @@
     <div class="comparison-grid">
       <div class="comparison-card">
         <div class="label">On-chain Payments</div>
-        <div class="cost"><span class="currency">$</span><span id="c-onchain">47.25</span></div>
-        <div class="detail" id="c-onchain-detail">~200 vbytes per tx</div>
+        <div class="cost"><span class="currency">$</span><span id="c-onchain">---</span></div>
+        <div class="detail" id="c-onchain-detail">---</div>
       </div>
       <div class="comparison-card highlight">
         <div class="label">Lightning Channel</div>
-        <div class="cost"><span class="currency">$</span><span id="c-lightning">1.26</span></div>
-        <div class="detail" id="c-lightning-detail">Open + close + off-chain payments</div>
+        <div class="cost"><span class="currency">$</span><span id="c-lightning">---</span></div>
+        <div class="detail" id="c-lightning-detail">---</div>
       </div>
       <div class="comparison-card">
         <div class="label">Savings with Lightning</div>
-        <div class="cost" id="c-savings" style="color:#3FB950;font-size:26px;">97.3%</div>
-        <div class="detail" id="c-savings-detail">You save $45.99</div>
+        <div class="cost" id="c-savings" style="color:#3FB950;font-size:26px;">---</div>
+        <div class="detail" id="c-savings-detail">---</div>
       </div>
     </div>
   </div>
@@ -205,15 +205,15 @@
     <p style="font-size:13px;color:var(--muted);margin-bottom:14px;">Based on the Bitcoin Node Cost Calculator model — hardware, bandwidth, electricity, and storage for a full-time Lightning node.</p>
 
     <div class="cost-breakdown">
-      <div class="cost-cat"><div class="lbl">Hardware</div><div class="val" id="o-hw">$167</div><div class="sub">$500 / 3 yr amortized</div></div>
-      <div class="cost-cat"><div class="lbl">Bandwidth</div><div class="val" id="o-bw">$600</div><div class="sub">$50/mo internet</div></div>
-      <div class="cost-cat"><div class="lbl">Electricity</div><div class="val" id="o-el">$158</div><div class="sub">150W × $0.12/kWh</div></div>
-      <div class="cost-cat"><div class="lbl">Storage</div><div class="val" id="o-st">$30</div><div class="sub">SSD maintenance</div></div>
+      <div class="cost-cat"><div class="lbl">Hardware</div><div class="val" id="o-hw">---</div><div class="sub">$500 / 3 yr amortized</div></div>
+      <div class="cost-cat"><div class="lbl">Bandwidth</div><div class="val" id="o-bw">---</div><div class="sub">$50/mo internet</div></div>
+      <div class="cost-cat"><div class="lbl">Electricity</div><div class="val" id="o-el">---</div><div class="sub">150W × $0.12/kWh</div></div>
+      <div class="cost-cat"><div class="lbl">Storage</div><div class="val" id="o-st">---</div><div class="sub">SSD maintenance</div></div>
     </div>
 
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px;">
-      <div class="result-card"><div class="lbl">Annual Node Cost</div><div class="val" id="o-total">$955</div><div class="sub">Total cost to run your LN node</div></div>
-      <div class="result-card"><div class="lbl">Monthly Cost</div><div class="val" id="o-mo">$80</div><div class="sub">Per month average</div></div>
+      <div class="result-card"><div class="lbl">Annual Node Cost</div><div class="val" id="o-total">---</div><div class="sub">Total cost to run your LN node</div></div>
+      <div class="result-card"><div class="lbl">Monthly Cost</div><div class="val" id="o-mo">---</div><div class="sub">Per month average</div></div>
     </div>
 
     <div class="split-bar">
@@ -223,8 +223,8 @@
         <div class="seg channel" id="seg-channel" style="width:15%">Channels</div>
       </div>
       <div class="legend">
-        <span style="color:#58A6FF">Baseline: <span id="l-baseline">$810/yr</span></span>
-        <span style="color:var(--orange)">Channel Mgmt: <span id="l-channel">$145/yr</span></span>
+        <span style="color:#58A6FF">Baseline: <span id="l-baseline">---</span></span>
+        <span style="color:var(--orange)">Channel Mgmt: <span id="l-channel">---</span></span>
       </div>
     </div>
   </div>
@@ -253,6 +253,7 @@ var CLOSE_VBYTES = 500;
 var TX_VBYTES = 200;
 var EXTERNALITY_PER_CHANNEL_YR = 0.0007;
 var liveFees = {};
+var _lsBuilt = false;
 
 function fmt(n) { return '$' + Number(n.toFixed(2)).toLocaleString(); }
 
@@ -352,16 +353,32 @@ function calc() {
   var maxFeeCost = Math.max.apply(null, feeCosts);
 
   var chart = document.getElementById('fee-chart');
-  if (chart) chart.innerHTML = '';
+  if (!_lsBuilt) {
+    feeLevels.forEach(function(f, i) {
+      var bar = document.createElement('div');
+      bar.className = 'fee-bar';
+      var ls = document.createElement('span');
+      ls.className = 'flabel'; ls.id = 'fee-label-'+i;
+      var td = document.createElement('div');
+      td.className = 'ftrack';
+      var fd = document.createElement('div');
+      fd.className = 'ffill'; fd.id = 'fee-fill-'+i; fd.style.width = '0%';
+      var vs = document.createElement('span');
+      vs.className = 'fval'; vs.id = 'fee-val-'+i;
+      td.appendChild(fd);
+      bar.appendChild(ls); bar.appendChild(td); bar.appendChild(vs);
+      if (chart) chart.appendChild(bar);
+    });
+    _lsBuilt = true;
+  }
   feeLevels.forEach(function(f, i) {
     var cost = feeCosts[i];
     var pct = maxFeeCost > 0 ? (cost / maxFeeCost * 100) : 0;
-    var label = f + ' sat/vB';
     var display = cost < 1 ? '$' + (cost * 100).toFixed(0) + '\u00A2' : fmt(cost);
-    var bar = document.createElement('div');
-    bar.className = 'fee-bar';
-    bar.innerHTML = '<span class="flabel">' + label + '</span><div class="ftrack"><div class="ffill" style="width:' + Math.max(pct, 1) + '%">' + display + '</div></div><span class="fval">' + display + '</span>';
-    if (chart) chart.appendChild(bar);
+    document.getElementById('fee-label-'+i).textContent = f + ' sat/vB';
+    document.getElementById('fee-fill-'+i).style.width = Math.max(pct, 1) + '%';
+    document.getElementById('fee-fill-'+i).textContent = display;
+    document.getElementById('fee-val-'+i).textContent = display;
   });
 
   var hw = 167, bw = 600, el = 158, st = 30;

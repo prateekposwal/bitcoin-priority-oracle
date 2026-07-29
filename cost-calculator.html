@@ -194,10 +194,10 @@
       </div>
 
       <div class="result-cards">
-        <div class="result-card"><div class="lbl">Annual Node Cost</div><div class="val" id="r-total">$924</div><div class="sub">Total cost to run your node</div></div>
-        <div class="result-card"><div class="lbl">Monthly Cost</div><div class="val" id="r-mo">$77</div><div class="sub">Per month average</div></div>
-        <div class="result-card"><div class="lbl">Cost Per Day</div><div class="val" id="r-day">$2.53</div><div class="sub">Per day average</div></div>
-        <div class="result-card"><div class="lbl">Cost Per Byte / Yr</div><div class="val" id="r-cpb">$0.0000019</div><div class="sub">Annual cost per byte stored</div></div>
+        <div class="result-card"><div class="lbl">Annual Node Cost</div><div class="val" id="cc-nodecost">---</div><div class="sub">Total cost to run your node</div></div>
+        <div class="result-card"><div class="lbl">Monthly Cost</div><div class="val" id="cc-monthly">---</div><div class="sub">Per month average</div></div>
+        <div class="result-card"><div class="lbl">Cost Per Day</div><div class="val" id="cc-daily">---</div><div class="sub">Per day average</div></div>
+        <div class="result-card"><div class="lbl">Cost Per Byte / Yr</div><div class="val" id="cc-cpb">---</div><div class="sub">Annual cost per byte stored</div></div>
       </div>
 
       <div class="btc-price-display" id="btc-price-display" style="display:none">
@@ -208,29 +208,29 @@
 
       <div class="breakdown-bar">
         <div class="bar-track">
-          <div class="seg hw" id="seg-hw" style="width:18%">HW</div>
-          <div class="seg bw" id="seg-bw" style="width:65%">BW</div>
-          <div class="seg elec" id="seg-el" style="width:17%">Elec</div>
+          <div class="seg hw" id="cc-seg-hw" style="width:0%"></div>
+          <div class="seg bw" id="cc-seg-bw" style="width:0%"></div>
+          <div class="seg elec" id="cc-seg-el" style="width:0%"></div>
         </div>
         <div class="legend">
-          <span style="color:#F7931A">Hardware: <span id="l-hw">$167</span></span>
-          <span style="color:#58A6FF">Bandwidth: <span id="l-bw">$600</span></span>
-          <span style="color:#3FB950">Electricity: <span id="l-el">$158</span></span>
-          <span style="color:#D29922">Storage: <span id="l-st">$0</span></span>
+          <span style="color:#F7931A">Hardware: <span id="cc-l-hw">---</span></span>
+          <span style="color:#58A6FF">Bandwidth: <span id="cc-l-bw">---</span></span>
+          <span style="color:#3FB950">Electricity: <span id="cc-l-el">---</span></span>
+          <span style="color:#D29922">Storage: <span id="cc-l-st">---</span></span>
         </div>
       </div>
 
       <div class="model-section">
         <h3>UTXO Cost Model</h3>
         <div class="model-metrics">
-          <div class="metric"><div class="lbl">Cost / Inscription (10yr)</div><div class="val" id="r-cpi">$0.0077</div><div class="sub">Lifetime storage cost per UTXO</div></div>
-          <div class="metric"><div class="lbl">Inscription Data / Yr</div><div class="val" id="r-ins-gb">0.5 GB</div><div class="sub">New inscription data per year</div></div>
-          <div class="metric"><div class="lbl">Inscription Share</div><div class="val" id="r-ins-pct">1.0%</div><div class="sub">Of total blockchain growth</div></div>
+          <div class="metric"><div class="lbl">Cost / Inscription (10yr)</div><div class="val" id="cc-cpi">---</div><div class="sub">Lifetime storage cost per UTXO</div></div>
+          <div class="metric"><div class="lbl">Inscription Data / Yr</div><div class="val" id="cc-ins-gb">---</div><div class="sub">New inscription data per year</div></div>
+          <div class="metric"><div class="lbl">Inscription Share</div><div class="val" id="cc-ins-pct">---</div><div class="sub">Of total blockchain growth</div></div>
         </div>
       </div>
 
       <div class="externality-box" id="externality-box">
-        Your node costs <strong id="ext-nodecost">$924/yr</strong>. Of that, ~<strong id="ext-pct">1.0%</strong> goes to storing inscription data (~<strong id="ext-dollars">$9.24/yr</strong>). Across all nodes, the cumulative inscription externality is substantial — every UTXO lives on every full node forever.
+        Your node costs <strong id="cc-ext-nodecost">---</strong>. Of that, ~<strong id="cc-ext-pct">---</strong> goes to storing inscription data (~<strong id="cc-ext-dollars">---</strong>). Across all nodes, the cumulative inscription externality is substantial — every UTXO lives on every full node forever.
       </div>
     </div>
   </div>
@@ -315,15 +315,27 @@ function compute(p) {
   };
 }
 
+var _ccBuilt = false;
+
+function buildScenarioTables() {
+  for (var id in SCENARIOS) {
+    var t = document.getElementById('t-' + id);
+    t.innerHTML =
+      '<tr><td>HW / yr</td><td id="cc-sc-' + id + '-hw"></td></tr>' +
+      '<tr><td>BW / yr</td><td id="cc-sc-' + id + '-bw"></td></tr>' +
+      '<tr><td>Elec / yr</td><td id="cc-sc-' + id + '-el"></td></tr>' +
+      '<tr><td>Storage / yr</td><td id="cc-sc-' + id + '-st"></td></tr>' +
+      '<tr class="total-row"><td>Total / yr</td><td id="cc-sc-' + id + '-total"></td></tr>';
+  }
+}
+
 function renderScenario(id, p) {
   var r = compute(p);
-  var t = document.getElementById('t-' + id);
-  t.innerHTML =
-    '<tr><td>HW / yr</td><td>' + fmtInt(r.hwAmort) + '</td></tr>' +
-    '<tr><td>BW / yr</td><td>' + fmtInt(r.bwAnnual) + '</td></tr>' +
-    '<tr><td>Elec / yr</td><td>' + fmtInt(r.elecAnnual) + '</td></tr>' +
-    '<tr><td>Storage / yr</td><td>' + fmtInt(r.stoAnnual) + '</td></tr>' +
-    '<tr class="total-row"><td>Total / yr</td><td>' + fmtInt(r.total) + '</td></tr>';
+  document.getElementById('cc-sc-' + id + '-hw').textContent = fmtInt(r.hwAmort);
+  document.getElementById('cc-sc-' + id + '-bw').textContent = fmtInt(r.bwAnnual);
+  document.getElementById('cc-sc-' + id + '-el').textContent = fmtInt(r.elecAnnual);
+  document.getElementById('cc-sc-' + id + '-st').textContent = fmtInt(r.stoAnnual);
+  document.getElementById('cc-sc-' + id + '-total').textContent = fmtInt(r.total);
 }
 
 function calc() {
@@ -354,33 +366,37 @@ function calc() {
   var p = { hw: hw, hl: hl, bw: bw, pw: pw, ec: ec, up: up, iv: iv, is: is, bg: bg, ut: ut, st: st };
   var r = compute(p);
 
-  document.getElementById('r-total').textContent = fmtInt(r.total);
-  document.getElementById('r-mo').textContent = fmtInt(r.monthly);
-  document.getElementById('r-day').textContent = '$' + r.daily.toFixed(2);
-  document.getElementById('r-cpb').textContent = '$' + r.costPerByte.toFixed(10);
+  document.getElementById('cc-nodecost').textContent = fmtInt(r.total);
+  document.getElementById('cc-monthly').textContent = fmtInt(r.monthly);
+  document.getElementById('cc-daily').textContent = '$' + r.daily.toFixed(2);
+  document.getElementById('cc-cpb').textContent = '$' + r.costPerByte.toFixed(10);
 
   var maxSeg = Math.max(r.hwAmort, r.bwAnnual, r.elecAnnual, r.stoAnnual, 1);
   var sum = r.hwAmort + r.bwAnnual + r.elecAnnual + r.stoAnnual;
   function pct(v) { return sum > 0 ? (v / sum * 100) : 0; }
-  document.getElementById('seg-hw').style.width = pct(r.hwAmort) + '%';
-  document.getElementById('seg-hw').textContent = pct(r.hwAmort) > 8 ? 'HW' : '';
-  document.getElementById('seg-bw').style.width = pct(r.bwAnnual) + '%';
-  document.getElementById('seg-bw').textContent = pct(r.bwAnnual) > 8 ? 'BW' : '';
-  document.getElementById('seg-el').style.width = pct(r.elecAnnual) + '%';
-  document.getElementById('seg-el').textContent = pct(r.elecAnnual) > 8 ? 'Elec' : '';
-  document.getElementById('l-hw').textContent = fmtInt(r.hwAmort);
-  document.getElementById('l-bw').textContent = fmtInt(r.bwAnnual);
-  document.getElementById('l-el').textContent = fmtInt(r.elecAnnual);
-  document.getElementById('l-st').textContent = fmtInt(r.stoAnnual);
+  document.getElementById('cc-seg-hw').style.width = pct(r.hwAmort) + '%';
+  document.getElementById('cc-seg-hw').textContent = pct(r.hwAmort) > 8 ? 'HW' : '';
+  document.getElementById('cc-seg-bw').style.width = pct(r.bwAnnual) + '%';
+  document.getElementById('cc-seg-bw').textContent = pct(r.bwAnnual) > 8 ? 'BW' : '';
+  document.getElementById('cc-seg-el').style.width = pct(r.elecAnnual) + '%';
+  document.getElementById('cc-seg-el').textContent = pct(r.elecAnnual) > 8 ? 'Elec' : '';
+  document.getElementById('cc-l-hw').textContent = fmtInt(r.hwAmort);
+  document.getElementById('cc-l-bw').textContent = fmtInt(r.bwAnnual);
+  document.getElementById('cc-l-el').textContent = fmtInt(r.elecAnnual);
+  document.getElementById('cc-l-st').textContent = fmtInt(r.stoAnnual);
 
-  document.getElementById('r-cpi').textContent = '$' + r.costPerInscription.toFixed(4);
-  document.getElementById('r-ins-gb').textContent = r.insGbYr.toFixed(1) + ' GB';
-  document.getElementById('r-ins-pct').textContent = r.insPct.toFixed(1) + '%';
+  document.getElementById('cc-cpi').textContent = '$' + r.costPerInscription.toFixed(4);
+  document.getElementById('cc-ins-gb').textContent = r.insGbYr.toFixed(1) + ' GB';
+  document.getElementById('cc-ins-pct').textContent = r.insPct.toFixed(1) + '%';
 
-  document.getElementById('ext-nodecost').textContent = fmtInt(r.total) + '/yr';
-  document.getElementById('ext-pct').textContent = r.insPct.toFixed(1) + '%';
-  document.getElementById('ext-dollars').textContent = fmtInt(r.insCostYr) + '/yr';
+  document.getElementById('cc-ext-nodecost').textContent = fmtInt(r.total) + '/yr';
+  document.getElementById('cc-ext-pct').textContent = r.insPct.toFixed(1) + '%';
+  document.getElementById('cc-ext-dollars').textContent = fmtInt(r.insCostYr) + '/yr';
 
+  if (!_ccBuilt) {
+    buildScenarioTables();
+    _ccBuilt = true;
+  }
   renderScenario('raspi', SCENARIOS.raspi);
   renderScenario('desktop', SCENARIOS.desktop);
   renderScenario('enterprise', SCENARIOS.enterprise);
