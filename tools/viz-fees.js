@@ -8,6 +8,7 @@ var VIZ_Fees = (function() {
   var displayFee = 3;
   var targetFee = 3;
   var scrollOffset = 0;
+  var bottomMargin = 120;
 
   function init(canvasId) {
     canvas = document.getElementById(canvasId);
@@ -35,12 +36,13 @@ var VIZ_Fees = (function() {
     // Spawn particles continuously
     setInterval(function() {
       var count = w < 480 ? 1 : w < 768 ? 2 : 3;
+      var maxBarArea = h - bottomMargin;
       for (var i = 0; i < count; i++) {
         var fee = Math.random() * 30 + 1;
         var p = Math.min(1, fee / 50);
         particles.push({
           x: Math.random() * (w || 800),
-          y: (h || 600) + 20,
+          y: maxBarArea + (Math.random() * 40),
           vx: (Math.random() - 0.5) * 0.3,
           vy: -(Math.random() * 0.5 + 0.2),
           r: Math.round(p * 248 + (1-p) * 63),
@@ -69,6 +71,7 @@ var VIZ_Fees = (function() {
 
   function loop() {
     var t = Date.now() / 1000;
+    var maxBarArea = h - bottomMargin;
     
     // Smooth fee display
     displayFee += (targetFee - displayFee) * 0.05;
@@ -81,7 +84,7 @@ var VIZ_Fees = (function() {
     for (var i = 0; i < bars.length; i++) {
       var b = bars[i];
       b.fee += (b.targetFee - b.fee) * 0.03;
-      b.h = (b.fee / 50) * h * 0.7;
+      b.h = (b.fee / 50) * maxBarArea * 0.7;
       b.age++;
     }
 
@@ -105,7 +108,7 @@ var VIZ_Fees = (function() {
       if (b.h < 2) continue;
       var x = w - ((i + scrollOffset) * bw);
       var barH = b.h;
-      var y = h - barH;
+      var y = maxBarArea - barH;
       var p = Math.min(1, b.fee / 50);
       var r = Math.round(p * 248 + (1-p) * 63);
       var g = Math.round((1-p) * 185 + p * 81);

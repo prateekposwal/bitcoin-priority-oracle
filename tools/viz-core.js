@@ -27,6 +27,7 @@ var VIZ = (function() {
   function responsiveSize(canvas, maxHeight) {
     var parent = canvas.parentElement;
     var pw = parent ? parent.clientWidth : window.innerWidth;
+    if (!pw || pw < 100) pw = window.innerWidth;
     var dpr = window.devicePixelRatio || 1;
     var w = Math.min(pw, 1200);
     var baseH = maxHeight || 350;

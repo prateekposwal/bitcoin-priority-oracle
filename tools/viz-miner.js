@@ -16,21 +16,22 @@ var VIZ_Miner = (function() {
     resize();
     window.addEventListener('resize', resize);
 
-    DATA_ENGINE.onUpdate(function() {
-      var d = DATA_ENGINE.get();
-      var history = d.fee_history || [];
-      btcPrice = d.btc_price || 64000;
+    if (typeof DATA_ENGINE !== 'undefined') {
+      var de = DATA_ENGINE;
+      de.onUpdate(function() {
+        var d = de.get();
+        var history = d.fee_history || [];
+        btcPrice = d.btc_price || 64000;
+        var slice = history.slice(-10);
+        var sum = 0;
+        for (var i = 0; i < slice.length; i++) {
+          sum += slice[i].avgFees || 0;
+        }
+        targetFee = slice.length > 0 ? sum / slice.length : 0;
+        feeHistory = history;
+      });
+    }
 
-      var slice = history.slice(-10);
-      var sum = 0;
-      for (var i = 0; i < slice.length; i++) {
-        sum += slice[i].avgFees || 0;
-      }
-      targetFee = slice.length > 0 ? sum / slice.length : 0;
-      feeHistory = history;
-    });
-
-    DATA_ENGINE.start();
     loop();
   }
 
@@ -296,5 +297,5 @@ var VIZ_Miner = (function() {
     return sats.toFixed(0);
   }
 
-  return { init: init };
+  return { init: init, resize: resize };
 })();

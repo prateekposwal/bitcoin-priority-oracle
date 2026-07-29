@@ -15,7 +15,7 @@ var VIZ_Lightning = (function() {
     resize();
 
     tooltipEl = document.createElement('div');
-    tooltipEl.style.cssText = 'position:fixed;pointer-events:none;background:rgba(18,16,14,0.92);color:#e8e3dc;padding:8px 12px;border-radius:6px;font:12px/1.4 -apple-system,sans-serif;border:1px solid rgba(255,255,255,0.08);z-index:9999;display:none;max-width:260px;';
+    tooltipEl.style.cssText = 'position:fixed;pointer-events:none;background:rgba(0,0,0,0.88);color:#e8e3dc;padding:8px 12px;border-radius:6px;font:12px/1.4 -apple-system,sans-serif;border:1px solid rgba(255,255,255,0.08);z-index:9999;display:none;max-width:260px;';
     document.body.appendChild(tooltipEl);
 
     canvas.addEventListener('mousemove', function(e) {
@@ -381,14 +381,16 @@ var VIZ_Lightning = (function() {
     ctx.textAlign = 'left';
     ctx.textBaseline = 'top';
     ctx.font = '12px -apple-system, sans-serif';
-    ctx.fillStyle = 'rgba(255,255,255,0.35)';
+    ctx.fillStyle = 'rgba(0,0,0,0.75)';
+    ctx.fillRect(14, 14, 350, 20);
+    ctx.fillStyle = 'rgba(255,255,255,0.7)';
     var capBtc = (stats.capacity / 100000000).toFixed(1);
     ctx.fillText('Capacity: ' + capBtc + ' BTC | Nodes: ' + stats.nodes + ' | Channels: ' + stats.channels, 16, 16);
 
     // Legend
     var lx = w - 200, ly = 16, lw = 140;
 
-    ctx.fillStyle = 'rgba(18,16,14,0.7)';
+    ctx.fillStyle = 'rgba(0,0,0,0.75)';
     ctx.fillRect(lx - 8, ly - 6, lw + 16, 80);
     ctx.strokeStyle = 'rgba(255,255,255,0.06)';
     ctx.lineWidth = 1;
@@ -397,25 +399,27 @@ var VIZ_Lightning = (function() {
     ctx.textAlign = 'left';
     ctx.textBaseline = 'top';
     ctx.font = '10px -apple-system, sans-serif';
-    ctx.fillStyle = 'rgba(255,255,255,0.4)';
+    ctx.fillStyle = 'rgba(255,255,255,0.7)';
     ctx.fillText('Node color = fee rate', lx, ly);
 
     // Green
     ctx.fillStyle = 'rgb(63,185,80)';
     ctx.fillRect(lx, ly + 14, 10, 10);
-    ctx.fillStyle = 'rgba(255,255,255,0.35)';
+    ctx.fillStyle = 'rgba(255,255,255,0.7)';
     ctx.fillText('Cheap (<5 ppm)', lx + 14, ly + 14);
 
     // Yellow
     ctx.fillStyle = 'rgb(210,170,80)';
     ctx.fillRect(lx, ly + 28, 10, 10);
     ctx.fillStyle = 'rgba(255,255,255,0.35)';
+    ctx.fillStyle = 'rgba(255,255,255,0.7)';
     ctx.fillText('Moderate (5-25)', lx + 14, ly + 28);
 
     // Red
     ctx.fillStyle = 'rgb(248,81,73)';
     ctx.fillRect(lx, ly + 42, 10, 10);
     ctx.fillStyle = 'rgba(255,255,255,0.35)';
+    ctx.fillStyle = 'rgba(255,255,255,0.7)';
     ctx.fillText('Expensive (>25)', lx + 14, ly + 42);
 
     // Node size hint

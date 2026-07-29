@@ -24,14 +24,20 @@ var VIZ_Exchange = (function() {
     canvas.addEventListener('touchmove', onTouchMove, { passive: false });
     canvas.addEventListener('touchend', onTouchEnd);
 
-    DATA_ENGINE.onUpdate(function() {
-      var fees = DATA_ENGINE.get().fees || {};
-      var price = DATA_ENGINE.get().btc_price || 0;
+    if (typeof DATA_ENGINE !== 'undefined') {
+      var de = DATA_ENGINE;
+      var fees = de.get().fees || {};
+      var price = de.get().btc_price || 0;
       if (fees.economyFee) economyFee = fees.economyFee;
       if (price) btcPrice = price;
-    });
+      de.onUpdate(function() {
+        var fees = de.get().fees || {};
+        var price = de.get().btc_price || 0;
+        if (fees.economyFee) economyFee = fees.economyFee;
+        if (price) btcPrice = price;
+      });
+    }
 
-    DATA_ENGINE.start();
     loop();
   }
 
@@ -315,5 +321,5 @@ var VIZ_Exchange = (function() {
 
   function onTouchEnd() { isDragging = false; showTooltip = false; }
 
-  return { init: init };
+  return { init: init, resize: resize };
 })();

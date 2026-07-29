@@ -255,5 +255,5 @@ var VIZ_Node = (function () {
     if (ctx) draw();
   }
 
-  return { init: init };
+  return { init: init, resize: resize };
 })();

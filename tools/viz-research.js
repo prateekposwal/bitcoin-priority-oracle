@@ -30,10 +30,14 @@ const VIZ_Research = (() => {
     canvas.addEventListener('touchmove', onTouchMove, { passive: false });
     canvas.addEventListener('touchend', onTouchEnd);
 
-    const engine = window.DATA_ENGINE;
-    if (engine && engine.get) {
-      const state = engine.get();
-      if (state && state.fee_history) {
+    if (typeof DATA_ENGINE !== 'undefined') {
+      DATA_ENGINE.onUpdate(function(state) {
+        if (state && state.fee_history) {
+          data = buildSeries(state.fee_history);
+        }
+      });
+      var state = DATA_ENGINE.get();
+      if (state && state.fee_history && state.fee_history.length > 0) {
         data = buildSeries(state.fee_history);
       }
     }
@@ -405,7 +409,7 @@ const VIZ_Research = (() => {
     window.removeEventListener('resize', resize);
   }
 
-  return { init, destroy, downloadCSV };
+  return { init, destroy, downloadCSV, resize };
 })();
 
 if (typeof module !== 'undefined' && module.exports) {
