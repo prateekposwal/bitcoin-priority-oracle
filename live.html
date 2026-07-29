@@ -54,7 +54,7 @@ html, body { width: 100%; min-height: 100vh; background: #1A1612; color: #E8E5E0
 </head>
 <body>
 <div class="header">
-  <span class="brand">⬡ BSAHI</span>
+  <a href="/" style="text-decoration:none;"><span class="brand">⬡ BSAHI</span></a>
   <button class="tab-btn active" data-tab="send">Send</button>
   <button class="tab-btn" data-tab="lightning">Lightning</button>
   <button class="tab-btn" data-tab="exchange">Exchange</button>
@@ -62,6 +62,11 @@ html, body { width: 100%; min-height: 100vh; background: #1A1612; color: #E8E5E0
   <button class="tab-btn" data-tab="miner">Miner</button>
   <button class="tab-btn" data-tab="research">Research</button>
   <button class="tab-btn" data-tab="developer">Dev</button>
+</div>
+
+<div style="position:sticky;top:41px;z-index:19;background:#1A1612;padding:8px 16px;border-bottom:1px solid #2A2622;text-align:center;">
+  <span id="live-state" style="font-size:12px;font-weight:600;letter-spacing:0.5px;color:#3FB950;">🟢 Network calm</span>
+  <span id="live-state-sub" style="font-size:11px;color:rgba(255,255,255,0.4);margin-left:8px;">Fees are low</span>
 </div>
 
 <canvas id="viz-fees"></canvas>
@@ -80,6 +85,7 @@ html, body { width: 100%; min-height: 100vh; background: #1A1612; color: #E8E5E0
     <div class="fee-card"><div class="fc-label">Hour</div><div class="fc-value" id="fee-hour">--</div><div class="fc-sub">~60 min</div></div>
     <div class="fee-card"><div class="fc-label">Economy</div><div class="fc-value" id="fee-economy">--</div><div class="fc-sub">~2+ hr</div></div>
   </div>
+  <div style="font-size:12px;color:rgba(255,255,255,0.3);margin-top:8px;line-height:1.5;">💡 Each colored bar in the chart above = one Bitcoin block from the last 24 hours. Green means low fees. Red means high congestion. The fee you choose determines how fast your transaction confirms.</div>
 </div>
 
 <!-- LIGHTNING -->
@@ -90,6 +96,7 @@ html, body { width: 100%; min-height: 100vh; background: #1A1612; color: #E8E5E0
     <div class="dc-sub" id="ln-cost">Estimating channel cost...</div>
   </div>
   <div class="stat-row"><div class="stat-card"><div class="sc-label">Nodes</div><div class="sc-value" id="ln-nodes">--</div></div><div class="stat-card"><div class="sc-label">Channels</div><div class="sc-value" id="ln-channels">--</div></div><div class="stat-card"><div class="sc-label">Capacity</div><div class="sc-value" id="ln-capacity">--</div></div></div>
+  <div style="font-size:12px;color:rgba(255,255,255,0.3);margin-top:8px;line-height:1.5;">⚡ Each channel open costs ~1,000 vbytes in on-chain fees. The economy rate determines if it's a good time to open. Lower fees = lower cost to enter the Lightning Network.</div>
 </div>
 
 <!-- EXCHANGE -->
@@ -99,6 +106,7 @@ html, body { width: 100%; min-height: 100vh; background: #1A1612; color: #E8E5E0
     <div class="dc-a" id="ex-verdict">Checking...</div>
     <div class="dc-sub" id="ex-saving">Estimating batch savings...</div>
   </div>
+  <div style="font-size:12px;color:rgba(255,255,255,0.3);margin-top:8px;line-height:1.5;">🏦 Batching combines multiple withdrawals into one transaction. Each additional output adds ~45 vbytes vs ~140 vbytes for a new transaction. At current fees, batching 1K withdrawals saves thousands in transaction fees.</div>
 </div>
 
 <!-- NODE -->
@@ -108,6 +116,7 @@ html, body { width: 100%; min-height: 100vh; background: #1A1612; color: #E8E5E0
     <div class="dc-a orange" id="node-cost">$924</div>
     <div class="dc-sub">Estimated annual cost to run a full node</div>
   </div>
+  <div style="font-size:12px;color:rgba(255,255,255,0.3);margin-top:8px;line-height:1.5;">🖥️ Based on $500 hardware (3yr life), $50/mo bandwidth, 150W power at $0.12/kWh. The UTXO set grows ~5-15% annually, increasing storage requirements over time.</div>
 </div>
 
 <!-- MINER -->
@@ -117,6 +126,7 @@ html, body { width: 100%; min-height: 100vh; background: #1A1612; color: #E8E5E0
     <div class="dc-a orange" id="miner-reward">Checking...</div>
     <div class="dc-sub">Subsidy + fees for the latest block</div>
   </div>
+  <div style="font-size:12px;color:rgba(255,255,255,0.3);margin-top:8px;line-height:1.5;">⛏️ Current block subsidy: 3.125 BTC. Transaction fees add ~$30K per block at current prices. The block reward will halve again at block 1,050,000 (~2028).</div>
 </div>
 
 <!-- RESEARCH -->
@@ -167,6 +177,14 @@ DATA_ENGINE.onUpdate(function() {
   var d = DATA_ENGINE.get();
   if (!d || !d.fees) return;
   var fees = d.fees;
+
+  // Update state bar
+  var f2 = fees.fastestFee || 3;
+  var stateEl = document.getElementById('live-state');
+  var stateSub = document.getElementById('live-state-sub');
+  if (f2 < 5) { stateEl.textContent = '🟢 Network calm'; stateEl.style.color = '#3FB950'; stateSub.textContent = 'Fees are low — good to send'; }
+  else if (f2 < 20) { stateEl.textContent = '🟡 Moderate congestion'; stateEl.style.color = '#D29922'; stateSub.textContent = 'Fees elevated — economy rate recommended'; }
+  else { stateEl.textContent = '🔴 Network congested'; stateEl.style.color = '#F85149'; stateSub.textContent = 'Fees are high — consider waiting'; }
 
   // Fee cards
   document.getElementById('fee-fastest').textContent = (fees.fastestFee || '--') + ' sat/vB';

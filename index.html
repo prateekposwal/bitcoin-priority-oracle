@@ -6,33 +6,109 @@
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html, body { width: 100%; height: 100%; overflow: hidden; background: #1A1612; font-family: -apple-system, system-ui, sans-serif; }
-    
     #viz-fees { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; }
-    
-    .overlay { position: fixed; bottom: 48px; left: 50%; transform: translateX(-50%); text-align: center; z-index: 10; }
-    .overlay h1 { font-size: 15px; font-weight: 600; color: rgba(255,255,255,0.5); letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 8px; }
-    .overlay .cta { display: inline-block; padding: 14px 32px; background: #F7931A; color: #1A1612; font-size: 17px; font-weight: 700; border-radius: 100px; text-decoration: none; transition: transform 0.2s, box-shadow 0.2s; }
-    .overlay .cta:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(247,147,26,0.3); }
-    
+
+    /* Top bar — network state in plain language */
+    .state-bar { position: fixed; top: 16px; left: 50%; transform: translateX(-50%); z-index: 20; text-align: center; pointer-events: none; }
+    .state-bar .state-label { font-size: 12px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; }
+    .state-bar .state-desc { font-size: 13px; color: rgba(255,255,255,0.5); margin-top: 4px; }
+
+    /* Bottom CTA */
+    .bottom-area { position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%); z-index: 10; text-align: center; }
+    .bottom-area .cta { display: inline-block; padding: 14px 32px; background: #F7931A; color: #1A1612; font-size: 17px; font-weight: 700; border-radius: 100px; text-decoration: none; transition: transform 0.2s, box-shadow 0.2s; }
+    .bottom-area .cta:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(247,147,26,0.3); }
+    .bottom-area .hint { font-size: 11px; color: rgba(255,255,255,0.3); margin-top: 8px; }
+
+    /* Legend — appears on hover over ? */
+    .legend-toggle { position: fixed; bottom: 100px; right: 20px; z-index: 30; width: 32px; height: 32px; border-radius: 50%; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.4); font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+    .legend-toggle:hover { background: rgba(255,255,255,0.15); color: rgba(255,255,255,0.8); }
+    .legend-panel { position: fixed; bottom: 140px; right: 20px; z-index: 30; background: #2A2622; border: 1px solid #3A3632; border-radius: 10px; padding: 16px; width: 220px; display: none; }
+    .legend-panel.visible { display: block; }
+    .legend-panel .l-item { display: flex; align-items: center; gap: 10px; padding: 4px 0; font-size: 12px; color: rgba(255,255,255,0.6); }
+    .legend-panel .l-dot { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
+    .legend-panel .l-title { font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.8); margin-bottom: 8px; }
+
     @media (max-width: 600px) {
-      .overlay { bottom: 24px; width: 90%; }
-      .overlay .cta { display: block; }
+      .bottom-area { width: 90%; }
+      .bottom-area .cta { display: block; }
+      .legend-panel { right: 10px; width: 180px; }
     }
   </style>
 </head>
 <body>
   <canvas id="viz-fees"></canvas>
-  <div style="position:fixed;bottom:48px;left:50%;transform:translateX(-50%);z-index:10;">
-    <a href="/live" style="display:inline-block;padding:14px 32px;background:#F7931A;color:#1A1612;font-size:17px;font-weight:700;border-radius:100px;text-decoration:none;transition:transform 0.2s;" 
-       onmouseover="this.style.transform='translateY(-2px)'" 
-       onmouseout="this.style.transform=''">Should I send now?</a>
+
+  <div class="state-bar" id="state-bar">
+    <div class="state-label" id="state-label" style="color:#3FB950;">Network calm</div>
+    <div class="state-desc" id="state-desc">Fees are low. Good time to send.</div>
   </div>
+
+  <div class="legend-toggle" id="legend-toggle" onclick="document.getElementById('legend-panel').classList.toggle('visible')">?</div>
+  <div class="legend-panel" id="legend-panel">
+    <div class="l-title">What am I looking at?</div>
+    <div class="l-item"><span class="l-dot" style="background:#3FB950;"></span> Low fee block</div>
+    <div class="l-item"><span class="l-dot" style="background:#D29922;"></span> Moderate fee</div>
+    <div class="l-item"><span class="l-dot" style="background:#F85149;"></span> High fee — congested</div>
+    <div class="l-item"><span style="color:rgba(255,255,255,0.4);font-size:14px;">◌</span> Floating particles = mempool transactions waiting</div>
+    <div class="l-item"><span style="color:rgba(255,255,255,0.4);font-size:14px;">⬜</span> Each bar = one Bitcoin block (last 24h)</div>
+  </div>
+
+  <div class="bottom-area">
+    <a href="/live" class="cta">Should I send now?</a>
+    <div class="hint">Hover over bars to see block details</div>
+  </div>
+
   <script src="tools/data-engine.js"></script>
   <script src="tools/viz-core.js"></script>
   <script src="tools/viz-fees.js"></script>
   <script>
     DATA_ENGINE.start();
     VIZ_Fees.init('viz-fees');
+
+    // Update state bar when data arrives
+    DATA_ENGINE.onUpdate(function() {
+      var f = DATA_ENGINE.get().fees || {};
+      var fastest = f.fastestFee || 3;
+      var label = document.getElementById('state-label');
+      var desc = document.getElementById('state-desc');
+      if (fastest < 5) {
+        label.textContent = '🟢 Network calm';
+        label.style.color = '#3FB950';
+        desc.textContent = 'Fees are low. Good time to send.';
+      } else if (fastest < 20) {
+        label.textContent = '🟡 Moderate congestion';
+        label.style.color = '#D29922';
+        desc.textContent = 'Fees are elevated. Economy rate recommended.';
+      } else {
+        label.textContent = '🔴 Network congested';
+        label.style.color = '#F85149';
+        desc.textContent = 'Fees are high. Consider waiting.';
+      }
+    });
+
+    // Canvas hover tooltip
+    var canvas = document.getElementById('viz-fees');
+    var tooltip = document.createElement('div');
+    tooltip.style.cssText = 'position:fixed;padding:8px 12px;background:#2A2622;border:1px solid #3A3632;border-radius:8px;font-size:12px;color:rgba(255,255,255,0.8);pointer-events:none;z-index:40;display:none;';
+    document.body.appendChild(tooltip);
+
+    canvas.addEventListener('mousemove', function(e) {
+      var rect = canvas.getBoundingClientRect();
+      var mx = e.clientX - rect.left;
+      var mxPct = mx / rect.width;
+      var barIdx = Math.floor((1 - mxPct) * 144);
+      var feeVal = VIZ_Fees.getFeeAt ? VIZ_Fees.getFeeAt(barIdx) : null;
+      if (feeVal) {
+        tooltip.style.display = 'block';
+        tooltip.style.left = (e.clientX + 12) + 'px';
+        tooltip.style.top = (e.clientY - 12) + 'px';
+        var color = feeVal < 5 ? '#3FB950' : feeVal < 20 ? '#D29922' : '#F85149';
+        tooltip.innerHTML = 'Block fee: <span style="color:' + color + ';font-weight:600;">' + feeVal.toFixed(1) + ' sat/vB</span>';
+      } else {
+        tooltip.style.display = 'none';
+      }
+    });
+    canvas.addEventListener('mouseleave', function() { tooltip.style.display = 'none'; });
   </script>
 </body>
 </html>

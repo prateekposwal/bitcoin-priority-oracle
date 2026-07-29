@@ -155,5 +155,10 @@ var VIZ_Fees = (function() {
     requestAnimationFrame(loop);
   }
 
-  return { init: init };
+  function getFeeAt(idx) {
+    if (idx < 0 || idx >= bars.length) return null;
+    return bars[idx].fee || null;
+  }
+
+  return { init: init, getFeeAt: getFeeAt };
 })();
