@@ -54,6 +54,9 @@
 .bar-legend { display: flex; flex-wrap: wrap; gap: 16px; justify-content: center; }
 .bar-legend span { font-size: 13px; color: var(--muted); display: flex; align-items: center; gap: 6px; }
 .bar-legend span::before { content: ''; display: inline-block; width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
+.bar-legend span:nth-child(1)::before { background: var(--green); }
+.bar-legend span:nth-child(2)::before { background: var(--orange); }
+.bar-legend span:nth-child(3)::before { background: var(--blue); }
 
 /* ── Section ── */
 .section { padding: 24px 0; }

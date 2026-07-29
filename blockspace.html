@@ -41,6 +41,11 @@
 .bar-legend { display: flex; flex-wrap: wrap; gap: 16px; justify-content: center; }
 .bar-legend span { font-size: 13px; color: var(--muted); display: flex; align-items: center; gap: 6px; }
 .bar-legend span::before { content: ''; display: inline-block; width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
+.bar-legend span:nth-child(1)::before { background: var(--green); }
+.bar-legend span:nth-child(2)::before { background: var(--orange); }
+.bar-legend span:nth-child(3)::before { background: var(--blue); }
+.bar-legend span:nth-child(4)::before { background: var(--muted); }
+.bar-legend span:nth-child(5)::before { background: #555; }
 
 /* ── KPI Cards ── */
 .kpi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; max-width: 900px; margin: 0 auto 28px; padding: 0 24px; }
