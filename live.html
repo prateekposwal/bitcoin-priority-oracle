@@ -23,6 +23,13 @@
   .counter-change { animation: tick 0.3s ease; }
   .countdown { transition: all 0.3s; }
 
+  .hero { text-align: center; padding: 16px 0 24px; }
+  .hero .badge { display: inline-block; font-size: 13px; font-weight: 600; color: var(--orange); border: 1px solid var(--orange); border-radius: 20px; padding: 4px 14px; margin-bottom: 12px; }
+  .hero h1 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; letter-spacing: -1px; line-height: 1.15; margin-bottom: 12px; }
+  .hero h1 span { background: linear-gradient(135deg, var(--orange), #FFB347); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .hero p { font-size: 17px; color: var(--muted); max-width: 650px; margin: 0 auto 20px; line-height: 1.6; }
+  .hero .actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+
   .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 28px; }
   .kpi-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 18px; text-align: center; transition: border-color 0.3s, transform 0.2s; }
   .kpi-card:hover { border-color: var(--orange); transform: translateY(-1px); }
@@ -72,17 +79,12 @@
   <a href="/live" class="cta">Dashboard</a>
 </nav>
 
+  <div class="container">
   <div class="hero">
     <div class="badge">Live Dashboard</div>
     <h1>Bitcoin Network — <span>In Real Time</span></h1>
     <p>Every 30 seconds, this page fetches the latest fee estimates, mempool pressure, and block data. All numbers update live.</p>
-    <div class="actions">
-      <a href="/decide" class="btn-secondary">Decision Center →</a>
-      <a href="https://github.com/prateekposwal/block-space-economics" class="btn-secondary">GitHub →</a>
-    </div>
   </div>
-
-  <div class="container">
   <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;">
     <div class="live-indicator"><span class="live-dot"></span><span id="live-clock">updating...</span></div>
   </div>
