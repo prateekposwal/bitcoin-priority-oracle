@@ -126,7 +126,7 @@ var API = (function() {
   return {
     start: function(opts) {
       opts = opts || {};
-      startPolling(opts.interval || 15000);
+      startPolling(opts.interval || 5000);
       _debugEl = document.getElementById('api-debug');
     },
     onData: function(cb) {
