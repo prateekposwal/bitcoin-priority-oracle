@@ -22,7 +22,7 @@ function updateBlockSpace() {
     if(!se)continue;
     se.style.width = Math.max(0.3,segs[i][2])+'%';
     var lb = se.querySelector('.seg-label');
-    if(lb) lb.textContent = segs[i][1]+' '+(segs[i][2]>=1?Math.round(segs[i][2]):segs[i][2].toFixed(1))+'%';
+    if(lb) lb.textContent = segs[i][1]+' '+(segs[i][2]>=10?Math.round(segs[i][2]):segs[i][2].toFixed(1))+'%';
   }
 
   // Update KPI cards
@@ -33,8 +33,8 @@ function updateBlockSpace() {
   setText('kpi-ins-pct', (ip >= 1 ? Math.round(ip) : ip.toFixed(1)) + '%');
 
   // Update slider output values
-  setText('so-fin', Math.round(fp) + '%');
-  setText('so-ins', (ip >= 1 ? Math.round(ip) : ip.toFixed(1)) + '%');
+  setText('so-fin', (fp >= 10 ? Math.round(fp) : fp.toFixed(1)) + '%');
+  setText('so-ins', (ip >= 10 ? Math.round(ip) : ip.toFixed(1)) + '%');
   var ratio = finPerBlock > 0 ? (ip / fp) : 0;
   setText('so-ratio', ratio.toFixed(2));
 
