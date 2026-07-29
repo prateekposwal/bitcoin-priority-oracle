@@ -14,7 +14,7 @@ html, body { width: 100%; min-height: 100vh; background: #1A1612; color: #E8E5E0
 .tab-btn:hover { color: #E8E5E0; border-color: #2A2622; }
 .tab-btn.active { color: #F7931A; border-color: #F7931A; background: rgba(247,147,26,0.1); }
 
-.content { max-width: 800px; margin: 0 auto; padding: 24px 16px; }
+.content { max-width: 800px; margin: 0 auto; padding: 24px 16px 60px; }
 .tab-panel { display: none; }
 .tab-panel.active { display: block; }
 
@@ -33,6 +33,9 @@ html, body { width: 100%; min-height: 100vh; background: #1A1612; color: #E8E5E0
 .fee-card .fc-value { font-size: 20px; font-weight: 700; margin: 4px 0; }
 .fee-card .fc-sub { font-size: 11px; color: #555; }
 
+.dollar-cost { text-align: center; font-size: 12px; color: rgba(255,255,255,0.5); padding: 8px 0 4px; letter-spacing: 0.3px; }
+.dollar-cost .cost-sep { color: rgba(255,255,255,0.15); margin: 0 6px; }
+
 .stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 12px 0; }
 .stat-card { background: #1A1612; border-radius: 8px; padding: 12px; text-align: center; }
 .stat-card .sc-label { font-size: 10px; color: #888; text-transform: uppercase; letter-spacing: 0.5px; }
@@ -40,6 +43,18 @@ html, body { width: 100%; min-height: 100vh; background: #1A1612; color: #E8E5E0
 
 .viz-canvas { width: 100%; height: 350px; border-radius: 12px; background: #1A1612; margin-top: 16px; }
 .explanation-text { font-size: 12px; color: rgba(255,255,255,0.3); margin-top: 8px; line-height: 1.5; }
+
+/* Genesis Strip */
+.genesis-strip { position: fixed; bottom: 28px; left: 0; width: 100%; height: 2px; z-index: 50; background: linear-gradient(90deg, #F7931A 0%, #3FB950 25%, #D29922 50%, #F85149 75%, #F7931A 100%); background-size: 200% 100%; animation: genesis-shimmer 4s linear infinite; }
+@keyframes genesis-shimmer { 0% { background-position: 0% 0%; } 100% { background-position: 200% 0%; } }
+
+/* Streaming Metrics Ticker */
+.ticker { position: fixed; bottom: 0; left: 0; width: 100%; height: 28px; z-index: 50; background: #0F0D0B; border-top: 1px solid #2A2622; overflow: hidden; display: flex; align-items: center; }
+.ticker-track { display: flex; gap: 0; white-space: nowrap; will-change: transform; animation: ticker-scroll 60s linear infinite; }
+.ticker-item { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; color: rgba(255,255,255,0.55); font-variant-numeric: tabular-nums; padding: 0 20px; border-right: 1px solid rgba(255,255,255,0.06); }
+.ticker-item .ti-label { color: rgba(255,255,255,0.3); }
+.ticker-item .ti-value { color: rgba(255,255,255,0.8); font-weight: 600; }
+@keyframes ticker-scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
 @media (max-width: 600px) {
   .fee-grid, .stat-row { grid-template-columns: 1fr; }
@@ -78,6 +93,7 @@ html, body { width: 100%; min-height: 100vh; background: #1A1612; color: #E8E5E0
     <div class="fee-card"><div class="fc-label">Hour</div><div class="fc-value" id="fee-hour">--</div><div class="fc-sub">~60 min</div></div>
     <div class="fee-card"><div class="fc-label">Economy</div><div class="fc-value" id="fee-economy">--</div><div class="fc-sub">~2+ hr</div></div>
   </div>
+  <div class="dollar-cost" id="dollar-cost">Fastest: $0.56 │ Hour: $0.28 │ Economy: $0.14</div>
   <canvas id="viz-send" class="viz-canvas"></canvas>
   <div class="explanation-text">Each bar = one block. Green = low fees. Red = high congestion. The fee you choose determines how fast your transaction confirms.</div>
 </div>
@@ -146,9 +162,7 @@ html, body { width: 100%; min-height: 100vh; background: #1A1612; color: #E8E5E0
 <!-- DEVELOPER -->
 <div class="tab-panel" id="panel-developer">
   <div id="viz-developer"></div>
-</div>
-  </div>
-  <div id="viz-developer" style="margin-top:16px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;">
+  <div style="margin-top:16px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;">
     <div style="background:#2A2622;border-radius:8px;padding:12px;text-align:center;">
       <div style="font-size:10px;color:#888;text-transform:uppercase;letter-spacing:0.5px;">Requests</div>
       <div style="font-size:22px;font-weight:700;margin:4px 0;color:#3FB950;">0</div>
@@ -168,6 +182,24 @@ html, body { width: 100%; min-height: 100vh; background: #1A1612; color: #E8E5E0
   <div class="explanation-text">API status dashboard. All endpoints are free and public. No authentication required.</div>
 </div>
 
+</div>
+
+<!-- Genesis Strip -->
+<div class="genesis-strip"></div>
+
+<!-- Streaming Metrics Ticker -->
+<div class="ticker" id="ticker">
+  <div class="ticker-track" id="ticker-track">
+    <span class="ticker-item"><span class="ti-label">MEMPOOL</span><span class="ti-value" id="tkr-mempool">--</span></span>
+    <span class="ticker-item"><span class="ti-label">FASTEST</span><span class="ti-value" id="tkr-fastest">--</span></span>
+    <span class="ticker-item"><span class="ti-label">HOUR</span><span class="ti-value" id="tkr-hour">--</span></span>
+    <span class="ticker-item"><span class="ti-label">ECONOMY</span><span class="ti-value" id="tkr-economy">--</span></span>
+    <span class="ticker-item"><span class="ti-label">BTC</span><span class="ti-value" id="tkr-btc">--</span></span>
+    <span class="ticker-item"><span class="ti-label">BLOCKS</span><span class="ti-value" id="tkr-blocks">--</span></span>
+    <span class="ticker-item"><span class="ti-label">LN NODES</span><span class="ti-value" id="tkr-ln-nodes">--</span></span>
+    <span class="ticker-item"><span class="ti-label">LN CAP</span><span class="ti-value" id="tkr-ln-cap">--</span></span>
+    <span class="ticker-item"><span class="ti-label">UPDATED</span><span class="ti-value" id="tkr-updated">--</span></span>
+  </div>
 </div>
 
 <script src="tools/data-engine.js"></script>
@@ -248,6 +280,31 @@ DATA_ENGINE.onUpdate(function() {
 
   var btcPrice = d.btc_price || 64000;
   document.getElementById('miner-reward').textContent = '~$' + Math.round(3.125 * btcPrice + 0.5 * btcPrice).toLocaleString() + '/block';
+
+  // --- Dollar Cost Context ---
+  var fastestUsd = (f * 140 * btcPrice) / 100000000;
+  var hourUsd = ((fees.hourFee || 1) * 140 * btcPrice) / 100000000;
+  var economyUsd = (e * 140 * btcPrice) / 100000000;
+  document.getElementById('dollar-cost').textContent =
+    'Fastest: $' + fastestUsd.toFixed(2) + ' │ Hour: $' + hourUsd.toFixed(2) + ' │ Economy: $' + economyUsd.toFixed(2);
+
+  // --- Streaming Metrics Ticker ---
+  var mpCount = d.mempool ? (d.mempool.count || 0).toLocaleString() : '--';
+  var blockH = d.block_height ? d.block_height.toLocaleString() : '--';
+  var lnNodes = d.lightning ? (d.lightning.node_count || 0).toLocaleString() : '--';
+  var lnCap = d.lightning ? (d.lightning.total_capacity || 0).toFixed(0) + ' BTC' : '--';
+  var updated = d.last_updated ? new Date(d.last_updated).toLocaleTimeString() : '--';
+  var btcDisplay = btcPrice ? '$' + btcPrice.toLocaleString() : '--';
+
+  document.getElementById('tkr-mempool').textContent = mpCount;
+  document.getElementById('tkr-fastest').textContent = (fees.fastestFee || '--') + ' sat';
+  document.getElementById('tkr-hour').textContent = (fees.hourFee || '--') + ' sat';
+  document.getElementById('tkr-economy').textContent = (fees.economyFee || '--') + ' sat';
+  document.getElementById('tkr-btc').textContent = btcDisplay;
+  document.getElementById('tkr-blocks').textContent = blockH;
+  document.getElementById('tkr-ln-nodes').textContent = lnNodes;
+  document.getElementById('tkr-ln-cap').textContent = lnCap;
+  document.getElementById('tkr-updated').textContent = updated;
 });
 </script>
 </body>

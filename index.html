@@ -8,30 +8,44 @@
     html, body { width: 100%; height: 100%; overflow: hidden; background: #1A1612; font-family: -apple-system, system-ui, sans-serif; }
     #viz-fees { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; }
 
-    /* Top bar — network state in plain language */
     .state-bar { position: fixed; top: 16px; left: 50%; transform: translateX(-50%); z-index: 20; text-align: center; pointer-events: none; }
     .state-bar .state-label { font-size: 12px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; }
     .state-bar .state-desc { font-size: 13px; color: rgba(255,255,255,0.5); margin-top: 4px; }
 
-    /* Bottom CTA */
-    .bottom-area { position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%); z-index: 10; text-align: center; }
+    .bottom-area { position: fixed; bottom: 48px; left: 50%; transform: translateX(-50%); z-index: 10; text-align: center; }
     .bottom-area .cta { display: inline-block; padding: 14px 32px; background: #F7931A; color: #1A1612; font-size: 17px; font-weight: 700; border-radius: 100px; text-decoration: none; transition: transform 0.2s, box-shadow 0.2s; }
     .bottom-area .cta:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(247,147,26,0.3); }
     .bottom-area .hint { font-size: 11px; color: rgba(255,255,255,0.3); margin-top: 8px; }
 
-    /* Legend — appears on hover over ? */
-    .legend-toggle { position: fixed; bottom: 100px; right: 20px; z-index: 30; width: 32px; height: 32px; border-radius: 50%; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.4); font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+    .legend-toggle { position: fixed; bottom: 120px; right: 20px; z-index: 30; width: 32px; height: 32px; border-radius: 50%; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.4); font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
     .legend-toggle:hover { background: rgba(255,255,255,0.15); color: rgba(255,255,255,0.8); }
-    .legend-panel { position: fixed; bottom: 140px; right: 20px; z-index: 30; background: #2A2622; border: 1px solid #3A3632; border-radius: 10px; padding: 16px; width: 220px; display: none; }
+    .legend-panel { position: fixed; bottom: 160px; right: 20px; z-index: 30; background: #2A2622; border: 1px solid #3A3632; border-radius: 10px; padding: 16px; width: 220px; display: none; }
     .legend-panel.visible { display: block; }
     .legend-panel .l-item { display: flex; align-items: center; gap: 10px; padding: 4px 0; font-size: 12px; color: rgba(255,255,255,0.6); }
     .legend-panel .l-dot { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
     .legend-panel .l-title { font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.8); margin-bottom: 8px; }
 
+    #genesis-strip { position: fixed; bottom: 100px; left: 0; width: 100vw; height: 2px; z-index: 15; }
+    #genesis-strip canvas { display: block; width: 100%; height: 100%; }
+
+    #dollar-context { position: fixed; top: 55%; left: 50%; transform: translateX(-50%); z-index: 15; text-align: center; font-size: 14px; color: rgba(255,255,255,0.4); pointer-events: none; font-variant-numeric: tabular-nums; }
+
+    #metrics-ticker { position: fixed; bottom: 0; left: 0; width: 100vw; z-index: 15; overflow: hidden; white-space: nowrap; font-size: 11px; color: rgba(255,255,255,0.3); padding: 4px 0; background: #1A1612; border-top: 1px solid rgba(255,255,255,0.05); font-variant-numeric: tabular-nums; letter-spacing: 0.3px; }
+    .ticker-track { display: inline-block; white-space: nowrap; padding-left: 0; animation: ticker-scroll 45s linear infinite; }
+    .ticker-track span { display: inline-block; }
+    .ticker-track .sep { margin: 0 10px; color: rgba(255,255,255,0.15); }
+    @keyframes ticker-scroll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
     @media (max-width: 600px) {
-      .bottom-area { width: 90%; }
+      .bottom-area { width: 90%; bottom: 42px; }
       .bottom-area .cta { display: block; }
       .legend-panel { right: 10px; width: 180px; }
+      .legend-toggle { bottom: 110px; right: 10px; }
+      .legend-panel { bottom: 150px; right: 10px; }
+      #dollar-context { font-size: 12px; top: 52%; }
     }
   </style>
 </head>
@@ -58,6 +72,14 @@
     <div class="hint">Hover over bars to see block details</div>
   </div>
 
+  <div id="genesis-strip"><canvas id="genesis-canvas"></canvas></div>
+
+  <div id="dollar-context">
+    Economy: <span id="ctx-economy">--</span> sat/vB = $<span id="ctx-dollar">--</span> per tx
+  </div>
+
+  <div id="metrics-ticker"><div class="ticker-track" id="ticker-track"></div></div>
+
   <script src="tools/data-engine.js"></script>
   <script src="tools/viz-core.js"></script>
   <script src="tools/viz-fees.js"></script>
@@ -65,28 +87,132 @@
     DATA_ENGINE.start();
     VIZ_Fees.init('viz-fees');
 
-    // Update state bar when data arrives
-    DATA_ENGINE.onUpdate(function() {
+    function feeColor(fee) {
+      var p = Math.min(1, Math.max(0, fee || 0) / 50);
+      return {
+        r: Math.round(p * 248 + (1-p) * 63),
+        g: Math.round((1-p) * 185 + p * 81),
+        b: Math.round((1-p) * 80 + p * 73)
+      };
+    }
+
+    function drawGenesisStrip() {
+      var c = document.getElementById('genesis-canvas');
+      if (!c) return;
+      var rect = c.parentElement.getBoundingClientRect();
+      var dpr = window.devicePixelRatio || 1;
+      var w = Math.round(rect.width * dpr);
+      var h = Math.round(rect.height * dpr);
+      if (w < 2 || h < 1) return;
+      c.width = w;
+      c.height = h;
+      var ctx = c.getContext('2d');
+      var data = DATA_ENGINE.get().fee_history || [];
+      var fees = DATA_ENGINE.get().fees || {};
+      var fc = feeColor(fees.fastestFee || 3);
+      var grad = ctx.createLinearGradient(0, 0, w, 0);
+      grad.addColorStop(0, '#1A1612');
+      grad.addColorStop(0.6, 'rgba(' + fc.r + ',' + fc.g + ',' + fc.b + ',0.25)');
+      grad.addColorStop(0.9, 'rgba(' + fc.r + ',' + fc.g + ',' + fc.b + ',0.6)');
+      grad.addColorStop(1, 'rgb(' + fc.r + ',' + fc.g + ',' + fc.b + ')');
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, w, h);
+      var n = Math.min(data.length, 144);
+      if (n > 0) {
+        var startX = Math.round(w * 0.98);
+        var barW = Math.max(1, (w - startX) / n);
+        for (var i = 0; i < n; i++) {
+          var entry = data[data.length - 1 - i];
+          var feeRate = Math.min(500, Math.max(0.1, (entry.avgFees || 0) / 2500000));
+          var pc = feeColor(feeRate);
+          ctx.fillStyle = 'rgb(' + pc.r + ',' + pc.g + ',' + pc.b + ')';
+          ctx.fillRect(startX + Math.round(i * barW), 0, Math.max(1, Math.round(barW)), h);
+        }
+      }
+    }
+
+    function updateDollarContext() {
+      var fees = DATA_ENGINE.get().fees || {};
+      var price = DATA_ENGINE.get().btc_price || 0;
+      var economy = fees.economyFee || fees.hourFee || 1;
+      var txCost = economy * 140 * price / 100000000;
+      document.getElementById('ctx-economy').textContent = economy.toFixed(0);
+      document.getElementById('ctx-dollar').textContent = txCost.toFixed(2);
+    }
+
+    function fmtNum(n) {
+      if (typeof n !== 'number') return '0';
+      if (n >= 1000000) return (n / 1000000).toFixed(1) + 'M';
+      if (n >= 1000) return n.toLocaleString();
+      return n.toString();
+    }
+
+    var tickerCache = '';
+
+    function buildTicker() {
+      var d = DATA_ENGINE.get();
+      var blocks = d.block_height || 840000;
+      var mp = d.mempool.count || 0;
+      var price = d.btc_price || 0;
+      var items = [
+        fmtNum(blocks) + ' blocks',
+        fmtNum(mp) + ' txs in mempool',
+        '84M UTXOs',
+        '425 EH/s',
+        price ? '$' + Math.round(price).toLocaleString() + ' BTC' : '-- BTC'
+      ];
+      return items.join(' \u25B8 ');
+    }
+
+    function updateTicker() {
+      var text = buildTicker();
+      if (text === tickerCache) return;
+      tickerCache = text;
+      var track = document.getElementById('ticker-track');
+      track.innerHTML = '<span>' + text + '</span><span>' + text + '</span>';
+      track.style.animation = 'none';
+      track.offsetHeight;
+      track.style.animation = '';
+    }
+
+    var stateLabel = document.getElementById('state-label');
+    var stateDesc = document.getElementById('state-desc');
+
+    function refreshUI() {
       var f = DATA_ENGINE.get().fees || {};
       var fastest = f.fastestFee || 3;
-      var label = document.getElementById('state-label');
-      var desc = document.getElementById('state-desc');
       if (fastest < 5) {
-        label.textContent = '🟢 Network calm';
-        label.style.color = '#3FB950';
-        desc.textContent = 'Fees are low. Good time to send.';
+        stateLabel.textContent = '\uD83D\uDFE2 Network calm';
+        stateLabel.style.color = '#3FB950';
+        stateDesc.textContent = 'Fees are low. Good time to send.';
       } else if (fastest < 20) {
-        label.textContent = '🟡 Moderate congestion';
-        label.style.color = '#D29922';
-        desc.textContent = 'Fees are elevated. Economy rate recommended.';
+        stateLabel.textContent = '\uD83D\uDFE1 Moderate congestion';
+        stateLabel.style.color = '#D29922';
+        stateDesc.textContent = 'Fees are elevated. Economy rate recommended.';
       } else {
-        label.textContent = '🔴 Network congested';
-        label.style.color = '#F85149';
-        desc.textContent = 'Fees are high. Consider waiting.';
+        stateLabel.textContent = '\uD83D\uDD34 Network congested';
+        stateLabel.style.color = '#F85149';
+        stateDesc.textContent = 'Fees are high. Consider waiting.';
       }
+      drawGenesisStrip();
+      updateDollarContext();
+      updateTicker();
+    }
+
+    DATA_ENGINE.onUpdate(refreshUI);
+
+    var initTimer = setInterval(function() {
+      if (DATA_ENGINE.get().block_height || DATA_ENGINE.get().fees.fastestFee) {
+        refreshUI();
+        clearInterval(initTimer);
+      }
+    }, 300);
+    setTimeout(function() { clearInterval(initTimer); }, 10000);
+
+    window.addEventListener('resize', function() {
+      setTimeout(drawGenesisStrip, 50);
     });
 
-    // Canvas hover tooltip
     var canvas = document.getElementById('viz-fees');
     var tooltip = document.createElement('div');
     tooltip.style.cssText = 'position:fixed;padding:8px 12px;background:#2A2622;border:1px solid #3A3632;border-radius:8px;font-size:12px;color:rgba(255,255,255,0.8);pointer-events:none;z-index:40;display:none;';
@@ -94,8 +220,7 @@
 
     canvas.addEventListener('mousemove', function(e) {
       var rect = canvas.getBoundingClientRect();
-      var mx = e.clientX - rect.left;
-      var mxPct = mx / rect.width;
+      var mxPct = (e.clientX - rect.left) / rect.width;
       var barIdx = Math.floor((1 - mxPct) * 144);
       var feeVal = VIZ_Fees.getFeeAt ? VIZ_Fees.getFeeAt(barIdx) : null;
       if (feeVal) {
