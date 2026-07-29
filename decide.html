@@ -271,8 +271,18 @@ API.onData(function(d) {
     <a href="https://github.com/prateekposwal/block-space-economics">GitHub</a>
     <a href="/live">Live Dashboard</a>
   </div>
-  <a href="/live" class="btn-live">📊 Explore the Live Dashboard</a>
   <p>Bitcoin Sahi — Blockchain Research & Development. Built in public.</p>
 </footer>
+
+<script>
+// Hash-based persona selection
+var hash = window.location.hash.replace('#', '');
+var valid = ['user','lightning','exchange','node','miner','research'];
+if (hash && valid.indexOf(hash) >= 0) {
+  renderWorkspace(hash);
+  var ind = document.getElementById('decide-indicator');
+  if (ind) ind.textContent = ' › ' + hash.charAt(0).toUpperCase() + hash.slice(1);
+}
+</script>
 </body>
 </html>
