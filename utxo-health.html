@@ -184,12 +184,7 @@ footer .links { display: flex; gap: 16px; justify-content: center; flex-wrap: wr
     <span>·</span>
     <span>Economy <strong id="live-economy">—</strong></span>
   </div>
-  <div class="live-badge" id="live-badge" style="display:none;">
-    <span class="dot"></span>
-    <span>Live — updates every 60s</span>
-    <span class="clock" id="live-badge-clock"></span>
-  </div>
-</div><!-- ─── HEALTH SCORE + KPI ─── -->
+  </div><!-- ─── HEALTH SCORE + KPI ─── -->
 <div class="gauge-section">
   <div class="gauge-wrap">
     <svg width="260" height="260" viewBox="0 0 260 260">
@@ -250,6 +245,7 @@ footer .links { display: flex; gap: 16px; justify-content: center; flex-wrap: wr
 
 <!-- ─── GROWTH PROJECTION ─── -->
 <div class="container">
+  <div class="live-badge" id="live-badge" style="display:none;"><span class="dot"></span><span>Live — updates every 60s</span><span class="clock" id="live-badge-clock"></span></div>
 <div class="section">
   <div class="section-header">5-Year Outlook</div>
   <h2 class="section-title">UTXO Set Growth Projection</h2>
@@ -522,5 +518,29 @@ updateAll();
 API.start({ interval: 60000 });
 </script>
 
+<script>
+(function(){
+  var el = document.getElementById('live-badge');
+  var cl = document.getElementById('live-badge-clock');
+  if (!el) return;
+  el.style.display = 'inline-flex';
+  var start = Date.now();
+  function tick() {
+    var s = Math.floor((Date.now() - start) / 1000);
+    if (cl) cl.textContent = s < 5 ? 'just now' : s + 's ago';
+  }
+  tick();
+  setInterval(tick, 2000);
+  // Reset on API data
+  if (typeof API !== 'undefined') {
+    var origStart = API.start;
+    API.start = function(opts) {
+      start = Date.now();
+      tick();
+      if (origStart) origStart(opts);
+    };
+  }
+})();
+</script>
 </body>
 </html>

@@ -115,6 +115,7 @@
   <a href="/live">📊 Dashboard</a>
 </nav>
 
+  <div class="live-badge" id="live-badge" style="display:none;"><span class="dot"></span><span>Live — updates every 60s</span><span class="clock" id="live-badge-clock"></span></div>
 <div class="container">
   <div class="page-title">Node Cost Calculator</div>
   <div class="page-sub">What does running a Bitcoin node really cost? This interactive model factors in hardware, bandwidth, power, and storage — and estimates your share of the inscription data externality. All parameters are adjustable.</div>
@@ -426,5 +427,29 @@ API.start({ interval: 60000 });
 
 <div id="api-debug" style="font-size:9px;color:#444;text-align:center;margin-top:2px;font-family:monospace;"></div>
 </footer>
+<script>
+(function(){
+  var el = document.getElementById('live-badge');
+  var cl = document.getElementById('live-badge-clock');
+  if (!el) return;
+  el.style.display = 'inline-flex';
+  var start = Date.now();
+  function tick() {
+    var s = Math.floor((Date.now() - start) / 1000);
+    if (cl) cl.textContent = s < 5 ? 'just now' : s + 's ago';
+  }
+  tick();
+  setInterval(tick, 2000);
+  // Reset on API data
+  if (typeof API !== 'undefined') {
+    var origStart = API.start;
+    API.start = function(opts) {
+      start = Date.now();
+      tick();
+      if (origStart) origStart(opts);
+    };
+  }
+})();
+</script>
 </body>
 </html>
