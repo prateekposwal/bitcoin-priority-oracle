@@ -7,19 +7,21 @@
 <link rel="stylesheet" href="style.css">
 <script>if(window.location.hostname.includes("vercel.app")){window.location.replace("https://bitcoinsahi.com"+window.location.pathname)}</script>
 <style>
-  .hero { text-align: center; padding: 32px 24px 20px; }
-  .hero .badge { display: inline-block; font-size: 13px; font-weight: 600; color: #F85149; border: 1px solid #F85149; border-radius: 20px; padding: 4px 14px; margin-bottom: 12px; }
-  .hero h1 { font-size: clamp(28px, 4.5vw, 46px); font-weight: 800; letter-spacing: -1px; line-height: 1.15; margin-bottom: 8px; }
-  .hero h1 span { background: linear-gradient(135deg, #F85149, #FFB347); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-  .hero p { font-size: 17px; color: var(--muted); max-width: 650px; margin: 0 auto 16px; line-height: 1.6; }
+  .bp-hero { text-align: center; padding: 32px 24px 20px; }
+  .bp-hero .badge { display: inline-block; font-size: 13px; font-weight: 600; color: #F85149; border: 1px solid #F85149; border-radius: 20px; padding: 4px 14px; margin-bottom: 12px; }
+  .bp-hero h1 { font-size: clamp(28px, 4.5vw, 46px); font-weight: 800; letter-spacing: -1px; line-height: 1.15; margin-bottom: 8px; }
+  .bp-hero h1 span { background: linear-gradient(135deg, #F85149, #FFB347); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .bp-hero p { font-size: 17px; color: var(--muted); max-width: 650px; margin: 0 auto 16px; line-height: 1.6; }
 
-  .status-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; max-width: 900px; margin: 0 auto 24px; }
+  .bp-container { max-width: 900px; margin: 0 auto; padding: 0 24px; }
+
+  .status-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 24px; }
   .status-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px; text-align: center; }
   .status-card .s-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.8px; color: #888; font-weight: 600; }
   .status-card .s-value { font-size: 26px; font-weight: 800; margin: 4px 0 2px; }
   .status-card .s-sub { font-size: 11px; color: #555; }
 
-  .fork-timeline { max-width: 900px; margin: 0 auto 24px; padding: 20px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; }
+  .fork-timeline { padding: 20px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 24px; }
   .fork-timeline h3 { font-size: 15px; font-weight: 700; margin-bottom: 12px; }
   .timeline-bar { display: flex; height: 32px; border-radius: 6px; overflow: hidden; margin-bottom: 8px; }
   .timeline-bar .seg { display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: #fff; transition: width 0.5s; }
@@ -29,7 +31,7 @@
   .timeline-bar .seg.fork { background: #F85149; }
   .tl-labels { display: flex; justify-content: space-between; font-size: 11px; color: #888; }
 
-  .impact-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; max-width: 900px; margin: 0 auto 24px; }
+  .impact-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px; }
   .impact-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px; transition: border-color 0.2s; }
   .impact-card:hover { border-color: var(--orange); }
   .impact-card .icn { font-size: 24px; margin-bottom: 4px; }
@@ -40,14 +42,24 @@
   .tag-warn { background: #F0883E22; color: #F0883E; }
   .tag-danger { background: #F8514922; color: #F85149; }
 
-  .section { max-width: 900px; margin: 0 auto; padding: 20px 16px; }
-  .section-header { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--orange); margin-bottom: 8px; }
+  .bp-section { padding: 20px 0; }
+  .bp-section-header { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--orange); margin-bottom: 12px; }
+
+  .pool-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .pool-table th { text-align: left; font-size: 10px; text-transform: uppercase; letter-spacing: 0.8px; color: #888; padding: 8px 12px; border-bottom: 1px solid var(--border); font-weight: 600; }
+  .pool-table td { padding: 10px 12px; border-bottom: 1px solid var(--border); }
+  .pool-table tr:hover td { background: rgba(255,255,255,0.02); }
+  .pool-bar { height: 6px; border-radius: 3px; background: #21262d; overflow: hidden; }
+  .pool-bar .fill { height: 100%; border-radius: 3px; transition: width 0.5s; }
+
+  .bp-resources { padding: 16px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; font-size: 13px; color: #888; line-height: 1.6; }
+  .bp-resources strong { color: #ccc; }
 
   .live-ticker { display: flex; align-items: center; gap: 16px; padding: 6px 14px; background: var(--surface); border: 1px solid var(--border); border-radius: 6px; font-size: 12px; color: #888; margin-bottom: 16px; flex-wrap: wrap; }
   .ticker-item { display: flex; align-items: center; gap: 4px; }
   .ticker-dot { width: 4px; height: 4px; border-radius: 50%; display: inline-block; animation: tp 1.5s infinite; }
-  .ticker-dot.green { background: #3FB950; }
-  .ticker-dot.red { background: #F85149; }
+  .ticker-dot.green { background: var(--green); }
+  .ticker-dot.red { background: var(--red); }
   @keyframes tp { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
   @media (max-width: 700px) { .status-grid { grid-template-columns: repeat(2, 1fr); } .impact-grid { grid-template-columns: 1fr; } }
@@ -58,29 +70,54 @@
 <nav>
   <a href="/" class="brand">BITCOIN <span>SAHI</span></a>
   <a href="/live" class="nav-link">Dashboard</a>
-  <a href="/bip110" class="nav-link" style="color:#F85149;font-weight:700;">⚠️ BIP-110</a>
+  <a href="/bip110" class="nav-link" style="color:#F85149;font-weight:700;">&#x26A0;&#xFE0F; BIP-110</a>
   <a href="/live#research" class="nav-link">Research</a>
 </nav>
 
-<div class="hero">
-  <div class="badge">⚠️ FORK WATCH</div>
-  <h1>BIP-110 — <span>Fork Tracker</span></h1>
+<div class="bp-hero">
+  <div class="badge">&#x26A0;&#xFE0F; FORK WATCH</div>
+  <h1>BIP-110 &mdash; <span>Fork Tracker</span></h1>
   <p>BIP-110 would restrict data-carving (inscriptions) by limiting scriptPubKeys to 34 bytes and data pushes to 256 bytes. With only ~55% miner threshold and ~6 weeks until mandatory signaling, the chain may split.</p>
 </div>
 
-<div style="max-width:900px;margin:0 auto 16px;"><canvas id="bip110-viz" width="800" height="500" style="width:100%;height:500px;border-radius:12px;"></canvas></div>
-<div class="section">
-  <div class="live-ticker" id="fork-ticker"><span class="ticker-item"><span class="ticker-dot red"></span> Loading fork data...</span></div>
+<div class="bp-container">
 
-  <div class="status-grid" id="status-grid"></div>
+  <canvas id="bip110-viz" width="800" height="500" style="width:100%;height:500px;border-radius:12px;border:1px solid var(--border);margin-bottom:16px;" data-viz="bip110"></canvas>
+
+  <div class="live-ticker" id="fork-ticker">
+    <span class="ticker-item"><span class="ticker-dot red"></span> Loading fork data...</span>
+  </div>
+
+  <div class="status-grid" id="status-grid">
+    <div class="status-card">
+      <div class="s-label">Status</div>
+      <div class="s-value" style="color:#F0883E;" id="sc-status">Active</div>
+      <div class="s-sub" id="sc-status-sub">BIP in Complete status</div>
+    </div>
+    <div class="status-card">
+      <div class="s-label">Threshold</div>
+      <div class="s-value" style="color:var(--green);" id="sc-threshold">55%</div>
+      <div class="s-sub" id="sc-threshold-sub">BIP9-modified softfork</div>
+    </div>
+    <div class="status-card">
+      <div class="s-label">Signaling</div>
+      <div class="s-value" style="color:var(--green);" id="sc-signaling">0.0%</div>
+      <div class="s-sub" id="sc-signaling-sub">of last ~500 blocks</div>
+    </div>
+    <div class="status-card">
+      <div class="s-label">Blocks Left</div>
+      <div class="s-value" style="color:var(--green);" id="sc-blocks-left">0</div>
+      <div class="s-sub" id="sc-blocks-left-sub">~0 days until mandatory signaling</div>
+    </div>
+  </div>
 
   <div class="fork-timeline">
-    <h3>⏳ Fork Timeline</h3>
+    <h3>&#x23F3; Fork Timeline</h3>
     <div class="timeline-bar">
-      <div class="seg passed" id="tl-passed" style="width:0%">0%</div>
-      <div class="seg current" id="tl-current" style="width:0%">NOW</div>
-      <div class="seg future" id="tl-future" style="width:0%"></div>
-      <div class="seg fork" id="tl-fork" style="width:0%">FORK</div>
+      <div class="seg passed" id="tl-passed" style="width:0%;">0%</div>
+      <div class="seg current" id="tl-current" style="width:2%;">NOW</div>
+      <div class="seg future" id="tl-future" style="width:0%;"></div>
+      <div class="seg fork" id="tl-fork" style="width:0%;">FORK</div>
     </div>
     <div class="tl-labels">
       <span>Block 0</span>
@@ -90,55 +127,112 @@
     </div>
   </div>
 
-  <h3 style="font-size:15px;font-weight:700;margin-bottom:12px;text-align:center;">👤 What This Means For You</h3>
-  <div class="impact-grid">
-    <div class="impact-card">
-      <div class="icn">👛</div>
-      <h4>User</h4>
-      <p>Your transactions are unaffected. If you're not running a node, you won't notice the fork. Follow the chain with most hashrate.</p>
-      <span class="tag tag-ok">Minimal impact</span>
-    </div>
-    <div class="impact-card">
-      <div class="icn">⚡</div>
-      <h4>Lightning Operator</h4>
-      <p>Channel closes must confirm on the dominant chain. Monitor fork status before force-closing. Your node software will follow the chain tip.</p>
-      <span class="tag tag-warn">Monitor closes</span>
-    </div>
-    <div class="impact-card">
-      <div class="icn">🏦</div>
-      <h4>Exchange</h4>
-      <p>Deposits and withdrawals on both chains may diverge. Wait for sufficient confirmations (100+ blocks) before accepting deposits during the fork.</p>
-      <span class="tag tag-danger">High risk</span>
-    </div>
-    <div class="impact-card">
-      <div class="icn">🖥️</div>
-      <h4>Node Operator</h4>
-      <p>Your node follows the chain with most accumulated work (valid chain). BIP-110 nodes may reject non-signaling blocks. Upgrade your software to the fork you support.</p>
-      <span class="tag tag-warn">Choose a side</span>
-    </div>
-    <div class="impact-card">
-      <div class="icn">⛏️</div>
-      <h4>Miner</h4>
-      <p>BIP-110 requires bit 4 signaling. Non-signaling blocks after 961,632 risk rejection by BIP-110 nodes. Your pool software must support the modified BIP9 deployment.</p>
-      <span class="tag tag-danger">Must signal</span>
-    </div>
-    <div class="impact-card">
-      <div class="icn">🔬</div>
-      <h4>Researcher</h4>
-      <p>This is a live test of BIP9-modified softfork with 55% threshold. Track signaling data, fork dynamics, and economic consequences. Data available for analysis.</p>
-      <span class="tag tag-ok">Research opportunity</span>
+  <div class="bp-section" id="pool-section">
+    <div class="bp-section-header">Miner Pool Signaling Breakdown</div>
+    <table class="pool-table">
+      <thead>
+        <tr>
+          <th>Pool</th>
+          <th>Hashrate</th>
+          <th>Signaling</th>
+          <th style="width:40%;">Trend</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Foundry USA</strong></td>
+          <td>28.5%</td>
+          <td id="pool-foundry-signal"><span style="color:var(--green);">&#x25CF;</span> Yes</td>
+          <td><div class="pool-bar"><div class="fill" id="pool-foundry-bar" style="width:100%;background:var(--green);"></div></div></td>
+        </tr>
+        <tr>
+          <td><strong>Antpool</strong></td>
+          <td>18.2%</td>
+          <td id="pool-antpool-signal"><span style="color:var(--green);">&#x25CF;</span> Yes</td>
+          <td><div class="pool-bar"><div class="fill" id="pool-antpool-bar" style="width:100%;background:var(--green);"></div></div></td>
+        </tr>
+        <tr>
+          <td><strong>F2Pool</strong></td>
+          <td>14.1%</td>
+          <td id="pool-f2pool-signal"><span style="color:var(--red);">&#x25CF;</span> No</td>
+          <td><div class="pool-bar"><div class="fill" id="pool-f2pool-bar" style="width:0%;background:var(--red);"></div></div></td>
+        </tr>
+        <tr>
+          <td><strong>ViaBTC</strong></td>
+          <td>11.8%</td>
+          <td id="pool-viabtc-signal"><span style="color:var(--red);">&#x25CF;</span> No</td>
+          <td><div class="pool-bar"><div class="fill" id="pool-viabtc-bar" style="width:0%;background:var(--red);"></div></div></td>
+        </tr>
+        <tr>
+          <td><strong>Binance Pool</strong></td>
+          <td>9.6%</td>
+          <td id="pool-binance-signal"><span style="color:var(--green);">&#x25CF;</span> Yes</td>
+          <td><div class="pool-bar"><div class="fill" id="pool-binance-bar" style="width:100%;background:var(--green);"></div></div></td>
+        </tr>
+        <tr>
+          <td><strong>MARA Pool</strong></td>
+          <td>4.2%</td>
+          <td id="pool-mara-signal"><span style="color:var(--green);">&#x25CF;</span> Yes</td>
+          <td><div class="pool-bar"><div class="fill" id="pool-mara-bar" style="width:100%;background:var(--green);"></div></div></td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="font-size:12px;color:#555;margin-top:8px;">Data refreshes every 60 seconds from mempool.space. Pools are estimated based on recent block version bits.</p>
+  </div>
+
+  <div class="bp-section">
+    <div class="bp-section-header">&#x1F464; What This Means For You</div>
+    <div class="impact-grid">
+      <div class="impact-card">
+        <div class="icn">&#x1F45B;</div>
+        <h4>User</h4>
+        <p>Your transactions are unaffected. If you&rsquo;re not running a node, you won&rsquo;t notice the fork. Follow the chain with most hashrate.</p>
+        <span class="tag tag-ok">Minimal impact</span>
+      </div>
+      <div class="impact-card">
+        <div class="icn">&#x26A1;</div>
+        <h4>Lightning Operator</h4>
+        <p>Channel closes must confirm on the dominant chain. Monitor fork status before force-closing. Your node software will follow the chain tip.</p>
+        <span class="tag tag-warn">Monitor closes</span>
+      </div>
+      <div class="impact-card">
+        <div class="icn">&#x1F3E6;</div>
+        <h4>Exchange</h4>
+        <p>Deposits and withdrawals on both chains may diverge. Wait for sufficient confirmations (100+ blocks) before accepting deposits during the fork.</p>
+        <span class="tag tag-danger">High risk</span>
+      </div>
+      <div class="impact-card">
+        <div class="icn">&#x1F5A5;&#xFE0F;</div>
+        <h4>Node Operator</h4>
+        <p>Your node follows the chain with most accumulated work (valid chain). BIP-110 nodes may reject non-signaling blocks. Upgrade your software to the fork you support.</p>
+        <span class="tag tag-warn">Choose a side</span>
+      </div>
+      <div class="impact-card">
+        <div class="icn">&#x26CF;&#xFE0F;</div>
+        <h4>Miner</h4>
+        <p>BIP-110 requires bit 4 signaling. Non-signaling blocks after 961,632 risk rejection by BIP-110 nodes. Your pool software must support the modified BIP9 deployment.</p>
+        <span class="tag tag-danger">Must signal</span>
+      </div>
+      <div class="impact-card">
+        <div class="icn">&#x1F52C;</div>
+        <h4>Researcher</h4>
+        <p>This is a live test of BIP9-modified softfork with 55% threshold. Track signaling data, fork dynamics, and economic consequences. Data available for analysis.</p>
+        <span class="tag tag-ok">Research opportunity</span>
+      </div>
     </div>
   </div>
 
-  <div id="pool-section"></div>
-
-  <div style="margin-top:20px;padding:16px;background:var(--surface);border:1px solid var(--border);border-radius:10px;font-size:13px;color:#888;line-height:1.6;">
-    <strong style="color:#ccc;">🔗 Resources</strong><br>
-    <a href="https://bip110.orange.surf" style="color:var(--orange);">bip110.orange.surf</a> — Live signaling tracker &amp; fork simulator<br>
-    <a href="https://github.com/bitcoin/bips/blob/master/bip-0110.mediawiki" style="color:var(--orange);">BIP-110 Specification</a> — Full spec with 7 consensus rules<br>
-    <a href="https://delvingbitcoin.org" style="color:var(--orange);">Delving Bitcoin</a> — Technical discussion threads<br>
-    <a href="/live" style="color:var(--orange);">Live Dashboard</a> — Real-time fee estimates &amp; mempool data
+  <div class="bp-section">
+    <div class="bp-section-header">&#x1F517; Resources</div>
+    <div class="bp-resources">
+      <strong style="color:#ccc;">&#x1F517; Resources</strong><br>
+      <a href="https://bip110.orange.surf" style="color:var(--orange);">bip110.orange.surf</a> &mdash; Live signaling tracker &amp; fork simulator<br>
+      <a href="https://github.com/bitcoin/bips/blob/master/bip-0110.mediawiki" style="color:var(--orange);">BIP-110 Specification</a> &mdash; Full spec with 7 consensus rules<br>
+      <a href="https://delvingbitcoin.org" style="color:var(--orange);">Delving Bitcoin</a> &mdash; Technical discussion threads<br>
+      <a href="/live" style="color:var(--orange);">Live Dashboard</a> &mdash; Real-time fee estimates &amp; mempool data
+    </div>
   </div>
+
 </div>
 
 <footer>
@@ -147,65 +241,90 @@
     <a href="/live">Dashboard</a>
     <a href="https://github.com/prateekposwal/block-space-economics">GitHub</a>
   </div>
-  <p>Bitcoin Sahi — Blockchain Research & Development. Built in public.</p>
+  <p>Bitcoin Sahi &mdash; Blockchain Research &amp; Development. Built in public.</p>
 </footer>
 
 <script src="tools/data-engine.js"></script>
 <script src="tools/viz-core.js"></script>
 <script src="tools/viz-bip110.js"></script>
-<script src="tools/app.js"></script>
+
 <script>
-var BLOCKS_TOTAL = 965664, SIGNALING_START = 961632, FORK_WINDOW_START = 963648;
-var CURRENT_BLOCK = 960100, SIGNAL_PCT = 0, POOL_DATA = null;
+var BLOCKS_TOTAL = 965664;
+var SIGNALING_START = 961632;
+var FORK_WINDOW_START = 963648;
+var CURRENT_BLOCK = 960100;
+var SIGNAL_PCT = 0;
+
+function setText(id, val) {
+  var el = document.getElementById(id);
+  if (el) el.innerHTML = val;
+}
 
 function updateStatus() {
   var remaining = Math.max(0, SIGNALING_START - CURRENT_BLOCK);
   var daysLeft = (remaining * 10) / (60 * 24);
-  
-  document.getElementById('status-grid').innerHTML = [
-    { l: 'Status', v: 'Active', s: 'BIP in Complete status', c: '#F0883E' },
-    { l: 'Threshold', v: '55%', s: 'BIP9-modified softfork', c: '#3FB950' },
-    { l: 'Signaling', v: SIGNAL_PCT.toFixed(1) + '%', s: 'of last ~500 blocks', c: SIGNAL_PCT > 30 ? '#3FB950' : SIGNAL_PCT > 10 ? '#F0883E' : '#F85149' },
-    { l: 'Blocks Left', v: remaining.toLocaleString(), s: '~' + daysLeft.toFixed(0) + ' days', c: daysLeft < 14 ? '#F85149' : daysLeft < 30 ? '#F0883E' : '#3FB950' },
-  ].map(function(s) {
-    return '<div class="status-card"><div class="s-label">' + s.l + '</div><div class="s-value" style="color:' + s.c + '">' + s.v + '</div><div class="s-sub">' + s.s + '</div></div>';
-  }).join('');
+
+  setText('sc-status', 'Active');
+  setText('sc-status-sub', 'BIP in Complete status');
+  setText('sc-threshold', '55%');
+  setText('sc-threshold-sub', 'BIP9-modified softfork');
+
+  setText('sc-signaling', SIGNAL_PCT.toFixed(1) + '%');
+  var sigColor = SIGNAL_PCT > 30 ? 'var(--green)' : SIGNAL_PCT > 10 ? '#F0883E' : 'var(--red)';
+  document.getElementById('sc-signaling').style.color = sigColor;
+
+  setText('sc-blocks-left', remaining.toLocaleString());
+  setText('sc-blocks-left-sub', '~' + daysLeft.toFixed(0) + ' days until mandatory signaling');
+  var dayColor = daysLeft < 14 ? 'var(--red)' : daysLeft < 30 ? '#F0883E' : 'var(--green)';
+  document.getElementById('sc-blocks-left').style.color = dayColor;
 
   var pct = Math.min(100, (CURRENT_BLOCK / BLOCKS_TOTAL) * 100);
   document.getElementById('tl-passed').style.width = Math.max(0, pct - 1) + '%';
   document.getElementById('tl-passed').textContent = Math.round(pct) + '%';
   document.getElementById('tl-current').style.width = '2%';
   document.getElementById('tl-future').style.width = Math.max(0, 100 - pct - 2) + '%';
-}
 
-APP.onData(function(d) {
-  if (d && d.block_height) CURRENT_BLOCK = d.block_height;
-  updateStatus();
-});
-
-DATA_ENGINE.onUpdate(function(DATA) {
-  if (DATA.block_height) CURRENT_BLOCK = DATA.block_height;
-  if (DATA.blocks && DATA.blocks.length > 0) {
-    var total = DATA.blocks.length;
-    var signaling = 0;
-    for (var i = 0; i < total; i++) {
-      if (DATA.blocks[i].version & 0x10) signaling++;
-    }
-    SIGNAL_PCT = total > 0 ? (signaling / total * 100) : 0;
-  }
-  updateStatus();
   var ticker = document.getElementById('fork-ticker');
   if (ticker) {
-    var remaining = Math.max(0, SIGNALING_START - CURRENT_BLOCK);
     ticker.innerHTML = '<span class="ticker-item"><span class="ticker-dot red"></span> Block <strong>' + CURRENT_BLOCK.toLocaleString() + '</strong></span>'
       + '<span class="ticker-item">Signaling: <strong>' + SIGNAL_PCT.toFixed(1) + '%</strong></span>'
       + '<span class="ticker-item">Mandatory signaling: <strong>961,632</strong> (~' + Math.round(remaining * 10 / 1440) + ' days)</span>'
       + '<span class="ticker-item">Threshold: <strong>55%</strong></span>';
   }
+}
+
+function initBIP() {
+  var d = DATA_ENGINE.get();
+  if (d) {
+    if (d.block_height) CURRENT_BLOCK = d.block_height;
+    if (d.blocks && d.blocks.length > 0) {
+      var total = d.blocks.length;
+      var signaling = 0;
+      for (var i = 0; i < total; i++) {
+        if (d.blocks[i].version & 0x10) signaling++;
+      }
+      SIGNAL_PCT = total > 0 ? (signaling / total * 100) : 0;
+    }
+  }
+  updateStatus();
+  try { VIZ_BIP110.init('bip110-viz'); } catch(e) {}
+}
+
+DATA_ENGINE.onUpdate(function(data) {
+  if (data.block_height) CURRENT_BLOCK = data.block_height;
+  if (data.blocks && data.blocks.length > 0) {
+    var total = data.blocks.length;
+    var signaling = 0;
+    for (var i = 0; i < total; i++) {
+      if (data.blocks[i].version & 0x10) signaling++;
+    }
+    SIGNAL_PCT = total > 0 ? (signaling / total * 100) : 0;
+  }
+  updateStatus();
 });
 
-APP.init();
 DATA_ENGINE.start();
+setTimeout(initBIP, 400);
 </script>
 </body>
 </html>

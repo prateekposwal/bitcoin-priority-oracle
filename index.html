@@ -3,16 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bitcoin Sahi — Understand the Fee Market. Make Better Decisions.</title>
+<title>Bitcoin Sahi — Understand what Bitcoin fees actually cost.</title>
 <link rel="stylesheet" href="style.css">
 <script>
 if (window.location.hostname.includes('vercel.app')) {
   window.location.replace('https://bitcoinsahi.com' + window.location.pathname);
 }
 </script>
-<style>html { scroll-behavior: smooth; }
+<style>
+html { scroll-behavior: smooth; }
 
-/* ── Persona Grid ── */
 .persona-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -48,65 +48,29 @@ if (window.location.hostname.includes('vercel.app')) {
   transform: translateY(-3px);
   box-shadow: 0 8px 30px rgba(247,147,26,0.08);
 }
-.persona-card:hover::before {
-  opacity: 1;
-}
-.persona-card .emoji {
-  font-size: 32px;
-  line-height: 1;
-  margin-bottom: 4px;
-}
-.persona-card h3 {
-  font-size: 17px;
-  font-weight: 700;
-  color: var(--text);
-  margin: 0;
-}
-.persona-card .question {
-  font-size: 13px;
-  color: var(--muted);
-  line-height: 1.5;
-  margin: 0 0 8px;
-}
+.persona-card:hover::before { opacity: 1; }
+.persona-card .emoji { font-size: 32px; line-height: 1; margin-bottom: 4px; }
+.persona-card h3 { font-size: 17px; font-weight: 700; color: var(--text); margin: 0; }
+.persona-card .question { font-size: 13px; color: var(--muted); line-height: 1.5; margin: 0 0 8px; }
 .persona-card .card-cta {
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--orange);
-  margin-top: auto;
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  transition: gap 0.2s;
+  font-size: 12px; font-weight: 600; color: var(--orange);
+  margin-top: auto; display: inline-flex; align-items: center; gap: 4px; transition: gap 0.2s;
 }
-.persona-card:hover .card-cta {
-  gap: 8px;
-}
+.persona-card:hover .card-cta { gap: 8px; }
 
-/* ── Fee canvas wrapper ── */
 .viz-wrap {
-  max-width: 900px;
-  margin: 0 auto 28px;
-  position: relative;
+  max-width: 900px; margin: 0 auto 28px; position: relative;
 }
 .viz-wrap canvas {
-  width: 100%;
-  height: 200px;
-  border-radius: 12px;
-  border: 1px solid var(--border);
-  display: block;
+  width: 100%; height: 200px; border-radius: 12px;
+  border: 1px solid var(--border); display: block;
 }
 .viz-overlay {
-  position: absolute;
-  bottom: 10px;
-  right: 14px;
-  font-size: 10px;
-  color: #555;
-  letter-spacing: 0.3px;
-  text-transform: uppercase;
-  pointer-events: none;
+  position: absolute; bottom: 10px; right: 14px;
+  font-size: 10px; color: #555; letter-spacing: 0.3px;
+  text-transform: uppercase; pointer-events: none;
 }
 
-/* ── Nav overrides ── */
 nav .logo { font-weight: 800; font-size: 20px; color: var(--text); letter-spacing: -0.3px; }
 nav .logo span { color: var(--orange); }
 nav a.nav-link { color: var(--muted); transition: color 0.2s; }
@@ -115,7 +79,6 @@ nav .cta:hover { transform: translateY(-1px); box-shadow: 0 4px 20px #F7931A40; 
 
 .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
 
-/* ── Hero ── */
 .hero {
   text-align: center; padding: 80px 24px 50px;
   background: radial-gradient(ellipse at 50% 0%, #F7931A10 0%, transparent 60%);
@@ -140,86 +103,43 @@ nav .cta:hover { transform: translateY(-1px); box-shadow: 0 4px 20px #F7931A40; 
 }
 .hero .btn-secondary:hover { border-color: var(--orange); text-decoration: none; }
 
-/* ── Stats bar ── */
-.stats {
+.stats-bar {
   display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px;
   background: var(--border); border-radius: 12px; overflow: hidden;
-  margin: -20px auto 60px; max-width: 900px;
+  margin: -20px auto 60px; max-width: 900px; position: relative;
 }
-.stat { background: var(--surface); padding: 24px; text-align: center; }
-.stat .num { font-size: 24px; font-weight: 800; }
-.stat .num.orange { color: var(--orange); }
-.stat .num.green { color: #3FB950; }
-.stat .num.blue { color: #58A6FF; }
-.stat .num.purple { color: #BC8CFF; }
-.stat .lbl { font-size: 17px; color: var(--muted); margin-top: 2px; text-transform: uppercase; letter-spacing: 0.5px; }
+.stat-item { background: var(--surface); padding: 24px; text-align: center; }
+.stat-item .num { font-size: 24px; font-weight: 800; }
+.stat-item .num.orange { color: var(--orange); }
+.stat-item .num.green { color: var(--green); }
+.stat-item .num.blue { color: var(--blue); }
+.stat-item .num.purple { color: var(--purple); }
+.stat-item .lbl { font-size: 17px; color: var(--muted); margin-top: 2px; text-transform: uppercase; letter-spacing: 0.5px; }
 
-/* ── Thesis section ── */
-.thesis {
-  padding: 60px 0 40px;
-}
+.thesis { padding: 60px 0 40px; }
 .thesis p.lede {
-  font-size: 22px;
-  line-height: 1.7;
-  max-width: 860px;
-  margin: 0 auto 40px;
-  text-align: center;
-  color: var(--text);
+  font-size: 22px; line-height: 1.7; max-width: 860px;
+  margin: 0 auto 40px; text-align: center; color: var(--text);
 }
 .thesis-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 24px;
-  max-width: 900px;
-  margin: 0 auto;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 24px; max-width: 900px; margin: 0 auto;
 }
 .thesis-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 32px;
-  transition: border-color 0.3s;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 14px; padding: 32px; transition: border-color 0.3s;
 }
-.thesis-card:hover {
-  border-color: var(--orange);
-}
+.thesis-card:hover { border-color: var(--orange); }
 .thesis-card .tag {
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: 10px;
-  display: inline-block;
-  padding: 3px 10px;
-  border-radius: 6px;
-  background: var(--orange-dim);
-  color: var(--orange);
+  font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
+  margin-bottom: 10px; display: inline-block; padding: 3px 10px;
+  border-radius: 6px; background: var(--orange-dim); color: var(--orange);
 }
-.thesis-card .tag.green {
-  background: #3FB95020;
-  color: var(--green);
-}
-.thesis-card .tag.red {
-  background: #F8514920;
-  color: var(--red);
-}
-.thesis-card h3 {
-  font-size: 20px;
-  font-weight: 700;
-  margin-bottom: 12px;
-  color: var(--text);
-}
-.thesis-card p {
-  font-size: 16px;
-  color: var(--muted);
-  line-height: 1.7;
-}
+.thesis-card .tag.green { background: #3FB95020; color: var(--green); }
+.thesis-card .tag.red { background: #F8514920; color: var(--red); }
+.thesis-card h3 { font-size: 20px; font-weight: 700; margin-bottom: 12px; color: var(--text); }
+.thesis-card p { font-size: 16px; color: var(--muted); line-height: 1.7; }
 
-/* ── Research section ── */
-.research {
-  padding: 30px 0 60px;
-  text-align: center;
-}
+.research { padding: 30px 0 60px; text-align: center; }
 .research .section-header {
   font-size: 20px; font-weight: 700; text-transform: uppercase;
   letter-spacing: 1px; color: var(--orange); margin-bottom: 8px;
@@ -228,31 +148,16 @@ nav .cta:hover { transform: translateY(-1px); box-shadow: 0 4px 20px #F7931A40; 
   font-size: 17px; color: var(--muted); max-width: 600px; line-height: 1.6; margin: 0 auto 32px;
 }
 .research-links {
-  display: flex;
-  gap: 16px;
-  justify-content: center;
-  flex-wrap: wrap;
+  display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;
 }
 .research-links a {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 14px 24px;
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--text);
+  background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+  padding: 14px 24px; font-size: 15px; font-weight: 600; color: var(--text);
   transition: border-color 0.2s, transform 0.2s;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
+  display: inline-flex; align-items: center; gap: 8px;
 }
-.research-links a:hover {
-  border-color: var(--orange);
-  transform: translateY(-2px);
-  text-decoration: none;
-}
+.research-links a:hover { border-color: var(--orange); transform: translateY(-2px); text-decoration: none; }
 
-/* ── Generic section ── */
 .section { padding: 40px 0; }
 .section-header {
   font-size: 20px; font-weight: 700; text-transform: uppercase;
@@ -262,7 +167,6 @@ nav .cta:hover { transform: translateY(-1px); box-shadow: 0 4px 20px #F7931A40; 
   font-size: 17px; color: var(--muted); max-width: 600px; line-height: 1.6; margin-bottom: 4px;
 }
 
-/* ── Footer ── */
 footer {
   border-top: 1px solid var(--border); padding: 40px 24px;
   text-align: center; font-size: 19px; color: var(--muted);
@@ -272,7 +176,7 @@ footer .links a { color: var(--muted); }
 footer .links a:hover { color: var(--text); }
 
 .live-pill { display: inline-flex; align-items: center; gap: 4px; font-size: 10px; color: #888; }
-.live-pill .dot { width: 5px; height: 5px; border-radius: 50%; background: #3FB950; display: inline-block; animation: livePulse 2s infinite; }
+.live-pill .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--green); display: inline-block; animation: livePulse 2s infinite; }
 @keyframes livePulse { 0%{opacity:1;box-shadow:0 0 0 0 rgba(63,185,80,0.4)} 50%{opacity:0.6} 100%{opacity:1;box-shadow:0 0 0 4px rgba(63,185,80,0)} }
 
 @media (max-width: 900px) {
@@ -281,7 +185,7 @@ footer .links a:hover { color: var(--text); }
 }
 @media (max-width: 600px) {
   .persona-grid { grid-template-columns: 1fr; }
-  .stats { grid-template-columns: repeat(2, 1fr); }
+  .stats-bar { grid-template-columns: repeat(2, 1fr); }
   .hero { padding: 60px 20px 40px; }
   nav a.nav-link { display: none; }
 }
@@ -296,7 +200,6 @@ footer .links a:hover { color: var(--text); }
   <a href="/live#research" class="nav-link">Research</a>
 </nav>
 
-<!-- ─── HERO ─── -->
 <div class="hero">
   <div class="badge">Open Research &middot; Live Data</div>
   <h1>Understand the Fee Market. <span>Make Better Decisions.</span></h1>
@@ -307,90 +210,98 @@ footer .links a:hover { color: var(--text); }
   </div>
 </div>
 
-<!-- ─── LIVE FEE WAVEFORM ─── -->
 <div class="viz-wrap">
-  <canvas id="fees-canvas" width="800" height="200"></canvas>
+  <canvas id="fees-canvas" width="800" height="200" data-viz="fees"></canvas>
   <div class="viz-overlay">Fee Rate &middot; sat/vB</div>
 </div>
 
-<!-- ─── PERSONA GRID ─── -->
 <div class="container" id="personas">
 <div class="section">
   <div class="section-header">What brings you here?</div>
   <div class="section-sub">Pick your role. We&rsquo;ll show you what matters.</div>
 
   <div class="persona-grid">
-    <a href="/live?tab=send" class="persona-card" style="text-decoration:none;">
+    <a href="/live?tab=send" class="persona-card" data-persona="send">
       <div class="emoji">&#x1F9DB;</div>
       <h3>Send Bitcoin</h3>
-      <div class="question">Should I send now, or wait for lower fees?</div>
+      <p class="question">Should I send now, or wait for lower fees?</p>
       <span class="card-cta">Check fee conditions &rarr;</span>
     </a>
 
-    <a href="/live?tab=lightning" class="persona-card" style="text-decoration:none;">
+    <a href="/live?tab=lightning" class="persona-card" data-persona="lightning">
       <div class="emoji">&#x26A1;</div>
       <h3>Lightning</h3>
-      <div class="question">Should I open channels at current on-chain rates?</div>
+      <p class="question">Should I open channels at current on-chain rates?</p>
       <span class="card-cta">Evaluate channel costs &rarr;</span>
     </a>
 
-    <a href="/live?tab=exchange" class="persona-card" style="text-decoration:none;">
+    <a href="/live?tab=exchange" class="persona-card" data-persona="exchange">
       <div class="emoji">&#x1F3E6;</div>
       <h3>Exchange</h3>
-      <div class="question">Should I batch withdrawals now or defer?</div>
+      <p class="question">Should I batch withdrawals now or defer?</p>
       <span class="card-cta">Batch analysis &rarr;</span>
     </a>
 
-    <a href="/live?tab=node" class="persona-card" style="text-decoration:none;">
+    <a href="/live?tab=node" class="persona-card" data-persona="node">
       <div class="emoji">&#x1F5A5;&#xFE0F;</div>
       <h3>Run a Node</h3>
-      <div class="question">What does my node actually cost me per year?</div>
+      <p class="question">What does my node actually cost me per year?</p>
       <span class="card-cta">Run the calculator &rarr;</span>
     </a>
 
-    <a href="/live?tab=miner" class="persona-card" style="text-decoration:none;">
+    <a href="/live?tab=miner" class="persona-card" data-persona="miner">
       <div class="emoji">&#x26CF;&#xFE0F;</div>
       <h3>Mine</h3>
-      <div class="question">What&rsquo;s in the blocks right now? What&rsquo;s the composition?</div>
+      <p class="question">What&rsquo;s in the blocks right now? What&rsquo;s the composition?</p>
       <span class="card-cta">Explore block space &rarr;</span>
     </a>
 
-    <a href="/live?tab=research" class="persona-card" style="text-decoration:none;">
+    <a href="/live?tab=research" class="persona-card" data-persona="research">
       <div class="emoji">&#x1F52C;</div>
       <h3>Research</h3>
-      <div class="question">What changed in the fee market this week?</div>
+      <p class="question">What changed in the fee market this week?</p>
       <span class="card-cta">Read the research &rarr;</span>
     </a>
 
-    <a href="/live?tab=developer" class="persona-card" style="text-decoration:none;">
+    <a href="/live?tab=developer" class="persona-card" data-persona="developer">
       <div class="emoji">&#x1F468;&#x200D;&#x1F4BB;</div>
       <h3>Build</h3>
-      <div class="question">What&rsquo;s the API? How do I integrate this data?</div>
+      <p class="question">What&rsquo;s the API? How do I integrate this data?</p>
       <span class="card-cta">View live endpoints &rarr;</span>
     </a>
 
-    <a href="/bip110" class="persona-card" style="text-decoration:none;">
+    <a href="/bip110" class="persona-card" data-persona="bip110">
       <div class="emoji">&#x26A0;&#xFE0F;</div>
       <h3>BIP-110 Fork</h3>
-      <div class="question">Is the chain forking? What&rsquo;s signaling?</div>
+      <p class="question">Is the chain forking? What&rsquo;s signaling?</p>
       <span class="card-cta" style="color:#F85149;">Check BIP-110 &rarr;</span>
     </a>
   </div>
 </div>
 </div>
 
-<!-- ─── STATS ─── -->
 <div class="container">
-<div class="stats" style="position:relative;">
+<div class="stats-bar">
   <div style="position:absolute;top:8px;right:12px;"><span class="live-pill"><span class="dot"></span> Live</span></div>
-  <div class="stat"><div class="num orange" id="stat-nodecost">$925</div><div class="lbl">Node Cost / Yr</div></div>
-  <div class="stat"><div class="num green" id="stat-storage">$0.008</div><div class="lbl">Storage / Inscription</div></div>
-  <div class="stat"><div class="num blue" id="stat-externality">$9.2K</div><div class="lbl">Externality / Yr</div></div>
-  <div class="stat"><div class="num purple" id="stat-ratio">8x &ndash; 3,000x</div><div class="lbl">Fee-to-Storage Ratio</div></div>
+  <div class="stat-item">
+    <div class="num orange" id="stat-nodecost">$925</div>
+    <div class="lbl">Node Cost / Yr</div>
+  </div>
+  <div class="stat-item">
+    <div class="num green" id="stat-storage">$0.008</div>
+    <div class="lbl">Storage / Inscription</div>
+  </div>
+  <div class="stat-item">
+    <div class="num blue" id="stat-externality">$9.2K</div>
+    <div class="lbl">Externality / Yr</div>
+  </div>
+  <div class="stat-item">
+    <div class="num purple" id="stat-ratio">8x &ndash; 3,000x</div>
+    <div class="lbl">Fee-to-Storage Ratio</div>
+  </div>
 </div>
 </div>
 
-<!-- ─── THESIS ─── -->
 <div class="container">
 <div class="thesis">
   <p class="lede">Every transaction competes for 4 million weight units per block. The fee you pay gets you into the next one. But the data you leave behind lives in every full node forever&mdash;and nobody prices that cost.</p>
@@ -407,15 +318,20 @@ footer .links a:hover { color: var(--text); }
       <h3>Permanence Cost</h3>
       <p>Every transaction that confirms imposes a storage cost on every full node that will ever sync that block. That cost compounds: one inscription written today must be stored, indexed, and served by thousands of nodes for the life of the network. The fee market ignores this entirely. We call it the permanence externality&mdash;and it grows with every block.</p>
     </div>
+
+    <div class="thesis-card" style="grid-column:1/-1;text-align:center;">
+      <span class="tag" style="background:#BC8CFF20;color:#BC8CFF;">The Gap</span>
+      <h3>Fee market = congestion pricing. Permanence = unpriced externality.</h3>
+      <p>Our model quantifies the gap at <strong>8x to 3,000x</strong>: the fee you pay to get into a block is orders of magnitude larger than the permanent storage cost your transaction imposes on the network. This asymmetry matters more with every inscription, every NFT, every data-heavy use case. The fee market is efficient. The question is whether it prices the right thing.</p>
+    </div>
   </div>
 </div>
 </div>
 
-<!-- ─── RESEARCH ─── -->
 <div class="container">
 <div class="research">
   <div class="section-header">Research &amp; Data</div>
-  <div class="section-sub">Open models, live dashboards, and the BIP-110 tracking page.</div>
+  <p class="section-sub">Open models, live dashboards, and the BIP-110 tracking page.</p>
 
   <div class="research-links">
     <a href="/live">&#x1F4CA; Live Dashboard</a>
@@ -425,7 +341,6 @@ footer .links a:hover { color: var(--text); }
 </div>
 </div>
 
-<!-- ─── FOOTER ─── -->
 <footer>
   <div class="links">
     <a href="/">Home</a>
@@ -437,6 +352,7 @@ footer .links a:hover { color: var(--text); }
 
 <script src="tools/data-engine.js"></script>
 <script src="tools/viz-core.js"></script>
+<script src="tools/app.js"></script>
 <script src="tools/viz-fees.js"></script>
 <script>
 DATA_ENGINE.start();

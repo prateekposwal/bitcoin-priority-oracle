@@ -57,7 +57,7 @@ var VIZ_BIP110 = (function() {
   }
 
   function draw(ctx, w, h, t) {
-    ctx.fillStyle = '#0A0A0F';
+    ctx.fillStyle = '#F5F2ED';
     ctx.fillRect(0, 0, w, h);
 
     // ── Layout ──

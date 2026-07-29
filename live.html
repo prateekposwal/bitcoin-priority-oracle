@@ -7,53 +7,43 @@
 <script>if(window.location.hostname.includes("vercel.app")){window.location.replace("https://bitcoinsahi.com"+window.location.pathname)}</script>
 <link rel="stylesheet" href="style.css">
 <style>
-  .container { max-width: 1200px; margin: 0 auto; padding: 32px 24px; }
-  .page-title { font-size: 30px; font-weight: 800; margin-bottom: 4px; }
-  .page-sub { color: var(--muted); font-size: 17px; margin-bottom: 28px; }
+  .dc-container { max-width: 1200px; margin: 0 auto; padding: 32px 24px; }
+  .dc-hero { text-align: center; padding: 12px 0 16px; }
+  .dc-hero .badge { display: inline-block; font-size: 13px; font-weight: 600; color: var(--orange); border: 1px solid var(--orange); border-radius: 20px; padding: 4px 14px; margin-bottom: 12px; }
+  .dc-hero h1 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; letter-spacing: -1px; line-height: 1.15; margin-bottom: 12px; }
+  .dc-hero h1 span { background: linear-gradient(135deg, var(--orange), #FFB347); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .dc-hero p { font-size: 17px; color: var(--muted); max-width: 700px; margin: 0 auto 20px; line-height: 1.6; }
 
-  .live-indicator { display: flex; align-items: center; gap: 8px; font-size: 12px; color: #555; margin-bottom: 16px; }
-  .live-dot { width: 8px; height: 8px; border-radius: 50%; background: #3FB950; display: inline-block; animation: breathe 2s infinite; }
-  @keyframes breathe { 0% { opacity: 1; box-shadow: 0 0 0 0 rgba(63,185,80,0.4); } 50% { opacity: 0.6; } 100% { opacity: 1; box-shadow: 0 0 0 6px rgba(63,185,80,0); } }
+  .tabs-bar { display: flex; gap: 4px; margin-bottom: 20px; flex-wrap: wrap; background: var(--surface); border-radius: 12px; padding: 4px; border: 1px solid var(--border); }
+  .tab-btn { padding: 10px 18px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; color: var(--muted); transition: all 0.2s; border: none; background: none; }
+  .tab-btn:hover { color: var(--text); background: #FFFFFF10; }
+  .tab-btn.active { background: var(--orange); color: #000; }
 
-  .hero { text-align: center; padding: 12px 0 16px; }
-  .hero .badge { display: inline-block; font-size: 13px; font-weight: 600; color: var(--orange); border: 1px solid var(--orange); border-radius: 20px; padding: 4px 14px; margin-bottom: 12px; }
-  .hero h1 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; letter-spacing: -1px; line-height: 1.15; margin-bottom: 12px; }
-  .hero h1 span { background: linear-gradient(135deg, var(--orange), #FFB347); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-  .hero p { font-size: 17px; color: var(--muted); max-width: 700px; margin: 0 auto 20px; line-height: 1.6; }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
 
-  .live-pill { display: inline-flex; align-items: center; gap: 4px; font-size: 10px; color: #888; }
-  .live-pill .dot { width: 5px; height: 5px; border-radius: 50%; background: #3FB950; display: inline-block; animation: livePulse 2s infinite; }
-  @keyframes livePulse { 0%{opacity:1;box-shadow:0 0 0 0 rgba(63,185,80,0.4)} 50%{opacity:0.6} 100%{opacity:1;box-shadow:0 0 0 4px rgba(63,185,80,0)} }
-
-  .tabs { display: flex; gap: 4px; margin-bottom: 20px; flex-wrap: wrap; background: var(--surface); border-radius: 12px; padding: 4px; border: 1px solid var(--border); }
-  .tab { padding: 10px 18px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; color: var(--muted); transition: all 0.2s; border: none; background: none; }
-  .tab:hover { color: var(--text); background: #FFFFFF10; }
-  .tab.active { background: var(--orange); color: #000; }
-
-  .workspace { display: none; }
-  .workspace.active { display: block; }
-
-  .ws-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-  .ws-card {
+  .panel-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .panel-card {
     background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 22px;
     transition: border-color 0.3s; position: relative;
   }
-  .ws-card:hover { border-color: var(--orange); }
-  .ws-card .label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 700; margin-bottom: 2px; }
-  .ws-card .label.send { color: var(--green); }
-  .ws-card .label.ln { color: var(--purple); }
-  .ws-card .label.ex { color: var(--blue); }
-  .ws-card .label.node { color: var(--orange); }
-  .ws-card .label.miner { color: var(--red); }
-  .ws-card .label.research { color: var(--yellow); }
-  .ws-card .label.dev { color: #58A6FF; }
-  .ws-card .q { font-size: 15px; color: var(--muted); margin-bottom: 8px; }
-  .ws-card .a { font-size: 26px; font-weight: 800; margin-bottom: 6px; line-height: 1.3; }
-  .ws-card .a .good { color: var(--green); }
-  .ws-card .a .warn { color: var(--yellow); }
-  .ws-card .a .bad { color: var(--red); }
-  .ws-card .d { font-size: 15px; color: var(--muted); margin-top: 6px; line-height: 1.6; }
-  .ws-card .badge {
+  .panel-card:hover { border-color: var(--orange); }
+  .panel-card .pc-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 700; margin-bottom: 2px; }
+  .pc-label.send { color: var(--green); }
+  .pc-label.ln { color: var(--purple); }
+  .pc-label.ex { color: var(--blue); }
+  .pc-label.node { color: var(--orange); }
+  .pc-label.miner { color: var(--red); }
+  .pc-label.research { color: var(--yellow); }
+  .pc-label.dev { color: var(--blue); }
+  .panel-card .pc-q { font-size: 15px; color: var(--muted); margin-bottom: 8px; }
+  .panel-card .pc-a { font-size: 26px; font-weight: 800; margin-bottom: 6px; line-height: 1.3; }
+  .panel-card .pc-a .good { color: var(--green); }
+  .panel-card .pc-a .warn { color: var(--yellow); }
+  .panel-card .pc-a .bad { color: var(--red); }
+  .panel-card .pc-d { font-size: 15px; color: var(--muted); margin-top: 6px; line-height: 1.6; }
+  .panel-card .pc-icon { font-size: 28px; position: absolute; top: 18px; right: 18px; opacity: 0.12; }
+  .panel-card .pc-badge {
     display: inline-block; font-size: 12px; font-weight: 600; padding: 4px 12px;
     border-radius: 6px; margin-top: 10px; text-transform: uppercase; letter-spacing: 0.3px;
   }
@@ -61,83 +51,377 @@
   .badge-wait { background: var(--yellow); color: #000; }
   .badge-ok { background: var(--blue); color: #000; }
   .badge-info { background: var(--surface); border: 1px solid var(--border); color: var(--muted); }
-  .ws-card .action { display: inline-block; margin-top: 8px; font-size: 13px; color: var(--orange); font-weight: 600; }
-  .ws-card .icon { font-size: 28px; position: absolute; top: 18px; right: 18px; opacity: 0.12; }
-
-  .ws-full { grid-column: 1 / -1; }
-
-  .ws-section-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin: 20px 0 10px; }
-
-  .tools-list { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
-  .tools-list a { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 6px 12px; font-size: 12px; color: var(--muted); text-decoration: none; }
-  .tools-list a:hover { border-color: var(--orange); color: var(--text); }
-
-  .summary-bar { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin: 24px 0; }
-  .summary-bar .row { display: flex; gap: 20px; flex-wrap: wrap; align-items: center; }
-  .summary-bar .time { font-size: 12px; color: #555; }
+  .panel-card .pc-action { display: inline-block; margin-top: 8px; font-size: 13px; color: var(--orange); font-weight: 600; }
+  .panel-full { grid-column: 1 / -1; }
 
   .fee-pill { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: 100px; font-weight: 700; font-size: 20px; }
   .fee-pill.green { background: var(--green); color: #000; }
   .fee-pill.yellow { background: var(--yellow); color: #000; }
   .fee-pill.red { background: var(--red); color: #000; }
 
-  .kv-table { width: 100%; font-size: 14px; }
-  .kv-table tr td { padding: 6px 0; border-bottom: 1px solid var(--border); }
-  .kv-table tr td:first-child { color: var(--muted); width: 40%; }
-  .kv-table tr td:last-child { font-weight: 600; text-align: right; }
-
-  .canvas-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 4px; margin-bottom: 16px; }
-  .canvas-wrap canvas { width: 100%; height: 200px; border-radius: 10px; display: block; }
-
-  .stat-row { display: flex; gap: 8px; flex-wrap: wrap; }
-  .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; flex: 1; min-width: 100px; transition: border-color 0.3s; }
-  .stat-card .label { font-size: 10px; color: #555; text-transform: uppercase; letter-spacing: 0.5px; }
-  .stat-card .value { font-size: 17px; font-weight: 700; margin-top: 2px; transition: all 0.3s; }
+  .stat-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+  .mini-stat { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; flex: 1; min-width: 100px; }
+  .mini-stat .ms-label { font-size: 10px; color: #555; text-transform: uppercase; letter-spacing: 0.5px; }
+  .mini-stat .ms-value { font-size: 17px; font-weight: 700; margin-top: 2px; }
 
   .endpoint-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 14px; margin-bottom: 8px; }
   .endpoint-card .method { display: inline-block; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 4px; margin-right: 8px; }
-  .method.get { background: #58A6FF; color: #000; }
+  .method.get { background: var(--blue); color: #000; }
   .method.post { background: var(--green); color: #000; }
   .endpoint-card .url { font-family: monospace; font-size: 13px; color: var(--orange); }
   .endpoint-card .desc { font-size: 12px; color: var(--muted); margin-top: 4px; }
 
-  @media (max-width: 700px) { .ws-grid { grid-template-columns: 1fr; } .tab { font-size: 12px; padding: 8px 12px; } }
+  .canvas-card canvas { width: 100%; border-radius: 10px; display: block; height: 200px; border: 1px solid var(--border); }
+
+  .download-grid { display: flex; gap: 8px; flex-wrap: wrap; margin: 12px 0; }
+  .download-grid a { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 10px 16px; font-size: 13px; color: var(--text); font-weight: 600; text-decoration: none; transition: border-color 0.2s; display: inline-flex; align-items: center; gap: 6px; }
+  .download-grid a:hover { border-color: var(--orange); text-decoration: none; }
+
+  .summary-bar { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin: 24px 0; }
+  .summary-bar .row { display: flex; gap: 20px; flex-wrap: wrap; align-items: center; }
+  .summary-bar .time { font-size: 12px; color: #555; }
+
+  @media (max-width: 700px) { .panel-grid { grid-template-columns: 1fr; } .tab-btn { font-size: 12px; padding: 8px 12px; } }
 </style>
 </head>
 <body>
+
 <nav>
   <a href="/" class="brand">BITCOIN <span>SAHI</span></a>
   <a href="/live" class="nav-link">Dashboard</a>
-  <a href="/bip110" class="nav-link" style="color:#F85149;font-weight:700;">⚠️ BIP-110</a>
+  <a href="/bip110" class="nav-link" style="color:#F85149;font-weight:700;">&#x26A0;&#xFE0F; BIP-110</a>
   <a href="/live#research" class="nav-link">Research</a>
 </nav>
 
-<div style="max-width:1200px;margin:0 auto 16px;"><canvas id="fees-canvas" width="800" height="200" style="width:100%;height:200px;border-radius:12px;"></canvas></div>
+<div style="max-width:1200px;margin:0 auto 16px;">
+  <canvas id="fees-canvas" width="800" height="200" style="width:100%;height:200px;border-radius:12px;" data-viz="fees"></canvas>
+</div>
 
-<div class="container">
-  <div class="live-ticker" id="live-ticker"><span class="ticker-item"><span class="ticker-dot green"></span> Loading live data...</span></div>
+<div class="dc-container">
 
-  <div class="hero">
+  <div class="live-ticker" id="live-ticker">
+    <span class="ticker-item"><span class="ticker-dot green"></span> Loading live data...</span>
+  </div>
+
+  <div class="dc-hero">
     <div class="badge">Decision Center</div>
     <h1>One dashboard, <span>every perspective.</span> Pick your role.</h1>
-    <p>Live data from mempool.space — same feed, seven viewpoints. Each persona answers one question: what should <em>you</em> do right now?</p>
+    <p>Live data from mempool.space &mdash; same feed, seven viewpoints. Each persona answers one question: what should <em>you</em> do right now?</p>
   </div>
 
   <div class="summary-bar" style="margin-bottom:4px;">
-    <div class="row"><span><span class="live-dot"></span> Live data from mempool.space · Same feed, seven views</span><span class="time" id="ts">Loading...</span></div>
+    <div class="row">
+      <span><span class="live-dot" style="width:8px;height:8px;border-radius:50%;background:var(--green);display:inline-block;animation:breathe 2s infinite;"></span> Live data from mempool.space &middot; Same feed, seven views</span>
+      <span class="time" id="ts">Loading...</span>
+    </div>
   </div>
 
-  <div class="tabs" id="tabs">
-    <button class="tab active" onclick="switchTab('send')">Send</button>
-    <button class="tab" onclick="switchTab('lightning')">Lightning</button>
-    <button class="tab" onclick="switchTab('exchange')">Exchange</button>
-    <button class="tab" onclick="switchTab('node')">Node</button>
-    <button class="tab" onclick="switchTab('miner')">Miner</button>
-    <button class="tab" onclick="switchTab('research')">Research</button>
-    <button class="tab" onclick="switchTab('developer')">Developer</button>
+  <div class="tabs-bar" role="tablist">
+    <button class="tab-btn active" data-tab="send" role="tab" aria-selected="true" aria-controls="panel-send">Send</button>
+    <button class="tab-btn" data-tab="lightning" role="tab" aria-selected="false" aria-controls="panel-lightning">Lightning</button>
+    <button class="tab-btn" data-tab="exchange" role="tab" aria-selected="false" aria-controls="panel-exchange">Exchange</button>
+    <button class="tab-btn" data-tab="node" role="tab" aria-selected="false" aria-controls="panel-node">Node</button>
+    <button class="tab-btn" data-tab="miner" role="tab" aria-selected="false" aria-controls="panel-miner">Miner</button>
+    <button class="tab-btn" data-tab="research" role="tab" aria-selected="false" aria-controls="panel-research">Research</button>
+    <button class="tab-btn" data-tab="developer" role="tab" aria-selected="false" aria-controls="panel-developer">Developer</button>
   </div>
 
-  <div id="workspace-container"></div>
+  <div id="panel-send" class="tab-panel active" role="tabpanel" data-tab="send">
+    <div class="panel-grid">
+      <div class="panel-card panel-full">
+        <div class="pc-icon">&#x2709;</div>
+        <div class="pc-label send">Your Wallet</div>
+        <div class="pc-q">Should I send a transaction right now?</div>
+        <div class="pc-a" id="send-rec-pill"><span class="fee-pill green" id="send-rec-pill-inner">Low &mdash; send now</span></div>
+        <div class="pc-d" style="margin-top:10px;font-size:18px;font-weight:700;" id="send-rec-text">Yes, send at economy fee rates</div>
+        <div class="pc-d">Economy: <strong id="send-econ-fee">2 sat/vB</strong> (<strong id="send-econ-usd">$0.18</strong>/tx) &mdash; confirms ~1 hr</div>
+        <div class="pc-d">Fastest: <strong id="send-fast-fee">5 sat/vB</strong> (<strong id="send-fast-usd">$0.44</strong>/tx) &mdash; next block</div>
+        <div class="pc-d">Savings by waiting: <strong id="send-savings">$0.26</strong></div>
+        <span class="pc-badge badge-rec" id="send-badge">YES &mdash; SEND AT ECONOMY</span>
+        <a href="/tools/fee_history.csv" class="pc-action">&rarr; Download fee history</a>
+      </div>
+      <div class="panel-card">
+        <div class="pc-icon">&#x1F4CA;</div>
+        <div class="pc-label send">Mempool Level</div>
+        <div class="pc-q">How congested is the network?</div>
+        <div class="pc-a"><span class="good" id="send-congestion">Low congestion</span></div>
+        <div class="pc-d">Unconfirmed txs: <strong id="send-mempool-count">0</strong></div>
+        <div class="pc-d">Economy fee: <strong id="send-mempool-econ">2 sat/vB</strong> &middot; Minimum: <strong id="send-mempool-min">1 sat/vB</strong></div>
+      </div>
+      <div class="panel-card">
+        <div class="pc-icon">&#x1F4B0;</div>
+        <div class="pc-label send">Market</div>
+        <div class="pc-q">What is the Bitcoin price?</div>
+        <div class="pc-a" id="send-btc-price">$63,900</div>
+        <div class="pc-d">Block height: <strong id="send-block-height">0</strong></div>
+        <div class="tools-list" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;">
+          <a href="/live" style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:6px 12px;font-size:12px;color:var(--muted);text-decoration:none;">Dashboard &rarr;</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="panel-lightning" class="tab-panel" role="tabpanel" data-tab="lightning">
+    <div class="panel-grid">
+      <div class="panel-card panel-full">
+        <div class="pc-icon">&#x26A1;</div>
+        <div class="pc-label ln">Channel Management</div>
+        <div class="pc-q">Should I open channels right now?</div>
+        <div class="pc-a"><span class="good" id="ln-rec">Good time to open &mdash; fees are low</span></div>
+        <div class="pc-d">Channel open cost: <strong id="ln-open-cost">$0.00</strong> at <strong id="ln-open-rate">2 sat/vB</strong> (economy) vs <strong id="ln-open-fast">$0.00</strong> fastest.</div>
+        <div class="pc-d">Savings by using economy: <strong id="ln-savings">$0.00</strong> per channel.</div>
+        <div class="pc-d">Channel close cost: ~<strong id="ln-close-cost">$0.00</strong> (500 vbytes at economy).</div>
+        <span class="pc-badge badge-rec" id="ln-badge">OPEN NOW</span>
+        <a href="/lightning-sim" class="pc-action">&rarr; Lightning Simulator</a>
+      </div>
+      <div class="panel-card">
+        <div class="pc-icon">&#x1F4C8;</div>
+        <div class="pc-label ln">Lightning Network Stats</div>
+        <div class="pc-q">How big is the Lightning Network?</div>
+        <div class="pc-a" id="ln-channels">0 channels</div>
+        <div class="pc-d">Nodes: <strong id="ln-nodes">0</strong> &middot; Total capacity: <strong id="ln-capacity">Loading...</strong></div>
+        <div class="pc-d">At current fees, a channel open + close costs ~<strong id="ln-total-cost">$0.00</strong>.</div>
+        <div class="tools-list" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;">
+          <a href="/live" style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:6px 12px;font-size:12px;color:var(--muted);text-decoration:none;">Dashboard &rarr;</a>
+        </div>
+      </div>
+      <div class="panel-card">
+        <div class="pc-icon">&#x1F9EE;</div>
+        <div class="pc-label ln">Node Economics</div>
+        <div class="pc-q">What does my Lightning node cost to run?</div>
+        <div class="pc-d">Base node operation: <strong>$924/yr</strong>. Channel ops add on-chain fees.</div>
+        <div class="pc-d">10 channels over 1 year: fees <strong id="ln-annual-fees">$0.00</strong>.</div>
+        <div class="tools-list" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;">
+          <a href="/calculator" style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:6px 12px;font-size:12px;color:var(--muted);text-decoration:none;">Cost Calculator &rarr;</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="panel-exchange" class="tab-panel" role="tabpanel" data-tab="exchange">
+    <div class="panel-grid">
+      <div class="panel-card panel-full">
+        <div class="pc-icon">&#x1F3E6;</div>
+        <div class="pc-label ex">Withdrawal Optimization</div>
+        <div class="pc-q">Should I batch withdrawals right now?</div>
+        <div class="pc-a"><span class="good" id="ex-rec">Good time to batch &mdash; fees are low</span></div>
+        <div class="pc-d">Per withdrawal (140 vbytes): <strong id="ex-per-tx">$0.00</strong> at economy rate.</div>
+        <div class="pc-d">Batch of 100 withdrawals: <strong id="ex-batch-100">$0.00</strong> vs <strong id="ex-indiv-100">$0.00</strong> individually.</div>
+        <div class="pc-d">Savings: <strong id="ex-savings">$0.00</strong> per 1,000 withdrawals vs individual sends.</div>
+        <span class="pc-badge badge-rec" id="ex-badge">SAVE $0.00 PER 1K WITHDRAWALS</span>
+        <a href="/live" class="pc-action">&rarr; Monitor fees</a>
+      </div>
+      <div class="panel-card">
+        <div class="pc-icon">&#x1F4CA;</div>
+        <div class="pc-label ex">Mempool Congestion</div>
+        <div class="pc-q">Is the mempool congested?</div>
+        <div class="pc-d">Unconfirmed txs: <strong id="ex-mempool-count">0</strong>.</div>
+        <div class="pc-d">Economy fee: <strong id="ex-econ-fee">2 sat/vB</strong> &middot; Fastest: <strong id="ex-fast-fee">5 sat/vB</strong></div>
+        <div class="pc-d" id="ex-congestion-text">Congestion low &mdash; good for batching.</div>
+        <div class="tools-list" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;">
+          <a href="/live" style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:6px 12px;font-size:12px;color:var(--muted);text-decoration:none;">Dashboard &rarr;</a>
+        </div>
+      </div>
+      <div class="panel-card">
+        <div class="pc-icon">&#x1F4C5;</div>
+        <div class="pc-label ex">Historical Context</div>
+        <div class="pc-q">How do today&rsquo;s fees compare historically?</div>
+        <div class="pc-d">Fee history dataset available for download. Track how fees change over hours and days.</div>
+        <div class="tools-list" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;">
+          <a href="/tools/fee_history.csv" target="_blank" style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:6px 12px;font-size:12px;color:var(--muted);text-decoration:none;">Download CSV &rarr;</a>
+          <a href="/tools/fee_forecast.json" target="_blank" style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:6px 12px;font-size:12px;color:var(--muted);text-decoration:none;">Forecast JSON &rarr;</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="panel-node" class="tab-panel" role="tabpanel" data-tab="node">
+    <div class="panel-grid">
+      <div class="panel-card panel-full">
+        <div class="pc-icon">&#x1F5A5;&#xFE0F;</div>
+        <div class="pc-label node">Node Economics</div>
+        <div class="pc-q">What does it cost to run a Bitcoin node?</div>
+        <div class="pc-a">~$924/yr baseline</div>
+        <div class="pc-d">Hardware amortized: <strong>$167/yr</strong> &middot; Bandwidth: <strong>$600/yr</strong> &middot; Power: <strong>$158/yr</strong></div>
+        <div class="pc-d">Inscription storage externality: <strong>~$2.53/yr</strong> (0.91% of block space). Pruning saves ~70% of disk.</div>
+        <div class="pc-d">At current fees: <strong id="node-econ-rate">2 sat/vB</strong> economy, the fee market prices congestion (~10 min) but not permanence (indefinite storage).</div>
+        <span class="pc-badge badge-info">YOUR MILEAGE VARIES</span>
+        <a href="/calculator" class="pc-action">&rarr; Node Cost Calculator</a>
+      </div>
+      <div class="panel-card">
+        <div class="pc-icon">&#x2764;</div>
+        <div class="pc-label node">UTXO Growth</div>
+        <div class="pc-q">How fast is the UTXO set growing?</div>
+        <div class="pc-d">At 100K inscriptions/month, the UTXO set grows by ~3.3K UTXOs/day from inscriptions alone.</div>
+        <div class="pc-d">Storage externality across all nodes: <strong>$9.2K/yr</strong> at current volume.</div>
+        <div class="tools-list" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;">
+          <a href="/utxo-health" style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:6px 12px;font-size:12px;color:var(--muted);text-decoration:none;">UTXO Health Dashboard &rarr;</a>
+        </div>
+      </div>
+      <div class="panel-card panel-full">
+        <div class="pc-label node">Live UTXO Visualization</div>
+        <div class="pc-q">UTXO set health organism &mdash; real-time</div>
+        <div class="canvas-card">
+          <canvas id="utxo-canvas" width="800" height="200" data-viz="utxo"></canvas>
+        </div>
+        <div class="tools-list" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;">
+          <a href="/utxo-health" style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:6px 12px;font-size:12px;color:var(--muted);text-decoration:none;">Full UTXO Dashboard &rarr;</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="panel-miner" class="tab-panel" role="tabpanel" data-tab="miner">
+    <div class="panel-grid">
+      <div class="panel-card panel-full">
+        <div class="pc-icon">&#x26CF;&#xFE0F;</div>
+        <div class="pc-label miner">Block Reward Breakdown</div>
+        <div class="pc-q">What is the current block reward composition?</div>
+        <div class="pc-a" id="miner-total-reward">~$0/block</div>
+        <div class="pc-d">Subsidy: <strong id="miner-subsidy">$0</strong> &middot; Fees: <strong id="miner-fees">$0</strong></div>
+        <div class="pc-d">Fee revenue share: <strong id="miner-fee-share">0.0%</strong> of total block reward.</div>
+        <div class="pc-d">Current fees: fastest <strong id="miner-fast-fee">5 sat/vB</strong> &middot; economy <strong id="miner-econ-fee">2 sat/vB</strong></div>
+        <span class="pc-badge badge-info">ESTIMATED</span>
+        <a href="/blockspace" class="pc-action">&rarr; Blockspace Explorer</a>
+      </div>
+      <div class="panel-card">
+        <div class="pc-icon">&#x1F4CA;</div>
+        <div class="pc-label miner">Fee Revenue Trend</div>
+        <div class="pc-q">How healthy is the fee market?</div>
+        <div class="pc-d">Fee &divide; storage cost ratio: <strong id="miner-ratio">0x</strong> &mdash; fees far exceed storage externality.</div>
+        <div class="pc-d">Inscriptions can contribute meaningful fee revenue during mania (up to 58% of block space).</div>
+        <div class="tools-list" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;">
+          <a href="/live" style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:6px 12px;font-size:12px;color:var(--muted);text-decoration:none;">Dashboard &rarr;</a>
+        </div>
+      </div>
+      <div class="panel-card panel-full">
+        <div class="pc-label miner">Live Blockspace</div>
+        <div class="pc-q">Each dot = a Bitcoin block. Color = fee pressure.</div>
+        <div class="canvas-card">
+          <canvas id="blockspace-canvas" width="800" height="200" data-viz="blockspace"></canvas>
+        </div>
+        <div class="tools-list" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;">
+          <a href="/blockspace" style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:6px 12px;font-size:12px;color:var(--muted);text-decoration:none;">Full Blockspace Explorer &rarr;</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="panel-research" class="tab-panel" role="tabpanel" data-tab="research">
+    <div class="panel-grid">
+      <div class="panel-card panel-full">
+        <div class="pc-icon">&#x1F52C;</div>
+        <div class="pc-label research">Latest Data</div>
+        <div class="pc-q">What data is available for research?</div>
+        <div class="pc-d">Live fee estimates, historical fee data (30+ days), mempool statistics, Lightning Network stats, block data, and our economic models.</div>
+        <div class="pc-d">Key finding: The fee market prices <strong>congestion</strong> (~10 min) but not <strong>permanence</strong> (indefinite storage).</div>
+        <div class="pc-d">Current economy fee: <strong id="research-econ-fee">2 sat/vB</strong> &middot; Historic low: <strong>1 sat/vB</strong> &middot; Historic high: <strong>~500+ sat/vB</strong> (ordinals mania).</div>
+        <div class="download-grid">
+          <a href="/tools/fee_history.csv" target="_blank">&darr; Fee History CSV</a>
+          <a href="/tools/fee_forecast.json" target="_blank">&darr; Forecast JSON</a>
+          <a href="/tools/monte_carlo_output.json" target="_blank">&darr; Monte Carlo</a>
+          <a href="/tools/live_data.json" target="_blank">&darr; Live Data JSON</a>
+        </div>
+        <div style="margin-top:10px;display:flex;gap:12px;flex-wrap:wrap;">
+          <a href="https://github.com/prateekposwal/block-space-economics" class="pc-action">&rarr; GitHub Repository</a>
+          <a href="/research-graph" class="pc-action">&rarr; Research Graph</a>
+          <a href="/articles" class="pc-action">&rarr; Articles</a>
+        </div>
+      </div>
+      <div class="panel-card">
+        <div class="pc-icon">&#x1F4CA;</div>
+        <div class="pc-label research">Model Outputs</div>
+        <div class="pc-q">What do the economic models say?</div>
+        <div class="pc-d">Storage externality: <strong>$0.008/inscription</strong> (baseline).</div>
+        <div class="pc-d">Monte Carlo (10K sims): 90% CI <strong>$0.003&ndash;$0.020/inscription</strong>.</div>
+        <div class="pc-d">Sensitivity: inscription volume drives <strong>60% of variance</strong>.</div>
+        <div class="tools-list" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;">
+          <a href="/calculator" style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:6px 12px;font-size:12px;color:var(--muted);text-decoration:none;">Calculator &rarr;</a>
+        </div>
+      </div>
+      <div class="panel-card">
+        <div class="pc-icon">&#x1F4DD;</div>
+        <div class="pc-label research">Publications</div>
+        <div class="pc-q">What has been published?</div>
+        <div class="pc-d">3 discovery papers, 7 Python models, verification appendix, Monte Carlo simulation, sensitivity analysis, 30-day historical dataset.</div>
+        <div class="tools-list" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;">
+          <a href="/articles" style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:6px 12px;font-size:12px;color:var(--muted);text-decoration:none;">Articles &rarr;</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="panel-developer" class="tab-panel" role="tabpanel" data-tab="developer">
+    <div class="panel-grid">
+      <div class="panel-card panel-full">
+        <div class="pc-icon">{ };</div>
+        <div class="pc-label dev">API Documentation</div>
+        <div class="pc-q">REST endpoints for live Bitcoin data.</div>
+        <div class="pc-d">All endpoints return JSON. Base URL: <code style="color:var(--orange);">https://mempool.space/api</code></div>
+      </div>
+      <div class="panel-card panel-full">
+        <div class="pc-label dev">Fee Estimates</div>
+        <div class="endpoint-card">
+          <span class="method get">GET</span><span class="url">/v1/fees/recommended</span>
+          <div class="desc">Returns fastestFee, halfHourFee, hourFee, economyFee, minimumFee in sat/vB.</div>
+        </div>
+        <div class="endpoint-card">
+          <span class="method get">GET</span><span class="url">/v1/fees/mempool-blocks</span>
+          <div class="desc">Fee histogram for the next mempool blocks &mdash; predicts near-term fee pressure.</div>
+        </div>
+      </div>
+      <div class="panel-card panel-full">
+        <div class="pc-label dev">Mempool &amp; Blocks</div>
+        <div class="endpoint-card">
+          <span class="method get">GET</span><span class="url">/mempool</span>
+          <div class="desc">Mempool snapshot: count, vsize, total fee, fee histogram.</div>
+        </div>
+        <div class="endpoint-card">
+          <span class="method get">GET</span><span class="url">/blocks?limit=10</span>
+          <div class="desc">Recent blocks with height, size, weight, tx count, fee data.</div>
+        </div>
+        <div class="endpoint-card">
+          <span class="method get">GET</span><span class="url">/blocks/tip/height</span>
+          <div class="desc">Current block height (plain text).</div>
+        </div>
+      </div>
+      <div class="panel-card panel-full">
+        <div class="pc-label dev">Mining &amp; Lightning</div>
+        <div class="endpoint-card">
+          <span class="method get">GET</span><span class="url">/v1/mining/blocks/fees/24h</span>
+          <div class="desc">Fee revenue history for the last 24 hours, per block.</div>
+        </div>
+        <div class="endpoint-card">
+          <span class="method get">GET</span><span class="url">/v1/lightning/statistics/latest</span>
+          <div class="desc">LN network stats: channel count, node count, total capacity.</div>
+        </div>
+        <div class="endpoint-card">
+          <span class="method get">GET</span><span class="url">/v1/difficulty-adjustment</span>
+          <div class="desc">Difficulty adjustment info: change, estimated retarget height.</div>
+        </div>
+      </div>
+      <div class="panel-card panel-full">
+        <div class="pc-label dev">Local Tools</div>
+        <div class="endpoint-card">
+          <span class="method get">GET</span><span class="url">/tools/fee_history.json</span>
+          <div class="desc">Historical fee data (30+ days) &mdash; fastest, economy, dates.</div>
+        </div>
+        <div class="endpoint-card">
+          <span class="method get">GET</span><span class="url">/tools/live_data.json</span>
+          <div class="desc">Pipeline output: latest block, BIP-110 signaling, miner revenue.</div>
+        </div>
+        <div class="endpoint-card">
+          <span class="method get">GET</span><span class="url">/tools/monte_carlo_output.json</span>
+          <div class="desc">Monte Carlo simulation results for storage externality model.</div>
+        </div>
+        <div class="endpoint-card">
+          <span class="method get">GET</span><span class="url">/tools/fee_forecast.json</span>
+          <div class="desc">Fee forecast based on historical patterns and mempool pressure.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </div>
 
 <footer>
@@ -146,7 +430,7 @@
     <a href="/live">Dashboard</a>
     <a href="https://github.com/prateekposwal/block-space-economics">GitHub</a>
   </div>
-  <p>Bitcoin Sahi — Blockchain Research & Development. Built in public.</p>
+  <p>Bitcoin Sahi &mdash; Blockchain Research &amp; Development. Built in public.</p>
 </footer>
 
 <script src="tools/viz-core.js"></script>
@@ -158,210 +442,164 @@
 
 <script>
 var currentTab = 'send';
-var DATA = { fees: { fastestFee: 3, halfHourFee: 2, hourFee: 1, economyFee: 1, minimumFee: 1 }, btc_price: 63000, mempool: { count: 100000, vsize: 0, fee_histogram: [] }, lightning: { channel_count: 0, node_count: 0, total_capacity: 0 }, block_height: 960000 };
+var D = { fees: { fastestFee: 3, halfHourFee: 2, hourFee: 1, economyFee: 1, minimumFee: 1 }, btc_price: 63000, mempool: { count: 100000, vsize: 0, fee_histogram: [] }, lightning: { channel_count: 0, node_count: 0, total_capacity: 0 }, block_height: 960000 };
 
 function niceNum(v, d) { return Number(v).toLocaleString(undefined, {maximumFractionDigits: d||0}); }
-
-function usd(s) { return '$' + (s * DATA.btc_price / 100000000).toFixed(2); }
-
-function feePill(e, f) {
-  var ratio = f > 0 ? e / f : 0;
-  if (e <= 5) return '<span class="fee-pill green">Low — send now</span>';
-  if (e <= 25) return '<span class="fee-pill yellow">Moderate — consider waiting</span>';
-  return '<span class="fee-pill red">High — wait if you can</span>';
-}
+function usd(s) { return '$' + (s * D.btc_price / 100000000).toFixed(2); }
+function feeClass(e) { return e <= 5 ? 'good' : e <= 25 ? 'warn' : 'bad'; }
+function feeLabel(e) { return e <= 5 ? 'Low &mdash; send now' : e <= 25 ? 'Moderate &mdash; consider waiting' : 'High &mdash; wait if you can'; }
+function feePillClass(e) { return e <= 5 ? 'green' : e <= 25 ? 'yellow' : 'red'; }
+function congestionLabel(c) { return c < 50000 ? 'Low congestion' : c < 200000 ? 'Moderate congestion' : 'High congestion'; }
 
 function switchTab(tab) {
   currentTab = tab;
-  document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); });
-  var btns = document.querySelectorAll('.tab');
-  var idx = { send: 0, lightning: 1, exchange: 2, node: 3, miner: 4, research: 5, developer: 6 }[tab];
-  if (btns[idx]) btns[idx].classList.add('active');
-  renderWorkspace(tab);
-  var ind = document.getElementById('decide-indicator');
-  if (ind) ind.textContent = ' › ' + tab.charAt(0).toUpperCase() + tab.slice(1);
+  document.querySelectorAll('.tab-btn').forEach(function(b) {
+    b.classList.toggle('active', b.getAttribute('data-tab') === tab);
+    b.setAttribute('aria-selected', b.getAttribute('data-tab') === tab ? 'true' : 'false');
+  });
+  document.querySelectorAll('.tab-panel').forEach(function(p) {
+    p.classList.toggle('active', p.getAttribute('data-tab') === tab);
+  });
+  setTimeout(function() {
+    if (tab === 'node') { try { VIZ_UTXO.init('utxo-canvas'); } catch(e) {} }
+    if (tab === 'miner') { try { VIZ_Blockspace.init('blockspace-canvas'); } catch(e) {} }
+  }, 100);
 }
 
-function renderWorkspace(tab) {
-  var e = DATA.fees.economyFee || 1;
-  var f = DATA.fees.fastestFee || 3;
-  var h = DATA.fees.hourFee || 1;
-  var hh = DATA.fees.halfHourFee || 2;
-  var m = DATA.fees.minimumFee || 1;
-  var mc = DATA.mempool ? DATA.mempool.count || 0 : 0;
-  var ln = DATA.lightning || {};
-  var bh = DATA.block_height || 0;
-  var html = '';
+function updateData() {
+  var e = D.fees.economyFee || 1;
+  var f = D.fees.fastestFee || 3;
+  var hh = D.fees.halfHourFee || 2;
+  var h = D.fees.hourFee || 1;
+  var m = D.fees.minimumFee || 1;
+  var mc = D.mempool ? D.mempool.count || 0 : 0;
+  var ln = D.lightning || {};
+  var bh = D.block_height || 0;
+  var btc = D.btc_price || 63000;
 
-  if (tab === 'send') {
-    var rec = e <= 5 ? 'rec' : 'wait';
-    var recText = e <= 5 ? 'YES — SEND AT ECONOMY' : 'NO — WAIT';
-    html = '<div class="ws-grid">' +
-      '<div class="ws-card ws-full"><span class="icon">✉</span><div class="label send">Your Wallet</div><div class="q">Should I send a transaction right now?</div>' +
-      '<div class="a">' + feePill(e, f) + '</div>' +
-      '<div class="d" style="margin-top:10px;font-size:18px;font-weight:700;">' + (e <= 5 ? 'Yes, send at economy (' + e + ' sat/vB)' : 'Fees are elevated — wait if you can') + '</div>' +
-      '<div class="d">Economy: <strong>' + e + ' sat/vB</strong> (' + usd(e * 140) + '/tx) — confirms ~1 hr</div>' +
-      '<div class="d">Fastest: <strong>' + f + ' sat/vB</strong> (' + usd(f * 140) + '/tx) — next block</div>' +
-      '<div class="d">Savings by waiting: <strong>$' + ((f - e) * 140 * DATA.btc_price / 100000000).toFixed(2) + '</strong></div>' +
-      '<span class="badge ' + (rec === 'rec' ? 'badge-rec' : 'badge-wait') + '">' + recText + '</span><a href="/tools/fee_history.csv" class="action">→ Download fee history</a></div>' +
-      '<div class="ws-card"><span class="icon">📊</span><div class="label send">Mempool Level</div><div class="q">How congested is the network?</div>' +
-      '<div class="a"><span class="' + (mc < 50000 ? 'good' : mc < 200000 ? 'warn' : 'bad') + '">' + (mc < 50000 ? 'Low congestion' : mc < 200000 ? 'Moderate congestion' : 'High congestion') + '</span></div>' +
-      '<div class="d">Unconfirmed txs: <strong>' + niceNum(mc) + '</strong></div>' +
-      '<div class="d">Economy fee: <strong>' + e + ' sat/vB</strong> · Minimum: <strong>' + m + ' sat/vB</strong></div></div>' +
-      '<div class="ws-card"><span class="icon">💰</span><div class="label send">Market</div><div class="q">What is the Bitcoin price?</div>' +
-      '<div class="a">$' + niceNum(DATA.btc_price) + '</div>' +
-      '<div class="d">Block height: <strong>' + niceNum(bh) + '</strong></div>' +
-      '<div class="tools-list"><a href="/live">Dashboard →</a></div></div>' +
-    '</div>';
-  } else if (tab === 'lightning') {
-    var lc = ln.channel_count || 0;
-    var nc = ln.node_count || 0;
-    var cap = ln.total_capacity || 0;
-    html = '<div class="ws-grid">' +
-      '<div class="ws-card ws-full"><span class="icon">⚡</span><div class="label ln">Channel Management</div><div class="q">Should I open channels right now?</div>' +
-      '<div class="a">' + (e < 5 ? '<span class="good">Good time to open — fees are low</span>' : e < 25 ? '<span class="warn">Fees moderate — OK to open' : '<span class="bad">Fees high — wait</span>') + '</div>' +
-      '<div class="d">Channel open cost: <strong>' + usd(e * 1000) + '</strong> at ' + e + ' sat/vB (economy) vs <strong>' + usd(f * 1000) + '</strong> fastest.</div>' +
-      '<div class="d">Savings by using economy: <strong>$' + ((f - e) * 1000 * DATA.btc_price / 100000000).toFixed(2) + '</strong> per channel.</div>' +
-      '<div class="d">Channel close cost: ~<strong>' + usd(e * 500) + '</strong> (500 vbytes at economy).</div>' +
-      '<span class="badge ' + (e < 5 ? 'badge-rec' : 'badge-wait') + '">' + (e < 5 ? 'OPEN NOW' : 'WATCH & WAIT') + '</span>' +
-      '<a href="/lightning-sim" class="action">→ Lightning Simulator</a></div>' +
-      '<div class="ws-card"><span class="icon">📈</span><div class="label ln">Lightning Network Stats</div><div class="q">How big is the Lightning Network?</div>' +
-      '<div class="a">' + niceNum(lc) + ' channels</div>' +
-      '<div class="d">Nodes: <strong>' + niceNum(nc) + '</strong> · Total capacity: <strong>' + (cap > 0 ? niceNum(Math.round(cap / 100000000)) + ' BTC' : 'Loading...') + '</strong></div>' +
-      '<div class="d">At current fees, a channel open + close costs ~<strong>' + usd((e * 1000 + e * 500)) + '</strong>.</div>' +
-      '<div class="tools-list"><a href="/live">Dashboard →</a></div></div>' +
-      '<div class="ws-card"><span class="icon">🧮</span><div class="label ln">Node Economics</div><div class="q">What does my Lightning node cost to run?</div>' +
-      '<div class="d">Base node operation: <strong>$924/yr</strong>. Channel ops add on-chain fees.</div>' +
-      '<div class="d">10 channels over 1 year: fees <strong>' + usd((e * 1000 + e * 500) * 10) + '</strong>.</div>' +
-      '<div class="tools-list"><a href="/calculator">Cost Calculator →</a></div></div>' +
-    '</div>';
-  } else if (tab === 'exchange') {
-    var batchSave = (e * 140 * 1000 - e * 100000) * DATA.btc_price / 100000000;
-    html = '<div class="ws-grid">' +
-      '<div class="ws-card ws-full"><span class="icon">🏦</span><div class="label ex">Withdrawal Optimization</div><div class="q">Should I batch withdrawals right now?</div>' +
-      '<div class="a">' + (e < 10 ? '<span class="good">Good time to batch — fees are low</span>' : '<span class="warn">Fees elevated — batch only urgent withdrawals</span>') + '</div>' +
-      '<div class="d">Per withdrawal (140 vbytes): <strong>' + usd(e * 140) + '</strong> at economy rate.</div>' +
-      '<div class="d">Batch of 100 withdrawals: <strong>' + usd(e * 10000) + '</strong> vs <strong>' + usd(e * 140 * 100) + '</strong> individually.</div>' +
-      '<div class="d">Savings: <strong>$' + batchSave.toFixed(2) + '</strong> per 1,000 withdrawals vs individual sends.</div>' +
-      '<span class="badge badge-rec">SAVE $' + batchSave.toFixed(2) + ' PER 1K WITHDRAWALS</span>' +
-      '<a href="/live" class="action">→ Monitor fees</a></div>' +
-      '<div class="ws-card"><span class="icon">📊</span><div class="label ex">Mempool Congestion</div><div class="q">Is the mempool congested?</div>' +
-      '<div class="d">Unconfirmed txs: <strong>' + niceNum(mc) + '</strong>.</div>' +
-      '<div class="d">Economy fee: <strong>' + e + ' sat/vB</strong> · Fastest: <strong>' + f + ' sat/vB</strong></div>' +
-      '<div class="d">Congestion ' + (mc < 50000 ? 'low — good for batching' : mc < 200000 ? 'moderate — batch with economy' : 'high — consider waiting') + '.</div>' +
-      '<div class="tools-list"><a href="/live">Dashboard →</a></div></div>' +
-      '<div class="ws-card"><span class="icon">📅</span><div class="label ex">Historical Context</div><div class="q">How do today&#39;s fees compare historically?</div>' +
-      '<div class="d">Fee history dataset available for download. Track how fees change over hours and days.</div>' +
-      '<div class="tools-list"><a href="/tools/fee_history.csv" target="_blank">Download CSV →</a><a href="/tools/fee_forecast.json" target="_blank">Forecast JSON →</a></div></div>' +
-    '</div>';
-  } else if (tab === 'node') {
-    html = '<div class="ws-grid">' +
-      '<div class="ws-card ws-full"><span class="icon">🖥</span><div class="label node">Node Economics</div><div class="q">What does it cost to run a Bitcoin node?</div>' +
-      '<div class="a">~$924/yr baseline</div>' +
-      '<div class="d">Hardware amortized: <strong>$167/yr</strong> · Bandwidth: <strong>$600/yr</strong> · Power: <strong>$158/yr</strong></div>' +
-      '<div class="d">Inscription storage externality: <strong>~$2.53/yr</strong> (0.91% of block space). Pruning saves ~70% of disk.</div>' +
-      '<div class="d">At current fees: ' + e + ' sat/vB economy, the fee market prices congestion (~10 min) but not permanence (indefinite storage).</div>' +
-      '<span class="badge badge-info">YOUR MILEAGE VARIES</span><a href="/calculator" class="action">→ Node Cost Calculator</a></div>' +
-      '<div class="ws-card"><span class="icon">❤</span><div class="label node">UTXO Growth</div><div class="q">How fast is the UTXO set growing?</div>' +
-      '<div class="d">At 100K inscriptions/month, the UTXO set grows by ~3.3K UTXOs/day from inscriptions alone.</div>' +
-      '<div class="d">Storage externality across all nodes: <strong>$9.2K/yr</strong> at current volume.</div>' +
-      '<div class="tools-list"><a href="/utxo-health">UTXO Health Dashboard →</a></div></div>' +
-      '<div class="ws-card ws-full"><span class="icon">🔬</span><div class="label node">Live UTXO Visualization</div><div class="q">UTXO set health organism — real-time</div>' +
-      '<div style="height:200px;margin-top:8px;"><canvas id="utxo-canvas" width="400" height="200" style="width:100%;height:200px;border-radius:8px;"></canvas></div>' +
-      '<div class="tools-list"><a href="/utxo-health">Full UTXO Dashboard →</a></div></div>' +
-    '</div>';
-  } else if (tab === 'miner') {
-    html = '<div class="ws-grid">' +
-      '<div class="ws-card ws-full"><span class="icon">⛏</span><div class="label miner">Block Reward Breakdown</div><div class="q">What is the current block reward composition?</div>' +
-      '<div class="a">~$' + niceNum(Math.round(3.125 * DATA.btc_price + 0.5 * DATA.btc_price)) + '/block</div>' +
-      '<div class="d">Subsidy: <strong>$' + niceNum(Math.round(3.125 * DATA.btc_price)) + '</strong> · Fees: <strong>$' + niceNum(Math.round(0.5 * DATA.btc_price)) + '</strong></div>' +
-      '<div class="d">Fee revenue share: <strong>' + (0.5 / 3.625 * 100).toFixed(1) + '%</strong> of total block reward.</div>' +
-      '<div class="d">Current fees: fastest <strong>' + f + ' sat/vB</strong> · economy <strong>' + e + ' sat/vB</strong></div>' +
-      '<span class="badge badge-info">ESTIMATED</span><a href="/blockspace" class="action">→ Blockspace Explorer</a></div>' +
-      '<div class="ws-card"><span class="icon">📊</span><div class="label miner">Fee Revenue Trend</div><div class="q">How healthy is the fee market?</div>' +
-      '<div class="d">Fee ÷ storage cost ratio: <strong>' + ((e * 100 * DATA.btc_price / 100000000) / 0.008).toFixed(0) + 'x</strong> — fees far exceed storage externality.</div>' +
-      '<div class="d">Inscriptions can contribute meaningful fee revenue during mania (up to 58% of block space).</div>' +
-      '<div class="tools-list"><a href="/live">Dashboard →</a></div></div>' +
-      '<div class="ws-card ws-full"><span class="icon">🔲</span><div class="label miner">Live Blockspace</div><div class="q">Each dot = a Bitcoin block. Color = fee pressure.</div>' +
-      '<div style="height:200px;margin-top:8px;"><canvas id="blockspace-canvas" width="400" height="200" style="width:100%;height:200px;border-radius:8px;"></canvas></div>' +
-      '<div class="tools-list"><a href="/blockspace">Full Blockspace Explorer →</a></div></div>' +
-    '</div>';
-  } else if (tab === 'research') {
-    html = '<div class="ws-grid">' +
-      '<div class="ws-card ws-full"><span class="icon">🔬</span><div class="label research">Latest Data</div><div class="q">What data is available for research?</div>' +
-      '<div class="d">Live fee estimates, historical fee data (30+ days), mempool statistics, Lightning Network stats, block data, and our economic models.</div>' +
-      '<div class="d">Key finding: The fee market prices <strong>congestion</strong> (~10 min) but not <strong>permanence</strong> (indefinite storage).</div>' +
-      '<div class="d">Current economy fee: <strong>' + e + ' sat/vB</strong> · Historic low: <strong>1 sat/vB</strong> · Historic high: <strong>~500+ sat/vB</strong> (ordinals mania).</div>' +
-      '<div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;">' +
-      '<a href="/tools/fee_history.csv" class="btn btn-secondary" style="font-size:13px;padding:8px 16px;" target="_blank">↓ Fee History CSV</a>' +
-      '<a href="/tools/fee_forecast.json" class="btn btn-secondary" style="font-size:13px;padding:8px 16px;" target="_blank">↓ Forecast JSON</a>' +
-      '<a href="/tools/monte_carlo_output.json" class="btn btn-secondary" style="font-size:13px;padding:8px 16px;" target="_blank">↓ Monte Carlo</a>' +
-      '<a href="/tools/live_data.json" class="btn btn-secondary" style="font-size:13px;padding:8px 16px;" target="_blank">↓ Live Data JSON</a></div>' +
-      '<div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;">' +
-      '<a href="https://github.com/prateekposwal/block-space-economics" class="action">→ GitHub Repository</a>' +
-      '<a href="/research-graph" class="action">→ Research Graph</a>' +
-      '<a href="/articles" class="action">→ Articles</a></div></div>' +
-      '<div class="ws-card"><span class="icon">📊</span><div class="label research">Model Outputs</div><div class="q">What do the economic models say?</div>' +
-      '<div class="d">Storage externality: <strong>$0.008/inscription</strong> (baseline).</div>' +
-      '<div class="d">Monte Carlo (10K sims): 90% CI <strong>$0.003–$0.020/inscription</strong>.</div>' +
-      '<div class="d">Sensitivity: inscription volume drives <strong>60% of variance</strong>.</div>' +
-      '<div class="tools-list"><a href="/calculator">Calculator →</a></div></div>' +
-      '<div class="ws-card"><span class="icon">📝</span><div class="label research">Publications</div><div class="q">What has been published?</div>' +
-      '<div class="d">3 discovery papers, 7 Python models, verification appendix, Monte Carlo simulation, sensitivity analysis, 30-day historical dataset.</div>' +
-      '<div class="tools-list"><a href="/articles">Articles →</a></div></div>' +
-    '</div>';
-  } else if (tab === 'developer') {
-    html = '<div class="ws-grid">' +
-      '<div class="ws-card ws-full"><span class="icon">{};</span><div class="label dev">API Documentation</div><div class="q">REST endpoints for live Bitcoin data.</div>' +
-      '<div class="d">All endpoints return JSON. Base URL: <code style="color:var(--orange);">https://mempool.space/api</code></div></div>' +
-      '<div class="ws-card ws-full"><div class="label dev">Fee Estimates</div>' +
-      '<div class="endpoint-card"><span class="method get">GET</span><span class="url">/v1/fees/recommended</span><div class="desc">Returns fastestFee, halfHourFee, hourFee, economyFee, minimumFee in sat/vB.</div></div>' +
-      '<div class="endpoint-card"><span class="method get">GET</span><span class="url">/v1/fees/mempool-blocks</span><div class="desc">Fee histogram for the next mempool blocks — predicts near-term fee pressure.</div></div></div>' +
-      '<div class="ws-card ws-full"><div class="label dev">Mempool & Blocks</div>' +
-      '<div class="endpoint-card"><span class="method get">GET</span><span class="url">/mempool</span><div class="desc">Mempool snapshot: count, vsize, total fee, fee histogram.</div></div>' +
-      '<div class="endpoint-card"><span class="method get">GET</span><span class="url">/blocks?limit=10</span><div class="desc">Recent blocks with height, size, weight, tx count, fee data.</div></div>' +
-      '<div class="endpoint-card"><span class="method get">GET</span><span class="url">/blocks/tip/height</span><div class="desc">Current block height (plain text).</div></div></div>' +
-      '<div class="ws-card ws-full"><div class="label dev">Mining & Lightning</div>' +
-      '<div class="endpoint-card"><span class="method get">GET</span><span class="url">/v1/mining/blocks/fees/24h</span><div class="desc">Fee revenue history for the last 24 hours, per block.</div></div>' +
-      '<div class="endpoint-card"><span class="method get">GET</span><span class="url">/v1/lightning/statistics/latest</span><div class="desc">LN network stats: channel count, node count, total capacity.</div></div>' +
-      '<div class="endpoint-card"><span class="method get">GET</span><span class="url">/v1/difficulty-adjustment</span><div class="desc">Difficulty adjustment info: change, estimated retarget height.</div></div></div>' +
-      '<div class="ws-card ws-full"><div class="label dev">Local Tools</div>' +
-      '<div class="endpoint-card"><span class="method get">GET</span><span class="url">/tools/fee_history.json</span><div class="desc">Historical fee data (30+ days) — fastest, economy, dates.</div></div>' +
-      '<div class="endpoint-card"><span class="method get">GET</span><span class="url">/tools/live_data.json</span><div class="desc">Pipeline output: latest block, BIP-110 signaling, miner revenue.</div></div>' +
-      '<div class="endpoint-card"><span class="method get">GET</span><span class="url">/tools/monte_carlo_output.json</span><div class="desc">Monte Carlo simulation results for storage externality model.</div></div>' +
-      '<div class="endpoint-card"><span class="method get">GET</span><span class="url">/tools/fee_forecast.json</span><div class="desc">Fee forecast based on historical patterns and mempool pressure.</div></div></div>' +
-    '</div>';
+  var sendPill = document.getElementById('send-rec-pill-inner');
+  if (sendPill) {
+    sendPill.textContent = feeLabel(e);
+    sendPill.className = 'fee-pill ' + feePillClass(e);
   }
-  document.getElementById('workspace-container').innerHTML = html;
+  var sendRecText = document.getElementById('send-rec-text');
+  if (sendRecText) sendRecText.textContent = e <= 5 ? 'Yes, send at economy (' + e + ' sat/vB)' : 'Fees are elevated &mdash; wait if you can';
+  setText('send-econ-fee', e + ' sat/vB');
+  setText('send-econ-usd', usd(e * 140));
+  setText('send-fast-fee', f + ' sat/vB');
+  setText('send-fast-usd', usd(f * 140));
+  setText('send-savings', usd((f - e) * 140));
+  var sendBadge = document.getElementById('send-badge');
+  if (sendBadge) {
+    sendBadge.textContent = e <= 5 ? 'YES &mdash; SEND AT ECONOMY' : 'NO &mdash; WAIT';
+    sendBadge.className = 'pc-badge ' + (e <= 5 ? 'badge-rec' : 'badge-wait');
+  }
+  var congEl = document.getElementById('send-congestion');
+  if (congEl) { congEl.textContent = congestionLabel(mc); congEl.className = feeClass(mc); }
+  setText('send-mempool-count', niceNum(mc));
+  setText('send-mempool-econ', e + ' sat/vB');
+  setText('send-mempool-min', m + ' sat/vB');
+  setText('send-btc-price', '$' + niceNum(btc));
+  setText('send-block-height', niceNum(bh));
 
-  if (tab === 'node') {
-    setTimeout(function() { try { VIZ_UTXO.init('utxo-canvas'); } catch(e) {} }, 100);
+  var lnRec = document.getElementById('ln-rec');
+  if (lnRec) {
+    if (e < 5) { lnRec.textContent = 'Good time to open &mdash; fees are low'; lnRec.className = 'good'; }
+    else if (e < 25) { lnRec.textContent = 'Fees moderate &mdash; OK to open'; lnRec.className = 'warn'; }
+    else { lnRec.textContent = 'Fees high &mdash; wait'; lnRec.className = 'bad'; }
   }
-  if (tab === 'miner') {
-    setTimeout(function() { try { VIZ_Blockspace.init('blockspace-canvas'); } catch(e) {} }, 100);
+  setText('ln-open-cost', usd(e * 1000));
+  setText('ln-open-rate', e + ' sat/vB');
+  setText('ln-open-fast', usd(f * 1000));
+  setText('ln-savings', usd((f - e) * 1000));
+  setText('ln-close-cost', usd(e * 500));
+  var lnBadge = document.getElementById('ln-badge');
+  if (lnBadge) { lnBadge.textContent = e < 5 ? 'OPEN NOW' : 'WATCH & WAIT'; lnBadge.className = 'pc-badge ' + (e < 5 ? 'badge-rec' : 'badge-wait'); }
+  setText('ln-channels', niceNum(ln.channel_count) + ' channels');
+  setText('ln-nodes', niceNum(ln.node_count));
+  setText('ln-capacity', ln.total_capacity > 0 ? niceNum(Math.round(ln.total_capacity / 100000000)) + ' BTC' : 'Loading...');
+  setText('ln-total-cost', usd((e * 1000 + e * 500)));
+  setText('ln-annual-fees', usd((e * 1000 + e * 500) * 10));
+
+  var batchSave = (e * 140 * 1000 - e * 100000) * btc / 100000000;
+  var exRec = document.getElementById('ex-rec');
+  if (exRec) {
+    if (e < 10) { exRec.textContent = 'Good time to batch &mdash; fees are low'; exRec.className = 'good'; }
+    else { exRec.textContent = 'Fees elevated &mdash; batch only urgent withdrawals'; exRec.className = 'warn'; }
   }
+  setText('ex-per-tx', usd(e * 140));
+  setText('ex-batch-100', usd(e * 10000));
+  setText('ex-indiv-100', usd(e * 140 * 100));
+  setText('ex-savings', '$' + batchSave.toFixed(2));
+  var exBadge = document.getElementById('ex-badge');
+  if (exBadge) exBadge.textContent = 'SAVE $' + batchSave.toFixed(2) + ' PER 1K WITHDRAWALS';
+  setText('ex-mempool-count', niceNum(mc));
+  setText('ex-econ-fee', e + ' sat/vB');
+  setText('ex-fast-fee', f + ' sat/vB');
+  setText('ex-congestion-text', mc < 50000 ? 'Congestion low &mdash; good for batching.' : mc < 200000 ? 'Congestion moderate &mdash; batch with economy.' : 'Congestion high &mdash; consider waiting.');
+
+  setText('node-econ-rate', e + ' sat/vB');
+
+  var totalReward = 3.125 * btc + 0.5 * btc;
+  setText('miner-total-reward', '~$' + niceNum(Math.round(totalReward)) + '/block');
+  setText('miner-subsidy', '$' + niceNum(Math.round(3.125 * btc)));
+  setText('miner-fees', '$' + niceNum(Math.round(0.5 * btc)));
+  setText('miner-fee-share', (0.5 / 3.625 * 100).toFixed(1) + '%');
+  setText('miner-fast-fee', f + ' sat/vB');
+  setText('miner-econ-fee', e + ' sat/vB');
+  var ratio = ((e * 100 * btc / 100000000) / 0.008).toFixed(0);
+  setText('miner-ratio', ratio + 'x');
+
+  setText('research-econ-fee', e + ' sat/vB');
 
   document.getElementById('ts').textContent = 'Updated ' + new Date().toLocaleString();
+
+  var ticker = document.getElementById('live-ticker');
+  if (ticker) {
+    ticker.innerHTML = '<span class="ticker-item"><span class="ticker-dot green"></span> Block <strong>' + niceNum(bh) + '</strong></span>'
+      + '<span class="ticker-item">BTC <strong>$' + niceNum(btc) + '</strong></span>'
+      + '<span class="ticker-item">Fastest <strong>' + f + ' sat/vB</strong></span>'
+      + '<span class="ticker-item">Economy <strong>' + e + ' sat/vB</strong></span>'
+      + '<span class="ticker-item">Mempool <strong>' + niceNum(mc) + ' tx</strong></span>';
+  }
 }
 
-function updateFromDataEngine() {
+function setText(id, val) {
+  var el = document.getElementById(id);
+  if (el) el.innerHTML = val;
+}
+
+function initFromDataEngine() {
   var d = DATA_ENGINE.get();
-  DATA.fees = d.fees || DATA.fees;
-  DATA.btc_price = d.btc_price || DATA.btc_price;
-  DATA.mempool = d.mempool || DATA.mempool;
-  DATA.lightning = d.lightning || DATA.lightning;
-  DATA.block_height = d.block_height || DATA.block_height;
-  renderWorkspace(currentTab);
-  var ts = document.getElementById('ts');
-  if (ts) ts.textContent = 'Updated ' + new Date().toLocaleString();
+  if (d) {
+    D.fees = d.fees || D.fees;
+    D.btc_price = d.btc_price || D.btc_price;
+    D.mempool = d.mempool || D.mempool;
+    D.lightning = d.lightning || D.lightning;
+    D.block_height = d.block_height || D.block_height;
+  }
+  updateData();
+  try { VIZ_Fees.init('fees-canvas'); } catch(e) {}
 }
 
-renderWorkspace('send');
+document.querySelectorAll('.tab-btn').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    switchTab(this.getAttribute('data-tab'));
+  });
+});
 
-DATA_ENGINE.onUpdate(function() { updateFromDataEngine(); });
+DATA_ENGINE.onUpdate(function(data) {
+  D.fees = data.fees || D.fees;
+  D.btc_price = data.btc_price || D.btc_price;
+  D.mempool = data.mempool || D.mempool;
+  D.lightning = data.lightning || D.lightning;
+  D.block_height = data.block_height || D.block_height;
+  updateData();
+});
+
 DATA_ENGINE.start();
-
-setTimeout(function() { try { VIZ_Fees.init('fees-canvas'); } catch(e) {} }, 200);
+switchTab('send');
+setTimeout(initFromDataEngine, 300);
 </script>
 </body>
 </html>

@@ -56,7 +56,7 @@ var VIZ_Blockspace = (function() {
   function draw(ctx, w, h, t) {
     rebuild();
 
-    ctx.fillStyle = '#0A0A0F';
+    ctx.fillStyle = '#F5F2ED';
     ctx.fillRect(0, 0, w, h);
 
     var trendH = layout.trendH;

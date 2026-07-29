@@ -85,7 +85,7 @@ var VIZ_Fees = (function() {
   }
 
   function draw(ctx, w, h, t) {
-    ctx.fillStyle = '#0A0A0F';
+    ctx.fillStyle = '#F5F2ED';
     ctx.fillRect(0, 0, w, h);
     h = Math.max(200, h);
 
