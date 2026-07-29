@@ -81,6 +81,10 @@
     {
       "src": "decide.html",
       "use": "@vercel/static"
+    },
+    {
+      "src": "beta.html",
+      "use": "@vercel/static"
     }
   ],
   "routes": [
@@ -135,6 +139,12 @@
     {
       "src": "/decide",
       "dest": "/decide.html"
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/beta",
+      "destination": "/beta.html"
     }
   ]
 }
