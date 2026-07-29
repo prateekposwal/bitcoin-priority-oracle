@@ -60,9 +60,6 @@ function updateBlockUI(b) {
   var sizeMB = ((b.size || 0) / 1000000).toFixed(2);
   setText('block-stats', fmtNum(b.tx_count || 0) + ' txs . ' + sizeMB + ' MB . ' + fmtNum(b.weight || 0) + ' kWU');
   setText('tx-footer', 'Live block #' + fmtNum(b.height || 0) + ' --- ' + fmtNum(b.tx_count || 0) + ' transactions');
-
-  setText('tx-footer', 'Live block #' + fmtNum(b.height || 0) + ' --- ' + fmtNum(b.tx_count || 0) + ' txs');
-}
 }
 
 function updateLiveIndicator(d) {
