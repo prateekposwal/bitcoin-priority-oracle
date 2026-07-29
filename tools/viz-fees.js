@@ -49,7 +49,7 @@ var VIZ_Fees = (function() {
           g: Math.round((1-p) * 185 + p * 81),
           b: Math.round((1-p) * 80 + p * 73),
           life: 1,
-          size: Math.random() * 3 + 1
+          size: Math.random() * 4 + 1.5
         });
       }
     }, 30);
@@ -84,7 +84,7 @@ var VIZ_Fees = (function() {
     for (var i = 0; i < bars.length; i++) {
       var b = bars[i];
       b.fee += (b.targetFee - b.fee) * 0.03;
-      b.h = (b.fee / 50) * maxBarArea * 0.7;
+      b.h = (b.fee / 50) * maxBarArea * 0.8;
       b.age++;
     }
 
@@ -98,7 +98,7 @@ var VIZ_Fees = (function() {
     var ag = Math.round((1-pct) * 185 + pct * 81);
     var ab = Math.round((1-pct) * 80 + pct * 73);
     var pulseSpeed = displayFee > 20 ? 2.0 : displayFee > 10 ? 1.0 : 0.5;
-    var aglow = Math.sin(t * pulseSpeed) * 0.03 + 0.05;
+    var aglow = Math.sin(t * pulseSpeed) * 0.04 + 0.06;
     ctx.fillStyle = 'rgba(' + ar + ',' + ag + ',' + ab + ',' + aglow + ')';
     ctx.fillRect(0, 0, w, h);
 
@@ -119,7 +119,7 @@ var VIZ_Fees = (function() {
       ctx.fillStyle = 'rgba(' + r + ',' + g + ',' + bl + ',' + glow + ')';
       ctx.fillRect(x - 2, y - 4, bw + 4, barH + 8);
       ctx.fillStyle = 'rgb(' + r + ',' + g + ',' + bl + ')';
-      ctx.fillRect(x, y, bw - 1, barH);
+      ctx.fillRect(x, y, Math.max(1, bw), barH);
     }
 
     // Draw floating particles
@@ -144,18 +144,18 @@ var VIZ_Fees = (function() {
     ctx.textBaseline = 'middle';
     
     // Glow behind number
-    ctx.font = '120px -apple-system, sans-serif';
+    ctx.font = '140px -apple-system, sans-serif';
     ctx.fillStyle = 'rgba(0,0,0,0.3)';
-    ctx.fillText(feeText, w/2 + 3, h/2 - 60 + 3);
+    ctx.fillText(feeText, w/2 + 3, h/2 - 70 + 3);
     
     // Main fee number
     ctx.fillStyle = feeColor;
-    ctx.fillText(feeText, w/2, h/2 - 60);
+    ctx.fillText(feeText, w/2, h/2 - 70);
     
     // Label
     ctx.font = '18px -apple-system, sans-serif';
     ctx.fillStyle = 'rgba(255,255,255,0.4)';
-    ctx.fillText('sat/vB — fastest fee', w/2, h/2 - 60 + 80);
+    ctx.fillText('sat/vB — fastest fee', w/2, h/2 - 70 + 95);
 
     // Narrative text
     var f = displayFee;
@@ -167,10 +167,10 @@ var VIZ_Fees = (function() {
     else if (f < 50) narrative = 'High fees — wait if you can';
     else narrative = 'Very high fees — not a good time to send';
 
-    ctx.font = '14px -apple-system, sans-serif';
+    ctx.font = '16px -apple-system, sans-serif';
     var narrativeOpacity = 0.4 + Math.sin(t * 1.5) * 0.1;
     ctx.fillStyle = 'rgba(255,255,255,' + Math.max(0.2, Math.min(0.6, narrativeOpacity)) + ')';
-    ctx.fillText(narrative, w/2, h/2 - 60 + 110);
+    ctx.fillText(narrative, w/2, h/2 - 70 + 125);
 
     // Vignette
     var grad = ctx.createRadialGradient(w/2, h/2, h*0.2, w/2, h/2, h*0.9);

@@ -14,13 +14,13 @@ html, body { width: 100%; min-height: 100vh; background: #1A1612; color: #E8E5E0
 .tab-btn:hover { color: #E8E5E0; border-color: #3A3632; }
 .tab-btn.active { color: #F7931A; border-color: #F7931A; background: rgba(247,147,26,0.12); }
 
-.content { max-width: 1100px; margin: 0 auto; padding: 32px 24px 80px; }
+.content { max-width: 1600px; margin: 0 auto; padding: 32px 40px 80px; }
 .tab-panel { display: none; }
 .tab-panel.active { display: block; }
 
-.dc { background: #2A2622; border-radius: 14px; padding: 24px; margin-bottom: 16px; }
+.dc { background: #2A2622; border-radius: 14px; padding: 32px; margin-bottom: 20px; }
 .dc .dc-q { font-size: 17px; font-weight: 600; color: #E8E5E0; margin-bottom: 8px; }
-.dc .dc-a { font-size: 32px; font-weight: 800; margin-bottom: 6px; }
+.dc .dc-a { font-size: 36px; font-weight: 800; margin-bottom: 8px; }
 .dc .dc-sub { font-size: 14px; color: #888; }
 .dc .green { color: #3FB950; }
 .dc .yellow { color: #D29922; }
@@ -28,37 +28,37 @@ html, body { width: 100%; min-height: 100vh; background: #1A1612; color: #E8E5E0
 .dc .orange { color: #F7931A; }
 
 .fee-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 16px 0; }
-.fee-card { background: #1A1612; border-radius: 10px; padding: 16px; text-align: center; }
+.fee-card { background: #1A1612; border-radius: 10px; padding: 20px; text-align: center; }
 .fee-card .fc-label { font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 0.5px; }
-.fee-card .fc-value { font-size: 24px; font-weight: 700; margin: 6px 0; }
+.fee-card .fc-value { font-size: 28px; font-weight: 700; margin: 8px 0; }
 .fee-card .fc-sub { font-size: 12px; color: #555; }
 
-.dollar-cost { text-align: center; font-size: 14px; color: rgba(255,255,255,0.5); padding: 10px 0 6px; letter-spacing: 0.3px; }
+.dollar-cost { text-align: center; font-size: 16px; color: rgba(255,255,255,0.5); padding: 12px 0 8px; letter-spacing: 0.3px; }
 .dollar-cost .cost-sep { color: rgba(255,255,255,0.15); margin: 0 6px; }
 
 .stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 16px 0; }
-.stat-card { background: #1A1612; border-radius: 10px; padding: 16px; text-align: center; }
+.stat-card { background: #1A1612; border-radius: 10px; padding: 20px; text-align: center; }
 .stat-card .sc-label { font-size: 11px; color: #888; text-transform: uppercase; letter-spacing: 0.5px; }
-.stat-card .sc-value { font-size: 26px; font-weight: 700; margin: 4px 0; }
+.stat-card .sc-value { font-size: 30px; font-weight: 700; margin: 6px 0; }
 
-.viz-canvas { width: 100%; height: 500px; border-radius: 12px; background: #1A1612; margin-top: 16px; }
+.viz-canvas { width: 100%; height: 600px; border-radius: 12px; background: #1A1612; margin-top: 16px; }
 
-.viz-section { margin-bottom: 24px; }
-.viz-section-title { font-size: 16px; font-weight: 700; color: rgba(255,255,255,0.8); margin-bottom: 6px; }
-.viz-section-desc { font-size: 13px; color: rgba(255,255,255,0.4); margin-bottom: 12px; line-height: 1.5; }
+.viz-section { margin-bottom: 32px; }
+.viz-section-title { font-size: 18px; font-weight: 700; color: rgba(255,255,255,0.8); margin-bottom: 8px; }
+.viz-section-desc { font-size: 14px; color: rgba(255,255,255,0.4); margin-bottom: 16px; line-height: 1.6; }
 
 .insight-card {
   background: rgba(247,147,26,0.06);
   border: 1px solid rgba(247,147,26,0.15);
   border-radius: 14px;
-  padding: 20px;
+  padding: 24px;
   display: flex;
-  gap: 14px;
-  margin-top: 20px;
+  gap: 16px;
+  margin-top: 24px;
 }
-.insight-icon { font-size: 28px; flex-shrink: 0; margin-top: 2px; }
-.insight-title { font-size: 15px; font-weight: 700; color: rgba(255,255,255,0.8); margin-bottom: 6px; }
-.insight-text { font-size: 14px; color: rgba(255,255,255,0.5); line-height: 1.7; }
+.insight-icon { font-size: 32px; flex-shrink: 0; margin-top: 2px; }
+.insight-title { font-size: 17px; font-weight: 700; color: rgba(255,255,255,0.8); margin-bottom: 8px; }
+.insight-text { font-size: 15px; color: rgba(255,255,255,0.5); line-height: 1.7; }
 
 /* Genesis Strip */
 .genesis-strip { position: fixed; bottom: 32px; left: 0; width: 100%; height: 2px; z-index: 50; background: linear-gradient(90deg, #F7931A 0%, #3FB950 25%, #D29922 50%, #F85149 75%, #F7931A 100%); background-size: 200% 100%; animation: genesis-shimmer 4s linear infinite; }
@@ -74,11 +74,13 @@ html, body { width: 100%; min-height: 100vh; background: #1A1612; color: #E8E5E0
 
 @media (max-width: 600px) {
   .fee-grid, .stat-row { grid-template-columns: 1fr; }
-  .viz-canvas { height: 350px; }
-  .insight-card { flex-direction: column; gap: 8px; }
-  .dc { padding: 18px; }
-  .dc .dc-a { font-size: 26px; }
+  .viz-canvas { height: 400px; }
+  .insight-card { flex-direction: column; gap: 10px; }
+  .dc { padding: 20px; }
+  .dc .dc-a { font-size: 28px; }
   .content { padding: 20px 16px 70px; }
+  .dollar-cost { font-size: 13px; }
+  .viz-section-title { font-size: 16px; }
 }
 
 @media (max-width: 480px) {
@@ -102,9 +104,9 @@ html, body { width: 100%; min-height: 100vh; background: #1A1612; color: #E8E5E0
   <button class="tab-btn" data-tab="developer">Dev</button>
 </div>
 
-<div style="position:sticky;top:54px;z-index:19;background:#1A1612;padding:12px 24px;border-bottom:1px solid #2A2622;text-align:center;">
-  <span id="live-state" style="font-size:14px;font-weight:600;letter-spacing:0.5px;color:#3FB950;">🟢 Network calm</span>
-  <span id="live-state-sub" style="font-size:13px;color:rgba(255,255,255,0.4);margin-left:8px;">Fees are low</span>
+<div style="position:sticky;top:41px;z-index:19;background:#1A1612;padding:12px 24px;border-bottom:1px solid #2A2622;text-align:center;">
+  <span id="live-state" style="font-size:16px;font-weight:600;letter-spacing:0.5px;color:#3FB950;">🟢 Network calm</span>
+  <span id="live-state-sub" style="font-size:14px;color:rgba(255,255,255,0.4);margin-left:10px;">Fees are low</span>
 </div>
 
 <div class="content">
