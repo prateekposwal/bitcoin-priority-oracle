@@ -467,9 +467,13 @@ function updateAll() {
   document.getElementById('ex-5x').textContent = '$' + (500 * EXT_PER_K).toLocaleString('en-US', {maximumFractionDigits:0});
   document.getElementById('so-ext').textContent = '$' + (extAnnual / 1000).toFixed(1) + 'K';
   if (liveFeeCost > 0) {
-    var feeRatio = (liveFeeCost / (EXT_PER_K / 12)).toFixed(1);
+    var inscSize = 400;
+    var inscFee = liveFeeCost * inscSize;
+    var inscMo = EXT_PER_K / (1000 * 12);
+    var inscLife = inscMo * 12 * 10;
+    var ratio = (inscLife > 0 ? (inscFee / inscLife) : 0).toFixed(0);
     var feeNote = document.getElementById('fee-note');
-    if (feeNote) feeNote.textContent = 'Current economy fee: $' + liveFeeCost.toFixed(4) + ' per vB — ' + feeRatio + 'x the per-channel monthly externality';
+    if (feeNote) feeNote.textContent = 'Typical inscription fee: $' + inscFee.toFixed(3) + ' — ' + ratio + 'x the 10-year storage externality';
   }
 
   var lowGrowth = 1.05;
