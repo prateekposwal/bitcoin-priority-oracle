@@ -245,11 +245,11 @@ footer .links { display: flex; gap: 16px; justify-content: center; flex-wrap: wr
     <div class="block-header">
       <div class="bh-left">
         <span class="bh-label">Block</span>
-        <span class="bh-value">#841,382</span>
-        <span style="font-size:13px;color:var(--muted);">—</span>
-        <span style="font-size:13px;color:var(--muted);">2026-07-28 14:23 UTC</span>
+        <span class="bh-value" id="block-height">#—</span>
+        <span style="font-size:13px;color:var(--muted);" id="block-hash">—</span>
+        <span style="font-size:13px;color:var(--muted);" id="block-time">Loading...</span>
       </div>
-      <div class="bh-right">2,754 txs · 1.48 MB · 3,992 kWU</div>
+      <div class="bh-right" id="block-stats">— txs · — MB · — kWU</div>
     </div>
     <div class="tx-header">
       <span>Transaction</span><span>Size</span><span>Fee</span><span>Storage Cost</span><span>View</span>
@@ -312,7 +312,7 @@ footer .links { display: flex; gap: 16px; justify-content: center; flex-wrap: wr
         <span class="tx-see">→ Details</span>
       </div>
     </div>
-    <div class="tx-footer">Showing 8 of 2,754 transactions — storage cost modeled at $924/yr per node · 10-year horizon</div>
+    <div class="tx-footer" id="tx-footer">Loading block data...</div>
   </div>
 </div>
 
@@ -467,6 +467,19 @@ API.onData(function(d) {
   var feeEl = document.getElementById('live-fees');
   if (feeEl && liveFees) {
     feeEl.innerHTML = 'Fees: <strong>' + liveFees.fastestFee + '</strong> fast / <strong>' + liveFees.economyFee + '</strong> econ sat/vB &middot; Mempool: <strong>' + liveMempoolTx.toLocaleString() + '</strong> txs';
+  }
+  // Update block detail from live data
+  if (d.latest_block) {
+    var b = d.latest_block;
+    document.getElementById('block-height').textContent = '#' + b.height.toLocaleString();
+    document.getElementById('block-hash').textContent = b.hash ? b.hash.substring(0, 16) + '…' : '—';
+    if (b.timestamp) {
+      var d2 = new Date(b.timestamp * 1000);
+      document.getElementById('block-time').textContent = d2.toISOString().replace('T', ' ').substring(0, 19) + ' UTC';
+    }
+    var sizeMB = (b.size / 1000000).toFixed(2);
+    document.getElementById('block-stats').textContent = b.tx_count.toLocaleString() + ' txs · ' + sizeMB + ' MB · ' + b.weight.toLocaleString() + ' kWU';
+    document.getElementById('tx-footer').textContent = 'Live block #' + b.height.toLocaleString() + ' — ' + b.tx_count.toLocaleString() + ' transactions · storage cost modeled at $924/yr per node · 10-year horizon';
   }
   updateBlockSpace();
 });
