@@ -1,0 +1,11 @@
+{
+  "endpoint": {
+    "key": "coinpaprika",
+    "name": "CoinPaprika",
+    "url": "https://api.coinpaprika.com/v1/coins/btc-bitcoin",
+    "type": "api",
+    "category": "price"
+  },
+  "stagedAt": "2026-07-29T20:14:21.434Z",
+  "status": "pending_review"
+}
