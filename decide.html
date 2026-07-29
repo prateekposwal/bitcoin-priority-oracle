@@ -251,8 +251,11 @@ function renderWorkspace(tab) {
   document.getElementById('workspace-container').innerHTML = html;
 }
 
+// Initial render with defaults
+renderWorkspace('user');
+
 // Live data via shared API module
-API.start({interval: 60000});
+API.start();
 API.onData(function(d) {
   if (d.btc_price) btcPrice = d.btc_price;
   if (d.fees) fees = d.fees;
