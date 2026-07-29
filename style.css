@@ -267,7 +267,7 @@ nav .dropdown:focus-within .dropdown-content {
 }
 
 .section-sub {
-  font-size: 17px;
+  font-size: 18px;
   color: var(--text-secondary);
   max-width: 600px;
   line-height: 1.6;
@@ -492,7 +492,7 @@ nav .dropdown:focus-within .dropdown-content {
 }
 
 .stat .num {
-  font-size: 24px;
+  font-size: 28px;
   font-weight: 800;
 }
 
@@ -503,7 +503,7 @@ nav .dropdown:focus-within .dropdown-content {
 .stat .num.red { color: var(--red); }
 
 .stat .lbl {
-  font-size: 11px;
+  font-size: 12px;
   color: var(--text-secondary);
   margin-top: 2px;
   text-transform: uppercase;
@@ -564,20 +564,20 @@ nav .dropdown:focus-within .dropdown-content {
 }
 
 .persona-card .emoji {
-  font-size: 32px;
+  font-size: 36px;
   line-height: 1;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
 }
 
 .persona-card h3 {
-  font-size: 17px;
+  font-size: 18px;
   font-weight: 700;
   color: var(--text);
   margin: 0;
 }
 
 .persona-card .question {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--text-secondary);
   line-height: 1.5;
   margin: 0 0 8px;
@@ -670,14 +670,14 @@ nav .dropdown:focus-within .dropdown-content {
 }
 
 .thesis-card h3 {
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 700;
   margin-bottom: 12px;
   color: var(--text);
 }
 
 .thesis-card p {
-  font-size: 16px;
+  font-size: 17px;
   color: var(--text-secondary);
   line-height: 1.7;
 }
@@ -699,8 +699,8 @@ nav .dropdown:focus-within .dropdown-content {
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: 10px;
-  padding: 14px 24px;
-  font-size: 15px;
+  padding: 16px 28px;
+  font-size: 16px;
   font-weight: 600;
   color: var(--text);
   transition: border-color var(--ease), transform var(--ease);
@@ -1082,7 +1082,7 @@ nav .dropdown:focus-within .dropdown-content {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 12px;
+  font-size: 13px;
   color: var(--text-muted);
   margin-bottom: 16px;
 }
@@ -1134,7 +1134,7 @@ nav .dropdown:focus-within .dropdown-content {
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: var(--radius-xs);
-  font-size: 12px;
+  font-size: 13px;
   color: var(--text-muted);
   overflow: hidden;
   white-space: nowrap;
@@ -1178,8 +1178,8 @@ nav .dropdown:focus-within .dropdown-content {
   background: var(--bg-elevated);
   border: 1px solid var(--border);
   border-radius: var(--radius-xs);
-  padding: 6px 12px;
-  font-size: 12px;
+  padding: 8px 14px;
+  font-size: 13px;
   color: var(--text-secondary);
   text-decoration: none;
   transition: border-color var(--ease), color var(--ease);
@@ -1194,7 +1194,7 @@ nav .dropdown:focus-within .dropdown-content {
 /* ── Key-Value Table ── */
 .kv-table {
   width: 100%;
-  font-size: 14px;
+  font-size: 15px;
   border-collapse: collapse;
 }
 
