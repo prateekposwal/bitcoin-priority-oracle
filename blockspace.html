@@ -402,6 +402,7 @@ footer .links { display: flex; gap: 16px; justify-content: center; flex-wrap: wr
     <a href="https://github.com/prateekposwal/block-space-economics">GitHub</a>
   </div>
   <p>Bitcoin Sahi — Blockchain Research & Development. Built in public.</p>
+  <div id="debug-log" style="font-size:10px;color:#444;text-align:center;margin-top:4px;"></div>
 </footer>
 
 <script>
@@ -409,6 +410,7 @@ var liveFees = null, liveMempoolTx = null, liveBtcPrice = null;
 var LIVE_BASE_TX = 3000;
 
 function updateBlockSpace() {
+  try {
   var vol = parseFloat(document.getElementById('sl-vol').value);
   document.getElementById('sl-vol-label').textContent = vol + 'K';
 
@@ -441,7 +443,7 @@ function updateBlockSpace() {
     if(!el)continue;
     el.style.width = Math.max(0.3,segs[i][2])+'%';
     var lb=el.querySelector('.seg-label');
-    if(lb)lb.textContent = segs[i][1]+' '+(segs[i][2]>1?Math.round(segs[i][2]):segs[i][2].toFixed(1))+'%';
+    if(lb)lb.textContent = segs[i][1]+' '+(segs[i][2]>=1?Math.round(segs[i][2]):segs[i][2].toFixed(1))+'%';
   }
   var tp=document.getElementById('total-pct');
   if(tp)tp.textContent=(finPct+insPct+emptyPct+10*sd).toFixed(1)+'%';
@@ -452,6 +454,10 @@ function updateBlockSpace() {
   try{document.getElementById('so-fin').textContent=Math.round(finPct)+'%';}catch(e){}
   try{document.getElementById('so-ins').textContent=Math.round(insPct)+'%';}catch(e){}
   try{document.getElementById('so-ratio').textContent=(insPct/(finPct||1)).toFixed(2);}catch(e){}
+  } catch(e) {
+    var dbg = document.getElementById('debug-log');
+    if (dbg) dbg.textContent = 'Error: ' + e.message;
+  }
 }
 
 API.onData(function(d) {
@@ -468,18 +474,29 @@ API.onData(function(d) {
   if (feeEl && liveFees) {
     feeEl.innerHTML = 'Fees: <strong>' + liveFees.fastestFee + '</strong> fast / <strong>' + liveFees.economyFee + '</strong> econ sat/vB &middot; Mempool: <strong>' + liveMempoolTx.toLocaleString() + '</strong> txs';
   }
-  // Update block detail from live data
-  if (d.latest_block) {
-    var b = d.latest_block;
+  // Update block detail — try pipeline data first, fallback to direct API
+  function updateBlockUI(b) {
     document.getElementById('block-height').textContent = '#' + b.height.toLocaleString();
     document.getElementById('block-hash').textContent = b.hash ? b.hash.substring(0, 16) + '…' : '—';
     if (b.timestamp) {
-      var d2 = new Date(b.timestamp * 1000);
-      document.getElementById('block-time').textContent = d2.toISOString().replace('T', ' ').substring(0, 19) + ' UTC';
+      var d2 = new Date((typeof b.timestamp === 'number' ? b.timestamp : Date.parse(b.timestamp)) * 1000);
+      document.getElementById('block-time').textContent = isNaN(d2.getTime()) ? '—' : d2.toISOString().replace('T', ' ').substring(0, 19) + ' UTC';
     }
     var sizeMB = (b.size / 1000000).toFixed(2);
     document.getElementById('block-stats').textContent = b.tx_count.toLocaleString() + ' txs · ' + sizeMB + ' MB · ' + b.weight.toLocaleString() + ' kWU';
     document.getElementById('tx-footer').textContent = 'Live block #' + b.height.toLocaleString() + ' — ' + b.tx_count.toLocaleString() + ' transactions · storage cost modeled at $924/yr per node · 10-year horizon';
+  }
+  if (d.latest_block) {
+    updateBlockUI(d.latest_block);
+  } else {
+    // Fallback: fetch block data directly from mempool.space
+    fetch('https://mempool.space/api/blocks/tip/height').then(function(r) { return r.text(); }).then(function(h) {
+      return fetch('https://mempool.space/api/block-height/' + h.trim());
+    }).then(function(r) { return r.text(); }).then(function(hash) {
+      return fetch('https://mempool.space/api/block/' + hash.trim());
+    }).then(function(r) { return r.json(); }).then(function(b) {
+      updateBlockUI({ height: b.height, hash: b.id, timestamp: b.timestamp, tx_count: b.tx_count, size: b.size, weight: b.weight });
+    }).catch(function() {});
   }
   updateBlockSpace();
 });
