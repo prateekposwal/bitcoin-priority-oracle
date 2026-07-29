@@ -171,7 +171,12 @@ footer .links { display: flex; gap: 16px; justify-content: center; flex-wrap: wr
 
 <!-- ─── HERO ─── -->
 <div class="hero">
-  <div class="badge">UTXO Health Dashboard</div>
+  <div class="badge">UTXO Health Dashboard
+    <div class="actions">
+      <a href="/live" class="btn-primary">📊 Open Dashboard</a>
+      <a href="https://github.com/prateekposwal/block-space-economics" class="btn-secondary">GitHub →</a>
+    </div>
+  </div>
   <h1><span>How Healthy Is</span> Bitcoin's UTXO Set?</h1>
   <p>Every UTXO must be stored by every full node on fast storage. The UTXO set is Bitcoin's collective memory — and it's growing faster than ever.</p>
   <div class="live-indicator" id="live-indicator" style="display:none;">
@@ -356,13 +361,10 @@ footer .links { display: flex; gap: 16px; justify-content: center; flex-wrap: wr
 <!-- ─── FOOTER ─── -->
 <footer>
   <div class="links">
-    <a href="/live">📊 Dashboard</a>
+    <a href="/articles">Articles</a>
     <a href="https://github.com/prateekposwal/block-space-economics">GitHub</a>
-    <a href="/live">Live Dashboard</a>
     <a href="/">Home</a>
   </div>
-  
-  <a href="/live" class="btn-live">📊 Explore the Live Dashboard</a>
   <p>Bitcoin Sahi — Blockchain Research & Development. Built in public.</p>
 </footer>
 
