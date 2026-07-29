@@ -6,6 +6,7 @@
 <title>Blockspace Explorer — Bitcoin Sahi Research</title>
 <link rel="stylesheet" href="/style.css">
 <script>if(window.location.hostname.includes("vercel.app")){window.location.replace("https://bitcoinsahi.com"+window.location.pathname)}</script>
+<script src="/tools/api.js"></script>
 <style>.hero .badge {
   display: inline-block; font-size: 13px; font-weight: 600; color: var(--orange);
   border: 1px solid var(--orange); border-radius: 20px; padding: 4px 14px;
@@ -137,6 +138,13 @@
 .slider-output .so-card { background: #0D1117; border: 1px solid var(--border); border-radius: 8px; padding: 14px; text-align: center; }
 .slider-output .so-card .so-lbl { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
 .slider-output .so-card .so-val { font-size: 20px; font-weight: 700; color: var(--orange); margin-top: 2px; }
+
+/* ── Live Data Indicator ── */
+.live-indicator { text-align: center; margin-top: 16px; font-size: 13px; color: var(--muted); }
+.live-indicator .live-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #3FB950; margin-right: 6px; animation: pulse-dot 2s infinite; vertical-align: middle; }
+@keyframes pulse-dot { 0%,100%{opacity:1;} 50%{opacity:0.4;} }
+.live-fees { text-align: center; font-size: 14px; color: var(--muted); margin-top: 4px; }
+.live-fees strong { color: var(--orange); font-weight: 700; }
 
 /* ── Footer ── */
 footer { border-top: 1px solid var(--border); padding: 40px 24px; text-align: center; font-size: 20px; color: var(--muted); }
@@ -380,6 +388,8 @@ footer .links { display: flex; gap: 16px; justify-content: center; flex-wrap: wr
       <br>
       <span style="color:#555;">Model assumes constant block demand ~3,000 tx/block · avg inscription 400 vB · SegWit discount applied</span>
     </div>
+    <div class="live-indicator" id="live-indicator"><span class="live-dot"></span> Loading live data...</div>
+    <div class="live-fees" id="live-fees"></div>
   </div>
 </div>
 
@@ -397,11 +407,15 @@ footer .links { display: flex; gap: 16px; justify-content: center; flex-wrap: wr
 </footer>
 
 <script>
+var liveFees = null, liveMempoolTx = null, liveBtcPrice = null;
+var LIVE_BASE_TX = 3000;
+
 function updateBlockSpace() {
   var vol = parseFloat(document.getElementById('sl-vol').value);
   document.getElementById('sl-vol-label').textContent = vol + 'K';
 
-  var BASE_TX = 3000, INS_SIZE = 400, TX_SIZE = 250, BLOCK_LIMIT = 4000000, INS_VB = INS_SIZE * 0.75;
+  var BASE_TX = liveMempoolTx ? Math.max(500, Math.round(liveMempoolTx / 144)) : LIVE_BASE_TX;
+  var INS_SIZE = 400, TX_SIZE = 250, BLOCK_LIMIT = 4000000, INS_VB = INS_SIZE * 0.75;
   var totalIns = vol * 1000;
   var insPerBlock = totalIns / (6 * 24 * 30.5);
   var finPerBlock = Math.max(200, BASE_TX - insPerBlock * 0.3);
@@ -441,6 +455,25 @@ function updateBlockSpace() {
   try{document.getElementById('so-ins').textContent=Math.round(insPct)+'%';}catch(e){}
   try{document.getElementById('so-ratio').textContent=(insPct/(finPct||1)).toFixed(2);}catch(e){}
 }
+
+API.onData(function(d) {
+  liveFees = d.fees;
+  liveMempoolTx = d.mempool.unconfirmed_tx;
+  liveBtcPrice = d.btc_price;
+  var now = Date.now();
+  var then = new Date(d.timestamp).getTime();
+  var secsAgo = Math.round((now - then) / 1000);
+  var ago = secsAgo < 60 ? secsAgo + 's' : Math.round(secsAgo / 60) + 'm';
+  var el = document.getElementById('live-indicator');
+  if (el) el.innerHTML = '<span class="live-dot"></span> Live &middot; ' + ago + ' ago';
+  var feeEl = document.getElementById('live-fees');
+  if (feeEl && liveFees) {
+    feeEl.innerHTML = 'Fees: <strong>' + liveFees.fastestFee + '</strong> fast / <strong>' + liveFees.economyFee + '</strong> econ sat/vB &middot; Mempool: <strong>' + liveMempoolTx.toLocaleString() + '</strong> txs';
+  }
+  updateBlockSpace();
+});
+
+API.start({ interval: 60000 });
 </script>
 
 </body>

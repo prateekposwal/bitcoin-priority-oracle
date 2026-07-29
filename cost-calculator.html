@@ -6,6 +6,7 @@
 <title>Node Cost Calculator — Bitcoin Sahi Research</title>
 <link rel="stylesheet" href="/style.css">
 <script>if(window.location.hostname.includes("vercel.app")){window.location.replace("https://bitcoinsahi.com"+window.location.pathname)}</script>
+<script src="/tools/api.js"></script>
 <style>a:hover { text-decoration: underline; }
   nav .brand { font-weight: 800; font-size: 20px; letter-spacing: -0.3px; }
   nav .brand span { color: var(--orange); }
@@ -78,7 +79,21 @@
   .cta-links { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin-top: 20px; }
   .cta-link { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 10px 20px; font-size: 13px; color: var(--text); transition: border-color 0.2s; }
   .cta-link:hover { border-color: var(--orange); text-decoration: none; }
-  .cta-link .icon { color: var(--orange); }</style>
+  .cta-link .icon { color: var(--orange); }
+
+  .live-indicator { display:flex; align-items:center; gap:6px; font-size:11px; color:#555; margin-bottom:12px; }
+  .live-dot { width:7px; height:7px; border-radius:50%; background:#3FB950; display:inline-block; animation: breathe 2s infinite; }
+  @keyframes breathe { 0%{opacity:1;box-shadow:0 0 0 0 rgba(63,185,80,0.4)} 50%{opacity:0.6} 100%{opacity:1;box-shadow:0 0 0 5px rgba(63,185,80,0)} }
+  .live-clock { color:#666; font-family:monospace; }
+
+  .btc-price-display { display:flex; align-items:center; gap:12px; background:#0D1117; border:1px solid var(--border); border-radius:8px; padding:10px 16px; margin-bottom:12px; }
+  .btc-price-display .lbl { font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:0.3px; }
+  .btc-price-display .val { font-size:20px; font-weight:800; color:#F7931A; }
+  .btc-price-display .note { font-size:10px; color:#555; margin-left:auto; }
+
+  .network-note { font-size:12px; color:#555; padding:10px 14px; background:#0D1117; border:1px solid var(--border); border-radius:8px; margin-bottom:12px; display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+  .network-note .lbl { color:var(--muted); text-transform:uppercase; letter-spacing:0.3px; font-size:10px; }
+  .network-note .val { color:var(--orange); font-weight:600; }</style>
 </head>
 <body>
 <nav>
@@ -172,11 +187,22 @@
     <div class="panel">
       <h2>Results <span class="badge">updates live</span></h2>
 
+      <div class="live-indicator" id="live-indicator" style="display:none">
+        <span class="live-dot"></span>
+        <span>Live · <span class="live-clock" id="live-clock">—</span></span>
+      </div>
+
       <div class="result-cards">
         <div class="result-card"><div class="lbl">Annual Node Cost</div><div class="val" id="r-total">$924</div><div class="sub">Total cost to run your node</div></div>
         <div class="result-card"><div class="lbl">Monthly Cost</div><div class="val" id="r-mo">$77</div><div class="sub">Per month average</div></div>
         <div class="result-card"><div class="lbl">Cost Per Day</div><div class="val" id="r-day">$2.53</div><div class="sub">Per day average</div></div>
         <div class="result-card"><div class="lbl">Cost Per Byte / Yr</div><div class="val" id="r-cpb">$0.0000019</div><div class="sub">Annual cost per byte stored</div></div>
+      </div>
+
+      <div class="btc-price-display" id="btc-price-display" style="display:none">
+        <span class="lbl">BTC Price</span>
+        <span class="val" id="btc-price-val">—</span>
+        <span class="note">via Mempool.space</span>
       </div>
 
       <div class="breakdown-bar">
@@ -209,6 +235,11 @@
   </div>
 
   <div class="panel scenarios">
+    <div class="network-note" id="network-note" style="display:none">
+      <span class="lbl">Current Network</span>
+      <span class="val">Fastest: <span id="net-fastest">—</span></span>
+      <span class="val">Economy: <span id="net-economy">—</span></span>
+    </div>
     <h3>Scenario Comparison</h3>
     <div class="scenario-grid">
       <div class="scenario-card" id="sc-raspi">
@@ -354,6 +385,18 @@ function calc() {
   renderScenario('enterprise', SCENARIOS.enterprise);
 }
 calc();
+
+API.onData(function(d) {
+  document.getElementById('live-indicator').style.display = 'flex';
+  document.getElementById('btc-price-val').textContent = '$' + Number(d.btc_price).toLocaleString(undefined, {minimumFractionDigits: 2});
+  document.getElementById('btc-price-display').style.display = 'flex';
+  if (d.fees) {
+    document.getElementById('network-note').style.display = 'flex';
+    document.getElementById('net-fastest').textContent = d.fees.fastestFee + ' sat/vB';
+    document.getElementById('net-economy').textContent = d.fees.economyFee + ' sat/vB';
+  }
+});
+API.start({ interval: 60000 });
 </script>
 </body>
 </html>

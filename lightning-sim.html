@@ -6,6 +6,7 @@
 <title>Lightning Simulator — Bitcoin Sahi Research</title>
 <link rel="stylesheet" href="/style.css">
 <script>if(window.location.hostname.includes("vercel.app")){window.location.replace("https://bitcoinsahi.com"+window.location.pathname)}</script>
+<script src="/tools/api.js"></script>
 <style>a:hover { text-decoration: underline; }
   nav .brand { font-weight: 800; font-size: 20px; letter-spacing: -0.3px; }
   nav .brand span { color: var(--orange); }
@@ -83,7 +84,13 @@
   .fee-bar .ffill { height: 100%; background: linear-gradient(90deg, #F7931A, #F7931ACC); border-radius: 4px; display: flex; align-items: center; justify-content: flex-end; padding: 0 8px; font-size: 11px; font-weight: 700; color: #000; transition: width 0.3s; }
   .fee-bar .fval { font-size: 13px; color: var(--text); font-weight: 700; width: 70px; flex-shrink: 0; text-align: right; }
 
-  .footer { font-size: 13px; color: #555; text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--border); }</style>
+  .footer { font-size: 13px; color: #555; text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--border); }
+
+  .live-indicator { display:flex; align-items:center; gap:6px; font-size:11px; color:#555; margin-bottom:12px; }
+  .live-dot { width:7px; height:7px; border-radius:50%; background:#3FB950; display:inline-block; animation: breathe 2s infinite; }
+  @keyframes breathe { 0%{opacity:1;box-shadow:0 0 0 0 rgba(63,185,80,0.4)} 50%{opacity:0.6} 100%{opacity:1;box-shadow:0 0 0 5px rgba(63,185,80,0)} }
+  .live-clock { color:#666; font-family:monospace; }
+  .live-data { font-size:12px; color:var(--muted); margin-bottom:16px; padding:8px 12px; background:#0D1117; border:1px solid var(--border); border-radius:6px; display:inline-block; }</style>
 </head>
 <body>
 
@@ -109,6 +116,12 @@
 
   <div class="page-title">Lightning Channel Cost Calculator</div>
   <div class="page-sub">What does it cost to open and operate Lightning channels? This simulator estimates real on-chain costs, storage externalities, and compares Lightning vs on-chain payments — all adjustable to your setup.</div>
+
+  <div class="live-indicator" id="live-indicator" style="display:none">
+    <span class="live-dot"></span>
+    <span>Live · <span class="live-clock" id="live-clock">0s ago</span></span>
+  </div>
+  <div class="live-data" id="live-data" style="display:none"></div>
 
   <div class="grid-2">
     <div class="panel">
@@ -215,12 +228,7 @@
   <div class="panel">
     <h2>Fee Sensitivity <span class="badge">channel open cost vs fee rate</span></h2>
     <p style="font-size:13px;color:var(--muted);margin-bottom:12px;">How the cost to open one channel changes with on-chain fee rates (using your parameters). Bars scale relative to the highest cost.</p>
-    <div class="chart-fee-grid" id="fee-chart">
-      <div class="fee-bar"><span class="flabel">1 sat/vB</span><div class="ftrack"><div class="ffill" style="width:6.6%" id="fc-1">$0.63</div></div><span class="fval" id="fv-1">$0.63</span></div>
-      <div class="fee-bar"><span class="flabel">10 sat/vB</span><div class="ftrack"><div class="ffill" style="width:5%" id="fc-10"></div></div><span class="fval" id="fv-10">$6.30</span></div>
-      <div class="fee-bar"><span class="flabel">50 sat/vB</span><div class="ftrack"><div class="ffill" style="width:25%" id="fc-50"></div></div><span class="fval" id="fv-50">$31.50</span></div>
-      <div class="fee-bar"><span class="flabel">200 sat/vB</span><div class="ftrack"><div class="ffill" style="width:100%" id="fc-200"></div></div><span class="fval" id="fv-200">$126.00</span></div>
-    </div>
+    <div class="chart-fee-grid" id="fee-chart"></div>
   </div>
 
   <div class="narrative">
@@ -240,12 +248,30 @@ var OPEN_VBYTES = 1000;
 var CLOSE_VBYTES = 500;
 var TX_VBYTES = 200;
 var EXTERNALITY_PER_CHANNEL_YR = 0.0007;
+var liveFees = {};
 
 function fmt(n) { return '$' + Number(n.toFixed(2)).toLocaleString(); }
 
 function btcToUsd(sats) {
   return sats / SATS_PER_BTC * BTC_PRICE;
 }
+
+API.onData(function(d) {
+  if (d.btc_price) BTC_PRICE = d.btc_price;
+  liveFees = d;
+  document.getElementById('live-indicator').style.display = 'flex';
+  var start = Date.now();
+  document.getElementById('live-clock').textContent = '0s ago';
+  if (window._liveClock) clearInterval(window._liveClock);
+  window._liveClock = setInterval(function() {
+    document.getElementById('live-clock').textContent = Math.floor((Date.now() - start) / 1000) + 's ago';
+  }, 1000);
+  if (d.fees) {
+    document.getElementById('live-data').style.display = 'inline-block';
+    document.getElementById('live-data').innerHTML = 'BTC: $' + Number(d.btc_price || BTC_PRICE).toLocaleString() + ' | Fastest: ' + d.fees.fastestFee + ' sat/vB | Economy: ' + d.fees.economyFee + ' sat/vB';
+  }
+  calc();
+});
 
 function calc() {
   var sizeSlider = +document.getElementById('p-size').value;
@@ -303,16 +329,35 @@ function calc() {
     document.getElementById('c-savings-detail').textContent = 'On-chain is cheaper at this fee level';
   }
 
-  var feeLevels = [1, 10, 50, 200];
+  var feeLevels;
+  if (liveFees && (liveFees.fees ? liveFees.fees.fastestFee : null) != null) {
+    feeLevels = [
+      (liveFees.fees ? liveFees.fees.economyFee : null) || 1,
+      (liveFees.fees ? liveFees.fees.hourFee : null) || Math.round(((liveFees.fees ? liveFees.fees.fastestFee : null) + ((liveFees.fees ? liveFees.fees.economyFee : null) || 1)) / 2),
+      (liveFees.fees ? liveFees.fees.halfHourFee : null) || Math.round(((liveFees.fees ? liveFees.fees.fastestFee : null) + ((liveFees.fees ? liveFees.fees.hourFee : null) || 1)) / 2),
+      (liveFees.fees ? liveFees.fees.fastestFee : null)
+    ];
+    feeLevels = feeLevels.filter(function(v, i, a) { return a.indexOf(v) === i; }).sort(function(a, b) { return a - b; });
+    while (feeLevels.length < 4) feeLevels.push(feeLevels[feeLevels.length - 1] * 2);
+    feeLevels = feeLevels.slice(0, 4);
+  } else {
+    feeLevels = [1, 10, 50, 200];
+  }
+
   var feeCosts = feeLevels.map(function(f) { return btcToUsd(f * OPEN_VBYTES); });
   var maxFeeCost = Math.max.apply(null, feeCosts);
 
+  var chart = document.getElementById('fee-chart');
+  if (chart) chart.innerHTML = '';
   feeLevels.forEach(function(f, i) {
     var cost = feeCosts[i];
     var pct = maxFeeCost > 0 ? (cost / maxFeeCost * 100) : 0;
-    document.getElementById('fc-' + f).style.width = Math.max(pct, 1) + '%';
-    document.getElementById('fc-' + f).textContent = cost < 1 ? '$' + (cost * 100).toFixed(0) + '\u00A2' : fmt(cost);
-    document.getElementById('fv-' + f).textContent = cost < 1 ? '$' + (cost * 100).toFixed(1) + '\u00A2' : fmt(cost);
+    var label = f + ' sat/vB';
+    var display = cost < 1 ? '$' + (cost * 100).toFixed(0) + '\u00A2' : fmt(cost);
+    var bar = document.createElement('div');
+    bar.className = 'fee-bar';
+    bar.innerHTML = '<span class="flabel">' + label + '</span><div class="ftrack"><div class="ffill" style="width:' + Math.max(pct, 1) + '%">' + display + '</div></div><span class="fval">' + display + '</span>';
+    if (chart) chart.appendChild(bar);
   });
 
   var hw = 167, bw = 600, el = 158, st = 30;
@@ -336,6 +381,7 @@ function calc() {
 }
 
 calc();
+API.start({ interval: 60000 });
 </script>
 </body>
 </html>
