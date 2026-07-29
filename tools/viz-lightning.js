@@ -1,237 +1,207 @@
-// Bitcoin Sahi — Living Lightning Network
-// Force-directed graph of LN nodes + channels with payment particles
+// Vrooom — Lightning Network Stats Visualization
+// Reads real-time LN data from DATA_ENGINE, displays stats as HTML cards,
+// and draws a network graph on canvas.
+// Export: VIZ_Lightning
+// Depends on: VIZ (viz-core.js), DATA_ENGINE (data-engine.js)
 
 var VIZ_Lightning = (function() {
+  var NODE_COUNT = 50;
   var nodes = [];
-  var channels = [];
-  var payments = [];
-  var _nodeCount = 0;
+  var edges = [];
+  var _data = {};
+  var density = 0.5;
 
-  var REPULSION = 14000;
-  var ATTRACTION = 0.004;
-  var DAMPING = 0.87;
-  var REST_LENGTH = 130;
-
-  function hasChannel(a, b) {
-    for (var i = 0; i < channels.length; i++) {
-      if ((channels[i].a === a && channels[i].b === b) ||
-          (channels[i].a === b && channels[i].b === a)) return true;
+  function getData() {
+    var eng = window.DATA_ENGINE ? DATA_ENGINE.get() : null;
+    if (eng && eng.lightning) {
+      _data = eng.lightning;
     }
-    return false;
+    _data.channel_count = _data.channel_count || 21214;
+    _data.node_count = _data.node_count || 6278;
+    _data.total_capacity = _data.total_capacity || 2816.03;
+    _data.avg_fee_rate = _data.avg_fee_rate || 131;
+    _data.avg_base_fee_mtokens = _data.avg_base_fee_mtokens || 350;
+    _data.med_capacity = _data.med_capacity || 0.02;
+    _data.tor_nodes = _data.tor_nodes || 3201;
+    _data.clearnet_nodes = _data.clearnet_nodes || 4914;
+    var ch = _data.channel_count || 1;
+    var nd = _data.node_count || 1;
+    density = Math.min(1, (ch / nd) / 5);
+    return _data;
   }
 
-  function addChannel(a, b) {
-    var base = Math.random() * 40 + 5;
-    channels.push({ a: a, b: b, baseFee: base, fee: base });
-    nodes[a].channels.push(channels.length - 1);
-    nodes[b].channels.push(channels.length - 1);
+  function fmt(n) {
+    if (n >= 1000000) return (n / 1000000).toFixed(1) + 'M';
+    if (n >= 1000) return (n / 1000).toFixed(1) + 'K';
+    return String(Math.round(n));
   }
 
-  function simulateStep(w, h) {
+  function card(label, id, value, opts) {
+    opts = opts || {};
+    var el = document.createElement('div');
+    el.id = id;
+    el.className = 'ln-card';
+    el.style.cssText = 'background:#111;border:1px solid #222;border-radius:8px;padding:12px 14px;';
+    var l = document.createElement('div');
+    l.style.cssText = 'font:9px "SF Mono",Monaco,monospace;color:#666;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;';
+    l.textContent = label;
+    var v = document.createElement('div');
+    v.className = 'stat-value';
+    v.style.cssText = 'font:' + (opts.big ? '28px' : '15px') + ' "SF Mono",Monaco,monospace;color:' + (opts.color || '#F7931A') + ';';
+    v.textContent = value;
+    el.appendChild(l);
+    el.appendChild(v);
+    return el;
+  }
+
+  function updateCard(id, value) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    var v = el.querySelector('.stat-value');
+    if (v) v.textContent = value;
+  }
+
+  function refresh() {
+    var d = getData();
+    updateCard('ln-nodes', fmt(d.node_count));
+    updateCard('ln-channels', fmt(d.channel_count));
+    updateCard('ln-capacity', Number(d.total_capacity).toLocaleString('en-US', {maximumFractionDigits:2}) + '\u00A0BTC');
+    updateCard('ln-fee-rate', Number(d.avg_fee_rate).toLocaleString('en-US') + '\u00A0msat');
+    updateCard('ln-base-fee', Number(d.avg_base_fee_mtokens).toLocaleString('en-US') + '\u00A0msat');
+    updateCard('ln-med-cap', Number(d.med_capacity).toLocaleString('en-US', {maximumFractionDigits:3}) + '\u00A0BTC');
+    var tor = d.tor_nodes || 0;
+    var clr = d.clearnet_nodes || 0;
+    var sum = tor + clr || 1;
+    var pct = (tor / sum * 100).toFixed(1);
+    updateCard('ln-health', pct + '% Tor\u00A0|\u00A0' + (100 - Number(pct)).toFixed(1) + '% Clr');
+  }
+
+  function initNodes(w, h) {
+    nodes = [];
+    for (var i = 0; i < NODE_COUNT; i++) {
+      nodes.push({
+        x: Math.random() * w * 0.8 + w * 0.1,
+        y: Math.random() * h * 0.8 + h * 0.1,
+        vx: 0, vy: 0
+      });
+    }
+  }
+
+  function generateEdges() {
+    edges = [];
+    var d = getData();
+    var ch = d.channel_count || 1;
+    var nd = d.node_count || 1;
+    var dens = Math.min(1, (ch / nd) / 5);
     for (var i = 0; i < nodes.length; i++) {
       for (var j = i + 1; j < nodes.length; j++) {
-        var dx = nodes[i].x - nodes[j].x;
-        var dy = nodes[i].y - nodes[j].y;
-        var dist = Math.sqrt(dx * dx + dy * dy) || 1;
-        var force = REPULSION / (dist * dist + 1);
-        var fx = (dx / dist) * force;
-        var fy = (dy / dist) * force;
-        nodes[i].vx += fx; nodes[i].vy += fy;
-        nodes[j].vx -= fx; nodes[j].vy -= fy;
+        if (Math.random() < dens * 0.15) {
+          edges.push({ a: i, b: j });
+        }
       }
     }
-
-    for (var ci = 0; ci < channels.length; ci++) {
-      var ch = channels[ci];
-      var na = nodes[ch.a], nb = nodes[ch.b];
-      var dx = na.x - nb.x;
-      var dy = na.y - nb.y;
-      var dist = Math.sqrt(dx * dx + dy * dy) || 1;
-      var force = (dist - REST_LENGTH) * ATTRACTION;
-      var fx = (dx / dist) * force;
-      var fy = (dy / dist) * force;
-      na.vx -= fx; na.vy -= fy;
-      nb.vx += fx; nb.vy += fy;
-    }
-
-    for (var i = 0; i < nodes.length; i++) {
-      var n = nodes[i];
-      n.vx *= DAMPING;
-      n.vy *= DAMPING;
-      n.x += n.vx;
-      n.y += n.vy;
-      if (n.x < 10) { n.x = 10; n.vx *= -0.5; }
-      if (n.x > w - 10) { n.x = w - 10; n.vx *= -0.5; }
-      if (n.y < 10) { n.y = 10; n.vy *= -0.5; }
-      if (n.y > h - 10) { n.y = h - 10; n.vy *= -0.5; }
-    }
-  }
-
-  function currentFee() {
-    var el = document.getElementById('p-fee');
-    if (el) return +el.value;
-    if (typeof liveFees !== 'undefined' && liveFees && liveFees.fees) {
-      return liveFees.fees.fastestFee || 10;
-    }
-    return 10;
   }
 
   function draw(ctx, w, h, t) {
     ctx.fillStyle = '#0A0A0F';
     ctx.fillRect(0, 0, w, h);
 
-    var feePressure = currentFee();
-    // Map slider 1-200 so at 20 the multiplier is 1x
-    var feeMul = feePressure / 20;
+    var d = getData();
+    var ch = d.channel_count || 1;
+    var nd = d.node_count || 1;
+    var dens = Math.min(1, (ch / nd) / 5);
 
-    simulateStep(w, h);
-
-    for (var ci = 0; ci < channels.length; ci++) {
-      var ch = channels[ci];
-      ch.fee = Math.min(100, ch.baseFee * feeMul);
-    }
-
-    // ── Channels ──
     ctx.lineCap = 'round';
-    for (var ci = 0; ci < channels.length; ci++) {
-      var ch = channels[ci];
-      var na = nodes[ch.a], nb = nodes[ch.b];
-      var color = VIZ.feeColor(ch.fee, 100);
-      var alpha = 0.25 + (ch.fee / 100) * 0.45;
-
-      ctx.globalAlpha = alpha;
-      ctx.strokeStyle = color;
-      ctx.lineWidth = 1.4;
-      ctx.beginPath();
-      ctx.moveTo(na.x, na.y);
-      ctx.lineTo(nb.x, nb.y);
-      ctx.stroke();
-
-      ctx.globalAlpha = alpha * 0.15;
-      ctx.lineWidth = 5;
-      ctx.strokeStyle = color;
+    for (var ei = 0; ei < edges.length; ei++) {
+      var e = edges[ei];
+      var na = nodes[e.a];
+      var nb = nodes[e.b];
+      if (!na || !nb) continue;
+      var dx = na.x - nb.x;
+      var dy = na.y - nb.y;
+      var dist = Math.sqrt(dx * dx + dy * dy);
+      var alpha = dens * 0.4 * (1 - Math.min(1, dist / 150));
+      ctx.globalAlpha = Math.max(0.05, alpha);
+      ctx.strokeStyle = '#F7931A';
+      ctx.lineWidth = 0.8;
       ctx.beginPath();
       ctx.moveTo(na.x, na.y);
       ctx.lineTo(nb.x, nb.y);
       ctx.stroke();
     }
     ctx.globalAlpha = 1;
-    ctx.lineCap = 'butt';
 
-    // ── Payment particles ──
-    if (Math.random() < 0.18 && channels.length > 0) {
-      var ci = Math.floor(Math.random() * channels.length);
-      payments.push({
-        channel: ci,
-        t: 0,
-        speed: 0.003 + Math.random() * 0.007
-      });
-    }
-
-    for (var pi = payments.length - 1; pi >= 0; pi--) {
-      var p = payments[pi];
-      var ch = channels[p.channel];
-      if (!ch) { payments.splice(pi, 1); continue; }
-
-      p.t += p.speed;
-      if (p.t > 1) { payments.splice(pi, 1); continue; }
-
-      var na = nodes[ch.a], nb = nodes[ch.b];
-      var px = na.x + (nb.x - na.x) * p.t;
-      var py = na.y + (nb.y - na.y) * p.t;
-      var fade = Math.sin(p.t * Math.PI);
-      var pColor = VIZ.feeColor(ch.fee, 100);
-
-      var grad = ctx.createRadialGradient(px, py, 0, px, py, 7);
-      grad.addColorStop(0, pColor + 'dd');
+    for (var i = 0; i < nodes.length; i++) {
+      var n = nodes[i];
+      var pulse = Math.sin(t * 1.5 + i * 0.7) * 0.15 + 1;
+      var r = 3 * pulse;
+      var grad = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, r * 4);
+      grad.addColorStop(0, '#58A6FF44');
       grad.addColorStop(1, 'transparent');
       ctx.fillStyle = grad;
-      ctx.globalAlpha = 0.7 * fade;
+      ctx.globalAlpha = 0.6;
       ctx.beginPath();
-      ctx.arc(px, py, 7, 0, Math.PI * 2);
+      ctx.arc(n.x, n.y, r * 4, 0, Math.PI * 2);
       ctx.fill();
-
-      ctx.fillStyle = '#fff';
-      ctx.globalAlpha = 0.95 * fade;
-      ctx.beginPath();
-      ctx.arc(px, py, 2.2, 0, Math.PI * 2);
-      ctx.fill();
-    }
-    ctx.globalAlpha = 1;
-
-    // ── Nodes ──
-    var maxCh = 1;
-    for (var i = 0; i < nodes.length; i++) {
-      if (nodes[i].channels.length > maxCh) maxCh = nodes[i].channels.length;
     }
 
     for (var i = 0; i < nodes.length; i++) {
       var n = nodes[i];
-      var chCount = n.channels.length;
-      var intensity = 0.35 + (chCount / maxCh) * 0.65;
-      var radius = 2.5 + (chCount / maxCh) * 5.5;
-      var pulse = Math.sin(t * 1.8 + i * 2.3) * 0.1 + 0.9;
-      radius *= pulse;
-
-      var gColor = intensity > 0.6 ? '#F7931A' : '#58A6FF';
-
-      var grad = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, radius * 5);
-      grad.addColorStop(0, gColor + '44');
-      grad.addColorStop(1, 'transparent');
-      ctx.fillStyle = grad;
-      ctx.globalAlpha = intensity;
+      var pulse = Math.sin(t * 1.5 + i * 0.7) * 0.15 + 1;
+      var r = 3 * pulse;
+      ctx.fillStyle = '#58A6FF';
+      ctx.globalAlpha = 0.9;
       ctx.beginPath();
-      ctx.arc(n.x, n.y, radius * 5, 0, Math.PI * 2);
-      ctx.fill();
-
-      ctx.fillStyle = gColor;
-      ctx.globalAlpha = intensity;
-      ctx.beginPath();
-      ctx.arc(n.x, n.y, radius, 0, Math.PI * 2);
-      ctx.fill();
-
-      ctx.fillStyle = '#fff';
-      ctx.globalAlpha = intensity * 0.35;
-      ctx.beginPath();
-      ctx.arc(n.x, n.y, radius * 0.35, 0, Math.PI * 2);
+      ctx.arc(n.x, n.y, r, 0, Math.PI * 2);
       ctx.fill();
     }
     ctx.globalAlpha = 1;
   }
 
   function init(canvasId) {
-    var c = VIZ.create(canvasId, { height: 400 });
+    if (document.getElementById('ln-nodes')) return;
+
+    var c = VIZ.create(canvasId, { height: 350 });
     if (!c) return;
 
-    nodes = [];
-    channels = [];
-    payments = [];
+    getData();
+    initNodes(c.w, c.h);
+    generateEdges();
 
-    _nodeCount = 20 + Math.floor(Math.random() * 11);
+    var parent = c.el.parentElement;
+    if (parent) {
+      var wrap = document.createElement('div');
+      wrap.style.cssText = 'display:flex;gap:12px;align-items:stretch;';
+      parent.insertBefore(wrap, c.el);
+      wrap.appendChild(c.el);
 
-    for (var i = 0; i < _nodeCount; i++) {
-      nodes.push({
-        x: Math.random() * c.w * 0.8 + c.w * 0.1,
-        y: Math.random() * c.h * 0.8 + c.h * 0.1,
-        vx: 0, vy: 0,
-        channels: []
-      });
+      var d = getData();
+
+      var left = document.createElement('div');
+      left.style.cssText = 'display:flex;flex-direction:column;gap:6px;min-width:130px;';
+      left.appendChild(card('Nodes', 'ln-nodes', fmt(d.node_count), { big: true }));
+      left.appendChild(card('Channels', 'ln-channels', fmt(d.channel_count), { big: true }));
+      left.appendChild(card('Capacity\u00A0(BTC)', 'ln-capacity', Number(d.total_capacity).toLocaleString('en-US', { maximumFractionDigits: 2 }) + '\u00A0BTC', { big: true }));
+      wrap.insertBefore(left, c.el);
+
+      var right = document.createElement('div');
+      right.style.cssText = 'display:flex;flex-direction:column;gap:6px;min-width:140px;';
+      right.appendChild(card('Avg Fee Rate', 'ln-fee-rate', Number(d.avg_fee_rate).toLocaleString('en-US') + '\u00A0msat', { color: '#58A6FF' }));
+      right.appendChild(card('Avg Base Fee', 'ln-base-fee', Number(d.avg_base_fee_mtokens).toLocaleString('en-US') + '\u00A0msat', { color: '#58A6FF' }));
+      right.appendChild(card('Median Channel', 'ln-med-cap', Number(d.med_capacity).toLocaleString('en-US', { maximumFractionDigits: 3 }) + '\u00A0BTC', { color: '#58A6FF' }));
+      var tor = d.tor_nodes || 0;
+      var clr = d.clearnet_nodes || 0;
+      var sum = tor + clr || 1;
+      var pct = (tor / sum * 100).toFixed(1);
+      right.appendChild(card('Tor\u00A0/\u00A0Clearnet', 'ln-health', pct + '% Tor\u00A0|\u00A0' + (100 - Number(pct)).toFixed(1) + '% Clr', { color: '#58A6FF' }));
+      wrap.appendChild(right);
     }
 
-    for (var i = 1; i < _nodeCount; i++) {
-      addChannel(i, Math.floor(Math.random() * i));
+    if (window.DATA_ENGINE) {
+      DATA_ENGINE.onUpdate(refresh);
     }
 
-    var extra = Math.floor(_nodeCount * 0.8);
-    for (var i = 0; i < extra; i++) {
-      var a = Math.floor(Math.random() * _nodeCount);
-      var b = Math.floor(Math.random() * _nodeCount);
-      if (a !== b && !hasChannel(a, b)) addChannel(a, b);
-    }
-
-    for (var s = 0; s < 80; s++) simulateStep(c.w, c.h);
-
-    VIZ.start(canvasId, draw, 33);
+    VIZ.start(canvasId, draw, 50);
   }
 
   return { init: init };

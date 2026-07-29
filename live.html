@@ -3,16 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Live Dashboard — Bitcoin Sahi Research</title>
-<link rel="stylesheet" href="style.css">
+<title>Decision Center — Bitcoin Sahi</title>
 <script>if(window.location.hostname.includes("vercel.app")){window.location.replace("https://bitcoinsahi.com"+window.location.pathname)}</script>
-<script src="tools/viz-core.js"></script>
-<script src="tools/viz-fees.js"></script>
-<script src="tools/app.js"></script>
+<link rel="stylesheet" href="style.css">
 <style>
-  nav .brand { font-weight: 800; font-size: 20px; letter-spacing: -0.3px; }
-  nav .brand span { color: var(--orange); }
-  nav a:hover { color: var(--text); }
   .container { max-width: 1200px; margin: 0 auto; padding: 32px 24px; }
   .page-title { font-size: 30px; font-weight: 800; margin-bottom: 4px; }
   .page-sub { color: var(--muted); font-size: 17px; margin-bottom: 28px; }
@@ -20,417 +14,354 @@
   .live-indicator { display: flex; align-items: center; gap: 8px; font-size: 12px; color: #555; margin-bottom: 16px; }
   .live-dot { width: 8px; height: 8px; border-radius: 50%; background: #3FB950; display: inline-block; animation: breathe 2s infinite; }
   @keyframes breathe { 0% { opacity: 1; box-shadow: 0 0 0 0 rgba(63,185,80,0.4); } 50% { opacity: 0.6; } 100% { opacity: 1; box-shadow: 0 0 0 6px rgba(63,185,80,0); } }
-  @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
-  @keyframes tick { 0% { transform: translateY(0); opacity: 1; } 50% { transform: translateY(-4px); opacity: 0.7; } 100% { transform: translateY(0); opacity: 1; } }
-  .counter-change { animation: tick 0.3s ease; }
-  .countdown { transition: all 0.3s; }
 
   .hero { text-align: center; padding: 12px 0 16px; }
   .hero .badge { display: inline-block; font-size: 13px; font-weight: 600; color: var(--orange); border: 1px solid var(--orange); border-radius: 20px; padding: 4px 14px; margin-bottom: 12px; }
   .hero h1 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; letter-spacing: -1px; line-height: 1.15; margin-bottom: 12px; }
   .hero h1 span { background: linear-gradient(135deg, var(--orange), #FFB347); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-  .hero p { font-size: 17px; color: var(--muted); max-width: 650px; margin: 0 auto 20px; line-height: 1.6; }
-  .hero .actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  .hero p { font-size: 17px; color: var(--muted); max-width: 700px; margin: 0 auto 20px; line-height: 1.6; }
 
-  .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 28px; }
-  .kpi-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 18px; text-align: center; transition: border-color 0.3s, transform 0.2s; }
-  .kpi-card:hover { border-color: var(--orange); transform: translateY(-1px); }
-  .kpi-card .label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
-  .kpi-card .value { font-size: 28px; font-weight: 800; margin: 4px 0 2px; transition: all 0.3s; }
-  .kpi-card .sub { font-size: 11px; color: #555; }
-  .kpi-card .change { font-size: 11px; font-weight: 600; transition: all 0.3s; }
+  .live-pill { display: inline-flex; align-items: center; gap: 4px; font-size: 10px; color: #888; }
+  .live-pill .dot { width: 5px; height: 5px; border-radius: 50%; background: #3FB950; display: inline-block; animation: livePulse 2s infinite; }
+  @keyframes livePulse { 0%{opacity:1;box-shadow:0 0 0 0 rgba(63,185,80,0.4)} 50%{opacity:0.6} 100%{opacity:1;box-shadow:0 0 0 4px rgba(63,185,80,0)} }
 
-  .section-header { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--orange); margin-bottom: 10px; padding-bottom: 6px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
-  .section-header .time { font-size: 10px; color: #555; font-weight: 400; text-transform: none; letter-spacing: 0; }
+  .tabs { display: flex; gap: 4px; margin-bottom: 20px; flex-wrap: wrap; background: var(--surface); border-radius: 12px; padding: 4px; border: 1px solid var(--border); }
+  .tab { padding: 10px 18px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; color: var(--muted); transition: all 0.2s; border: none; background: none; }
+  .tab:hover { color: var(--text); background: #FFFFFF10; }
+  .tab.active { background: var(--orange); color: #000; }
 
-  .row { display: flex; gap: 8px; flex-wrap: wrap; }
+  .workspace { display: none; }
+  .workspace.active { display: block; }
+
+  .ws-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .ws-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 22px;
+    transition: border-color 0.3s; position: relative;
+  }
+  .ws-card:hover { border-color: var(--orange); }
+  .ws-card .label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 700; margin-bottom: 2px; }
+  .ws-card .label.send { color: var(--green); }
+  .ws-card .label.ln { color: var(--purple); }
+  .ws-card .label.ex { color: var(--blue); }
+  .ws-card .label.node { color: var(--orange); }
+  .ws-card .label.miner { color: var(--red); }
+  .ws-card .label.research { color: var(--yellow); }
+  .ws-card .label.dev { color: #58A6FF; }
+  .ws-card .q { font-size: 15px; color: var(--muted); margin-bottom: 8px; }
+  .ws-card .a { font-size: 26px; font-weight: 800; margin-bottom: 6px; line-height: 1.3; }
+  .ws-card .a .good { color: var(--green); }
+  .ws-card .a .warn { color: var(--yellow); }
+  .ws-card .a .bad { color: var(--red); }
+  .ws-card .d { font-size: 15px; color: var(--muted); margin-top: 6px; line-height: 1.6; }
+  .ws-card .badge {
+    display: inline-block; font-size: 12px; font-weight: 600; padding: 4px 12px;
+    border-radius: 6px; margin-top: 10px; text-transform: uppercase; letter-spacing: 0.3px;
+  }
+  .badge-rec { background: var(--green); color: #000; }
+  .badge-wait { background: var(--yellow); color: #000; }
+  .badge-ok { background: var(--blue); color: #000; }
+  .badge-info { background: var(--surface); border: 1px solid var(--border); color: var(--muted); }
+  .ws-card .action { display: inline-block; margin-top: 8px; font-size: 13px; color: var(--orange); font-weight: 600; }
+  .ws-card .icon { font-size: 28px; position: absolute; top: 18px; right: 18px; opacity: 0.12; }
+
+  .ws-full { grid-column: 1 / -1; }
+
+  .ws-section-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin: 20px 0 10px; }
+
+  .tools-list { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+  .tools-list a { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 6px 12px; font-size: 12px; color: var(--muted); text-decoration: none; }
+  .tools-list a:hover { border-color: var(--orange); color: var(--text); }
+
+  .summary-bar { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin: 24px 0; }
+  .summary-bar .row { display: flex; gap: 20px; flex-wrap: wrap; align-items: center; }
+  .summary-bar .time { font-size: 12px; color: #555; }
+
+  .fee-pill { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: 100px; font-weight: 700; font-size: 20px; }
+  .fee-pill.green { background: var(--green); color: #000; }
+  .fee-pill.yellow { background: var(--yellow); color: #000; }
+  .fee-pill.red { background: var(--red); color: #000; }
+
+  .kv-table { width: 100%; font-size: 14px; }
+  .kv-table tr td { padding: 6px 0; border-bottom: 1px solid var(--border); }
+  .kv-table tr td:first-child { color: var(--muted); width: 40%; }
+  .kv-table tr td:last-child { font-weight: 600; text-align: right; }
+
+  .canvas-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 4px; margin-bottom: 16px; }
+  .canvas-wrap canvas { width: 100%; height: 200px; border-radius: 10px; display: block; }
+
+  .stat-row { display: flex; gap: 8px; flex-wrap: wrap; }
   .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; flex: 1; min-width: 100px; transition: border-color 0.3s; }
   .stat-card .label { font-size: 10px; color: #555; text-transform: uppercase; letter-spacing: 0.5px; }
   .stat-card .value { font-size: 17px; font-weight: 700; margin-top: 2px; transition: all 0.3s; }
 
-  .fee-chart { display: flex; align-items: flex-end; gap: 6px; height: 80px; margin-top: 10px; padding: 8px 0; }
-  .fee-chart .bar { flex: 1; border-radius: 3px 3px 0 0; min-width: 40px; transition: height 0.6s ease, background 0.3s; position: relative; }
-  .fee-chart .bar .bar-label { position: absolute; bottom: -20px; left: 50%; transform: translateX(-50%); font-size: 10px; color: var(--muted); white-space: nowrap; }
+  .endpoint-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 14px; margin-bottom: 8px; }
+  .endpoint-card .method { display: inline-block; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 4px; margin-right: 8px; }
+  .method.get { background: #58A6FF; color: #000; }
+  .method.post { background: var(--green); color: #000; }
+  .endpoint-card .url { font-family: monospace; font-size: 13px; color: var(--orange); }
+  .endpoint-card .desc { font-size: 12px; color: var(--muted); margin-top: 4px; }
 
-  .history-chart { display: flex; align-items: flex-end; gap: 6px; height: 140px; margin-top: 8px; padding: 10px 0; }
-  .history-chart .day { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 3px; }
-  .history-chart .day .bar-fast { width: 100%; min-width: 10px; border-radius: 3px 3px 0 0; background: var(--orange); transition: height 0.6s ease; }
-  .history-chart .day .bar-econ { width: 80%; min-width: 8px; border-radius: 3px 3px 0 0; background: #58A6FF; transition: height 0.6s ease; }
-  .history-chart .day .date-label { font-size: 8px; color: #555; transform: rotate(-30deg); margin-top: 4px; white-space: nowrap; }
-
-  .alert-item { padding: 10px 14px; border-radius: 8px; font-size: 13px; margin-bottom: 4px; border-left: 3px solid; background: var(--surface); }
-
-  @media (max-width: 700px) { .kpi-grid { grid-template-columns: repeat(2, 1fr); } .row { flex-direction: column; } }
-
-.live-pill { display: inline-flex; align-items: center; gap: 4px; font-size: 10px; color: #888; }
-.live-pill .dot { width: 5px; height: 5px; border-radius: 50%; background: #3FB950; display: inline-block; animation: livePulse 2s infinite; }
-@keyframes livePulse { 0%{opacity:1;box-shadow:0 0 0 0 rgba(63,185,80,0.4)} 50%{opacity:0.6} 100%{opacity:1;box-shadow:0 0 0 4px rgba(63,185,80,0)} }
+  @media (max-width: 700px) { .ws-grid { grid-template-columns: 1fr; } .tab { font-size: 12px; padding: 8px 12px; } }
 </style>
 </head>
 <body>
 <nav>
   <a href="/" class="brand">BITCOIN <span>SAHI</span></a>
-  <a href="/#problem" class="nav-link">Problem</a>
+  <a href="/live" class="nav-link">Dashboard</a>
   <a href="/bip110" class="nav-link" style="color:#F85149;font-weight:700;">⚠️ BIP-110</a>
-  <a href="/decide" class="nav-link">Decide<span id="decide-indicator" style="color:var(--orange);font-weight:400;margin-left:2px;"></span></a>
-  <a href="/articles" class="nav-link">Articles</a>
-  <div class="dropdown"><span class="dropbtn">Explore <span class="dd-arrow">▾</span></span>
-    <div class="dropdown-content"><div class="dd-title">Explore</div>
-      <a href="/blockspace">Blockspace Explorer</a>
-      <a href="/research-graph">Research Graph</a>
-      <a href="/calculator">Cost Calculator</a>
-      <a href="/utxo-health">UTXO Health</a>
-      <a href="/lightning-sim">Lightning Sim</a>
-    </div>
-  </div>
-  <span class="spacer"></span>
-  <a href="/live" class="cta">Dashboard</a>
+  <a href="/live#research" class="nav-link">Research</a>
 </nav>
 
-  <div style="max-width:1200px;margin:0 auto 16px;"><canvas id="fees-canvas" width="800" height="200" style="width:100%;height:200px;border-radius:12px;"></canvas></div>
+<div style="max-width:1200px;margin:0 auto 16px;"><canvas id="fees-canvas" width="800" height="200" style="width:100%;height:200px;border-radius:12px;"></canvas></div>
+
 <div class="container">
-<div class="live-ticker" id="live-ticker"><span class="ticker-item"><span class="ticker-dot green"></span> Loading live data...</span></div>
+  <div class="live-ticker" id="live-ticker"><span class="ticker-item"><span class="ticker-dot green"></span> Loading live data...</span></div>
+
   <div class="hero">
-    <div class="badge">Live Dashboard</div>
-    <h1>Bitcoin Network — <span>In Real Time</span></h1>
-    <p>Every 30 seconds, this page fetches the latest fee estimates, mempool pressure, and block data. All numbers update live.</p>
-  </div>
-  <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;">
-    <div class="live-indicator"><span class="live-dot"></span><span id="live-clock">updating...</span></div>
+    <div class="badge">Decision Center</div>
+    <h1>One dashboard, <span>every perspective.</span> Pick your role.</h1>
+    <p>Live data from mempool.space — same feed, seven viewpoints. Each persona answers one question: what should <em>you</em> do right now?</p>
   </div>
 
-  <div class="kpi-grid" id="kpi-grid"></div>
-
-  <div class="section-header"><span class="live-pill"><span class="dot"></span> Live</span> Fee Estimates <span class="time" id="fee-timestamp"></span></div>
-  <div class="row" id="fee-row"></div>
-  <div class="fee-chart" id="fee-bar"></div>
-
-  <div class="section-header" style="margin-top:28px;">Fee Trend — Last 14 Days</div>
-  <div class="history-chart" id="history-chart"></div>
-  <div style="display:flex;gap:14px;font-size:11px;color:var(--muted);margin-top:4px;"><span>■ <span style="color:var(--orange)">Fastest fee</span></span><span>■ <span style="color:#58A6FF">Economy fee</span></span><span style="flex:1;text-align:right;" id="history-dates"></span></div>
-
-  <div class="section-header" style="margin-top:28px;"><span class="live-pill"><span class="dot"></span> Live</span> Model Output</div>
-  <div class="row" id="model-row"></div>
-
-  <div class="section-header" style="margin-top:28px;">Market Context</div>
-  <div class="row" id="market-row"></div>
-
-  <div class="section-header" style="margin-top:28px;">Alerts</div>
-  <div id="alerts"></div>
-
-  <div class="section-header" style="margin-top:28px;">Interactive Model</div>
-  <div class="model-panel" style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;">
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px 24px;" id="sliders"></div>
-    <div class="model-output" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px;padding-top:14px;border-top:1px solid var(--border);" id="model-output"></div>
+  <div class="summary-bar" style="margin-bottom:4px;">
+    <div class="row"><span><span class="live-dot"></span> Live data from mempool.space · Same feed, seven views</span><span class="time" id="ts">Loading...</span></div>
   </div>
+
+  <div class="tabs" id="tabs">
+    <button class="tab active" onclick="switchTab('send')">Send</button>
+    <button class="tab" onclick="switchTab('lightning')">Lightning</button>
+    <button class="tab" onclick="switchTab('exchange')">Exchange</button>
+    <button class="tab" onclick="switchTab('node')">Node</button>
+    <button class="tab" onclick="switchTab('miner')">Miner</button>
+    <button class="tab" onclick="switchTab('research')">Research</button>
+    <button class="tab" onclick="switchTab('developer')">Developer</button>
+  </div>
+
+  <div id="workspace-container"></div>
 </div>
-
-<script>
-var btcPrice = 63000, prevPrice = 63000;
-var fees = { fastestFee: 3, halfHourFee: 2, hourFee: 1, economyFee: 1, minimumFee: 1 };
-var prevFees = {};
-var mempoolTx = 100000, blockHeight = 960000, hashRate = 803, difficulty = 126;
-
-function niceNum(v, decimals) { return Number(v).toLocaleString(undefined, {maximumFractionDigits: decimals||0}); }
-
-function updateClock() {
-  var el = document.getElementById('live-clock');
-  if (!el) return;
-  if (!el._start) el._start = Date.now();
-  var s = Math.floor((Date.now() - el._start) / 1000);
-  el.textContent = 'Live · ' + s + 's ago';
-}
-setInterval(updateClock, 1000);
-updateClock();
-
-function animateValue(el, newVal, suffix) {
-  if (!suffix) suffix = '';
-  var old = parseFloat(el.getAttribute('data-val') || '0');
-  if (old !== parseFloat(newVal)) {
-    el.classList.remove('counter-change');
-    void el.offsetWidth;
-    el.classList.add('counter-change');
-  }
-  el.setAttribute('data-val', newVal);
-  el.textContent = newVal + suffix;
-}
-
-var _dashboardBuilt = false;
-function renderDashboard() {
-  var e = fees.economyFee || 1, f = fees.fastestFee || 3, hh = fees.halfHourFee || 2, h = fees.hourFee || 1;
-  
-  var annualNodeCost = 924.35;
-  var avgInscBytes = 400;
-  var monthlyInscVolume = 100000;
-  var costPerBytePerYear = annualNodeCost / (avgInscBytes * monthlyInscVolume * 12);
-  var storagePerInsc = costPerBytePerYear * avgInscBytes * 10;
-  var yearlyExternality = storagePerInsc * monthlyInscVolume * 12 / 10;
-  var lowestFee = Math.max(0.06, e * btcPrice / 100000000);
-  var highestFee = Math.min(25, f * btcPrice / 100000000);
-
-  if (!_dashboardBuilt) {
-    // First run — build the complete HTML structure with IDs
-    document.getElementById('kpi-grid').innerHTML = [
-      '<div class="kpi-card"><div class="label">BTC Price</div><div class="value" id="kpi-btc" style="color:#3FB950">$' + niceNum(btcPrice) + '</div><div class="sub">Live</div></div>',
-      '<div class="kpi-card"><div class="label">Fastest Fee</div><div class="value" id="kpi-fastest" style="color:#3FB950">' + f + ' sat/vB</div><div class="sub">Next block ~10 min</div></div>',
-      '<div class="kpi-card"><div class="label">Economy Fee</div><div class="value" id="kpi-economy" style="color:#8B949E">' + e + ' sat/vB</div><div class="sub">Slow ~1+ hr</div></div>',
-      '<div class="kpi-card"><div class="label">Storage Cost</div><div class="value" id="kpi-storage" style="color:#F7931A">$' + storagePerInsc.toFixed(4) + '</div><div class="sub">Per insc (10yr)</div></div>',
-    ].join('');
-    document.getElementById('fee-row').innerHTML = [
-      '<div class="stat-card"><div class="label">Fastest</div><div class="value" id="fr-fastestFee">' + f + ' sat/vB</div></div>',
-      '<div class="stat-card"><div class="label">30 Min</div><div class="value" id="fr-halfHourFee">' + hh + ' sat/vB</div></div>',
-      '<div class="stat-card"><div class="label">1 Hour</div><div class="value" id="fr-hourFee">' + h + ' sat/vB</div></div>',
-      '<div class="stat-card"><div class="label">Economy</div><div class="value" id="fr-economyFee">' + e + ' sat/vB</div></div>',
-      '<div class="stat-card"><div class="label">Minimum</div><div class="value" id="fr-minimumFee">' + (fees.minimumFee || 1) + ' sat/vB</div></div>',
-    ].join('');
-    document.getElementById('model-row').innerHTML = [
-      '<div class="stat-card"><div class="label">Node Cost / Yr</div><div class="value" id="md-node">$' + annualNodeCost.toFixed(0) + '</div></div>',
-      '<div class="stat-card"><div class="label">Cost/Byte/Yr</div><div class="value" id="md-cpb">$' + costPerBytePerYear.toFixed(10) + '</div></div>',
-      '<div class="stat-card"><div class="label">Storage/Insc (10yr)</div><div class="value" id="md-storage">$' + storagePerInsc.toFixed(4) + '</div></div>',
-      '<div class="stat-card"><div class="label">Externality / Yr</div><div class="value" id="md-externality">$' + (yearlyExternality / 1000).toFixed(1) + 'K</div></div>',
-      '<div class="stat-card"><div class="label">Fee Ratio</div><div class="value" id="md-ratio">' + (lowestFee / storagePerInsc).toFixed(0) + 'x - ' + (highestFee / storagePerInsc).toFixed(0) + 'x</div></div>',
-    ].join('');
-    document.getElementById('market-row').innerHTML = [
-      '<div class="stat-card"><div class="label">Sat/$ Ratio</div><div class="value" id="mk-sat">' + (btcPrice > 0 ? (100000000 / btcPrice).toFixed(1) : '---') + ' sat</div></div>',
-      '<div class="stat-card"><div class="label">Insc Fee (economy)</div><div class="value" id="mk-inscfee">$' + (btcPrice > 0 ? ((e * 100 * btcPrice / 100000000).toFixed(4)) : '---') + '</div></div>',
-      '<div class="stat-card"><div class="label">Tx in Mempool</div><div class="value" id="mk-mempool">' + niceNum(mempoolTx) + '</div></div>',
-      '<div class="stat-card"><div class="label">Block Height</div><div class="value" id="mk-height">' + niceNum(blockHeight) + '</div></div>',
-      '<div class="stat-card"><div class="label">Hash Rate</div><div class="value" id="mk-hashrate">' + hashRate.toFixed(0) + ' EH/s</div></div>',
-      '<div class="stat-card"><div class="label">Difficulty</div><div class="value" id="mk-diff">' + difficulty + 'T</div></div>',
-    ].join('');
-    // Build sliders once
-    document.getElementById('sliders').innerHTML = [
-      { l: 'Inscription Volume / Mo', id: 'sv', min: 10, max: 500, val: 100, unit: 'K' },
-      { l: 'Avg Inscription Size', id: 'ss', min: 100, max: 2000, val: 400, unit: ' B' },
-      { l: 'Node Power Draw', id: 'sp', min: 10, max: 300, val: 150, unit: ' W' },
-      { l: 'Bandwidth Cost / Mo', id: 'sb', min: 10, max: 200, val: 50, unit: '$' },
-      { l: 'Electricity Rate', id: 'se', min: 3, max: 40, val: 12, unit: 'c' },
-      { l: 'UTXO Lifetime (yr)', id: 'sl', min: 1, max: 50, val: 10, unit: ' yr' },
-      { l: 'Hardware Lifespan', id: 'shl', min: 1, max: 10, val: 3, unit: ' yr' },
-    ].map(function(s) {
-      return '<div><div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted);"><span>' + s.l + '</span><span style="color:var(--orange);font-weight:700;" id="sl-' + s.id + '">' + s.val + s.unit + '</span></div><input type="range" id="' + s.id + '" min="' + s.min + '" max="' + s.max + '" value="' + s.val + '" oninput="updateModel()" style="width:100%;"></div>';
-    }).join('');
-    _dashboardBuilt = true;
-  } else {
-    // Subsequent runs — update values only
-    var kpiEls = {
-      'kpi-btc': '$' + niceNum(btcPrice),
-      'kpi-fastest': f + ' sat/vB',
-      'kpi-economy': e + ' sat/vB',
-      'kpi-storage': '$' + storagePerInsc.toFixed(4),
-    };
-    Object.keys(kpiEls).forEach(function(id) {
-      var el = document.getElementById(id);
-      if (el) el.textContent = kpiEls[id];
-    });
-    ['fastestFee','halfHourFee','hourFee','economyFee','minimumFee'].forEach(function(k) {
-      var el = document.getElementById('fr-' + k);
-      if (el) el.textContent = (fees[k] || '---') + ' sat/vB';
-    });
-    var modelVals = {
-      'md-node': '$' + annualNodeCost.toFixed(0),
-      'md-cpb': '$' + costPerBytePerYear.toFixed(10),
-      'md-storage': '$' + storagePerInsc.toFixed(4),
-      'md-externality': '$' + (yearlyExternality / 1000).toFixed(1) + 'K',
-      'md-ratio': (lowestFee / storagePerInsc).toFixed(0) + 'x - ' + (highestFee / storagePerInsc).toFixed(0) + 'x',
-    };
-    Object.keys(modelVals).forEach(function(id) {
-      var el = document.getElementById(id);
-      if (el) el.textContent = modelVals[id];
-    });
-    var marketVals = {
-      'mk-sat': (btcPrice > 0 ? (100000000 / btcPrice).toFixed(1) : '---') + ' sat',
-      'mk-inscfee': (btcPrice > 0 ? '$' + ((e * 100 * btcPrice / 100000000).toFixed(4)) : '---'),
-      'mk-mempool': niceNum(mempoolTx),
-      'mk-height': niceNum(blockHeight),
-      'mk-hashrate': hashRate.toFixed(0) + ' EH/s',
-      'mk-diff': difficulty + 'T',
-    };
-    Object.keys(marketVals).forEach(function(id) {
-      var el = document.getElementById(id);
-      if (el) el.textContent = marketVals[id];
-    });
-  }
-
-  document.getElementById('fee-timestamp').textContent = new Date().toLocaleTimeString();
-
-  // Fee row — update values only
-  Object.entries({fastestFee:'Fastest', halfHourFee:'30 Min', hourFee:'1 Hour', economyFee:'Economy', minimumFee:'Minimum'}).forEach(function(pair) {
-    var k = pair[0], l = pair[1];
-    var el = document.getElementById('fr-' + k);
-    if (el) el.textContent = (fees[k] || '—') + ' sat/vB';
-  });
-
-  // Fee bar — rebuild bars
-  var barData = [f, hh, h, e, fees.minimumFee || 1];
-  var maxFee = Math.max(1, ...barData);
-  var barColors = ['#F7931A', '#D29922', '#3FB950', '#58A6FF', '#8B949E'];
-  var barLabels = ['Fastest','30 Min','1 Hour','Economy','Minimum'];
-  document.getElementById('fee-bar').innerHTML = barData.map(function(v, i) {
-    return '<div class="bar" style="height:' + (v / maxFee * 80 + 10) + 'px;background:' + barColors[i] + '" title="' + barLabels[i] + ': ' + v + ' sat/vB"><span class="bar-label">' + v + '</span></div>';
-  }).join('');
-
-  // Model — update values only
-  var modelVals = {
-    'md-node': '$' + annualNodeCost.toFixed(0),
-    'md-cpb': '$' + costPerBytePerYear.toFixed(10),
-    'md-storage': '$' + storagePerInsc.toFixed(4),
-    'md-externality': '$' + (yearlyExternality / 1000).toFixed(1) + 'K',
-    'md-ratio': (lowestFee / storagePerInsc).toFixed(0) + 'x - ' + (highestFee / storagePerInsc).toFixed(0) + 'x',
-  };
-  Object.keys(modelVals).forEach(function(id) {
-    var el = document.getElementById(id);
-    if (el) el.textContent = modelVals[id];
-  });
-
-  // Market — update values only
-  var spd = btcPrice > 0 ? (100000000 / btcPrice).toFixed(1) : '---';
-  var ifu = btcPrice > 0 ? ((e * 100 * btcPrice / 100000000).toFixed(4)) : '---';
-  var marketVals = {
-    'mk-sat': spd + ' sat',
-    'mk-inscfee': '$' + ifu,
-    'mk-mempool': niceNum(mempoolTx),
-    'mk-height': niceNum(blockHeight),
-    'mk-hashrate': hashRate.toFixed(0) + ' EH/s',
-    'mk-diff': difficulty + 'T',
-  };
-  Object.keys(marketVals).forEach(function(id) {
-    var el = document.getElementById(id);
-    if (el) el.textContent = marketVals[id];
-  });
-
-  // Alerts
-  var ah = '';
-  if (f > 50) ah += '<div class="alert-item" style="border-color:#F85149;color:#F85149;">:rotating_light: High fees: ' + f + ' sat/vB - possible inscription mania</div>';
-  else if (f < 2 && btcPrice > 50000) ah += '<div class="alert-item" style="border-color:#3FB950;color:#3FB950;">:white_check_mark: Low fees at high BTC price - network not congested</div>';
-  else ah += '<div class="alert-item" style="border-color:#3FB950;color:#555;">:white_check_mark: All nominal - ' + f + ' sat/vB fastest, ' + e + ' sat/vB economy</div>';
-  document.getElementById('alerts').innerHTML = ah;
-
-  // Sliders — build ONCE, not on every refresh
-  if (!document.getElementById('sliders').children.length) {
-    document.getElementById('sliders').innerHTML = [
-      { l: 'Inscription Volume / Mo', id: 'sv', min: 10, max: 500, val: 100, unit: 'K' },
-      { l: 'Avg Inscription Size', id: 'ss', min: 100, max: 2000, val: 400, unit: ' B' },
-      { l: 'Node Power Draw', id: 'sp', min: 10, max: 300, val: 150, unit: ' W' },
-      { l: 'Bandwidth Cost / Mo', id: 'sb', min: 10, max: 200, val: 50, unit: '$' },
-      { l: 'Hardware Cost', id: 'sh', min: 100, max: 2000, val: 500, unit: '$' },
-      { l: 'Electricity Rate', id: 'se', min: 3, max: 40, val: 12, unit: 'c' },
-      { l: 'UTXO Lifetime (yr)', id: 'sl', min: 1, max: 50, val: 10, unit: ' yr' },
-      { l: 'Hardware Lifespan', id: 'shl', min: 1, max: 10, val: 3, unit: ' yr' },
-    ].map(function(s) {
-      return '<div><div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted);"><span>' + s.l + '</span><span style="color:var(--orange);font-weight:700;" id="sl-' + s.id + '">' + s.val + s.unit + '</span></div><input type="range" id="' + s.id + '" min="' + s.min + '" max="' + s.max + '" value="' + s.val + '" oninput="updateModel()" style="width:100%;"></div>';
-    }).join('');
-  }
-  updateModel();
-}
-
-function updateModel() {
-  var vol = parseFloat(document.getElementById('sv').value) * 1000;
-  var size = parseFloat(document.getElementById('ss').value);
-  var power = parseFloat(document.getElementById('sp').value);
-  var bw = parseFloat(document.getElementById('sb').value);
-  var hw = parseFloat(document.getElementById('sh').value);
-  var elec = parseFloat(document.getElementById('se').value) / 100;
-  var life = parseFloat(document.getElementById('sl').value);
-  var hl = parseFloat(document.getElementById('shl').value);
-
-  document.getElementById('sl-sv').textContent = (vol/1000) + 'K';
-  document.getElementById('sl-ss').textContent = size + ' B';
-  document.getElementById('sl-sp').textContent = power + ' W';
-  document.getElementById('sl-sb').textContent = '$' + bw;
-  document.getElementById('sl-sh').textContent = '$' + hw;
-  document.getElementById('sl-se').textContent = (elec*100) + '¢';
-  document.getElementById('sl-sl').textContent = life + ' yr';
-  document.getElementById('sl-shl').textContent = hl + ' yr';
-
-  var nodeCost = hw/hl + bw*12 + (power*24*365/1000)*elec;
-  var bytesYr = size * vol * 12;
-  var costPerByte = nodeCost / bytesYr;
-  var storageCost = costPerByte * size * life;
-  var ext = storageCost * vol * 12 / life;
-
-  var mo = document.getElementById('model-output');
-  if (mo) mo.innerHTML = [
-    '<div class="stat-card"><div class="label">Node Cost / Yr</div><div class="value" style="color:var(--orange);">$' + Math.round(nodeCost) + '</div></div>',
-    '<div class="stat-card"><div class="label">Storage / Insc</div><div class="value" style="color:var(--orange);">$' + storageCost.toFixed(4) + '</div></div>',
-    '<div class="stat-card"><div class="label">Externality / Yr</div><div class="value" style="color:var(--orange);">$' + (ext/1000).toFixed(1) + 'K</div></div>',
-  ].join('');
-}
-
-APP.onData(function(d) {
-  if (d.btc_price) { btcPrice = d.btc_price; }
-  if (d.fees) { prevFees = JSON.parse(JSON.stringify(fees)); fees = d.fees; }
-  if (d.mempool && d.mempool.unconfirmed_tx) mempoolTx = d.mempool.unconfirmed_tx;
-  if (d.block_height) blockHeight = d.block_height;
-  if (d.hash_rate) hashRate = d.hash_rate / 1e9;
-  if (d.difficulty) difficulty = (d.difficulty / 1e12).toFixed(0);
-  renderDashboard();
-  document.getElementById('live-clock')._start = Date.now();
-  document.getElementById('live-clock').textContent = 'Live · 0s ago';
-  loadHistory();
-});
-
-VIZ_Fees.init("fees-canvas");
-APP.init();
-
-// Fee history
-function loadHistory() {
-  fetch('/tools/fee_history.json?_=' + Date.now())
-    .then(function(r) { return r.json(); })
-    .then(function(hist) {
-      if (!hist || hist.length < 1) {
-        document.getElementById('history-chart').innerHTML = '<div style="color:#555;font-size:13px;">Building history...</div>';
-        return;
-      }
-      var fastest = hist.map(function(d) { return d.fastestFee || 0; });
-      var economy = hist.map(function(d) { return d.economyFee || 0; });
-      var maxH = Math.max(1, ...fastest);
-      var html = '';
-      for (var i = 0; i < hist.length; i++) {
-        var fh = Math.max(4, fastest[i] / maxH * 100 * 0.8);
-        var eh = Math.max(3, economy[i] / maxH * 100 * 0.7);
-        html += '<div class="day"><div class="bar-fast" style="height:' + fh + '%;" title="Fastest: ' + fastest[i] + ' sat/vB"></div><div class="bar-econ" style="height:' + eh + '%;" title="Economy: ' + economy[i] + ' sat/vB"></div><div class="date-label">' + hist[i].date.slice(5) + '</div></div>';
-      }
-      document.getElementById('history-chart').innerHTML = html;
-      if (hist.length > 0) document.getElementById('history-dates').textContent = hist[0].date + ' – ' + hist[hist.length-1].date + ' (' + hist.length + ' days)';
-    })
-    .catch(function() {});
-}
-</script>
 
 <footer>
   <div class="links">
     <a href="/">Home</a>
-    <a href="/articles">Articles</a>
+    <a href="/live">Dashboard</a>
     <a href="https://github.com/prateekposwal/block-space-economics">GitHub</a>
   </div>
   <p>Bitcoin Sahi — Blockchain Research & Development. Built in public.</p>
-
-<div id="api-debug" style="font-size:9px;color:#444;text-align:center;margin-top:2px;font-family:monospace;"></div>
 </footer>
+
+<script src="tools/viz-core.js"></script>
+<script src="tools/data-engine.js"></script>
+<script src="tools/viz-fees.js"></script>
+<script src="tools/viz-blockspace.js"></script>
+<script src="tools/viz-utxo.js"></script>
+<script src="tools/viz-lightning.js"></script>
+
 <script>
-(function(){
-  var el = document.getElementById('live-badge');
-  var cl = document.getElementById('live-badge-clock');
-  if (!el) return;
-  el.style.display = 'inline-flex';
-  var start = Date.now();
-  function tick() {
-    var s = Math.floor((Date.now() - start) / 1000);
-    if (cl) cl.textContent = s < 5 ? 'just now' : s + 's ago';
+var currentTab = 'send';
+var DATA = { fees: { fastestFee: 3, halfHourFee: 2, hourFee: 1, economyFee: 1, minimumFee: 1 }, btc_price: 63000, mempool: { count: 100000, vsize: 0, fee_histogram: [] }, lightning: { channel_count: 0, node_count: 0, total_capacity: 0 }, block_height: 960000 };
+
+function niceNum(v, d) { return Number(v).toLocaleString(undefined, {maximumFractionDigits: d||0}); }
+
+function usd(s) { return '$' + (s * DATA.btc_price / 100000000).toFixed(2); }
+
+function feePill(e, f) {
+  var ratio = f > 0 ? e / f : 0;
+  if (e <= 5) return '<span class="fee-pill green">Low — send now</span>';
+  if (e <= 25) return '<span class="fee-pill yellow">Moderate — consider waiting</span>';
+  return '<span class="fee-pill red">High — wait if you can</span>';
+}
+
+function switchTab(tab) {
+  currentTab = tab;
+  document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); });
+  var btns = document.querySelectorAll('.tab');
+  var idx = { send: 0, lightning: 1, exchange: 2, node: 3, miner: 4, research: 5, developer: 6 }[tab];
+  if (btns[idx]) btns[idx].classList.add('active');
+  renderWorkspace(tab);
+  var ind = document.getElementById('decide-indicator');
+  if (ind) ind.textContent = ' › ' + tab.charAt(0).toUpperCase() + tab.slice(1);
+}
+
+function renderWorkspace(tab) {
+  var e = DATA.fees.economyFee || 1;
+  var f = DATA.fees.fastestFee || 3;
+  var h = DATA.fees.hourFee || 1;
+  var hh = DATA.fees.halfHourFee || 2;
+  var m = DATA.fees.minimumFee || 1;
+  var mc = DATA.mempool ? DATA.mempool.count || 0 : 0;
+  var ln = DATA.lightning || {};
+  var bh = DATA.block_height || 0;
+  var html = '';
+
+  if (tab === 'send') {
+    var rec = e <= 5 ? 'rec' : 'wait';
+    var recText = e <= 5 ? 'YES — SEND AT ECONOMY' : 'NO — WAIT';
+    html = '<div class="ws-grid">' +
+      '<div class="ws-card ws-full"><span class="icon">✉</span><div class="label send">Your Wallet</div><div class="q">Should I send a transaction right now?</div>' +
+      '<div class="a">' + feePill(e, f) + '</div>' +
+      '<div class="d" style="margin-top:10px;font-size:18px;font-weight:700;">' + (e <= 5 ? 'Yes, send at economy (' + e + ' sat/vB)' : 'Fees are elevated — wait if you can') + '</div>' +
+      '<div class="d">Economy: <strong>' + e + ' sat/vB</strong> (' + usd(e * 140) + '/tx) — confirms ~1 hr</div>' +
+      '<div class="d">Fastest: <strong>' + f + ' sat/vB</strong> (' + usd(f * 140) + '/tx) — next block</div>' +
+      '<div class="d">Savings by waiting: <strong>$' + ((f - e) * 140 * DATA.btc_price / 100000000).toFixed(2) + '</strong></div>' +
+      '<span class="badge ' + (rec === 'rec' ? 'badge-rec' : 'badge-wait') + '">' + recText + '</span><a href="/tools/fee_history.csv" class="action">→ Download fee history</a></div>' +
+      '<div class="ws-card"><span class="icon">📊</span><div class="label send">Mempool Level</div><div class="q">How congested is the network?</div>' +
+      '<div class="a"><span class="' + (mc < 50000 ? 'good' : mc < 200000 ? 'warn' : 'bad') + '">' + (mc < 50000 ? 'Low congestion' : mc < 200000 ? 'Moderate congestion' : 'High congestion') + '</span></div>' +
+      '<div class="d">Unconfirmed txs: <strong>' + niceNum(mc) + '</strong></div>' +
+      '<div class="d">Economy fee: <strong>' + e + ' sat/vB</strong> · Minimum: <strong>' + m + ' sat/vB</strong></div></div>' +
+      '<div class="ws-card"><span class="icon">💰</span><div class="label send">Market</div><div class="q">What is the Bitcoin price?</div>' +
+      '<div class="a">$' + niceNum(DATA.btc_price) + '</div>' +
+      '<div class="d">Block height: <strong>' + niceNum(bh) + '</strong></div>' +
+      '<div class="tools-list"><a href="/live">Dashboard →</a></div></div>' +
+    '</div>';
+  } else if (tab === 'lightning') {
+    var lc = ln.channel_count || 0;
+    var nc = ln.node_count || 0;
+    var cap = ln.total_capacity || 0;
+    html = '<div class="ws-grid">' +
+      '<div class="ws-card ws-full"><span class="icon">⚡</span><div class="label ln">Channel Management</div><div class="q">Should I open channels right now?</div>' +
+      '<div class="a">' + (e < 5 ? '<span class="good">Good time to open — fees are low</span>' : e < 25 ? '<span class="warn">Fees moderate — OK to open' : '<span class="bad">Fees high — wait</span>') + '</div>' +
+      '<div class="d">Channel open cost: <strong>' + usd(e * 1000) + '</strong> at ' + e + ' sat/vB (economy) vs <strong>' + usd(f * 1000) + '</strong> fastest.</div>' +
+      '<div class="d">Savings by using economy: <strong>$' + ((f - e) * 1000 * DATA.btc_price / 100000000).toFixed(2) + '</strong> per channel.</div>' +
+      '<div class="d">Channel close cost: ~<strong>' + usd(e * 500) + '</strong> (500 vbytes at economy).</div>' +
+      '<span class="badge ' + (e < 5 ? 'badge-rec' : 'badge-wait') + '">' + (e < 5 ? 'OPEN NOW' : 'WATCH & WAIT') + '</span>' +
+      '<a href="/lightning-sim" class="action">→ Lightning Simulator</a></div>' +
+      '<div class="ws-card"><span class="icon">📈</span><div class="label ln">Lightning Network Stats</div><div class="q">How big is the Lightning Network?</div>' +
+      '<div class="a">' + niceNum(lc) + ' channels</div>' +
+      '<div class="d">Nodes: <strong>' + niceNum(nc) + '</strong> · Total capacity: <strong>' + (cap > 0 ? niceNum(Math.round(cap / 100000000)) + ' BTC' : 'Loading...') + '</strong></div>' +
+      '<div class="d">At current fees, a channel open + close costs ~<strong>' + usd((e * 1000 + e * 500)) + '</strong>.</div>' +
+      '<div class="tools-list"><a href="/live">Dashboard →</a></div></div>' +
+      '<div class="ws-card"><span class="icon">🧮</span><div class="label ln">Node Economics</div><div class="q">What does my Lightning node cost to run?</div>' +
+      '<div class="d">Base node operation: <strong>$924/yr</strong>. Channel ops add on-chain fees.</div>' +
+      '<div class="d">10 channels over 1 year: fees <strong>' + usd((e * 1000 + e * 500) * 10) + '</strong>.</div>' +
+      '<div class="tools-list"><a href="/calculator">Cost Calculator →</a></div></div>' +
+    '</div>';
+  } else if (tab === 'exchange') {
+    var batchSave = (e * 140 * 1000 - e * 100000) * DATA.btc_price / 100000000;
+    html = '<div class="ws-grid">' +
+      '<div class="ws-card ws-full"><span class="icon">🏦</span><div class="label ex">Withdrawal Optimization</div><div class="q">Should I batch withdrawals right now?</div>' +
+      '<div class="a">' + (e < 10 ? '<span class="good">Good time to batch — fees are low</span>' : '<span class="warn">Fees elevated — batch only urgent withdrawals</span>') + '</div>' +
+      '<div class="d">Per withdrawal (140 vbytes): <strong>' + usd(e * 140) + '</strong> at economy rate.</div>' +
+      '<div class="d">Batch of 100 withdrawals: <strong>' + usd(e * 10000) + '</strong> vs <strong>' + usd(e * 140 * 100) + '</strong> individually.</div>' +
+      '<div class="d">Savings: <strong>$' + batchSave.toFixed(2) + '</strong> per 1,000 withdrawals vs individual sends.</div>' +
+      '<span class="badge badge-rec">SAVE $' + batchSave.toFixed(2) + ' PER 1K WITHDRAWALS</span>' +
+      '<a href="/live" class="action">→ Monitor fees</a></div>' +
+      '<div class="ws-card"><span class="icon">📊</span><div class="label ex">Mempool Congestion</div><div class="q">Is the mempool congested?</div>' +
+      '<div class="d">Unconfirmed txs: <strong>' + niceNum(mc) + '</strong>.</div>' +
+      '<div class="d">Economy fee: <strong>' + e + ' sat/vB</strong> · Fastest: <strong>' + f + ' sat/vB</strong></div>' +
+      '<div class="d">Congestion ' + (mc < 50000 ? 'low — good for batching' : mc < 200000 ? 'moderate — batch with economy' : 'high — consider waiting') + '.</div>' +
+      '<div class="tools-list"><a href="/live">Dashboard →</a></div></div>' +
+      '<div class="ws-card"><span class="icon">📅</span><div class="label ex">Historical Context</div><div class="q">How do today&#39;s fees compare historically?</div>' +
+      '<div class="d">Fee history dataset available for download. Track how fees change over hours and days.</div>' +
+      '<div class="tools-list"><a href="/tools/fee_history.csv" target="_blank">Download CSV →</a><a href="/tools/fee_forecast.json" target="_blank">Forecast JSON →</a></div></div>' +
+    '</div>';
+  } else if (tab === 'node') {
+    html = '<div class="ws-grid">' +
+      '<div class="ws-card ws-full"><span class="icon">🖥</span><div class="label node">Node Economics</div><div class="q">What does it cost to run a Bitcoin node?</div>' +
+      '<div class="a">~$924/yr baseline</div>' +
+      '<div class="d">Hardware amortized: <strong>$167/yr</strong> · Bandwidth: <strong>$600/yr</strong> · Power: <strong>$158/yr</strong></div>' +
+      '<div class="d">Inscription storage externality: <strong>~$2.53/yr</strong> (0.91% of block space). Pruning saves ~70% of disk.</div>' +
+      '<div class="d">At current fees: ' + e + ' sat/vB economy, the fee market prices congestion (~10 min) but not permanence (indefinite storage).</div>' +
+      '<span class="badge badge-info">YOUR MILEAGE VARIES</span><a href="/calculator" class="action">→ Node Cost Calculator</a></div>' +
+      '<div class="ws-card"><span class="icon">❤</span><div class="label node">UTXO Growth</div><div class="q">How fast is the UTXO set growing?</div>' +
+      '<div class="d">At 100K inscriptions/month, the UTXO set grows by ~3.3K UTXOs/day from inscriptions alone.</div>' +
+      '<div class="d">Storage externality across all nodes: <strong>$9.2K/yr</strong> at current volume.</div>' +
+      '<div class="tools-list"><a href="/utxo-health">UTXO Health Dashboard →</a></div></div>' +
+      '<div class="ws-card ws-full"><span class="icon">🔬</span><div class="label node">Live UTXO Visualization</div><div class="q">UTXO set health organism — real-time</div>' +
+      '<div style="height:200px;margin-top:8px;"><canvas id="utxo-canvas" width="400" height="200" style="width:100%;height:200px;border-radius:8px;"></canvas></div>' +
+      '<div class="tools-list"><a href="/utxo-health">Full UTXO Dashboard →</a></div></div>' +
+    '</div>';
+  } else if (tab === 'miner') {
+    html = '<div class="ws-grid">' +
+      '<div class="ws-card ws-full"><span class="icon">⛏</span><div class="label miner">Block Reward Breakdown</div><div class="q">What is the current block reward composition?</div>' +
+      '<div class="a">~$' + niceNum(Math.round(3.125 * DATA.btc_price + 0.5 * DATA.btc_price)) + '/block</div>' +
+      '<div class="d">Subsidy: <strong>$' + niceNum(Math.round(3.125 * DATA.btc_price)) + '</strong> · Fees: <strong>$' + niceNum(Math.round(0.5 * DATA.btc_price)) + '</strong></div>' +
+      '<div class="d">Fee revenue share: <strong>' + (0.5 / 3.625 * 100).toFixed(1) + '%</strong> of total block reward.</div>' +
+      '<div class="d">Current fees: fastest <strong>' + f + ' sat/vB</strong> · economy <strong>' + e + ' sat/vB</strong></div>' +
+      '<span class="badge badge-info">ESTIMATED</span><a href="/blockspace" class="action">→ Blockspace Explorer</a></div>' +
+      '<div class="ws-card"><span class="icon">📊</span><div class="label miner">Fee Revenue Trend</div><div class="q">How healthy is the fee market?</div>' +
+      '<div class="d">Fee ÷ storage cost ratio: <strong>' + ((e * 100 * DATA.btc_price / 100000000) / 0.008).toFixed(0) + 'x</strong> — fees far exceed storage externality.</div>' +
+      '<div class="d">Inscriptions can contribute meaningful fee revenue during mania (up to 58% of block space).</div>' +
+      '<div class="tools-list"><a href="/live">Dashboard →</a></div></div>' +
+      '<div class="ws-card ws-full"><span class="icon">🔲</span><div class="label miner">Live Blockspace</div><div class="q">Each dot = a Bitcoin block. Color = fee pressure.</div>' +
+      '<div style="height:200px;margin-top:8px;"><canvas id="blockspace-canvas" width="400" height="200" style="width:100%;height:200px;border-radius:8px;"></canvas></div>' +
+      '<div class="tools-list"><a href="/blockspace">Full Blockspace Explorer →</a></div></div>' +
+    '</div>';
+  } else if (tab === 'research') {
+    html = '<div class="ws-grid">' +
+      '<div class="ws-card ws-full"><span class="icon">🔬</span><div class="label research">Latest Data</div><div class="q">What data is available for research?</div>' +
+      '<div class="d">Live fee estimates, historical fee data (30+ days), mempool statistics, Lightning Network stats, block data, and our economic models.</div>' +
+      '<div class="d">Key finding: The fee market prices <strong>congestion</strong> (~10 min) but not <strong>permanence</strong> (indefinite storage).</div>' +
+      '<div class="d">Current economy fee: <strong>' + e + ' sat/vB</strong> · Historic low: <strong>1 sat/vB</strong> · Historic high: <strong>~500+ sat/vB</strong> (ordinals mania).</div>' +
+      '<div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;">' +
+      '<a href="/tools/fee_history.csv" class="btn btn-secondary" style="font-size:13px;padding:8px 16px;" target="_blank">↓ Fee History CSV</a>' +
+      '<a href="/tools/fee_forecast.json" class="btn btn-secondary" style="font-size:13px;padding:8px 16px;" target="_blank">↓ Forecast JSON</a>' +
+      '<a href="/tools/monte_carlo_output.json" class="btn btn-secondary" style="font-size:13px;padding:8px 16px;" target="_blank">↓ Monte Carlo</a>' +
+      '<a href="/tools/live_data.json" class="btn btn-secondary" style="font-size:13px;padding:8px 16px;" target="_blank">↓ Live Data JSON</a></div>' +
+      '<div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;">' +
+      '<a href="https://github.com/prateekposwal/block-space-economics" class="action">→ GitHub Repository</a>' +
+      '<a href="/research-graph" class="action">→ Research Graph</a>' +
+      '<a href="/articles" class="action">→ Articles</a></div></div>' +
+      '<div class="ws-card"><span class="icon">📊</span><div class="label research">Model Outputs</div><div class="q">What do the economic models say?</div>' +
+      '<div class="d">Storage externality: <strong>$0.008/inscription</strong> (baseline).</div>' +
+      '<div class="d">Monte Carlo (10K sims): 90% CI <strong>$0.003–$0.020/inscription</strong>.</div>' +
+      '<div class="d">Sensitivity: inscription volume drives <strong>60% of variance</strong>.</div>' +
+      '<div class="tools-list"><a href="/calculator">Calculator →</a></div></div>' +
+      '<div class="ws-card"><span class="icon">📝</span><div class="label research">Publications</div><div class="q">What has been published?</div>' +
+      '<div class="d">3 discovery papers, 7 Python models, verification appendix, Monte Carlo simulation, sensitivity analysis, 30-day historical dataset.</div>' +
+      '<div class="tools-list"><a href="/articles">Articles →</a></div></div>' +
+    '</div>';
+  } else if (tab === 'developer') {
+    html = '<div class="ws-grid">' +
+      '<div class="ws-card ws-full"><span class="icon">{};</span><div class="label dev">API Documentation</div><div class="q">REST endpoints for live Bitcoin data.</div>' +
+      '<div class="d">All endpoints return JSON. Base URL: <code style="color:var(--orange);">https://mempool.space/api</code></div></div>' +
+      '<div class="ws-card ws-full"><div class="label dev">Fee Estimates</div>' +
+      '<div class="endpoint-card"><span class="method get">GET</span><span class="url">/v1/fees/recommended</span><div class="desc">Returns fastestFee, halfHourFee, hourFee, economyFee, minimumFee in sat/vB.</div></div>' +
+      '<div class="endpoint-card"><span class="method get">GET</span><span class="url">/v1/fees/mempool-blocks</span><div class="desc">Fee histogram for the next mempool blocks — predicts near-term fee pressure.</div></div></div>' +
+      '<div class="ws-card ws-full"><div class="label dev">Mempool & Blocks</div>' +
+      '<div class="endpoint-card"><span class="method get">GET</span><span class="url">/mempool</span><div class="desc">Mempool snapshot: count, vsize, total fee, fee histogram.</div></div>' +
+      '<div class="endpoint-card"><span class="method get">GET</span><span class="url">/blocks?limit=10</span><div class="desc">Recent blocks with height, size, weight, tx count, fee data.</div></div>' +
+      '<div class="endpoint-card"><span class="method get">GET</span><span class="url">/blocks/tip/height</span><div class="desc">Current block height (plain text).</div></div></div>' +
+      '<div class="ws-card ws-full"><div class="label dev">Mining & Lightning</div>' +
+      '<div class="endpoint-card"><span class="method get">GET</span><span class="url">/v1/mining/blocks/fees/24h</span><div class="desc">Fee revenue history for the last 24 hours, per block.</div></div>' +
+      '<div class="endpoint-card"><span class="method get">GET</span><span class="url">/v1/lightning/statistics/latest</span><div class="desc">LN network stats: channel count, node count, total capacity.</div></div>' +
+      '<div class="endpoint-card"><span class="method get">GET</span><span class="url">/v1/difficulty-adjustment</span><div class="desc">Difficulty adjustment info: change, estimated retarget height.</div></div></div>' +
+      '<div class="ws-card ws-full"><div class="label dev">Local Tools</div>' +
+      '<div class="endpoint-card"><span class="method get">GET</span><span class="url">/tools/fee_history.json</span><div class="desc">Historical fee data (30+ days) — fastest, economy, dates.</div></div>' +
+      '<div class="endpoint-card"><span class="method get">GET</span><span class="url">/tools/live_data.json</span><div class="desc">Pipeline output: latest block, BIP-110 signaling, miner revenue.</div></div>' +
+      '<div class="endpoint-card"><span class="method get">GET</span><span class="url">/tools/monte_carlo_output.json</span><div class="desc">Monte Carlo simulation results for storage externality model.</div></div>' +
+      '<div class="endpoint-card"><span class="method get">GET</span><span class="url">/tools/fee_forecast.json</span><div class="desc">Fee forecast based on historical patterns and mempool pressure.</div></div></div>' +
+    '</div>';
   }
-  tick();
-  setInterval(tick, 2000);
-  // Reset on API data
-  if (typeof API !== 'undefined') {
-    var origStart = API.start;
-    API.start = function(opts) {
-      start = Date.now();
-      tick();
-      if (origStart) origStart(opts);
-    };
+  document.getElementById('workspace-container').innerHTML = html;
+
+  if (tab === 'node') {
+    setTimeout(function() { try { VIZ_UTXO.init('utxo-canvas'); } catch(e) {} }, 100);
   }
-})();
+  if (tab === 'miner') {
+    setTimeout(function() { try { VIZ_Blockspace.init('blockspace-canvas'); } catch(e) {} }, 100);
+  }
+
+  document.getElementById('ts').textContent = 'Updated ' + new Date().toLocaleString();
+}
+
+function updateFromDataEngine() {
+  var d = DATA_ENGINE.get();
+  DATA.fees = d.fees || DATA.fees;
+  DATA.btc_price = d.btc_price || DATA.btc_price;
+  DATA.mempool = d.mempool || DATA.mempool;
+  DATA.lightning = d.lightning || DATA.lightning;
+  DATA.block_height = d.block_height || DATA.block_height;
+  renderWorkspace(currentTab);
+  var ts = document.getElementById('ts');
+  if (ts) ts.textContent = 'Updated ' + new Date().toLocaleString();
+}
+
+renderWorkspace('send');
+
+DATA_ENGINE.onUpdate(function() { updateFromDataEngine(); });
+DATA_ENGINE.start();
+
+setTimeout(function() { try { VIZ_Fees.init('fees-canvas'); } catch(e) {} }, 200);
 </script>
 </body>
 </html>

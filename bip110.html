@@ -57,19 +57,9 @@
 
 <nav>
   <a href="/" class="brand">BITCOIN <span>SAHI</span></a>
-  <a href="/bip110" class="nav-link" style="color:var(--orange);font-weight:700;">⚠️ BIP-110</a>
-  <a href="/decide" class="nav-link">Decide</a>
-  <a href="/articles" class="nav-link">Articles</a>
-  <div class="dropdown"><span class="dropbtn">Explore ▾</span>
-    <div class="dropdown-content"><div class="dd-title">Explore</div>
-      <a href="/blockspace">Blockspace Explorer</a>
-      <a href="/research-graph">Research Graph</a>
-      <a href="/calculator">Cost Calculator</a>
-      <a href="/utxo-health">UTXO Health</a>
-      <a href="/lightning-sim">Lightning Sim</a>
-    </div>
-  </div>
-  <a href="/live" class="cta">📊 Dashboard</a>
+  <a href="/live" class="nav-link">Dashboard</a>
+  <a href="/bip110" class="nav-link" style="color:#F85149;font-weight:700;">⚠️ BIP-110</a>
+  <a href="/live#research" class="nav-link">Research</a>
 </nav>
 
 <div class="hero">
@@ -147,47 +137,26 @@
     <a href="https://bip110.orange.surf" style="color:var(--orange);">bip110.orange.surf</a> — Live signaling tracker &amp; fork simulator<br>
     <a href="https://github.com/bitcoin/bips/blob/master/bip-0110.mediawiki" style="color:var(--orange);">BIP-110 Specification</a> — Full spec with 7 consensus rules<br>
     <a href="https://delvingbitcoin.org" style="color:var(--orange);">Delving Bitcoin</a> — Technical discussion threads<br>
-    <a href="/blockspace" style="color:var(--orange);">Our Blockspace Explorer</a> — Live block composition &amp; fee data
+    <a href="/live" style="color:var(--orange);">Live Dashboard</a> — Real-time fee estimates &amp; mempool data
   </div>
 </div>
 
 <footer>
   <div class="links">
     <a href="/">Home</a>
-    <a href="/articles">Articles</a>
+    <a href="/live">Dashboard</a>
     <a href="https://github.com/prateekposwal/block-space-economics">GitHub</a>
   </div>
   <p>Bitcoin Sahi — Blockchain Research & Development. Built in public.</p>
 </footer>
 
+<script src="tools/data-engine.js"></script>
 <script src="tools/viz-core.js"></script>
 <script src="tools/viz-bip110.js"></script>
 <script src="tools/app.js"></script>
 <script>
 var BLOCKS_TOTAL = 965664, SIGNALING_START = 961632, FORK_WINDOW_START = 963648;
 var CURRENT_BLOCK = 960100, SIGNAL_PCT = 0, POOL_DATA = null;
-
-// Fetch BIP-110 signaling from blockstream.info (CORS-enabled)
-function fetchSignaling() {
-  var x = new XMLHttpRequest();
-  x.open('GET', 'https://blockstream.info/api/blocks?limit=100', true);
-  x.timeout = 10000;
-  x.onload = function() {
-    if (x.status !== 200) return;
-    try {
-      var blocks = JSON.parse(x.responseText);
-      if (!blocks || !blocks.length) return;
-      var total = blocks.length;
-      var signaling = 0;
-      for (var bi = 0; bi < blocks.length; bi++) {
-        if (blocks[bi].version & 0x10) signaling++;  // bit 4
-      }
-      SIGNAL_PCT = total > 0 ? (signaling / total * 100) : 0;
-      updateStatus();
-    } catch(e) {}
-  };
-  x.send();
-}
 
 function updateStatus() {
   var remaining = Math.max(0, SIGNALING_START - CURRENT_BLOCK);
@@ -202,43 +171,29 @@ function updateStatus() {
     return '<div class="status-card"><div class="s-label">' + s.l + '</div><div class="s-value" style="color:' + s.c + '">' + s.v + '</div><div class="s-sub">' + s.s + '</div></div>';
   }).join('');
 
-  // Timeline
   var pct = Math.min(100, (CURRENT_BLOCK / BLOCKS_TOTAL) * 100);
   document.getElementById('tl-passed').style.width = Math.max(0, pct - 1) + '%';
   document.getElementById('tl-passed').textContent = Math.round(pct) + '%';
   document.getElementById('tl-current').style.width = '2%';
   document.getElementById('tl-future').style.width = Math.max(0, 100 - pct - 2) + '%';
-
-  // Pool breakdown
-  try {
-    if (POOL_DATA) {
-      var poolHtml = '<h3 style="font-size:14px;font-weight:700;margin:16px 0 8px;">⛏️ Mining Pool Signaling</h3><div style="display:grid;grid-template-columns:repeat(2,1fr);gap:6px;font-size:12px;">';
-      var poolNames = Object.keys(POOL_DATA);
-      poolNames.sort(function(a,b) { return (POOL_DATA[b].blocks || 0) - (POOL_DATA[a].blocks || 0); });
-      for (var pi = 0; pi < poolNames.length; pi++) {
-        var name = poolNames[pi];
-        var p = POOL_DATA[name];
-        var sigPct = p.blocks > 0 ? (p.signaling / p.blocks * 100) : 0;
-        var color = sigPct > 50 ? '#3FB950' : sigPct > 0 ? '#F0883E' : '#555';
-        poolHtml += '<div style="display:flex;justify-content:space-between;padding:5px 8px;background:var(--surface);border:1px solid var(--border);border-radius:4px;">'
-          + '<span>' + name + '</span>'
-          + '<span style="color:' + color + ';font-weight:600;">' + (sigPct > 0 ? sigPct.toFixed(0) + '%' : '0%') + '</span>'
-          + '<span style="color:#555;">' + p.blocks + ' blks</span>'
-          + '</div>';
-      }
-      poolHtml += '</div>';
-      document.getElementById('pool-section').innerHTML = poolHtml;
-    }
-  } catch(e) {
-    document.getElementById('pool-section').innerHTML = '<div style="color:#555;font-size:12px;">Pool data loading...</div>';
-  }
 }
 
 APP.onData(function(d) {
   if (d && d.block_height) CURRENT_BLOCK = d.block_height;
-  fetchSignaling();
   updateStatus();
-  
+});
+
+DATA_ENGINE.onUpdate(function(DATA) {
+  if (DATA.block_height) CURRENT_BLOCK = DATA.block_height;
+  if (DATA.blocks && DATA.blocks.length > 0) {
+    var total = DATA.blocks.length;
+    var signaling = 0;
+    for (var i = 0; i < total; i++) {
+      if (DATA.blocks[i].version & 0x10) signaling++;
+    }
+    SIGNAL_PCT = total > 0 ? (signaling / total * 100) : 0;
+  }
+  updateStatus();
   var ticker = document.getElementById('fork-ticker');
   if (ticker) {
     var remaining = Math.max(0, SIGNALING_START - CURRENT_BLOCK);
@@ -250,8 +205,7 @@ APP.onData(function(d) {
 });
 
 APP.init();
-fetchSignaling();
-setInterval(fetchSignaling, 60000);
+DATA_ENGINE.start();
 </script>
 </body>
 </html>

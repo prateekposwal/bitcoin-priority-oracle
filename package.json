@@ -1,0 +1,7 @@
+{
+  "name": "block-space-economics-test",
+  "private": true,
+  "dependencies": {
+    "playwright": "^1.62.0"
+  }
+}
