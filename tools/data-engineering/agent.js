@@ -61,11 +61,13 @@ async function runCycle() {
           log('Found ' + unknown.length + ' new potential sources');
           STATE.discoveredSources = unknown;
           for (var i = 0; i < unknown.length && i < CONFIG.discovery.maxNewSources; i++) {
-            log('  Testing: ' + unknown[i].name + ' (' + unknown[i].url + ')');
-            var testResult = await integrate.testEndpoint(unknown[i]);
+            var src = unknown[i];
+            var endpoint = { key: src.key || src.name.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/_+/g, '_').replace(/^_|_$/g, ''), url: src.url, name: src.name, type: src.type, category: src.category || 'discovered' };
+            log('  Testing: ' + endpoint.name + ' (' + endpoint.url + ')');
+            var testResult = await integrate.testEndpoint(endpoint);
             if (testResult.ok) {
-              var staged = integrate.stageEndpoint(unknown[i]);
-              log('  Staged for review: ' + staged);
+              var staged = integrate.stageEndpoint(endpoint);
+              log('  Staged for review: ' + (staged || endpoint.key));
             }
           }
         } else {
