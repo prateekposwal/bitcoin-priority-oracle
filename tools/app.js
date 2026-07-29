@@ -99,7 +99,7 @@ var APP = (function() {
     });
 
     // Pipeline fallback for historical data
-    fetchJson('/tools/live_data.json', function(d) {
+    fetchJson('tools/live_data.json', function(d) {
       if (d) {
         if (d.latest_block) merged.latest_block = d.latest_block;
         if (d.bip110_signaling) merged.bip110_signaling = d.bip110_signaling;
