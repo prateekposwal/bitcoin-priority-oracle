@@ -277,6 +277,14 @@ var VIZ_Node = (function() {
     requestAnimationFrame(loop);
   }
 
+  function getCosts() {
+    var hw = values.hardware / DEPRECIATION_YEARS;
+    var bw = values.bandwidth * 12;
+    var elec = (values.power * 24 * 365 / 1000) * values.rate;
+    var storage = STORAGE_FIXED;
+    return { hw: Math.round(hw), bw: Math.round(bw), elec: Math.round(elec), storage: Math.round(storage), total: Math.round(hw + bw + elec + storage) };
+  }
+
   function resize() {
     var r = VIZ.responsiveSize(canvas, 600);
     w = r.w;
@@ -284,5 +292,5 @@ var VIZ_Node = (function() {
     ctx = r.ctx;
   }
 
-  return { init: init, resize: resize };
+  return { init: init, resize: resize, getCosts: getCosts };
 })();

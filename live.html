@@ -523,16 +523,14 @@ if (typeof DATA_ENGINE !== 'undefined') {
   document.getElementById('ex-savings').textContent = '$' + batchSave.toFixed(0);
 
   // --- Node Stat Cards ---
-  var hwCostNode = Math.round(Math.min(2000, Math.max(200, btcPrice * 0.025)));
-  var bwCostNode = 50;
-  var powerCostNode = 150;
-  var storageCostNode = 50;
-  var totalNodeCost = Math.round(hwCostNode / 3 + bwCostNode * 12 + (powerCostNode * 24 * 365 / 1000) * 0.12 + storageCostNode);
-  document.getElementById('node-hw').textContent = '$' + Math.round(hwCostNode / 3);
-  document.getElementById('node-bw').textContent = '$' + (bwCostNode * 12);
-  document.getElementById('node-power').textContent = '$' + Math.round((powerCostNode * 24 * 365 / 1000) * 0.12);
-  var nodeCostEl = document.getElementById('node-cost');
-  if (nodeCostEl) nodeCostEl.textContent = '$' + totalNodeCost;
+  var nodeCosts = (typeof VIZ_Node !== 'undefined' && VIZ_Node.getCosts) ? VIZ_Node.getCosts() : null;
+  if (nodeCosts) {
+    document.getElementById('node-hw').textContent = '$' + nodeCosts.hw;
+    document.getElementById('node-bw').textContent = '$' + nodeCosts.bw;
+    document.getElementById('node-power').textContent = '$' + nodeCosts.elec;
+    var nodeCostEl = document.getElementById('node-cost');
+    if (nodeCostEl) nodeCostEl.textContent = '$' + nodeCosts.total;
+  }
 
   // --- Miner Stat Cards ---
   document.getElementById('miner-subsidy').textContent = '3.125 BTC';

@@ -12,6 +12,7 @@ const VIZ_Research = (() => {
   let rafId = null;
   let btcPrice = 64000;
   let stacked = false;
+  let feeSpread = { fastest: 3, hour: 1.5, economy: 1 };
 
   function isMobile() { return w < 480; }
 
@@ -53,6 +54,10 @@ const VIZ_Research = (() => {
           data = buildSeries(state.fee_history);
         }
         if (state && state.btc_price) btcPrice = state.btc_price;
+        if (state && state.fees && state.fees.fastestFee) {
+          var eco = state.fees.economyFee || 1;
+          feeSpread = { fastest: state.fees.fastestFee / eco, hour: (state.fees.hourFee || eco) / eco, economy: 1 };
+        }
       });
     }
 
@@ -91,13 +96,14 @@ const VIZ_Research = (() => {
 
   function buildSeries(raw) {
     if (!raw || !Array.isArray(raw) || raw.length === 0) return [];
+    var fs = feeSpread || { fastest: 3, hour: 1.5, economy: 1 };
     return raw.map(function(e) {
       var economy = (e.avgFees || e.avgFee || 0) / 2500000;
       return {
         t: e.timestamp,
         economy: economy,
-        hour: economy * 1.5,
-        fastest: economy * 3,
+        hour: economy * fs.hour,
+        fastest: economy * fs.fastest,
       };
     });
   }

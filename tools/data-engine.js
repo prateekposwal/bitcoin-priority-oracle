@@ -287,8 +287,8 @@ var DATA_ENGINE = (function () {
       case 'mempool_blocks':
         m.d = { n: Array.isArray(raw) ? raw.length : 0 };
         break;
-      case 'fee_history':
-        m.d = { n: Array.isArray(raw) ? raw.length : 0, l: raw.length > 0 ? (raw[raw.length-1].avgFees || 0) : 0 };
+       case 'fee_history':
+        m.d = { n: Array.isArray(raw) ? raw.length : 0, l: raw.length > 0 ? (raw[raw.length-1].avgFees || raw[raw.length-1].avg_fees || 0) : 0 };
         break;
       case 'lightning':
         var s = raw.latest || raw;
