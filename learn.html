@@ -27,7 +27,7 @@ a:hover{color:#E8B86D}
 .hero h1 span{background:linear-gradient(135deg,#D4933A,#E8B86D);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .hero p{font-size:1.1rem;color:#9B8B78;max-width:700px;margin:0 auto 32px;line-height:1.7}
 
-#hero-viz{width:100%;height:400px;border-radius:16px;background:#1A1612;border:1px solid #3A3228;margin-top:24px}
+#hero-viz{width:100%;height:520px;border-radius:16px;background:#1A1612;border:1px solid #3A3228;margin-top:24px}
 
 .container{max-width:1000px;margin:0 auto;padding:0 24px}
 
@@ -38,7 +38,7 @@ a:hover{color:#E8B86D}
 .section-desc{font-size:1rem;color:#9B8B78;line-height:1.8;margin-bottom:24px;max-width:750px}
 .section-desc strong{color:#EADCC8;font-weight:600}
 
-.viz-mini{width:100%;height:320px;border-radius:12px;background:#1A1612;border:1px solid #3A3228;margin:24px 0}
+.viz-mini{width:100%;height:420px;border-radius:12px;background:#1A1612;border:1px solid #3A3228;margin:24px 0}
 
 .stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:32px 0}
 .stat-card{background:#231F19;border:1px solid #3A3228;border-radius:12px;padding:24px;text-align:center}
@@ -93,8 +93,8 @@ footer .links a:hover{color:#D4933A}
   .scroll-section{padding:60px 0}
   .bsahi-section{padding:24px}
   .header-inner{padding:0 16px}
-  #hero-viz{height:260px}
-  .viz-mini{height:220px}
+  #hero-viz{height:360px}
+  .viz-mini{height:300px}
 }
 </style>
 </head>
@@ -320,7 +320,7 @@ var chainLinks = [];
 function resizeHero() {
   var r = heroCanvas.parentElement.getBoundingClientRect();
   heroW = heroCanvas.width = r.width || 800;
-  heroH = heroCanvas.height = 320;
+  heroH = heroCanvas.height = 480;
   if (window.devicePixelRatio > 1) {
     heroCanvas.width = heroW * 2;
     heroCanvas.height = heroH * 2;
@@ -357,19 +357,19 @@ function loopHero() {
   heroCtx.fillRect(0, 0, heroW, heroH);
 
   // Title
-  heroCtx.font = 'bold 16px -apple-system,sans-serif';
+  heroCtx.font = 'bold 20px -apple-system,sans-serif';
   heroCtx.fillStyle = 'rgba(234,220,200,0.6)';
   heroCtx.textAlign = 'left';
-  heroCtx.fillText('⬡ The Bitcoin Block', 20, 28);
+  heroCtx.fillText('⬡ The Bitcoin Block', 30, 36);
 
   // Subtitle
-  heroCtx.font = '12px -apple-system,sans-serif';
+  heroCtx.font = '14px -apple-system,sans-serif';
   heroCtx.fillStyle = 'rgba(107,93,78,0.6)';
-  heroCtx.fillText('Mempool  →  Block  →  Chain', 20, 48);
+  heroCtx.fillText('Mempool  →  Block  →  Chain', 30, 62);
 
   // Label: Mempool
   heroCtx.fillStyle = 'rgba(107,93,78,0.4)';
-  heroCtx.font = '10px -apple-system,sans-serif';
+  heroCtx.font = '12px -apple-system,sans-serif';
   heroCtx.textAlign = 'center';
   heroCtx.fillText('MEMPOOL', heroW * 0.15, heroH - 20);
 
@@ -524,7 +524,7 @@ function initMempoolViz() {
   if (!c) return;
   var r = c.parentElement.getBoundingClientRect();
   memW = c.width = Math.min(r.width || 800, 1000);
-  memH = c.height = 280;
+  memH = c.height = 400;
   memCtx = c.getContext('2d');
   drawMempool();
 }
@@ -545,26 +545,27 @@ function drawMempool() {
       var r = Math.round(p * 248 + (1-p) * 63);
       var g = Math.round((1-p) * 185 + p * 81);
       var bl = Math.round((1-p) * 80 + p * 73);
-      var bh = (count / maxCount) * (memH - 60);
+      var bh = (count / maxCount) * (memH - 80);
       memCtx.fillStyle = 'rgb(' + r + ',' + g + ',' + bl + ')';
-      memCtx.fillRect(40 + i * barW, memH - 30 - bh, barW - 1, bh);
+      memCtx.fillRect(50 + i * barW, memH - 40 - bh, Math.max(1, barW - 1), bh);
     }
     memCtx.fillStyle = '#6A5D4E';
-    memCtx.font = '10px -apple-system,sans-serif';
+    memCtx.font = '12px -apple-system,sans-serif';
     memCtx.textAlign = 'left';
-    memCtx.fillText('0 sat/vB', 40, memH - 8);
+    memCtx.fillText('0 sat/vB', 50, memH - 12);
     memCtx.textAlign = 'right';
-    memCtx.fillText('50+', memW - 20, memH - 8);
+    memCtx.fillText('50+', memW - 30, memH - 12);
     memCtx.save();
-    memCtx.translate(14, memH / 2);
+    memCtx.translate(20, memH / 2);
     memCtx.rotate(-Math.PI / 2);
     memCtx.textAlign = 'center';
+    memCtx.font = '11px -apple-system,sans-serif';
     memCtx.fillText('Waiting transactions', 0, 0);
     memCtx.restore();
     memCtx.fillStyle = '#EADCC8';
-    memCtx.font = 'bold 13px -apple-system,sans-serif';
+    memCtx.font = 'bold 16px -apple-system,sans-serif';
     memCtx.textAlign = 'left';
-    memCtx.fillText('Fee Histogram — Current Mempool Distribution', 40, 20);
+    memCtx.fillText('Fee Histogram — Current Mempool Distribution', 50, 28);
   } else {
     memCtx.fillStyle = '#6A5D4E';
     memCtx.font = '14px -apple-system,sans-serif';
@@ -581,7 +582,7 @@ function initMiningViz() {
   if (!c) return;
   var r = c.parentElement.getBoundingClientRect();
   miningW = c.width = Math.min(r.width || 800, 1000);
-  miningH = c.height = 280;
+  miningH = c.height = 400;
   miningCtx = c.getContext('2d');
   loopMining();
 }
@@ -621,7 +622,7 @@ function initPropViz() {
   if (!c) return;
   var r = c.parentElement.getBoundingClientRect();
   propW = c.width = Math.min(r.width || 800, 1000);
-  propH = c.height = 280;
+  propH = c.height = 400;
   propCtx = c.getContext('2d');
   loopProp();
 }
@@ -669,7 +670,7 @@ function initChainViz() {
   if (!c) return;
   var r = c.parentElement.getBoundingClientRect();
   chainW = c.width = Math.min(r.width || 800, 1000);
-  chainH = c.height = 280;
+  chainH = c.height = 400;
   chainCtx = c.getContext('2d');
   loopChain();
 }
