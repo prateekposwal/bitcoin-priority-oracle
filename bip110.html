@@ -173,12 +173,15 @@ function fetchSignaling() {
     if (x.status !== 200) return;
     try {
       var d = JSON.parse(x.responseText);
-      if (!d.signals) return;
-      var signals = d.signals;
-      var total = signals.length;
-      var signaling = signals.split('1').length - 1;
-      SIGNAL_PCT = total > 0 ? (signaling / total * 100) : 0;
-      POOL_DATA = d.pools || null;
+      if (d.signals) {
+        var sigStr = d.signals;
+        var sigCount = 0;
+        for (var si = 0; si < sigStr.length; si++) {
+          if (sigStr[si] === '1') sigCount++;
+        }
+        SIGNAL_PCT = sigStr.length > 0 ? (sigCount / sigStr.length * 100) : 0;
+      }
+      if (d.pools) POOL_DATA = d.pools;
       updateStatus();
     } catch(e) {}
   };
@@ -206,22 +209,27 @@ function updateStatus() {
   document.getElementById('tl-future').style.width = Math.max(0, 100 - pct - 2) + '%';
 
   // Pool breakdown
-  if (POOL_DATA) {
-    var poolHtml = '<h3 style="font-size:14px;font-weight:700;margin:16px 0 8px;">⛏️ Mining Pool Signaling</h3><div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;font-size:13px;">';
-    var poolNames = Object.keys(POOL_DATA);
-    poolNames.sort(function(a,b) { return POOL_DATA[b].blocks - POOL_DATA[a].blocks; });
-    poolNames.forEach(function(name) {
-      var p = POOL_DATA[name];
-      var sigPct = p.blocks > 0 ? (p.signaling / p.blocks * 100) : 0;
-      var color = sigPct > 50 ? '#3FB950' : sigPct > 0 ? '#F0883E' : '#555';
-      poolHtml += '<div style="display:flex;justify-content:space-between;padding:6px 10px;background:var(--surface);border:1px solid var(--border);border-radius:6px;">'
-        + '<span>' + name + '</span>'
-        + '<span style="color:' + color + ';font-weight:600;">' + (sigPct > 0 ? sigPct.toFixed(0) + '% signal' : 'No signal') + '</span>'
-        + '<span style="color:#555;">' + p.blocks + ' blocks</span>'
-        + '</div>';
-    });
-    poolHtml += '</div>';
-    document.getElementById('pool-section').innerHTML = poolHtml;
+  try {
+    if (POOL_DATA) {
+      var poolHtml = '<h3 style="font-size:14px;font-weight:700;margin:16px 0 8px;">⛏️ Mining Pool Signaling</h3><div style="display:grid;grid-template-columns:repeat(2,1fr);gap:6px;font-size:12px;">';
+      var poolNames = Object.keys(POOL_DATA);
+      poolNames.sort(function(a,b) { return (POOL_DATA[b].blocks || 0) - (POOL_DATA[a].blocks || 0); });
+      for (var pi = 0; pi < poolNames.length; pi++) {
+        var name = poolNames[pi];
+        var p = POOL_DATA[name];
+        var sigPct = p.blocks > 0 ? (p.signaling / p.blocks * 100) : 0;
+        var color = sigPct > 50 ? '#3FB950' : sigPct > 0 ? '#F0883E' : '#555';
+        poolHtml += '<div style="display:flex;justify-content:space-between;padding:5px 8px;background:var(--surface);border:1px solid var(--border);border-radius:4px;">'
+          + '<span>' + name + '</span>'
+          + '<span style="color:' + color + ';font-weight:600;">' + (sigPct > 0 ? sigPct.toFixed(0) + '%' : '0%') + '</span>'
+          + '<span style="color:#555;">' + p.blocks + ' blks</span>'
+          + '</div>';
+      }
+      poolHtml += '</div>';
+      document.getElementById('pool-section').innerHTML = poolHtml;
+    }
+  } catch(e) {
+    document.getElementById('pool-section').innerHTML = '<div style="color:#555;font-size:12px;">Pool data loading...</div>';
   }
 }
 
