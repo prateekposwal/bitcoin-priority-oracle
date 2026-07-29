@@ -199,6 +199,11 @@ body{background:#1A1612;color:#EADCC8;font-family:-apple-system,BlinkMacSystemFo
     <div class="dc-a" id="ex-verdict">Checking...</div>
     <div class="dc-sub" id="ex-saving">Estimating batch savings...</div>
   </div>
+  <div class="stat-row">
+    <div class="stat-card" style="border-top:3px solid #D4933A;"><div class="sc-label">Current Fee</div><div class="sc-value" id="ex-fee">--</div><div class="fc-sub">Economy sat/vB</div></div>
+    <div class="stat-card" style="border-top:3px solid #58A6FF;"><div class="sc-label">Batch Size</div><div class="sc-value" id="ex-batch">--</div><div class="fc-sub">Withdrawals per tx</div></div>
+    <div class="stat-card" style="border-top:3px solid #3BA35D;"><div class="sc-label">Savings</div><div class="sc-value" id="ex-savings">--</div><div class="fc-sub">Per 1K withdrawals</div></div>
+  </div>
   <div class="viz-section">
     <div class="viz-section-title">Batch vs Individual Withdrawal Cost</div>
     <div class="viz-section-desc">Drag the slider to compare costs. The gap between lines = your savings from batching.</div>
@@ -220,6 +225,11 @@ body{background:#1A1612;color:#EADCC8;font-family:-apple-system,BlinkMacSystemFo
     <div class="dc-a orange" id="node-cost">$924</div>
     <div class="dc-sub">Estimated annual cost to run a full node</div>
   </div>
+  <div class="stat-row">
+    <div class="stat-card" style="border-top:3px solid #D4933A;"><div class="sc-label">Hardware</div><div class="sc-value" id="node-hw">--</div><div class="fc-sub">Annual depreciation</div></div>
+    <div class="stat-card" style="border-top:3px solid #58A6FF;"><div class="sc-label">Bandwidth</div><div class="sc-value" id="node-bw">--</div><div class="fc-sub">Per year</div></div>
+    <div class="stat-card" style="border-top:3px solid #3BA35D;"><div class="sc-label">Power</div><div class="sc-value" id="node-power">--</div><div class="fc-sub">Electricity per year</div></div>
+  </div>
   <div class="viz-section">
     <div class="viz-section-title">Annual Cost Breakdown</div>
     <div class="viz-section-desc">Adjust the sliders below to match your setup. Hardware depreciates over 3 years.</div>
@@ -240,6 +250,11 @@ body{background:#1A1612;color:#EADCC8;font-family:-apple-system,BlinkMacSystemFo
     <div class="dc-q">Block reward breakdown</div>
     <div class="dc-a orange" id="miner-reward">Checking...</div>
     <div class="dc-sub">Subsidy + fees for the latest block</div>
+  </div>
+  <div class="stat-row">
+    <div class="stat-card" style="border-top:3px solid #D4933A;"><div class="sc-label">Subsidy</div><div class="sc-value" id="miner-subsidy">3.125</div><div class="fc-sub">BTC per block</div></div>
+    <div class="stat-card" style="border-top:3px solid #3BA35D;"><div class="sc-label">Fees</div><div class="sc-value" id="miner-fees">--</div><div class="fc-sub">BTC per block (avg)</div></div>
+    <div class="stat-card" style="border-top:3px solid #58A6FF;"><div class="sc-label">Total</div><div class="sc-value" id="miner-total">--</div><div class="fc-sub">BTC per block</div></div>
   </div>
   <div class="viz-section">
     <div class="viz-section-title">Block Reward Composition</div>
@@ -263,6 +278,11 @@ body{background:#1A1612;color:#EADCC8;font-family:-apple-system,BlinkMacSystemFo
     <button id="csv-download-btn" style="display:block;width:100%;padding:10px;background:#2A2622;border:1px solid transparent;border-radius:8px;color:#F7931A;font-size:14px;font-weight:600;cursor:pointer;transition:all 0.2s;font-family:inherit;margin-bottom:8px;text-align:center;">⬇ Download Fee History CSV</button>
     <div id="data-freshness" style="font-size:10px;color:rgba(255,255,255,0.25);text-align:center;margin-top:4px;">Data refreshes every 60s from mempool.space</div>
     <a href="https://github.com/prateekposwal/block-space-economics" style="display:block;padding:10px;background:#2A2622;border-radius:8px;color:#F7931A;text-decoration:none;text-align:center;">View on GitHub →</a>
+  </div>
+  <div class="stat-row">
+    <div class="stat-card" style="border-top:3px solid #C0392B;"><div class="sc-label">Volatility</div><div class="sc-value" id="res-volatility">--</div><div class="fc-sub">24h fee variance</div></div>
+    <div class="stat-card" style="border-top:3px solid #3BA35D;"><div class="sc-label">Avg Fee</div><div class="sc-value" id="res-avgfee">--</div><div class="fc-sub">Economy avg 24h</div></div>
+    <div class="stat-card" style="border-top:3px solid #58A6FF;"><div class="sc-label">Range</div><div class="sc-value" id="res-range">--</div><div class="fc-sub">Min - Max sat/vB</div></div>
   </div>
   <div class="viz-section">
     <div class="viz-section-title">Fee History Analysis</div>
@@ -492,6 +512,40 @@ DATA_ENGINE.onUpdate(function() {
     'Block rewards are currently ~$' + Math.round(blockTotal).toLocaleString() + ' per block (subsidy + fees). ' +
     'Fee revenue represents ' + feePct.toFixed(1) + '% of total rewards. Next halving at block 1,050,000 (~2028).';
 
+
+  // --- Exchange Stat Cards ---
+  document.getElementById('ex-fee').textContent = e + ' sat';
+  document.getElementById('ex-batch').textContent = '1000';
+  document.getElementById('ex-savings').textContent = '$' + batchSave.toFixed(0);
+
+  // --- Node Stat Cards ---
+  var hwCost = Math.round(Math.min(2000, Math.max(200, btcPrice * 0.025)));
+  var bwCost = 50;
+  var powerCost = 150;
+  document.getElementById('node-hw').textContent = '$' + Math.round(hwCost / 3);
+  document.getElementById('node-bw').textContent = '$' + (bwCost * 12);
+  document.getElementById('node-power').textContent = '$' + Math.round((powerCost * 24 * 365 / 1000) * 0.12);
+
+  // --- Miner Stat Cards ---
+  document.getElementById('miner-subsidy').textContent = '3.125 BTC';
+  document.getElementById('miner-fees').textContent = feeBtc.toFixed(4) + ' BTC';
+  document.getElementById('miner-total').textContent = (3.125 + feeBtc).toFixed(4) + ' BTC';
+
+  // --- Research Stat Cards ---
+  var feeArr = [];
+  for (var ri = 0; ri < fh.length; ri++) { var rv = (fh[ri].avgFees || 0) / 2500000; if (rv > 0) feeArr.push(rv); }
+  if (feeArr.length > 2) {
+    var fSum = 0, fMin = Infinity, fMax = -Infinity;
+    for (var ri = 0; ri < feeArr.length; ri++) { fSum += feeArr[ri]; if (feeArr[ri] < fMin) fMin = feeArr[ri]; if (feeArr[ri] > fMax) fMax = feeArr[ri]; }
+    var fAvg = fSum / feeArr.length;
+    var variance = 0;
+    for (var ri = 0; ri < feeArr.length; ri++) { variance += (feeArr[ri] - fAvg) * (feeArr[ri] - fAvg); }
+    var stdDev = Math.sqrt(variance / feeArr.length);
+    var volPct = fAvg > 0 ? Math.round(stdDev / fAvg * 100) : 0;
+    document.getElementById('res-volatility').textContent = volPct + '%';
+    document.getElementById('res-avgfee').textContent = fAvg.toFixed(1) + ' sat';
+    document.getElementById('res-range').textContent = fMin.toFixed(0) + ' - ' + fMax.toFixed(0);
+  }
 
   // --- Streaming Metrics Ticker ---
   var mpCount = d.mempool ? (d.mempool.count || 0).toLocaleString() : '--';
