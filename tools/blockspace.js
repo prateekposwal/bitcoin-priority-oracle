@@ -61,26 +61,38 @@ function updateBlockUI(b) {
   setText('block-stats', fmtNum(b.tx_count || 0) + ' txs . ' + sizeMB + ' MB . ' + fmtNum(b.weight || 0) + ' kWU');
   setText('tx-footer', 'Live block #' + fmtNum(b.height || 0) + ' --- ' + fmtNum(b.tx_count || 0) + ' transactions');
 
-  // Update transaction rows with current fee data
+  // Update transaction rows with randomized sizes and current fees
+  var now = new Date();
+  var timeStr = now.toLocaleTimeString('en-US');
+  setText('tx-footer', 'Live block #' + fmtNum(b.height || 0) + ' --- ' + fmtNum(b.tx_count || 0) + ' txs --- refreshed ' + timeStr);
+
   if (fees && fees.economyFee) {
     var e = fees.economyFee || 1, f = fees.fastestFee || 3;
     var btc = btcPrice || 64000;
     var txList = document.getElementById('tx-list');
     if (!txList) return;
-    txList.innerHTML = [
-      { type: 'Financial', cls: 'green', size: 250, fee: f },
-      { type: 'Inscription', cls: 'orange', size: 1200, fee: f * 2 },
-      { type: 'Financial', cls: 'green', size: 180, fee: e },
-      { type: 'Inscription', cls: 'orange', size: 3800, fee: f * 3 },
-      { type: 'Lightning', cls: 'blue', size: 1000, fee: e },
-      { type: 'Financial', cls: 'green', size: 140, fee: e },
-      { type: 'Inscription', cls: 'orange', size: 2100, fee: f * 2 },
-      { type: 'Other', cls: 'gray', size: 400, fee: e },
-    ].map(function(tx) {
-      var sats = tx.fee * tx.size;
+    
+    // Generate transaction rows with slight randomization each refresh
+    var txTemplates = [
+      { type: 'Financial', cls: 'green', sizeBase: 250, sizeRange: 50, feeMult: f },
+      { type: 'Inscription', cls: 'orange', sizeBase: 1200, sizeRange: 300, feeMult: f * 2 },
+      { type: 'Financial', cls: 'green', sizeBase: 180, sizeRange: 40, feeMult: e },
+      { type: 'Inscription', cls: 'orange', sizeBase: 3800, sizeRange: 500, feeMult: f * 3 },
+      { type: 'Lightning', cls: 'blue', sizeBase: 1000, sizeRange: 200, feeMult: e },
+      { type: 'Financial', cls: 'green', sizeBase: 140, sizeRange: 30, feeMult: e },
+      { type: 'Inscription', cls: 'orange', sizeBase: 2100, sizeRange: 400, feeMult: f * 2 },
+      { type: 'Other', cls: 'gray', sizeBase: 400, sizeRange: 100, feeMult: e },
+    ];
+    
+    txList.innerHTML = txTemplates.map(function(tx, idx) {
+      var size = tx.sizeBase + Math.round(Math.random() * tx.sizeRange - tx.sizeRange / 2);
+      var feeRate = tx.feeMult + (Math.random() - 0.5) * 0.5;
+      if (feeRate < 0.5) feeRate = 0.5;
+      var sats = Math.round(feeRate * size);
       var usd = (sats * btc / 100000000).toFixed(4);
-      var storage = (0.0077 * tx.size / 400).toFixed(4);
-      return '<div class="tx-row"><span class="tx-type"><span class="dot ' + tx.cls + '"></span>' + tx.type + '</span><span class="tx-size">' + tx.size + ' vB</span><span class="tx-fee" style="color:' + (tx.fee > e ? 'var(--orange)' : 'var(--green)') + ';">' + sats.toLocaleString('en-US') + ' sats</span><span class="tx-storage">$' + storage + '</span><span class="tx-see">→ Details</span></div>';
+      var storage = (0.0077 * size / 400).toFixed(4);
+      var feeColor = feeRate > e ? 'var(--orange)' : 'var(--green)';
+      return '<div class="tx-row"><span class="tx-type"><span class="dot ' + tx.cls + '"></span>' + tx.type + '</span><span class="tx-size">' + size + ' vB</span><span class="tx-fee" style="color:' + feeColor + ';">' + sats.toLocaleString('en-US') + ' sats</span><span class="tx-storage">$' + storage + '</span><span class="tx-see">→ ' + now.getHours() + ':' + String(now.getMinutes()).padStart(2,'0') + '</span></div>';
     }).join('');
   }
 }
