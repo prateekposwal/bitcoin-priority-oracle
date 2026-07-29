@@ -1,13 +1,14 @@
-// Block Reward Composition — Miner Persona
-// Interactive donut chart showing subsidy vs fees, with 24h fee revenue trend
-
 var VIZ_Miner = (function() {
   var canvas, ctx, w = 0, h = 0;
-  var rotation = 0;
-  var targetFee = 0;
-  var smoothFee = 0;
+  var blocks = [];
   var feeHistory = [];
   var btcPrice = 64000;
+  var poolSats = 0;
+  var poolDisplay = 0;
+  var blockIndex = 0;
+  var pulse = 0;
+  var spawnTimer = 0;
+  var sparklineData = [];
 
   function init(canvasId) {
     canvas = document.getElementById(canvasId);
@@ -18,18 +19,35 @@ var VIZ_Miner = (function() {
 
     if (typeof DATA_ENGINE !== 'undefined') {
       var de = DATA_ENGINE;
+      var d = de.get();
+      if (d.fee_history && d.fee_history.length > 0) {
+        feeHistory = d.fee_history;
+        sparklineData = d.fee_history.slice(-144).map(function(b) { return b.avgFees || 0; });
+      }
+      if (d.btc_price) btcPrice = d.btc_price;
+
       de.onUpdate(function() {
         var d = de.get();
-        var history = d.fee_history || [];
-        btcPrice = d.btc_price || 64000;
-        var slice = history.slice(-10);
-        var sum = 0;
-        for (var i = 0; i < slice.length; i++) {
-          sum += slice[i].avgFees || 0;
+        if (d.fee_history && d.fee_history.length > 0) {
+          if (d.fee_history.length !== feeHistory.length) {
+            feeHistory = d.fee_history;
+            sparklineData = d.fee_history.slice(-144).map(function(b) { return b.avgFees || 0; });
+            blockIndex = 0;
+          }
         }
-        targetFee = slice.length > 0 ? sum / slice.length : 0;
-        feeHistory = history;
+        if (d.btc_price) btcPrice = d.btc_price;
       });
+    }
+
+    if (feeHistory.length === 0) {
+      var now = Date.now();
+      for (var i = 143; i >= 0; i--) {
+        feeHistory.push({
+          timestamp: now - i * 600000,
+          avgFees: (5 + Math.sin(i * 0.3) * 3 + Math.random() * 4) * 1000000
+        });
+      }
+      sparklineData = feeHistory.slice(-144).map(function(b) { return b.avgFees || 0; });
     }
 
     loop();
@@ -40,7 +58,8 @@ var VIZ_Miner = (function() {
     var pw = parent ? parent.clientWidth : window.innerWidth;
     var dpr = window.devicePixelRatio || 1;
     w = Math.min(pw, 1200);
-    h = w < 500 ? 600 : 500;
+    h = 500;
+    if (w < 480) h = 400;
     canvas.width = w * dpr;
     canvas.height = h * dpr;
     canvas.style.width = w + 'px';
@@ -49,240 +68,289 @@ var VIZ_Miner = (function() {
     ctx.scale(dpr, dpr);
   }
 
+  function getSatsColor(sats) {
+    var p = Math.min(1, Math.max(0, (sats || 0) / 50000000));
+    var r = Math.round(63 + p * 185);
+    var g = Math.round(185 - p * 104);
+    var b = Math.round(80 - p * 7);
+    return { r: r, g: g, b: b };
+  }
+
   function loop() {
     var t = Date.now() / 1000;
-    rotation = (rotation + 0.0015) % (Math.PI * 2);
-    smoothFee += (targetFee - smoothFee) * 0.05;
-    if (Math.abs(smoothFee - targetFee) < 1) smoothFee = targetFee;
+    var leftW = w < 768 ? w : Math.round(w * 0.6);
+    var rightW = w - leftW;
+
+    if (feeHistory.length > 0) {
+      spawnTimer++;
+      var spawnRate = Math.max(3, 8 - feeHistory.length * 0.02);
+      if (spawnTimer >= spawnRate) {
+        spawnTimer = 0;
+        var entry = feeHistory[blockIndex % feeHistory.length];
+        var fee = entry.avgFees || 5000000;
+        blocks.push({
+          x: -24,
+          y: h * 0.14 + Math.random() * (h * 0.45),
+          fee: fee,
+          w: 20,
+          h: 24 + Math.random() * 14,
+          speed: 1.2 + Math.random() * 0.8
+        });
+        blockIndex = (blockIndex + 1) % feeHistory.length;
+      }
+    }
+
+    var poolX = leftW - 55;
+    for (var i = blocks.length - 1; i >= 0; i--) {
+      var b = blocks[i];
+      b.x += b.speed;
+      if (b.x > poolX) {
+        poolSats += b.fee;
+        blocks.splice(i, 1);
+        pulse = 1;
+      }
+    }
+
+    if (blocks.length > 30) {
+      blocks = blocks.slice(-20);
+    }
+
+    poolDisplay += (poolSats - poolDisplay) * 0.015;
+    if (Math.abs(poolDisplay - poolSats) < 1) poolDisplay = poolSats;
+
+    pulse *= 0.92;
+    if (pulse < 0.01) pulse = 0;
 
     ctx.clearRect(0, 0, w, h);
     ctx.fillStyle = '#1A1612';
     ctx.fillRect(0, 0, w, h);
 
-    if (w < 500) {
-      drawDonut(w, h * 0.5, t);
-      drawTrend(0, w, h * 0.5, t);
-    } else {
-      drawDonut(w * 0.6, h, t);
-      drawTrend(w * 0.6, w * 0.4, h, t);
-    }
-    drawTitle(w);
+    drawStream(leftW, h, t);
+    if (rightW > 100) drawStats(leftW, rightW, h, t);
 
-    // Subtle vignette
-    var grad = ctx.createRadialGradient(w / 2, h / 2, h * 0.1, w / 2, h / 2, h * 0.8);
+    var grad = ctx.createRadialGradient(w / 2, h / 2, h * 0.1, w / 2, h / 2, h * 0.7);
     grad.addColorStop(0, 'rgba(0,0,0,0)');
-    grad.addColorStop(1, 'rgba(0,0,0,0.3)');
+    grad.addColorStop(1, 'rgba(0,0,0,0.25)');
     ctx.fillStyle = grad;
     ctx.fillRect(0, 0, w, h);
 
     requestAnimationFrame(loop);
   }
 
-  function drawDonut(areaW, areaH, t) {
-    var cx = areaW / 2;
-    var cy = areaH / 2 + 6;
-    var pulse = 1 + Math.sin(t * 1.2) * 0.015;
-    var outerR = Math.min(areaW, areaH) * 0.32 * pulse;
-    var innerR = outerR * 0.58;
+  function drawStream(areaW, areaH, t) {
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'top';
+    ctx.font = 'bold 12px -apple-system, sans-serif';
+    ctx.fillStyle = 'rgba(255,255,255,0.4)';
+    ctx.fillText('Block Reward Stream', areaW / 2, 8);
 
-    var subsidySats = 312500000;
-    var feeSats = Math.max(0, smoothFee);
-    var totalSats = subsidySats + feeSats;
-
-    var subAngle = totalSats > 0 ? (subsidySats / totalSats) * Math.PI * 2 : Math.PI * 2;
-    var feeAngle = totalSats > 0 ? (feeSats / totalSats) * Math.PI * 2 : 0;
-
-    if (feeAngle < 0.02) feeAngle = 0;
-    if (subAngle < 0.02) subAngle = 0;
-
-    var r = rotation;
-
-    // Subsidy arc (orange)
+    var poolLineX = areaW - 55;
+    ctx.setLineDash([5, 5]);
+    ctx.strokeStyle = 'rgba(247,147,26,0.2)';
+    ctx.lineWidth = 1.5;
     ctx.beginPath();
-    ctx.arc(cx, cy, outerR, r, r + subAngle);
-    ctx.arc(cx, cy, innerR, r + subAngle, r, true);
-    ctx.closePath();
-    ctx.fillStyle = '#F7931A';
-    ctx.fill();
+    ctx.moveTo(poolLineX, areaH * 0.08);
+    ctx.lineTo(poolLineX, areaH * 0.72);
+    ctx.stroke();
+    ctx.setLineDash([]);
 
-    // Subsidy glow
-    ctx.shadowColor = 'rgba(247,147,26,0.15)';
-    ctx.shadowBlur = 25;
-    ctx.beginPath();
-    ctx.arc(cx, cy, outerR, r, r + subAngle);
-    ctx.arc(cx, cy, innerR, r + subAngle, r, true);
-    ctx.closePath();
-    ctx.fill();
-    ctx.shadowBlur = 0;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'bottom';
+    ctx.font = '8px -apple-system, sans-serif';
+    ctx.fillStyle = 'rgba(247,147,26,0.2)';
+    ctx.fillText('pool entrance', poolLineX, areaH * 0.08 - 2);
 
-    // Fee arc (green)
-    if (feeAngle > 0) {
-      ctx.beginPath();
-      ctx.arc(cx, cy, outerR, r + subAngle, r + subAngle + feeAngle);
-      ctx.arc(cx, cy, innerR, r + subAngle + feeAngle, r + subAngle, true);
-      ctx.closePath();
-      ctx.fillStyle = '#3FB950';
+    for (var i = 0; i < blocks.length; i++) {
+      var b = blocks[i];
+      var c = getSatsColor(b.fee);
+      var alpha = Math.min(1, Math.max(0.15, (b.x + 24) / 100));
+      var cx = 'rgba(' + c.r + ',' + c.g + ',' + c.b + ',' + alpha + ')';
+
+      ctx.shadowColor = 'rgba(' + c.r + ',' + c.g + ',' + c.b + ',0.12)';
+      ctx.shadowBlur = 6;
+      ctx.fillStyle = cx;
+      VIZ.roundRect(ctx, b.x, b.y, b.w, b.h, 3);
+      ctx.fill();
+
+      ctx.shadowBlur = 0;
+      ctx.fillStyle = 'rgba(255,255,255,0.06)';
+      VIZ.roundRect(ctx, b.x, b.y, b.w, 3, 2);
       ctx.fill();
     }
 
-    // Center text — total reward in USD
-    var totalBtc = 3.125 + feeSats / 100000000;
-    var totalUsd = totalBtc * btcPrice;
+    ctx.shadowBlur = 0;
+
+    var poolCX = areaW - 30;
+    var poolCY = areaH * 0.4;
+    var feeBTC = poolDisplay / 100000000;
+    var poolR = Math.min(52, 26 + feeBTC * 80);
+    var pulseR = poolR * (1 + pulse * 0.07);
+
+    var glow = ctx.createRadialGradient(poolCX, poolCY, 0, poolCX, poolCY, pulseR * 1.6);
+    glow.addColorStop(0, 'rgba(247,147,26,0.5)');
+    glow.addColorStop(0.4, 'rgba(247,147,26,0.12)');
+    glow.addColorStop(1, 'rgba(247,147,26,0)');
+    ctx.beginPath();
+    ctx.arc(poolCX, poolCY, pulseR * 1.6, 0, Math.PI * 2);
+    ctx.fillStyle = glow;
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.arc(poolCX, poolCY, pulseR, 0, Math.PI * 2);
+    ctx.fillStyle = '#F7931A';
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.arc(poolCX, poolCY, pulseR * 0.65, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(255,255,255,0.07)';
+    ctx.fill();
+
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.font = 'bold 24px -apple-system, sans-serif';
+    ctx.font = 'bold 16px -apple-system, sans-serif';
     ctx.fillStyle = '#E8E5E0';
-    ctx.fillText('$' + fmtUSD(totalUsd), cx, cy - 14);
-    ctx.font = '12px -apple-system, sans-serif';
+    ctx.fillText(feeBTC.toFixed(4), poolCX, poolCY - 6);
+    ctx.font = '8px -apple-system, sans-serif';
     ctx.fillStyle = 'rgba(255,255,255,0.35)';
-    ctx.fillText(totalBtc.toFixed(4) + ' BTC', cx, cy + 14);
+    ctx.fillText('BTC fees', poolCX, poolCY + 16);
 
-    // Percentage labels on arcs
-    if (totalSats > 0) {
-      var lr = (outerR + innerR) / 2;
-      ctx.font = 'bold 12px -apple-system, sans-serif';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-
-      if (subAngle > 0.3) {
-        var ma = r + subAngle / 2;
-        ctx.fillStyle = 'rgba(255,255,255,0.9)';
-        ctx.fillText((subsidySats / totalSats * 100).toFixed(1) + '%', cx + Math.cos(ma) * lr, cy + Math.sin(ma) * lr);
-      }
-
-      if (feeAngle > 0.3) {
-        var ma = r + subAngle + feeAngle / 2;
-        ctx.fillStyle = 'rgba(255,255,255,0.9)';
-        ctx.fillText((feeSats / totalSats * 100).toFixed(1) + '%', cx + Math.cos(ma) * lr, cy + Math.sin(ma) * lr);
-      }
-    }
-
-    // Legend
-    var legX = cx - 75;
-    var legY = cy + outerR + 24;
-    ctx.textAlign = 'left';
-    ctx.textBaseline = 'middle';
-    ctx.font = '11px -apple-system, sans-serif';
-
-    ctx.fillStyle = '#F7931A';
-    ctx.fillRect(legX, legY - 5, 10, 10);
-    ctx.fillStyle = 'rgba(255,255,255,0.6)';
-    ctx.fillText('Subsidy: 3.125 BTC', legX + 16, legY + 1);
-
-    ctx.fillStyle = '#3FB950';
-    ctx.fillRect(legX, legY + 18, 10, 10);
-    ctx.fillStyle = 'rgba(255,255,255,0.6)';
-    ctx.fillText('Fees: ' + (feeSats / 100000000).toFixed(4) + ' BTC', legX + 16, legY + 24);
+    ctx.textBaseline = 'top';
+    ctx.font = '10px -apple-system, sans-serif';
+    ctx.fillStyle = 'rgba(255,255,255,0.25)';
+    ctx.fillText('Fee Pool', poolCX, poolCY + pulseR + 8);
   }
 
-  function drawTrend(leftW, trendW, areaH, t) {
-    var margin = { top: 36, right: 16, bottom: 24, left: 50 };
-    var plotW = trendW - margin.left - margin.right;
-    var plotH = areaH - margin.top - margin.bottom;
+  function drawStats(leftX, areaW, areaH, t) {
+    var cardW = areaW - 24;
+    var cardX = leftX + 12;
+    var cardGap = 6;
+    var cardH = (areaH - 28 - cardGap * 2) / 3;
+    var totalBTC = 3.125 + poolDisplay / 100000000;
+    var totalUSD = totalBTC * btcPrice;
 
-    if (plotW < 10 || plotH < 10) return;
+    var y1 = 14;
+    ctx.fillStyle = 'rgba(255,255,255,0.04)';
+    VIZ.roundRect(ctx, cardX, y1, cardW, cardH, 8);
+    ctx.fill();
 
-    var ox = leftW + margin.left;
-    var oy = margin.top;
-
-    // Trend title
     ctx.textAlign = 'left';
     ctx.textBaseline = 'top';
+    ctx.font = '10px -apple-system, sans-serif';
+    ctx.fillStyle = 'rgba(255,255,255,0.35)';
+    ctx.fillText('Block Reward', cardX + 14, y1 + 10);
+
+    ctx.font = 'bold 26px -apple-system, sans-serif';
+    ctx.fillStyle = '#E8E5E0';
+    ctx.fillText(fmtUSD(totalUSD), cardX + 14, y1 + 26);
+
     ctx.font = '11px -apple-system, sans-serif';
-    ctx.fillStyle = 'rgba(255,255,255,0.4)';
-    ctx.fillText('Fee Revenue (sats) — Last 144 Blocks', leftW + 8, 10);
-
-    var data = feeHistory.slice(-144);
-    if (data.length < 2) return;
-
-    var minVal = Infinity, maxVal = -Infinity;
-    for (var i = 0; i < data.length; i++) {
-      var v = data[i].avgFees || 0;
-      if (v < minVal) minVal = v;
-      if (v > maxVal) maxVal = v;
-    }
-    if (maxVal - minVal < 1) {
-      maxVal = minVal * 1.2 + 1;
-      minVal = minVal * 0.8;
-    }
-    var range = maxVal - minVal;
-
-    // Grid lines
-    ctx.strokeStyle = 'rgba(255,255,255,0.06)';
-    ctx.lineWidth = 1;
-    for (var g = 0; g <= 4; g++) {
-      var gy = oy + (plotH / 4) * g;
-      ctx.beginPath();
-      ctx.moveTo(ox, gy);
-      ctx.lineTo(ox + plotW, gy);
-      ctx.stroke();
-    }
-
-    // Y-axis labels
-    ctx.textAlign = 'right';
-    ctx.textBaseline = 'middle';
-    ctx.font = '9px -apple-system, sans-serif';
     ctx.fillStyle = 'rgba(255,255,255,0.3)';
-    for (var g = 0; g <= 4; g++) {
-      var val = maxVal - (g / 4) * range;
-      ctx.fillText(fmtSats(val), ox - 4, oy + (plotH / 4) * g);
-    }
+    ctx.fillText(totalBTC.toFixed(4) + ' BTC', cardX + 14, y1 + 58);
 
-    // Area fill under line
-    ctx.beginPath();
-    for (var i = 0; i < data.length; i++) {
-      var x = ox + (i / (data.length - 1)) * plotW;
-      var v = data[i].avgFees || 0;
-      var y = oy + plotH - ((v - minVal) / range) * plotH;
-      if (i === 0) ctx.moveTo(x, y);
-      else ctx.lineTo(x, y);
-    }
-    ctx.lineTo(ox + plotW, oy + plotH);
-    ctx.lineTo(ox, oy + plotH);
-    ctx.closePath();
-    ctx.fillStyle = 'rgba(247,147,26,0.08)';
+    var y2 = y1 + cardH + cardGap;
+    ctx.fillStyle = 'rgba(255,255,255,0.04)';
+    VIZ.roundRect(ctx, cardX, y2, cardW, cardH, 8);
     ctx.fill();
 
-    // Trend line
-    ctx.beginPath();
-    ctx.strokeStyle = '#F7931A';
-    ctx.lineWidth = 2;
-    ctx.lineJoin = 'round';
-    for (var i = 0; i < data.length; i++) {
-      var x = ox + (i / (data.length - 1)) * plotW;
-      var v = data[i].avgFees || 0;
-      var y = oy + plotH - ((v - minVal) / range) * plotH;
-      if (i === 0) ctx.moveTo(x, y);
-      else ctx.lineTo(x, y);
-    }
-    ctx.stroke();
-
-    // Latest value dot and label
-    var last = data[data.length - 1].avgFees || 0;
-    var lx = ox + plotW;
-    var ly = oy + plotH - ((last - minVal) / range) * plotH;
-    ctx.beginPath();
-    ctx.arc(lx, ly, 4, 0, Math.PI * 2);
-    ctx.fillStyle = '#F7931A';
-    ctx.fill();
-    ctx.beginPath();
-    ctx.arc(lx, ly, 6, 0, Math.PI * 2);
-    ctx.strokeStyle = 'rgba(247,147,26,0.3)';
-    ctx.lineWidth = 2;
-    ctx.stroke();
     ctx.textAlign = 'left';
-    ctx.textBaseline = 'bottom';
-    ctx.font = 'bold 10px -apple-system, sans-serif';
-    ctx.fillStyle = '#F7931A';
-    ctx.fillText(fmtSats(last), lx + 8, ly);
-  }
-
-  function drawTitle(totalW) {
-    ctx.textAlign = 'center';
     ctx.textBaseline = 'top';
-    ctx.font = '13px -apple-system, sans-serif';
-    ctx.fillStyle = 'rgba(255,255,255,0.5)';
-    ctx.fillText('Block Reward Composition', totalW / 2, 10);
+    ctx.font = '10px -apple-system, sans-serif';
+    ctx.fillStyle = 'rgba(255,255,255,0.35)';
+    ctx.fillText('Subsidy vs Fees', cardX + 14, y2 + 10);
+
+    var barW = cardW - 28;
+    var barH = 18;
+    var barY = y2 + cardH * 0.48;
+    var subSats = 3.125 * 100000000;
+    var totalSats = subSats + poolDisplay;
+    var subRatio = totalSats > 0 ? subSats / totalSats : 1;
+    var feeRatio = totalSats > 0 ? poolDisplay / totalSats : 0;
+
+    if (totalSats > 0) {
+      ctx.fillStyle = '#F7931A';
+      VIZ.roundRect(ctx, cardX + 14, barY, barW * subRatio, barH, 3);
+      ctx.fill();
+
+      if (feeRatio > 0.01) {
+        ctx.fillStyle = '#3FB950';
+        VIZ.roundRect(ctx, cardX + 14 + barW * subRatio, barY, barW * feeRatio, barH, 3);
+        ctx.fill();
+      }
+
+      ctx.textBaseline = 'top';
+      ctx.font = '9px -apple-system, sans-serif';
+      ctx.fillStyle = 'rgba(255,255,255,0.45)';
+      ctx.textAlign = 'left';
+      ctx.fillText('S: ' + (subRatio * 100).toFixed(1) + '%', cardX + 14, barY + barH + 4);
+      ctx.textAlign = 'right';
+      ctx.fillText('F: ' + (feeRatio * 100).toFixed(1) + '%', cardX + 14 + barW, barY + barH + 4);
+    }
+
+    var y3 = y2 + cardH + cardGap;
+    ctx.fillStyle = 'rgba(255,255,255,0.04)';
+    VIZ.roundRect(ctx, cardX, y3, cardW, cardH, 8);
+    ctx.fill();
+
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'top';
+    ctx.font = '10px -apple-system, sans-serif';
+    ctx.fillStyle = 'rgba(255,255,255,0.35)';
+    ctx.fillText('24h Fee Trend', cardX + 14, y3 + 10);
+
+    if (sparklineData.length > 1) {
+      var sx = cardX + 14;
+      var sy = y3 + cardH * 0.38;
+      var sw = cardW - 28;
+      var sh = cardH * 0.48;
+
+      var minV = Infinity, maxV = -Infinity;
+      for (var i = 0; i < sparklineData.length; i++) {
+        var v = sparklineData[i];
+        if (v < minV) minV = v;
+        if (v > maxV) maxV = v;
+      }
+      if (maxV - minV < 1) { maxV = minV * 1.2 + 1; minV = minV * 0.8; }
+      var rangeV = maxV - minV;
+
+      ctx.beginPath();
+      for (var i = 0; i < sparklineData.length; i++) {
+        var x = sx + (i / (sparklineData.length - 1)) * sw;
+        var y = sy + sh - ((sparklineData[i] - minV) / rangeV) * sh;
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.lineTo(sx + sw, sy + sh);
+      ctx.lineTo(sx, sy + sh);
+      ctx.closePath();
+      ctx.fillStyle = 'rgba(247,147,26,0.07)';
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.strokeStyle = '#F7931A';
+      ctx.lineWidth = 1.5;
+      ctx.lineJoin = 'round';
+      for (var i = 0; i < sparklineData.length; i++) {
+        var x = sx + (i / (sparklineData.length - 1)) * sw;
+        var y = sy + sh - ((sparklineData[i] - minV) / rangeV) * sh;
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+
+      var lastV = sparklineData[sparklineData.length - 1];
+      var lx = sx + sw;
+      var ly = sy + sh - ((lastV - minV) / rangeV) * sh;
+      ctx.beginPath();
+      ctx.arc(lx, ly, 3, 0, Math.PI * 2);
+      ctx.fillStyle = '#F7931A';
+      ctx.fill();
+
+      ctx.textAlign = 'right';
+      ctx.textBaseline = 'bottom';
+      ctx.font = 'bold 9px -apple-system, sans-serif';
+      ctx.fillStyle = '#F7931A';
+      ctx.fillText(fmtSats(lastV), lx - 2, ly - 3);
+    }
   }
 
   function fmtUSD(val) {

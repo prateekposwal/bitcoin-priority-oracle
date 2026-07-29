@@ -33,18 +33,18 @@ var VIZ_Fees = (function() {
     
     DATA_ENGINE.start();
     
-    // Spawn particles continuously
     setInterval(function() {
       var count = w < 480 ? 1 : w < 768 ? 2 : 3;
       var maxBarArea = h - bottomMargin;
+      var speedMultiplier = 1 + (displayFee / 50) * 1.5;
       for (var i = 0; i < count; i++) {
         var fee = Math.random() * 30 + 1;
         var p = Math.min(1, fee / 50);
         particles.push({
           x: Math.random() * (w || 800),
           y: maxBarArea + (Math.random() * 40),
-          vx: (Math.random() - 0.5) * 0.3,
-          vy: -(Math.random() * 0.5 + 0.2),
+          vx: (Math.random() - 0.5) * 0.3 * speedMultiplier,
+          vy: -(Math.random() * 0.5 + 0.2) * speedMultiplier,
           r: Math.round(p * 248 + (1-p) * 63),
           g: Math.round((1-p) * 185 + p * 81),
           b: Math.round((1-p) * 80 + p * 73),
@@ -97,7 +97,8 @@ var VIZ_Fees = (function() {
     var ar = Math.round(pct * 248 + (1-pct) * 63);
     var ag = Math.round((1-pct) * 185 + pct * 81);
     var ab = Math.round((1-pct) * 80 + pct * 73);
-    var aglow = Math.sin(t * 0.5) * 0.02 + 0.04;
+    var pulseSpeed = displayFee > 20 ? 2.0 : displayFee > 10 ? 1.0 : 0.5;
+    var aglow = Math.sin(t * pulseSpeed) * 0.03 + 0.05;
     ctx.fillStyle = 'rgba(' + ar + ',' + ag + ',' + ab + ',' + aglow + ')';
     ctx.fillRect(0, 0, w, h);
 
@@ -113,7 +114,7 @@ var VIZ_Fees = (function() {
       var r = Math.round(p * 248 + (1-p) * 63);
       var g = Math.round((1-p) * 185 + p * 81);
       var bl = Math.round((1-p) * 80 + p * 73);
-      var glow = Math.min(0.25, 0.05 + 0.2 * Math.exp(-b.age / 20));
+      var glow = Math.min(0.35, 0.05 + 0.3 * Math.exp(-b.age / 15));
       
       ctx.fillStyle = 'rgba(' + r + ',' + g + ',' + bl + ',' + glow + ')';
       ctx.fillRect(x - 2, y - 4, bw + 4, barH + 8);
@@ -155,6 +156,21 @@ var VIZ_Fees = (function() {
     ctx.font = '18px -apple-system, sans-serif';
     ctx.fillStyle = 'rgba(255,255,255,0.4)';
     ctx.fillText('sat/vB — fastest fee', w/2, h/2 - 60 + 80);
+
+    // Narrative text
+    var f = displayFee;
+    var narrative = '';
+    if (f < 3) narrative = 'Lowest fees — best time to send';
+    else if (f < 5) narrative = 'Fees are low — good to send';
+    else if (f < 10) narrative = 'Moderate fees — economy rate OK';
+    else if (f < 20) narrative = 'Fees elevated — consider waiting';
+    else if (f < 50) narrative = 'High fees — wait if you can';
+    else narrative = 'Very high fees — not a good time to send';
+
+    ctx.font = '14px -apple-system, sans-serif';
+    var narrativeOpacity = 0.4 + Math.sin(t * 1.5) * 0.1;
+    ctx.fillStyle = 'rgba(255,255,255,' + Math.max(0.2, Math.min(0.6, narrativeOpacity)) + ')';
+    ctx.fillText(narrative, w/2, h/2 - 60 + 110);
 
     // Vignette
     var grad = ctx.createRadialGradient(w/2, h/2, h*0.2, w/2, h/2, h*0.9);

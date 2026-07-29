@@ -1,12 +1,22 @@
 var VIZ_Exchange = (function() {
   var canvas, ctx, w = 0, h = 0;
-  var padding = { top: 40, right: 20, bottom: 50, left: 70 };
-  var maxBatchSize = 100;
-  var dragX = 20;
+  var droplets = [];
+  var splashes = [];
+  var individualPool = 0;
+  var batchedPool = 0;
+  var totalSaved = 0;
+  var batchDiscount = 0.60;
   var isDragging = false;
   var economyFee = 3;
   var btcPrice = 60000;
-  var showTooltip = false;
+  var spawnTimer = 0;
+  var indivCost = 0;
+  var batchCost = 0;
+  var lastIndivCost = 0;
+  var lastBatchCost = 0;
+  var gravity = 0.08;
+  var poolY = 0;
+  var titleOpacity = 1;
 
   function init(canvasId) {
     canvas = document.getElementById(canvasId);
@@ -38,42 +48,60 @@ var VIZ_Exchange = (function() {
       });
     }
 
+    indivCost = 150 * economyFee * btcPrice / 100000000;
+    batchCost = indivCost * batchDiscount;
+
     loop();
   }
 
   function resize() {
-    var r = VIZ.responsiveSize(canvas, 450);
+    var r = VIZ.responsiveSize(canvas, 500);
     w = r.w;
     h = r.h;
     ctx = r.ctx;
+    poolY = h - 80;
   }
 
-  function costIndividual(n) {
-    return n * 150 * economyFee * btcPrice / 100000000;
+  function costIndividual() {
+    return 150 * economyFee * btcPrice / 100000000;
   }
 
-  function costBatched(n) {
-    return (80 + n * 18) * economyFee * btcPrice / 100000000;
+  function costBatched() {
+    return costIndividual() * batchDiscount;
   }
 
-  function maxCost() {
-    return costIndividual(maxBatchSize) * 1.12;
+  function spawnDroplet() {
+    var isIndividual = Math.random() < 0.4;
+    var x = w * 0.15 + Math.random() * w * 0.7;
+    return {
+      x: x,
+      y: -10 - Math.random() * 40,
+      vx: (Math.random() - 0.5) * 0.3,
+      vy: Math.random() * 0.5 + 0.3,
+      radius: 2 + Math.random() * 2,
+      isIndividual: isIndividual,
+      life: 1,
+      splashed: false,
+      targetX: isIndividual ? w * 0.25 : w * 0.75,
+      color: isIndividual ? '#F85149' : '#3FB950'
+    };
   }
 
-  function mapX(n) {
-    var plotW = w - padding.left - padding.right;
-    return padding.left + (n / maxBatchSize) * plotW;
-  }
-
-  function mapY(cost) {
-    var plotH = h - padding.top - padding.bottom;
-    return h - padding.bottom - (cost / maxCost()) * plotH;
-  }
-
-  function unmapX(px) {
-    var plotW = w - padding.left - padding.right;
-    var val = (px - padding.left) / plotW * maxBatchSize;
-    return Math.max(0, Math.min(maxBatchSize, Math.round(val)));
+  function createSplash(x, y, color, count) {
+    for (var i = 0; i < count; i++) {
+      var angle = Math.random() * Math.PI * 2;
+      var speed = Math.random() * 2 + 0.5;
+      splashes.push({
+        x: x,
+        y: y,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed - 1,
+        radius: 1 + Math.random() * 1.5,
+        color: color,
+        life: 1,
+        decay: 0.02 + Math.random() * 0.02
+      });
+    }
   }
 
   function draw() {
@@ -81,194 +109,146 @@ var VIZ_Exchange = (function() {
     ctx.fillStyle = '#1A1612';
     ctx.fillRect(0, 0, w, h);
 
-    var plotL = padding.left;
-    var plotR = w - padding.right;
-    var plotT = padding.top;
-    var plotB = h - padding.bottom;
-    var plotW = plotR - plotL;
-    var plotH = plotB - plotT;
-    var mCost = maxCost();
-
-    ctx.strokeStyle = 'rgba(255,255,255,0.05)';
-    ctx.lineWidth = 1;
-    for (var i = 0; i <= 4; i++) {
-      var y = plotT + (i / 4) * plotH;
-      ctx.beginPath();
-      ctx.moveTo(plotL, y);
-      ctx.lineTo(plotR, y);
-      ctx.stroke();
-    }
-    for (var i = 0; i <= 5; i++) {
-      var x = plotL + (i / 5) * plotW;
-      ctx.beginPath();
-      ctx.moveTo(x, plotT);
-      ctx.lineTo(x, plotB);
-      ctx.stroke();
-    }
-
-    var grad = ctx.createLinearGradient(0, plotT, 0, plotB);
-    grad.addColorStop(0, 'rgba(36, 199, 120, 0.30)');
-    grad.addColorStop(1, 'rgba(36, 199, 120, 0.02)');
-    ctx.fillStyle = grad;
-    ctx.beginPath();
-    for (var n = 0; n <= maxBatchSize; n++) {
-      var x = mapX(n);
-      var y = mapY(costBatched(n));
-      if (n === 0) ctx.moveTo(x, y);
-      else ctx.lineTo(x, y);
-    }
-    for (var n = maxBatchSize; n >= 0; n--) {
-      var x = mapX(n);
-      var y = mapY(costIndividual(n));
-      ctx.lineTo(x, y);
-    }
-    ctx.closePath();
-    ctx.fill();
-
-    ctx.beginPath();
-    ctx.strokeStyle = '#F85149';
-    ctx.lineWidth = 2;
-    for (var n = 0; n <= maxBatchSize; n++) {
-      var x = mapX(n);
-      var y = mapY(costIndividual(n));
-      if (n === 0) ctx.moveTo(x, y);
-      else ctx.lineTo(x, y);
-    }
-    ctx.stroke();
-
-    ctx.beginPath();
-    ctx.strokeStyle = '#3FB950';
-    ctx.lineWidth = 2.5;
-    for (var n = 0; n <= maxBatchSize; n++) {
-      var x = mapX(n);
-      var y = mapY(costBatched(n));
-      if (n === 0) ctx.moveTo(x, y);
-      else ctx.lineTo(x, y);
-    }
-    ctx.stroke();
-
-    var dX = Math.round(dragX);
-    var vx = mapX(dX);
-    var indY = mapY(costIndividual(dX));
-    var batY = mapY(costBatched(dX));
-
-    ctx.setLineDash([4, 4]);
-    ctx.strokeStyle = 'rgba(255,255,255,0.4)';
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.moveTo(vx, plotT);
-    ctx.lineTo(vx, plotB);
-    ctx.stroke();
-    ctx.setLineDash([]);
-
-    ctx.fillStyle = '#F85149';
-    ctx.beginPath();
-    ctx.arc(vx, indY, 4, 0, Math.PI * 2);
-    ctx.fill();
-
-    ctx.fillStyle = '#3FB950';
-    ctx.beginPath();
-    ctx.arc(vx, batY, 4, 0, Math.PI * 2);
-    ctx.fill();
-
-    if (showTooltip || isDragging) {
-      var savings = costIndividual(dX) - costBatched(dX);
-      var ttX = vx + 14;
-      var ttY = batY - 20;
-      if (ttX + 170 > w) ttX = vx - 184;
-      if (ttY < 2) ttY = 2;
-      if (ttY + 80 > h) ttY = h - 82;
-
-      ctx.fillStyle = 'rgba(18, 15, 12, 0.94)';
-      ctx.strokeStyle = 'rgba(255,255,255,0.12)';
-      ctx.lineWidth = 1;
-      roundRect(ctx, ttX, ttY, 170, 74, 6);
-      ctx.fill();
-      ctx.stroke();
-
-      ctx.fillStyle = 'rgba(255,255,255,0.85)';
-      ctx.font = 'bold 11px -apple-system, sans-serif';
-      ctx.textAlign = 'left';
-      ctx.textBaseline = 'top';
-      ctx.fillText('Batch size: ' + dX, ttX + 12, ttY + 8);
-
-      ctx.font = '10px -apple-system, sans-serif';
-      ctx.fillStyle = '#F85149';
-      ctx.fillText('Individual:  $' + costIndividual(dX).toFixed(2), ttX + 12, ttY + 26);
-      ctx.fillStyle = '#3FB950';
-      ctx.fillText('Batched:     $' + costBatched(dX).toFixed(2), ttX + 12, ttY + 40);
-      ctx.fillStyle = '#24C778';
-      ctx.font = 'bold 10px -apple-system, sans-serif';
-      ctx.fillText('Savings:     $' + savings.toFixed(2), ttX + 12, ttY + 56);
-    }
-
-    ctx.fillStyle = 'rgba(255,255,255,0.75)';
-    ctx.font = 'bold 14px -apple-system, sans-serif';
-    ctx.textAlign = 'left';
-    ctx.textBaseline = 'top';
-    ctx.fillText('Batch vs Individual Withdrawal Cost', padding.left, 10);
-
-    var legX = plotR - 175;
-    var legY = 10;
-    ctx.fillStyle = '#3FB950';
-    ctx.fillRect(legX, legY + 5, 16, 3);
-    ctx.fillStyle = 'rgba(255,255,255,0.6)';
-    ctx.font = '11px -apple-system, sans-serif';
-    ctx.textAlign = 'left';
-    ctx.textBaseline = 'top';
-    ctx.fillText('Batched', legX + 22, legY + 2);
-
-    ctx.fillStyle = '#F85149';
-    ctx.fillRect(legX, legY + 22, 16, 3);
-    ctx.fillStyle = 'rgba(255,255,255,0.6)';
-    ctx.fillText('Individual', legX + 22, legY + 19);
-
-    ctx.fillStyle = 'rgba(255,255,255,0.35)';
-    ctx.font = '11px -apple-system, sans-serif';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'top';
-    ctx.fillText('Withdrawals in batch', w / 2, h - 16);
+    var t = Date.now() / 1000;
 
     ctx.save();
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'bottom';
-    ctx.translate(14, (plotT + plotB) / 2);
-    ctx.rotate(-Math.PI / 2);
-    ctx.fillText('Total cost (USD)', 0, 0);
-    ctx.restore();
-
-    ctx.textAlign = 'right';
-    ctx.textBaseline = 'middle';
-    ctx.fillStyle = 'rgba(255,255,255,0.25)';
-    ctx.font = '10px -apple-system, sans-serif';
-    for (var i = 0; i <= 4; i++) {
-      var y = plotT + (i / 4) * plotH;
-      var val = mCost - (i / 4) * mCost;
-      ctx.fillText('$' + val.toFixed(2), plotL - 6, y);
-    }
 
     ctx.textAlign = 'center';
     ctx.textBaseline = 'top';
-    ctx.fillStyle = 'rgba(255,255,255,0.25)';
-    ctx.font = '10px -apple-system, sans-serif';
-    for (var i = 0; i <= 5; i++) {
-      var x = plotL + (i / 5) * plotW;
-      ctx.fillText(Math.round((i / 5) * maxBatchSize).toString(), x, plotB + 5);
-    }
-  }
+    ctx.font = 'bold 16px -apple-system, sans-serif';
+    ctx.fillStyle = 'rgba(255,255,255,0.8)';
+    ctx.fillText('Batch vs Individual — Savings Waterfall', w / 2, 14);
 
-  function roundRect(ctx, x, y, w, h, r) {
+    indivCost = costIndividual();
+    batchCost = costBatched();
+
+    var dropCount = w < 480 ? 1 : w < 768 ? 2 : 3;
+    spawnTimer += dropCount;
+    if (spawnTimer >= 8) {
+      for (var i = 0; i < Math.floor(spawnTimer / 8); i++) {
+        droplets.push(spawnDroplet());
+      }
+      spawnTimer = spawnTimer % 8;
+    }
+
+    for (var i = droplets.length - 1; i >= 0; i--) {
+      var d = droplets[i];
+      d.vy += gravity;
+      d.x += d.vx;
+      d.y += d.vy;
+
+      if (d.y >= poolY) {
+        if (!d.splashed) {
+          d.splashed = true;
+          createSplash(d.x, poolY, d.color, 6 + Math.floor(Math.random() * 4));
+          if (d.isIndividual) {
+            individualPool += indivCost * 0.01;
+          } else {
+            batchedPool += batchCost * 0.01;
+            totalSaved += (indivCost - batchCost) * 0.01;
+          }
+        }
+        d.life -= 0.04;
+        if (d.life <= 0 || d.y > poolY + 40) {
+          droplets.splice(i, 1);
+          continue;
+        }
+      }
+
+      var alpha = d.y < 0 ? Math.max(0, 1 + d.y / 20) : 1;
+      ctx.globalAlpha = alpha * d.life;
+      ctx.fillStyle = d.color;
+      ctx.beginPath();
+      ctx.arc(d.x, d.y, d.radius, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+
+    for (var i = splashes.length - 1; i >= 0; i--) {
+      var s = splashes[i];
+      s.x += s.vx;
+      s.y += s.vy;
+      s.vy += 0.05;
+      s.life -= s.decay;
+      if (s.life <= 0) {
+        splashes.splice(i, 1);
+        continue;
+      }
+      ctx.globalAlpha = s.life;
+      ctx.fillStyle = s.color;
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.radius * s.life, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+
+    var poolBaseY = poolY + 4;
+    var poolMaxW = w * 0.28;
+
+    var indivPct = Math.min(1, individualPool / Math.max(0.01, individualPool + batchedPool) * 2);
+    var batchedPct = Math.min(1, batchedPool / Math.max(0.01, individualPool + batchedPool) * 2);
+
+    ctx.fillStyle = 'rgba(248, 81, 73, 0.3)';
     ctx.beginPath();
-    ctx.moveTo(x + r, y);
-    ctx.lineTo(x + w - r, y);
-    ctx.quadraticCurveTo(x + w, y, x + w, y + r);
-    ctx.lineTo(x + w, y + h - r);
-    ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
-    ctx.lineTo(x + r, y + h);
-    ctx.quadraticCurveTo(x, y + h, x, y + h - r);
-    ctx.lineTo(x, y + r);
-    ctx.quadraticCurveTo(x, y, x + r, y);
-    ctx.closePath();
+    ctx.ellipse(w * 0.25, poolBaseY, 4 + indivPct * poolMaxW * 0.5, 8 + indivPct * 30, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.fillStyle = 'rgba(63, 185, 80, 0.3)';
+    ctx.beginPath();
+    ctx.ellipse(w * 0.75, poolBaseY, 4 + batchedPct * poolMaxW * 0.5, 8 + batchedPct * 30, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.font = '12px -apple-system, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'top';
+
+    ctx.fillStyle = '#F85149';
+    ctx.fillText('Individual ($' + individualPool.toFixed(2) + ')', w * 0.25, poolBaseY + 14);
+
+    ctx.fillStyle = '#3FB950';
+    ctx.fillText('Batched ($' + batchedPool.toFixed(2) + ')', w * 0.75, poolBaseY + 14);
+
+    ctx.font = 'bold 14px -apple-system, sans-serif';
+    ctx.fillStyle = '#24C778';
+    ctx.fillText('Total saved: $' + totalSaved.toFixed(2), w / 2, poolBaseY + 32);
+
+    var savingsBarW = Math.min(300, w * 0.5);
+    var savingsBarX = (w - savingsBarW) / 2;
+    var savingsBarY = poolBaseY + 52;
+    var savingsPct = Math.min(1, totalSaved / Math.max(0.01, totalSaved + individualPool + batchedPool) * 3);
+
+    ctx.fillStyle = 'rgba(255,255,255,0.1)';
+    VIZ.roundRect(ctx, savingsBarX, savingsBarY, savingsBarW, 10, 5);
+    ctx.fill();
+
+    ctx.fillStyle = '#3FB950';
+    VIZ.roundRect(ctx, savingsBarX, savingsBarY, savingsBarW * savingsPct, 10, 5);
+    ctx.fill();
+
+    ctx.font = '11px -apple-system, sans-serif';
+    ctx.fillStyle = 'rgba(255,255,255,0.35)';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'top';
+    ctx.fillText('Savings efficiency', w / 2, savingsBarY + 14);
+
+    var discountLabel = 'Batch efficiency: ' + Math.round(batchDiscount * 100) + '%';
+    ctx.font = '12px -apple-system, sans-serif';
+    ctx.fillStyle = 'rgba(255,255,255,0.5)';
+    ctx.textAlign = 'right';
+    ctx.textBaseline = 'top';
+    ctx.fillText(discountLabel, w - 16, 14);
+
+    if (isDragging) {
+      var dragX = 0;
+      var dragIndicatorY = 36;
+      ctx.fillStyle = 'rgba(255,255,255,0.7)';
+      ctx.font = '12px -apple-system, sans-serif';
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'top';
+      ctx.fillText('Drag to adjust batch discount: ' + Math.round(batchDiscount * 100) + '%', 16, dragIndicatorY);
+    }
+
+    ctx.restore();
   }
 
   function loop() {
@@ -282,33 +262,22 @@ var VIZ_Exchange = (function() {
   }
 
   function onMouseDown(e) {
-    var pos = getPos(e);
-    if (Math.abs(pos.x - mapX(dragX)) < 24) {
-      isDragging = true;
-      showTooltip = true;
-    }
+    isDragging = true;
   }
 
   function onMouseMove(e) {
+    if (!isDragging) return;
     var pos = getPos(e);
-    if (isDragging) dragX = unmapX(pos.x);
-    var near = Math.abs(pos.x - mapX(dragX)) < 24;
-    canvas.style.cursor = near ? 'ew-resize' : 'default';
+    var pct = pos.x / w;
+    batchDiscount = Math.max(0.1, Math.min(1.0, 0.3 + pct * 0.7));
   }
 
   function onMouseUp() { isDragging = false; }
-  function onMouseLeave() { isDragging = false; showTooltip = false; canvas.style.cursor = 'default'; }
+  function onMouseLeave() { isDragging = false; }
 
   function onTouchStart(e) {
     e.preventDefault();
-    var t = e.touches[0];
-    var rect = canvas.getBoundingClientRect();
-    var pos = { x: t.clientX - rect.left, y: t.clientY - rect.top };
-    var threshold = w < 480 ? 60 : 40;
-    if (Math.abs(pos.x - mapX(dragX)) < threshold) {
-      isDragging = true;
-      showTooltip = true;
-    }
+    isDragging = true;
   }
 
   function onTouchMove(e) {
@@ -316,10 +285,11 @@ var VIZ_Exchange = (function() {
     if (!isDragging) return;
     var t = e.touches[0];
     var rect = canvas.getBoundingClientRect();
-    dragX = unmapX(t.clientX - rect.left);
+    var pct = (t.clientX - rect.left) / w;
+    batchDiscount = Math.max(0.1, Math.min(1.0, 0.3 + pct * 0.7));
   }
 
-  function onTouchEnd() { isDragging = false; showTooltip = false; }
+  function onTouchEnd() { isDragging = false; }
 
   return { init: init, resize: resize };
 })();

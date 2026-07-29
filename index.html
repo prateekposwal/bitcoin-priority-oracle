@@ -9,7 +9,7 @@
     #viz-fees { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; }
 
     .state-bar { position: fixed; top: 16px; left: 50%; transform: translateX(-50%); z-index: 20; text-align: center; pointer-events: none; }
-    .state-bar .state-label { font-size: 12px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; }
+    .state-bar .state-label { font-size: 12px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; transition: color 1s ease; }
     .state-bar .state-desc { font-size: 13px; color: rgba(255,255,255,0.5); margin-top: 4px; }
 
     .bottom-area { position: fixed; bottom: 48px; left: 50%; transform: translateX(-50%); z-index: 20; text-align: center; }
@@ -40,6 +40,9 @@
       50% { opacity: 0.7; }
     }
 
+    #narrative-frame { position:fixed;top:62%;left:50%;transform:translateX(-50%);z-index:15;text-align:center;pointer-events:none; }
+    #narrative-text { font-size:13px;color:rgba(255,255,255,0.3);transition:opacity 1s;font-style:italic; }
+
     #metrics-ticker { position: fixed; bottom: 0; left: 0; width: 100vw; z-index: 15; overflow: hidden; white-space: nowrap; font-size: 11px; color: rgba(255,255,255,0.3); padding: 4px 0; background: #1A1612; border-top: 1px solid rgba(255,255,255,0.05); font-variant-numeric: tabular-nums; letter-spacing: 0.3px; }
     .ticker-track { display: inline-block; white-space: nowrap; padding-left: 0; animation: ticker-scroll 45s linear infinite; }
     .ticker-track span { display: inline-block; }
@@ -56,10 +59,14 @@
       .legend-toggle { bottom: 90px; right: 10px; }
       .legend-panel { bottom: 130px; right: 10px; }
       #dollar-context { font-size: 12px; top: 54%; }
+      #narrative-frame { top: 58%; }
+      #narrative-frame #narrative-text { font-size: 11px; }
     }
 
     @media (max-width: 480px) {
       #dollar-context { top: 54%; font-size: 11px; }
+      #narrative-frame { top: 56%; }
+      #narrative-frame #narrative-text { font-size: 11px; }
       .bottom-area .cta { padding: 12px 24px; font-size: 15px; }
       .legend-panel { width: 160px; font-size: 11px; }
     }
@@ -99,6 +106,7 @@
     Economy: <span id="ctx-economy">--</span> sat/vB = $<span id="ctx-dollar">--</span> per tx
   </div>
 
+  <div id="narrative-frame"><div id="narrative-text"></div></div>
   <div id="metrics-ticker"><div class="ticker-track" id="ticker-track"></div></div>
 
   <script src="tools/data-engine.js"></script>
@@ -259,6 +267,55 @@
       }
     });
     canvas.addEventListener('mouseleave', function() { tooltip.style.display = 'none'; });
+
+    var narrativeMessages = [
+      'Each bar is one Bitcoin block — mined every ~10 minutes',
+      '144 blocks = last 24 hours of Bitcoin',
+      'Green bars = low fees. Red bars = congestion.',
+      'Floating particles = transactions waiting in mempool',
+      'Fee rate determines how fast your tx confirms',
+      'The network has processed over 960,000 blocks',
+    ];
+    var narrativeIdx = 0;
+    var narrativeEl = document.getElementById('narrative-text');
+
+    function cycleNarrative() {
+      narrativeIdx = (narrativeIdx + 1) % narrativeMessages.length;
+      narrativeEl.style.opacity = '0';
+      setTimeout(function() {
+        narrativeEl.textContent = narrativeMessages[narrativeIdx];
+        narrativeEl.style.opacity = '1';
+      }, 1000);
+    }
+
+    var welcomeShown = false;
+    var welcomeTimer = setInterval(function() {
+      if (!welcomeShown && (DATA_ENGINE.get().block_height || DATA_ENGINE.get().fees.fastestFee)) {
+        welcomeShown = true;
+        narrativeEl.textContent = 'Welcome to Bitcoin Sahi — this is the Bitcoin network, right now.';
+        narrativeEl.style.opacity = '1';
+        setTimeout(function() {
+          narrativeEl.style.opacity = '0';
+          setTimeout(function() {
+            narrativeEl.textContent = narrativeMessages[0];
+            narrativeIdx = 0;
+            narrativeEl.style.opacity = '1';
+            setInterval(cycleNarrative, 8000);
+          }, 1000);
+        }, 3000);
+        clearInterval(welcomeTimer);
+      }
+    }, 500);
+    setTimeout(function() {
+      if (!welcomeShown) {
+        clearInterval(welcomeTimer);
+        welcomeShown = true;
+        narrativeEl.textContent = narrativeMessages[0];
+        narrativeIdx = 0;
+        narrativeEl.style.opacity = '1';
+        setInterval(cycleNarrative, 8000);
+      }
+    }, 15000);
   </script>
 </body>
 </html>

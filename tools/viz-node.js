@@ -1,11 +1,7 @@
-// Bitcoin Sahi — Interactive Node Cost Breakdown
-// Stacked horizontal bar chart showing annual cost of running a Bitcoin node
-
-var VIZ_Node = (function () {
-  'use strict';
-
+var VIZ_Node = (function() {
   var canvas, ctx, w = 0, h = 0;
   var animFrame = null;
+  var pulseTime = 0;
 
   var values = {
     hardware: 500,
@@ -18,10 +14,10 @@ var VIZ_Node = (function () {
   var DEPRECIATION_YEARS = 3;
 
   var COLORS = {
-    hardware:    { bg: '#D29922', text: '#1A1612' },
-    bandwidth:   { bg: '#58A6FF', text: '#1A1612' },
-    electricity: { bg: '#3FB950', text: '#1A1612' },
-    storage:     { bg: '#BC8CFF', text: '#1A1612' }
+    hardware: '#F7931A',
+    bandwidth: '#58A6FF',
+    electricity: '#3FB950',
+    storage: '#BC8CFF'
   };
 
   var SEG_ORDER = ['hardware', 'bandwidth', 'electricity', 'storage'];
@@ -32,24 +28,31 @@ var VIZ_Node = (function () {
     storage: 'Storage'
   };
 
+  var targetCosts = { hw: 0, bw: 0, elec: 0, storage: 0, total: 0 };
+  var currentCosts = { hw: 0, bw: 0, elec: 0, storage: 0, total: 0 };
+  var animating = false;
+  var animStart = 0;
+  var animDuration = 300;
+  var prevCosts = { hw: 0, bw: 0, elec: 0, storage: 0, total: 0 };
+
   function init(canvasId) {
     canvas = document.getElementById(canvasId);
     if (!canvas) return;
     ctx = canvas.getContext('2d');
 
-    try {
-      if (typeof DATA_ENGINE !== 'undefined') {
-        var btcPrice = DATA_ENGINE.get().btc_price;
-        if (btcPrice && btcPrice > 0) {
-          values.hardware = Math.round(Math.min(2000, Math.max(200, btcPrice * 0.025)));
-        }
+    if (typeof DATA_ENGINE !== 'undefined') {
+      var btcPrice = DATA_ENGINE.get().btc_price;
+      if (btcPrice && btcPrice > 0) {
+        values.hardware = Math.round(Math.min(2000, Math.max(200, btcPrice * 0.025)));
       }
-    } catch (_) {}
+    }
 
     createControls();
     resize();
     window.addEventListener('resize', resize);
-    draw();
+    computeTarget();
+    for (var k in targetCosts) currentCosts[k] = targetCosts[k];
+    loop();
   }
 
   function createControls() {
@@ -90,14 +93,14 @@ var VIZ_Node = (function () {
       valSpan.style.cssText = 'width:90px;text-align:right;color:#E6EDF3;font-size:14px;font-weight:600;font-variant-numeric:tabular-nums;flex-shrink:0;';
       valSpan.textContent = s.fmt(s.val);
 
-      slider.addEventListener('input', function () {
+      slider.addEventListener('input', function() {
         var v = parseFloat(this.value);
         var key = keyFromId(this.id);
         values[key] = v;
-        document.getElementById(this.id + '-val').textContent = sliderDefs.filter(function(d) { return d.id === this.id; }.bind(this))[0].fmt(v);
+        document.getElementById(this.id + '-val').textContent = s.fmt(v);
         var pct = ((v - this.min) / (this.max - this.min)) * 100;
         this.style.background = 'linear-gradient(to right,#58A6FF 0%,#58A6FF ' + pct + '%,#30363D ' + pct + '%,#30363D 100%)';
-        draw();
+        onSliderChange();
       });
 
       row.appendChild(label);
@@ -114,145 +117,175 @@ var VIZ_Node = (function () {
     return map[id] || 'hardware';
   }
 
-  function computeCosts() {
+  function onSliderChange() {
+    prevCosts = { hw: currentCosts.hw, bw: currentCosts.bw, elec: currentCosts.elec, storage: currentCosts.storage, total: currentCosts.total };
+    computeTarget();
+    animStart = performance.now();
+    animating = true;
+  }
+
+  function computeTarget() {
     var hw = values.hardware / DEPRECIATION_YEARS;
     var bw = values.bandwidth * 12;
     var elec = (values.power * 24 * 365 / 1000) * values.rate;
     var storage = STORAGE_FIXED;
     var total = hw + bw + elec + storage;
-    return { hw: hw, bw: bw, elec: elec, storage: storage, total: total };
+    targetCosts = { hw: hw, bw: bw, elec: elec, storage: storage, total: total };
+  }
+
+  function lerp(a, b, t) {
+    return a + (b - a) * t;
+  }
+
+  function updateAnimation() {
+    if (!animating) return;
+    var elapsed = performance.now() - animStart;
+    var t = Math.min(1, elapsed / animDuration);
+    var ease = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+    currentCosts.hw = lerp(prevCosts.hw, targetCosts.hw, ease);
+    currentCosts.bw = lerp(prevCosts.bw, targetCosts.bw, ease);
+    currentCosts.elec = lerp(prevCosts.elec, targetCosts.elec, ease);
+    currentCosts.storage = lerp(prevCosts.storage, targetCosts.storage, ease);
+    currentCosts.total = lerp(prevCosts.total, targetCosts.total, ease);
+    if (t >= 1) {
+      currentCosts = { hw: targetCosts.hw, bw: targetCosts.bw, elec: targetCosts.elec, storage: targetCosts.storage, total: targetCosts.total };
+      animating = false;
+    }
   }
 
   function draw() {
     if (!ctx) return;
+    updateAnimation();
 
-    var c = computeCosts();
+    var c = currentCosts;
+    pulseTime += 0.02;
 
-    var segs = SEG_ORDER.map(function (k) {
+    ctx.clearRect(0, 0, w, h);
+    ctx.fillStyle = '#1A1612';
+    ctx.fillRect(0, 0, w, h);
+
+    var segs = SEG_ORDER.map(function(k) {
       return {
         key: k,
         label: SEG_LABELS[k],
         cost: c[k],
         color: COLORS[k]
       };
-    }).filter(function (s) { return s.cost > 0; });
+    }).filter(function(s) { return s.cost > 0; });
 
-    ctx.clearRect(0, 0, w, h);
-    ctx.fillStyle = '#1A1612';
-    ctx.fillRect(0, 0, w, h);
+    var totalCost = c.total || 1;
+    var cx = w / 2;
+    var cy = h / 2 - 20;
+    var outerR = Math.min(w, h) * 0.3;
+    var innerR = outerR * 0.55;
+    var pulse = 1 + Math.sin(pulseTime) * 0.008;
+    outerR *= pulse;
 
-    ctx.textAlign = 'center';
+    var startAngle = -Math.PI / 2;
+    var glowGap = 0.04;
 
-    ctx.textBaseline = 'bottom';
-    ctx.font = '12px -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif';
-    ctx.fillStyle = '#8B949E';
-    ctx.fillText('YOUR ANNUAL NODE COST', w / 2, 26);
+    segs.forEach(function(s, idx) {
+      var segAngle = (s.cost / totalCost) * Math.PI * 2;
+      if (segAngle < 0.001) return;
 
-    ctx.textBaseline = 'middle';
-    var totalStr = '$' + c.total.toFixed(0);
-    ctx.font = 'bold 50px -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif';
-    ctx.fillStyle = '#E6EDF3';
-    ctx.fillText(totalStr, w / 2 - 20, 64);
+      var endAngle = startAngle + segAngle - glowGap;
 
-    ctx.font = '18px -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif';
-    ctx.fillStyle = '#8B949E';
-    ctx.textAlign = 'left';
-    ctx.fillText('/ year', w / 2 + ctx.measureText(totalStr).width / 2 + 6, 64);
+      ctx.save();
+      ctx.shadowColor = s.color;
+      ctx.shadowBlur = 12;
+      ctx.shadowOffsetX = 0;
+      ctx.shadowOffsetY = 0;
 
-    var barY = 100;
-    var barH = 50;
-    var padX = Math.max(40, w * 0.06);
-    var availW = w - padX * 2;
+      ctx.beginPath();
+      ctx.arc(cx, cy, outerR, startAngle, endAngle);
+      ctx.arc(cx, cy, innerR, endAngle, startAngle, true);
+      ctx.closePath();
 
-    if (availW < 50) { availW = 50; }
+      ctx.fillStyle = s.color;
+      ctx.globalAlpha = 0.85;
+      ctx.fill();
+      ctx.globalAlpha = 1;
+      ctx.shadowBlur = 0;
+      ctx.restore();
 
-    ctx.textAlign = 'center';
+      startAngle += segAngle;
+    });
 
-    ctx.fillStyle = '#21262D';
-    var r = 6;
+    var centerGlow = ctx.createRadialGradient(cx, cy, innerR * 0.1, cx, cy, innerR * 0.9);
+    centerGlow.addColorStop(0, 'rgba(26,22,18,0)');
+    centerGlow.addColorStop(1, 'rgba(26,22,18,0.6)');
+    ctx.fillStyle = centerGlow;
     ctx.beginPath();
-    ctx.moveTo(padX + r, barY);
-    ctx.lineTo(padX + availW - r, barY);
-    ctx.quadraticCurveTo(padX + availW, barY, padX + availW, barY + r);
-    ctx.lineTo(padX + availW, barY + barH - r);
-    ctx.quadraticCurveTo(padX + availW, barY + barH, padX + availW - r, barY + barH);
-    ctx.lineTo(padX + r, barY + barH);
-    ctx.quadraticCurveTo(padX, barY + barH, padX, barY + barH - r);
-    ctx.lineTo(padX, barY + r);
-    ctx.quadraticCurveTo(padX, barY, padX + r, barY);
-    ctx.closePath();
+    ctx.arc(cx, cy, innerR, 0, Math.PI * 2);
     ctx.fill();
 
-    var x = padX;
-    segs.forEach(function (s) {
-      var segW = (s.cost / c.total) * availW;
-      if (segW < 1) return;
-
-      ctx.fillStyle = s.color.bg;
-      ctx.fillRect(x, barY, segW, barH);
-
-      var dollarLabel = '$' + s.cost.toFixed(0);
-
-      if (segW > 70) {
-        ctx.font = 'bold 14px -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif';
-        ctx.fillStyle = s.color.text;
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText(dollarLabel, x + segW / 2, barY + barH / 2);
-
-        ctx.font = '10px -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif';
-        ctx.fillStyle = s.color.text;
-        ctx.globalAlpha = 0.7;
-        ctx.fillText(s.label, x + segW / 2, barY + barH / 2 + 16);
-        ctx.globalAlpha = 1;
-      } else {
-        ctx.font = 'bold 12px -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif';
-        ctx.fillStyle = '#8B949E';
-        ctx.textAlign = 'left';
-        ctx.textBaseline = 'top';
-        ctx.fillText(dollarLabel, x + 2, barY + barH + 6);
-      }
-
-      x += segW;
-    });
-
-    var legendY = barY + barH + 28;
-    var legendX = padX;
-    var legendGap = 24;
-
-    segs.forEach(function (s) {
-      ctx.fillStyle = s.color.bg;
-      ctx.beginPath();
-      ctx.arc(legendX + 5, legendY, 5, 0, Math.PI * 2);
-      ctx.fill();
-
-      ctx.font = '12px -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif';
-      ctx.textAlign = 'left';
-      ctx.textBaseline = 'middle';
-      ctx.fillStyle = '#8B949E';
-      ctx.fillText(s.label, legendX + 14, legendY);
-
-      legendX += ctx.measureText(s.label).width + legendGap + 24;
-
-      if (legendX > w - padX) {
-        legendY += 22;
-        legendX = padX;
-      }
-    });
-
     ctx.textAlign = 'center';
     ctx.textBaseline = 'bottom';
-    ctx.font = '12px -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif';
-    ctx.fillStyle = 'rgba(139,148,158,0.45)';
-    ctx.fillText('Adjust the sliders to match your setup', w / 2, h - 12);
+    ctx.font = 'bold 34px -apple-system, sans-serif';
+    ctx.fillStyle = '#E6EDF3';
+    ctx.fillText('$' + totalCost.toFixed(0), cx, cy + 4);
+
+    ctx.textBaseline = 'top';
+    ctx.font = '16px -apple-system, sans-serif';
+    ctx.fillStyle = '#8B949E';
+    ctx.fillText('/ year', cx, cy + 8);
+
+    var labelR = outerR + 28;
+    startAngle = -Math.PI / 2;
+    segs.forEach(function(s) {
+      var segAngle = (s.cost / totalCost) * Math.PI * 2;
+      if (segAngle < 0.001) return;
+      var midAngle = startAngle + segAngle / 2;
+      var lx = cx + Math.cos(midAngle) * labelR;
+      var ly = cy + Math.sin(midAngle) * labelR;
+
+      ctx.textAlign = midAngle > Math.PI / 2 && midAngle < Math.PI * 1.5 ? 'right' : 'left';
+      ctx.textBaseline = 'middle';
+      ctx.font = '11px -apple-system, sans-serif';
+      ctx.fillStyle = 'rgba(255,255,255,0.7)';
+      ctx.fillText('$' + s.cost.toFixed(0), lx, ly);
+      startAngle += segAngle;
+    });
+
+    var legendY = cy + outerR + 60;
+    var legendX = cx - 180;
+    var itemHeight = 20;
+    var colW = 180;
+
+    segs.forEach(function(s, idx) {
+      var col = Math.floor(idx / 2);
+      var row = idx % 2;
+      var lx = legendX + col * colW;
+      var ly = legendY + row * itemHeight;
+
+      ctx.fillStyle = s.color;
+      ctx.beginPath();
+      ctx.arc(lx + 6, ly + 6, 5, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'middle';
+      ctx.font = '12px -apple-system, sans-serif';
+      ctx.fillStyle = '#8B949E';
+      ctx.fillText(s.label, lx + 16, ly + 6);
+
+      ctx.font = 'bold 12px -apple-system, sans-serif';
+      ctx.fillStyle = '#E6EDF3';
+      ctx.textAlign = 'right';
+      ctx.fillText('$' + s.cost.toFixed(0), lx + colW - 10, ly + 6);
+    });
+  }
+
+  function loop() {
+    draw();
+    requestAnimationFrame(loop);
   }
 
   function resize() {
-    var r = VIZ.responsiveSize(canvas, 450);
+    var r = VIZ.responsiveSize(canvas, 500);
     w = r.w;
     h = r.h;
     ctx = r.ctx;
-    if (ctx) draw();
   }
 
   return { init: init, resize: resize };
