@@ -356,13 +356,10 @@ footer .links { display: flex; gap: 16px; justify-content: center; flex-wrap: wr
 <!-- ─── FOOTER ─── -->
 <footer>
   <div class="links">
-    <a href="/live">📊 Dashboard</a>
-    <a href="https://github.com/prateekposwal/block-space-economics">GitHub</a>
-    <a href="/live">Live Dashboard</a>
     <a href="/">Home</a>
+    <a href="/articles">Articles</a>
+    <a href="https://github.com/prateekposwal/block-space-economics">GitHub</a>
   </div>
-  
-  <a href="/live" class="btn-live">📊 Explore the Live Dashboard</a>
   <p>Bitcoin Sahi — Blockchain Research & Development. Built in public.</p>
 </footer>
 
@@ -486,6 +483,7 @@ function formatNum(n) {
   return n.toString();
 }
 
+updateAll();
 API.start({ interval: 60000 });
 </script>
 
