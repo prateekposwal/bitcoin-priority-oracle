@@ -16,17 +16,17 @@ var VIZ_Node = (function() {
   var DEPRECIATION_YEARS = 3;
 
   var COLORS = {
-    hardware: '#F7931A',
-    bandwidth: '#58A6FF',
-    electricity: '#3FB950',
+    hw: '#F7931A',
+    bw: '#58A6FF',
+    elec: '#3FB950',
     storage: '#BC8CFF'
   };
 
-  var SEG_ORDER = ['hardware', 'bandwidth', 'electricity', 'storage'];
+  var SEG_ORDER = ['hw', 'bw', 'elec', 'storage'];
   var SEG_LABELS = {
-    hardware: 'Hardware',
-    bandwidth: 'Bandwidth',
-    electricity: 'Electricity',
+    hw: 'Hardware',
+    bw: 'Bandwidth',
+    elec: 'Electricity',
     storage: 'Storage'
   };
 
@@ -177,16 +177,29 @@ var VIZ_Node = (function() {
 
     var totalCost = c.total || 1;
     var cx = w / 2;
-    var cy = h / 2 - (isMobile() ? 10 : 20);
-    var outerR = Math.min(w, h) * (isMobile() ? 0.22 : 0.3);
-    var innerR = outerR * 0.55;
+    var cy = h * 0.42;
+    var baseOuterR = Math.min(w * 0.2, h * 0.45);
     var pulse = 1 + Math.sin(pulseTime) * 0.008;
-    outerR *= pulse;
+    var outerR = baseOuterR * pulse;
+    var innerR = outerR * 0.55;
+
+    ctx.strokeStyle = 'rgba(58,50,40,0.3)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.arc(cx, cy, baseOuterR + 4, 0, Math.PI * 2);
+    ctx.stroke();
+
+    var pulseR = baseOuterR + 8 + Math.sin(pulseTime * 0.5) * 6;
+    ctx.strokeStyle = 'rgba(212,147,58,' + (0.06 + Math.sin(pulseTime * 0.5) * 0.03) + ')';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.arc(cx, cy, pulseR, 0, Math.PI * 2);
+    ctx.stroke();
 
     var startAngle = -Math.PI / 2;
     var glowGap = 0.04;
 
-    segs.forEach(function(s, idx) {
+    segs.forEach(function(s) {
       var segAngle = (s.cost / totalCost) * Math.PI * 2;
       if (segAngle < 0.001) return;
 
@@ -194,7 +207,7 @@ var VIZ_Node = (function() {
 
       ctx.save();
       ctx.shadowColor = s.color;
-      ctx.shadowBlur = 12;
+      ctx.shadowBlur = 20;
       ctx.shadowOffsetX = 0;
       ctx.shadowOffsetY = 0;
 
@@ -232,6 +245,11 @@ var VIZ_Node = (function() {
     ctx.fillStyle = '#8B949E';
     ctx.fillText('/ year', cx, cy + (isMobile() ? 6 : 8));
 
+    ctx.textBaseline = 'top';
+    ctx.font = (isMobile() ? '11px' : '13px') + ' -apple-system, sans-serif';
+    ctx.fillStyle = '#6A5D4E';
+    ctx.fillText('~$' + (totalCost / 12).toFixed(0) + '/month', cx, cy + (isMobile() ? 24 : 30));
+
     var labelR = outerR + (isMobile() ? 18 : 28);
     startAngle = -Math.PI / 2;
     segs.forEach(function(s) {
@@ -249,33 +267,29 @@ var VIZ_Node = (function() {
       startAngle += segAngle;
     });
 
-    var legendY = cy + outerR + (isMobile() ? 40 : 60);
-    var legendX = cx - (isMobile() ? 120 : 180);
-    var itemHeight = isMobile() ? 16 : 20;
-    var colW = isMobile() ? 130 : 180;
-
-    segs.forEach(function(s, idx) {
-      var col = Math.floor(idx / 2);
-      var row = idx % 2;
-      var lx = legendX + col * colW;
-      var ly = legendY + row * itemHeight;
-
-      ctx.fillStyle = s.color;
+    var legendY = cy + outerR + 30;
+    var legendItems = segs.map(function(s) {
+      return { label: s.label, cost: s.cost, color: s.color, pct: (s.cost / totalCost * 100).toFixed(1) };
+    });
+    for (var i = 0; i < legendItems.length; i++) {
+      var col = i % 2;
+      var row = Math.floor(i / 2);
+      var lx = (col === 0 ? 40 : w / 2 + 10);
+      var ly = legendY + row * (isMobile() ? 22 : 26);
+      ctx.fillStyle = legendItems[i].color;
       ctx.beginPath();
       ctx.arc(lx + 6, ly + 6, 5, 0, Math.PI * 2);
       ctx.fill();
-
       ctx.textAlign = 'left';
       ctx.textBaseline = 'middle';
       ctx.font = (isMobile() ? '10px' : '12px') + ' -apple-system, sans-serif';
-      ctx.fillStyle = '#8B949E';
-      ctx.fillText(s.label, lx + 16, ly + 6);
-
-      ctx.font = (isMobile() ? 'bold 10px' : 'bold 12px') + ' -apple-system, sans-serif';
-      ctx.fillStyle = '#E6EDF3';
+      ctx.fillStyle = '#9B8B78';
+      ctx.fillText(legendItems[i].label, lx + 16, ly + 6);
       ctx.textAlign = 'right';
-      ctx.fillText('$' + s.cost.toFixed(0), lx + colW - 10, ly + 6);
-    });
+      ctx.font = (isMobile() ? 'bold 10px' : 'bold 13px') + ' -apple-system, sans-serif';
+      ctx.fillStyle = '#EADCC8';
+      ctx.fillText('$' + legendItems[i].cost.toFixed(0) + '/yr (' + legendItems[i].pct + '%)', lx + (col === 0 ? w/2 - 50 : w - 50), ly + 6);
+    }
   }
 
   function loop() {

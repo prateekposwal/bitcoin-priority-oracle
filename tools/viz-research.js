@@ -21,6 +21,7 @@ const VIZ_Research = (() => {
   let rafId = null;
   let btcPrice = 64000;
   let stacked = false;
+  let footerH = 130;
 
   function isMobile() { return w < 480; }
 
@@ -82,7 +83,7 @@ const VIZ_Research = (() => {
     var dpr = window.devicePixelRatio || 1;
     w = pw;
     stacked = w < 768;
-    h = stacked ? 1000 : 600;
+    h = stacked ? 1000 : 600 + footerH;
     canvas.width = w * dpr;
     canvas.height = h * dpr;
     canvas.style.width = w + 'px';
@@ -133,29 +134,31 @@ const VIZ_Research = (() => {
 
   function draw() {
     ctx.clearRect(0, 0, w, h);
-    ctx.fillStyle = '#1A1612';
+    ctx.fillStyle = '#161310';
     ctx.fillRect(0, 0, w, h);
 
     if (stacked) {
-      var panelH = (h - 20) / 3;
+      var mainH = h - footerH - 16;
+      var panelH = (mainH - 20) / 2;
       drawHistogram(0, 12, w - 24, panelH - 4);
       drawChartPanel(0, panelH + 8, w - 24, panelH - 4);
-      drawStatsPanel(0, 2 * panelH + 12, w - 24, panelH - 4);
+      drawStatsPanel(0, mainH + 12, w - 24, footerH - 8);
     } else {
-      var histW = Math.round(w * 0.35) - 12;
-      var chartW = Math.round(w * 0.40) - 8;
+      var histW = Math.round(w * 0.40) - 12;
+      var chartW = Math.round(w * 0.55) - 8;
       var statsW = w - histW - chartW - 28;
+      var mainH = h - footerH - 24;
 
-      drawHistogram(10, 10, histW, h - 20);
-      drawChartPanel(histW + 18, 10, chartW, h - 20);
-      drawStatsPanel(histW + chartW + 22, 10, statsW, h - 20);
+      drawHistogram(10, 10, histW, mainH);
+      drawChartPanel(histW + 18, 10, chartW, mainH);
+      drawStatsPanel(10, mainH + 18, w - 20, footerH - 4);
     }
 
     if (hovered && !stacked) drawCrosshair();
 
     var grad = ctx.createRadialGradient(w / 2, h / 2, h * 0.05, w / 2, h / 2, h * 0.7);
     grad.addColorStop(0, 'rgba(0,0,0,0)');
-    grad.addColorStop(1, 'rgba(0,0,0,0.2)');
+    grad.addColorStop(1, 'rgba(0,0,0,0.18)');
     ctx.fillStyle = grad;
     ctx.fillRect(0, 0, w, h);
   }
@@ -163,13 +166,20 @@ const VIZ_Research = (() => {
   function drawHistogram(px, py, pw, ph) {
     if (pw < 40 || ph < 40) return;
 
+    ctx.fillStyle = '#231F19';
+    ctx.strokeStyle = '#3A3228';
+    ctx.lineWidth = 1;
+    VIZ.roundRect(ctx, px, py, pw, ph, 10);
+    ctx.fill();
+    ctx.stroke();
+
     ctx.textAlign = 'left';
     ctx.textBaseline = 'top';
-    ctx.font = (isMobile() ? 'bold 10px' : 'bold 12px') + ' -apple-system, sans-serif';
-    ctx.fillStyle = 'rgba(255,255,255,0.5)';
-    ctx.fillText('Fee Distribution', px + 10, py + 8);
+    ctx.font = 'bold 13px -apple-system, sans-serif';
+    ctx.fillStyle = '#EADCC8';
+    ctx.fillText('Fee Distribution', px + 14, py + 12);
 
-    var margin = { top: isMobile() ? 28 : 34, right: 10, bottom: isMobile() ? 22 : 28, left: isMobile() ? 30 : 36 };
+    var margin = { top: isMobile() ? 36 : 42, right: 12, bottom: isMobile() ? 24 : 30, left: isMobile() ? 34 : 40 };
     var plotX = px + margin.left;
     var plotY = py + margin.top;
     var plotW = pw - margin.left - margin.right;
@@ -181,9 +191,9 @@ const VIZ_Research = (() => {
     for (var i = 0; i < histData.length; i++) {
       if (histData[i] > maxCount) maxCount = histData[i];
     }
-    maxCount = Math.ceil(maxCount * 1.15);
+    maxCount = Math.ceil(maxCount * 1.2);
 
-    ctx.strokeStyle = 'rgba(255,255,255,0.05)';
+    ctx.strokeStyle = 'rgba(255,255,255,0.04)';
     ctx.lineWidth = 1;
     for (var g = 0; g <= 3; g++) {
       var gy = plotY + (g / 3) * plotH;
@@ -194,13 +204,18 @@ const VIZ_Research = (() => {
 
       ctx.textAlign = 'right';
       ctx.textBaseline = 'middle';
-      ctx.font = (isMobile() ? '8px' : '9px') + ' -apple-system, sans-serif';
-      ctx.fillStyle = 'rgba(255,255,255,0.2)';
-      ctx.fillText(Math.round(maxCount - (g / 3) * maxCount) + '', plotX - 4, gy);
+      ctx.font = '9px -apple-system, sans-serif';
+      ctx.fillStyle = 'rgba(234,220,200,0.2)';
+      ctx.fillText(Math.round(maxCount - (g / 3) * maxCount) + '', plotX - 5, gy);
     }
 
-    var barW = plotW / histData.length * 0.75;
-    var barGap = plotW / histData.length * 0.25;
+    var barW = plotW / histData.length * 0.65;
+    var barGap = plotW / histData.length * 0.35;
+
+    var tallestIdx = 0;
+    for (var i = 1; i < histData.length; i++) {
+      if (histData[i] > histData[tallestIdx]) tallestIdx = i;
+    }
 
     for (var i = 0; i < histData.length; i++) {
       var barH = (histData[i] / maxCount) * plotH;
@@ -211,29 +226,66 @@ const VIZ_Research = (() => {
       var feeColor = VIZ.feeColor(Math.min(midFee, 50));
 
       var grad = ctx.createLinearGradient(0, by, 0, plotY + plotH);
-      grad.addColorStop(0, 'rgba(' + feeColor.r + ',' + feeColor.g + ',' + feeColor.b + ',0.85)');
-      grad.addColorStop(1, 'rgba(' + feeColor.r + ',' + feeColor.g + ',' + feeColor.b + ',0.3)');
+      grad.addColorStop(0, 'rgba(' + feeColor.r + ',' + feeColor.g + ',' + feeColor.b + ',0.9)');
+      grad.addColorStop(1, 'rgba(' + feeColor.r + ',' + feeColor.g + ',' + feeColor.b + ',0.2)');
       ctx.fillStyle = grad;
-      VIZ.roundRect(ctx, bx, by, barW, barH, 3);
+      VIZ.roundRect(ctx, bx, by, barW, barH, 4);
       ctx.fill();
 
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'bottom';
-      ctx.font = (isMobile() ? 'bold 8px' : 'bold 9px') + ' -apple-system, sans-serif';
-      ctx.fillStyle = 'rgba(255,255,255,0.6)';
-      ctx.fillText(histData[i], bx + barW / 2, by - 3);
+      if (i === tallestIdx) {
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'bottom';
+        ctx.font = 'bold 11px -apple-system, sans-serif';
+        ctx.fillStyle = '#EADCC8';
+        ctx.fillText(histData[i], bx + barW / 2, by - 6);
+      }
 
+      ctx.textAlign = 'center';
       ctx.textBaseline = 'top';
-      ctx.font = (isMobile() ? '7px' : '8px') + ' -apple-system, sans-serif';
-      ctx.fillStyle = 'rgba(255,255,255,0.3)';
+      ctx.font = '9px -apple-system, sans-serif';
+      ctx.fillStyle = 'rgba(234,220,200,0.35)';
       ctx.fillText(BUCKET_LABELS[i], bx + barW / 2, plotY + plotH + 4);
+    }
+
+    var ecoVals = data.map(function(d) { return d.economy; });
+    if (ecoVals.length > 0) {
+      var minE = Infinity, maxE = -Infinity;
+      for (var i = 0; i < ecoVals.length; i++) {
+        if (ecoVals[i] < minE) minE = ecoVals[i];
+        if (ecoVals[i] > maxE) maxE = ecoVals[i];
+      }
+      var sparkY = py + ph - 24;
+      var sparkX = px + 14;
+      var sparkW = pw - 28;
+      var sparkH = 16;
+      ctx.strokeStyle = 'rgba(51,221,119,0.5)';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      var sparkData = ecoVals.slice(-60);
+      var sMin = Math.min.apply(null, sparkData);
+      var sMax = Math.max.apply(null, sparkData);
+      var sRange = sMax - sMin || 1;
+      for (var i = 0; i < sparkData.length; i++) {
+        var sx = sparkX + (i / (sparkData.length - 1)) * sparkW;
+        var sy = sparkY + sparkH - ((sparkData[i] - sMin) / sRange) * sparkH;
+        if (i === 0) ctx.moveTo(sx, sy);
+        else ctx.lineTo(sx, sy);
+      }
+      ctx.stroke();
     }
   }
 
   function drawChartPanel(px, py, pw, ph) {
     if (pw < 60 || ph < 40 || data.length < 2) return;
 
-    var chartPad = { top: isMobile() ? 28 : 34, right: 10, bottom: isMobile() ? 24 : 30, left: isMobile() ? 38 : 46 };
+    ctx.fillStyle = '#231F19';
+    ctx.strokeStyle = '#3A3228';
+    ctx.lineWidth = 1;
+    VIZ.roundRect(ctx, px, py, pw, ph, 10);
+    ctx.fill();
+    ctx.stroke();
+
+    var chartPad = { top: isMobile() ? 36 : 42, right: 12, bottom: isMobile() ? 28 : 34, left: isMobile() ? 42 : 52 };
     var chartX = px + chartPad.left;
     var chartY = py + chartPad.top;
     var chartW = pw - chartPad.left - chartPad.right;
@@ -243,9 +295,9 @@ const VIZ_Research = (() => {
 
     ctx.textAlign = 'left';
     ctx.textBaseline = 'top';
-    ctx.font = (isMobile() ? 'bold 10px' : 'bold 12px') + ' -apple-system, sans-serif';
-    ctx.fillStyle = 'rgba(255,255,255,0.5)';
-    ctx.fillText('Fee History — Last 24h', px + 10, py + 8);
+    ctx.font = 'bold 13px -apple-system, sans-serif';
+    ctx.fillStyle = '#EADCC8';
+    ctx.fillText('Fee History — Last 24h', px + 14, py + 12);
 
     function getMaxY() {
       var m = 1;
@@ -268,7 +320,7 @@ const VIZ_Research = (() => {
       return chartY + chartH - (v / maxY) * chartH;
     }
 
-    ctx.strokeStyle = 'rgba(255,255,255,0.05)';
+    ctx.strokeStyle = 'rgba(255,255,255,0.04)';
     ctx.lineWidth = 1;
     var ySteps = 4;
     for (var i = 0; i <= ySteps; i++) {
@@ -281,9 +333,9 @@ const VIZ_Research = (() => {
 
       ctx.textAlign = 'right';
       ctx.textBaseline = 'middle';
-      ctx.font = (isMobile() ? '8px' : '9px') + ' -apple-system, sans-serif';
-      ctx.fillStyle = 'rgba(255,255,255,0.25)';
-      ctx.fillText(Math.round(v) + '', chartX - 5, gy);
+      ctx.font = '9px -apple-system, sans-serif';
+      ctx.fillStyle = 'rgba(234,220,200,0.25)';
+      ctx.fillText(Math.round(v) + '', chartX - 6, gy);
     }
 
     var xSteps = 5;
@@ -298,10 +350,10 @@ const VIZ_Research = (() => {
 
       ctx.textAlign = 'center';
       ctx.textBaseline = 'top';
-      ctx.font = (isMobile() ? '7px' : '9px') + ' -apple-system, sans-serif';
-      ctx.fillStyle = 'rgba(255,255,255,0.25)';
+      ctx.font = '9px -apple-system, sans-serif';
+      ctx.fillStyle = 'rgba(234,220,200,0.25)';
       var dd = new Date(d.t);
-      ctx.fillText(String(dd.getHours()).padStart(2, '0') + ':' + String(dd.getMinutes()).padStart(2, '0'), gx, chartY + chartH + 4);
+      ctx.fillText(String(dd.getHours()).padStart(2, '0') + ':' + String(dd.getMinutes()).padStart(2, '0'), gx, chartY + chartH + 6);
     }
 
     var keys = ['economy', 'hour', 'fastest'];
@@ -318,8 +370,8 @@ const VIZ_Research = (() => {
       ctx.closePath();
       var grad = ctx.createLinearGradient(0, chartY, 0, chartY + chartH);
       var c = COLORS[key];
-      grad.addColorStop(0, c + '66');
-      grad.addColorStop(1, c + '10');
+      grad.addColorStop(0, c + '88');
+      grad.addColorStop(1, c + '08');
       ctx.fillStyle = grad;
       ctx.fill();
     }
@@ -329,17 +381,28 @@ const VIZ_Research = (() => {
       var pts = data.map(function(d) { return { x: mapX(d.t), y: mapY(d[key]) }; });
       if (pts.length < 2) continue;
       ctx.strokeStyle = COLORS[key];
-      ctx.lineWidth = 3;
+      ctx.lineWidth = 2.5;
       ctx.lineJoin = 'round';
-      ctx.shadowColor = COLORS[key] + '44';
-      ctx.shadowBlur = 6;
+      ctx.shadowColor = COLORS[key] + '66';
+      ctx.shadowBlur = 8;
       ctx.beginPath();
       bezierThrough(ctx, pts);
       ctx.stroke();
       ctx.shadowBlur = 0;
+
+      var dotInterval = Math.max(1, Math.floor(pts.length / 12));
+      for (var i = 0; i < pts.length; i += dotInterval) {
+        ctx.beginPath();
+        ctx.arc(pts[i].x, pts[i].y, 3, 0, Math.PI * 2);
+        ctx.fillStyle = COLORS[key];
+        ctx.fill();
+        ctx.strokeStyle = '#231F19';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+      }
     }
 
-    drawLegend(px + pw - 95, py + 10, keys);
+    drawLegend(px + pw - 105, py + 12, keys);
   }
 
   function bezierThrough(ctx, pts) {
@@ -359,8 +422,8 @@ const VIZ_Research = (() => {
   }
 
   function drawLegend(lx, ly, keys) {
-    var boxW = isMobile() ? 70 : 80;
-    var boxH = keys.length * (isMobile() ? 18 : 22) + 10;
+    var boxW = 90;
+    var boxH = keys.length * 22 + 10;
     ctx.fillStyle = 'rgba(0,0,0,0.5)';
     ctx.strokeStyle = 'rgba(255,255,255,0.08)';
     ctx.lineWidth = 1;
@@ -368,14 +431,14 @@ const VIZ_Research = (() => {
     ctx.fill();
     ctx.stroke();
 
-    ctx.font = (isMobile() ? '9px' : '11px') + ' -apple-system, sans-serif';
+    ctx.font = '11px -apple-system, sans-serif';
     ctx.textBaseline = 'middle';
     for (var i = 0; i < keys.length; i++) {
       var y = ly + 10 + i * 22 + 11;
       ctx.fillStyle = COLORS[keys[i]];
       VIZ.roundRect(ctx, lx + 8, y - 4, 10, 10, 2);
       ctx.fill();
-      ctx.fillStyle = '#cbd5e1';
+      ctx.fillStyle = '#EADCC8';
       ctx.textAlign = 'left';
       ctx.fillText(LABELS[keys[i]], lx + 24, y);
     }
@@ -384,16 +447,18 @@ const VIZ_Research = (() => {
   function drawStatsPanel(px, py, pw, ph) {
     if (pw < 40 || ph < 40) return;
 
-    ctx.textAlign = 'left';
-    ctx.textBaseline = 'top';
-    ctx.font = (isMobile() ? 'bold 10px' : 'bold 12px') + ' -apple-system, sans-serif';
-    ctx.fillStyle = 'rgba(255,255,255,0.5)';
-    ctx.fillText('Fee Stats', px + 10, py + 8);
+    ctx.fillStyle = '#231F19';
+    ctx.strokeStyle = '#3A3228';
+    ctx.lineWidth = 1;
+    VIZ.roundRect(ctx, px, py, pw, ph, 10);
+    ctx.fill();
+    ctx.stroke();
 
-    var cardGap = 6;
-    var cardY = py + (isMobile() ? 26 : 32);
-    var cardH = (ph - (isMobile() ? 30 : 36) - cardGap * 2) / 3;
-    var cardW = pw - 16;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'top';
+    ctx.font = 'bold 14px -apple-system, sans-serif';
+    ctx.fillStyle = '#EADCC8';
+    ctx.fillText('Analysis', px + pw / 2, py + 14);
 
     if (data.length < 2) return;
 
@@ -404,74 +469,60 @@ const VIZ_Research = (() => {
       if (ecoVals[i] > maxFee) maxFee = ecoVals[i];
       sumFee += ecoVals[i];
     }
-    var avgFee = sumFee / ecoVals.length;
-    var volatility = avgFee > 0 ? (maxFee - minFee) / avgFee : 0;
+    var fAvg = sumFee / ecoVals.length;
+    var fMin = minFee;
+    var fMax = maxFee;
+    var volatility = fAvg > 0 ? (fMax - fMin) / fAvg : 0;
     var volPct = volatility * 100;
 
-    var volColor = volPct < 30 ? '#3FB950' : volPct < 60 ? '#D29922' : '#F85149';
+    var cardY = py + 44;
+    var cardH = (ph - 60) / 3;
+    var statsData = [
+      { label: 'Volatility', value: volPct.toFixed(1) + '%', sub: '24h fee variance', color: volPct > 50 ? '#C0392B' : volPct > 25 ? '#D4762A' : '#3BA35D' },
+      { label: 'Avg Economy', value: fAvg.toFixed(1) + ' sat', sub: '24h average', color: '#EADCC8' },
+      { label: 'Range', value: fMin.toFixed(0) + '-' + fMax.toFixed(0), sub: 'Min - Max sat/vB', color: '#9B8B78' },
+    ];
+    for (var i = 0; i < statsData.length; i++) {
+      var sy = cardY + i * cardH;
+      ctx.fillStyle = '#1A1612';
+      ctx.strokeStyle = '#3A3228';
+      ctx.lineWidth = 1;
+      VIZ.roundRect(ctx, px + 8, sy + 4, pw - 16, cardH - 8, 8);
+      ctx.fill();
+      ctx.stroke();
 
-    ctx.fillStyle = 'rgba(255,255,255,0.04)';
-    VIZ.roundRect(ctx, px + 8, cardY, cardW, cardH, 8);
-    ctx.fill();
-    ctx.textAlign = 'left';
-    ctx.textBaseline = 'top';
-    ctx.font = (isMobile() ? '8px' : '10px') + ' -apple-system, sans-serif';
-    ctx.fillStyle = 'rgba(255,255,255,0.35)';
-    ctx.fillText('Volatility', px + (isMobile() ? 14 : 20), cardY + (isMobile() ? 8 : 10));
-    ctx.font = (isMobile() ? 'bold 16px' : 'bold 22px') + ' -apple-system, sans-serif';
-    ctx.fillStyle = volColor;
-    ctx.fillText(volPct.toFixed(1) + '%', px + (isMobile() ? 14 : 20), cardY + (isMobile() ? 20 : 28));
-    ctx.font = (isMobile() ? '8px' : '9px') + ' -apple-system, sans-serif';
-    ctx.fillStyle = 'rgba(255,255,255,0.2)';
-    ctx.textBaseline = 'bottom';
-    ctx.fillText(volPct < 30 ? 'low volatility' : volPct < 60 ? 'moderate' : 'high volatility', px + (isMobile() ? 14 : 20), cardY + cardH - 8);
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'top';
+      ctx.font = '10px -apple-system, sans-serif';
+      ctx.fillStyle = '#6A5D4E';
+      ctx.fillText(statsData[i].label, px + 16, sy + 10);
 
-    var cardY2 = cardY + cardH + cardGap;
-    ctx.fillStyle = 'rgba(255,255,255,0.04)';
-    VIZ.roundRect(ctx, px + 8, cardY2, cardW, cardH, 8);
-    ctx.fill();
-    ctx.textAlign = 'left';
-    ctx.textBaseline = 'top';
-    ctx.font = (isMobile() ? '8px' : '10px') + ' -apple-system, sans-serif';
-    ctx.fillStyle = 'rgba(255,255,255,0.35)';
-    ctx.fillText('Avg Fee', px + (isMobile() ? 14 : 20), cardY2 + (isMobile() ? 8 : 10));
-    ctx.font = (isMobile() ? 'bold 16px' : 'bold 22px') + ' -apple-system, sans-serif';
-    ctx.fillStyle = '#E8E5E0';
-    ctx.fillText(avgFee.toFixed(1), px + (isMobile() ? 14 : 20), cardY2 + (isMobile() ? 20 : 28));
-    ctx.font = (isMobile() ? '9px' : '11px') + ' -apple-system, sans-serif';
-    ctx.fillStyle = 'rgba(255,255,255,0.3)';
-    ctx.textBaseline = 'bottom';
-    ctx.fillText('sat/vB', px + (isMobile() ? 14 : 20), cardY2 + cardH - 8);
+      ctx.font = 'bold 22px -apple-system, sans-serif';
+      ctx.fillStyle = statsData[i].color;
+      ctx.textAlign = 'right';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(statsData[i].value, px + pw - 14, sy + cardH / 2);
 
-    var cardY3 = cardY2 + cardH + cardGap;
-    ctx.fillStyle = 'rgba(255,255,255,0.04)';
-    VIZ.roundRect(ctx, px + 8, cardY3, cardW, cardH, 8);
-    ctx.fill();
-    ctx.textAlign = 'left';
-    ctx.textBaseline = 'top';
-    ctx.font = (isMobile() ? '8px' : '10px') + ' -apple-system, sans-serif';
-    ctx.fillStyle = 'rgba(255,255,255,0.35)';
-    ctx.fillText('Range', px + (isMobile() ? 14 : 20), cardY3 + (isMobile() ? 8 : 10));
-    ctx.font = (isMobile() ? 'bold 13px' : 'bold 18px') + ' -apple-system, sans-serif';
-    ctx.fillStyle = '#E8E5E0';
-    ctx.fillText(minFee.toFixed(1) + ' — ' + maxFee.toFixed(1), px + (isMobile() ? 14 : 20), cardY3 + (isMobile() ? 20 : 28));
-    ctx.font = (isMobile() ? '9px' : '11px') + ' -apple-system, sans-serif';
-    ctx.fillStyle = 'rgba(255,255,255,0.3)';
-    ctx.textBaseline = 'bottom';
-    ctx.fillText('sat/vB', px + (isMobile() ? 14 : 20), cardY3 + cardH - 8);
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'bottom';
+      ctx.font = '9px -apple-system, sans-serif';
+      ctx.fillStyle = '#6A5D4E';
+      ctx.fillText(statsData[i].sub, px + 16, sy + cardH - 6);
+    }
   }
 
   function drawCrosshair() {
     if (!hovered || stacked) return;
     var p = hovered.point;
 
-    var chartPad = { top: 44, right: 10, bottom: 30, left: 56 };
-    var histW = Math.round(w * 0.35) - 12;
-    var chartW = Math.round(w * 0.40) - 8;
+    var histW = Math.round(w * 0.40) - 12;
+    var chartW = Math.round(w * 0.55) - 8;
+    var chartPad = { top: 52, right: 12, bottom: 34, left: 62 };
     var chartX = histW + 18 + chartPad.left;
-    var chartY = chartPad.top;
+    var chartY = 10 + chartPad.top;
+    var mainH = h - footerH - 24;
     var chartPW = chartW - chartPad.left - chartPad.right;
-    var chartPH = h - 20 - chartPad.top - chartPad.bottom;
+    var chartPH = mainH - chartPad.top - chartPad.bottom;
 
     if (chartPW < 10 || chartPH < 10) return;
 
@@ -526,7 +577,7 @@ const VIZ_Research = (() => {
       ctx.fillStyle = r.color;
       VIZ.roundRect(ctx, tx + 10, ry + 3, 8, 8, 2);
       ctx.fill();
-      ctx.fillStyle = '#cbd5e1';
+      ctx.fillStyle = '#EADCC8';
       ctx.textAlign = 'left';
       ctx.font = '10px -apple-system, sans-serif';
       ctx.fillText(r.label + ':', tx + 24, ry);
@@ -544,15 +595,15 @@ const VIZ_Research = (() => {
   function handleHover(mx, my) {
     if (data.length < 2) { hovered = null; return; }
 
-    var histW = Math.round(w * 0.35) - 12;
-    var chartW = Math.round(w * 0.40) - 8;
-    var chartPad = { top: 44, right: 10, bottom: 30, left: 56 };
+    var histW = Math.round(w * 0.40) - 12;
+    var chartW = Math.round(w * 0.55) - 8;
+    var chartPad = { top: 52, right: 12, bottom: 34, left: 62 };
 
     var chartAreaX = histW + 18;
     var chartAreaW = chartW;
 
     if (mx < chartAreaX + chartPad.left || mx > chartAreaX + chartAreaW - chartPad.right ||
-        my < chartPad.top || my > h - chartPad.top) {
+        my < chartPad.top || my > 600 + footerH - chartPad.top) {
       hovered = null;
       return;
     }
