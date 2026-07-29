@@ -145,79 +145,172 @@ function animateValue(el, newVal, suffix) {
   el.textContent = newVal + suffix;
 }
 
+var _dashboardBuilt = false;
 function renderDashboard() {
   var e = fees.economyFee || 1, f = fees.fastestFee || 3, hh = fees.halfHourFee || 2, h = fees.hourFee || 1;
   
-  // KPI grid
-  var kpis = [
-    { l: 'BTC Price', v: '$' + niceNum(btcPrice), sub: 'Live', clr: btcPrice > 50000 ? '#3FB950' : '#F0F6FC' },
-    { l: 'Fastest Fee', v: f + ' sat/vB', sub: 'Next block ~10 min', clr: f > 50 ? '#F85149' : f > 10 ? '#D29922' : '#3FB950' },
-    { l: 'Economy Fee', v: e + ' sat/vB', sub: 'Slow ~1+ hr', clr: '#8B949E' },
-    { l: 'Storage Cost', v: '$0.008', sub: 'Per insc (10yr)', clr: '#F7931A' },
-  ];
-  document.getElementById('kpi-grid').innerHTML = kpis.map(k =>
-    '<div class="kpi-card"><div class="label">' + k.l + '</div><div class="value" style="color:' + k.clr + '">' + k.v + '</div><div class="sub">' + k.sub + '</div></div>'
-  ).join('');
+  var annualNodeCost = 924.35;
+  var avgInscBytes = 400;
+  var monthlyInscVolume = 100000;
+  var costPerBytePerYear = annualNodeCost / (avgInscBytes * monthlyInscVolume * 12);
+  var storagePerInsc = costPerBytePerYear * avgInscBytes * 10;
+  var yearlyExternality = storagePerInsc * monthlyInscVolume * 12 / 10;
+  var lowestFee = Math.max(0.06, e * btcPrice / 100000000);
+  var highestFee = Math.min(25, f * btcPrice / 100000000);
+
+  if (!_dashboardBuilt) {
+    // First run — build the complete HTML structure with IDs
+    document.getElementById('kpi-grid').innerHTML = [
+      '<div class="kpi-card"><div class="label">BTC Price</div><div class="value" id="kpi-btc" style="color:#3FB950">$' + niceNum(btcPrice) + '</div><div class="sub">Live</div></div>',
+      '<div class="kpi-card"><div class="label">Fastest Fee</div><div class="value" id="kpi-fastest" style="color:#3FB950">' + f + ' sat/vB</div><div class="sub">Next block ~10 min</div></div>',
+      '<div class="kpi-card"><div class="label">Economy Fee</div><div class="value" id="kpi-economy" style="color:#8B949E">' + e + ' sat/vB</div><div class="sub">Slow ~1+ hr</div></div>',
+      '<div class="kpi-card"><div class="label">Storage Cost</div><div class="value" id="kpi-storage" style="color:#F7931A">$' + storagePerInsc.toFixed(4) + '</div><div class="sub">Per insc (10yr)</div></div>',
+    ].join('');
+    document.getElementById('fee-row').innerHTML = [
+      '<div class="stat-card"><div class="label">Fastest</div><div class="value" id="fr-fastestFee">' + f + ' sat/vB</div></div>',
+      '<div class="stat-card"><div class="label">30 Min</div><div class="value" id="fr-halfHourFee">' + hh + ' sat/vB</div></div>',
+      '<div class="stat-card"><div class="label">1 Hour</div><div class="value" id="fr-hourFee">' + h + ' sat/vB</div></div>',
+      '<div class="stat-card"><div class="label">Economy</div><div class="value" id="fr-economyFee">' + e + ' sat/vB</div></div>',
+      '<div class="stat-card"><div class="label">Minimum</div><div class="value" id="fr-minimumFee">' + (fees.minimumFee || 1) + ' sat/vB</div></div>',
+    ].join('');
+    document.getElementById('model-row').innerHTML = [
+      '<div class="stat-card"><div class="label">Node Cost / Yr</div><div class="value" id="md-node">$' + annualNodeCost.toFixed(0) + '</div></div>',
+      '<div class="stat-card"><div class="label">Cost/Byte/Yr</div><div class="value" id="md-cpb">$' + costPerBytePerYear.toFixed(10) + '</div></div>',
+      '<div class="stat-card"><div class="label">Storage/Insc (10yr)</div><div class="value" id="md-storage">$' + storagePerInsc.toFixed(4) + '</div></div>',
+      '<div class="stat-card"><div class="label">Externality / Yr</div><div class="value" id="md-externality">$' + (yearlyExternality / 1000).toFixed(1) + 'K</div></div>',
+      '<div class="stat-card"><div class="label">Fee Ratio</div><div class="value" id="md-ratio">' + (lowestFee / storagePerInsc).toFixed(0) + 'x - ' + (highestFee / storagePerInsc).toFixed(0) + 'x</div></div>',
+    ].join('');
+    document.getElementById('market-row').innerHTML = [
+      '<div class="stat-card"><div class="label">Sat/$ Ratio</div><div class="value" id="mk-sat">' + (btcPrice > 0 ? (100000000 / btcPrice).toFixed(1) : '---') + ' sat</div></div>',
+      '<div class="stat-card"><div class="label">Insc Fee (economy)</div><div class="value" id="mk-inscfee">$' + (btcPrice > 0 ? ((e * 100 * btcPrice / 100000000).toFixed(4)) : '---') + '</div></div>',
+      '<div class="stat-card"><div class="label">Tx in Mempool</div><div class="value" id="mk-mempool">' + niceNum(mempoolTx) + '</div></div>',
+      '<div class="stat-card"><div class="label">Block Height</div><div class="value" id="mk-height">' + niceNum(blockHeight) + '</div></div>',
+      '<div class="stat-card"><div class="label">Hash Rate</div><div class="value" id="mk-hashrate">' + hashRate.toFixed(0) + ' EH/s</div></div>',
+      '<div class="stat-card"><div class="label">Difficulty</div><div class="value" id="mk-diff">' + difficulty + 'T</div></div>',
+    ].join('');
+    // Build sliders once
+    document.getElementById('sliders').innerHTML = [
+      { l: 'Inscription Volume / Mo', id: 'sv', min: 10, max: 500, val: 100, unit: 'K' },
+      { l: 'Avg Inscription Size', id: 'ss', min: 100, max: 2000, val: 400, unit: ' B' },
+      { l: 'Node Power Draw', id: 'sp', min: 10, max: 300, val: 150, unit: ' W' },
+      { l: 'Bandwidth Cost / Mo', id: 'sb', min: 10, max: 200, val: 50, unit: '$' },
+      { l: 'Electricity Rate', id: 'se', min: 3, max: 40, val: 12, unit: 'c' },
+      { l: 'UTXO Lifetime (yr)', id: 'sl', min: 1, max: 50, val: 10, unit: ' yr' },
+      { l: 'Hardware Lifespan', id: 'shl', min: 1, max: 10, val: 3, unit: ' yr' },
+    ].map(function(s) {
+      return '<div><div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted);"><span>' + s.l + '</span><span style="color:var(--orange);font-weight:700;" id="sl-' + s.id + '">' + s.val + s.unit + '</span></div><input type="range" id="' + s.id + '" min="' + s.min + '" max="' + s.max + '" value="' + s.val + '" oninput="updateModel()" style="width:100%;"></div>';
+    }).join('');
+    _dashboardBuilt = true;
+  } else {
+    // Subsequent runs — update values only
+    var kpiEls = {
+      'kpi-btc': '$' + niceNum(btcPrice),
+      'kpi-fastest': f + ' sat/vB',
+      'kpi-economy': e + ' sat/vB',
+      'kpi-storage': '$' + storagePerInsc.toFixed(4),
+    };
+    Object.keys(kpiEls).forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) el.textContent = kpiEls[id];
+    });
+    ['fastestFee','halfHourFee','hourFee','economyFee','minimumFee'].forEach(function(k) {
+      var el = document.getElementById('fr-' + k);
+      if (el) el.textContent = (fees[k] || '---') + ' sat/vB';
+    });
+    var modelVals = {
+      'md-node': '$' + annualNodeCost.toFixed(0),
+      'md-cpb': '$' + costPerBytePerYear.toFixed(10),
+      'md-storage': '$' + storagePerInsc.toFixed(4),
+      'md-externality': '$' + (yearlyExternality / 1000).toFixed(1) + 'K',
+      'md-ratio': (lowestFee / storagePerInsc).toFixed(0) + 'x - ' + (highestFee / storagePerInsc).toFixed(0) + 'x',
+    };
+    Object.keys(modelVals).forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) el.textContent = modelVals[id];
+    });
+    var marketVals = {
+      'mk-sat': (btcPrice > 0 ? (100000000 / btcPrice).toFixed(1) : '---') + ' sat',
+      'mk-inscfee': (btcPrice > 0 ? '$' + ((e * 100 * btcPrice / 100000000).toFixed(4)) : '---'),
+      'mk-mempool': niceNum(mempoolTx),
+      'mk-height': niceNum(blockHeight),
+      'mk-hashrate': hashRate.toFixed(0) + ' EH/s',
+      'mk-diff': difficulty + 'T',
+    };
+    Object.keys(marketVals).forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) el.textContent = marketVals[id];
+    });
+  }
+
   document.getElementById('fee-timestamp').textContent = new Date().toLocaleTimeString();
 
-  // Fee row
-  document.getElementById('fee-row').innerHTML = Object.entries({fastestFee:'Fastest', halfHourFee:'30 Min', hourFee:'1 Hour', economyFee:'Economy', minimumFee:'Minimum'}).map(([k,l]) =>
-    '<div class="stat-card"><div class="label">' + l + '</div><div class="value">' + (fees[k]||'—') + ' sat/vB</div></div>'
-  ).join('');
+  // Fee row — update values only
+  Object.entries({fastestFee:'Fastest', halfHourFee:'30 Min', hourFee:'1 Hour', economyFee:'Economy', minimumFee:'Minimum'}).forEach(function(pair) {
+    var k = pair[0], l = pair[1];
+    var el = document.getElementById('fr-' + k);
+    if (el) el.textContent = (fees[k] || '—') + ' sat/vB';
+  });
 
-  // Fee bar
+  // Fee bar — rebuild bars
   var barData = [f, hh, h, e, fees.minimumFee || 1];
   var maxFee = Math.max(1, ...barData);
   var barColors = ['#F7931A', '#D29922', '#3FB950', '#58A6FF', '#8B949E'];
   var barLabels = ['Fastest','30 Min','1 Hour','Economy','Minimum'];
-  document.getElementById('fee-bar').innerHTML = barData.map((v, i) =>
-    '<div class="bar" style="height:' + (v / maxFee * 80 + 10) + 'px;background:' + barColors[i] + '" title="' + barLabels[i] + ': ' + v + ' sat/vB"><span class="bar-label">' + v + '</span></div>'
-  ).join('');
+  document.getElementById('fee-bar').innerHTML = barData.map(function(v, i) {
+    return '<div class="bar" style="height:' + (v / maxFee * 80 + 10) + 'px;background:' + barColors[i] + '" title="' + barLabels[i] + ': ' + v + ' sat/vB"><span class="bar-label">' + v + '</span></div>';
+  }).join('');
 
-  // Model
-  var nc = 924.35, bpi = 400, ipm = 100000;
-  var cpb = nc / (bpi * ipm * 12);
-  var s10 = cpb * bpi * 10;
-  var ext = s10 * ipm * 12 / 10;
-  document.getElementById('model-row').innerHTML = [
-    { l: 'Node Cost / Yr', v: '$' + nc.toFixed(0) },
-    { l: 'Cost/Byte/Yr', v: '$' + cpb.toFixed(10) },
-    { l: 'Storage/Insc (10yr)', v: '$' + s10.toFixed(4) },
-    { l: 'Externality / Yr', v: '$' + (ext / 1000).toFixed(1) + 'K' },
-    { l: 'Fee Ratio', v: ((0.06)/s10).toFixed(0) + '× – ' + ((25)/s10).toFixed(0) + '×' },
-  ].map(m => '<div class="stat-card"><div class="label">' + m.l + '</div><div class="value">' + m.v + '</div></div>').join('');
+  // Model — update values only
+  var modelVals = {
+    'md-node': '$' + annualNodeCost.toFixed(0),
+    'md-cpb': '$' + costPerBytePerYear.toFixed(10),
+    'md-storage': '$' + storagePerInsc.toFixed(4),
+    'md-externality': '$' + (yearlyExternality / 1000).toFixed(1) + 'K',
+    'md-ratio': (lowestFee / storagePerInsc).toFixed(0) + 'x - ' + (highestFee / storagePerInsc).toFixed(0) + 'x',
+  };
+  Object.keys(modelVals).forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.textContent = modelVals[id];
+  });
 
-  // Market
-  var spd = btcPrice > 0 ? (100000000 / btcPrice).toFixed(1) : '—';
-  var ifu = btcPrice > 0 ? ((e * 100 * btcPrice / 100000000).toFixed(4)) : '—';
-  document.getElementById('market-row').innerHTML = [
-    { l: 'Sat/$ Ratio', v: spd + ' sat' },
-    { l: 'Insc Fee (economy)', v: '$' + ifu },
-    { l: 'Tx in Mempool', v: niceNum(mempoolTx) },
-    { l: 'Block Height', v: niceNum(blockHeight) },
-    { l: 'Hash Rate', v: hashRate.toFixed(0) + ' EH/s' },
-    { l: 'Difficulty', v: difficulty + 'T' },
-  ].map(m => '<div class="stat-card"><div class="label">' + m.l + '</div><div class="value">' + m.v + '</div></div>').join('');
+  // Market — update values only
+  var spd = btcPrice > 0 ? (100000000 / btcPrice).toFixed(1) : '---';
+  var ifu = btcPrice > 0 ? ((e * 100 * btcPrice / 100000000).toFixed(4)) : '---';
+  var marketVals = {
+    'mk-sat': spd + ' sat',
+    'mk-inscfee': '$' + ifu,
+    'mk-mempool': niceNum(mempoolTx),
+    'mk-height': niceNum(blockHeight),
+    'mk-hashrate': hashRate.toFixed(0) + ' EH/s',
+    'mk-diff': difficulty + 'T',
+  };
+  Object.keys(marketVals).forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.textContent = marketVals[id];
+  });
 
   // Alerts
   var ah = '';
-  if (f > 50) ah += '<div class="alert-item" style="border-color:#F85149;color:#F85149;">🚨 High fees: ' + f + ' sat/vB — possible inscription mania</div>';
-  else if (f < 2 && btcPrice > 50000) ah += '<div class="alert-item" style="border-color:#3FB950;color:#3FB950;">✅ Low fees at high BTC price — network not congested</div>';
-  else ah += '<div class="alert-item" style="border-color:#3FB950;color:#555;">✅ All nominal — ' + f + ' sat/vB fastest, ' + e + ' sat/vB economy</div>';
+  if (f > 50) ah += '<div class="alert-item" style="border-color:#F85149;color:#F85149;">:rotating_light: High fees: ' + f + ' sat/vB - possible inscription mania</div>';
+  else if (f < 2 && btcPrice > 50000) ah += '<div class="alert-item" style="border-color:#3FB950;color:#3FB950;">:white_check_mark: Low fees at high BTC price - network not congested</div>';
+  else ah += '<div class="alert-item" style="border-color:#3FB950;color:#555;">:white_check_mark: All nominal - ' + f + ' sat/vB fastest, ' + e + ' sat/vB economy</div>';
   document.getElementById('alerts').innerHTML = ah;
 
-  // Sliders
-  document.getElementById('sliders').innerHTML = [
-    { l: 'Inscription Volume / Mo', id: 'sv', min: 10, max: 500, val: 100, unit: 'K' },
-    { l: 'Avg Inscription Size', id: 'ss', min: 100, max: 2000, val: 400, unit: ' B' },
-    { l: 'Node Power Draw', id: 'sp', min: 10, max: 300, val: 150, unit: ' W' },
-    { l: 'Bandwidth Cost / Mo', id: 'sb', min: 10, max: 200, val: 50, unit: '$' },
-    { l: 'Hardware Cost', id: 'sh', min: 100, max: 2000, val: 500, unit: '$' },
-    { l: 'Electricity Rate', id: 'se', min: 3, max: 40, val: 12, unit: '¢' },
-    { l: 'UTXO Lifetime (yr)', id: 'sl', min: 1, max: 50, val: 10, unit: ' yr' },
-    { l: 'Hardware Lifespan', id: 'shl', min: 1, max: 10, val: 3, unit: ' yr' },
-  ].map(s => '<div><div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted);"><span>' + s.l + '</span><span style="color:var(--orange);font-weight:700;" id="sl-' + s.id + '">' + s.val + s.unit + '</span></div><input type="range" id="' + s.id + '" min="' + s.min + '" max="' + s.max + '" value="' + s.val + '" oninput="updateModel()" style="width:100%;"></div>'
-  ).join('');
+  // Sliders — build ONCE, not on every refresh
+  if (!document.getElementById('sliders').children.length) {
+    document.getElementById('sliders').innerHTML = [
+      { l: 'Inscription Volume / Mo', id: 'sv', min: 10, max: 500, val: 100, unit: 'K' },
+      { l: 'Avg Inscription Size', id: 'ss', min: 100, max: 2000, val: 400, unit: ' B' },
+      { l: 'Node Power Draw', id: 'sp', min: 10, max: 300, val: 150, unit: ' W' },
+      { l: 'Bandwidth Cost / Mo', id: 'sb', min: 10, max: 200, val: 50, unit: '$' },
+      { l: 'Hardware Cost', id: 'sh', min: 100, max: 2000, val: 500, unit: '$' },
+      { l: 'Electricity Rate', id: 'se', min: 3, max: 40, val: 12, unit: 'c' },
+      { l: 'UTXO Lifetime (yr)', id: 'sl', min: 1, max: 50, val: 10, unit: ' yr' },
+      { l: 'Hardware Lifespan', id: 'shl', min: 1, max: 10, val: 3, unit: ' yr' },
+    ].map(function(s) {
+      return '<div><div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted);"><span>' + s.l + '</span><span style="color:var(--orange);font-weight:700;" id="sl-' + s.id + '">' + s.val + s.unit + '</span></div><input type="range" id="' + s.id + '" min="' + s.min + '" max="' + s.max + '" value="' + s.val + '" oninput="updateModel()" style="width:100%;"></div>';
+    }).join('');
+  }
   updateModel();
 }
 
