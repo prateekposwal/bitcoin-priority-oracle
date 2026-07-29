@@ -90,17 +90,12 @@
   <a href="/live" class="cta">Dashboard</a>
 </nav>
 
+  <div class="live-badge" id="live-badge" style="display:none;"><span class="dot"></span><span>Live — updates every 60s</span><span class="clock" id="live-badge-clock"></span></div>
 <div class="container">
     <div class="hero">
     <div class="badge">Decision Center</div>
     <h1>Bitcoin Decisions — <span>For Your Role</span></h1>
     <p>One dashboard, six perspectives. Pick your role and get live answers — channel costs, batch savings, fee recommendations, UTXO health, mining economics, or research data.</p></div>
-  <div class="live-badge" id="live-badge" style="display:none;">
-    <span class="dot"></span>
-    <span>Live — updates every 60s</span>
-    <span class="clock" id="live-badge-clock"></span>
-  </div>
-  
   <div class="live-indicator"><span class="live-dot"></span> <span>Live</span> <span class="live-clock" id="live-clock"></span></div>
 
   <!-- Live data + Tabs — stacked -->
@@ -278,5 +273,29 @@ API.onData(function(d) {
   </div>
   <p>Bitcoin Sahi — Blockchain Research & Development. Built in public.</p>
 </footer>
+<script>
+(function(){
+  var el = document.getElementById('live-badge');
+  var cl = document.getElementById('live-badge-clock');
+  if (!el) return;
+  el.style.display = 'inline-flex';
+  var start = Date.now();
+  function tick() {
+    var s = Math.floor((Date.now() - start) / 1000);
+    if (cl) cl.textContent = s < 5 ? 'just now' : s + 's ago';
+  }
+  tick();
+  setInterval(tick, 2000);
+  // Reset on API data
+  if (typeof API !== 'undefined') {
+    var origStart = API.start;
+    API.start = function(opts) {
+      start = Date.now();
+      tick();
+      if (origStart) origStart(opts);
+    };
+  }
+})();
+</script>
 </body>
 </html>

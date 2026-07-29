@@ -194,11 +194,7 @@ footer .links { display: flex; gap: 16px; justify-content: center; flex-wrap: wr
   <h1>What Is Filling <span>Bitcoin Blocks</span>?</h1>
   <p>Every block is a competition for 4 million weight units. This page breaks down what fills that space — and uncovers the hidden cost of permanent data storage.</p>
 </div>
-  <div class="live-badge" id="live-badge" style="display:none;">
-    <span class="dot"></span>
-    <span>Live — updates every 60s</span>
-    <span class="clock" id="live-badge-clock"></span>
-  </div><!-- ─── COMPOSITION BAR ─── -->
+  <!-- ─── COMPOSITION BAR ─── -->
 <div class="composition-bar" id="composition-bar">
   <div class="bar-container">
     <div class="bar-label-top"><span>Typical Block Composition</span><span id="total-pct">100%</span></div>
@@ -240,6 +236,7 @@ footer .links { display: flex; gap: 16px; justify-content: center; flex-wrap: wr
 
 <!-- ─── BLOCK DETAIL PANEL ─── -->
 <div class="container">
+  <div class="live-badge" id="live-badge" style="display:none;"><span class="dot"></span><span>Live — updates every 60s</span><span class="clock" id="live-badge-clock"></span></div>
 <div class="section">
   <div class="section-header">Block Explorer View</div>
   <h2 class="section-title">Single Block Transaction Detail</h2>
@@ -410,5 +407,29 @@ footer .links { display: flex; gap: 16px; justify-content: center; flex-wrap: wr
 </footer>
 
 <script src="/tools/blockspace.js"></script>
+<script>
+(function(){
+  var el = document.getElementById('live-badge');
+  var cl = document.getElementById('live-badge-clock');
+  if (!el) return;
+  el.style.display = 'inline-flex';
+  var start = Date.now();
+  function tick() {
+    var s = Math.floor((Date.now() - start) / 1000);
+    if (cl) cl.textContent = s < 5 ? 'just now' : s + 's ago';
+  }
+  tick();
+  setInterval(tick, 2000);
+  // Reset on API data
+  if (typeof API !== 'undefined') {
+    var origStart = API.start;
+    API.start = function(opts) {
+      start = Date.now();
+      tick();
+      if (origStart) origStart(opts);
+    };
+  }
+})();
+</script>
 </body>
 </html>

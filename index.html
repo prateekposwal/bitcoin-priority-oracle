@@ -184,11 +184,7 @@ if (window.location.hostname.includes('vercel.app')) {
     <a href="#project" class="btn-primary">See What We Found →</a>
     <a href="/decide" class="btn-secondary">Use the Decision Center</a>
   </div>
-  <div class="live-badge" id="live-badge" style="display:none;">
-    <span class="dot"></span>
-    <span>Live — updates every 60s</span>
-    <span class="clock" id="live-badge-clock"></span>
-  </div></div>
+  </div>
 
 <!-- ─── STATS ─── -->
 <div class="container">
@@ -202,6 +198,7 @@ if (window.location.hostname.includes('vercel.app')) {
 
 <!-- ─── PROBLEM ─── -->
 <div class="container">
+  <div class="live-badge" id="live-badge" style="display:none;"><span class="dot"></span><span>Live — updates every 60s</span><span class="clock" id="live-badge-clock"></span></div>
 <div class="section" id="problem">
   <div class="section-header">The Problem</div>
   <h2 class="section-title">Bitcoin's fee market prices congestion. It does not price permanence.</h2>
@@ -401,23 +398,35 @@ API.start({ interval: 60000 });
 </script>
 <script>
 // Live badge update
-var _badgeEl = document.getElementById('live-badge');
-var _badgeClock = document.getElementById('live-badge-clock');
-function updateBadge() {
-  if (_badgeEl && _badgeClock) {
-    _badgeEl.style.display = 'inline-flex';
-    if (!_badgeEl._start) _badgeEl._start = Date.now();
-    var s = Math.floor((Date.now() - _badgeEl._start) / 1000);
-    _badgeClock.textContent = s < 5 ? 'just now' : s + 's ago';
-  }
-}
-setInterval(updateBadge, 2000);
-updateBadge();
 // Also update badge timestamp when API data arrives
 var _origOnData = API.onData;
 API.onData = function(cb) {
   _origOnData(cb);
   API.onData = _origOnData; // restore
 };</script>
+<script>
+(function(){
+  var el = document.getElementById('live-badge');
+  var cl = document.getElementById('live-badge-clock');
+  if (!el) return;
+  el.style.display = 'inline-flex';
+  var start = Date.now();
+  function tick() {
+    var s = Math.floor((Date.now() - start) / 1000);
+    if (cl) cl.textContent = s < 5 ? 'just now' : s + 's ago';
+  }
+  tick();
+  setInterval(tick, 2000);
+  // Reset on API data
+  if (typeof API !== 'undefined') {
+    var origStart = API.start;
+    API.start = function(opts) {
+      start = Date.now();
+      tick();
+      if (origStart) origStart(opts);
+    };
+  }
+})();
+</script>
 </body>
 </html>

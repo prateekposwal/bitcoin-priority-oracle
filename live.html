@@ -86,15 +86,11 @@
     <h1>Bitcoin Network — <span>In Real Time</span></h1>
     <p>Every 30 seconds, this page fetches the latest fee estimates, mempool pressure, and block data. All numbers update live.</p>
   </div>
-  <div class="live-badge" id="live-badge" style="display:none;">
-    <span class="dot"></span>
-    <span>Live — updates every 60s</span>
-    <span class="clock" id="live-badge-clock"></span>
-  </div>
   <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;">
     <div class="live-indicator"><span class="live-dot"></span><span id="live-clock">updating...</span></div>
   </div>
 
+  <div class="live-badge" id="live-badge" style="display:none;"><span class="dot"></span><span>Live — updates every 60s</span><span class="clock" id="live-badge-clock"></span></div>
   <div class="kpi-grid" id="kpi-grid"></div>
 
   <div class="section-header">Fee Estimates <span class="time" id="fee-timestamp"></span></div>
@@ -402,5 +398,29 @@ function loadHistory() {
 
 <div id="api-debug" style="font-size:9px;color:#444;text-align:center;margin-top:2px;font-family:monospace;"></div>
 </footer>
+<script>
+(function(){
+  var el = document.getElementById('live-badge');
+  var cl = document.getElementById('live-badge-clock');
+  if (!el) return;
+  el.style.display = 'inline-flex';
+  var start = Date.now();
+  function tick() {
+    var s = Math.floor((Date.now() - start) / 1000);
+    if (cl) cl.textContent = s < 5 ? 'just now' : s + 's ago';
+  }
+  tick();
+  setInterval(tick, 2000);
+  // Reset on API data
+  if (typeof API !== 'undefined') {
+    var origStart = API.start;
+    API.start = function(opts) {
+      start = Date.now();
+      tick();
+      if (origStart) origStart(opts);
+    };
+  }
+})();
+</script>
 </body>
 </html>
