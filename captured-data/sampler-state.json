@@ -1,5 +1,8 @@
 {
-  "lastSampled": 36001,
-  "totalSampled": 33,
-  "epochsComplete": []
+  "lastSampled": 150000,
+  "totalSampled": 147,
+  "epochsComplete": [
+    "Genesis Era",
+    "Early Adoption"
+  ]
 }
