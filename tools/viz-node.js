@@ -162,12 +162,15 @@ var VIZ_Node = (function() {
     ctx.closePath();
   }
 
+  var animT = 0;
   function draw() {
     if (!ctx) return;
+    animT += 0.025;
     updateAnimation();
 
     var c = currentCosts;
     var mobile = isMobile();
+    var pulse = Math.sin(animT * 1.5) * 0.04 + 0.96;
 
     ctx.clearRect(0, 0, w, h);
     ctx.fillStyle = '#1A1612';
@@ -196,13 +199,16 @@ var VIZ_Node = (function() {
     for (var i = 0; i < 3; i++) {
       var cx = mobile ? 40 : 40 + i * (cardW + cardGap);
       var cy = mobile ? cardsStartY + i * 90 : cardsStartY;
+      var glow = Math.sin(animT * 1.2 + i * 2.1) * 3 + 4;
 
       ctx.fillStyle = '#231F19';
       ctx.strokeStyle = '#3A3228';
       ctx.lineWidth = 1;
+      if (i === 2) { ctx.shadowColor = 'rgba(212,147,58,0.08)'; ctx.shadowBlur = glow; }
       roundRect(ctx, cx, cy, cardW, 80, 10);
       ctx.fill();
       ctx.stroke();
+      ctx.shadowBlur = 0;
 
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
