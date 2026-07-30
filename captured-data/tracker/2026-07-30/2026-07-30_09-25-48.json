@@ -1,0 +1,39 @@
+{
+  "captureTime": "2026-07-30T09:25:48.264Z",
+  "blocks": {
+    "count": 10,
+    "intervals": [
+      235,
+      103,
+      1661,
+      293,
+      70,
+      128,
+      56,
+      1171,
+      32
+    ],
+    "avgInterval": 416.56,
+    "minInterval": 32,
+    "maxInterval": 1661
+  },
+  "mempool": {
+    "count": 85902,
+    "vsize": 42418488,
+    "changeSinceLast": -105,
+    "changePerSecond": -0.0292,
+    "inflowRate": -0.0192
+  },
+  "fees": {
+    "fastest": 2,
+    "halfHour": 1,
+    "hour": 1,
+    "economy": 1,
+    "fastestChange": -1,
+    "volatility": 0.8
+  },
+  "network": {
+    "blocksPerHour": 8.64,
+    "mempoolClearTimeHours": 1656.62
+  }
+}

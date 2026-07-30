@@ -153,6 +153,7 @@ body{background:#1A1612;color:#EADCC8;font-family:-apple-system,BlinkMacSystemFo
 <div style="position:sticky;top:41px;z-index:19;background:#1A1612;padding:12px 24px;border-bottom:1px solid #2A2622;text-align:center;">
   <span id="live-state" style="font-size:16px;font-weight:600;letter-spacing:0.5px;color:#3FB950;">🟢 Network calm</span>
   <span id="live-state-sub" style="font-size:14px;color:rgba(255,255,255,0.4);margin-left:10px;">Fees are low</span>
+  <span id="capacity-indicator" style="margin-left:16px;font-size:12px;color:rgba(255,255,255,0.25);font-variant-numeric:tabular-nums;"></span>
 </div>
 
 <div class="content">
@@ -492,6 +493,25 @@ if (typeof DATA_ENGINE !== 'undefined') {
   document.getElementById('fee-fastest').textContent = (fees.fastestFee || '--') + ' sat/vB';
   document.getElementById('fee-hour').textContent = (fees.hourFee || '--') + ' sat/vB';
   document.getElementById('fee-economy').textContent = (fees.economyFee || '--') + ' sat/vB';
+
+  // Capacity indicator in state bar
+  var capEl = document.getElementById('capacity-indicator');
+  if (capEl) {
+    var blocks = d.blocks || [];
+    var lastBlock = blocks.length > 0 ? blocks[0] : null;
+    var weight = lastBlock ? lastBlock.weight : 0;
+    var weightPct = weight > 0 ? Math.round(weight / 4000000 * 100) : 0;
+    var mpCount = d.mempool ? (d.mempool.count || 0) : 0;
+    var tps = mpCount > 0 ? (mpCount / 600).toFixed(1) : '0';
+    var bars = '';
+    var segments = 10;
+    var filled = Math.round(weightPct / segments);
+    for (var bi = 0; bi < segments; bi++) {
+      bars += bi < filled ? '█' : '░';
+    }
+    var capColor = weightPct > 90 ? '#C0392B' : weightPct > 70 ? '#D4762A' : '#3BA35D';
+    capEl.innerHTML = 'Block: <span style="color:' + capColor + ';">' + bars + ' ' + weightPct + '%</span> · TPS: <span style="color:#58A6FF;">' + tps + '</span>';
+  }
 
   var e = fees.economyFee || 1;
   var f = fees.fastestFee || 3;
