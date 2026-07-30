@@ -1,0 +1,13 @@
+#!/bin/sh
+# Pre-commit hook: validate JavaScript syntax before every commit
+# Install: git config core.hooksPath .githooks
+
+echo "=== Pre-commit validation ==="
+node tools/validate.js
+if [ $? -ne 0 ]; then
+  echo ""
+  echo "❌ Commit blocked: fix errors above before committing."
+  echo "   Run 'node tools/validate.js' to re-check."
+  exit 1
+fi
+echo "✅ Validation passed"
