@@ -55,6 +55,7 @@ var VIZ_Miner = (function() {
   function resize() {
     var parent = canvas.parentElement;
     var pw = parent ? parent.clientWidth : window.innerWidth;
+    if (!pw || pw < 100) pw = window.innerWidth;
     var dpr = Math.min(window.devicePixelRatio || 1, 3);
     w = pw;
     h = 600;
