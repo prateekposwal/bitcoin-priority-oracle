@@ -1,6 +1,6 @@
 {
-  "lastRun": 1785403567389,
-  "cycleCount": 7,
+  "lastRun": 1785407151542,
+  "cycleCount": 8,
   "discoveredSources": [
     {
       "name": "trend-scan.github.io",
@@ -268,7 +268,7 @@
     }
   ],
   "issues": [
-    "11 endpoints unhealthy",
-    "7 sources stale (>30min old)"
+    "6 endpoints unhealthy",
+    "6 sources stale (>30min old)"
   ]
 }

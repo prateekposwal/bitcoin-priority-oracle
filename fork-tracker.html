@@ -105,6 +105,39 @@ td.fee{font-variant-numeric:tabular-nums;font-weight:500}
 .impact-card h3{font-size:.9rem;font-weight:600;color:#EADCC8;margin-bottom:8px}
 .impact-card p{font-size:.82rem;color:#9B8B78;line-height:1.7}
 
+/* Explainer Box */
+.explain-box{background:#231F19;border:1px solid #3A3228;border-radius:12px;padding:24px;margin-bottom:32px}
+.explain-title{font-size:.95rem;font-weight:700;color:#EADCC8;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.explain-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:600px){.explain-grid{grid-template-columns:1fr}}
+.explain-card{padding:16px;border-radius:10px}
+.explain-card.policy{background:rgba(88,166,255,.06);border:1px solid rgba(88,166,255,.15)}
+.explain-card.consensus{background:rgba(212,147,58,.06);border:1px solid rgba(212,147,58,.15)}
+.explain-card .ec-label{font-size:.65rem;text-transform:uppercase;letter-spacing:.08em;font-weight:600;margin-bottom:6px}
+.explain-card.policy .ec-label{color:#58A6FF}
+.explain-card.consensus .ec-label{color:#D4933A}
+.explain-card .ec-title{font-size:.95rem;font-weight:700;color:#EADCC8;margin-bottom:6px}
+.explain-card .ec-desc{font-size:.8rem;color:#9B8B78;line-height:1.6;margin-bottom:8px}
+.explain-card .ec-detail{font-size:.75rem;color:#6A5D4E;line-height:1.5}
+.explain-card .ec-tag{display:inline-block;font-size:.65rem;padding:2px 8px;border-radius:6px;font-weight:600;margin-top:6px}
+.explain-card.policy .ec-tag{background:rgba(88,166,255,.12);color:#58A6FF}
+.explain-card.consensus .ec-tag{background:rgba(212,147,58,.12);color:#D4933A}
+
+/* Scenario Cards */
+.scenario-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:40px}
+@media(max-width:600px){.scenario-grid{grid-template-columns:1fr}}
+.scenario-card{background:#231F19;border:1px solid #3A3228;border-radius:12px;padding:20px;transition:border-color .3s}
+.scenario-card.likely{border-left:3px solid #3BA35D}
+.scenario-card.possible{border-left:3px solid #D4762A}
+.scenario-card.unlikely{border-left:3px solid #C0392B}
+.scenario-card .sc-icon{font-size:1.3rem;margin-bottom:8px}
+.scenario-card h4{font-size:.9rem;font-weight:600;color:#EADCC8;margin-bottom:6px}
+.scenario-card p{font-size:.8rem;color:#9B8B78;line-height:1.6;margin-bottom:8px}
+.scenario-card .sc-prob{font-size:.7rem;color:#6A5D4E}
+
+/* Node Version Badge */
+.version-badge{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:6px;font-size:.7rem;font-weight:500;background:#2A251E;color:#9B8B78;border:1px solid #3A3228;margin:2px}
+
 /* Loading / Error */
 .loading{text-align:center;padding:40px;color:#6A5D4E}
 .loading-spinner{display:inline-block;width:24px;height:24px;border:2px solid #3A3228;border-top-color:#D4933A;border-radius:50%;animation:spin .8s linear infinite;margin-bottom:12px}
@@ -144,11 +177,33 @@ td.fee{font-variant-numeric:tabular-nums;font-weight:500}
 <div>Loading fork data...</div>
 </div>
 <div id="heroContent" style="display:none">
-<h1 class="hero-title">BIP-110 — ASICBoost Fork</h1>
-<p class="hero-desc">BIP-110 removes the quadruple SHA256 from the Proof-of-Work function, effectively banning ASICBoost. 55% miner signaling required in a 2-week period for lock-in.</p>
+<h1 class="hero-title">BIP-110 — Data Restriction Soft Fork</h1>
+<p class="hero-desc">BIP-110 is a temporary soft fork (~1 year) that restricts arbitrary data at the consensus level — limiting oversized scriptPubKeys, witness items, and data-bearing constructions. 55% miner signaling required in a 2-week period for lock-in. Different from Core30's relay policy change.</p>
 <span class="hero-badge" id="statusBadge">—</span>
 </div>
 </section>
+
+<div class="container">
+<div class="explain-box">
+<div class="explain-title">🔍 Understanding the Difference</div>
+<div class="explain-grid">
+<div class="explain-card policy">
+<div class="ec-label">Relay Policy (Core30)</div>
+<div class="ec-title">Bitcoin Core v30 — Already Deployed</div>
+<div class="ec-desc">Changed the default <code>datacarriersize</code> from 80 to 100,000 bytes. This raised the <code>OP_RETURN</code> relay limit — a <strong>policy</strong> change, not a consensus rule.</div>
+<div class="ec-detail">Nodes can opt-out without forking the chain. Different nodes can have different policies. This is already active and does not require miner signaling.</div>
+<div class="ec-tag">Policy · Non-consensus</div>
+</div>
+<div class="explain-card consensus">
+<div class="ec-label">Consensus Rule (BIP-110)</div>
+<div class="ec-title">BIP-110 — Proposed Soft Fork</div>
+<div class="ec-desc">Restricts <strong>arbitrary data at the consensus level</strong> for ~1 year. Limits scriptPubKey sizes, witness item sizes, and other data-bearing constructions node operators must enforce.</div>
+<div class="ec-detail">Requires 55% miner signaling within a 2016-block period. After activation, blocks containing oversized data become <strong>consensus-invalid</strong> — upgraded nodes reject them entirely.</div>
+<div class="ec-tag">Consensus · Requires signaling</div>
+</div>
+</div>
+</div>
+</div>
 
 <div class="error-banner" id="dataWarning" style="display:none"></div>
 
@@ -224,17 +279,41 @@ td.fee{font-variant-numeric:tabular-nums;font-weight:500}
 <div class="impact-card">
 <div class="impact-icon">⚙️</div>
 <h3>If Activated</h3>
-<p>ASICBoost miners must upgrade or shut down. Estimated 10–20 EH/s of hashrate affected, potentially causing a temporary difficulty adjustment and shifting mining power distribution.</p>
+<p>Oversized data transactions become consensus-invalid. Inscriptions, large OP_RETURN outputs, and oversized witness data in violation of the new rules would be rejected by upgraded nodes.</p>
 </div>
 <div class="impact-card">
 <div class="impact-icon">📈</div>
-<h3>Price Impact</h3>
-<p>Lower issuance security premium from ASICBoost phase-out. Historically, network upgrades that level the playing field are neutral-to-bullish for Bitcoin price.</p>
+<h3>Market Impact</h3>
+<p>Reduced block space competition from data transactions could lower fee rates for financial transactions. Inscription-based protocols may need to adapt or move to alternative layers.</p>
 </div>
 <div class="impact-card">
 <div class="impact-icon">⏳</div>
 <h3>Timeline</h3>
-<p>Minimum 1 year from initial signaling to full activation after lock-in. Includes 2016-block signaling period, 2016-block grace period, then mandatory enforcement.</p>
+<p>Temporary ~1 year deployment. Includes 2016-block signaling period (55% threshold), 2016-block grace period, then mandatory enforcement. Automatically expires after deployment period.</p>
+</div>
+</div>
+</section>
+
+<section class="impact-section">
+<h2>📋 Possible Scenarios</h2>
+<div class="scenario-grid">
+<div class="scenario-card likely">
+<div class="sc-icon">📊</div>
+<h4>Signaling Reached → Lock-in</h4>
+<p>55% of miners signal within a 2016-block period. BIP-110 locks in, then activates after a grace period. ASICBoost miners phase out over 1+ years.</p>
+<div class="sc-prob">Likely if major pools signal · Monitor signaling % above</div>
+</div>
+<div class="scenario-card possible">
+<div class="sc-icon">⏸</div>
+<h4>Signaling Stalls</h4>
+<p>Miners fail to reach 55% threshold. BIP-110 does not activate. Core30 policy remains the de facto standard. Debate continues in subsequent difficulty periods.</p>
+<div class="sc-prob">Possible · Requires ~50%+ hashrate opposition</div>
+</div>
+<div class="scenario-card unlikely">
+<div class="sc-icon">🔀</div>
+<h4>Contentious Activation</h4>
+<p>BIP-110 activates despite significant opposition. Minority chain persists with old rules. Network effects determine economic relevance of each chain.</p>
+<div class="sc-prob">Unlikely · Requires extreme lack of consensus</div>
 </div>
 </div>
 </section>
