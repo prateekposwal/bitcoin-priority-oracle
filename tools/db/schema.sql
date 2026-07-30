@@ -1,0 +1,74 @@
+CREATE TABLE IF NOT EXISTS captures (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  captured_at TEXT NOT NULL,          -- ISO 8601
+  source TEXT NOT NULL,               -- endpoint key (fees, mempool, etc.)
+  endpoint_url TEXT,                  -- full URL fetched
+  status INTEGER,                     -- HTTP status
+  latency_ms INTEGER,                 -- response time
+  json_data TEXT,                     -- full response (for server captures)
+  minimized_data TEXT,                -- minimized version (for browser captures)
+  file_path TEXT,                     -- original flat file path
+  cycle_id INTEGER,                   -- reference to capture cycle
+  created_at TEXT DEFAULT (datetime('now'))
+);
+
+CREATE INDEX IF NOT EXISTS idx_captures_source ON captures(source);
+CREATE INDEX IF NOT EXISTS idx_captures_time ON captures(captured_at);
+CREATE INDEX IF NOT EXISTS idx_captures_source_time ON captures(source, captured_at);
+
+CREATE TABLE IF NOT EXISTS cycles (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  started_at TEXT NOT NULL,
+  completed_at TEXT,
+  endpoint_count INTEGER DEFAULT 0,
+  success_count INTEGER DEFAULT 0,
+  error_count INTEGER DEFAULT 0,
+  total_latency_ms INTEGER DEFAULT 0
+);
+
+CREATE TABLE IF NOT EXISTS block_stats (
+  height INTEGER PRIMARY KEY,
+  hash TEXT,
+  timestamp TEXT,
+  tx_count INTEGER,
+  size INTEGER,
+  weight INTEGER,
+  avg_fee_sats REAL,
+  avg_fee_rate_satvb REAL,
+  fee_percentiles TEXT,               -- JSON array [p10,p25,p50,p75,p90]
+  subsidy_btc REAL,
+  miner TEXT,
+  captured_at TEXT DEFAULT (datetime('now'))
+);
+
+CREATE TABLE IF NOT EXISTS research_findings (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  agent TEXT NOT NULL,
+  finding TEXT NOT NULL,
+  cycle_id INTEGER,
+  created_at TEXT DEFAULT (datetime('now'))
+);
+
+CREATE VIEW IF NOT EXISTS latest_fees AS
+  SELECT c.captured_at, 
+    json_extract(c.json_data, '$.fastestFee') as fastest,
+    json_extract(c.json_data, '$.halfHourFee') as half_hour,
+    json_extract(c.json_data, '$.hourFee') as hour_fee,
+    json_extract(c.json_data, '$.economyFee') as economy,
+    json_extract(c.json_data, '$.minimumFee') as minimum
+  FROM captures c 
+  WHERE c.source = 'fees' 
+  ORDER BY c.captured_at DESC LIMIT 1;
+
+CREATE VIEW IF NOT EXISTS fee_trend_24h AS
+  SELECT date(captured_at) as day, 
+    strftime('%H', captured_at) as hour,
+    COUNT(*) as samples,
+    AVG(json_extract(json_data, '$.fastestFee')) as avg_fastest,
+    AVG(json_extract(json_data, '$.economyFee')) as avg_economy,
+    MIN(json_extract(json_data, '$.economyFee')) as min_economy,
+    MAX(json_extract(json_data, '$.fastestFee')) as max_fastest
+  FROM captures 
+  WHERE source = 'fees' 
+    AND captured_at >= datetime('now', '-1 day')
+  GROUP BY day, hour;
