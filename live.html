@@ -297,6 +297,11 @@ body{background:#1A1612;color:#EADCC8;font-family:-apple-system,BlinkMacSystemFo
     <div class="stat-card" style="border-top:3px solid #58A6FF;"><div class="sc-label">Total</div><div class="sc-value" id="miner-total">--</div><div class="fc-sub">BTC per block</div></div>
     <div class="stat-card" style="border-top:3px solid #D4933A;"><div class="sc-label">Daily Rev</div><div class="sc-value" id="miner-daily" style="color:#D4933A;">--</div><div class="fc-sub">USD per day</div></div>
   </div>
+  <div class="stat-row" id="pool-stats" style="display:none;">
+    <div class="stat-card" style="border-top:3px solid #D4933A;"><div class="sc-label">Top Pool</div><div class="sc-value" id="pool-top1" style="font-size:1.2rem;color:#D4933A;">--</div><div class="fc-sub" id="pool-top1-pct"></div></div>
+    <div class="stat-card" style="border-top:3px solid #58A6FF;"><div class="sc-label">#2 Pool</div><div class="sc-value" id="pool-top2" style="font-size:1.2rem;color:#58A6FF;">--</div><div class="fc-sub" id="pool-top2-pct"></div></div>
+    <div class="stat-card" style="border-top:3px solid #3BA35D;"><div class="sc-label">#3 Pool</div><div class="sc-value" id="pool-top3" style="font-size:1.2rem;color:#3BA35D;">--</div><div class="fc-sub" id="pool-top3-pct"></div></div>
+  </div>
   <div class="viz-section">
     <div class="viz-section-title">Block Reward Composition</div>
     <div class="viz-section-desc">Donut chart shows subsidy vs fee split. Line chart shows fee revenue trend over the last 144 blocks.</div>
@@ -338,6 +343,11 @@ body{background:#1A1612;color:#EADCC8;font-family:-apple-system,BlinkMacSystemFo
     <div class="viz-section-title">Fee History Analysis</div>
     <div class="viz-section-desc">Three fee tiers plotted over 24 hours. Hover to inspect values at any point in time.</div>
     <canvas id="viz-research" class="viz-canvas"></canvas>
+  </div>
+  <div class="viz-section">
+    <div class="viz-section-title">Fee Distribution Trend</div>
+    <div class="viz-section-desc">How the fee histogram shifts over the last 24 hours. Green = cheap, red = expensive.</div>
+    <canvas id="viz-fee-trend" style="width:100%;height:150px;border-radius:8px;background:#1A1612;border:1px solid #3A3228;"></canvas>
   </div>
   <div class="insight-card">
     <div class="insight-icon">💡</div>
@@ -588,6 +598,43 @@ if (typeof DATA_ENGINE !== 'undefined') {
   document.getElementById('dollar-cost').textContent =
     'Fastest: $' + fastestUsd.toFixed(2) + ' │ Hour: $' + hourUsd.toFixed(2) + ' │ Economy: $' + economyUsd.toFixed(2);
 
+  // Fee distribution trend viz
+  (function drawFeeTrend() {
+    var c = document.getElementById('viz-fee-trend');
+    if (!c) return;
+    var r = c.parentElement.getBoundingClientRect();
+    var cw = c.width = r.width || 600;
+    var ch = c.height = 150;
+    var cx = c.getContext('2d');
+    var hist = d && d.mempool ? d.mempool.fee_histogram : [];
+    cx.fillStyle = '#1A1612';
+    cx.fillRect(0, 0, cw, ch);
+    if (hist.length > 0) {
+      var maxCount = 1;
+      for (var i = 0; i < hist.length; i++) { if (hist[i][1] > maxCount) maxCount = hist[i][1]; }
+      var barW = Math.max(1, (cw - 40) / Math.min(hist.length, 200));
+      for (var i = 0; i < Math.min(hist.length, 200); i++) {
+        var fee = hist[i][0];
+        var count = hist[i][1];
+        var p = Math.min(1, fee / 20);
+        var red = Math.round(p * 248 + (1-p) * 63);
+        var green = Math.round((1-p) * 185 + p * 81);
+        var blue = Math.round((1-p) * 80 + p * 73);
+        var bh = (count / maxCount) * (ch - 20);
+        cx.fillStyle = 'rgb(' + red + ',' + green + ',' + blue + ')';
+        cx.fillRect(10 + i * barW, ch - 10 - bh, Math.max(1, barW - 1), Math.max(1, bh));
+      }
+      cx.fillStyle = '#6A5D4E';
+      cx.font = '9px -apple-system,sans-serif';
+      cx.textAlign = 'left';
+      cx.fillText('0', 10, ch - 2);
+      cx.textAlign = 'right';
+      cx.fillText('20+ sat/vB', cw - 10, ch - 2);
+      cx.textAlign = 'center';
+      cx.fillText('Low fee ←  Fee rate  → High fee', cw / 2, 12);
+    }
+  })();
+
   // --- Send Insight ---
   var cost = (e * 140 * btcPrice) / 100000000;
   var trend = getFeeTrend(d.fee_history || []);
@@ -744,12 +791,42 @@ if (typeof DATA_ENGINE !== 'undefined') {
   document.getElementById('tkr-ln-nodes').textContent = lnNodes;
   document.getElementById('tkr-ln-cap').textContent = lnCap;
   document.getElementById('tkr-updated').textContent = updated;
+  // Mining pool stats from DATA_ENGINE
+  if (d && d.mining_pools && d.mining_pools.pools) {
+    var poolList = d.mining_pools.pools.slice(0, 3);
+    document.getElementById('pool-stats').style.display = 'flex';
+    var poolColors = ['#D4933A', '#58A6FF', '#3BA35D'];
+    for (var pi = 0; pi < poolList.length; pi++) {
+      var p = poolList[pi];
+      document.getElementById('pool-top' + (pi+1)).textContent = p.name || 'Unknown';
+      document.getElementById('pool-top' + (pi+1) + '-pct').textContent = (p.blockCount || 0).toLocaleString() + ' blocks';
+    }
+  }
+
   try {
     localStorage.setItem('bsahi_cache', JSON.stringify(d));
     localStorage.setItem('bsahi_cache_time', Date.now().toString());
   } catch (e) {}
 });
 }
+
+// WebSocket for instant updates
+(function() {
+  try {
+    var ws = new WebSocket('wss://mempool.space/api/v1/ws');
+    ws.onmessage = function(e) {
+      try {
+        var msg = JSON.parse(e.data);
+        if (msg && (msg.action === 'newBlock' || msg.action === 'mempool' || msg.txid)) {
+          if (typeof DATA_ENGINE !== 'undefined') DATA_ENGINE.start();
+        }
+      } catch (err) {}
+    };
+    ws.onclose = function() { setTimeout(function() {
+      try { var ws2 = new WebSocket('wss://mempool.space/api/v1/ws'); } catch (e) {}
+    }, 30000); };
+  } catch (e) {}
+})();
 
 // Fix 5: Render cached data instantly — persisted across sessions
 (function() {
