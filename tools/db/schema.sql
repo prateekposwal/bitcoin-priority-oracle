@@ -41,6 +41,27 @@ CREATE TABLE IF NOT EXISTS block_stats (
   captured_at TEXT DEFAULT (datetime('now'))
 );
 
+CREATE TABLE IF NOT EXISTS transactions (
+  txid TEXT PRIMARY KEY,
+  block_height INTEGER,
+  block_hash TEXT,
+  fee_sats INTEGER,
+  vsize INTEGER,
+  fee_rate_satvb REAL,
+  tx_type TEXT,                       -- 'segwit', 'legacy', 'inscription'
+  is_coinbase INTEGER DEFAULT 0,
+  input_count INTEGER DEFAULT 0,
+  output_count INTEGER DEFAULT 0,
+  total_output_sats INTEGER DEFAULT 0,
+  weight INTEGER DEFAULT 0,
+  captured_at TEXT DEFAULT (datetime('now')),
+  FOREIGN KEY (block_height) REFERENCES block_stats(height)
+);
+
+CREATE INDEX IF NOT EXISTS idx_tx_block ON transactions(block_height);
+CREATE INDEX IF NOT EXISTS idx_tx_type ON transactions(tx_type);
+CREATE INDEX IF NOT EXISTS idx_tx_fee_rate ON transactions(fee_rate_satvb);
+
 CREATE TABLE IF NOT EXISTS research_findings (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   agent TEXT NOT NULL,
