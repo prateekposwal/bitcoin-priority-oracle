@@ -165,12 +165,6 @@ body{background:#1A1612;color:#EADCC8;font-family:-apple-system,BlinkMacSystemFo
     <div class="dc-q">Should I send now?</div>
     <div class="dc-a" id="send-verdict">Checking...</div>
     <div class="dc-sub">Based on current network conditions</div>
-    <div style="margin-top:12px;padding-top:10px;border-top:1px solid #3A3228;display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:12px;">
-      <span id="weather-badge" class="weather-wrap weather-sunny">☀️ <span id="weather-label">Sunny</span></span>
-      <span id="live-state" style="font-weight:600;"></span>
-      <span id="live-state-sub" style="color:#6A5D4E;"></span>
-      <span id="capacity-indicator" style="color:#6A5D4E;"></span>
-    </div>
   </div>
   <div class="fee-grid" id="fee-grid">
     <div class="fee-card fastest"><div class="fc-label">Fastest</div><div class="fc-value" id="fee-fastest">--</div><div class="fc-sub">~10 min</div></div>
@@ -202,6 +196,11 @@ body{background:#1A1612;color:#EADCC8;font-family:-apple-system,BlinkMacSystemFo
     <div class="dc-q">Should I open channels today?</div>
     <div class="dc-a" id="ln-verdict">Checking...</div>
     <div class="dc-sub" id="ln-cost">Estimating channel cost...</div>
+    <div class="dc-status" style="margin-top:12px;padding-top:10px;border-top:1px solid #3A3228;display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:12px;">
+      <span class="weather-wrap weather-sunny">☀️ <span>Sunny</span></span>
+      <span class="live-state" style="font-weight:600;"></span>
+      <span class="live-state-sub" style="color:#6A5D4E;"></span>
+    </div>
   </div>
   <div class="stat-row">
     <div class="stat-card" style="border-top:3px solid #58A6FF;"><div class="sc-label">Nodes</div><div class="sc-value" id="ln-nodes">--</div><div class="fc-sub">Public LN nodes</div></div>
@@ -453,6 +452,14 @@ document.querySelectorAll('.tab-btn').forEach(function(btn) {
     if (id === 'research') window.setTimeout(function() { VIZ_Research && VIZ_Research.resize(); }, 50);
     if (id === 'developer') window.setTimeout(function() { VIZ_Developer && VIZ_Developer.resize(); }, 50);
   });
+});
+
+// Inject network status into every panel's decision card
+document.querySelectorAll('.tab-panel .dc').forEach(function(dc) {
+  var div = document.createElement('div');
+  div.style.cssText = 'margin-top:12px;padding-top:10px;border-top:1px solid #3A3228;display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:12px;';
+  div.innerHTML = '<span id="weather-badge" class="weather-wrap weather-sunny">☀️ <span id="weather-label">Sunny</span></span><span id="live-state" style="font-weight:600;"></span><span id="live-state-sub" style="color:#6A5D4E;"></span><span id="capacity-indicator" style="color:#6A5D4E;font-size:11px;"></span>';
+  dc.appendChild(div);
 });
 
 document.getElementById('csv-download-btn').addEventListener('click', function() {
