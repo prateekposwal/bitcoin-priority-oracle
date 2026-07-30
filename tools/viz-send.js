@@ -3,6 +3,8 @@ var VIZ_Send = (function() {
   var PAD = { top: 60, right: 150, bottom: 50, left: 70 };
   var bars = [];
   var economyFee = 0;
+  var displayEconomyFee = 0;
+  var displayBtcPrice = 0;
   var btcPrice = 0;
   var hoverIdx = -1;
   var mouseX = 0, mouseY = 0;
@@ -27,6 +29,8 @@ var VIZ_Send = (function() {
         economyFee = s.fees.economyFee || 0;
         btcPrice = s.btc_price || 0;
       });
+      displayEconomyFee = economyFee;
+      displayBtcPrice = btcPrice;
     }
     tick();
   }
@@ -86,6 +90,8 @@ var VIZ_Send = (function() {
   function tick() {
     if (!ctx) return;
     try {
+    displayEconomyFee += (economyFee - displayEconomyFee) * 0.05;
+    displayBtcPrice += (btcPrice - displayBtcPrice) * 0.05;
     ctx.clearRect(0, 0, w, h);
     var n = bars.length;
     if (n === 0) { requestAnimationFrame(tick); return; }
@@ -137,8 +143,8 @@ var VIZ_Send = (function() {
     ctx.fillText('sat/vB', 0, 0);
     ctx.restore();
 
-    if (economyFee > 0) {
-      var ecoY = cB - (economyFee / maxF) * cH;
+    if (displayEconomyFee > 0) {
+      var ecoY = cB - (displayEconomyFee / maxF) * cH;
       if (ecoY >= cT && ecoY <= cB) {
         ctx.strokeStyle = 'rgba(46, 160, 67, 0.5)';
         ctx.lineWidth = 1.5;
@@ -152,7 +158,7 @@ var VIZ_Send = (function() {
         ctx.textAlign = 'left';
         ctx.textBaseline = 'bottom';
         ctx.font = '10px -apple-system, Helvetica, sans-serif';
-        ctx.fillText('Economy ' + economyFee + ' sat/vB', cR + 6, ecoY - 2);
+        ctx.fillText('Economy ' + displayEconomyFee.toFixed(1) + ' sat/vB', cR + 6, ecoY - 2);
       }
     }
 

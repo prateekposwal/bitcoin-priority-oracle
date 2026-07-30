@@ -1,7 +1,9 @@
 var VIZ_Exchange = (function() {
   var canvas, ctx, w = 0, h = 0;
   var economyFee = 3;
+  var displayEconomyFee = 3;
   var btcPrice = 60000;
+  var displayBtcPrice = 60000;
   var batchDiscount = 0.60;
   var isDragging = false;
   var tooltipData = null;
@@ -48,6 +50,8 @@ var VIZ_Exchange = (function() {
   }
 
   function draw() {
+    displayEconomyFee += (economyFee - displayEconomyFee) * 0.05;
+    displayBtcPrice += (btcPrice - displayBtcPrice) * 0.05;
     ctx.clearRect(0, 0, w, h);
     ctx.fillStyle = '#1A1612';
     ctx.fillRect(0, 0, w, h);
@@ -55,8 +59,8 @@ var VIZ_Exchange = (function() {
     var t = Date.now() / 1000;
     var mob = isMobile();
 
-    var individualCost = 150 * economyFee * btcPrice / 100000000;
-    var batchedCost = (80 + 1000 * 18) * economyFee * btcPrice / 100000000;
+    var individualCost = 150 * displayEconomyFee * displayBtcPrice / 100000000;
+    var batchedCost = (80 + 1000 * 18) * displayEconomyFee * displayBtcPrice / 100000000;
     var savings = individualCost * 1000 - batchedCost;
     var efficiency = individualCost > 0 ? ((individualCost * 1000 - batchedCost) / (individualCost * 1000) * 100) : 0;
     efficiency = Math.min(100, Math.max(0, efficiency));

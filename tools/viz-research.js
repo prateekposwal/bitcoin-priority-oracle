@@ -13,6 +13,7 @@ const VIZ_Research = (() => {
   let btcPrice = 64000;
   let stacked = false;
   let feeSpread = { fastest: 3, hour: 1.5, economy: 1 };
+  let animTime = 0;
 
   function isMobile() { return w < 480; }
 
@@ -73,7 +74,7 @@ const VIZ_Research = (() => {
     loop();
   }
 
-  function loop() { try { draw(); } catch (e) {}
+  function loop() { try { animTime += 0.02; draw(); } catch (e) {}
     rafId = requestAnimationFrame(loop);
   }
 
@@ -241,16 +242,19 @@ const VIZ_Research = (() => {
 
     for (var i = 0; i < 3; i++) {
       var cx = 40 + i * (cardW + cardGap);
+      var pulse = Math.sin(animTime * 1.2 + i) * 0.03 + 0.97;
       ctx.fillStyle = '#231F19';
       ctx.strokeStyle = '#3A3228';
       ctx.lineWidth = 1;
+      if (i === 1) { ctx.shadowColor = 'rgba(192,57,43,0.06)'; ctx.shadowBlur = 6 + Math.sin(animTime * 1.2) * 3; }
       roundRect(ctx, cx, py, cardW, 80, 10);
       ctx.fill();
       ctx.stroke();
+      ctx.shadowBlur = 0;
 
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.font = 'bold 24px -apple-system, sans-serif';
+      ctx.font = 'bold ' + Math.round(24 * pulse) + 'px -apple-system, sans-serif';
       ctx.fillStyle = cardData[i].color;
       ctx.fillText(cardData[i].value, cx + cardW / 2, py + 30);
       ctx.font = '10px -apple-system, sans-serif';
@@ -281,7 +285,10 @@ const VIZ_Research = (() => {
     ctx.textBaseline = 'middle';
     ctx.font = 'bold 14px -apple-system, sans-serif';
     ctx.fillStyle = trend === 'up' ? '#C0392B' : trend === 'down' ? '#3BA35D' : '#D4762A';
+    ctx.shadowColor = trend === 'up' ? 'rgba(192,57,43,0.15)' : trend === 'down' ? 'rgba(59,163,93,0.15)' : 'rgba(212,118,42,0.15)';
+    ctx.shadowBlur = 6 + Math.sin(animTime * 1.5) * 3;
     ctx.fillText(trendIcon + ' Fees trending ' + trendWord + ' over last 24 hours', 60, py + 25);
+    ctx.shadowBlur = 0;
   }
 
   function downloadCSV() {
