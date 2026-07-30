@@ -133,6 +133,13 @@ var server = http.createServer(function(req, res) {
       }
     });
 
+  } else if (route === '/post-log.json') {
+    var postLogPath = path.resolve(__dirname, '..', '..', 'captured-data', 'post-log.json');
+    if (require('fs').existsSync(postLogPath)) {
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(require('fs').readFileSync(postLogPath, 'utf8'));
+    } else { jsonResponse(res, { posts: [] }); }
+
   } else if (route === '/team' || route === '/team.html') {
     var teamPath = path.resolve(__dirname, '..', '..', 'docs', 'team.html');
     if (require('fs').existsSync(teamPath)) {

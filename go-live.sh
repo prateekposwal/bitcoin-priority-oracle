@@ -77,8 +77,9 @@ log "[4/4] Starting health monitor..."
       cd "$DIR" && node tools/data-engineering/server.js &
       echo $! > "$PIDDIR/de-server.pid"
     fi
-    # Generate fresh RSS
+    # Generate fresh RSS + sync post log to docs
     cd "$DIR" && node -e "require('./tools/marketing/publisher.js').generateRSSFeed();" 2>/dev/null
+    cp "$DIR/captured-data/post-log.json" "$DIR/docs/post-log.json" 2>/dev/null
     sleep 300
   done
 ) &
