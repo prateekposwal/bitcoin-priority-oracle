@@ -839,14 +839,29 @@ if (typeof DATA_ENGINE !== 'undefined') {
 (function() {
   try {
     var ws = new WebSocket('wss://mempool.space/api/v1/ws');
+    var blockFlashActive = 0;
     ws.onmessage = function(e) {
       try {
         var msg = JSON.parse(e.data);
         if (msg && (msg.action === 'newBlock' || msg.action === 'mempool' || msg.txid)) {
           if (typeof DATA_ENGINE !== 'undefined') DATA_ENGINE.start();
+          if (msg.action === 'newBlock') blockFlashActive = 60;
         }
       } catch (err) {}
     };
+    // New Block flash animation loop
+    (function flashLoop() {
+      if (blockFlashActive > 0) {
+        blockFlashActive--;
+        var intensity = blockFlashActive / 60;
+        document.querySelectorAll('.dc, .fee-card, .stat-card, .brief-card, .insight-card, #weather-badge, .viz-canvas').forEach(function(el) {
+          if (blockFlashActive > 55) { el.style.transition = 'box-shadow 0.1s'; el.style.boxShadow = 'inset 0 0 40px rgba(212,147,58,' + (intensity * 0.3) + ')'; }
+          else if (blockFlashActive === 0) { el.style.boxShadow = ''; el.style.transition = ''; }
+          else { el.style.boxShadow = 'inset 0 0 ' + (intensity * 30) + 'px rgba(212,147,58,' + (intensity * 0.15) + ')'; }
+        });
+      }
+      requestAnimationFrame(flashLoop);
+    })();
     ws.onclose = function() { setTimeout(function() {
       try { var ws2 = new WebSocket('wss://mempool.space/api/v1/ws'); } catch (e) {}
     }, 30000); };
