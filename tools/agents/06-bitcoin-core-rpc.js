@@ -59,7 +59,7 @@ async function getMempoolInfo() {
 }
 
 async function getBlockStats(hash) {
-  return await rpcCall('getblockstats', [hash, ['avgfee', 'avgfeerate', 'maxfee', 'minfee', 'medfee', 'feerate_percentiles', 'subsidy', 'total_out', 'totalfee', 'utxo_size_inc', 'outs']]);
+  return await rpcCall('getblockstats', [hash, ['avgfee', 'avgfeerate', 'maxfee', 'minfee', 'feerate_percentiles', 'subsidy', 'total_out', 'totalfee', 'utxo_size_inc', 'outs']]);
 }
 
 async function getBlock(hash) {

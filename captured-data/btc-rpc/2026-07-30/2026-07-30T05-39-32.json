@@ -1,0 +1,51 @@
+{
+  "ok": true,
+  "error": null,
+  "blockchain": {
+    "chain": "main",
+    "blocks": 0,
+    "headers": 7559,
+    "bestBlockHash": "000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f",
+    "difficulty": 1,
+    "sizeOnDisk": 293,
+    "pruned": true,
+    "pruneHeight": 0,
+    "verificationProgress": 6.756193638183454e-10
+  },
+  "mempool": {
+    "size": 0,
+    "bytes": 0,
+    "usage": 0,
+    "maxmempool": 5000000,
+    "mempoolminfee": 0.00001
+  },
+  "blocks": [
+    {
+      "height": 0,
+      "hash": "000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f",
+      "time": 1231006505,
+      "txCount": 1,
+      "size": 285,
+      "weight": 1140,
+      "avgFee": 0,
+      "avgFeeRate": 0,
+      "maxFee": 0,
+      "minFee": 0,
+      "medFee": 0,
+      "feePercentiles": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "subsidy": 5000000000,
+      "totalFee": 0,
+      "totalOut": 0,
+      "utxoSizeInc": 117,
+      "outputs": 1
+    }
+  ],
+  "peerCount": 8,
+  "elapsed": 14
+}

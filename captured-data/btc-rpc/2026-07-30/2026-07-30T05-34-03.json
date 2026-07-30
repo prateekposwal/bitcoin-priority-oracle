@@ -1,0 +1,25 @@
+{
+  "ok": true,
+  "error": null,
+  "blockchain": {
+    "chain": "main",
+    "blocks": 0,
+    "headers": 0,
+    "bestBlockHash": "000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f",
+    "difficulty": 1,
+    "sizeOnDisk": 293,
+    "pruned": true,
+    "pruneHeight": 0,
+    "verificationProgress": 6.756203503684799e-10
+  },
+  "mempool": {
+    "size": 0,
+    "bytes": 0,
+    "usage": 0,
+    "maxmempool": 5000000,
+    "mempoolminfee": 0.00001
+  },
+  "blocks": [],
+  "peerCount": 6,
+  "elapsed": 14
+}
