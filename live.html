@@ -513,15 +513,21 @@ if (typeof DATA_ENGINE !== 'undefined') {
   var weight = lastBlock ? lastBlock.weight : 0;
   var weightPct = weight > 0 ? weight / 4000000 : 0;
 
-  // Bitcoin Weather computation
+  // Bitcoin Weather computation — fees FIRST, then mempool as modifier
   var weather = { icon: '☀️', label: 'Sunny', cls: 'weather-sunny', advice: 'Good time to send', color: '#3BA35D' };
   if (!fees.fastestFee && !fees.economyFee) {
     weather = { icon: '⏳', label: 'Offline', cls: 'weather-cloudy', advice: 'Data source unavailable', color: '#9B8B78' };
   } else if (f2 >= 100) { weather = { icon: '🌀', label: 'Extreme', cls: 'weather-extreme', advice: 'Avoid sending — fees are extreme', color: '#C0392B' }; }
   else if (f2 >= 50) { weather = { icon: '⛈', label: 'Storm', cls: 'weather-storm', advice: 'Network congested — wait if possible', color: '#C0392B' }; }
-  else if (f2 >= 20 || mpCount > 80000) { weather = { icon: '🌧', label: 'Rainy', cls: 'weather-rainy', advice: 'Fees elevated — economy rate recommended', color: '#D4762A' }; }
-  else if (f2 >= 10 || mpCount > 40000 || weightPct > 0.8) { weather = { icon: '⛅', label: 'Breezy', cls: 'weather-cloudy', advice: 'Moderate traffic — send with economy fee', color: '#D4933A' }; }
-  else if (f2 >= 5 || mpCount > 15000) { weather = { icon: '🌤', label: 'Partly Cloudy', cls: 'weather-cloudy', advice: 'Fees are low — good to send', color: '#D4933A' }; }
+  else if (f2 >= 20) { weather = { icon: '🌧', label: 'Rainy', cls: 'weather-rainy', advice: 'Fees elevated — economy rate recommended', color: '#D4762A' }; }
+  else if (f2 >= 10) { weather = { icon: '⛅', label: 'Breezy', cls: 'weather-cloudy', advice: 'Moderate traffic — send with economy fee', color: '#D4933A' }; }
+  else { weather = { icon: '☀️', label: 'Sunny', cls: 'weather-sunny', advice: 'Lowest fees — good to send', color: '#3BA35D' }; }
+  // Mempool modifier: if mempool is large but fees are still low, advise appropriately
+  if (weather.label === 'Sunny' && mpCount > 40000 && f2 < 5) {
+    weather = { icon: '🌤', label: 'Building', cls: 'weather-cloudy', advice: 'Mempool rising but fees low — send soon', color: '#D4933A' };
+  } else if (weather.label === 'Sunny' && mpCount > 15000 && f2 < 5) {
+    weather = { icon: '🌤', label: 'Partly Cloudy', cls: 'weather-cloudy', advice: 'Fees low — good time to send', color: '#D4933A' };
+  }
 
   var inflowRate = Math.round(mpCount / 600 * 60);
   document.querySelectorAll('#weather-badge').forEach(function(b) {
