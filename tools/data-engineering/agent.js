@@ -7,6 +7,7 @@ var monitor = require('./monitor.js');
 var report = require('./report.js');
 var tracker = require('../../tools/agents/03-block-interval-tracker.js');
 var btcRpc = require('../../tools/agents/06-bitcoin-core-rpc.js');
+var digest = require('../../tools/agents/12-research-digest.js');
 
 var STATE = { lastRun: null, cycleCount: 0, discoveredSources: [], issues: [] };
 var STATE_FILE = path.resolve(__dirname, '..', '..', CONFIG.agent.stateFile);
@@ -123,6 +124,16 @@ async function runCycle() {
         await report.reportToTelos(dailyReport);
         await report.reportToArchitect(dailyReport);
         log('Reports saved');
+      }
+      // Generate research digest every 4 cycles (daily at 60min cycle)
+      if (STATE.cycleCount % 4 === 0) {
+        try {
+          log('Generating research digest...');
+          digest.generateLinkedInPost();
+          digest.generateTweetThread();
+          digest.generateRedditPost();
+          log('Digest saved to reports/digest/');
+        } catch (e) { log('Digest error: ' + e.message); }
       }
     } catch (e) { log('Report error: ' + e.message); }
   }
