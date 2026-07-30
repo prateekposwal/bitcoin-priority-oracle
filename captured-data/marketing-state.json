@@ -1,8 +1,33 @@
 {
-  "totalPosted": 0,
-  "totalScheduled": 0,
-  "lastRun": "2026-07-30T21:51:20.913Z",
-  "posts": [],
-  "platformStats": {},
+  "totalPosted": 3,
+  "totalScheduled": 2,
+  "lastRun": "2026-07-30T22:01:26.834Z",
+  "posts": [
+    {
+      "id": "BSAHI-MS81T2KU-LUOE",
+      "platform": "linkedin",
+      "topic": "fee",
+      "postedAt": "2026-07-30T22:01:26.065Z",
+      "url": "nostr:event:cf2377b882252ab309b1d4c0881eaa74dc0cab4ce0199ceba34471fb0e25d580"
+    },
+    {
+      "id": "BSAHI-MS81T2KW-YJA0",
+      "platform": "twitter",
+      "topic": "fee",
+      "postedAt": "2026-07-30T22:01:26.456Z",
+      "url": "nostr:event:92e2e6b63da9e48a6098dc54b25bc136376c9aa7189d4df7692fcdc2c1d12b29"
+    },
+    {
+      "id": "BSAHI-MS825T4O-2MBM",
+      "platform": "linkedin",
+      "topic": "fee",
+      "postedAt": "2026-07-30T22:01:26.828Z",
+      "url": "nostr:event:8d238b573bbd2de6532bafe149a77266ef36b50cc2075acd149bf9fce6a15a86"
+    }
+  ],
+  "platformStats": {
+    "linkedin": 2,
+    "twitter": 1
+  },
   "cycleCount": 1
 }

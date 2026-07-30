@@ -2,6 +2,8 @@
   "name": "block-space-economics-test",
   "private": true,
   "dependencies": {
-    "playwright": "^1.62.0"
+    "nostr-tools": "^2.24.1",
+    "playwright": "^1.62.0",
+    "ws": "^8.21.1"
   }
 }

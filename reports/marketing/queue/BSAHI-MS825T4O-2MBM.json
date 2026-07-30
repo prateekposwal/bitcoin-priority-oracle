@@ -1,13 +1,13 @@
 {
-  "id": "BSAHI-MS81T2KU-LUOE",
+  "id": "BSAHI-MS825T4O-2MBM",
   "platform": "linkedin",
   "topic": "fee",
   "content": "Bitcoin's fee market is the most sophisticated congestion pricing mechanism in the digital asset world. It allocates ~7 MB of block space per day among thousands of competing transactions.\n\nBut it only prices **congestion** — not **permanence**.\n\nEvery transaction is stored by ~27,800 nodes forever. The fee is paid once. The storage persists for years.\n\nOur Storage Cost Coverage Ratio measures this gap.\n\nCurrent ratio: 0.0149 — meaning fees cover 1.5% of 10-year storage cost.\n\nOpen research question. Reproducible methodology. Published at https://bitcoinsahi.com/learn",
   "status": "posted",
-  "created": "2026-07-30T21:51:20.910Z",
+  "created": "2026-07-30T22:01:15.192Z",
   "scheduledFor": "2026-07-30",
-  "postedAt": "2026-07-30T22:01:26.065Z",
-  "url": "nostr:event:cf2377b882252ab309b1d4c0881eaa74dc0cab4ce0199ceba34471fb0e25d580",
+  "postedAt": "2026-07-30T22:01:26.828Z",
+  "url": "nostr:event:8d238b573bbd2de6532bafe149a77266ef36b50cc2075acd149bf9fce6a15a86",
   "engagement": {
     "likes": 0,
     "replies": 0,
