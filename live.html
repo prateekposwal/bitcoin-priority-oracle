@@ -55,6 +55,13 @@ body{background:#1A1612;color:#EADCC8;font-family:-apple-system,BlinkMacSystemFo
 .insight-title{font-size:.9rem;font-weight:600;color:#EADCC8;margin-bottom:6px}
 .insight-text{font-size:.85rem;color:#9B8B78;line-height:1.6}
 
+.weather-wrap{display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:8px;font-size:13px}
+.weather-sunny{background:rgba(59,163,93,.1);color:#3BA35D}
+.weather-cloudy{background:rgba(212,147,58,.1);color:#D4933A}
+.weather-rainy{background:rgba(212,118,42,.12);color:#D4762A}
+.weather-storm{background:rgba(192,57,43,.12);color:#C0392B}
+.weather-extreme{background:rgba(192,57,43,.2);color:#C0392B}
+
 .brief-card{background:rgba(212,147,58,.04);border:1px solid rgba(212,147,58,.12);border-radius:10px;padding:12px 16px;margin:12px 0;display:flex;align-items:flex-start;gap:10px}
 .brief-icon{font-size:1.1rem;flex-shrink:0;margin-top:1px}
 .brief-content{font-size:.8rem;color:#9B8B78;line-height:1.5}
@@ -151,9 +158,10 @@ body{background:#1A1612;color:#EADCC8;font-family:-apple-system,BlinkMacSystemFo
 </div>
 
 <div style="position:sticky;top:41px;z-index:19;background:#1A1612;padding:12px 24px;border-bottom:1px solid #2A2622;text-align:center;">
-  <span id="live-state" style="font-size:16px;font-weight:600;letter-spacing:0.5px;color:#3FB950;">🟢 Network calm</span>
-  <span id="live-state-sub" style="font-size:14px;color:rgba(255,255,255,0.4);margin-left:10px;">Fees are low</span>
-  <span id="capacity-indicator" style="margin-left:16px;font-size:12px;color:rgba(255,255,255,0.25);font-variant-numeric:tabular-nums;"></span>
+  <span id="weather-badge" class="weather-wrap weather-sunny">☀️ <span id="weather-label">Sunny</span></span>
+  <span id="live-state" style="font-size:15px;font-weight:600;letter-spacing:0.3px;color:#3FB950;margin-left:8px;">Network calm</span>
+  <span id="live-state-sub" style="font-size:13px;color:rgba(255,255,255,0.4);margin-left:6px;">Fees are low</span>
+  <span id="capacity-indicator" style="margin-left:12px;font-size:11px;color:rgba(255,255,255,0.25);font-variant-numeric:tabular-nums;"></span>
 </div>
 
 <div class="content">
@@ -482,13 +490,34 @@ if (typeof DATA_ENGINE !== 'undefined') {
   var fees = d.fees;
 
   var f2 = fees.fastestFee || 0;
+  var mpCount = d.mempool ? (d.mempool.count || 0) : 0;
+  var blocks = d.blocks || [];
+  var lastBlock = blocks.length > 0 ? blocks[0] : null;
+  var weight = lastBlock ? lastBlock.weight : 0;
+  var weightPct = weight > 0 ? weight / 4000000 : 0;
+
+  // Bitcoin Weather computation
+  var weather = { icon: '☀️', label: 'Sunny', cls: 'weather-sunny', advice: 'Good time to send', color: '#3BA35D' };
+  if (!fees.fastestFee && !fees.economyFee) {
+    weather = { icon: '⏳', label: 'Offline', cls: 'weather-cloudy', advice: 'Data source unavailable', color: '#9B8B78' };
+  } else if (f2 >= 100) { weather = { icon: '🌀', label: 'Extreme', cls: 'weather-extreme', advice: 'Avoid sending — fees are extreme', color: '#C0392B' }; }
+  else if (f2 >= 50) { weather = { icon: '⛈', label: 'Storm', cls: 'weather-storm', advice: 'Network congested — wait if possible', color: '#C0392B' }; }
+  else if (f2 >= 20 || mpCount > 80000) { weather = { icon: '🌧', label: 'Rainy', cls: 'weather-rainy', advice: 'Fees elevated — economy rate recommended', color: '#D4762A' }; }
+  else if (f2 >= 10 || mpCount > 40000 || weightPct > 0.8) { weather = { icon: '⛅', label: 'Breezy', cls: 'weather-cloudy', advice: 'Moderate traffic — send with economy fee', color: '#D4933A' }; }
+  else if (f2 >= 5 || mpCount > 15000) { weather = { icon: '🌤', label: 'Partly Cloudy', cls: 'weather-cloudy', advice: 'Fees are low — good to send', color: '#D4933A' }; }
+
   var stateEl = document.getElementById('live-state');
   var stateSub = document.getElementById('live-state-sub');
-  if (!fees.fastestFee && !fees.economyFee) {
-    stateEl.textContent = '⏳ Data source offline'; stateEl.style.color = '#9B8B78'; stateSub.textContent = 'mempool.space is temporarily unreachable — showing cached data if available';
-  } else if (f2 < 5) { stateEl.textContent = '🟢 Network calm'; stateEl.style.color = '#3FB950'; stateSub.textContent = 'Fees are low — good to send'; }
-  else if (f2 < 20) { stateEl.textContent = '🟡 Moderate congestion'; stateEl.style.color = '#D29922'; stateSub.textContent = 'Fees elevated — economy rate recommended'; }
-  else { stateEl.textContent = '🔴 Network congested'; stateEl.style.color = '#F85149'; stateSub.textContent = 'Fees are high — consider waiting'; }
+  var badge = document.getElementById('weather-badge');
+  var label = document.getElementById('weather-label');
+  if (badge) { badge.className = 'weather-wrap ' + weather.cls; }
+  if (label) { label.textContent = weather.label; }
+  if (stateEl) { stateEl.textContent = weather.advice; stateEl.style.color = weather.color; }
+  if (stateSub) {
+    if (!fees.fastestFee && !fees.economyFee) stateSub.textContent = 'Showing cached data if available';
+    else if (f2 >= 50) stateSub.textContent = 'Fastest ' + f2 + ' sat/vB · Mempool ' + mpCount.toLocaleString() + ' · Consider waiting';
+    else stateSub.textContent = 'Fastest ' + f2 + ' sat/vB · Economy ' + (fees.economyFee || 1) + ' sat/vB · ' + mpCount.toLocaleString() + ' in mempool';
+  }
 
   document.getElementById('fee-fastest').textContent = (fees.fastestFee || '--') + ' sat/vB';
   document.getElementById('fee-hour').textContent = (fees.hourFee || '--') + ' sat/vB';
