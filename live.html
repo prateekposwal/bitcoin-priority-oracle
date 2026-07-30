@@ -508,6 +508,8 @@ if (typeof DATA_ENGINE !== 'undefined') {
 
   var f2 = fees.fastestFee || 0;
   var mpCount = d.mempool ? (d.mempool.count || 0) : 0;
+  if (lastFastestFee > 0 && f2 > lastFastestFee * 2 && f2 > 5) feeFlashActive = 40;
+  lastFastestFee = f2;
   var blocks = d.blocks || [];
   var lastBlock = blocks.length > 0 ? blocks[0] : null;
   var weight = lastBlock ? lastBlock.weight : 0;
@@ -840,7 +842,8 @@ if (typeof DATA_ENGINE !== 'undefined') {
   try {
     var ws = new WebSocket('wss://mempool.space/api/v1/ws');
     var blockFlashActive = 0;
-    ws.onmessage = function(e) {
+    var feeFlashActive = 0;
+    var lastFastestFee = 0;
       try {
         var msg = JSON.parse(e.data);
         if (msg && (msg.action === 'newBlock' || msg.action === 'mempool' || msg.txid)) {
@@ -851,14 +854,39 @@ if (typeof DATA_ENGINE !== 'undefined') {
     };
     // New Block flash animation loop
     (function flashLoop() {
+      var flash = false;
       if (blockFlashActive > 0) {
-        blockFlashActive--;
-        var intensity = blockFlashActive / 60;
-        document.querySelectorAll('.dc, .fee-card, .stat-card, .brief-card, .insight-card, #weather-badge, .viz-canvas').forEach(function(el) {
-          if (blockFlashActive > 55) { el.style.transition = 'box-shadow 0.1s'; el.style.boxShadow = 'inset 0 0 40px rgba(212,147,58,' + (intensity * 0.3) + ')'; }
-          else if (blockFlashActive === 0) { el.style.boxShadow = ''; el.style.transition = ''; }
-          else { el.style.boxShadow = 'inset 0 0 ' + (intensity * 30) + 'px rgba(212,147,58,' + (intensity * 0.15) + ')'; }
+        blockFlashActive--; flash = true;
+        var bIntensity = blockFlashActive / 60;
+        var bColor = 'rgba(212,147,58,' + (blockFlashActive > 55 ? 0.3 : bIntensity * 0.15) + ')';
+        var bSize = blockFlashActive > 55 ? 40 : bIntensity * 30;
+        document.querySelectorAll('.dc, .fee-card, .stat-card, .brief-card, .insight-card, .viz-canvas').forEach(function(el) {
+          el.style.transition = 'box-shadow 0.1s';
+          el.style.boxShadow = 'inset 0 0 ' + bSize + 'px ' + bColor;
         });
+        if (blockFlashActive === 0) {
+          setTimeout(function() {
+            document.querySelectorAll('.dc, .fee-card, .stat-card, .brief-card, .insight-card, .viz-canvas').forEach(function(el) {
+              el.style.boxShadow = ''; el.style.transition = '';
+            });
+          }, 150);
+        }
+      }
+      if (feeFlashActive > 0) {
+        feeFlashActive--; flash = true;
+        var fIntensity = feeFlashActive / 40;
+        document.querySelectorAll('.fee-card.fastest, #weather-badge').forEach(function(el) {
+          el.style.transition = 'box-shadow 0.1s, border-color 0.1s';
+          el.style.boxShadow = '0 0 ' + (fIntensity * 20) + 'px rgba(248,81,73,' + (fIntensity * 0.4) + ')';
+          el.style.borderColor = 'rgba(248,81,73,' + (fIntensity * 0.5) + ')';
+        });
+        if (feeFlashActive === 0) {
+          setTimeout(function() {
+            document.querySelectorAll('.fee-card.fastest, #weather-badge').forEach(function(el) {
+              el.style.boxShadow = ''; el.style.borderColor = ''; el.style.transition = '';
+            });
+          }, 150);
+        }
       }
       requestAnimationFrame(flashLoop);
     })();
