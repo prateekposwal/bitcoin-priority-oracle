@@ -151,29 +151,46 @@ var VIZ_Developer = (function() {
     var el = document.getElementById('dev-overview');
     if (!el) return;
     var total = DATA_SOURCES.length;
-    var okCount = 0, latSum = 0, latCount = 0, newestCheck = 0;
+    var okCount = 0, latSum = 0, latCount = 0, newestCheck = 0, checkedCount = 0;
     DATA_SOURCES.forEach(function(s) {
       var st = states[s.key];
+      if (st.lastChecked) checkedCount++;
       if (st.ok) okCount++;
       if (st.latency !== null) { latSum += st.latency; latCount++; }
       if (st.lastChecked && st.lastChecked > newestCheck) newestCheck = st.lastChecked;
     });
-    var uptime = latCount > 0 ? (okCount / total * 100).toFixed(1) : '99.9';
+    var checked = checkedCount === total;
+    var uptime = checked ? (okCount / total * 100).toFixed(1) : '--';
     var avgLat = latCount > 0 ? Math.round(latSum / latCount) : '—';
-    var freshness = newestCheck > 0 ? Math.floor((Date.now() - newestCheck) / 1000) + 's ago' : 'just now';
+    var freshness = newestCheck > 0 ? Math.floor((Date.now() - newestCheck) / 1000) + 's ago' : (checked ? 'stale' : 'checking...');
 
     el.innerHTML =
-      '<span style="font-weight:600;color:#E8E5E0;">4 featured</span>' +
+      '<span style="font-weight:600;color:#EADCC8;">4 featured</span>' +
       '<span style="color:rgba(255,255,255,0.4);">Avg ' + avgLat + ' ms</span>' +
-      '<span style="color:rgba(255,255,255,0.4);"><span style="color:#3FB950;">' + uptime + '%</span> uptime</span>' +
+      '<span style="color:rgba(255,255,255,0.4);"><span style="color:' + (checked ? (uptime > 90 ? '#3BA35D' : uptime > 50 ? '#D4762A' : '#C0392B') : '#6A5D4E') + ';">' + (checked ? uptime + '%' : '--') + '</span> uptime</span>' +
       '<span style="color:rgba(255,255,255,0.3);font-size:11px;">Updated ' + freshness + '</span>';
 
     var verdict = document.getElementById('dev-verdict');
     if (verdict) {
-      var allOk = okCount === total;
-      verdict.textContent = allOk ? 'All systems operational' : okCount + '/' + total + ' sources online';
-      verdict.className = 'dc-a ' + (allOk ? 'green' : 'yellow');
+      if (!checked) {
+        verdict.textContent = 'Checking data sources...';
+        verdict.className = 'dc-a';
+        verdict.style.color = '#6A5D4E';
+      } else if (okCount === total) {
+        verdict.textContent = 'All systems operational';
+        verdict.className = 'dc-a green';
+      } else if (okCount === 0) {
+        verdict.textContent = 'Data sources unreachable';
+        verdict.className = 'dc-a red';
+      } else {
+        verdict.textContent = okCount + '/' + total + ' sources online';
+        verdict.className = 'dc-a yellow';
+      }
     }
+
+    var uptimeEl = document.getElementById('dev-uptime');
+    if (uptimeEl) uptimeEl.textContent = checked ? uptime + '%' : '--';
+  }
 
     var uptimeEl = document.getElementById('dev-uptime');
     if (uptimeEl) uptimeEl.textContent = uptime + '%';
