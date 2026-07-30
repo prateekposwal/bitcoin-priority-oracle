@@ -93,12 +93,32 @@ a:hover{color:#E8B86D}
 
 <section class="hero">
 <h1>Where Does Bitcoin's <span>Capacity</span> Go?</h1>
-<p>Bitcoin's typical on-chain throughput is <strong>~3–7 transactions per second</strong> (workload-dependent). But capacity isn't just throughput — it's block weight utilization, SegWit adoption, batching efficiency, and Layer 2 growth. This page shows every dimension of Bitcoin's capacity, live.</p>
+<p>Bitcoin settles <strong id="settlement-hero">$18B+</strong> daily — not because it processes millions of transactions per second, but because each transaction carries economic value. Capacity isn't TPS. It's block weight, SegWit adoption, batching efficiency, and Layer 2 growth. This page shows every dimension, live.</p>
 </section>
 
 <div class="container">
 
 <canvas id="capacity-canvas"></canvas>
+
+<div class="stat-row" style="margin-bottom:24px;">
+  <div class="stat-card" style="flex:1.5;background:#231F19;border:1px solid #D4933A;border-radius:12px;padding:20px;text-align:center;">
+    <div class="stat-label" style="font-size:.7rem;color:#6A5D4E;text-transform:uppercase;letter-spacing:.08em;font-weight:600;">Daily Settlement Volume</div>
+    <div class="stat-value" id="settlement-volume" style="font-size:2rem;font-weight:800;color:#D4933A;font-family:'SF Mono',monospace;font-variant-numeric:tabular-nums;">--</div>
+    <div class="stat-sub" style="font-size:.75rem;color:#6A5D4E;margin-top:4px;">Estimated USD value settled on-chain per day</div>
+  </div>
+  <div class="stat-card" style="flex:1;background:#231F19;border:1px solid #3A3228;border-radius:12px;padding:20px;text-align:center;">
+    <div class="stat-label" style="font-size:.7rem;color:#6A5D4E;text-transform:uppercase;letter-spacing:.08em;font-weight:600;">Avg Tx Value</div>
+    <div class="stat-value" id="avg-tx-value" style="font-size:1.5rem;font-weight:700;color:#EADCC8;font-family:'SF Mono',monospace;font-variant-numeric:tabular-nums;">--</div>
+  </div>
+  <div class="stat-card" style="flex:1;background:#231F19;border:1px solid #3A3228;border-radius:12px;padding:20px;text-align:center;">
+    <div class="stat-label" style="font-size:.7rem;color:#6A5D4E;text-transform:uppercase;letter-spacing:.08em;font-weight:600;">On-Chain Txs/Day</div>
+    <div class="stat-value" id="daily-txs" style="font-size:1.5rem;font-weight:700;color:#EADCC8;font-family:'SF Mono',monospace;font-variant-numeric:tabular-nums;">--</div>
+  </div>
+  <div class="stat-card" style="flex:1;background:#231F19;border:1px solid #3A3228;border-radius:12px;padding:20px;text-align:center;">
+    <div class="stat-label" style="font-size:.7rem;color:#6A5D4E;text-transform:uppercase;letter-spacing:.08em;font-weight:600;">LN Capacity</div>
+    <div class="stat-value" id="ln-capacity-val" style="font-size:1.5rem;font-weight:700;color:#58A6FF;font-family:'SF Mono',monospace;font-variant-numeric:tabular-nums;">--</div>
+  </div>
+</div>
 
 <div class="compact-grid" id="metric-grid">
   <div class="stat-card"><div class="stat-label">On-Chain Throughput</div><div class="stat-value" style="font-size:1.2rem;">~3-7 tx/s</div></div>
@@ -169,6 +189,31 @@ DATA_ENGINE.onUpdate(function() {
 
   // Avg tx size from latest block
   var avgTxSize = (lastBlock && lastBlock.tx_count > 0) ? Math.round(lastBlock.size / lastBlock.tx_count) : '--';
+
+  // Settlement capacity
+  var totalFeesBlock = 0;
+  var totalTxs = 0;
+  for (var si = 0; si < fh.length; si++) { totalFeesBlock += fh[si].avgFees || 0; totalTxs += 2500; }
+  var avgFeePerBlock = fh.length > 0 ? totalFeesBlock / fh.length : 0;
+  var blocksPerDay = 144;
+  var dailyBtcMined = 3.125 * blocksPerDay;
+  var dailyFeesBtc = (avgFeePerBlock * blocksPerDay) / 100000000;
+  var dailySettlement = (dailyBtcMined + dailyFeesBtc) * btcPrice;
+  var avgTxValue = dailySettlement / (totalTxs || 1);
+
+  fmtCurrency = function(v) {
+    if (v >= 1000000000) return '$' + (v / 1000000000).toFixed(1) + 'B';
+    if (v >= 1000000) return '$' + (v / 1000000).toFixed(1) + 'M';
+    if (v >= 1000) return '$' + (v / 1000).toFixed(1) + 'K';
+    return '$' + v.toFixed(0);
+  };
+
+  $('settlement-volume').textContent = fmtCurrency(dailySettlement);
+  var heroEl = document.getElementById('settlement-hero');
+  if (heroEl) heroEl.textContent = fmtCurrency(dailySettlement) + '+';
+  $('avg-tx-value').textContent = fmtCurrency(avgTxValue);
+  $('daily-txs').textContent = (totalTxs || 0).toLocaleString();
+  $('ln-capacity-val').textContent = ((ln.total_capacity || 0) / 100000000).toFixed(0) + ' BTC';
 
   // Update compact grid
   $('m-inflow').textContent = inflowRate + ' tx/min';
