@@ -3,6 +3,8 @@ var VIZ_Miner = (function() {
   var feeHistory = [];
   var sparklineData = [];
   var btcPrice = 64000;
+  var displayPrice = 64000;
+  var displayFee = 5000000;
   var blockIndex = 0;
 
   function isMobile() { return w < 480; }
@@ -73,7 +75,10 @@ var VIZ_Miner = (function() {
 
   function loop() { try {
     var t = Date.now() / 1000;
-    var feeTotal = getCurrentFee();
+    var targetFee = getCurrentFee();
+    displayFee += (targetFee - displayFee) * 0.08;
+    displayPrice += (btcPrice - displayPrice) * 0.05;
+    var feeTotal = displayFee;
 
     blockIndex = (blockIndex + 1) % Math.max(1, feeHistory.length);
 
@@ -179,9 +184,9 @@ var VIZ_Miner = (function() {
     var totalBtc = subsidyBtc + feeBtc;
 
     var statsData = [
-      { value: subsidyBtc.toFixed(3) + ' BTC', sub: 'Subsidy', usd: '$' + Math.round(subsidyBtc * btcPrice).toLocaleString(), color: '#D4933A' },
-      { value: feeBtc.toFixed(4) + ' BTC', sub: 'Fees', usd: '$' + Math.round(feeBtc * btcPrice).toLocaleString(), color: '#3BA35D' },
-      { value: totalBtc.toFixed(3) + ' BTC', sub: 'Total Reward', usd: '$' + Math.round(totalBtc * btcPrice).toLocaleString(), color: '#58A6FF' },
+      { value: subsidyBtc.toFixed(3) + ' BTC', sub: 'Subsidy', usd: '$' + Math.round(subsidyBtc * displayPrice).toLocaleString(), color: '#D4933A' },
+      { value: feeBtc.toFixed(4) + ' BTC', sub: 'Fees', usd: '$' + Math.round(feeBtc * displayPrice).toLocaleString(), color: '#3BA35D' },
+      { value: totalBtc.toFixed(3) + ' BTC', sub: 'Total Reward', usd: '$' + Math.round(totalBtc * displayPrice).toLocaleString(), color: '#58A6FF' },
     ];
 
     if (isMob) {
