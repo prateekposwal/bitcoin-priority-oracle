@@ -675,22 +675,60 @@ if (typeof DATA_ENGINE !== 'undefined') {
   document.getElementById('tkr-ln-nodes').textContent = lnNodes;
   document.getElementById('tkr-ln-cap').textContent = lnCap;
   document.getElementById('tkr-updated').textContent = updated;
-  try { sessionStorage.setItem('bsahi_cache', JSON.stringify(d)); } catch (e) {}
+  try {
+    localStorage.setItem('bsahi_cache', JSON.stringify(d));
+    localStorage.setItem('bsahi_cache_time', Date.now().toString());
+  } catch (e) {}
 });
 }
 
-// Fix 5: Render cached fee cards instantly on page load
+// Fix 5: Render cached data instantly — persisted across sessions
 (function() {
   try {
-    var cached = JSON.parse(sessionStorage.getItem('bsahi_cache') || 'null');
-    if (cached && cached.fees) {
+    var cached = JSON.parse(localStorage.getItem('bsahi_cache') || 'null');
+    var cacheTime = parseInt(localStorage.getItem('bsahi_cache_time') || '0', 10);
+    var ageHours = (Date.now() - cacheTime) / 3600000;
+    if (cached && cached.fees && ageHours < 48) {
       document.getElementById('fee-fastest').textContent = (cached.fees.fastestFee || '--') + ' sat/vB';
       document.getElementById('fee-hour').textContent = (cached.fees.hourFee || '--') + ' sat/vB';
       document.getElementById('fee-economy').textContent = (cached.fees.economyFee || '--') + ' sat/vB';
       if (cached.block_height) document.getElementById('tkr-blocks').textContent = cached.block_height.toLocaleString();
       if (cached.btc_price) document.getElementById('tkr-btc').textContent = '$' + cached.btc_price.toLocaleString();
+      if (cached.mempool) document.getElementById('tkr-mempool').textContent = (cached.mempool.count || 0).toLocaleString();
     }
   } catch (e) {}
+})();
+
+// Fallback: fetch Blockchair fees when mempool.space is down
+(function() {
+  var fallbackTimer = setInterval(function() {
+    var el = document.getElementById('fee-fastest');
+    if (el && el.textContent !== '-- sat/vB') { clearInterval(fallbackTimer); return; }
+    if (el && el.textContent === '-- sat/vB' && typeof DATA_ENGINE !== 'undefined') {
+      var d = DATA_ENGINE.get();
+      if (d && d.blockchair) {
+        var bc = d.blockchair;
+        // Blockchair doesn't have fee tiers, but has best_block_height and mempool_tps
+        if (bc.bestHeight) document.getElementById('tkr-blocks').textContent = bc.bestHeight.toLocaleString();
+        if (bc.mempoolTps) document.getElementById('tkr-mempool').textContent = Math.round(bc.mempoolTps * 600).toLocaleString();
+      }
+    }
+  }, 3000);
+  // Also try fetching Blockchair directly
+  var bcXhr = new XMLHttpRequest();
+  bcXhr.open('GET', 'https://api.blockchair.com/bitcoin/stats', true);
+  bcXhr.timeout = 10000;
+  bcXhr.onload = function() {
+    try {
+      var bc = JSON.parse(bcXhr.responseText);
+      if (bc && bc.data) {
+        document.getElementById('tkr-blocks').textContent = (bc.data.best_block_height || 0).toLocaleString();
+        var mpTps = bc.data.mempool_tps || 0;
+        if (mpTps > 0) document.getElementById('tkr-mempool').textContent = Math.round(mpTps * 600).toLocaleString();
+      }
+    } catch (e) {}
+  };
+  bcXhr.send();
 })();
 
 // Fix 3: Pause hidden tab canvases
