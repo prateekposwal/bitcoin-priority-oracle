@@ -61,6 +61,8 @@
       #dollar-context { font-size: 12px; top: 54%; }
       #narrative-frame { top: 58%; }
       #narrative-frame #narrative-text { font-size: 11px; }
+      #nav-links { bottom: 140px; right: 10px; }
+      #nav-links a { padding: 10px 16px; font-size: 13px; min-width: 140px; }
     }
 
     @media (max-width: 480px) {
@@ -78,6 +80,8 @@
       .legend-toggle { bottom: 80px; right: 8px; width: 28px; height: 28px; font-size: 12px; }
       .legend-panel { bottom: 115px; right: 8px; width: 150px; padding: 12px; }
       .legend-panel .l-item { font-size: 10px; }
+      #nav-links { bottom: 120px; right: 8px; }
+      #nav-links a { padding: 8px 14px; font-size: 12px; min-width: 120px; }
     }
 
     @media (max-width: 380px) {
@@ -106,13 +110,14 @@
 
     <div class="bottom-area">
       <a href="/live" class="cta">Should I send now?</a>
-      <div class="hint" style="display:flex;align-items:center;justify-content:center;gap:16px;font-size:13px;color:rgba(255,255,255,0.4);flex-wrap:wrap;">
-        <span>Hover over bars to see block details</span>
-        <span style="color:rgba(255,255,255,0.15);">·</span>
-        <a href="/learn" style="color:#D4933A;font-weight:600;text-decoration:none;padding:6px 14px;border:1px solid rgba(212,147,58,0.25);border-radius:6px;transition:all 0.2s;font-size:12px;">📖 Learn</a>
-        <a href="/capacity" style="color:#D4933A;font-weight:600;text-decoration:none;padding:6px 14px;border:1px solid rgba(212,147,58,0.25);border-radius:6px;transition:all 0.2s;font-size:12px;">📊 Capacity</a>
-        <a href="/fork-tracker" style="color:#D4933A;font-weight:600;text-decoration:none;padding:6px 14px;border:1px solid rgba(212,147,58,0.25);border-radius:6px;transition:all 0.2s;font-size:12px;">🔱 Fork</a>
-      </div>
+      <div class="hint" style="font-size:12px;color:rgba(255,255,255,0.35);margin-top:8px;">Hover over bars to see block details</div>
+    </div>
+
+    <div id="nav-links" style="position:fixed;bottom:160px;right:20px;z-index:30;display:flex;flex-direction:column;gap:10px;">
+      <a href="/learn" style="display:flex;align-items:center;gap:10px;padding:14px 24px;background:#231F19;border:1px solid #3A3228;border-radius:12px;color:#EADCC8;font-size:15px;font-weight:600;text-decoration:none;transition:all 0.2s;min-width:180px;">📖 Learn</a>
+      <a href="/capacity" style="display:flex;align-items:center;gap:10px;padding:14px 24px;background:#231F19;border:1px solid #3A3228;border-radius:12px;color:#EADCC8;font-size:15px;font-weight:600;text-decoration:none;transition:all 0.2s;min-width:180px;">📊 Capacity</a>
+      <a href="/fork-tracker" style="display:flex;align-items:center;gap:10px;padding:14px 24px;background:#231F19;border:1px solid #3A3228;border-radius:12px;color:#EADCC8;font-size:15px;font-weight:600;text-decoration:none;transition:all 0.2s;min-width:180px;">🔱 Fork Tracker</a>
+    </div>
     </div>
 
   <div id="genesis-strip"><canvas id="genesis-canvas"></canvas></div>
