@@ -453,7 +453,7 @@ document.querySelectorAll('.tab-btn').forEach(function(btn) {
 document.querySelectorAll('.tab-panel .dc').forEach(function(dc) {
   var div = document.createElement('div');
   div.style.cssText = 'margin-top:12px;padding-top:10px;border-top:1px solid #3A3228;display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:12px;';
-  div.innerHTML = '<span id="weather-badge" class="weather-wrap weather-sunny">☀️ <span id="weather-label">Sunny</span></span><span id="live-state" style="font-weight:600;"></span><span id="live-state-sub" style="color:#6A5D4E;"></span><span id="capacity-indicator" style="color:#6A5D4E;font-size:11px;"></span>';
+  div.innerHTML = '<span id="weather-badge" class="weather-wrap weather-sunny">☀️ <span>Sunny</span></span><span id="live-state" style="font-weight:600;"></span><span id="live-state-sub" style="color:#6A5D4E;"></span><span id="capacity-indicator" style="color:#6A5D4E;font-size:11px;"></span>';
   dc.appendChild(div);
 });
 
@@ -510,9 +510,7 @@ if (typeof DATA_ENGINE !== 'undefined') {
   var stateEl = document.getElementById('live-state');
   var stateSub = document.getElementById('live-state-sub');
   var badge = document.getElementById('weather-badge');
-  var label = document.getElementById('weather-label');
-  if (badge) { badge.className = 'weather-wrap ' + weather.cls; }
-  if (label) { label.textContent = weather.label; }
+  if (badge) { badge.className = 'weather-wrap ' + weather.cls; badge.innerHTML = weather.icon + ' <span>' + weather.label + '</span>'; }
   if (stateEl) { stateEl.textContent = weather.advice; stateEl.style.color = weather.color; }
   if (stateSub) {
     var inflowRate = Math.round(mpCount / 600 * 60);
