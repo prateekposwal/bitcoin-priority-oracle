@@ -35,7 +35,7 @@ var VIZ_Developer = (function() {
     buildDOM();
     checkAll();
     checkTimer = setInterval(checkAll, 60000);
-    renderTimer = setInterval(render, 3000);
+    renderTimer = setInterval(function() { try { render(); } catch (e) {} }, 3000);
     window.addEventListener('resize', resize);
     var toggle = document.getElementById('dev-mode-toggle');
     if (toggle) toggle.addEventListener('click', toggleDevMode);
@@ -131,7 +131,7 @@ var VIZ_Developer = (function() {
     setInterval(fetchDEStatus, 60000);
   }
 
-  function fetchDEStatus() {
+  function fetchDEStatus() { try {
     var el = document.getElementById('de-agent-status');
     if (!el) return;
     fetch('http://localhost:3456/status').then(function(r) { return r.json(); }).then(function(data) {
@@ -145,7 +145,7 @@ var VIZ_Developer = (function() {
       el.textContent = '\u26AA Agent offline';
       el.style.color = 'rgba(255,255,255,0.3)';
     });
-  }
+  } catch (e) {} }
 
   function renderOverview() {
     var el = document.getElementById('dev-overview');
@@ -236,9 +236,9 @@ var VIZ_Developer = (function() {
   }
 
   function render() {
-    renderOverview();
+    try { renderOverview(); } catch (e) {}
     if (!cardsEl) return;
-    DATA_SOURCES.forEach(function(s) {
+    DATA_SOURCES.forEach(function(s) { try {
       var card = document.getElementById('ds-card-' + s.key);
       if (!card) return;
       var st = states[s.key];
@@ -282,7 +282,7 @@ var VIZ_Developer = (function() {
         card.style.background = '';
         card.style.borderColor = '';
       }
-    });
+    } catch (e) {} });
   }
 
   function toggleDevMode() {
