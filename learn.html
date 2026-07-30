@@ -228,7 +228,7 @@ Each new block strengthens every block that came before it. To rewrite history, 
 <div class="diff-desc">Show charts, metrics, and API status. You interpret the data and make your own decision.</div>
 </div>
 <div class="diff-card us">
-<div class="diff-label" style="color:#3BA35D;">Bitcoin Sahi</div>
+<div class="diff-label" style="color:#3BA35D;">BSAHI</div>
 <div class="diff-title">Decisions</div>
 <div class="diff-desc">Shows what matters for your role — miner, sender, exchange — and tells you what to do. Data → Insight → Action.</div>
 </div>
@@ -240,7 +240,7 @@ Each new block strengthens every block that came before it. To rewrite history, 
 <div class="diff-desc">Raw blockchain data. You build the integration, you handle the scaling, you manage the reliability.</div>
 </div>
 <div class="diff-card us">
-<div class="diff-label" style="color:#3BA35D;">Bitcoin Sahi</div>
+<div class="diff-label" style="color:#3BA35D;">BSAHI</div>
 <div class="diff-title">Data for Everyone</div>
 <div class="diff-desc">Curated, persona-connected data with reliability monitoring. Each source shows who it serves and why it matters. Enterprise feeds available for those who need more.</div>
 </div>
@@ -252,7 +252,7 @@ Each new block strengthens every block that came before it. To rewrite history, 
 <div class="diff-desc">Historical charts. "What happened yesterday?"</div>
 </div>
 <div class="diff-card us">
-<div class="diff-label" style="color:#3BA35D;">Bitcoin Sahi</div>
+<div class="diff-label" style="color:#3BA35D;">BSAHI</div>
 <div class="diff-title">Live + Predictive</div>
 <div class="diff-desc">Real-time data with historical capture. Building toward fee forecasting, anomaly detection, and congestion prediction.</div>
 </div>
@@ -264,7 +264,7 @@ Each new block strengthens every block that came before it. To rewrite history, 
 <div class="diff-desc">100% dependent on third-party API availability. When mempool.space goes down, their site goes blank.</div>
 </div>
 <div class="diff-card us">
-<div class="diff-label" style="color:#3BA35D;">Bitcoin Sahi</div>
+<div class="diff-label" style="color:#3BA35D;">BSAHI</div>
 <div class="diff-title">Self-Owned Infrastructure</div>
 <div class="diff-desc">Our own Bitcoin Core node + localStorage cache + Blockchair fallback. When any data source is down, cached data and fallbacks keep the site functional.</div>
 </div>
@@ -273,23 +273,23 @@ Each new block strengthens every block that came before it. To rewrite history, 
 
 <div class="bsahi-section">
 <h2>Our <span>Architecture</span></h2>
-<p>Bitcoin Sahi runs on a four-layer data pipeline — from raw network data to persona-driven decisions:</p>
+<p>BSAHI runs on a four-layer pipeline — from raw network data to persona-driven decisions, updated every 60 seconds:</p>
 <div style="display:flex;flex-direction:column;gap:12px;margin:20px 0;">
 <div style="background:#1A1612;border:1px solid #3A3228;border-radius:10px;padding:16px;display:flex;align-items:center;gap:16px;">
-<span style="font-size:2rem;">🔗</span>
-<div><div style="font-weight:600;color:#EADCC8;margin-bottom:2px;">Layer 1: Data Sources</div><div style="font-size:.85rem;color:#6A5D4E;"><strong style="color:#EADCC8;">13 endpoints</strong> across mempool.space, Blockchair, CoinPaprika, Blockstream, Fear &amp; Greed, plus our own <strong style="color:#EADCC8;">Bitcoin Core node</strong> for fee percentiles. ~400+ captures in SQLite database.</div></div>
+<span style="font-size:1.5rem;color:#D4933A;font-weight:800;">⬡</span>
+<div><div style="font-weight:600;color:#EADCC8;margin-bottom:2px;">Layer 1: Data Sources</div><div style="font-size:.85rem;color:#6A5D4E;"><strong style="color:#EADCC8;">13 endpoints</strong> across mempool.space, Blockchair, CoinPaprika, Blockstream, Fear &amp; Greed, plus our own <strong style="color:#EADCC8;">Bitcoin Core node</strong>. <strong style="color:#EADCC8;">640+ captures</strong> in SQLite, backfill every 10 minutes. Historical sampler covering blocks from 2009.</div></div>
 </div>
 <div style="background:#1A1612;border:1px solid #3A3228;border-radius:10px;padding:16px;display:flex;align-items:center;gap:16px;">
-<span style="font-size:2rem;">🤖</span>
-<div><div style="font-weight:600;color:#EADCC8;margin-bottom:2px;">Layer 2: Data Engineering Agent</div><div style="font-size:.85rem;color:#6A5D4E;">Monitors all endpoints every cycle. Runs block interval tracking, fee volatility, mempool inflow/outflow. Discovers new data sources automatically (33 found so far). Reports daily health metrics.</div></div>
+<span style="font-size:1.5rem;color:#D4933A;font-weight:800;">⬡</span>
+<div><div style="font-weight:600;color:#EADCC8;margin-bottom:2px;">Layer 2: Data Engineering Agent</div><div style="font-size:.85rem;color:#6A5D4E;">Monitors all 13 endpoints every cycle. Block interval tracking, fee volatility, mempool inflow/outflow modeling. Auto-discovers new data sources (33 found). Daily health reports to <code style="color:#9B8B78;">reports/data-engineering/</code>.</div></div>
 </div>
 <div style="background:#1A1612;border:1px solid #3A3228;border-radius:10px;padding:16px;display:flex;align-items:center;gap:16px;">
-<span style="font-size:2rem;">🔬</span>
-<div><div style="font-weight:600;color:#EADCC8;margin-bottom:2px;">Layer 3: Research Agents</div><div style="font-size:.85rem;color:#6A5D4E;">5 specialist agents (Bitcoin Core, Lightning, APIs, General, Academic) scanning GitHub, arXiv, forums, and news every 4 hours. Generate findings saved to <code style="color:#9B8B78;">reports/research/</code>.</div></div>
+<span style="font-size:1.5rem;color:#D4933A;font-weight:800;">⬡</span>
+<div><div style="font-weight:600;color:#EADCC8;margin-bottom:2px;">Layer 3: Research Agents</div><div style="font-size:.85rem;color:#6A5D4E;">5 specialist agents (Bitcoin Core, Lightning, APIs, General, Academic) scanning GitHub, arXiv, forums every 4 hours. First empirical finding: <strong style="color:#D4933A;">Storage Cost Coverage Ratio: 0.0149</strong> — fees cover 1.5% of 10-year storage cost.</div></div>
 </div>
 <div style="background:#1A1612;border:1px solid #3A3228;border-radius:10px;padding:16px;display:flex;align-items:center;gap:16px;">
-<span style="font-size:2rem;">🎯</span>
-<div><div style="font-weight:600;color:#EADCC8;margin-bottom:2px;">Layer 4: Decision Engine</div><div style="font-size:.85rem;color:#6A5D4E;">7 personas + Capacity + Fork Tracker + Weather. Every tab shows persona-relevant data with Market Brief insights, Bitcoin Weather conditions, and research-powered context.</div></div>
+<span style="font-size:1.5rem;color:#D4933A;font-weight:800;">⬡</span>
+<div><div style="font-weight:600;color:#EADCC8;margin-bottom:2px;">Layer 4: Decision Engine</div><div style="font-size:.85rem;color:#6A5D4E;">7 personas + Capacity Dashboard + Fork Tracker + Bitcoin Weather + Settlement Metrics. Every tab shows persona-relevant data with Market Brief insights and research-powered context.</div></div>
 </div>
 </div>
 </div>
