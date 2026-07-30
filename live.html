@@ -640,11 +640,11 @@ if (typeof DATA_ENGINE !== 'undefined') {
   // --- Research Stat Cards ---
   var feeArr = [];
   for (var ri = 0; ri < fh.length; ri++) { var rv = (fh[ri].avgFees || 0) / 2500000; if (rv > 0) feeArr.push(rv); }
-  var fSum = 0, fMin = Infinity, fMax = -Infinity, fAvg = 0, stdDev = 0, volPct = 0;
-  for (var ri = 0; ri < feeArr.length; ri++) { fSum += feeArr[ri]; if (feeArr[ri] < fMin) fMin = feeArr[ri]; if (feeArr[ri] > fMax) fMax = feeArr[ri]; }
-  if (feeArr.length > 0) fAvg = fSum / feeArr.length;
-  if (feeArr.length > 2) {
-    for (var ri = 0; ri < feeArr.length; ri++) { variance += (feeArr[ri] - fAvg) * (feeArr[ri] - fAvg); }
+    var fSum = 0, fMin = Infinity, fMax = -Infinity, fAvg = 0, variance = 0, stdDev = 0, volPct = 0;
+    for (var ri = 0; ri < feeArr.length; ri++) { fSum += feeArr[ri]; if (feeArr[ri] < fMin) fMin = feeArr[ri]; if (feeArr[ri] > fMax) fMax = feeArr[ri]; }
+    if (feeArr.length > 0) fAvg = fSum / feeArr.length;
+    if (feeArr.length > 2) {
+      for (var ri = 0; ri < feeArr.length; ri++) { variance += (feeArr[ri] - fAvg) * (feeArr[ri] - fAvg); }
     stdDev = Math.sqrt(variance / feeArr.length);
     volPct = fAvg > 0 ? Math.round(stdDev / fAvg * 100) : 0;
   }
