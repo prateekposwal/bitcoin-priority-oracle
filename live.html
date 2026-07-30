@@ -166,6 +166,10 @@ body{background:#1A1612;color:#EADCC8;font-family:-apple-system,BlinkMacSystemFo
     <div class="dc-a" id="send-verdict">Checking...</div>
     <div class="dc-sub">Based on current network conditions</div>
   </div>
+  <div class="brief-card" id="brief-send">
+    <span class="brief-icon">📋</span>
+    <div class="brief-content" id="brief-send-text">Loading market insights...</div>
+  </div>
   <div class="fee-grid" id="fee-grid">
     <div class="fee-card fastest"><div class="fc-label">Fastest</div><div class="fc-value" id="fee-fastest">--</div><div class="fc-sub">~10 min</div></div>
     <div class="fee-card hour"><div class="fc-label">Hour</div><div class="fc-value" id="fee-hour">--</div><div class="fc-sub">~60 min</div></div>
@@ -184,7 +188,6 @@ body{background:#1A1612;color:#EADCC8;font-family:-apple-system,BlinkMacSystemFo
       <div class="insight-text" id="send-insight">Waiting for fee data to generate insight...</div>
     </div>
   </div>
-  <div class="brief-card" id="brief-send">
     <span class="brief-icon">📋</span>
     <div class="brief-content" id="brief-send-text">Loading market insights...</div>
   </div>
@@ -196,11 +199,10 @@ body{background:#1A1612;color:#EADCC8;font-family:-apple-system,BlinkMacSystemFo
     <div class="dc-q">Should I open channels today?</div>
     <div class="dc-a" id="ln-verdict">Checking...</div>
     <div class="dc-sub" id="ln-cost">Estimating channel cost...</div>
-    <div class="dc-status" style="margin-top:12px;padding-top:10px;border-top:1px solid #3A3228;display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:12px;">
-      <span class="weather-wrap weather-sunny">☀️ <span>Sunny</span></span>
-      <span class="live-state" style="font-weight:600;"></span>
-      <span class="live-state-sub" style="color:#6A5D4E;"></span>
-    </div>
+  </div>
+  <div class="brief-card" id="brief-lightning">
+    <span class="brief-icon">🌩</span>
+    <div class="brief-content" id="brief-lightning-text">Loading market insights...</div>
   </div>
   <div class="stat-row">
     <div class="stat-card" style="border-top:3px solid #58A6FF;"><div class="sc-label">Nodes</div><div class="sc-value" id="ln-nodes">--</div><div class="fc-sub">Public LN nodes</div></div>
@@ -219,9 +221,6 @@ body{background:#1A1612;color:#EADCC8;font-family:-apple-system,BlinkMacSystemFo
       <div class="insight-text" id="ln-insight">Waiting for Lightning Network data...</div>
     </div>
   </div>
-  <div class="brief-card" id="brief-lightning">
-    <span class="brief-icon">🌩</span>
-    <div class="brief-content" id="brief-lightning-text">Loading market insights...</div>
   </div>
 </div>
 
