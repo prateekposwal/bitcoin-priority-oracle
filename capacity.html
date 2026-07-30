@@ -566,6 +566,48 @@ window.addEventListener('load', function() {
   drawSettlement();
 });
 window.addEventListener('resize', resizeSet);
+// Flash animations for capacity page
+(function() {
+  var blockFlashActive = 0, feeFlashActive = 0, lastFee = 0;
+  var ws = new WebSocket('wss://mempool.space/api/v1/ws');
+  ws.onmessage = function(e) { try {
+    var m = JSON.parse(e.data);
+    if (m && m.action === 'newBlock') { blockFlashActive = 60; if (typeof DATA_ENGINE !== 'undefined') DATA_ENGINE.start(); }
+  } catch (err) {} };
+  if (typeof DATA_ENGINE !== 'undefined') {
+    var orig = DATA_ENGINE.onUpdate;
+    DATA_ENGINE.onUpdate = function(cb) {
+      var wrapped = function(d) {
+        try {
+          if (d && d.fees) { var f = d.fees.fastestFee || 0; if (lastFee > 0 && f > lastFee * 2 && f > 5) feeFlashActive = 40; lastFee = f; }
+        } catch (e) {}
+        cb(d);
+      };
+      if (typeof orig === 'function') orig(wrapped);
+    };
+  }
+  (function flashLoop() {
+    if (blockFlashActive > 0) {
+      blockFlashActive--;
+      var bi = blockFlashActive / 60;
+      document.querySelectorAll('.stat-card, .gauge-card').forEach(function(el) {
+        el.style.transition = 'box-shadow 0.1s';
+        el.style.boxShadow = 'inset 0 0 ' + (blockFlashActive > 55 ? 40 : bi * 30) + 'px rgba(212,147,58,' + (bi * 0.2) + ')';
+        if (blockFlashActive === 0) setTimeout(function() { el.style.boxShadow = ''; el.style.transition = ''; }, 150);
+      });
+    }
+    if (feeFlashActive > 0) {
+      feeFlashActive--;
+      var fi = feeFlashActive / 40;
+      document.querySelectorAll('#m-inflow, #m-weight-pct').forEach(function(el) {
+        el.style.transition = 'box-shadow 0.1s';
+        el.style.boxShadow = '0 0 ' + (fi * 15) + 'px rgba(248,81,73,' + (fi * 0.3) + ')';
+        if (feeFlashActive === 0) setTimeout(function() { el.style.boxShadow = ''; el.style.transition = ''; }, 150);
+      });
+    }
+    requestAnimationFrame(flashLoop);
+  })();
+})();
 </script>
 </body>
 </html>
