@@ -542,14 +542,21 @@ if (typeof DATA_ENGINE !== 'undefined') {
 
   var e = fees.economyFee || 1;
   var f = fees.fastestFee || 3;
-  var verdict = document.getElementById('send-verdict');
-  if (f < 5) { verdict.textContent = '✅ Yes, fees are low'; verdict.className = 'dc-a green'; }
-  else if (f < 20) { verdict.textContent = '🟡 Moderate — economy rate recommended'; verdict.className = 'dc-a yellow'; }
-  else { verdict.textContent = '🔴 High fees — wait if possible'; verdict.className = 'dc-a red'; }
+  // Verdicts based on weather condition (fees + mempool + weight combined)
+  var weatherLevel = weather.label;
+  var sendV = document.getElementById('send-verdict');
+  if (weatherLevel === 'Sunny') { sendV.textContent = '✅ Yes, fees are low'; sendV.className = 'dc-a green'; }
+  else if (weatherLevel === 'Partly Cloudy') { sendV.textContent = '✅ Low fees — good to send'; sendV.className = 'dc-a green'; }
+  else if (weatherLevel === 'Breezy') { sendV.textContent = '⚡ Network busy — use economy fee'; sendV.className = 'dc-a yellow'; }
+  else if (weatherLevel === 'Rainy') { sendV.textContent = '🟡 Fees elevated — economy rate recommended'; sendV.className = 'dc-a yellow'; }
+  else if (weatherLevel === 'Storm' || weatherLevel === 'Extreme') { sendV.textContent = '🔴 Network congested — wait if possible'; sendV.className = 'dc-a red'; }
+  else { sendV.textContent = '⏳ Data offline'; sendV.className = 'dc-a'; sendV.style.color = '#6A5D4E'; }
 
   var lnV = document.getElementById('ln-verdict');
-  if (e < 3) { lnV.textContent = '✅ Good time to open'; lnV.className = 'dc-a green'; }
-  else { lnV.textContent = '🟡 Consider waiting for lower fees'; lnV.className = 'dc-a yellow'; }
+  if (weatherLevel === 'Sunny' || weatherLevel === 'Partly Cloudy') { lnV.textContent = '✅ Good time to open'; lnV.className = 'dc-a green'; }
+  else if (weatherLevel === 'Breezy') { lnV.textContent = '🟡 Moderate — economy fee channels OK'; lnV.className = 'dc-a yellow'; }
+  else if (weatherLevel === 'Rainy' || weatherLevel === 'Storm' || weatherLevel === 'Extreme') { lnV.textContent = '🟡 Wait for lower fees to open'; lnV.className = 'dc-a yellow'; }
+  else { lnV.textContent = '⏳ Data offline'; lnV.className = 'dc-a'; lnV.style.color = '#6A5D4E'; }
   document.getElementById('ln-cost').textContent = 'Channel open cost: ~$' + ((e * 1000 * (d.btc_price || 64000)) / 100000000).toFixed(2) + ' USD';
 
   if (d.lightning) {
@@ -559,8 +566,10 @@ if (typeof DATA_ENGINE !== 'undefined') {
   }
 
   var exV = document.getElementById('ex-verdict');
-  if (e < 2) { exV.textContent = '✅ Batch now — fees are low'; exV.className = 'dc-a green'; }
-  else { exV.textContent = '🟡 Wait — fees are elevated'; exV.className = 'dc-a yellow'; }
+  if (weatherLevel === 'Sunny' || weatherLevel === 'Partly Cloudy') { exV.textContent = '✅ Batch now — fees are low'; exV.className = 'dc-a green'; }
+  else if (weatherLevel === 'Breezy') { exV.textContent = '⚡ Good time to batch — moderate fees'; exV.className = 'dc-a yellow'; }
+  else if (weatherLevel === 'Rainy' || weatherLevel === 'Storm' || weatherLevel === 'Extreme') { exV.textContent = '🟡 Wait — fees are elevated for batching'; exV.className = 'dc-a yellow'; }
+  else { exV.textContent = '⏳ Data offline'; exV.className = 'dc-a'; exV.style.color = '#6A5D4E'; }
   var batchSave = ((e * 140 * 1000 - e * 100000) * (d.btc_price || 64000)) / 100000000;
   document.getElementById('ex-saving').textContent = 'Batch of 1K withdrawals saves ~$' + batchSave.toFixed(0);
 
