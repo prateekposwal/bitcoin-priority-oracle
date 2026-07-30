@@ -668,7 +668,7 @@ if (typeof DATA_ENGINE !== 'undefined') {
   document.getElementById('res-range').textContent = (fMin < Infinity ? fMin.toFixed(0) : '--') + ' - ' + (fMax > 0 ? fMax.toFixed(0) : '--');
   var resDailyRev = (3.125 * 144 + feeAvg * 144 / 100000000) * btcPrice;
   document.getElementById('res-daily-rev').textContent = resDailyRev > 1000000 ? '$' + (resDailyRev / 1000000).toFixed(1) + 'M' : '$' + Math.round(resDailyRev / 1000).toFixed(0) + 'K';
-  document.getElementById('res-settlement').textContent = resDailyRev > 1000000 ? '$' + (resDailyRev * 200).toFixed(0) + 'B' : '--';
+  document.getElementById('res-settlement').textContent = resDailyRev > 1000000 ? '$' + ((resDailyRev * 200) / 1000000000).toFixed(1) + 'B' : '--';
   document.getElementById('res-txs-day').textContent = fh.length > 0 ? (Math.round(fh.length * 3000)).toLocaleString() : '--';
 
   // --- Market Brief Panels ---
