@@ -145,7 +145,7 @@ var DATA_ENGINE = (function () {
     var xhr = new XMLHttpRequest();
     var done = false;
     xhr.open('GET', url, true);
-    xhr.timeout = 10000;
+    xhr.timeout = 8000;
 
     function finish(err, data) {
       if (done) return;
