@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 60" width="200" height="60">
+  <defs>
+    <linearGradient id="bsahi-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#D4933A" />
+      <stop offset="100%" style="stop-color:#E8B86D" />
+    </linearGradient>
+    <style>
+      .hex { fill: url(#bsahi-grad); }
+      .text { fill: #EADCC8; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif; font-weight: 800; font-size: 28px; letter-spacing: -0.5px; }
+    </style>
+  </defs>
+  <g transform="translate(4, 4)">
+    <polygon class="hex" points="20,0 37,10 37,30 20,40 3,30 3,10" />
+    <text x="20" y="32" text-anchor="middle" style="fill:#1A1612;font-family: -apple-system, sans-serif; font-weight: 800; font-size: 22px;">⬡</text>
+  </g>
+  <text class="text" x="52" y="40">BSAHI</text>
+</svg>
