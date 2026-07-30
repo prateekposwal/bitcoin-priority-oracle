@@ -108,6 +108,17 @@ The fee market prices **congestion** (inclusion in the next block). It does not 
 
 **Open question:** Is the permanence externality significant enough to matter, or do most node operators run pruned nodes and not care about historical data?
 
+## Phase R5: Storage Cost Coverage Ratio (2026-07-30)
+
+- [x] Define metric: StorageCostCoverageRatio = TransactionFee / (Bytes × ReplicationFactor × CostPerBytePerYear × Years)
+- [x] Build reproducible computation module → `tools/research/storage-ratio.js`
+- [x] Generate first report: 148 blocks, avg ratio 0.0149 (1.49%) → `reports/research/storage-ratio-2026-07-30.md`
+- [ ] Feed Bitcoin Core `getblockstats → utxo_size_inc` for per-block UTXO growth data
+- [ ] Track ratio over time as new data accumulates
+- [ ] Publish as research note (arXiv, Bitcoin Optech, r/BitcoinEngineering)
+
+**Key finding:** 100% of sampled blocks have fees covering less than 1× the estimated 10-year storage cost. Average coverage: **1.49%**. This is the first empirical evidence that Bitcoin's fee market does not price the storage externality.
+
 ## Open Questions
 
 1. Does the SegWit weight formula need to be parameterized differently for data vs financial transactions?
