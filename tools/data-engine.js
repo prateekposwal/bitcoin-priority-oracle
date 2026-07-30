@@ -416,8 +416,11 @@ var DATA_ENGINE = (function () {
     appendToLog(key, raw);
   };
 
-  openDB();
-  loadFromDB();
+  try { openDB(); } catch (e) {}
+  try {
+    var lfd = loadFromDB();
+    if (lfd && typeof lfd.catch === 'function') lfd.catch(function() {});
+  } catch (e) {}
 
   return {
     start: start, stop: stop, onUpdate: onUpdate, get: get,

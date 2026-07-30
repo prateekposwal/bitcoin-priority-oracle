@@ -192,10 +192,6 @@ var VIZ_Developer = (function() {
     if (uptimeEl) uptimeEl.textContent = checked ? uptime + '%' : '--';
   }
 
-    var uptimeEl = document.getElementById('dev-uptime');
-    if (uptimeEl) uptimeEl.textContent = uptime + '%';
-  }
-
   function checkAll() {
     lastRefreshTime = Date.now();
     DATA_SOURCES.forEach(function(ep) {
