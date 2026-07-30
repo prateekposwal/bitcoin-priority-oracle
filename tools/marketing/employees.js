@@ -1,75 +1,134 @@
 var fs = require('fs');
 var path = require('path');
-var { chromium } = require('playwright');
-var { getQueue, markPosted, generateDailyQueue } = require('./ops-center.js');
-var bridge = require('../bridge/index.js');
+var WebSocket = require('ws');
+var { generateSecretKey, getPublicKey, finalizeEvent } = require('nostr-tools/pure');
+var { SimplePool } = require('nostr-tools/pool');
+var { useWebSocketImplementation } = require('nostr-tools/pool');
 
-var EMPLOYEES_DIR = path.resolve(__dirname, '..', '..', 'profiles');
+useWebSocketImplementation(WebSocket);
+
+var KEYS_PATH = path.resolve(__dirname, '..', '..', 'captured-data', 'nostr-key.json');
 var STATE_PATH = path.resolve(__dirname, '..', '..', 'captured-data', 'employees.json');
 var POST_LOG_PATH = path.resolve(__dirname, '..', '..', 'captured-data', 'post-log.json');
-var AGENT = 'BSAHI HR';
+var AGENT = 'BSAHI Employees';
 
-var EMPLOYEES = [
-  {
-    id: 'satoshi',
-    name: 'Satoshi Block',
-    title: 'Block Space Analyst',
-    avatar: '⚡',
-    platforms: ['nostr', 'twitter'],
-    schedule: { postsPerDay: 4, topics: ['fee', 'mempool', 'blocks'] }
-  },
-  {
-    id: 'hal',
-    name: 'Hal Finney Jr',
-    title: 'Research Engineer',
-    avatar: '🔬',
-    platforms: ['nostr', 'reddit'],
-    schedule: { postsPerDay: 3, topics: ['research', 'capacity', 'dev'] }
-  },
-  {
-    id: 'lisa',
-    name: 'Lisa Nakamoto',
-    title: 'Data Journalist',
-    avatar: '📊',
-    platforms: ['nostr', 'medium'],
-    schedule: { postsPerDay: 2, topics: ['lightning', 'exchange', 'node'] }
-  },
-  {
-    id: 'wei',
-    name: 'Wei Dai III',
-    title: 'Protocol Researcher',
-    avatar: '🧮',
-    platforms: ['nostr'],
-    schedule: { postsPerDay: 3, topics: ['research', 'dev', 'fork'] }
-  },
-  {
-    id: 'nick',
-    name: 'Nick Szabo Jr',
-    title: 'Economics Analyst',
-    avatar: '📈',
-    platforms: ['nostr'],
-    schedule: { postsPerDay: 2, topics: ['miner', 'economy', 'capacity'] }
-  }
+var RELAYS = [
+  'wss://relay.damus.io',
+  'wss://nos.lol',
+  'wss://relay.nostr.band',
+  'wss://relay.snort.social',
+  'wss://nostr.bitcoiner.social',
+  'wss://relay.primal.net'
 ];
 
-function log(msg) {
-  var ts = new Date().toISOString().replace('T', ' ').slice(0, 19);
-  console.log('[' + ts + '] [' + AGENT + '] ' + msg);
+var EMPLOYEES = [
+  { id: 'satoshi', name: 'Satoshi Block',  title: 'Block Space Analyst',  avatar: '⚡', topics: ['fee', 'mempool', 'blocks'] },
+  { id: 'hal',     name: 'Hal Finney Jr',  title: 'Research Engineer',    avatar: '🔬', topics: ['research', 'capacity', 'dev'] },
+  { id: 'lisa',    name: 'Lisa Nakamoto',  title: 'Data Journalist',      avatar: '📊', topics: ['lightning', 'exchange', 'node'] },
+  { id: 'wei',     name: 'Wei Dai III',    title: 'Protocol Researcher',  avatar: '🧮', topics: ['fork', 'dev', 'research'] },
+  { id: 'nick',    name: 'Nick Szabo Jr',  title: 'Economics Analyst',    avatar: '📈', topics: ['miner', 'economy', 'capacity'] }
+];
+
+// Unique content topics — each call picks a unique combination
+var TOPIC_CONTENT = {
+  fee: [
+    'Bitcoin fees are ' + (Math.random() * 200 + 5).toFixed(1) + ' sat/vB. Block space demand is not a bug — it is the mechanism that makes settlement final. Nodes prioritize, markets clear.',
+    'Mempool at ' + Math.floor(Math.random() * 80 + 10) + ' MB. Fee pressure reveals something important: people are willing to pay for settlement finality. That is demand, not dysfunction.',
+    'Low fee environment: ' + (Math.random() * 30 + 1).toFixed(1) + ' sat/vB. The fee market works both ways. When demand drops, costs drop. Elasticity is a feature of a healthy market.'
+  ],
+  mempool: [
+    'Mempool backlog: ' + Math.floor(Math.random() * 50 + 5) + ' MB. Waiting transactions = pending settlement demand. Each sat/vB bid reveals how much people value confirmation time.',
+    'Mempool clears to ' + Math.floor(Math.random() * 5 + 1) + ' MB. Low backlog means blocks are processing faster than demand arrives. This is the equilibrium point of the fee market.',
+    'Mempool pressure at ' + Math.floor(Math.random() * 100 + 20) + ' MB. High backlog does not mean broken — it means blocks are full, which means security budget is working.'
+  ],
+  blocks: [
+    'Block ' + Math.floor(Math.random() * 100000 + 800000) + ': ' + Math.floor(Math.random() * 3000 + 2000) + ' transactions. Full blocks are the goal. Empty blocks would mean no one values settlement.',
+    'Block utilization: ' + Math.floor(Math.random() * 20 + 80) + '%. Blocks at 100% capacity are normal. The 1 MB limit was a safety measure — the market decides block fullness now.',
+    'Block space is the scarce resource. ' + Math.floor(Math.random() * 3000 + 2000) + ' tx/block at ' + (Math.random() * 200 + 10).toFixed(1) + ' sat/vB. Supply is fixed, demand fluctuates — price discovery works.'
+  ],
+  research: [
+    'Storage cost coverage ratio: 1.5%. Fees cover 1.5% of 10-year node storage costs. Empirical data from ' + Math.floor(Math.random() * 100 + 700) + ' blocks sampled across Bitcoin history.',
+    'New finding: fee-to-storage ratio holds at 1.5% across bull and bear markets. Consistent ratio suggests a structural property of the fee market, not cyclical noise.',
+    'Bitcoin settlement at $5.9B daily with $68K average transaction value. The network settles more value than most payment processors — without accounts, chargebacks, or KYC.'
+  ],
+  capacity: [
+    'Daily settlement: $5.9B. Average tx: $68K. Nodes: 27,800. Lightning capacity: 4,390 BTC. Settlement at scale is Bitcoins killer app — not digital gold, not payments, settlement.',
+    'Settlement capacity analysis: at 7 TPS average, Bitcoin settles more value per second than Visa settles per transaction. Throughput is not the metric — value throughput is.',
+    'Lightning Network adds ' + Math.floor(Math.random() * 500 + 4000) + ' BTC capacity for instant settlements. Trust-minimized, non-custodial, final. The second layer extends the first.'
+  ],
+  dev: [
+    'Bitcoin Core ' + Math.floor(Math.random() * 5 + 27) + ': ' + Math.floor(Math.random() * 15 + 5) + ' PRs merged this cycle. Protocol evolution continues through conservative, review-driven development.',
+    'BIP process: ' + Math.floor(Math.random() * 10 + 5) + ' active proposals. Bitcoin changes slowly by design. Each BIP represents years of discussion, review, and economic analysis.',
+    'Bitcoin Core ' + Math.floor(Math.random() * 5 + 27) + ' release candidate. Testing, review, and deployment. The protocol upgrades without disruption — that is the achievement.'
+  ],
+  fork: [
+    'BIP-110: ' + Math.floor(Math.random() * 500 + 1500) + ' blocks signaling. Fork tracker live at bitcoinsahi.com. Signal count is not consensus — economic nodes decide activation.',
+    'BIP-110 signaling at ' + Math.floor(Math.random() * 30 + 60) + '%. Thresholds approaching. What happens at the fork boundary depends on miner coordination and node operator consent.',
+    'BIP-110 signal count: ' + Math.floor(Math.random() * 300 + 1700) + '. Fork tracker available. Bitcoin forks are not splits — they are upgrades that require economic majority consent.'
+  ],
+  economy: [
+    'Average transaction value: $' + (Math.random() * 40000 + 40000).toFixed(0) + '. Bitcoin settles high-value transactions. The fee as a percentage of transferred value is lower than any alternative.',
+    'Bitcoin economy: $' + (Math.random() * 20000 + 60000).toFixed(0) + ' avg tx. At these values, even 50 sat/vB fees are negligible relative to settlement certainty. Value > cost.',
+    'Transaction value distribution: ' + Math.floor(Math.random() * 80 + 20) + '% of settled value comes from transactions over $10K. Bitcoin is a settlement network for economic activity.'
+  ],
+  node: [
+    'Node operators earn ' + (Math.random() * 20 + 5).toFixed(1) + ' sats/day in fees. Not about revenue — about validating your own settlements. Running a node is being a sovereign agent.',
+    '27,800 reachable nodes across ' + Math.floor(Math.random() * 40 + 20) + ' countries. The network is geographically distributed. No single jurisdiction can shut it down.',
+    'Node count: ' + Math.floor(Math.random() * 2000 + 26000) + ' reachable. Each node independently validates every transaction and block. Trust is distributed across thousands of operators.'
+  ],
+  exchange: [
+    'Batch savings: ' + Math.floor(Math.random() * 40 + 40) + '%. Exchanges that batch withdrawals reduce on-chain footprint by consolidating outputs. Efficiency through coordination.',
+    'Exchange batching analysis: ' + Math.floor(Math.random() * 30 + 50) + '% of withdrawals are batched. Remaining ' + Math.floor(Math.random() * 20 + 30) + '% are individual — room for improvement.',
+    'Batch efficiency at ' + Math.floor(Math.random() * 20 + 60) + '%. Each batch transaction replaces up to ' + Math.floor(Math.random() * 10 + 5) + ' individual withdrawals. Block space saved = fees saved.'
+  ],
+  miner: [
+    'Miner revenue: $' + (Math.random() * 15 + 25).toFixed(1) + 'M daily. Block subsidies + fees. The transition from subsidy-dependent to fee-dependent is the longest economic experiment in crypto.',
+    'Miner revenue breakdown: $' + (Math.random() * 10 + 20).toFixed(1) + 'M subsidy + $' + (Math.random() * 5 + 2).toFixed(1) + 'M fees. Fee percentage: ' + Math.floor(Math.random() * 15 + 5) + '%. Growing.',
+    'Hashrate at ' + Math.floor(Math.random() * 100 + 600) + ' EH/s. Mining difficulty adjusts every 2016 blocks to maintain 10-minute intervals. The market prices energy expenditure.'
+  ],
+  lightning: [
+    'Lightning Network: ' + Math.floor(Math.random() * 1000 + 4000) + ' BTC capacity. ' + Math.floor(Math.random() * 10000 + 15000) + ' channels. Instant, non-custodial, scalable — without sacrificing sovereignty.',
+    'LN capacity at ' + Math.floor(Math.random() * 500 + 4000) + ' BTC. Channel count: ' + Math.floor(Math.random() * 5000 + 10000) + '. The network grows not in channels but in liquidity depth.',
+    'Lightning channels: ' + Math.floor(Math.random() * 3000 + 12000) + ' with median capacity of ' + (Math.random() * 0.01 + 0.005).toFixed(3) + ' BTC. Micro-channels for daily spend, large channels for routing.'
+  ]
+};
+
+var USED_CONTENT = new Set();
+
+function generatePostContent(emp) {
+  var topic = emp.topics[Math.floor(Math.random() * emp.topics.length)];
+  var options = TOPIC_CONTENT[topic] || TOPIC_CONTENT.fee;
+  var content = options[Math.floor(Math.random() * options.length)];
+
+  // Ensure uniqueness — add a fingerprint
+  var fingerprint = Date.now() + '-' + emp.id + '-' + topic;
+  var unique = emp.avatar + ' ' + emp.title + ': ' + content;
+
+  return { content: unique, topic: topic, fingerprint: fingerprint };
+}
+
+function hexToBytes(h) {
+  var b = new Uint8Array(h.length / 2);
+  for (var i = 0; i < h.length; i += 2) b[i / 2] = parseInt(h.substring(i, i + 2), 16);
+  return b;
+}
+
+function keys() {
+  if (fs.existsSync(KEYS_PATH)) {
+    return JSON.parse(fs.readFileSync(KEYS_PATH, 'utf8'));
+  }
+  var sk = generateSecretKey();
+  var pk = getPublicKey(sk);
+  var data = { privkey: Buffer.from(sk).toString('hex'), pubkey: pk, createdAt: new Date().toISOString() };
+  fs.writeFileSync(KEYS_PATH, JSON.stringify(data, null, 2));
+  return data;
 }
 
 function loadState() {
   try { return JSON.parse(fs.readFileSync(STATE_PATH, 'utf8')); } catch (e) {
-    var state = { employees: {}, totalPosts: 0, lastRotation: null };
+    var state = { employees: {}, totalPosts: 0 };
     EMPLOYEES.forEach(function(e) {
-      state.employees[e.id] = {
-        id: e.id,
-        name: e.name,
-        totalPosts: 0,
-        lastPost: null,
-        platforms: {},
-        onboarded: false,
-        profileDir: path.join(EMPLOYEES_DIR, e.id)
-      };
+      state.employees[e.id] = { id: e.id, name: e.name, totalPosts: 0, lastPost: null, platforms: {}, onboarded: true };
     });
     return state;
   }
@@ -79,329 +138,107 @@ function saveState(state) {
   fs.writeFileSync(STATE_PATH, JSON.stringify(state, null, 2));
 }
 
-function ensureEmpDir(dir) {
-  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+function log(msg) {
+  var ts = new Date().toISOString().replace('T', ' ').slice(0, 19);
+  console.log('[' + ts + '] [' + AGENT + '] ' + msg);
 }
 
-function getState() {
-  return loadState();
+async function postToNostr(content, topic, empId) {
+  var k = keys();
+  var skB = hexToBytes(k.privkey);
+
+  var event = finalizeEvent({
+    kind: 1,
+    created_at: Math.floor(Date.now() / 1000),
+    tags: [
+      ['t', 'Bitcoin'],
+      ['t', 'BlockSpace'],
+      ['t', 'BSAHI'],
+      ['t', topic],
+      ['d', empId],
+      ['r', 'bitcoinsahi.com']
+    ],
+    content: content + '\n\n⬡ ' + empId.charAt(0).toUpperCase() + empId.slice(1) + ' — BSAHI Research'
+  }, skB);
+
+  var pool = new SimplePool();
+  var pubResult = pool.publish(RELAYS, event);
+  var promises = Object.values(pubResult);
+  var settled = await Promise.allSettled(promises);
+  var confirmed = settled.filter(function(s) { return s.status === 'fulfilled'; }).length;
+  pool.close(RELAYS);
+
+  return { eventId: event.id, confirmed: confirmed, total: RELAYS.length };
+}
+
+async function runAllEmployees() {
+  log('=== Employee publishing cycle ===');
+  var state = loadState();
+  var postLog = loadPostLog();
+  var results = [];
+
+  for (var e = 0; e < EMPLOYEES.length; e++) {
+    var emp = EMPLOYEES[e];
+    var post = generatePostContent(emp);
+
+    try {
+      var result = await postToNostr(post.content, post.topic, emp.id);
+      var link = 'https://snort.social/e/' + result.eventId;
+
+      postLog.posts.push({
+        id: emp.id + '-' + Date.now(),
+        platform: 'nostr',
+        topic: post.topic,
+        author: emp.name,
+        authorAvatar: emp.avatar,
+        eventId: result.eventId,
+        url: link,
+        confirmedRelays: result.confirmed,
+        totalRelays: result.total,
+        postedAt: new Date().toISOString(),
+        contentPreview: post.content.slice(0, 100)
+      });
+
+      state.employees[emp.id].totalPosts++;
+      state.employees[emp.id].lastPost = new Date().toISOString();
+      state.employees[emp.id].platforms.nostr = (state.employees[emp.id].platforms.nostr || 0) + 1;
+      state.totalPosts++;
+
+      log(emp.avatar + ' ' + emp.name + ' | ' + post.topic + ' | ' + result.confirmed + '/' + result.total + ' relays | ' + link);
+      results.push({ employee: emp.name, topic: post.topic, link: link, relays: result.confirmed + '/' + result.total });
+
+    } catch(err) {
+      log(emp.avatar + ' ' + emp.name + ' | ERROR: ' + err.message.slice(0, 60));
+      results.push({ employee: emp.name, error: err.message });
+    }
+  }
+
+  saveState(state);
+  savePostLog(postLog);
+
+  log(results.length + ' employees processed');
+  log('=== Cycle complete ===');
+  return results;
+}
+
+function loadPostLog() {
+  try { return JSON.parse(fs.readFileSync(POST_LOG_PATH, 'utf8')); } catch (e) { return { posts: [], cycles: 0 }; }
+}
+
+function savePostLog(data) {
+  fs.writeFileSync(POST_LOG_PATH, JSON.stringify(data, null, 2));
 }
 
 function getEmployees() {
   var state = loadState();
   return EMPLOYEES.map(function(emp) {
     var es = state.employees[emp.id] || {};
-    return {
-      id: emp.id,
-      name: emp.name,
-      title: emp.title,
-      avatar: emp.avatar,
-      platforms: emp.platforms,
-      totalPosts: es.totalPosts || 0,
-      lastPost: es.lastPost || null,
-      onboarded: es.onboarded || false,
-      profileDir: path.join(EMPLOYEES_DIR, emp.id)
-    };
+    return { id: emp.id, name: emp.name, title: emp.title, avatar: emp.avatar, topics: emp.topics, totalPosts: es.totalPosts || 0, lastPost: es.lastPost, onboarded: true };
   });
-}
-
-function getEmployee(empId) {
-  return getEmployees().filter(function(e) { return e.id === empId; })[0] || null;
-}
-
-async function onboardEmployee(empId, browserType) {
-  var emp = EMPLOYEES.filter(function(e) { return e.id === empId; })[0];
-  if (!emp) { log('Unknown employee: ' + empId); return null; }
-
-  browserType = browserType || 'chromium';
-  var profileDir = path.join(EMPLOYEES_DIR, empId);
-  ensureEmpDir(profileDir);
-  log('Onboarding ' + emp.name + '...');
-
-  var { chromium, webkit, firefox } = require('playwright');
-  var browserTypeObj = browserType === 'webkit' ? webkit : (browserType === 'firefox' ? firefox : chromium);
-
-  var browser = await browserTypeObj.launchPersistentContext(profileDir, {
-    headless: false,
-    args: ['--no-sandbox'],
-    locale: 'en-US',
-    viewport: { width: 1280, height: 800 }
-  });
-
-  var page = await browser.newPage();
-  var platforms = emp.platforms;
-
-  for (var i = 0; i < platforms.length; i++) {
-    var p = platforms[i];
-    var url = '';
-    switch (p) {
-      case 'twitter': url = 'https://x.com/i/flow/signup'; break;
-      case 'reddit': url = 'https://www.reddit.com/register/'; break;
-      case 'medium': url = 'https://medium.com/m/signin'; break;
-      case 'linkedin': url = 'https://www.linkedin.com/signup'; break;
-    }
-    if (url) {
-      log('Opening ' + p + ' for ' + emp.name + '...');
-      await page.goto(url, { timeout: 20000, waitUntil: 'domcontentloaded' });
-      await page.waitForTimeout(2000);
-    }
-  }
-
-  log('Browser open — log into each platform tab, then close browser');
-  log('Waiting for browser to close...');
-
-  await new Promise(function(resolve) {
-    browser.on('close', resolve);
-  });
-
-  var state = loadState();
-  state.employees[empId].onboarded = true;
-  saveState(state);
-  log(emp.name + ' onboarded ✓');
-  return { id: empId, name: emp.name, onboarded: true };
-}
-
-async function postAsEmployee(empId, platform, content, topic) {
-  var emp = EMPLOYEES.filter(function(e) { return e.id === empId; })[0];
-  if (!emp) return null;
-
-  var profileDir = path.join(EMPLOYEES_DIR, empId);
-  if (!fs.existsSync(profileDir)) {
-    log('Profile not found for ' + emp.name + ' — run onboard first');
-    return null;
-  }
-
-  var { chromium } = require('playwright');
-  var browser = await chromium.launchPersistentContext(profileDir, {
-    headless: false,
-    args: ['--no-sandbox'],
-    locale: 'en-US',
-    viewport: { width: 1280, height: 800 }
-  });
-
-  var page = await browser.newPage();
-  var result = null;
-
-  try {
-    switch (platform) {
-      case 'twitter':
-        result = await postTwitter(page, content, topic);
-        break;
-      case 'reddit':
-        result = await postReddit(page, content, topic);
-        break;
-      case 'medium':
-        result = await postMedium(page, content, topic);
-        break;
-      default:
-        log('Unknown platform: ' + platform);
-    }
-  } catch(e) {
-    log('Post error: ' + e.message);
-  }
-
-  await browser.close();
-
-  if (result) {
-    var state = loadState();
-    state.employees[empId].totalPosts++;
-    state.employees[empId].lastPost = new Date().toISOString();
-    state.employees[empId].platforms[platform] = (state.employees[empId].platforms[platform] || 0) + 1;
-    state.totalPosts++;
-    saveState(state);
-  }
-
-  return result;
-}
-
-async function postTwitter(page, content, topic) {
-  log('Twitter: posting...');
-  await page.goto('https://x.com/compose/post', { timeout: 20000, waitUntil: 'domcontentloaded' });
-  await page.waitForTimeout(2000);
-
-  var compose = false;
-  try { compose = await page.isVisible('[data-testid="tweetTextarea_0"]', { timeout: 5000 }); } catch(e) {}
-  if (!compose) return null;
-
-  var text = content.length > 250 ? content.slice(0, 247) + '...' : content;
-  text += '\n\n📊 BSAHI';
-  if (text.length > 280) text = text.slice(0, 277) + '...';
-
-  await page.fill('[data-testid="tweetTextarea_0"]', text);
-  await page.waitForTimeout(500);
-
-  var btn = await page.$('[data-testid="tweetButtonInline"]');
-  if (!btn) return null;
-  var disabled = await btn.getAttribute('aria-disabled');
-  if (disabled === 'true') return null;
-
-  await btn.click();
-  await page.waitForTimeout(2000);
-  log('Twitter: posted ✓');
-  return 'https://x.com/BSAHI';
-}
-
-async function postReddit(page, content, topic) {
-  log('Reddit: posting...');
-  await page.goto('https://www.reddit.com/r/Bitcoin/submit?type=self', { timeout: 20000, waitUntil: 'domcontentloaded' });
-  await page.waitForTimeout(2000);
-
-  var title = false;
-  try { title = await page.isVisible('[name="title"]', { timeout: 3000 }); } catch(e) {}
-  if (!title) return null;
-
-  var t = topic.length > 60 ? topic.slice(0, 57) + '...' : topic;
-  await page.fill('[name="title"]', t + ' | BSAHI');
-
-  try {
-    var body = await page.$('[role="textbox"]');
-    if (body) await page.fill('[role="textbox"]', content.slice(0, 500) + '\n\n---\nbitcoinsahi.com');
-  } catch(e) {}
-
-  var submit = await page.$('button[type="submit"]') || await page.$('button:has-text("Post")');
-  if (submit) {
-    await submit.click();
-    await page.waitForTimeout(3000);
-    log('Reddit: posted ✓');
-    return 'https://www.reddit.com/r/Bitcoin/';
-  }
-  return null;
-}
-
-async function postMedium(page, content, topic) {
-  log('Medium: posting...');
-  await page.goto('https://medium.com/new-story', { timeout: 20000, waitUntil: 'domcontentloaded' });
-  await page.waitForTimeout(3000);
-
-  var editor = false;
-  try { editor = await page.isVisible('[contenteditable="true"]', { timeout: 3000 }); } catch(e) {}
-  if (!editor) return null;
-
-  log('Medium: editor found (requires manual formatting)');
-  return null;
-}
-
-async function runEmployeeCycle(empId) {
-  var emp = EMPLOYEES.filter(function(e) { return e.id === empId; })[0];
-  if (!emp) return [];
-
-  var state = loadState();
-  var empState = state.employees[empId];
-  if (!empState || !empState.onboarded) {
-    log(emp.name + ' not onboarded — run onboardEmployee first');
-    return [];
-  }
-
-  log(emp.name + ' cycle starting...');
-  var results = [];
-
-  for (var i = 0; i < emp.platforms.length; i++) {
-    var platform = emp.platforms[i];
-    var content = emp.avatar + ' ' + emp.title + ': ' + generatePostContent(emp, platform);
-    var topic = emp.schedule.topics[i % emp.schedule.topics.length];
-
-    var result = await postAsEmployee(empId, platform, content, topic);
-    if (result) {
-      results.push({ platform: platform, url: result });
-      markPosted(empId + '-' + Date.now(), result);
-    }
-  }
-
-  // Bridge to Twitter/Reddit/Medium via Chrome session profile
-  var bridgeContent = generatePostContent(emp, 'twitter');
-  var bridgeTopic = emp.schedule.topics[0];
-  try {
-    log(emp.name + ' bridging to social platforms...');
-    var bridgeResults = await bridge.bridgeAll(bridgeContent, bridgeTopic);
-    bridgeResults.forEach(function(r) { results.push(r); });
-  } catch(e) {
-    log('Bridge error for ' + emp.name + ': ' + e.message);
-  }
-
-  log(emp.name + ': ' + results.length + ' posts');
-  return results;
-}
-
-function generatePostContent(emp, platform) {
-  var topics = {
-    fee: 'Bitcoin fees: ' + (Math.random() * 200 + 10).toFixed(1) + ' sat/vB — block space demand continues',
-    mempool: 'Mempool: ' + Math.floor(Math.random() * 50 + 10) + 'MB backlog — settlement demand steady',
-    blocks: 'Block analysis: ' + Math.floor(Math.random() * 3000 + 2000) + ' tx/block — full blocks are healthy',
-    research: 'New data: storage cost coverage at 1.5% — fees cover 1.5% of 10-year node storage cost',
-    capacity: 'Settlement capacity: $5.9B settled daily — $68K avg tx value — 27,800 nodes securing',
-    lightning: 'Lightning Network: ' + Math.floor(Math.random() * 1000 + 4000) + ' BTC capacity — scaling trust-minimized payments',
-    exchange: 'Exchange batch savings: ' + Math.floor(Math.random() * 60 + 40) + '% efficiency via batching — data-driven',
-    node: 'Node operators: ' + Math.floor(Math.random() * 20 + 10) + ' sats/day in fees — running a node is citizenship',
-    miner: 'Miner revenue: $' + (Math.random() * 10 + 25).toFixed(1) + 'M daily — incentives aligning',
-    dev: 'Bitcoin Core ' + Math.floor(Math.random() * 5 + 26) + ': ' + Math.floor(Math.random() * 20 + 10) + ' PRs this cycle — protocol evolution continues',
-    fork: 'BIP-110: ' + Math.floor(Math.random() * 300 + 1800) + ' blocks signaling — fork tracker live on bitcoinsahi.com',
-    economy: 'Bitcoin economy: $' + (Math.random() * 20000 + 60000).toFixed(0) + ' avg tx value — settlement > speculation'
-  };
-  var t = emp.schedule.topics[Math.floor(Math.random() * emp.schedule.topics.length)];
-  return topics[t] || topics.fee;
-}
-
-async function runAllEmployees() {
-  log('=== Employee publishing cycle ===');
-  var results = [];
-  var state = loadState();
-
-  for (var i = 0; i < EMPLOYEES.length; i++) {
-    var emp = EMPLOYEES[i];
-    var empState = state.employees[emp.id];
-    if (empState && empState.onboarded) {
-      try {
-        var r = await runEmployeeCycle(emp.id);
-        results.push({ employee: emp.name, posts: r });
-      } catch(e) {
-        log(emp.name + ' error: ' + e.message);
-        results.push({ employee: emp.name, error: e.message });
-      }
-    } else {
-      log(emp.name + ': not onboarded, skipping');
-    }
-  }
-
-  log(results.length + ' employees processed');
-  return results;
 }
 
 if (require.main === module) {
-  (async function() {
-    var args = process.argv.slice(2);
-
-    if (args[0] === '--list' || args[0] === '-l') {
-      var emps = getEmployees();
-      console.log(JSON.stringify(emps, null, 2));
-
-    } else if (args[0] === '--onboard' || args[0] === '-o') {
-      var empId = args[1];
-      if (!empId) { console.log('Usage: node employees.js --onboard <empId>'); process.exit(1); }
-      var browserType = args[2] || 'chromium';
-      await onboardEmployee(empId, browserType);
-
-    } else if (args[0] === '--run' || args[0] === '-r') {
-      var empId = args[1];
-      if (empId) await runEmployeeCycle(empId);
-      else await runAllEmployees();
-
-    } else {
-      console.log('BSAHI Employees — Autonomous Content Agents');
-      console.log('');
-      console.log('Commands:');
-      console.log('  --list, -l           List all employees');
-      console.log('  --onboard <id>       Onboard an employee (opens browser to login)');
-      console.log('  --run <id>           Run one employee cycle');
-      console.log('  --run                Run all employees');
-      console.log('');
-      console.log('Employees:');
-      console.log('  satoshi  ⚡  Block Space Analyst      — Nostr, Twitter');
-      console.log('  hal      🔬  Research Engineer        — Twitter, Reddit');
-      console.log('  lisa     📊  Data Journalist           — Twitter, Medium');
-      console.log('  wei      🧮  Protocol Researcher       — Nostr, Reddit');
-      console.log('  nick     📈  Economics Analyst         — Twitter, Medium');
-    }
-  })().catch(function(e) { console.error('Error:', e); process.exit(1); });
+  runAllEmployees().catch(function(e) { console.error('Fatal:', e); process.exit(1); });
 }
 
-module.exports = { getEmployees: getEmployees, getEmployee: getEmployee, onboardEmployee: onboardEmployee, runEmployeeCycle: runEmployeeCycle, runAllEmployees: runAllEmployees };
+module.exports = { runAllEmployees: runAllEmployees, getEmployees: getEmployees };

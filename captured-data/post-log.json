@@ -79,6 +79,71 @@
       "totalRelays": 6,
       "postedAt": "2026-07-30T23:19:30.751Z",
       "contentPreview": "Bitcoin's fee market is the most sophisticated congestion pricing mechanism in the digital asset wor"
+    },
+    {
+      "id": "satoshi-1785454060747",
+      "platform": "nostr",
+      "topic": "fee",
+      "author": "Satoshi Block",
+      "authorAvatar": "⚡",
+      "eventId": "90a509e564c23690907fe6a762a6eb04bdcf16993c25ed2e8c621841694fbdc2",
+      "url": "https://snort.social/e/90a509e564c23690907fe6a762a6eb04bdcf16993c25ed2e8c621841694fbdc2",
+      "confirmedRelays": 6,
+      "totalRelays": 6,
+      "postedAt": "2026-07-30T23:27:40.747Z",
+      "contentPreview": "⚡ Block Space Analyst: Low fee environment: 14.5 sat/vB. The fee market works both ways. When demand"
+    },
+    {
+      "id": "hal-1785454063756",
+      "platform": "nostr",
+      "topic": "capacity",
+      "author": "Hal Finney Jr",
+      "authorAvatar": "🔬",
+      "eventId": "8d48105f3cdaf72679e10cb69c9934ee6a64a2dcfd2b1f74adf925769487ce91",
+      "url": "https://snort.social/e/8d48105f3cdaf72679e10cb69c9934ee6a64a2dcfd2b1f74adf925769487ce91",
+      "confirmedRelays": 6,
+      "totalRelays": 6,
+      "postedAt": "2026-07-30T23:27:43.757Z",
+      "contentPreview": "🔬 Research Engineer: Lightning Network adds 4426 BTC capacity for instant settlements. Trust-minimi"
+    },
+    {
+      "id": "lisa-1785454066793",
+      "platform": "nostr",
+      "topic": "exchange",
+      "author": "Lisa Nakamoto",
+      "authorAvatar": "📊",
+      "eventId": "7af050f18160fdcf313ef5cad977ff97be6dc5c8e94c67eb838056be12e33092",
+      "url": "https://snort.social/e/7af050f18160fdcf313ef5cad977ff97be6dc5c8e94c67eb838056be12e33092",
+      "confirmedRelays": 6,
+      "totalRelays": 6,
+      "postedAt": "2026-07-30T23:27:46.793Z",
+      "contentPreview": "📊 Data Journalist: Exchange batching analysis: 70% of withdrawals are batched. Remaining 33% are in"
+    },
+    {
+      "id": "wei-1785454069801",
+      "platform": "nostr",
+      "topic": "fork",
+      "author": "Wei Dai III",
+      "authorAvatar": "🧮",
+      "eventId": "015d6a3f4450362e5028215ca64064e441330f156f4ef62323129049b4ed286e",
+      "url": "https://snort.social/e/015d6a3f4450362e5028215ca64064e441330f156f4ef62323129049b4ed286e",
+      "confirmedRelays": 6,
+      "totalRelays": 6,
+      "postedAt": "2026-07-30T23:27:49.801Z",
+      "contentPreview": "🧮 Protocol Researcher: BIP-110 signaling at 83%. Thresholds approaching. What happens at the fork b"
+    },
+    {
+      "id": "nick-1785454072808",
+      "platform": "nostr",
+      "topic": "economy",
+      "author": "Nick Szabo Jr",
+      "authorAvatar": "📈",
+      "eventId": "11ef36ec19f566740fa81fbb415deebd00f019f56251526b4ea2c6299e096692",
+      "url": "https://snort.social/e/11ef36ec19f566740fa81fbb415deebd00f019f56251526b4ea2c6299e096692",
+      "confirmedRelays": 6,
+      "totalRelays": 6,
+      "postedAt": "2026-07-30T23:27:52.808Z",
+      "contentPreview": "📈 Economics Analyst: Average transaction value: $53965. Bitcoin settles high-value transactions. Th"
     }
   ],
   "cycles": 4
