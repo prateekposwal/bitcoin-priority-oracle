@@ -1,0 +1,45 @@
+{
+  "employees": {
+    "satoshi": {
+      "id": "satoshi",
+      "name": "Satoshi Block",
+      "totalPosts": 0,
+      "lastPost": null,
+      "platforms": {},
+      "onboarded": true
+    },
+    "hal": {
+      "id": "hal",
+      "name": "Hal Finney Jr",
+      "totalPosts": 0,
+      "lastPost": null,
+      "platforms": {},
+      "onboarded": true
+    },
+    "lisa": {
+      "id": "lisa",
+      "name": "Lisa Nakamoto",
+      "totalPosts": 0,
+      "lastPost": null,
+      "platforms": {},
+      "onboarded": true
+    },
+    "wei": {
+      "id": "wei",
+      "name": "Wei Dai III",
+      "totalPosts": 0,
+      "lastPost": null,
+      "platforms": {},
+      "onboarded": true
+    },
+    "nick": {
+      "id": "nick",
+      "name": "Nick Szabo Jr",
+      "totalPosts": 0,
+      "lastPost": null,
+      "platforms": {},
+      "onboarded": true
+    }
+  },
+  "totalPosts": 0
+}

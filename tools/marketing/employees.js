@@ -14,15 +14,14 @@ var EMPLOYEES = [
     title: 'Block Space Analyst',
     avatar: '⚡',
     platforms: ['nostr', 'twitter'],
-    schedule: { postsPerDay: 4, topics: ['fee', 'mempool', 'blocks'] },
-    relays: ['wss://relay.damus.io', 'wss://nos.lol', 'wss://relay.nostr.band']
+    schedule: { postsPerDay: 4, topics: ['fee', 'mempool', 'blocks'] }
   },
   {
     id: 'hal',
     name: 'Hal Finney Jr',
     title: 'Research Engineer',
     avatar: '🔬',
-    platforms: ['twitter', 'reddit'],
+    platforms: ['nostr', 'reddit'],
     schedule: { postsPerDay: 3, topics: ['research', 'capacity', 'dev'] }
   },
   {
@@ -30,7 +29,7 @@ var EMPLOYEES = [
     name: 'Lisa Nakamoto',
     title: 'Data Journalist',
     avatar: '📊',
-    platforms: ['twitter', 'medium'],
+    platforms: ['nostr', 'medium'],
     schedule: { postsPerDay: 2, topics: ['lightning', 'exchange', 'node'] }
   },
   {
@@ -38,7 +37,7 @@ var EMPLOYEES = [
     name: 'Wei Dai III',
     title: 'Protocol Researcher',
     avatar: '🧮',
-    platforms: ['nostr', 'reddit'],
+    platforms: ['nostr'],
     schedule: { postsPerDay: 3, topics: ['research', 'dev', 'fork'] }
   },
   {
@@ -46,7 +45,7 @@ var EMPLOYEES = [
     name: 'Nick Szabo Jr',
     title: 'Economics Analyst',
     avatar: '📈',
-    platforms: ['twitter', 'medium'],
+    platforms: ['nostr'],
     schedule: { postsPerDay: 2, topics: ['miner', 'economy', 'capacity'] }
   }
 ];

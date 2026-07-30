@@ -12,3 +12,4 @@ captured-data/tracker/*.json
 captured-data/btc-rpc/*.json
 .DS_Store
 .vercel
+profiles/
