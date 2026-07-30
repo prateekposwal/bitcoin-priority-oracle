@@ -1,6 +1,6 @@
 {
-  "cycleCount": 2,
-  "lastRun": 1785406791745,
+  "cycleCount": 3,
+  "lastRun": 1785429123283,
   "lastResults": [
     {
       "agent": "Bitcoin Core & Protocol",
@@ -9,16 +9,16 @@
         "Active BIP discussions in repo",
         "Bitcoin Optech newsletters available"
       ],
-      "timestamp": "2026-07-30T10:19:34.142Z"
+      "timestamp": "2026-07-30T16:31:41.187Z"
     },
     {
       "agent": "Lightning Network",
       "findings": [
         "LND latest: v0.20.2-beta",
         "CLN latest: v26.06.6",
-        "LN Network: 17236 nodes, 38829 channels, 4447.9 BTC capacity"
+        "LN Network: 17195 nodes, 38744 channels, 4459.0 BTC capacity"
       ],
-      "timestamp": "2026-07-30T10:19:41.434Z"
+      "timestamp": "2026-07-30T16:31:47.487Z"
     },
     {
       "agent": "APIs & Data Sources",
@@ -26,26 +26,26 @@
         "Data source health: 4/4 endpoints responding",
         "Mempool blocks: 8 blocks in queue",
         "Last mempool block fee range: N/A sat/vB",
-        "Difficulty adjustment: -2.3%",
-        "Blocks until next adjustment: 1387"
+        "Difficulty adjustment: -2.5%",
+        "Blocks until next adjustment: 1352"
       ],
-      "timestamp": "2026-07-30T10:19:45.249Z"
+      "timestamp": "2026-07-30T16:31:52.172Z"
     },
     {
       "agent": "Blockchain General",
       "findings": [
         "Trending Bitcoin repos: bitcoinbook/bitcoinbook, UFund-Me/Qbot, solana-labs/solana",
         "DeFiLlama Bitcoin data: 1959 data points",
-        "BTC: $64,522 (24h: -0.14%)"
+        "BTC: $64,831 (24h: 1.32%)"
       ],
-      "timestamp": "2026-07-30T10:19:48.813Z"
+      "timestamp": "2026-07-30T16:31:57.201Z"
     },
     {
       "agent": "Academic Research",
       "findings": [
         "No new papers found this cycle"
       ],
-      "timestamp": "2026-07-30T10:19:51.742Z"
+      "timestamp": "2026-07-30T16:32:03.283Z"
     }
   ]
 }
