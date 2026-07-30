@@ -1,7 +1,7 @@
 # ⬡ BSAHI — Go Live
 # Every agent, publisher, and process start in background
 
-DIR="$(cd "$(dirname "$0")/.." && pwd)"
+DIR="$(cd "$(dirname "$0")" && pwd)"
 LOG="$DIR/captured-data/live.log"
 PIDDIR="$DIR/captured-data/pids"
 mkdir -p "$PIDDIR"

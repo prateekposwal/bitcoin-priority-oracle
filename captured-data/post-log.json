@@ -59,7 +59,27 @@
       "totalRelays": 6,
       "postedAt": "2026-07-30T22:20:01.379Z",
       "contentPreview": "1/ Bitcoin's fastest fee is **1 sat/vB** right now. But here's what most people miss about how fees "
+    },
+    {
+      "id": "BSAHI-MS84Y8G4-B87B",
+      "platform": "nostr",
+      "topic": "fee",
+      "eventId": "75541bcf880289859a47e6ce47f57c2d15f80fdaab779c2f6fb5a2acfc8baaf6",
+      "confirmedRelays": 4,
+      "totalRelays": 6,
+      "postedAt": "2026-07-30T23:19:25.728Z",
+      "contentPreview": "1/ Bitcoin's fastest fee is **4 sat/vB** right now. But here's what most people miss about how fees "
+    },
+    {
+      "id": "BSAHI-MS84Y8G4-XGHT",
+      "platform": "nostr",
+      "topic": "fee",
+      "eventId": "d852be78d9f01812f19020d407083752acdf2e7daa4c02faa3f196c39f70022c",
+      "confirmedRelays": 5,
+      "totalRelays": 6,
+      "postedAt": "2026-07-30T23:19:30.751Z",
+      "contentPreview": "Bitcoin's fee market is the most sophisticated congestion pricing mechanism in the digital asset wor"
     }
   ],
-  "cycles": 3
+  "cycles": 4
 }
