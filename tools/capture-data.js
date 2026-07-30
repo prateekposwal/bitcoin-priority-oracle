@@ -13,7 +13,9 @@ var ENDPOINTS = [
   { key: 'block_height',    url: 'https://blockstream.info/api/blocks/tip/height' },
   { key: 'coinpaprika',     url: 'https://api.coinpaprika.com/v1/coins/btc-bitcoin' },
   { key: 'fear_greed',      url: 'https://api.alternative.me/fng/' },
-  { key: 'blockchair',      url: 'https://api.blockchair.com/bitcoin/stats' }
+  { key: 'blockchair',      url: 'https://api.blockchair.com/bitcoin/stats' },
+  { key: 'mining_pools',    url: 'https://mempool.space/api/v1/mining/pools/weekly' },
+  { key: 'difficulty',      url: 'https://mempool.space/api/v1/difficulty-adjustment' }
 ];
 
 var results = {};

@@ -49,6 +49,8 @@ var CONFIG = {
     { key: 'coinpaprika',     url: 'https://api.coinpaprika.com/v1/coins/btc-bitcoin', method: 'GET', category: 'price', priority: 3, maxLatency: 5000 },
     { key: 'fear_greed',      url: 'https://api.alternative.me/fng/', method: 'GET', category: 'sentiment', priority: 3, maxLatency: 5000 },
     { key: 'blockchair',      url: 'https://api.blockchair.com/bitcoin/stats', method: 'GET', category: 'general', priority: 3, maxLatency: 5000 },
+    { key: 'mining_pools',    url: 'https://mempool.space/api/v1/mining/pools/weekly', method: 'GET', category: 'mining', priority: 3, maxLatency: 5000 },
+    { key: 'difficulty',      url: 'https://mempool.space/api/v1/difficulty-adjustment', method: 'GET', category: 'mining', priority: 2, maxLatency: 3000 },
   ],
 };
 
