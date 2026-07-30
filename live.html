@@ -554,7 +554,7 @@ if (typeof DATA_ENGINE !== 'undefined') {
     var segments = 10;
     var filled = Math.round(weightPct / segments);
     for (var bi = 0; bi < segments; bi++) { bars += bi < filled ? '█' : '░'; }
-    var capColor = weightPct > 90 ? '#C0392B' : weightPct > 70 ? '#D4762A' : '#3BA35D';
+    var capColor = '#3BA35D';
     el.innerHTML = 'Block: <span style="color:' + capColor + ';">' + bars + ' ' + weightPct + '%</span> · <span style="color:#9B8B78;">' + inflowRate + ' tx/min</span>';
   });
 
