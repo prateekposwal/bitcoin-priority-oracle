@@ -297,9 +297,9 @@ Each new block strengthens every block that came before it. To rewrite history, 
 <div class="bsahi-section">
 <h2>Why <span>Block Space</span> Matters</h2>
 <p>Every Bitcoin transaction bids for a scarce resource: <strong>space in the next block</strong>. The fee market determines who gets in. But the fee market only prices congestion — not the permanent cost of storing data across every full node forever.</p>
-<p>Our research (<a href="/research/problem_statement.md">The Bitcoin Block Space Problem</a>) frames this question:</p>
-<div class="highlight">Does Bitcoin's fee market correctly price the lifetime cost of permanent data storage — or does it only price the 10-minute race to the next block?</div>
-<p>We don't claim to have the answer. We're building the data infrastructure to help the community find it.</p>
+<p>Our research (<a href="https://github.com/prateekposwal/block-space-economics/blob/main/research/problem_statement.md">The Bitcoin Block Space Problem</a>) frames this question. In July 2026, we produced the first empirical measurement:</p>
+<div class="highlight"><strong>Storage Cost Coverage Ratio: 0.0149</strong> — Current Bitcoin transaction fees cover only ~1.5% of the estimated 10-year storage cost across 60,000 nodes. 100% of sampled blocks fall below the 1× threshold.</div>
+<p>Based on 148 blocks sampled over 24 hours. This is an open research question — we're publishing the data and methodology for the community to verify and build upon.</p>
 </div>
 
 </section>
