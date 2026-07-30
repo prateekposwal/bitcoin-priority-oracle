@@ -514,9 +514,10 @@ if (typeof DATA_ENGINE !== 'undefined') {
   if (label) { label.textContent = weather.label; }
   if (stateEl) { stateEl.textContent = weather.advice; stateEl.style.color = weather.color; }
   if (stateSub) {
+    var inflowRate = Math.round(mpCount / 600 * 60);
     if (!fees.fastestFee && !fees.economyFee) stateSub.textContent = 'Showing cached data if available';
-    else if (f2 >= 50) stateSub.textContent = 'Fastest ' + f2 + ' sat/vB · Mempool ' + mpCount.toLocaleString() + ' · Consider waiting';
-    else stateSub.textContent = 'Fastest ' + f2 + ' sat/vB · Economy ' + (fees.economyFee || 1) + ' sat/vB · ' + mpCount.toLocaleString() + ' in mempool';
+    else if (f2 >= 50) stateSub.textContent = 'Fastest ' + f2 + ' sat/vB · Mempool ' + mpCount.toLocaleString() + ' · ' + inflowRate + ' tx/min arriving';
+    else stateSub.textContent = 'Fastest ' + f2 + ' sat/vB · Economy ' + (fees.economyFee || 1) + ' sat/vB · ' + inflowRate + ' tx/min · ' + mpCount.toLocaleString() + ' pending';
   }
 
   document.getElementById('fee-fastest').textContent = (fees.fastestFee || '--') + ' sat/vB';
@@ -531,7 +532,7 @@ if (typeof DATA_ENGINE !== 'undefined') {
     var weight = lastBlock ? lastBlock.weight : 0;
     var weightPct = weight > 0 ? Math.round(weight / 4000000 * 100) : 0;
     var mpCount = d.mempool ? (d.mempool.count || 0) : 0;
-    var tps = mpCount > 0 ? (mpCount / 600).toFixed(1) : '0';
+    var inflowRate = mpCount > 0 ? Math.round(mpCount / 600 * 60) : 0;
     var bars = '';
     var segments = 10;
     var filled = Math.round(weightPct / segments);
@@ -539,7 +540,7 @@ if (typeof DATA_ENGINE !== 'undefined') {
       bars += bi < filled ? '█' : '░';
     }
     var capColor = weightPct > 90 ? '#C0392B' : weightPct > 70 ? '#D4762A' : '#3BA35D';
-    capEl.innerHTML = 'Block: <span style="color:' + capColor + ';">' + bars + ' ' + weightPct + '%</span> · TPS: <span style="color:#58A6FF;">' + tps + '</span>';
+    capEl.innerHTML = 'Block: <span style="color:' + capColor + ';">' + bars + ' ' + weightPct + '%</span> · <span style="color:#9B8B78;">' + inflowRate + ' tx/min</span>';
   }
 
   var e = fees.economyFee || 1;

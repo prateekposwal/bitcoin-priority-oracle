@@ -93,7 +93,7 @@ a:hover{color:#E8B86D}
 
 <section class="hero">
 <h1>Where Does Bitcoin's <span>Capacity</span> Go?</h1>
-<p>Bitcoin can process ~7 transactions per second. But capacity isn't just TPS — it's block weight, SegWit adoption, batching efficiency, and Layer 2 growth. This page shows every dimension of Bitcoin's capacity, live.</p>
+<p>Bitcoin's typical on-chain throughput is <strong>~3–7 transactions per second</strong> (workload-dependent). But capacity isn't just throughput — it's block weight utilization, SegWit adoption, batching efficiency, and Layer 2 growth. This page shows every dimension of Bitcoin's capacity, live.</p>
 </section>
 
 <div class="container">
@@ -101,8 +101,8 @@ a:hover{color:#E8B86D}
 <canvas id="capacity-canvas"></canvas>
 
 <div class="compact-grid" id="metric-grid">
-  <div class="stat-card"><div class="stat-label">Max Theoretical TPS</div><div class="stat-value" id="m-max-tps">7</div></div>
-  <div class="stat-card"><div class="stat-label">Current TPS</div><div class="stat-value" id="m-current-tps">--</div></div>
+  <div class="stat-card"><div class="stat-label">On-Chain Throughput</div><div class="stat-value" style="font-size:1.2rem;">~3-7 tx/s</div></div>
+  <div class="stat-card"><div class="stat-label">Inflow Rate</div><div class="stat-value" id="m-inflow" style="color:#58A6FF;">-- <span style="font-size:.8rem;">tx/min</span></div></div>
   <div class="stat-card"><div class="stat-label">Block Weight Usage</div><div class="stat-value" id="m-weight-pct">--</div></div>
   <div class="stat-card"><div class="stat-label">Avg Tx Size</div><div class="stat-value" id="m-avg-tx">--</div></div>
 </div>
@@ -157,9 +157,9 @@ DATA_ENGINE.onUpdate(function() {
   var ln = d.lightning || {};
   var mempool = d.mempool || {};
 
-  // Current TPS from mempool size / 600s (avg block time)
+  // Inflow rate from mempool size / 600s (avg block time) × 60 = tx/min
   var mpCount = mempool.count || 0;
-  var currentTps = mpCount > 0 ? (mpCount / 600).toFixed(2) : '--';
+  var inflowRate = mpCount > 0 ? Math.round(mpCount / 600 * 60) : 0;
   var btcPrice = d.btc_price || 64000;
 
   // Block weight from latest block
@@ -170,12 +170,8 @@ DATA_ENGINE.onUpdate(function() {
   // Avg tx size from latest block
   var avgTxSize = (lastBlock && lastBlock.tx_count > 0) ? Math.round(lastBlock.size / lastBlock.tx_count) : '--';
 
-  // Effective capacity with batching (estimate: ~20% of txs are batched)
-  var effTps = currentTps !== '--' ? (parseFloat(currentTps) * 1.25).toFixed(2) : '--';
-
   // Update compact grid
-  $('m-max-tps').textContent = MAX_TPS;
-  $('m-current-tps').textContent = currentTps;
+  $('m-inflow').textContent = inflowRate + ' tx/min';
   $('m-weight-pct').textContent = weightPct !== '--' ? weightPct + '%' : '--';
   $('m-avg-tx').textContent = avgTxSize !== '--' ? avgTxSize + ' vB' : '--';
 
@@ -203,7 +199,7 @@ DATA_ENGINE.onUpdate(function() {
 
   // Gauges
   var gauges = [
-    { id: 'gauge-tps', label: 'TPS Utilization', value: currentTps !== '--' ? Math.round(parseFloat(currentTps) / MAX_TPS * 100) : 0, max: 100, unit: '%', color: '#58A6FF' },
+    { id: 'gauge-inflow', label: 'Inflow Rate', value: Math.min(100, Math.round(inflowRate / 200 * 100)), max: 100, unit: 'tx/min', color: '#58A6FF' },
     { id: 'gauge-weight', label: 'Block Weight', value: weightPct !== '--' ? Math.round(parseFloat(weightPct)) : 0, max: 100, unit: '%', color: '#D4933A' },
     { id: 'gauge-segwit', label: 'SegWit Adoption', value: segwitPct, max: 100, unit: '%', color: '#3BA35D' },
     { id: 'gauge-mempool', label: 'Mempool Pressure', value: Math.min(100, Math.round(mpCount / 50000 * 100)), max: 100, unit: '%', color: mpCount > 30000 ? '#C0392B' : mpCount > 10000 ? '#D4762A' : '#3BA35D' },
@@ -278,23 +274,23 @@ function drawCapacity() {
   capCtx.fillStyle = 'rgba(107,93,78,0.6)';
   capCtx.fillText('Block weight: ' + weight.toLocaleString() + ' / 4,000,000 WU', w / 2, by + 110);
 
-  // TPS meter
+  // Inflow meter
   var tpsX = w + 30, tpsY = 70, tpsW = w - 60, tpsH = 50;
   capCtx.strokeStyle = '#3A3228';
   capCtx.lineWidth = 1;
   capCtx.strokeRect(tpsX, tpsY, tpsW, tpsH);
-  var tps = d.mempool && d.mempool.count ? (d.mempool.count / 600) : 0;
-  var tpsPct = Math.min(1, tps / MAX_TPS);
-  capCtx.fillStyle = 'rgba(59,163,93,' + (0.1 + tpsPct * 0.3) + ')';
-  capCtx.fillRect(tpsX + 1, tpsY + 1, tpsW * tpsPct - 2, tpsH - 2);
+  var inflow = d.mempool && d.mempool.count ? Math.round(d.mempool.count / 600 * 60) : 0;
+  var inflowPct = Math.min(1, inflow / 200);
+  capCtx.fillStyle = 'rgba(59,163,93,' + (0.1 + inflowPct * 0.3) + ')';
+  capCtx.fillRect(tpsX + 1, tpsY + 1, tpsW * inflowPct - 2, tpsH - 2);
   capCtx.fillStyle = '#EADCC8';
-  capCtx.font = 'bold 22px -apple-system,sans-serif';
+  capCtx.font = 'bold 20px -apple-system,sans-serif';
   capCtx.textAlign = 'center';
-  capCtx.fillText(tps.toFixed(2) + ' TPS', w + 30 + tpsW / 2, tpsY + 34);
+  capCtx.fillText(inflow + ' tx/min', w + 30 + tpsW / 2, tpsY + 34);
   capCtx.font = '10px -apple-system,sans-serif';
   capCtx.fillStyle = '#6A5D4E';
-  capCtx.textAlign = 'right';
-  capCtx.fillText('max: ' + MAX_TPS + ' TPS', w + 30 + tpsW, tpsY + tpsH + 14);
+  capCtx.textAlign = 'center';
+  capCtx.fillText('Inflow rate (estimated)', w + 30 + tpsW / 2, tpsY + tpsH + 14);
 
   // Lightning summary
   var ln = d.lightning || {};
