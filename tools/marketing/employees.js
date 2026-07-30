@@ -1,6 +1,8 @@
 var fs = require('fs');
 var path = require('path');
+var { chromium } = require('playwright');
 var { getQueue, markPosted, generateDailyQueue } = require('./ops-center.js');
+var bridge = require('../bridge/index.js');
 
 var EMPLOYEES_DIR = path.resolve(__dirname, '..', '..', 'profiles');
 var STATE_PATH = path.resolve(__dirname, '..', '..', 'captured-data', 'employees.json');
@@ -303,6 +305,17 @@ async function runEmployeeCycle(empId) {
       results.push({ platform: platform, url: result });
       markPosted(empId + '-' + Date.now(), result);
     }
+  }
+
+  // Bridge to Twitter/Reddit/Medium via Chrome session profile
+  var bridgeContent = generatePostContent(emp, 'twitter');
+  var bridgeTopic = emp.schedule.topics[0];
+  try {
+    log(emp.name + ' bridging to social platforms...');
+    var bridgeResults = await bridge.bridgeAll(bridgeContent, bridgeTopic);
+    bridgeResults.forEach(function(r) { results.push(r); });
+  } catch(e) {
+    log('Bridge error for ' + emp.name + ': ' + e.message);
   }
 
   log(emp.name + ': ' + results.length + ' posts');

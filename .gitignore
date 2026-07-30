@@ -13,3 +13,5 @@ captured-data/btc-rpc/*.json
 .DS_Store
 .vercel
 profiles/
+sessions/
+captured-data/post-log.json
