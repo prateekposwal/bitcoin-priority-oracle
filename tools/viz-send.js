@@ -171,9 +171,11 @@ var VIZ_Send = (function() {
     }
 
     var bw = cW / n;
+    var waveT = Date.now() / 1000;
     for (var i = 0; i < n; i++) {
       var fr = (bars[i].avgFees || bars[i].avg_fees || (bars[i].avgFeeRate ? bars[i].avgFeeRate * 2500000 : 0)) / 2500000;
-      var bh = (fr / maxF) * cH;
+      var wave = Math.sin(waveT * 0.6 + i * 0.08) * 0.04 + 0.96;
+      var bh = (fr / maxF) * cH * wave;
       var x = cL + i * bw;
       var y = cB - bh;
       var p = Math.min(1, fr / (maxF * 0.7));
