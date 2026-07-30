@@ -1,182 +1,279 @@
-var { webkit, chromium } = require('playwright');
+var { chromium } = require('playwright');
 var fs = require('fs');
 var path = require('path');
 
-var CHROME_PROFILE = '/Users/prateekposwal/Library/Application Support/Google/Chrome/Default';
-var PROFILE_DIR = path.resolve(__dirname, '..', '..', 'profiles', '_bsahi');
+var PROFILES_DIR = path.resolve(__dirname, '..', '..', 'profiles');
+var CRED_PATH = path.resolve(__dirname, '..', '..', 'captured-data', 'employee-creds.json');
+var AGENT = 'BSAHI Account Creator';
 
-// Email found from Chrome Preferences
-var EMAIL = 'p8015844+bsahi@gmail.com';
 var PASSWORD = 'BSAHI_Live2024!';
+var MAIL_DOMAIN = null;
+var MAIL_TOKEN = null;
+var MAIL_ACCOUNTS = {};
 
-function log(msg) { console.log('[' + new Date().toISOString().slice(11,19) + '] ' + msg); }
+var EMPLOYEES = [
+  { id: 'satoshi', name: 'Satoshi Block',  avatar: '⚡', platforms: ['reddit', 'medium'] },
+  { id: 'hal',     name: 'Hal Finney Jr',  avatar: '🔬', platforms: ['reddit'] },
+  { id: 'lisa',    name: 'Lisa Nakamoto',  avatar: '📊', platforms: ['medium'] },
+  { id: 'wei',     name: 'Wei Dai III',    avatar: '🧮', platforms: ['reddit'] },
+  { id: 'nick',    name: 'Nick Szabo Jr',  avatar: '📈', platforms: ['medium'] }
+];
 
-async function waitForGmailVerification(timeoutMs) {
-  timeoutMs = timeoutMs || 120000;
-  log('Opening Chrome to check Gmail...');
-  var browser = await chromium.launchPersistentContext(CHROME_PROFILE, {
-    headless: false, channel: 'chrome', args: ['--no-sandbox'], locale: 'en-US'
+function log(msg) {
+  var ts = new Date().toISOString().replace('T', ' ').slice(0, 19);
+  console.log('[' + ts + '] [' + AGENT + '] ' + msg);
+}
+
+function loadCreds() {
+  try { return JSON.parse(fs.readFileSync(CRED_PATH, 'utf8')); } catch (e) { return { accounts: [] }; }
+}
+
+function saveCreds(data) {
+  fs.writeFileSync(CRED_PATH, JSON.stringify(data, null, 2));
+}
+
+async function initMail() {
+  log('Setting up mail.tm...');
+  var resp = await fetch('https://api.mail.tm/domains');
+  var data = await resp.json();
+  MAIL_DOMAIN = data['hydra:member'][0].domain;
+  log('Mail domain: ' + MAIL_DOMAIN);
+}
+
+async function createMailAccount(empId) {
+  if (!MAIL_DOMAIN) await initMail();
+  var addr = 'bsahi.' + empId + Math.floor(Math.random() * 10000) + '@' + MAIL_DOMAIN;
+  log('Creating email: ' + addr);
+
+  var resp = await fetch('https://api.mail.tm/accounts', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ address: addr, password: PASSWORD })
   });
-  var page = await browser.newPage();
-  var start = Date.now();
-  var link = null;
+  var data = await resp.json();
+  if (!data.address) throw new Error('Mail account failed: ' + JSON.stringify(data));
 
-  while (!link && (Date.now() - start) < timeoutMs) {
-    await page.goto('https://mail.google.com/mail/u/0/#inbox', { timeout: 10000, waitUntil: 'domcontentloaded' });
+  // Get token for checking inbox
+  var tresp = await fetch('https://api.mail.tm/token', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ address: addr, password: PASSWORD })
+  });
+  var tdata = await tresp.json();
+  MAIL_TOKEN = tdata.token;
+
+  return { address: addr, password: PASSWORD, token: tdata.token };
+}
+
+async function waitForVerificationLink(token, timeoutMs) {
+  timeoutMs = timeoutMs || 60000;
+  var start = Date.now();
+  while (Date.now() - start < timeoutMs) {
+    var resp = await fetch('https://api.mail.tm/messages', {
+      headers: { 'Authorization': 'Bearer ' + token }
+    });
+    var data = await resp.json();
+    if (data['hydra:member'] && data['hydra:member'].length > 0) {
+      var msg = data['hydra:member'][0];
+      // Get full message
+      var mresp = await fetch('https://api.mail.tm/messages/' + msg.id, {
+        headers: { 'Authorization': 'Bearer ' + token }
+      });
+      var mdata = await mresp.json();
+      // Look for verification link in HTML
+      var html = mdata.html ? mdata.html[0] : '';
+      var match = html.match(/https?:\/\/[^"'\s]+(?:verify|confirm|activate)[^"'\s]*/i);
+      if (match) return match[0];
+      // Also check text
+      var text = mdata.text ? mdata.text[0] : '';
+      var tmatch = text.match(/https?:\/\/[^\s]+/);
+      if (tmatch) return tmatch[0];
+    }
+    await new Promise(function(r) { setTimeout(r, 2000); });
+  }
+  return null;
+}
+
+async function createRedditAccount(page, emp, email) {
+  log('Creating Reddit account for ' + emp.name + ' (' + email.address + ')...');
+
+  var username = 'BSAHI_' + emp.id.charAt(0).toUpperCase() + emp.id.slice(1);
+
+  await page.goto('https://www.reddit.com/register/', { timeout: 20000, waitUntil: 'domcontentloaded' });
+  await page.waitForTimeout(2000);
+
+  // Fill signup form
+  try {
+    var emailField = await page.$('[name="email"]');
+    if (emailField) await emailField.fill(email.address);
+
+    var unameField = await page.$('[name="username"]');
+    if (unameField) {
+      await unameField.fill(username);
+    } else {
+      // Try alternative selector
+      var altUname = await page.$('#regUsername');
+      if (altUname) await altUname.fill(username);
+    }
+
+    var passField = await page.$('[name="password"]');
+    if (passField) await passField.fill(PASSWORD);
+
+    // Click submit
+    var submitBtn = await page.$('button[type="submit"]') || await page.$('button:has-text("Continue")');
+    if (submitBtn) await submitBtn.click();
+
+    await page.waitForTimeout(3000);
+    log('Reddit account created for ' + emp.name + ' (username: ' + username + ')');
+    return { platform: 'reddit', username: username, email: email.address, password: PASSWORD };
+  } catch (e) {
+    log('Reddit signup error: ' + e.message);
+    return null;
+  }
+}
+
+async function createMediumAccount(page, emp, email) {
+  log('Creating Medium account for ' + emp.name + ' (' + email.address + ')...');
+
+  var username = 'BSAHI_' + emp.id.charAt(0).toUpperCase() + emp.id.slice(1);
+
+  await page.goto('https://medium.com/m/signin', { timeout: 20000, waitUntil: 'domcontentloaded' });
+  await page.waitForTimeout(2000);
+
+  // Click "Sign up with email"
+  try {
+    var emailBtn = await page.$('button:has-text("Email")') || await page.$('a:has-text("Sign up")');
+    if (emailBtn) await emailBtn.click();
+    await page.waitForTimeout(1000);
+
+    var emailField = await page.$('[type="email"]') || await page.$('[name="email"]');
+    if (emailField) await emailField.fill(email.address);
+
+    var submitBtn = await page.$('button[type="submit"]') || await page.$('[data-action="submit"]');
+    if (submitBtn) await submitBtn.click();
     await page.waitForTimeout(2000);
 
-    var firstEmail = await page.$('tr.zA:first-child');
-    if (firstEmail) {
-      await firstEmail.click();
-      await page.waitForTimeout(2000);
-      var html = await page.content();
-      var matches = html.match(/https?:\/\/[^"'\s]+(?:verify|confirm|activate|email_verify|reddit\.com\/verify)[^"'\s]*/gi);
-      if (matches && matches.length > 0) {
-        link = matches[0].replace(/&amp;/g, '&');
-        log('Verification link found');
-        break;
+    // Check for verification code input
+    var codeField = await page.$('[type="text"][inputmode="numeric"]');
+    if (codeField) {
+      // Wait for verification code in email
+      log('Waiting for Medium verification code...');
+      var code = await waitForVerificationCode(email.token, 120000);
+      if (code) {
+        await codeField.fill(code);
+        await page.waitForTimeout(1000);
+        log('Medium account created for ' + emp.name + ' (username: ' + username + ')');
+        return { platform: 'medium', username: username, email: email.address, password: PASSWORD };
+      }
+    }
+  } catch (e) {
+    log('Medium signup error: ' + e.message);
+  }
+  return null;
+}
+
+async function waitForVerificationCode(token, timeoutMs) {
+  var start = Date.now();
+  while (Date.now() - start < timeoutMs) {
+    var resp = await fetch('https://api.mail.tm/messages', {
+      headers: { 'Authorization': 'Bearer ' + token }
+    });
+    var data = await resp.json();
+    if (data['hydra:member'] && data['hydra:member'].length > 0) {
+      var msg = data['hydra:member'][0];
+      var mresp = await fetch('https://api.mail.tm/messages/' + msg.id, {
+        headers: { 'Authorization': 'Bearer ' + token }
+      });
+      var mdata = await mresp.json();
+      var html = mdata.html ? mdata.html[0] : '';
+      // Try to find numeric code
+      var codeMatch = html.match(/\b(\d{4,8})\b/);
+      if (codeMatch) return codeMatch[1];
+      // Mark as read so we don't process again
+    }
+    await new Promise(function(r) { setTimeout(r, 3000); });
+  }
+  return null;
+}
+
+async function createAllAccounts() {
+  log('=== BSAHI Employee Account Creation ===');
+  log('');
+
+  await initMail();
+  var creds = loadCreds();
+  var results = [];
+
+  for (var i = 0; i < EMPLOYEES.length; i++) {
+    var emp = EMPLOYEES[i];
+    log('─── ' + emp.avatar + ' ' + emp.name + ' ───');
+
+    // Create email account
+    var email = await createMailAccount(emp.id);
+    MAIL_ACCOUNTS[emp.id] = email;
+    log('Email: ' + email.address);
+
+    // Create browser profile directory
+    var profileDir = path.join(PROFILES_DIR, emp.id);
+    if (!fs.existsSync(profileDir)) fs.mkdirSync(profileDir, { recursive: true });
+
+    var browser = await chromium.launchPersistentContext(profileDir, {
+      headless: false,
+      args: ['--no-sandbox'],
+      locale: 'en-US',
+      viewport: { width: 1280, height: 800 }
+    });
+    var page = await browser.newPage();
+    var empAccounts = [];
+
+    for (var p = 0; p < emp.platforms.length; p++) {
+      var platform = emp.platforms[p];
+      var account = null;
+
+      try {
+        if (platform === 'reddit') {
+          account = await createRedditAccount(page, emp, email);
+        } else if (platform === 'medium') {
+          account = await createMediumAccount(page, emp, email);
+        }
+      } catch (e) {
+        log(platform + ' failed for ' + emp.id + ': ' + e.message);
+      }
+
+      if (account) {
+        empAccounts.push(account);
+        results.push(account);
+        log(emp.name + ' → ' + platform + ': ' + account.username);
       }
     }
 
-    log('No verification email yet (waited ' + (Date.now() - start)/1000 + 's)');
-    await page.waitForTimeout(10000);
-  }
-
-  await browser.close();
-  return link;
-}
-
-async function createReddit() {
-  log('');
-  log('─── Reddit: BSAHI_Research ───');
-  if (!fs.existsSync(PROFILE_DIR)) fs.mkdirSync(PROFILE_DIR, { recursive: true });
-
-  var browser = await webkit.launchPersistentContext(PROFILE_DIR, {
-    headless: false, locale: 'en-US'
-  });
-  var page = await browser.newPage();
-
-  log('Opening Reddit registration...');
-  await page.goto('https://www.reddit.com/register/', { timeout: 20000 });
-
-  // Wait for JS challenge
-  log('Waiting for JS challenge to resolve...');
-  var ready = false;
-  for (var i = 0; i < 30; i++) {
-    await page.waitForTimeout(1000);
-    try { ready = await page.isVisible('[name="email"]', { timeout: 200 }); } catch(e) {}
-    if (ready) { log('Form ready after ' + (i+1) + 's'); break; }
-  }
-
-  if (!ready) {
-    log('Form never appeared — page may have different layout');
-    await page.screenshot({ path: '/tmp/reddit-form-fail.png' });
     await browser.close();
-    return false;
-  }
 
-  log('Filling form with keyboard...');
-  // Focus first field and type
-  await page.evaluate(function() { document.querySelector('faceplate-text-input[name="email"]')?.focus(); });
-  await page.waitForTimeout(300);
-  await page.keyboard.type(EMAIL, { delay: 20 });
-  await page.waitForTimeout(300);
-  await page.keyboard.press('Tab');
-  await page.waitForTimeout(500);
-  await page.keyboard.type('BSAHI_Research', { delay: 10 });
-  await page.waitForTimeout(200);
-  await page.keyboard.press('Tab');
-  await page.waitForTimeout(500);
-  await page.keyboard.type(PASSWORD, { delay: 10 });
-  await page.waitForTimeout(200);
-  await page.keyboard.press('Tab');
-  await page.waitForTimeout(500);
-
-  // Try Enter to submit
-  log('Pressing Enter to submit...');
-  await page.keyboard.press('Enter');
-  await page.waitForTimeout(3000);
-  log('URL: ' + (await page.url()).slice(0, 100));
-
-  await browser.close();
-
-  log('Checking Gmail for verification...');
-  var verifyLink = await waitForGmailVerification();
-
-  if (verifyLink) {
-    log('Verifying email...');
-    browser = await webkit.launchPersistentContext(PROFILE_DIR, {
-      headless: false, locale: 'en-US'
+    // Save credentials
+    creds.accounts.push({
+      employee: emp.id,
+      name: emp.name,
+      email: email.address,
+      emailPassword: PASSWORD,
+      accounts: empAccounts
     });
-    page = await browser.newPage();
-    await page.goto(verifyLink, { timeout: 15000 });
-    await page.waitForTimeout(3000);
-    await browser.close();
-    log('✓ Reddit verified!');
-    return true;
+    saveCreds(creds);
   }
 
-  log('✗ No verification email found');
-  return false;
-}
-
-async function createMedium() {
   log('');
-  log('─── Medium ───');
-  var browser = await webkit.launchPersistentContext(PROFILE_DIR, {
-    headless: false, locale: 'en-US'
-  });
-  var page = await browser.newPage();
-
-  await page.goto('https://medium.com/m/signin', { timeout: 20000 });
-  await page.waitForTimeout(2000);
-
-  var googleBtn = await page.$('button:has-text("Google")') || await page.$('a:has-text("Google")');
-  if (googleBtn) {
-    log('Google SSO...');
-    await googleBtn.click();
-    await page.waitForTimeout(5000);
-    log('URL: ' + (await page.url()).slice(0, 100));
-  } else {
-    log('No Google SSO button found');
-  }
-
-  await browser.close();
-
-  var url = await page.url();
-  var ok = url.includes('medium.com') && !url.includes('signin');
-  log(ok ? '✓ Medium ready' : '✗ Medium not signed in');
-  return ok;
-}
-
-async function run() {
-  console.log('');
-  console.log('╔══════════════════════════════════════════════╗');
-  console.log('║  BSAHI — Account Creation                    ║');
-  console.log('║                                              ║');
-  console.log('║  Email: ' + EMAIL);
-  console.log('║  Using: WebKit + Chrome (Gmail access)       ║');
-  console.log('╚══════════════════════════════════════════════╝');
-  console.log('');
-
-  var r = await createReddit();
-  var m = await createMedium();
-
+  log('=== Account Creation Complete ===');
+  log('Created ' + results.length + ' accounts for ' + EMPLOYEES.length + ' employees');
   log('');
-  log('══════════════════════════════════════════');
-  log('  Reddit: ' + (r ? '✓ BSAHI_Research' : '✗'));
-  log('  Medium: ' + (m ? '✓' : '✗'));
-  log('  Nostr: already live');
-  log('  Twitter: needs phone (create @BSAHI_BTC manually)');
+  log('Credentials saved to: ' + CRED_PATH);
   log('');
-  log('  Close any remaining browser windows');
-  log('══════════════════════════════════════════');
+  log('Each employee browser profile saved at: profiles/[id]/');
+  log('To test posting: node tools/marketing/browser-publisher.js');
 
-  fs.writeFileSync(path.join(PROFILE_DIR, 'accounts.json'), JSON.stringify({
-    reddit: r, medium: m, at: new Date().toISOString()
-  }));
+  return results;
 }
 
 if (require.main === module) {
-  run().catch(function(e) { console.error('Fatal:', e); process.exit(1); });
+  createAllAccounts().catch(function(e) { console.error('Fatal:', e); process.exit(1); });
 }
+
+module.exports = { createAllAccounts: createAllAccounts };
