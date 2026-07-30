@@ -27,7 +27,7 @@ a:hover{color:#E8B86D}
 .hero h1 span{background:linear-gradient(135deg,#D4933A,#E8B86D);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .hero p{font-size:1.1rem;color:#9B8B78;max-width:700px;margin:0 auto 32px;line-height:1.7}
 
-#hero-viz{width:100%;height:520px;border-radius:16px;background:#1A1612;border:1px solid #3A3228;margin-top:24px}
+#hero-viz{width:100%;max-width:900px;height:520px;border-radius:16px;background:#1A1612;border:1px solid #3A3228;margin:24px auto 0;display:block}
 
 .container{max-width:1000px;margin:0 auto;padding:0 24px}
 
@@ -335,7 +335,7 @@ var chainLinks = [];
 
 function resizeHero() {
   var r = heroCanvas.parentElement.getBoundingClientRect();
-  heroW = heroCanvas.width = r.width || 800;
+  heroW = heroCanvas.width = Math.min(r.width || 800, 900);
   heroH = heroCanvas.height = 480;
   if (window.devicePixelRatio > 1) {
     heroCanvas.width = heroW * 2;
