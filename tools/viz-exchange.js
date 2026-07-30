@@ -244,8 +244,7 @@ var VIZ_Exchange = (function() {
     }
   }
 
-  function loop() {
-    draw();
+  function loop() { try { draw(); } catch (e) {}
     requestAnimationFrame(loop);
   }
 

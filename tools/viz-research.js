@@ -73,8 +73,7 @@ const VIZ_Research = (() => {
     loop();
   }
 
-  function loop() {
-    draw();
+  function loop() { try { draw(); } catch (e) {}
     rafId = requestAnimationFrame(loop);
   }
 

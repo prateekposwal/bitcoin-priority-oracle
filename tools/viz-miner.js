@@ -71,7 +71,7 @@ var VIZ_Miner = (function() {
     return entry.avgFees || 5000000;
   }
 
-  function loop() {
+  function loop() { try {
     var t = Date.now() / 1000;
     var feeTotal = getCurrentFee();
 
@@ -93,6 +93,7 @@ var VIZ_Miner = (function() {
     ctx.fillStyle = grad;
     ctx.fillRect(0, 0, w, h);
 
+    } catch (e) {}
     requestAnimationFrame(loop);
   }
 

@@ -172,10 +172,8 @@ var VIZ_Lightning = (function() {
     }
   }
 
-  function loop() {
+  function loop() { try {
     var t = Date.now() / 1000;
-
-    // Force-directed physics
     var repulsion = isMobile() ? 20000 : 40000;
     var attraction = 0.001;
     var damping = 0.98;
@@ -442,6 +440,7 @@ var VIZ_Lightning = (function() {
     ctx.fillRect(0, 0, w, h);
 
     frameCount++;
+    } catch (e) {}
     animId = requestAnimationFrame(loop);
   }
 

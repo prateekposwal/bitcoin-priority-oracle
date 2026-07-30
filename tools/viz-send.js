@@ -85,6 +85,7 @@ var VIZ_Send = (function() {
 
   function tick() {
     if (!ctx) return;
+    try {
     ctx.clearRect(0, 0, w, h);
     var n = bars.length;
     if (n === 0) { requestAnimationFrame(tick); return; }
@@ -257,6 +258,7 @@ var VIZ_Send = (function() {
       ctx.fillText('$' + feeUSD.toFixed(2) + ' USD/vB', tx + 12, ty + 54);
     }
 
+    } catch (e) {}
     requestAnimationFrame(tick);
   }
 

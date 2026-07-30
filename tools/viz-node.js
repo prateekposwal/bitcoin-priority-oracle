@@ -272,8 +272,7 @@ var VIZ_Node = (function() {
     }
   }
 
-  function loop() {
-    draw();
+  function loop() { try { draw(); } catch (e) {}
     requestAnimationFrame(loop);
   }
 
