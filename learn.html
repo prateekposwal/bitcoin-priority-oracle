@@ -257,23 +257,39 @@ Each new block strengthens every block that came before it. To rewrite history, 
 <div class="diff-desc">Real-time data with historical capture. Building toward fee forecasting, anomaly detection, and congestion prediction.</div>
 </div>
 </div>
+<div class="diff-grid">
+<div class="diff-card them">
+<div class="diff-label">Market</div>
+<div class="diff-title">API Reliance</div>
+<div class="diff-desc">100% dependent on third-party API availability. When mempool.space goes down, their site goes blank.</div>
+</div>
+<div class="diff-card us">
+<div class="diff-label" style="color:#3BA35D;">Bitcoin Sahi</div>
+<div class="diff-title">Self-Owned Infrastructure</div>
+<div class="diff-desc">Our own Bitcoin Core node + localStorage cache + Blockchair fallback. When any data source is down, cached data and fallbacks keep the site functional.</div>
+</div>
+</div>
 </div>
 
 <div class="bsahi-section">
 <h2>Our <span>Architecture</span></h2>
-<p>Bitcoin Sahi runs on a three-layer data pipeline:</p>
+<p>Bitcoin Sahi runs on a four-layer data pipeline — from raw network data to persona-driven decisions:</p>
 <div style="display:flex;flex-direction:column;gap:12px;margin:20px 0;">
 <div style="background:#1A1612;border:1px solid #3A3228;border-radius:10px;padding:16px;display:flex;align-items:center;gap:16px;">
 <span style="font-size:2rem;">🔗</span>
-<div><div style="font-weight:600;color:#EADCC8;margin-bottom:2px;">Layer 1: Data Sources</div><div style="font-size:.85rem;color:#6A5D4E;">11+ endpoints across mempool.space, Blockchair, CoinPaprika, Blockstream — monitored every 60 seconds by our Data Engineering Agent.</div></div>
+<div><div style="font-weight:600;color:#EADCC8;margin-bottom:2px;">Layer 1: Data Sources</div><div style="font-size:.85rem;color:#6A5D4E;"><strong style="color:#EADCC8;">13 endpoints</strong> across mempool.space, Blockchair, CoinPaprika, Blockstream, Fear &amp; Greed, plus our own <strong style="color:#EADCC8;">Bitcoin Core node</strong> for fee percentiles. ~400+ captures in SQLite database.</div></div>
 </div>
 <div style="background:#1A1612;border:1px solid #3A3228;border-radius:10px;padding:16px;display:flex;align-items:center;gap:16px;">
-<span style="font-size:2rem;">🧠</span>
-<div><div style="font-weight:600;color:#EADCC8;margin-bottom:2px;">Layer 2: Analysis Engine</div><div style="font-size:.85rem;color:#6A5D4E;">Block interval tracking, fee volatility computation, mempool inflow/outflow modeling. Runs continuously via the DE Agent.</div></div>
+<span style="font-size:2rem;">🤖</span>
+<div><div style="font-weight:600;color:#EADCC8;margin-bottom:2px;">Layer 2: Data Engineering Agent</div><div style="font-size:.85rem;color:#6A5D4E;">Monitors all endpoints every cycle. Runs block interval tracking, fee volatility, mempool inflow/outflow. Discovers new data sources automatically (33 found so far). Reports daily health metrics.</div></div>
+</div>
+<div style="background:#1A1612;border:1px solid #3A3228;border-radius:10px;padding:16px;display:flex;align-items:center;gap:16px;">
+<span style="font-size:2rem;">🔬</span>
+<div><div style="font-weight:600;color:#EADCC8;margin-bottom:2px;">Layer 3: Research Agents</div><div style="font-size:.85rem;color:#6A5D4E;">5 specialist agents (Bitcoin Core, Lightning, APIs, General, Academic) scanning GitHub, arXiv, forums, and news every 4 hours. Generate findings saved to <code style="color:#9B8B78;">reports/research/</code>.</div></div>
 </div>
 <div style="background:#1A1612;border:1px solid #3A3228;border-radius:10px;padding:16px;display:flex;align-items:center;gap:16px;">
 <span style="font-size:2rem;">🎯</span>
-<div><div style="font-weight:600;color:#EADCC8;margin-bottom:2px;">Layer 3: Decision Engine</div><div style="font-size:.85rem;color:#6A5D4E;">7 personas — Send, Lightning, Exchange, Node, Miner, Research, Developer. Each gets the data they need in the format that helps them decide.</div></div>
+<div><div style="font-weight:600;color:#EADCC8;margin-bottom:2px;">Layer 4: Decision Engine</div><div style="font-size:.85rem;color:#6A5D4E;">7 personas + Capacity + Fork Tracker + Weather. Every tab shows persona-relevant data with Market Brief insights, Bitcoin Weather conditions, and research-powered context.</div></div>
 </div>
 </div>
 </div>
