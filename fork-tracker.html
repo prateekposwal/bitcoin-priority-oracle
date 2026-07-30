@@ -177,8 +177,8 @@ td.fee{font-variant-numeric:tabular-nums;font-weight:500}
 <div>Loading fork data...</div>
 </div>
 <div id="heroContent" style="display:none">
-<h1 class="hero-title">BIP-110 — Data Restriction Soft Fork</h1>
-<p class="hero-desc">BIP-110 is a temporary soft fork (~1 year) that restricts arbitrary data at the consensus level — limiting oversized scriptPubKeys, witness items, and data-bearing constructions. 55% miner signaling required in a 2-week period for lock-in. Different from Core30's relay policy change.</p>
+<h1 class="hero-title">BIP-110 — Temporary Data Soft Fork</h1>
+<p class="hero-desc">BIP-110 is a proposed temporary soft fork that introduces additional consensus rules restricting certain data-bearing transaction constructions for approximately one year. Unlike Bitcoin Core v30, which changed default relay policy, BIP-110 changes block validity rules for upgraded nodes. 55% miner signaling required within a 2016-block period for lock-in.</p>
 <span class="hero-badge" id="statusBadge">—</span>
 </div>
 </section>
@@ -191,14 +191,14 @@ td.fee{font-variant-numeric:tabular-nums;font-weight:500}
 <div class="ec-label">Relay Policy (Core30)</div>
 <div class="ec-title">Bitcoin Core v30 — Already Deployed</div>
 <div class="ec-desc">Changed the default <code>datacarriersize</code> from 80 to 100,000 bytes. This raised the <code>OP_RETURN</code> relay limit — a <strong>policy</strong> change, not a consensus rule.</div>
-<div class="ec-detail">Nodes can opt-out without forking the chain. Different nodes can have different policies. This is already active and does not require miner signaling.</div>
+<div class="ec-detail">Nodes can configure different relay policies without affecting consensus. Blocks remain valid regardless of an individual node's relay policy. This is already active and does not require miner signaling.</div>
 <div class="ec-tag">Policy · Non-consensus</div>
 </div>
 <div class="explain-card consensus">
 <div class="ec-label">Consensus Rule (BIP-110)</div>
 <div class="ec-title">BIP-110 — Proposed Soft Fork</div>
 <div class="ec-desc">Restricts <strong>arbitrary data at the consensus level</strong> for ~1 year. Limits scriptPubKey sizes, witness item sizes, and other data-bearing constructions node operators must enforce.</div>
-<div class="ec-detail">Requires 55% miner signaling within a 2016-block period. After activation, blocks containing oversized data become <strong>consensus-invalid</strong> — upgraded nodes reject them entirely.</div>
+<div class="ec-detail">Requires 55% miner signaling within a 2016-block period. Upgraded nodes enforce these additional consensus rules. After activation, blocks violating the new limits are considered invalid by upgraded nodes.</div>
 <div class="ec-tag">Consensus · Requires signaling</div>
 </div>
 </div>
@@ -279,42 +279,108 @@ td.fee{font-variant-numeric:tabular-nums;font-weight:500}
 <div class="impact-card">
 <div class="impact-icon">⚙️</div>
 <h3>If Activated</h3>
-<p>Oversized data transactions become consensus-invalid. Inscriptions, large OP_RETURN outputs, and oversized witness data in violation of the new rules would be rejected by upgraded nodes.</p>
+<p>Transactions using constructions restricted by BIP-110 would become consensus-invalid under the proposal. Applications relying on those constructions would need to modify their transaction format or use alternative approaches.</p>
 </div>
 <div class="impact-card">
 <div class="impact-icon">📈</div>
-<h3>Market Impact</h3>
-<p>Reduced block space competition from data transactions could lower fee rates for financial transactions. Inscription-based protocols may need to adapt or move to alternative layers.</p>
+<h3>Potential Effects</h3>
+<p>Potential effects include changes to block space demand, transaction fee dynamics, and the behavior of data-bearing protocols. The magnitude and direction of these effects depend on adoption, user behavior, and miner incentives.</p>
 </div>
 <div class="impact-card">
 <div class="impact-icon">⏳</div>
 <h3>Timeline</h3>
-<p>Temporary ~1 year deployment. Includes 2016-block signaling period (55% threshold), 2016-block grace period, then mandatory enforcement. Automatically expires after deployment period.</p>
+<p>Temporary ~1 year deployment. Includes 2016-block signaling period (55% threshold), 2016-block grace period, then mandatory enforcement if activated. Automatically expires after deployment period.</p>
 </div>
+</div>
+</section>
+
+<section class="impact-section">
+<h2>📋 What Actually Changes?</h2>
+<div style="overflow-x:auto;border:1px solid #3A3228;border-radius:12px;margin-bottom:24px">
+<table style="width:100%;border-collapse:collapse;font-size:.85rem">
+<thead style="background:#1F1B16">
+<tr><th style="padding:12px 16px;text-align:left;font-weight:600;color:#6A5D4E;font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;border-bottom:1px solid #3A3228">Aspect</th>
+<th style="padding:12px 16px;text-align:left;font-weight:600;color:#6A5D4E;font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;border-bottom:1px solid #3A3228">Before</th>
+<th style="padding:12px 16px;text-align:left;font-weight:600;color:#6A5D4E;font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;border-bottom:1px solid #3A3228">After (if activated)</th></tr>
+</thead>
+<tbody>
+<tr><td style="padding:10px 16px;border-bottom:1px solid #2A251E;color:#C4B8A6;font-weight:600;color:#EADCC8">Relay Policy</td>
+<td style="padding:10px 16px;border-bottom:1px solid #2A251E;color:#C4B8A6">Can differ between nodes</td>
+<td style="padding:10px 16px;border-bottom:1px solid #2A251E;color:#C4B8A6">Consensus rules become stricter for upgraded nodes</td></tr>
+<tr><td style="padding:10px 16px;border-bottom:1px solid #2A251E;color:#C4B8A6;font-weight:600;color:#EADCC8">Validity</td>
+<td style="padding:10px 16px;border-bottom:1px solid #2A251E;color:#C4B8A6">Large data transactions remain consensus-valid</td>
+<td style="padding:10px 16px;border-bottom:1px solid #2A251E;color:#C4B8A6">Certain oversized constructions become consensus-invalid</td></tr>
+<tr><td style="padding:10px 16px;border-bottom:1px solid #2A251E;color:#C4B8A6;font-weight:600;color:#EADCC8">Block Acceptance</td>
+<td style="padding:10px 16px;border-bottom:1px solid #2A251E;color:#C4B8A6">Miners decide via policy</td>
+<td style="padding:10px 16px;border-bottom:1px solid #2A251E;color:#C4B8A6">Validity determined by new consensus rules</td></tr>
+<tr><td style="padding:10px 16px;border-bottom:1px solid #2A251E;color:#C4B8A6;font-weight:600;color:#EADCC8">Duration</td>
+<td style="padding:10px 16px;border-bottom:1px solid #2A251E;color:#C4B8A6">Ongoing</td>
+<td style="padding:10px 16px;border-bottom:1px solid #2A251E;color:#C4B8A6">~1 year, then automatic expiration</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+
+<section class="impact-section">
+<h2>👤 Who Is Affected?</h2>
+<div style="overflow-x:auto;border:1px solid #3A3228;border-radius:12px;margin-bottom:24px">
+<table style="width:100%;border-collapse:collapse;font-size:.85rem">
+<thead style="background:#1F1B16">
+<tr><th style="padding:12px 16px;text-align:left;font-weight:600;color:#6A5D4E;font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;border-bottom:1px solid #3A3228">Persona</th>
+<th style="padding:12px 16px;text-align:left;font-weight:600;color:#6A5D4E;font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;border-bottom:1px solid #3A3228">Possible Impact</th></tr>
+</thead>
+<tbody>
+<tr><td style="padding:10px 16px;border-bottom:1px solid #2A251E;color:#C4B8A6;font-weight:600;color:#EADCC8">Bitcoin User</td>
+<td style="padding:10px 16px;border-bottom:1px solid #2A251E;color:#C4B8A6">Usually none unless using affected transaction types</td></tr>
+<tr><td style="padding:10px 16px;border-bottom:1px solid #2A251E;color:#C4B8A6;font-weight:600;color:#EADCC8">Wallet Developer</td>
+<td style="padding:10px 16px;border-bottom:1px solid #2A251E;color:#C4B8A6">May need to update transaction creation logic</td></tr>
+<tr><td style="padding:10px 16px;border-bottom:1px solid #2A251E;color:#C4B8A6;font-weight:600;color:#EADCC8">Miner</td>
+<td style="padding:10px 16px;border-bottom:1px solid #2A251E;color:#C4B8A6">Decide whether to signal and enforce the proposal</td></tr>
+<tr><td style="padding:10px 16px;border-bottom:1px solid #2A251E;color:#C4B8A6;font-weight:600;color:#EADCC8">Node Operator</td>
+<td style="padding:10px 16px;border-bottom:1px solid #2A251E;color:#C4B8A6">Choose whether to upgrade</td></tr>
+<tr><td style="padding:10px 16px;border-bottom:1px solid #2A251E;color:#C4B8A6;font-weight:600;color:#EADCC8">Data Protocols</td>
+<td style="padding:10px 16px;border-bottom:1px solid #2A251E;color:#C4B8A6">May need to adapt transaction formats or migrate activity</td></tr>
+<tr><td style="padding:10px 16px;border-bottom:1px solid #2A251E;color:#C4B8A6;font-weight:600;color:#EADCC8">Researcher</td>
+<td style="padding:10px 16px;border-bottom:1px solid #2A251E;color:#C4B8A6">Monitor adoption, signaling, and economic effects</td></tr>
+</tbody>
+</table>
 </div>
 </section>
 
 <section class="impact-section">
 <h2>📋 Possible Scenarios</h2>
 <div class="scenario-grid">
-<div class="scenario-card likely">
+<div class="scenario-card" style="border-left:3px solid #3BA35D">
 <div class="sc-icon">📊</div>
-<h4>Signaling Reached → Lock-in</h4>
-<p>55% of miners signal within a 2016-block period. BIP-110 locks in, then activates after a grace period. ASICBoost miners phase out over 1+ years.</p>
-<div class="sc-prob">Likely if major pools signal · Monitor signaling % above</div>
+<h4>Lock-in</h4>
+<p>55% signaling threshold reached within a 2016-block period. BIP-110 locks in, grace period begins, then activates for ~1 year before automatic expiration.</p>
+<div class="sc-prob">Depends on miner adoption · Track signaling % above</div>
 </div>
-<div class="scenario-card possible">
+<div class="scenario-card" style="border-left:3px solid #D4762A">
 <div class="sc-icon">⏸</div>
-<h4>Signaling Stalls</h4>
-<p>Miners fail to reach 55% threshold. BIP-110 does not activate. Core30 policy remains the de facto standard. Debate continues in subsequent difficulty periods.</p>
-<div class="sc-prob">Possible · Requires ~50%+ hashrate opposition</div>
+<h4>No Lock-in</h4>
+<p>Threshold not reached during the signaling period. BIP-110 does not activate. Core30 relay policy remains the de facto standard. Debate could continue in subsequent periods.</p>
+<div class="sc-prob">Depends on miner signaling behavior</div>
 </div>
-<div class="scenario-card unlikely">
+<div class="scenario-card" style="border-left:3px solid #C0392B">
 <div class="sc-icon">🔀</div>
 <h4>Contentious Activation</h4>
-<p>BIP-110 activates despite significant opposition. Minority chain persists with old rules. Network effects determine economic relevance of each chain.</p>
-<div class="sc-prob">Unlikely · Requires extreme lack of consensus</div>
+<p>Activation occurs while a portion of the ecosystem continues using previous rules, potentially resulting in competing chains if economic actors support both.</p>
+<div class="sc-prob">Depends on consensus breadth at activation</div>
 </div>
+</div>
+</section>
+
+<section class="impact-section">
+<h2>❓ Known Unknowns</h2>
+<div style="background:#231F19;border:1px solid #3A3228;border-radius:12px;padding:20px;">
+<ul style="list-style:none;padding:0;margin:0">
+<li style="padding:8px 0;border-bottom:1px solid #2A251E;color:#9B8B78;font-size:.85rem;line-height:1.6">🔸 <strong style="color:#EADCC8">Miner participation</strong> — which pools will signal and enforce remains uncertain</li>
+<li style="padding:8px 0;border-bottom:1px solid #2A251E;color:#9B8B78;font-size:.85rem;line-height:1.6">🔸 <strong style="color:#EADCC8">Exchange and wallet support</strong> — adoption by infrastructure providers is unknown</li>
+<li style="padding:8px 0;border-bottom:1px solid #2A251E;color:#9B8B78;font-size:.85rem;line-height:1.6">🔸 <strong style="color:#EADCC8">Fee market effects</strong> — impact on transaction fees cannot be predicted precisely</li>
+<li style="padding:8px 0;border-bottom:1px solid #2A251E;color:#9B8B78;font-size:.85rem;line-height:1.6">🔸 <strong style="color:#EADCC8">Ecosystem response</strong> — how applications and users adapt depends on economic incentives</li>
+<li style="padding:8px 0;border-bottom:1px solid #2A251E;color:#9B8B78;font-size:.85rem;line-height:1.6">🔸 <strong style="color:#EADCC8">Chain split risk</strong> — whether a minority chain persists depends on economic support</li>
+</ul>
 </div>
 </section>
 
