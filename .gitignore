@@ -14,4 +14,5 @@ captured-data/btc-rpc/*.json
 .vercel
 profiles/
 sessions/
+relay-data/
 captured-data/post-log.json
