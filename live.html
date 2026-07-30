@@ -844,6 +844,7 @@ if (typeof DATA_ENGINE !== 'undefined') {
     var blockFlashActive = 0;
     var feeFlashActive = 0;
     var lastFastestFee = 0;
+    ws.onmessage = function(e) {
       try {
         var msg = JSON.parse(e.data);
         if (msg && (msg.action === 'newBlock' || msg.action === 'mempool' || msg.txid)) {
