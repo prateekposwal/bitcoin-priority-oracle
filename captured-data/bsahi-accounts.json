@@ -1,0 +1,16 @@
+[
+  {
+    "platform": "medium",
+    "handle": "@BSAHI",
+    "signedIn": false
+  },
+  {
+    "platform": "stackernews",
+    "loggedIn": true
+  },
+  {
+    "platform": "hackernews",
+    "handle": "BSAHI",
+    "created": false
+  }
+]
