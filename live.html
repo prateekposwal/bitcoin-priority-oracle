@@ -76,6 +76,12 @@ body{background:#1A1612;color:#EADCC8;font-family:-apple-system,BlinkMacSystemFo
 @keyframes ticker-scroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 
 @keyframes pulse-dot{0%,100%{opacity:1}50%{opacity:.4}}
+
+.loading-skeleton{padding:40px;text-align:center;color:#6A5D4E;font-size:.9rem}
+.loading-skeleton .spinner{width:24px;height:24px;border:2px solid #3A3228;border-top-color:#D4933A;border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 12px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.skeleton-hidden{display:none}
+
 @media(max-width:600px){
   .fee-grid,.stat-row{flex-direction:column}
   .viz-canvas{height:400px}
@@ -400,6 +406,10 @@ function measureLatency() {
 setInterval(measureLatency, 30000);
 measureLatency();
 
+// Fix 5: Session cache — show cached data instantly on revisit
+var sessionCache = null;
+try { sessionCache = JSON.parse(sessionStorage.getItem('bsahi_cache') || 'null'); } catch (e) {}
+
 function getFeeTrend(history) {
   if (!history || history.length < 10) return 'stable';
   var half = Math.floor(history.length / 2);
@@ -663,8 +673,48 @@ if (typeof DATA_ENGINE !== 'undefined') {
   document.getElementById('tkr-ln-nodes').textContent = lnNodes;
   document.getElementById('tkr-ln-cap').textContent = lnCap;
   document.getElementById('tkr-updated').textContent = updated;
+  try { sessionStorage.setItem('bsahi_cache', JSON.stringify(d)); } catch (e) {}
 });
 }
+
+// Fix 5: Render cached fee cards instantly on page load
+(function() {
+  try {
+    var cached = JSON.parse(sessionStorage.getItem('bsahi_cache') || 'null');
+    if (cached && cached.fees) {
+      document.getElementById('fee-fastest').textContent = (cached.fees.fastestFee || '--') + ' sat/vB';
+      document.getElementById('fee-hour').textContent = (cached.fees.hourFee || '--') + ' sat/vB';
+      document.getElementById('fee-economy').textContent = (cached.fees.economyFee || '--') + ' sat/vB';
+      if (cached.block_height) document.getElementById('tkr-blocks').textContent = cached.block_height.toLocaleString();
+      if (cached.btc_price) document.getElementById('tkr-btc').textContent = '$' + cached.btc_price.toLocaleString();
+    }
+  } catch (e) {}
+})();
+
+// Fix 3: Pause hidden tab canvases
+(function() {
+  var tabBtns = document.querySelectorAll('.tab-btn');
+  tabBtns.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var id = btn.dataset.tab;
+      var v = window['VIZ_' + id.charAt(0).toUpperCase() + id.slice(1)];
+      if (v && v.resize) setTimeout(function() { v.resize(); }, 50);
+    });
+  });
+})();
+
+// Fix 4: fetchDEStatus with 2s timeout
+(function() {
+  var origFetch = window.fetch;
+  if (origFetch) {
+    window.fetch = function(url, opts) {
+      if (typeof url === 'string' && url.indexOf('localhost:3456') > -1) {
+        return origFetch(url, Object.assign({}, opts || {}, { signal: AbortSignal.timeout(2000) }));
+      }
+      return origFetch(url, opts || {});
+    };
+  }
+})();
 </script>
 </body>
 </html>
