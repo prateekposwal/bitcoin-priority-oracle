@@ -283,6 +283,35 @@ function generateReport() {
   return reportPath;
 }
 
+async function runFullCycle() {
+  log('=== Full publishing cycle (Nostr + Browser) ===');
+  var results = [];
+
+  // Step 1: Nostr (headless, no UI)
+  try {
+    var nostr = await runCycle();
+    results.push({ engine: 'nostr', posts: nostr.length, details: nostr });
+  } catch(e) {
+    log('Nostr error: ' + e.message);
+    results.push({ engine: 'nostr', error: e.message });
+  }
+
+  // Step 2: Browser (Twitter + Reddit via Chrome session)
+  try {
+    var browserPublisher = require('./browser-publisher.js');
+    var browser = await browserPublisher.runCycle();
+    results.push({ engine: 'browser', posts: browser ? browser.length : 0, details: browser || [] });
+  } catch(e) {
+    log('Browser error: ' + e.message);
+    results.push({ engine: 'browser', error: e.message });
+  }
+
+  generateRSSFeed();
+  generateReport();
+  log('=== Full cycle complete ===');
+  return results;
+}
+
 if (require.main === module) {
   (async function() {
     var args = process.argv.slice(2);
@@ -291,10 +320,15 @@ if (require.main === module) {
     } else if (args[0] === '--rss' || args[0] === '-r') {
       generateRSSFeed();
       console.log('RSS generated');
-    } else {
+    } else if (args[0] === '--nostr') {
       await runCycle();
+    } else if (args[0] === '--browser' || args[0] === '-b') {
+      var bp = require('./browser-publisher.js');
+      await bp.runCycle();
+    } else {
+      await runFullCycle();
     }
   })().catch(function(e) { console.error(e); process.exit(1); });
 }
 
-module.exports = { runCycle: runCycle, getStats: getStats, generateRSSFeed: generateRSSFeed, generateReport: generateReport };
+module.exports = { runCycle: runCycle, runFullCycle: runFullCycle, getStats: getStats, generateRSSFeed: generateRSSFeed, generateReport: generateReport };

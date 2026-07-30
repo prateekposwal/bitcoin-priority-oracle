@@ -142,7 +142,7 @@ async function runCycle() {
   // Step 7: Run Nostr publisher (every cycle = hourly)
   try {
     var pubStart = Date.now();
-    var pubResult = await publisher.runCycle();
+    var pubResult = await publisher.runFullCycle();
     var pubElapsed = Math.round((Date.now() - pubStart) / 1000);
     log('Publisher: ' + pubResult.length + ' posts in ' + pubElapsed + 's');
     publisher.generateRSSFeed();
