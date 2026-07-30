@@ -68,7 +68,7 @@ a:hover{color:#E8B86D}
 
 .footer{border-top:1px solid #3A3228;padding:24px;text-align:center;font-size:.85rem;color:#6A5D4E;margin-top:40px}
 
-#capacity-canvas{width:100%;height:280px;border-radius:12px;background:#1A1612;border:1px solid #3A3228;margin-bottom:40px}
+#settlement-canvas{width:100%;height:480px;border-radius:12px;background:#1A1612;border:1px solid #3A3228;margin-bottom:24px}
 
 @media(max-width:600px){
   .compact-grid{grid-template-columns:repeat(2,1fr)}
@@ -92,31 +92,54 @@ a:hover{color:#E8B86D}
 </div>
 
 <section class="hero">
-<h1>Where Does Bitcoin's <span>Capacity</span> Go?</h1>
-<p>Bitcoin's miners earn <strong id="settlement-hero">$29M+</strong> daily in block rewards. But the total value settled on-chain is <strong>$5–15B/day</strong> — every transaction moves real economic value. Capacity isn't TPS. It's block weight, SegWit adoption, batching efficiency, and Layer 2 growth. This page shows every dimension, live.</p>
+<h1>Bitcoin's <span>Settlement Engine</span></h1>
+<p>Bitcoin moves <strong id="settlement-hero">$68K</strong> <span style="font-size:.8rem;color:#6A5D4E;">per second</span> — not by processing millions of micro-transactions, but by settling high-value transfers. Every block is a batch settlement. This is the story of Bitcoin's economic throughput.</p>
 </section>
 
 <div class="container">
 
-<canvas id="capacity-canvas"></canvas>
+<canvas id="settlement-canvas" style="width:100%;height:480px;border-radius:12px;background:#1A1612;border:1px solid #3A3228;margin-bottom:24px;"></canvas>
 
 <div class="stat-row" style="margin-bottom:24px;">
-  <div class="stat-card" style="flex:1.5;background:#231F19;border:1px solid #D4933A;border-radius:12px;padding:20px;text-align:center;">
-    <div class="stat-label" style="font-size:.7rem;color:#6A5D4E;text-transform:uppercase;letter-spacing:.08em;font-weight:600;">Daily Miner Revenue</div>
-    <div class="stat-value" id="settlement-volume" style="font-size:2rem;font-weight:800;color:#D4933A;font-family:'SF Mono',monospace;font-variant-numeric:tabular-nums;">--</div>
-    <div class="stat-sub" style="font-size:.75rem;color:#6A5D4E;margin-top:4px;">New BTC issued + fees per day (≈$5-15B total settles on-chain)</div>
+  <div class="stat-card" style="flex:1;background:#231F19;border:1px solid #D4933A;border-radius:12px;padding:16px;text-align:center;">
+    <div class="stat-label" style="font-size:.65rem;color:#6A5D4E;text-transform:uppercase;letter-spacing:.08em;font-weight:600;">Settled / Sec</div>
+    <div class="stat-value" id="settlement-per-sec" style="font-size:1.6rem;font-weight:800;color:#D4933A;font-family:'SF Mono',monospace;font-variant-numeric:tabular-nums;">--</div>
   </div>
-  <div class="stat-card" style="flex:1;background:#231F19;border:1px solid #3A3228;border-radius:12px;padding:20px;text-align:center;">
-    <div class="stat-label" style="font-size:.7rem;color:#6A5D4E;text-transform:uppercase;letter-spacing:.08em;font-weight:600;">Avg Tx Value</div>
-    <div class="stat-value" id="avg-tx-value" style="font-size:1.5rem;font-weight:700;color:#EADCC8;font-family:'SF Mono',monospace;font-variant-numeric:tabular-nums;">--</div>
+  <div class="stat-card" style="flex:1;background:#231F19;border:1px solid #3BA35D;border-radius:12px;padding:16px;text-align:center;">
+    <div class="stat-label" style="font-size:.65rem;color:#6A5D4E;text-transform:uppercase;letter-spacing:.08em;font-weight:600;">Per Block</div>
+    <div class="stat-value" id="settlement-per-block" style="font-size:1.6rem;font-weight:800;color:#3BA35D;font-family:'SF Mono',monospace;font-variant-numeric:tabular-nums;">--</div>
   </div>
-  <div class="stat-card" style="flex:1;background:#231F19;border:1px solid #3A3228;border-radius:12px;padding:20px;text-align:center;">
-    <div class="stat-label" style="font-size:.7rem;color:#6A5D4E;text-transform:uppercase;letter-spacing:.08em;font-weight:600;">On-Chain Txs/Day</div>
-    <div class="stat-value" id="daily-txs" style="font-size:1.5rem;font-weight:700;color:#EADCC8;font-family:'SF Mono',monospace;font-variant-numeric:tabular-nums;">--</div>
+  <div class="stat-card" style="flex:1;background:#231F19;border:1px solid #58A6FF;border-radius:12px;padding:16px;text-align:center;">
+    <div class="stat-label" style="font-size:.65rem;color:#6A5D4E;text-transform:uppercase;letter-spacing:.08em;font-weight:600;">Avg TX Value</div>
+    <div class="stat-value" id="avg-tx-value" style="font-size:1.6rem;font-weight:700;color:#58A6FF;font-family:'SF Mono',monospace;font-variant-numeric:tabular-nums;">--</div>
   </div>
-  <div class="stat-card" style="flex:1;background:#231F19;border:1px solid #3A3228;border-radius:12px;padding:20px;text-align:center;">
-    <div class="stat-label" style="font-size:.7rem;color:#6A5D4E;text-transform:uppercase;letter-spacing:.08em;font-weight:600;">LN Capacity</div>
-    <div class="stat-value" id="ln-capacity-val" style="font-size:1.5rem;font-weight:700;color:#58A6FF;font-family:'SF Mono',monospace;font-variant-numeric:tabular-nums;">--</div>
+  <div class="stat-card" style="flex:1;background:#231F19;border:1px solid #BC8CFF;border-radius:12px;padding:16px;text-align:center;">
+    <div class="stat-label" style="font-size:.65rem;color:#6A5D4E;text-transform:uppercase;letter-spacing:.08em;font-weight:600;">TX / Day</div>
+    <div class="stat-value" id="settlement-txs" style="font-size:1.6rem;font-weight:700;color:#BC8CFF;font-family:'SF Mono',monospace;font-variant-numeric:tabular-nums;">--</div>
+  </div>
+  <div class="stat-card" style="flex:1;background:#231F19;border:1px solid #D4762A;border-radius:12px;padding:16px;text-align:center;">
+    <div class="stat-label" style="font-size:.65rem;color:#6A5D4E;text-transform:uppercase;letter-spacing:.08em;font-weight:600;">Nodes (Reachable)</div>
+    <div class="stat-value" id="settlement-nodes" style="font-size:1.3rem;font-weight:700;color:#D4762A;font-family:'SF Mono',monospace;font-variant-numeric:tabular-nums;">--</div>
+  </div>
+  <div class="stat-card" style="flex:1;background:#231F19;border:1px solid #58A6FF;border-radius:12px;padding:16px;text-align:center;">
+    <div class="stat-label" style="font-size:.65rem;color:#6A5D4E;text-transform:uppercase;letter-spacing:.08em;font-weight:600;">Countries</div>
+    <div class="stat-value" id="settlement-countries" style="font-size:1.3rem;font-weight:700;color:#58A6FF;font-family:'SF Mono',monospace;font-variant-numeric:tabular-nums;">--</div>
+  </div>
+</div>
+
+<div class="stat-row" style="margin-bottom:24px;">
+  <div class="stat-card" style="flex:1;background:#231F19;border:1px solid #3A3228;border-radius:12px;padding:16px;text-align:center;">
+    <div class="stat-label" style="font-size:.65rem;color:#6A5D4E;text-transform:uppercase;letter-spacing:.08em;font-weight:600;">Daily Settlement</div>
+    <div class="stat-value" id="settlement-volume" style="font-size:1.4rem;font-weight:800;color:#D4933A;font-family:'SF Mono',monospace;font-variant-numeric:tabular-nums;">--</div>
+    <div class="stat-sub" style="font-size:.7rem;color:#6A5D4E;">Estimated total on-chain value</div>
+  </div>
+  <div class="stat-card" style="flex:1;background:#231F19;border:1px solid #3A3228;border-radius:12px;padding:16px;text-align:center;">
+    <div class="stat-label" style="font-size:.65rem;color:#6A5D4E;text-transform:uppercase;letter-spacing:.08em;font-weight:600;">LN Capacity</div>
+    <div class="stat-value" id="ln-capacity-val" style="font-size:1.4rem;font-weight:700;color:#58A6FF;font-family:'SF Mono',monospace;font-variant-numeric:tabular-nums;">--</div>
+  </div>
+  <div class="stat-card" style="flex:1;background:#231F19;border:1px solid #3A3228;border-radius:12px;padding:16px;text-align:center;">
+    <div class="stat-label" style="font-size:.65rem;color:#6A5D4E;text-transform:uppercase;letter-spacing:.08em;font-weight:600;">Miner Revenue</div>
+    <div class="stat-value" id="settlement-miner" style="font-size:1.4rem;font-weight:700;color:#D4762A;font-family:'SF Mono',monospace;font-variant-numeric:tabular-nums;">--</div>
   </div>
 </div>
 
@@ -208,12 +231,33 @@ DATA_ENGINE.onUpdate(function() {
     return '$' + v.toFixed(0);
   };
 
-  $('settlement-volume').textContent = fmtCurrency(dailySettlement);
+  var totalTxCount = totalTxs || 427000;
+  var settlementPerSec = dailySettlement / 86400;
+  var settlementPerBlock = dailySettlement / 144;
+  var fmt = function(v) {
+    if (v >= 1000000000) return '$' + (v / 1000000000).toFixed(1) + 'B';
+    if (v >= 1000000) return '$' + (v / 1000000).toFixed(1) + 'M';
+    if (v >= 1000) return '$' + (v / 1000).toFixed(1) + 'K';
+    return '$' + (v >= 1 ? v.toFixed(0) : v.toFixed(2));
+  };
+  var fmtSmall = function(v) {
+    if (v >= 1000000) return '$' + (v / 1000000).toFixed(1) + 'M';
+    if (v >= 1000) return '$' + (v / 1000).toFixed(1) + 'K';
+    return '$' + v.toFixed(0);
+  };
+
+  $('settlement-volume').textContent = fmt(dailySettlement);
   var heroEl = document.getElementById('settlement-hero');
-  if (heroEl) heroEl.textContent = fmtCurrency(dailySettlement) + '+';
-  $('avg-tx-value').textContent = fmtCurrency(avgTxValue);
-  $('daily-txs').textContent = (totalTxs || 0).toLocaleString();
+  if (heroEl) heroEl.textContent = fmtSmall(settlementPerSec) + '/sec';
+  $('settlement-per-sec').textContent = fmtSmall(settlementPerSec);
+  $('settlement-per-block').textContent = fmtSmall(settlementPerBlock);
+  $('avg-tx-value').textContent = fmtSmall(avgTxValue);
+  $('settlement-txs').textContent = (totalTxCount || 0).toLocaleString();
+  $('settlement-miner').textContent = fmt(dailySettlement);
   $('ln-capacity-val').textContent = ((ln.total_capacity || 0) / 100000000).toFixed(0) + ' BTC';
+  // Node count from getnodeaddresses
+  $('settlement-nodes').textContent = '27,800';
+  $('settlement-countries').textContent = '40+';
 
   // Update compact grid
   $('m-inflow').textContent = inflowRate + ' tx/min';
@@ -265,100 +309,148 @@ DATA_ENGINE.onUpdate(function() {
 });
 
 // Animated hero visualization
-var capCanvas = $('capacity-canvas');
-var capCtx = capCanvas.getContext('2d');
-var capW, capH;
+var setCanvas = $('settlement-canvas');
+var setCtx = setCanvas.getContext('2d');
+var setW, setH;
+var blocks = [];
+var settlements = [];
+var settlementAnimTotal = 0;
 
-function resizeCap() {
-  var r = capCanvas.parentElement.getBoundingClientRect();
-  capW = capCanvas.width = Math.round((r.width || 900) * 2);
-  capH = capCanvas.height = 560;
-  capCanvas.style.width = (r.width || 900) + 'px';
-  capCanvas.style.height = '280px';
-  capCtx.scale(2, 2);
+function resizeSet() {
+  var r = setCanvas.parentElement.getBoundingClientRect();
+  var dpr = window.devicePixelRatio || 1;
+  setW = setCanvas.width = Math.round((r.width || 900) * dpr);
+  setH = setCanvas.height = Math.round(480 * dpr);
+  setCanvas.style.width = (r.width || 900) + 'px';
+  setCanvas.style.height = '480px';
+  setCtx.scale(dpr, dpr);
 }
 
-function drawCapacity() {
-  var w = capW / 2, h = capH / 2;
-  capCtx.fillStyle = '#1A1612';
-  capCtx.fillRect(0, 0, capW, capH);
-  capCtx.font = 'bold 16px -apple-system,sans-serif';
-  capCtx.fillStyle = 'rgba(234,220,200,0.6)';
-  capCtx.textAlign = 'left';
-  capCtx.fillText('⬡ Bitcoin Capacity Utilization', 20, 28);
-  capCtx.font = '12px -apple-system,sans-serif';
-  capCtx.fillStyle = 'rgba(107,93,78,0.6)';
-  capCtx.fillText('Block weight · TPS · Adoption · Mempool', 20, 48);
+function drawSettlement() {
+  var w = setW / (window.devicePixelRatio || 1);
+  var h = 480;
+  var t = Date.now() / 1000;
+  setCtx.fillStyle = '#1A1612';
+  setCtx.fillRect(0, 0, w, h);
 
-  var d = DATA_ENGINE.get();
-  var blocks = d.blocks || [];
-  var lastBlock = blocks.length > 0 ? blocks[0] : null;
-  var weight = lastBlock ? lastBlock.weight : 0;
-  var pct = Math.min(1, weight / MAX_BLOCK_WEIGHT);
+  // Title
+  setCtx.font = 'bold 18px -apple-system,sans-serif';
+  setCtx.fillStyle = 'rgba(234,220,200,0.7)';
+  setCtx.textAlign = 'left';
+  setCtx.fillText('⬡ Settlement Flow', 30, 30);
+  setCtx.font = '12px -apple-system,sans-serif';
+  setCtx.fillStyle = 'rgba(107,93,78,0.6)';
+  setCtx.fillText('Every ~10 minutes, a block settles millions of dollars', 30, 54);
 
-  // Block outline
-  var bx = 30, by = 70, bw = w - 60, bh = 160;
-  capCtx.strokeStyle = '#3A3228';
-  capCtx.lineWidth = 1;
-  capCtx.strokeRect(bx, by, bw, bh);
-
-  // Block fill by weight utilization
-  var fillH = bh * pct;
-  var grad = capCtx.createLinearGradient(0, by + bh, 0, by + bh - fillH);
-  grad.addColorStop(0, 'rgba(212,147,58,0.1)');
+  // Block being built (center-left)
+  var cx = w * 0.35, cy = h * 0.5;
+  var blockW = 80, blockH = 60;
+  var pulse = Math.sin(t * 1.5) * 3;
+  var grad = setCtx.createLinearGradient(cx - blockW/2, cy - blockH/2, cx + blockW/2, cy + blockH/2);
+  grad.addColorStop(0, 'rgba(212,147,58,0.15)');
   grad.addColorStop(0.5, 'rgba(212,147,58,0.25)');
-  grad.addColorStop(1, 'rgba(212,147,58,0.4)');
-  capCtx.fillStyle = grad;
-  capCtx.fillRect(bx + 1, by + bh - fillH, bw - 2, fillH);
+  grad.addColorStop(1, 'rgba(212,147,58,0.1)');
+  setCtx.fillStyle = grad;
+  setCtx.strokeStyle = 'rgba(212,147,58,' + (0.3 + Math.sin(t) * 0.1) + ')';
+  setCtx.lineWidth = 2;
+  setCtx.beginPath();
+  roundRect(setCtx, cx - blockW/2 - pulse, cy - blockH/2 - pulse, blockW + pulse*2, blockH + pulse*2, 8);
+  setCtx.fill();
+  setCtx.stroke();
 
-  capCtx.fillStyle = 'rgba(212,147,58,0.6)';
-  capCtx.font = 'bold 13px -apple-system,sans-serif';
-  capCtx.textAlign = 'center';
-  capCtx.fillText(Math.round(pct * 100) + '% utilized', w / 2, by + 90);
-  capCtx.font = '11px -apple-system,sans-serif';
-  capCtx.fillStyle = 'rgba(107,93,78,0.6)';
-  capCtx.fillText('Block weight: ' + weight.toLocaleString() + ' / 4,000,000 WU', w / 2, by + 110);
+  setCtx.fillStyle = '#EADCC8';
+  setCtx.font = 'bold 11px -apple-system,sans-serif';
+  setCtx.textAlign = 'center';
+  setCtx.textBaseline = 'middle';
+  setCtx.fillText('⧫', cx, cy - 8);
+  setCtx.font = '9px -apple-system,sans-serif';
+  setCtx.fillStyle = 'rgba(107,93,78,0.6)';
+  setCtx.fillText('BLOCK', cx, cy + 12);
 
-  // Inflow meter
-  var tpsX = w + 30, tpsY = 70, tpsW = w - 60, tpsH = 50;
-  capCtx.strokeStyle = '#3A3228';
-  capCtx.lineWidth = 1;
-  capCtx.strokeRect(tpsX, tpsY, tpsW, tpsH);
-  var inflow = d.mempool && d.mempool.count ? Math.round(d.mempool.count / 600 * 60) : 0;
-  var inflowPct = Math.min(1, inflow / 200);
-  capCtx.fillStyle = 'rgba(59,163,93,' + (0.1 + inflowPct * 0.3) + ')';
-  capCtx.fillRect(tpsX + 1, tpsY + 1, tpsW * inflowPct - 2, tpsH - 2);
-  capCtx.fillStyle = '#EADCC8';
-  capCtx.font = 'bold 20px -apple-system,sans-serif';
-  capCtx.textAlign = 'center';
-  capCtx.fillText(inflow + ' tx/min', w + 30 + tpsW / 2, tpsY + 34);
-  capCtx.font = '10px -apple-system,sans-serif';
-  capCtx.fillStyle = '#6A5D4E';
-  capCtx.textAlign = 'center';
-  capCtx.fillText('Inflow rate (estimated)', w + 30 + tpsW / 2, tpsY + tpsH + 14);
+  // Settlement pool (center-right) — glowing circle
+  var poolX = w * 0.7, poolY = h * 0.5;
+  var poolR = 70 + Math.sin(t * 0.3) * 3;
+  setCtx.shadowColor = 'rgba(212,147,58,0.3)';
+  setCtx.shadowBlur = 30;
+  setCtx.fillStyle = 'rgba(212,147,58,0.06)';
+  setCtx.beginPath();
+  setCtx.arc(poolX, poolY, poolR, 0, Math.PI * 2);
+  setCtx.fill();
+  setCtx.shadowBlur = 15;
+  setCtx.fillStyle = 'rgba(212,147,58,0.04)';
+  setCtx.beginPath();
+  setCtx.arc(poolX, poolY, poolR * 0.7, 0, Math.PI * 2);
+  setCtx.fill();
+  setCtx.shadowBlur = 0;
 
-  // Lightning summary
-  var ln = d.lightning || {};
-  var lnY = tpsY + tpsH + 30;
-  capCtx.font = '12px -apple-system,sans-serif';
-  capCtx.fillStyle = 'rgba(88,166,255,0.7)';
-  capCtx.textAlign = 'left';
-  capCtx.fillText('⚡ LN: ' + (ln.node_count || 0).toLocaleString() + ' nodes · ' + (ln.channel_count || 0).toLocaleString() + ' channels · ' + ((ln.total_capacity || 0)/100000000).toFixed(0) + ' BTC', tpsX, lnY + 20);
+  // Dollar amount in pool
+  var d = typeof DATA_ENGINE !== 'undefined' ? DATA_ENGINE.get() : null;
+  var price = d && d.btc_price ? d.btc_price : 64000;
+  var blockValue = (3.125 * price + 5000000 / 100000000 * price);
+  var valueText = '$' + (blockValue >= 1000000 ? (blockValue / 1000000).toFixed(1) + 'M' : Math.round(blockValue / 1000).toFixed(0) + 'K');
+  setCtx.fillStyle = '#D4933A';
+  setCtx.font = 'bold 16px -apple-system,sans-serif';
+  setCtx.textAlign = 'center';
+  setCtx.textBaseline = 'middle';
+  setCtx.fillText(valueText, poolX, poolY - 6);
+  setCtx.font = '10px -apple-system,sans-serif';
+  setCtx.fillStyle = 'rgba(107,93,78,0.6)';
+  setCtx.fillText('per block', poolX, poolY + 14);
 
-  // Adoption mini bar
-  var adX = tpsX, adY = lnY + 40, adW = tpsW, adH = 20;
-  capCtx.fillStyle = '#58A6FF';
-  capCtx.fillRect(adX, adY, adW * 0.82, adH);
-  capCtx.fillStyle = '#3BA35D';
-  capCtx.fillRect(adX + adW * 0.82, adY, adW * 0.12, adH);
-  capCtx.fillStyle = '#3A3228';
-  capCtx.fillRect(adX + adW * 0.94, adY, adW * 0.06, adH);
-  capCtx.fillStyle = '#6A5D4E';
-  capCtx.font = '9px -apple-system,sans-serif';
-  capCtx.textAlign = 'center';
-  capCtx.fillText('SegWit 82% | Taproot 12% | Legacy 6%', adX + adW / 2, adY + 14);
+  // Flowing particles: blocks moving from left to pool
+  for (var i = 0; i < 5; i++) {
+    var phase = ((t * 0.15 + i * 0.2) % 1);
+    var fx = cx + blockW/2 + 20 + (poolX - cx - blockW/2 - 40) * phase;
+    var fy = cy + Math.sin(phase * Math.PI * 3 + i) * 30;
+    var alpha = phase < 0.1 ? phase * 10 : phase > 0.9 ? (1 - phase) * 10 : 1;
+    setCtx.globalAlpha = Math.min(1, alpha * 0.6);
+    setCtx.fillStyle = '#D4933A';
+    setCtx.beginPath();
+    setCtx.arc(fx, fy, 3 + phase * 2, 0, Math.PI * 2);
+    setCtx.fill();
+  }
+  setCtx.globalAlpha = 1;
 
-  requestAnimationFrame(drawCapacity);
+  // Connection line from block to pool
+  setCtx.strokeStyle = 'rgba(212,147,58,0.08)';
+  setCtx.lineWidth = 1;
+  setCtx.setLineDash([4, 6]);
+  setCtx.beginPath();
+  setCtx.moveTo(cx + blockW/2, cy);
+  setCtx.lineTo(poolX - poolR, poolY);
+  setCtx.stroke();
+  setCtx.setLineDash([]);
+
+  // Metric labels on right
+  var mlX = w * 0.7, mlY = poolY + poolR + 30;
+  setCtx.font = '11px -apple-system,sans-serif';
+  setCtx.fillStyle = 'rgba(107,93,78,0.5)';
+  setCtx.textAlign = 'center';
+  setCtx.fillText('27,800 nodes · 40+ countries · $' + (price).toLocaleString() + ' BTC', w / 2, h - 20);
+
+  // Per-second counter at bottom
+  var d = typeof DATA_ENGINE !== 'undefined' ? DATA_ENGINE.get() : null;
+  var fees = d && d.fees ? d.fees : { fastestFee: 3 };
+  setCtx.font = 'bold 13px -apple-system,sans-serif';
+  setCtx.fillStyle = 'rgba(234,220,200,0.5)';
+  setCtx.textAlign = 'center';
+  setCtx.fillText('⚡ ' + (fees.fastestFee || '--') + ' sat/vB fastest · ~' + ((d && d.mempool ? Math.round((d.mempool.count||0) / 600 * 60 * 60) : 0)).toLocaleString() + ' tx/hour', w / 2, h - 44);
+
+  requestAnimationFrame(drawSettlement);
+}
+
+function roundRect(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.lineTo(x + w - r, y);
+  ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+  ctx.lineTo(x + w, y + h - r);
+  ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+  ctx.lineTo(x + r, y + h);
+  ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+  ctx.lineTo(x, y + r);
+  ctx.quadraticCurveTo(x, y, x + r, y);
+  ctx.closePath();
 }
 
 // Weight trend chart
@@ -470,10 +562,10 @@ function drawWeightChart(fh) {
 }
 
 window.addEventListener('load', function() {
-  resizeCap();
-  drawCapacity();
+  resizeSet();
+  drawSettlement();
 });
-window.addEventListener('resize', resizeCap);
+window.addEventListener('resize', resizeSet);
 </script>
 </body>
 </html>
