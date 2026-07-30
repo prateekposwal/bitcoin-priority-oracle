@@ -8,6 +8,7 @@ var report = require('./report.js');
 var tracker = require('../../tools/agents/03-block-interval-tracker.js');
 var btcRpc = require('../../tools/agents/06-bitcoin-core-rpc.js');
 var digest = require('../../tools/agents/12-research-digest.js');
+var publisher = require('../../tools/marketing/publisher.js');
 
 var STATE = { lastRun: null, cycleCount: 0, discoveredSources: [], issues: [] };
 var STATE_FILE = path.resolve(__dirname, '..', '..', CONFIG.agent.stateFile);
@@ -137,6 +138,16 @@ async function runCycle() {
       }
     } catch (e) { log('Report error: ' + e.message); }
   }
+
+  // Step 7: Run Nostr publisher (every cycle = hourly)
+  try {
+    var pubStart = Date.now();
+    var pubResult = await publisher.runCycle();
+    var pubElapsed = Math.round((Date.now() - pubStart) / 1000);
+    log('Publisher: ' + pubResult.length + ' posts in ' + pubElapsed + 's');
+    publisher.generateRSSFeed();
+    publisher.generateReport();
+  } catch (e) { log('Publisher error: ' + e.message); }
 
   STATE.lastRun = Date.now();
   saveState();
