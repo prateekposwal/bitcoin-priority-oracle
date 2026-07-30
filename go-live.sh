@@ -65,7 +65,20 @@ log "[3/4] Starting employee publisher..."
 echo $! > "$PIDDIR/employee-publisher.pid"
 log "  PID: $(cat $PIDDIR/employee-publisher.pid)"
 
-# 4. Health check + RSS update
+# 4. Bridge Poster (attempts to post to Twitter/Reddit/Medium every 2 hours)
+log "[4/5] Starting bridge poster..."
+(
+  while true; do
+    log "[Bridge] Running bridge cycle..."
+    cd "$DIR" && node tools/bridge/full-post.js 2>&1 | tee -a "$LOG" || true
+    log "[Bridge] Next cycle in 2 hours"
+    sleep 7200
+  done
+) &
+echo $! > "$PIDDIR/bridge-poster.pid"
+log "  PID: $(cat $PIDDIR/bridge-poster.pid)"
+
+# 5. Health check + RSS update
 log "[4/4] Starting health monitor..."
 (
   while true; do
@@ -95,6 +108,8 @@ log "Employees:   Every 8 hours"
 log "RSS feed:    Updated every 5 minutes"
 log ""
 log "Team: http://localhost:3456/employees"
+log "Bridge:   Every 2 hours"
+log "Relay:    node tools/bridge/relay-node.js --run"
 log ""
 log "Press Ctrl+C to stop all processes"
 log "========================================================"

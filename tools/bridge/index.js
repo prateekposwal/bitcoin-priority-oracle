@@ -8,8 +8,8 @@ var POST_LOG = path.resolve(__dirname, '..', '..', 'captured-data', 'post-log.js
 var AGENT = 'BSAHI Bridge';
 
 var PLATFORMS = {
-  twitter: { url: 'https://x.com/compose/post', compose: '[data-testid="tweetTextarea_0"]', submit: '[data-testid="tweetButtonInline"]' },
-  reddit: { url: 'https://www.reddit.com/r/Bitcoin/submit?type=self', title: '[name="title"]', body: '[role="textbox"]', submit: 'button[type="submit"]' }
+  twitter: { url: 'https://x.com/home', postBtn: 'a[data-testid="SideNav_NewTweet_Button"]', compose: '[data-testid="tweetTextarea_0"]', submit: '[data-testid="tweetButton"]:not([aria-disabled="true"])' },
+  reddit: { url: 'https://www.reddit.com/submit', title: '[name="title"]', body: '[role="textbox"]', submit: 'button[type="submit"]' }
 };
 
 function log(msg) { console.log('[' + new Date().toISOString().slice(11,19) + '] [' + AGENT + '] ' + msg); }
@@ -46,19 +46,23 @@ function savePostLog(data) {
 async function postToTwitter(page, content) {
   await page.goto(PLATFORMS.twitter.url, { timeout: 20000, waitUntil: 'domcontentloaded' });
   await page.waitForTimeout(2000);
+  log('Twitter URL: ' + (await page.url()).slice(0, 60));
+
+  var postBtn = await page.$(PLATFORMS.twitter.postBtn);
+  if (!postBtn) { log('Twitter: post button not found (session may be stale)'); return null; }
+  await postBtn.click();
+  await page.waitForTimeout(1000);
 
   var compose = false;
   try { compose = await page.isVisible(PLATFORMS.twitter.compose, { timeout: 3000 }); } catch(e) {}
-  if (!compose) { log('Twitter: compose not available'); return null; }
+  if (!compose) { log('Twitter: compose dialog not found'); return null; }
 
   var text = content.length > 250 ? content.slice(0, 247) + '...' : content;
   await page.fill(PLATFORMS.twitter.compose, text + '\n\n⬡ BSAHI');
   await page.waitForTimeout(500);
 
   var btn = await page.$(PLATFORMS.twitter.submit);
-  if (!btn) return null;
-  var disabled = await btn.getAttribute('aria-disabled');
-  if (disabled === 'true') { log('Twitter: button disabled'); return null; }
+  if (!btn) { log('Twitter: submit button not found'); return null; }
 
   await btn.click();
   await page.waitForTimeout(2000);
@@ -69,10 +73,11 @@ async function postToTwitter(page, content) {
 async function postToReddit(page, content, topic) {
   await page.goto(PLATFORMS.reddit.url, { timeout: 20000, waitUntil: 'domcontentloaded' });
   await page.waitForTimeout(2000);
+  log('Reddit URL: ' + (await page.url()).slice(0, 60));
 
   var titleField = false;
   try { titleField = await page.isVisible(PLATFORMS.reddit.title, { timeout: 3000 }); } catch(e) {}
-  if (!titleField) { log('Reddit: title field not available'); return null; }
+  if (!titleField) { log('Reddit: title field not available (session may be stale)'); return null; }
 
   var title = topic ? topic.slice(0, 60) : 'BSAHI Block Space Research';
   await page.fill(PLATFORMS.reddit.title, title + ' — BSAHI');
