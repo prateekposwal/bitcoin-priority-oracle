@@ -535,20 +535,35 @@ DATA_ENGINE.onUpdate(function() {
 <script>
 // Mini visualization for mempool chapter
 var memCtx, memW, memH;
-function initMempoolViz() {
+function resizeMempoolViz() {
   var c = document.getElementById('viz-mempool');
   if (!c) return;
   var r = c.parentElement.getBoundingClientRect();
-  memW = c.width = Math.min(r.width || 800, 1000);
-  memH = c.height = 400;
+  if (r.width < 100) r = { width: window.innerWidth - 48, height: 420 };
+  memW = c.width = Math.round(Math.min(r.width, 1000) * (window.devicePixelRatio || 1));
+  memH = c.height = Math.round(420 * (window.devicePixelRatio || 1));
+  c.style.width = Math.min(r.width, 1000) + 'px';
+  c.style.height = '420px';
   memCtx = c.getContext('2d');
+  memCtx.scale(window.devicePixelRatio || 1, window.devicePixelRatio || 1);
+  memW = Math.min(r.width, 1000);
+  memH = 420;
+}
+
+function initMempoolViz() {
+  resizeMempoolViz();
+  window.addEventListener('resize', resizeMempoolViz);
+  if (typeof DATA_ENGINE !== 'undefined') {
+    DATA_ENGINE.onUpdate(function() { if (memCtx) drawMempool(); });
+  }
   drawMempool();
 }
+
 function drawMempool() {
   if (!memCtx) return;
   memCtx.fillStyle = '#1A1612';
   memCtx.fillRect(0, 0, memW, memH);
-  var d = DATA_ENGINE ? DATA_ENGINE.get() : null;
+  var d = typeof DATA_ENGINE !== 'undefined' ? DATA_ENGINE.get() : null;
   var hist = d && d.mempool ? d.mempool.fee_histogram : [];
   if (hist.length > 0) {
     var maxCount = 1;
