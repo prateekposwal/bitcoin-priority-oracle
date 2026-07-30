@@ -211,17 +211,21 @@ var VIZ_Miner = (function() {
 
     for (var i = 0; i < 3; i++) {
       var cx = 50 + i * (cardW + cardGap);
+      var pulseY = Math.sin(t * 1.5 + i * 1.2) * 1.2;
+      var pulseGlow = Math.sin(t * 1.5 + i * 1.2) * 3 + 5;
       ctx.fillStyle = '#231F19';
       ctx.strokeStyle = '#3A3228';
       ctx.lineWidth = 1;
+      if (i === 2) { ctx.shadowColor = 'rgba(88,166,255,' + (0.04 + Math.sin(t + i) * 0.02) + ')'; ctx.shadowBlur = pulseGlow; }
       VIZ.roundRect(ctx, cx, statsY, cardW, cardH, 10);
       ctx.fill();
       ctx.stroke();
+      ctx.shadowBlur = 0;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
       ctx.font = 'bold 18px -apple-system, sans-serif';
       ctx.fillStyle = statsData[i].color;
-      ctx.fillText(statsData[i].value, cx + cardW / 2, statsY + 30);
+      ctx.fillText(statsData[i].value, cx + cardW / 2, statsY + 30 + (i === 2 ? pulseY * 0.3 : 0));
       ctx.font = '11px -apple-system, sans-serif';
       ctx.fillStyle = '#6A5D4E';
       ctx.fillText(statsData[i].sub, cx + cardW / 2, statsY + 54);
