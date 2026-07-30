@@ -337,11 +337,12 @@
       }
     }, 15000);
   // Flash animations
-  (function(){var bf=0,ff=0,lf=0;try{var ws=new WebSocket('wss://mempool.space/api/v1/ws');ws.onmessage=function(e){try{var m=JSON.parse(e.data);if(m&&m.action==='newBlock'){bf=60;if(typeof DATA_ENGINE!=='undefined')DATA_ENGINE.start();}}catch(err){}};}catch(e){}
-  if(typeof DATA_ENGINE!=='undefined'){var og=DATA_ENGINE.onUpdate;DATA_ENGINE.onUpdate=function(cb){og(function(d){try{if(d&&d.fees){var f=d.fees.fastestFee||0;if(lf>0&&f>lf*2&&f>5)ff=40;lf=f;}}catch(e){}cb(d);});};}
-  (function fl(){if(bf>0){bf--;var bi=bf/60;document.querySelectorAll('.state-bar,.legend-panel,.cta,#dollar-context').forEach(function(el){el.style.transition='box-shadow 0.1s';el.style.boxShadow=bf>55?'inset 0 0 40px rgba(212,147,58,0.25)':'inset 0 0 '+(bi*25)+'px rgba(212,147,58,'+(bi*0.12)+')';if(bf===0)setTimeout(function(){el.style.boxShadow='';el.style.transition='';},150);});}
-  if(ff>0){ff--;var fi=ff/40;document.querySelectorAll('.cta').forEach(function(el){el.style.transition='box-shadow 0.1s';el.style.boxShadow='0 0 '+(fi*20)+'px rgba(248,81,73,'+(fi*0.3)+')';if(ff===0)setTimeout(function(){el.style.boxShadow='';el.style.transition='';},150);});}
-  requestAnimationFrame(fl);})();
+  var bfA=0,ffA=0,lfA=0;
+  try{var wsA=new WebSocket('wss://mempool.space/api/v1/ws');wsA.onmessage=function(e){try{var mA=JSON.parse(e.data);if(mA&&mA.action==='newBlock'){bfA=60;if(typeof DATA_ENGINE!=='undefined')DATA_ENGINE.start();}}catch(err){}};}catch(eA){}
+  if(typeof DATA_ENGINE!=='undefined'){var ogA=DATA_ENGINE.onUpdate;DATA_ENGINE.onUpdate=function(cb){ogA(function(d){try{if(d&&d.fees){var fA=d.fees.fastestFee||0;if(lfA>0&&fA>lfA*2&&fA>5)ffA=40;lfA=fA;}}catch(eA){}cb(d);});};}
+  (function flA(){if(bfA>0){bfA--;var biA=bfA/60;document.querySelectorAll('.state-bar,.legend-panel,.cta,#dollar-context').forEach(function(el){el.style.transition='box-shadow 0.1s';var bsA=bfA>55?'inset 0 0 40px rgba(212,147,58,0.25)':'inset 0 0 '+(biA*25)+'px rgba(212,147,58,'+(biA*0.12)+')';el.style.boxShadow=bsA;if(bfA===0){setTimeout(function(){el.style.boxShadow='';el.style.transition='';},150);}});}
+  if(ffA>0){ffA--;var fiA=ffA/40;document.querySelectorAll('.cta').forEach(function(el){el.style.transition='box-shadow 0.1s';el.style.boxShadow='0 0 '+(fiA*20)+'px rgba(248,81,73,'+(fiA*0.3)+')';if(ffA===0){setTimeout(function(){el.style.boxShadow='';el.style.transition='';},150);}});}
+  requestAnimationFrame(flA);})();
   </script>
 </body>
 </html>
