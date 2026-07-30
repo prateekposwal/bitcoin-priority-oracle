@@ -559,8 +559,10 @@ function initMempoolViz() {
   drawMempool();
 }
 
+var mempoolRAF = null;
 function drawMempool() {
   if (!memCtx) return;
+  var t = Date.now() / 1000;
   memCtx.fillStyle = '#1A1612';
   memCtx.fillRect(0, 0, memW, memH);
   var d = typeof DATA_ENGINE !== 'undefined' ? DATA_ENGINE.get() : null;
@@ -568,24 +570,44 @@ function drawMempool() {
   if (hist.length > 0) {
     var maxCount = 1;
     for (var i = 0; i < hist.length; i++) { if (hist[i][1] > maxCount) maxCount = hist[i][1]; }
-    var barW = Math.max(2, (memW - 80) / hist.length);
-    for (var i = 0; i < hist.length; i++) {
-      var fee = hist[i][0];
-      var count = hist[i][1];
-      var p = Math.min(1, fee / 50);
+    var barW = Math.max(3, (memW - 80) / Math.min(hist.length, 150));
+    var numBars = Math.min(hist.length, 150);
+    var step = Math.max(1, Math.floor(hist.length / numBars));
+    // Draw glow behind highest bars
+    memCtx.shadowColor = 'rgba(212,147,58,0.06)';
+    memCtx.shadowBlur = 20;
+    for (var i = 0; i < numBars; i++) {
+      var idx = i * step;
+      var fee = hist[idx][0];
+      var count = hist[idx][1];
+      var p = Math.min(1, fee / 20);
+      var wave = Math.sin(t * 0.8 + i * 0.2) * 0.08 + 0.92;
       var r = Math.round(p * 248 + (1-p) * 63);
       var g = Math.round((1-p) * 185 + p * 81);
       var bl = Math.round((1-p) * 80 + p * 73);
-      var bh = (count / maxCount) * (memH - 80);
+      var bh = (count / maxCount) * (memH - 80) * wave;
       memCtx.fillStyle = 'rgb(' + r + ',' + g + ',' + bl + ')';
-      memCtx.fillRect(50 + i * barW, memH - 40 - bh, Math.max(1, barW - 1), bh);
+      memCtx.fillRect(50 + i * barW, memH - 40 - bh, Math.max(1, barW - 2), Math.max(1, bh));
     }
+    memCtx.shadowBlur = 0;
+    // Peak value label
+    var peakIdx = 0, peakVal = 0;
+    for (var i = 0; i < hist.length; i++) { if (hist[i][1] > peakVal) { peakVal = hist[i][1]; peakIdx = i; } }
+    memCtx.fillStyle = '#EADCC8';
+    memCtx.font = 'bold 12px -apple-system,sans-serif';
+    memCtx.textAlign = 'center';
+    memCtx.fillText(peakVal.toLocaleString() + ' txs', 50 + (peakIdx / hist.length) * (memW - 80), memH - 50 - (peakVal / maxCount) * (memH - 80));
+    memCtx.fillStyle = '#6A5D4E';
+    memCtx.font = '10px -apple-system,sans-serif';
+    memCtx.textAlign = 'center';
+    memCtx.fillText('peak at ' + hist[peakIdx][0].toFixed(1) + ' sat/vB', 50 + (peakIdx / hist.length) * (memW - 80), memH - 36 - (peakVal / maxCount) * (memH - 80));
+    // Labels
     memCtx.fillStyle = '#6A5D4E';
     memCtx.font = '12px -apple-system,sans-serif';
     memCtx.textAlign = 'left';
     memCtx.fillText('0 sat/vB', 50, memH - 12);
     memCtx.textAlign = 'right';
-    memCtx.fillText('50+', memW - 30, memH - 12);
+    memCtx.fillText('20+', memW - 30, memH - 12);
     memCtx.save();
     memCtx.translate(20, memH / 2);
     memCtx.rotate(-Math.PI / 2);
@@ -603,7 +625,7 @@ function drawMempool() {
     memCtx.textAlign = 'center';
     memCtx.fillText('Waiting for mempool data...', memW / 2, memH / 2);
   }
-  setTimeout(drawMempool, 3000);
+  mempoolRAF = requestAnimationFrame(drawMempool);
 }
 
 // Mining viz

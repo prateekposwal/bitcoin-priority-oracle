@@ -605,41 +605,60 @@ if (typeof DATA_ENGINE !== 'undefined') {
     'Fastest: $' + fastestUsd.toFixed(2) + ' │ Hour: $' + hourUsd.toFixed(2) + ' │ Economy: $' + economyUsd.toFixed(2);
 
   // Fee distribution trend viz
-  (function drawFeeTrend() {
-    var c = document.getElementById('viz-fee-trend');
-    if (!c) return;
-    var r = c.parentElement.getBoundingClientRect();
-    var cw = c.width = r.width || 600;
-    var ch = c.height = 150;
-    var cx = c.getContext('2d');
-    var hist = d && d.mempool ? d.mempool.fee_histogram : [];
-    cx.fillStyle = '#1A1612';
-    cx.fillRect(0, 0, cw, ch);
-    if (hist.length > 0) {
-      var maxCount = 1;
-      for (var i = 0; i < hist.length; i++) { if (hist[i][1] > maxCount) maxCount = hist[i][1]; }
-      var barW = Math.max(1, (cw - 40) / Math.min(hist.length, 200));
-      for (var i = 0; i < Math.min(hist.length, 200); i++) {
-        var fee = hist[i][0];
-        var count = hist[i][1];
-        var p = Math.min(1, fee / 20);
-        var red = Math.round(p * 248 + (1-p) * 63);
-        var green = Math.round((1-p) * 185 + p * 81);
-        var blue = Math.round((1-p) * 80 + p * 73);
-        var bh = (count / maxCount) * (ch - 20);
-        cx.fillStyle = 'rgb(' + red + ',' + green + ',' + blue + ')';
-        cx.fillRect(10 + i * barW, ch - 10 - bh, Math.max(1, barW - 1), Math.max(1, bh));
+  if (!window._feeTrendAnim) {
+    window._feeTrendAnim = {};
+    window._feeTrendAnimRunning = {};
+  }
+  var trendCanvasId = 'viz-fee-trend';
+  if (!window._feeTrendAnim[trendCanvasId]) {
+    window._feeTrendAnim[trendCanvasId] = function() {
+      var c = document.getElementById(trendCanvasId);
+      if (!c) return;
+      var r = c.parentElement.getBoundingClientRect();
+      var cw = c.width = r.width || 600;
+      var ch = c.height = 150;
+      var cx = c.getContext('2d');
+      var de = typeof DATA_ENGINE !== 'undefined' ? DATA_ENGINE.get() : null;
+      var hist = de && de.mempool ? de.mempool.fee_histogram : [];
+      var t = Date.now() / 1000;
+      cx.fillStyle = '#1A1612';
+      cx.fillRect(0, 0, cw, ch);
+      if (hist.length > 0) {
+        var maxCount = 1;
+        for (var i = 0; i < hist.length; i++) { if (hist[i][1] > maxCount) maxCount = hist[i][1]; }
+        var barW = Math.max(2, (cw - 40) / Math.min(hist.length, 120));
+        var numBars = Math.min(hist.length, 120);
+        var step = Math.max(1, Math.floor(hist.length / numBars));
+        for (var i = 0; i < numBars; i++) {
+          var idx = i * step;
+          var fee = hist[idx][0];
+          var count = hist[idx][1];
+          var p = Math.min(1, fee / 20);
+          var red = Math.round(p * 248 + (1-p) * 63);
+          var green = Math.round((1-p) * 185 + p * 81);
+          var blue = Math.round((1-p) * 80 + p * 73);
+          var wave = Math.sin(t * 1.2 + i * 0.3) * 0.06 + 0.94;
+          var bh = (count / maxCount) * (ch - 20) * wave;
+          cx.fillStyle = 'rgb(' + red + ',' + green + ',' + blue + ')';
+          cx.fillRect(10 + i * barW, ch - 10 - bh, Math.max(2, barW - 1), Math.max(2, bh));
+        }
+        cx.fillStyle = '#EADCC8';
+        cx.font = 'bold 10px -apple-system,sans-serif';
+        cx.textAlign = 'center';
+        var peakI = 0, peakC = 0;
+        for (var i = 0; i < hist.length; i++) { if (hist[i][1] > peakC) { peakC = hist[i][1]; peakI = i; } }
+        cx.fillText('Peak: ' + peakC.toLocaleString() + ' txs @ ' + hist[peakI][0].toFixed(1) + ' sat/vB', cw / 2, ch - 24);
+        cx.fillStyle = '#6A5D4E';
+        cx.font = '9px -apple-system,sans-serif';
+        cx.textAlign = 'left';
+        cx.fillText('0', 10, ch - 2);
+        cx.textAlign = 'right';
+        cx.fillText('20+', cw - 10, ch - 2);
       }
-      cx.fillStyle = '#6A5D4E';
-      cx.font = '9px -apple-system,sans-serif';
-      cx.textAlign = 'left';
-      cx.fillText('0', 10, ch - 2);
-      cx.textAlign = 'right';
-      cx.fillText('20+ sat/vB', cw - 10, ch - 2);
-      cx.textAlign = 'center';
-      cx.fillText('Low fee ←  Fee rate  → High fee', cw / 2, 12);
-    }
-  })();
+      window._feeTrendAnimRunning[trendCanvasId] = requestAnimationFrame(window._feeTrendAnim[trendCanvasId]);
+    };
+    window._feeTrendAnim[trendCanvasId]();
+  }
 
   // --- Send Insight ---
   var cost = (e * 140 * btcPrice) / 100000000;
