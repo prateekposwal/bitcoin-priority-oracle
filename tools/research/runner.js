@@ -1,6 +1,8 @@
 var fs = require('fs');
 var path = require('path');
 
+var notes = require('./notes.js');
+
 var fetchers = [
   require('./fetchers/bitcoin-core.js'),
   require('./fetchers/lightning.js'),
@@ -58,6 +60,26 @@ function generateReport(allResults) {
     }
     lines.push('');
   }
+  // Include architect's notes
+  var noteSummary = notes.getSummary();
+  if (noteSummary && noteSummary.hasNotes) {
+    lines.push('## 🧑‍🔧 Architect\'s Research Notes');
+    lines.push('');
+    lines.push('The following insights were provided by the architect and applied to this cycle:');
+    lines.push('');
+    for (var si = 0; si < noteSummary.sections.length; si++) {
+      var sec = noteSummary.sections[si];
+      var secNotes = notes.readNotes();
+      if (secNotes && secNotes[sec]) {
+        lines.push('### ' + sec);
+        for (var ni = 0; ni < secNotes[sec].length; ni++) {
+          lines.push('- ' + secNotes[sec][ni]);
+        }
+        lines.push('');
+      }
+    }
+  }
+
   lines.push('---');
   lines.push('*Bitcoin Sahi Research Agent System*');
 
