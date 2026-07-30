@@ -295,6 +295,7 @@ body{background:#1A1612;color:#EADCC8;font-family:-apple-system,BlinkMacSystemFo
     <div class="stat-card" style="border-top:3px solid #D4933A;"><div class="sc-label">Subsidy</div><div class="sc-value" id="miner-subsidy">3.125</div><div class="fc-sub">BTC per block</div></div>
     <div class="stat-card" style="border-top:3px solid #3BA35D;"><div class="sc-label">Fees</div><div class="sc-value" id="miner-fees">--</div><div class="fc-sub">BTC per block (avg)</div></div>
     <div class="stat-card" style="border-top:3px solid #58A6FF;"><div class="sc-label">Total</div><div class="sc-value" id="miner-total">--</div><div class="fc-sub">BTC per block</div></div>
+    <div class="stat-card" style="border-top:3px solid #D4933A;"><div class="sc-label">Daily Rev</div><div class="sc-value" id="miner-daily" style="color:#D4933A;">--</div><div class="fc-sub">USD per day</div></div>
   </div>
   <div class="viz-section">
     <div class="viz-section-title">Block Reward Composition</div>
@@ -327,6 +328,11 @@ body{background:#1A1612;color:#EADCC8;font-family:-apple-system,BlinkMacSystemFo
     <div class="stat-card" style="border-top:3px solid #C0392B;"><div class="sc-label">Volatility</div><div class="sc-value" id="res-volatility">--</div><div class="fc-sub">24h fee variance</div></div>
     <div class="stat-card" style="border-top:3px solid #3BA35D;"><div class="sc-label">Avg Fee</div><div class="sc-value" id="res-avgfee">--</div><div class="fc-sub">Economy avg 24h</div></div>
     <div class="stat-card" style="border-top:3px solid #58A6FF;"><div class="sc-label">Range</div><div class="sc-value" id="res-range">--</div><div class="fc-sub">Min - Max sat/vB</div></div>
+  </div>
+  <div class="stat-row">
+    <div class="stat-card" style="border-top:3px solid #D4933A;"><div class="sc-label">Miner Revenue</div><div class="sc-value" id="res-daily-rev" style="color:#D4933A;">--</div><div class="fc-sub">USD per day (new BTC + fees)</div></div>
+    <div class="stat-card" style="border-top:3px solid #3BA35D;"><div class="sc-label">Est. Settlement</div><div class="sc-value" id="res-settlement" style="color:#3BA35D;">--</div><div class="fc-sub">USD per day (all tx value)</div></div>
+    <div class="stat-card" style="border-top:3px solid #58A6FF;"><div class="sc-label">Txs/Day</div><div class="sc-value" id="res-txs-day" style="color:#58A6FF;">--</div><div class="fc-sub">Estimated on-chain</div></div>
   </div>
   <div class="viz-section">
     <div class="viz-section-title">Fee History Analysis</div>
@@ -643,6 +649,8 @@ if (typeof DATA_ENGINE !== 'undefined') {
   document.getElementById('miner-subsidy').textContent = '3.125 BTC';
   document.getElementById('miner-fees').textContent = feeBtc.toFixed(4) + ' BTC';
   document.getElementById('miner-total').textContent = (3.125 + feeBtc).toFixed(4) + ' BTC';
+  var dailyRev = (3.125 * 144 + feeAvg * 144 / 100000000) * btcPrice;
+  document.getElementById('miner-daily').textContent = dailyRev > 1000000 ? '$' + (dailyRev / 1000000).toFixed(1) + 'M' : '$' + Math.round(dailyRev / 1000).toFixed(0) + 'K';
 
   // --- Research Stat Cards ---
   var feeArr = [];
@@ -658,6 +666,10 @@ if (typeof DATA_ENGINE !== 'undefined') {
   document.getElementById('res-volatility').textContent = volPct > 0 ? volPct + '%' : '--';
   document.getElementById('res-avgfee').textContent = fAvg > 0 ? fAvg.toFixed(1) + ' sat' : '--';
   document.getElementById('res-range').textContent = (fMin < Infinity ? fMin.toFixed(0) : '--') + ' - ' + (fMax > 0 ? fMax.toFixed(0) : '--');
+  var resDailyRev = (3.125 * 144 + feeAvg * 144 / 100000000) * btcPrice;
+  document.getElementById('res-daily-rev').textContent = resDailyRev > 1000000 ? '$' + (resDailyRev / 1000000).toFixed(1) + 'M' : '$' + Math.round(resDailyRev / 1000).toFixed(0) + 'K';
+  document.getElementById('res-settlement').textContent = resDailyRev > 1000000 ? '$' + (resDailyRev * 200).toFixed(0) + 'B' : '--';
+  document.getElementById('res-txs-day').textContent = fh.length > 0 ? (Math.round(fh.length * 3000)).toLocaleString() : '--';
 
   // --- Market Brief Panels ---
   var briefF = f2 || 3;
