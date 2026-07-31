@@ -1,0 +1,3 @@
+[2026-07-31 12:51:41] Engagement orchestrator started
+[2026-07-31 12:51:42] === Engagement cycle ===
+[2026-07-31 12:51:42] RUN: python3 /Users/prateekposwal/Desktop/block-space-economics/tools/bridge/reply-engine.py 
