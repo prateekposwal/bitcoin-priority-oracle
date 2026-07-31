@@ -160,6 +160,13 @@ var server = http.createServer(function(req, res) {
       }).catch(function(e) { jsonResponse(res, { error: e.message }, 500); });
     }
 
+  } else if (route === '/spool/consume') {
+    var consumer = require('./spool-consumer.js');
+    consumer.drainAll().then(function() { return require('./spool.js').init(); })
+      .then(function(s) { return s.stats(); })
+      .then(function(st) { jsonResponse(res, st); })
+      .catch(function(e) { jsonResponse(res, { error: e.message }, 500); });
+
   } else if (route === '/team' || route === '/team.html') {
     var teamPath = path.resolve(__dirname, '..', '..', 'docs', 'team.html');
     if (require('fs').existsSync(teamPath)) {

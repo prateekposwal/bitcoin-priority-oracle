@@ -169,6 +169,18 @@ async function runCycle() {
     publisher.generateReport();
   } catch (e) { log('Publisher error: ' + e.message); }
 
+  // Step 7b: Drain spool into SQLite + run spool-backed forecast and alerts
+  try {
+    var consumer = require('./spool-consumer.js');
+    var cResult = await consumer.drainAll();
+    log('Consumer: drained spool into SQLite');
+  } catch (e) { log('Consumer error: ' + e.message); }
+  try {
+    var childProcess = require('child_process');
+    childProcess.execFile('python3', [path.resolve(__dirname, '..', '..', 'tools', 'fee_forecast.py')], { cwd: path.resolve(__dirname, '..', '..'), timeout: 30000 }, function() {});
+    childProcess.execFile('python3', [path.resolve(__dirname, '..', '..', 'tools', 'alert_webhook.py'), '--spool'], { cwd: path.resolve(__dirname, '..', '..'), timeout: 30000 }, function() {});
+  } catch (e) { log('Forecast/alerts error: ' + e.message); }
+
   STATE.lastRun = Date.now();
   saveState();
   var elapsed = Math.round((Date.now() - start) / 1000);

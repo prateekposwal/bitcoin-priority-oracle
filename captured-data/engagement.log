@@ -172,3 +172,14 @@ ModuleNotFoundError: No module named 'seen_state'
 [2026-07-31 15:36:58] RUN: scheduler.py 
 [2026-07-31 15:37:59] [21:07:59] [Scheduler] === Cycle complete ===
 [2026-07-31 15:37:59] === Cycle complete ===
+[2026-07-31 16:28:21] === Engagement cycle ===
+[2026-07-31 16:28:22] RUN: reply-engine.py 
+[2026-07-31 16:28:22] Feedback: {"fees":0.3342733294522798,"mempool":0.04128318574017713,"blocks":0.18777825759622846,"lightning":0.18777825759622846,"n
+[2026-07-31 16:30:04] Replies today: 3
+[2026-07-31 16:30:04] RUN: comment-engine.py 8
+[2026-07-31 16:30:08] Cycle done. Comments today: 6/50
+[2026-07-31 16:30:08] RUN: engage-engine.py 3 3
+[2026-07-31 16:30:10] Cycle done. LinkedIn: 0/3, Medium: 0/3
+[2026-07-31 16:30:10] RUN: scheduler.py 
+[2026-07-31 16:31:55] [22:01:55] [Scheduler] === Cycle complete ===
+[2026-07-31 16:31:55] === Cycle complete ===

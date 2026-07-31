@@ -1,0 +1,101 @@
+{
+  "ok": true,
+  "error": null,
+  "blockchain": {
+    "chain": "main",
+    "blocks": 526886,
+    "headers": 960434,
+    "bestBlockHash": "00000000000000000032688740df8fc4e420dfff5a0e60d90102bfe4b3080f68",
+    "difficulty": 4940704885521.827,
+    "sizeOnDisk": 1370073574,
+    "pruned": true,
+    "pruneHeight": 526046,
+    "verificationProgress": 0.2171248263405066
+  },
+  "mempool": {
+    "size": 0,
+    "bytes": 0,
+    "usage": 0,
+    "maxmempool": 5000000,
+    "mempoolminfee": 0.00001
+  },
+  "blocks": [
+    {
+      "height": 526886,
+      "hash": "00000000000000000032688740df8fc4e420dfff5a0e60d90102bfe4b3080f68",
+      "time": 1528659077,
+      "txCount": 2316,
+      "size": 1480741,
+      "weight": 3997933,
+      "avgFee": 3949,
+      "avgFeeRate": 9,
+      "maxFee": 585000,
+      "minFee": 226,
+      "medFee": 0,
+      "feePercentiles": [
+        5,
+        5,
+        5,
+        6,
+        8
+      ],
+      "subsidy": 1250000000,
+      "totalFee": 9143178,
+      "totalOut": 1248114074953,
+      "utxoSizeInc": -209714,
+      "outputs": 5155
+    },
+    {
+      "height": 526885,
+      "hash": "0000000000000000002b20a36640411abfeb0e672d1a17e408d4d56afaf229d9",
+      "time": 1528658839,
+      "txCount": 1558,
+      "size": 1330095,
+      "weight": 3993165,
+      "avgFee": 15557,
+      "avgFeeRate": 24,
+      "maxFee": 1310200,
+      "minFee": 284,
+      "medFee": 0,
+      "feePercentiles": [
+        8,
+        8,
+        10,
+        12,
+        100
+      ],
+      "subsidy": 1250000000,
+      "totalFee": 24222839,
+      "totalOut": 1718071572371,
+      "utxoSizeInc": -247116,
+      "outputs": 4046
+    },
+    {
+      "height": 526884,
+      "hash": "00000000000000000034ea84eb327ab62d4742632f2e3c28329be0620cad2d1c",
+      "time": 1528658021,
+      "txCount": 2074,
+      "size": 1380506,
+      "weight": 3993059,
+      "avgFee": 11068,
+      "avgFeeRate": 22,
+      "maxFee": 6082006,
+      "minFee": 199,
+      "medFee": 0,
+      "feePercentiles": [
+        5,
+        6,
+        8,
+        10,
+        31
+      ],
+      "subsidy": 1250000000,
+      "totalFee": 22944541,
+      "totalOut": 1649887882206,
+      "utxoSizeInc": -106454,
+      "outputs": 5398
+    }
+  ],
+  "peerCount": 8,
+  "elapsed": 15545
+}

@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-07-31T15:36:57.906Z",
+  "updated_at": "2026-07-31T16:30:04.603Z",
   "pages": {
     "reddit-search:fees": {
       "last_scanned": "2026-07-31T15:35:13.529Z",
@@ -95,6 +95,48 @@
       "last_seen": "2026-07-31T15:36:57.906Z",
       "action": "discovered",
       "attempts": 0
+    },
+    "reply-check:/r/bitcoinismoney/comments/1vbny5q/blocks_are_full_here_is_what_the_data_says/p0whef6/?context=3": {
+      "first_seen": "2026-07-31T16:28:28.109Z",
+      "last_seen": "2026-07-31T16:28:41.357Z",
+      "action": "failed",
+      "attempts": 1
+    },
+    "reply-check:/r/bitcoinismoney/comments/1vbny5q/blocks_are_full_here_is_what_the_data_says/p0vphqf/?context=3": {
+      "first_seen": "2026-07-31T16:28:41.549Z",
+      "last_seen": "2026-07-31T16:28:55.649Z",
+      "action": "failed",
+      "attempts": 1
+    },
+    "reply-check:/r/bitcoinismoney/comments/1vbny5q/blocks_are_full_here_is_what_the_data_says/p0vpfcz/?context=3": {
+      "first_seen": "2026-07-31T16:28:55.739Z",
+      "last_seen": "2026-07-31T16:29:09.304Z",
+      "action": "failed",
+      "attempts": 1
+    },
+    "reply-check:/r/bitcoinismoney/comments/1vbny5q/blocks_are_full_here_is_what_the_data_says/p0vfkor/?context=3": {
+      "first_seen": "2026-07-31T16:29:09.370Z",
+      "last_seen": "2026-07-31T16:29:22.665Z",
+      "action": "failed",
+      "attempts": 1
+    },
+    "reply-check:/r/bitcoinismoney/comments/1vbny5q/blocks_are_full_here_is_what_the_data_says/p0v2cxc/?context=3": {
+      "first_seen": "2026-07-31T16:29:22.734Z",
+      "last_seen": "2026-07-31T16:29:35.785Z",
+      "action": "failed",
+      "attempts": 1
+    },
+    "reply-check:/r/bitcoinismoney/comments/1vbny5q/blocks_are_full_here_is_what_the_data_says/p0urz1n/?context=3": {
+      "first_seen": "2026-07-31T16:29:35.845Z",
+      "last_seen": "2026-07-31T16:29:49.221Z",
+      "action": "failed",
+      "attempts": 1
+    },
+    "reply-check:/r/Bitcoin/comments/1vbnntr/blocks_are_full_here_is_what_the_data_says/p0ungop/?context=3": {
+      "first_seen": "2026-07-31T16:29:49.296Z",
+      "last_seen": "2026-07-31T16:30:04.601Z",
+      "action": "failed",
+      "attempts": 1
     }
   }
 }

@@ -1,8 +1,8 @@
 {
   "source": "lightning",
-  "lastCycleTs": "2026-07-31_20-23-53",
-  "lastEnqueuedAt": "2026-07-31T14:53:54.304Z",
-  "lastSeen": "2026-07-31T14:53:54.304Z",
+  "lastCycleTs": "2026-07-31_22-13-00",
+  "lastEnqueuedAt": "2026-07-31T16:43:01.095Z",
+  "lastSeen": "2026-07-31T16:43:01.095Z",
   "expectedIntervalMinutes": 10,
   "status": "healthy",
   "missedCycles": 0,

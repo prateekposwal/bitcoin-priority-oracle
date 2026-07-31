@@ -299,6 +299,25 @@ Spool.prototype.resolve = function(source, day) {
   });
 };
 
+Spool.prototype.dequeueById = function(id, opts) {
+  var self = this;
+  opts = opts || {};
+  return new Promise(function(resolve) {
+    var entry = self.entries.get(id);
+    if (!entry) return resolve(null);
+    if (self.acked.has(id) || self.dead.has(id)) return resolve(null);
+    if (self.leases.has(id)) return resolve(null);
+    var holder = opts.consumer || 'default';
+    var leasedAt = new Date().toISOString();
+    var expiresAt = new Date(Date.now() + self.cfg.leaseTtlMs).toISOString();
+    var attempts = 1;
+    self._append(self.leasesFile, { id: id, holder: holder, leasedAt: leasedAt, expiresAt: expiresAt }, { fsync: self.cfg.fsync });
+    self.leases.set(id, { holder: holder, leasedAt: leasedAt, expiresAt: expiresAt, attempts: attempts });
+    entry.attempts = attempts;
+    resolve(entry);
+  });
+};
+
 Spool.prototype.consume = function(source, day, handler, opts) {
   var self = this;
   opts = opts || {};
@@ -317,8 +336,8 @@ Spool.prototype.consume = function(source, day, handler, opts) {
       function next() {
         if (idx >= pending.length) return resolve({ source: source, day: day, processed: processed, failed: failed });
         var entry = pending[idx++];
-        self.dequeue(source, { consumer: opts.consumer || 'consume' }).then(function(deq) {
-          if (!deq || deq.id !== entry.id) {
+        self.dequeueById(entry.id, { consumer: opts.consumer || 'consume' }).then(function(deq) {
+          if (!deq) {
             self._expireLeases();
             return next();
           }
@@ -367,12 +386,18 @@ Spool.prototype.stats = function() {
       if (self.acked.has(entry.id) || self.dead.has(entry.id) || self.leases.has(entry.id)) return;
       if (!oldest || entry.seq < oldest.seq) oldest = entry;
     });
+    var activeLeases = 0;
+    self.leases.forEach(function(lease, id) {
+      if (self.acked.has(id) || self.dead.has(id)) return;
+      if (!self.entries.has(id)) return;
+      activeLeases++;
+    });
     var totals = {
       enqueued: self.entries.size,
       acked: self.acked.size,
       dead: self.dead.size,
-      leased: self.leases.size,
-      pending: self.entries.size - self.acked.size - self.dead.size - self.leases.size,
+      leased: activeLeases,
+      pending: self.entries.size - self.acked.size - self.dead.size - activeLeases,
       duplicates: self.totals.duplicates
     };
     var accountingOk = totals.enqueued === totals.acked + totals.dead + totals.leased + totals.pending;

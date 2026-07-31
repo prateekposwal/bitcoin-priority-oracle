@@ -1,6 +1,6 @@
 var { makeValidator, isObj, isInt, isNum } = require('./helpers.js');
 
-var schema = { name: 'capture.difficulty', source: 'difficulty', major: 1, minor: 0, protocolDoc: 'docs/protocols/difficulty.md' };
+var schema = { name: 'capture.difficulty', source: 'difficulty', major: 1, minor: 1, protocolDoc: 'docs/protocols/difficulty.md' };
 
 function validate(data) {
   if (!isObj(data)) return { ok: false, reasons: ['must be object'] };

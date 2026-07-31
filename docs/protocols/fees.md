@@ -3,8 +3,10 @@
 **Status:** ACTIVE
 **Source URL:** `https://mempool.space/api/v1/fees/recommended`
 **Cadence:** 60 minutes (`expectedIntervalMinutes`)
-**Schema:** `capture.fees @ 1.0`
+**Schema:** `capture.fees @ 1.1`
 **Validator:** `tools/data-engineering/schemas/fees.js`
+
+Schema 1.1: validators accept numeric strings (mempool.space intermittently string-types fees).
 
 ## Response shape (real sample)
 

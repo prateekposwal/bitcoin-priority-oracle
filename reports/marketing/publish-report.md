@@ -1,5 +1,5 @@
 # BSAHI Publishing Report
-Generated: 2026-07-30 23:19:30 UTC
+Generated: 2026-07-31 16:43:28 UTC
 
 ## Identity
 - Public key: b4bc93933169b6a288d08a2599832f05ff6b3a72a801a60b5266a29295bcaedc
@@ -7,19 +7,22 @@ Generated: 2026-07-30 23:19:30 UTC
 - Profile: https://snort.social/p/b4bc93933169b6a288d08a2599832f05ff6b3a72a801a60b5266a29295bcaedc
 
 ## Summary
-- Total posts: 8
-- Total cycles: 4
+- Total posts: 20
+- Total cycles: 7
 - Relays: 6
 
 ## Posts by Platform
-- nostr: 8
+- nostr: 15
+- reddit: 2
+- medium: 2
+- linkedin: 1
 
 ## Recent Posts
-- [nostr] fee — 2026-07-30 | [view](https://snort.social/e/d852be78d9f01812f19020d407083752acdf2e7daa4c02faa3f196c39f70022c)
-- [nostr] fee — 2026-07-30 | [view](https://snort.social/e/75541bcf880289859a47e6ce47f57c2d15f80fdaab779c2f6fb5a2acfc8baaf6)
-- [nostr] fee — 2026-07-30 | [view](https://snort.social/e/540add211ff12c01b40fd641ff6af3cde9f5c8ae3bbb5dddab052360cffacb7d)
-- [nostr] fee — 2026-07-30 | [view](https://snort.social/e/df6d8d5f3dc5fca2c524b64156ea91aa0ee043d07ac0270e0f73d45ec802b27b)
-- [nostr] fee — 2026-07-30 | [view](https://snort.social/e/a3068bda14227409c9824d3bd653c62b37d778a7cd0df1164a6a506cf7b8f959)
+- [nostr] storage — 2026-07-31 | [view](https://snort.social/e/7b0bc1148465bfa8add30c81b3409a26d61c184319bfe82fbe754f3822787fca)
+- [nostr] storage — 2026-07-31 | [view](https://snort.social/e/96a2dd2d420821ded7f18202cde87f7165a0bce446c939d770cb2ce56f85de7d)
+- [medium] network-state — 2026-07-31 | [view](https://snort.social/e/undefined)
+- [linkedin] network-state — 2026-07-31 | [view](https://snort.social/e/undefined)
+- [medium] network-state — 2026-07-31 | [view](https://snort.social/e/undefined)
 
 ---
-*BSAHI Autonomous Publishing Agent — 8 posts, 4 cycles*
+*BSAHI Autonomous Publishing Agent — 20 posts, 7 cycles*

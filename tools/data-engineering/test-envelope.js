@@ -115,7 +115,7 @@ test('wrapAndValidate marks provenance', function() {
   var r = vc.wrapAndValidate('fees', { status: 200, data: { fastestFee: 1, halfHourFee: 1, hourFee: 1, economyFee: 1, minimumFee: 1 }, fetchedAt: '2026-07-31T00:00:00.000Z' }, { cycleTs: '2026-07-31_00-00-00' });
   assert.ok(r.ok);
   assert.ok(r.payload.env.provenance.validated);
-  assert.ok(r.payload.env.provenance.validatedBy.indexOf('capture.fees@1.0') === 0);
+  assert.ok(r.payload.env.provenance.validatedBy.indexOf('capture.fees@1.') === 0);
 });
 
 test('wrapAndValidate flags violation', function() {

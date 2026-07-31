@@ -1,5 +1,13 @@
-function isInt(v) { return typeof v === 'number' && Number.isInteger(v); }
-function isNum(v) { return typeof v === 'number' && isFinite(v); }
+function isInt(v) {
+  if (typeof v === 'number') return Number.isInteger(v);
+  if (typeof v === 'string' && v.trim() !== '') return Number.isInteger(Number(v));
+  return false;
+}
+function isNum(v) {
+  if (typeof v === 'number') return isFinite(v);
+  if (typeof v === 'string' && v.trim() !== '') return isFinite(Number(v));
+  return false;
+}
 function isStr(v) { return typeof v === 'string'; }
 function isBool(v) { return typeof v === 'boolean'; }
 function isArr(v) { return Array.isArray(v); }

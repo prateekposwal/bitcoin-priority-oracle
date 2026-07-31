@@ -10,7 +10,7 @@ function validate(source, payload) {
   if (!entry) return { ok: false, reasons: ['no schema registered for source: ' + source] };
   if (!payload) return { ok: false, reasons: ['null payload'] };
   var data = payload.data !== undefined ? payload.data : payload;
-  if (payload.error !== undefined || (payload.status !== undefined && payload.status === 0) ||
+  if (payload.error !== undefined || (payload.status !== undefined && (payload.status === 0 || payload.status >= 400)) ||
       data === null || data === undefined) {
     return { ok: true, reasons: [], isError: true };
   }

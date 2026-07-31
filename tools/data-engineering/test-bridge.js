@@ -44,7 +44,7 @@ test('B1 envelope adoption — valid file wrapped and validated', function() {
   }).then(function(entries) {
     assert.strictEqual(entries.length, 1);
     assert.strictEqual(entries[0].payload.env.magic, 'BSAHI-CAPTURE');
-    assert.strictEqual(entries[0].payload.env.provenance.validatedBy, 'capture.fees@1.0');
+    assert.ok(entries[0].payload.env.provenance.validatedBy.indexOf('capture.fees@1.') === 0);
     assert.strictEqual(entries[0].payload.data.fastestFee, 1);
   });
 });

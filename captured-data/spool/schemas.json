@@ -1,12 +1,12 @@
 {
-  "generatedAt": "2026-07-31T15:29:02.410Z",
+  "generatedAt": "2026-07-31T16:43:51.328Z",
   "count": 13,
   "schemas": [
     {
       "name": "capture.fees",
       "source": "fees",
       "major": 1,
-      "minor": 0,
+      "minor": 1,
       "protocolDoc": "docs/protocols/fees.md"
     },
     {
@@ -90,7 +90,7 @@
       "name": "capture.difficulty",
       "source": "difficulty",
       "major": 1,
-      "minor": 0,
+      "minor": 1,
       "protocolDoc": "docs/protocols/difficulty.md"
     }
   ]

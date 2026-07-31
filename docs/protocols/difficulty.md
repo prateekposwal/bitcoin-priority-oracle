@@ -3,7 +3,7 @@
 **Status:** ACTIVE
 **Source URL:** `https://mempool.space/api/v1/difficulty-adjustment`
 **Cadence:** 60 minutes (`expectedIntervalMinutes`)
-**Schema:** `capture.difficulty @ 1.0`
+**Schema:** `capture.difficulty @ 1.1`
 **Validator:** `tools/data-engineering/schemas/difficulty.js`
 
 ## Response shape (real sample)

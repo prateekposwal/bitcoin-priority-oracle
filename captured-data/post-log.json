@@ -191,7 +191,27 @@
       "author": "BSAHI",
       "postedAt": "2026-07-31T11:56:03.397Z",
       "contentPreview": "Bitcoin Network State: 2026-07-31 (full article)"
+    },
+    {
+      "id": "BSAHI-MS95WS9U-PCW1",
+      "platform": "nostr",
+      "topic": "storage",
+      "eventId": "96a2dd2d420821ded7f18202cde87f7165a0bce446c939d770cb2ce56f85de7d",
+      "confirmedRelays": 4,
+      "totalRelays": 6,
+      "postedAt": "2026-07-31T16:34:04.151Z",
+      "contentPreview": "The Storage Cost Coverage Ratio: Do Bitcoin Fees Cover Node Costs?\n\n## A Simple Question\n\nBitcoin tr"
+    },
+    {
+      "id": "BSAHI-MS95WYP4-9HUJ",
+      "platform": "nostr",
+      "topic": "storage",
+      "eventId": "7b0bc1148465bfa8add30c81b3409a26d61c184319bfe82fbe754f3822787fca",
+      "confirmedRelays": 4,
+      "totalRelays": 6,
+      "postedAt": "2026-07-31T16:43:26.148Z",
+      "contentPreview": "The Storage Cost Coverage Ratio: Do Bitcoin Fees Cover Node Costs?\n\n## A Simple Question\n\nBitcoin tr"
     }
   ],
-  "cycles": 4
+  "cycles": 7
 }
