@@ -190,25 +190,33 @@ def post_medium(title, body):
     osa('tell application "Google Chrome" to set URL of active tab of front window to "https://medium.com/new-story"')
     time.sleep(8)
 
-    # Fill the editor (title + body) via real selection + beforeinput
+    # Fill title (editor 0) + body (editor 1) via real selection + beforeinput
     fill_js = f"""
     (function() {{
-      var editor = document.querySelector('[contenteditable="true"]');
-      if (!editor) return 'NO_EDITOR';
-      editor.focus();
-      var title = {json.dumps(title)};
-      var body = {json.dumps(body)};
-      editor.dispatchEvent(new InputEvent('beforeinput', {{ bubbles:true, cancelable:true, inputType:'insertText', data:title }}));
-      document.execCommand('insertText', false, title);
-      // newline + body
-      editor.dispatchEvent(new InputEvent('beforeinput', {{ bubbles:true, cancelable:true, inputType:'insertParagraph', data:null }}));
-      document.execCommand('insertText', false, body);
-      return 'filled';
+      var editors = document.querySelectorAll('[contenteditable="true"]');
+      if (editors.length < 2) return 'NEED_2_EDITORS:' + editors.length;
+      var out = [];
+      function fillEditor(el, text) {{
+        el.focus();
+        var tn = el.firstChild || document.createTextNode('');
+        if (!el.firstChild) el.appendChild(tn);
+        var r = document.createRange();
+        r.setStart(tn, 0); r.collapse(true);
+        var s = window.getSelection();
+        s.removeAllRanges(); s.addRange(r);
+        document.execCommand('selectAll', false, null);
+        el.dispatchEvent(new InputEvent('beforeinput', {{ bubbles:true, cancelable:true, inputType:'insertText', data:text }}));
+        document.execCommand('insertText', false, text);
+      }}
+      fillEditor(editors[0], {json.dumps(title)});
+      fillEditor(editors[1], {json.dumps(body)});
+      out.push('title=' + (editors[0].innerText||'').slice(0,15));
+      out.push('bodyLen=' + (editors[1].innerText||'').length);
+      return out.join(' || ');
     }})()
     """
     print("Fill:", run_js(fill_js))
     time.sleep(2)
-    # Close tab (Medium has more complex publish flow; leave draft)
     result = run_js("location.href")
     osa('tell application "Google Chrome" to close active tab of front window')
     return result
