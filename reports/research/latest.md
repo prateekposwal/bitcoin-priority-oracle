@@ -1,5 +1,5 @@
 # Research Agent Report — 2026-07-31
-Cycle: 7 | Generated: 2026-07-31 15:08:18 UTC
+Cycle: 8 | Generated: 2026-07-31 19:47:07 UTC
 
 ## Summary
 
@@ -21,21 +21,21 @@ Cycle: 7 | Generated: 2026-07-31 15:08:18 UTC
 
 - LND latest: v0.20.2-beta
 - CLN latest: v26.06.6
-- LN Network: 17408 nodes, 40639 channels, 4788.8 BTC capacity
+- LN Network: 17219 nodes, 39133 channels, 4467.6 BTC capacity
 
 ## APIs & Data Sources
 
 - Data source health: 4/4 endpoints responding
 - Mempool blocks: 8 blocks in queue
 - Last mempool block fee range: N/A sat/vB
-- Difficulty adjustment: -2.0%
-- Blocks until next adjustment: 1216
+- Difficulty adjustment: -0.9%
+- Blocks until next adjustment: 1179
 
 ## Blockchain General
 
 - Trending Bitcoin repos: bitcoinbook/bitcoinbook, UFund-Me/Qbot, solana-labs/solana
 - DeFiLlama Bitcoin data: 1960 data points
-- BTC: $62,613 (24h: -3.20%)
+- BTC: $62,930 (24h: -2.86%)
 
 ## Academic Research
 

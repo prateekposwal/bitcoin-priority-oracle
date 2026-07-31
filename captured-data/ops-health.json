@@ -1,8 +1,9 @@
 {
-  "generated_at": "2026-07-31T19:06:41.820Z",
+  "generated_at": "2026-07-31T20:02:47.343Z",
   "status": "DEGRADED",
   "issues": [
-    "SPOOL: stale sources: block_height,block_interval,blockchair,blocks,btc_price,btc_rpc,coinpaprika,derived_metrics,difficulty,fear_greed,fee_history,fees,lightning,mempool,mempool_blocks,mining_pools,research_findings"
+    "SPOOL: stale sources: block_height,block_interval,blockchair,blocks,btc_price,btc_rpc,coinpaprika,derived_metrics,difficulty,fear_greed,fee_history,fees,lightning,mempool,mempool_blocks,mining_pools,research_findings",
+    "DE SERVER: unhealthy"
   ],
   "checks": {
     "spool": {
@@ -12,20 +13,20 @@
       "stale": 17
     },
     "de_server": {
-      "ok": true,
-      "status": 200,
-      "agent": "running"
+      "ok": false,
+      "status": 0,
+      "agent": null
     },
     "de_agent": {
-      "lastRunAgeMin": 40
+      "lastRunAgeMin": 50
     },
     "orchestrator": {
-      "heartbeatAgeMin": 14,
+      "heartbeatAgeMin": 15,
       "phase": "cycle-complete"
     },
     "db": {
       "errorRatioPct": 2,
-      "total": 3020
+      "total": 3037
     }
   }
 }

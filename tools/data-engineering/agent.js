@@ -131,6 +131,11 @@ async function runCycle() {
           STATE.discoveredSources = unknown;
           for (var i = 0; i < unknown.length && i < CONFIG.discovery.maxNewSources; i++) {
             var src = unknown[i];
+            // S3/flagged: belt-and-suspenders gate — only high-confidence api sources stage.
+            if (!(src.confidence >= 0.7) || src.type !== 'api') {
+              log('  SKIP (not stageable): ' + (src.name || src.url) + ' type=' + src.type + ' conf=' + src.confidence);
+              continue;
+            }
             var endpoint = { key: src.key || src.name.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/_+/g, '_').replace(/^_|_$/g, ''), url: src.url, name: src.name, type: src.type, category: src.category || 'discovered' };
             log('  Testing: ' + endpoint.name + ' (' + endpoint.url + ')');
             var testResult = await integrate.testEndpoint(endpoint);
@@ -152,10 +157,11 @@ async function runCycle() {
   if (quality.score < 60) STATE.issues.push('Data quality score below 60 (' + quality.score + ')');
   if (freshness && freshness.sources) {
     var staleCount = 0;
+    var staleThreshold = require('./config.js').staleAfterMinutes();
     for (var k in freshness.sources) {
-      if (freshness.sources[k] && freshness.sources[k].ageMinutes > CONFIG.monitoring.freshnessMaxAgeMinutes) staleCount++;
+      if (freshness.sources[k] && freshness.sources[k].ageMinutes > staleThreshold) staleCount++;
     }
-    if (staleCount > 0) STATE.issues.push(staleCount + ' sources stale (>' + CONFIG.monitoring.freshnessMaxAgeMinutes + 'min old)');
+    if (staleCount > 0) STATE.issues.push(staleCount + ' sources stale (>' + staleThreshold + 'min old)');
   }
 
   // Step 6: Generate reports
@@ -185,10 +191,8 @@ async function runCycle() {
       if (STATE.cycleCount % 4 === 0) {
         try {
           log('Generating research digest...');
-          digest.generateLinkedInPost();
-          digest.generateTweetThread();
-          digest.generateRedditPost();
-          log('Digest saved to reports/digest/');
+          digest.saveDigest();
+          log('Digest saved to reports/digest/reddit-' + new Date().toISOString().slice(0, 10) + '.md');
         } catch (e) { log('Digest error: ' + e.message); }
       } else {
         try {
@@ -203,9 +207,7 @@ async function runCycle() {
             });
             if (newest && (Date.now() - newest.mtimeMs) > 30 * 3600 * 1000) {
               log('Digest stale (>30h) — regenerating');
-              digest.generateLinkedInPost();
-              digest.generateTweetThread();
-              digest.generateRedditPost();
+              digest.saveDigest();
             }
           }
         } catch (e) { log('Digest staleness check error: ' + e.message); }

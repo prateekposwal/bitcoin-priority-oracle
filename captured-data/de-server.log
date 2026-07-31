@@ -385,3 +385,13 @@ DE Agent auto-started (AUTO_START)
 [DE Agent 2026-07-31 19:12:54] Alert dispatcher: forecast + alerts + index self-heal
 [DE Agent 2026-07-31 19:12:54] Cycle 27 complete in 130s
 [DE Agent 2026-07-31 19:12:54] ISSUES: 2 endpoints unhealthy | 17 sources stale (>30min old)
+DE Server running on http://localhost:3456
+[DE Agent 2026-07-31 20:02:40] Starting — Data Engineer v1
+[DE Agent 2026-07-31 20:02:40] Cycle interval: 60 minutes
+[DE Agent 2026-07-31 20:02:40] Endpoints: 13
+[DE Agent 2026-07-31 20:02:40] Cycle 28 started
+[DE Agent 2026-07-31 20:02:40] Checking 13 endpoints...
+DE Agent auto-started (AUTO_START)
+[DE Agent 2026-07-31 20:02:49] Endpoints: 12/13 healthy, 1 unhealthy
+[DE Agent 2026-07-31 20:02:50] Freshness checked
+[DE Agent 2026-07-31 20:02:50] Spool: scanned=185 new=1 ingested=1 validated=13 violated=0 failed=0

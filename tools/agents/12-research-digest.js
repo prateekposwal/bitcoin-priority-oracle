@@ -192,20 +192,14 @@ function saveDigest() {
   ensureDir(OUT_DIR);
   var date = new Date().toISOString().slice(0, 10);
 
-  var linkedin = generateLinkedInPost();
-  fs.writeFileSync(path.join(OUT_DIR, 'linkedin-' + date + '.md'), linkedin);
-
-  var tweets = generateTweetThread();
-  fs.writeFileSync(path.join(OUT_DIR, 'twitter-' + date + '.md'), tweets.join('\n\n---\n\n'));
-
+  // LinkedIn/Twitter legs retired (docs/decisions/2026-07-31-engagement.md).
+  // Reddit digest is the live leg — persisted to disk.
   var reddit = generateRedditPost();
-  fs.writeFileSync(path.join(OUT_DIR, 'reddit-' + date + '.md'), reddit);
+  var redditPath = path.join(OUT_DIR, 'reddit-' + date + '.md');
+  fs.writeFileSync(redditPath, reddit);
 
-  console.log('Digest saved to ' + OUT_DIR);
-  console.log('  linkedin-' + date + '.md');
-  console.log('  twitter-' + date + '.md');
-  console.log('  reddit-' + date + '.md');
+  console.log('Digest saved to ' + redditPath);
 }
 
 if (require.main === module) { saveDigest(); }
-module.exports = { generateLinkedInPost: generateLinkedInPost, generateTweetThread: generateTweetThread, generateRedditPost: generateRedditPost };
+module.exports = { generateLinkedInPost: generateLinkedInPost, generateTweetThread: generateTweetThread, generateRedditPost: generateRedditPost, saveDigest: saveDigest };

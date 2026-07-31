@@ -116,7 +116,8 @@ function createCaptureAgent(opts) {
       inFlight: false,
       consecutiveFails: 0,
       recoveryCountdown: 0,
-      missedCycles: 0
+      missedCycles: 0,
+      expectedIntervalMinutes: cfg.baseIntervalMinutes || 60
     };
     state.tasks[source] = task;
     spool.cursor(source).then(function(cur) {
@@ -165,7 +166,7 @@ function createCaptureAgent(opts) {
       return validate.quarantine(spool, wr.payload, wr.reasons)
         .then(function() {
           validate.logViolation(source, cycleTs, wr.reasons, 'capture-agent', null);
-          return spool.updateCursor(source, cycleTs, new Error('schemaViolation: ' + wr.reasons.join('; ')), { advance: false, missedCycles: task.missedCycles + 1 });
+          return spool.updateCursor(source, cycleTs, new Error('schemaViolation: ' + wr.reasons.join('; ')), { advance: false, missedCycles: task.missedCycles + 1, expectedIntervalMinutes: task.expectedIntervalMinutes });
         })
         .then(function() { return { status: 'violated', source: source }; });
     }
@@ -174,7 +175,7 @@ function createCaptureAgent(opts) {
       task.recoveryCountdown = 0;
       return spool.enqueue(source, wr.payload, { captureTime: cycleTs, day: cycleTs.slice(0, 10), producer: 'capture-agent' })
         .then(function() {
-          return spool.updateCursor(source, cycleTs, new Error(capture.error || 'fetch failed'), { advance: false, missedCycles: task.missedCycles + 1 });
+          return spool.updateCursor(source, cycleTs, new Error(capture.error || 'fetch failed'), { advance: false, missedCycles: task.missedCycles + 1, expectedIntervalMinutes: task.expectedIntervalMinutes });
         })
         .then(function() { return { status: 'errored', source: source }; });
     }
@@ -184,7 +185,7 @@ function createCaptureAgent(opts) {
     return spool.enqueue(source, wr.payload, { captureTime: cycleTs, day: cycleTs.slice(0, 10), producer: 'capture-agent' })
       .then(function() {
         task.missedCycles = 0;
-        return spool.updateCursor(source, cycleTs);
+        return spool.updateCursor(source, cycleTs, null, { expectedIntervalMinutes: task.expectedIntervalMinutes });
       })
       .then(function() { return { status: 'captured', source: source }; });
   }
@@ -225,6 +226,10 @@ function createCaptureAgent(opts) {
       }).then(function(r) {
         results[r.status] = (results[r.status] || 0) + 1;
         var degraded = task.consecutiveFails > 0;
+        // S3b: stamp the ACTUAL schedule into the cursor — degraded interval is 2x.
+        var currentInterval = cfg.baseIntervalMinutes || 60;
+        if (degraded) currentInterval = currentInterval * degradedMul;
+        task.expectedIntervalMinutes = currentInterval;
         task.nextRunAt = now().getTime() + computeBackoff(degraded, task.recoveryCountdown);
         if (task.recoveryCountdown > 0) task.recoveryCountdown--;
         return r;

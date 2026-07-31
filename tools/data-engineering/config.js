@@ -28,6 +28,7 @@ var CONFIG = {
   monitoring: {
     checkIntervalMinutes: 15,
     freshnessMaxAgeMinutes: 30,
+    staleAfterMinutes: 0,
     errorThreshold: 5,
     latencyWarningMs: 3000,
     reportOnFailure: true,
@@ -64,4 +65,9 @@ var CONFIG = {
   ],
 };
 
-if (typeof module !== 'undefined') module.exports = { CONFIG };
+function staleAfterMinutes() {
+  if (CONFIG.monitoring.staleAfterMinutes > 0) return CONFIG.monitoring.staleAfterMinutes;
+  return Math.max(2 * (CONFIG.capture.baseIntervalMinutes || CONFIG.agent.cycleMinutes || 60), 30);
+}
+
+if (typeof module !== 'undefined') module.exports = { CONFIG, staleAfterMinutes };

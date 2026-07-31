@@ -1,29 +1,29 @@
 {
   "version": 1,
-  "updated_at": "2026-07-31T17:43:00.717Z",
+  "updated_at": "2026-07-31T19:46:07.511Z",
   "pages": {
     "reddit-search:fees": {
-      "last_scanned": "2026-07-31T15:35:13.529Z",
+      "last_scanned": "2026-07-31T19:43:16.990Z",
       "hits": 0
     },
     "reddit-search:mempool": {
-      "last_scanned": "2026-07-31T15:35:24.044Z",
+      "last_scanned": "2026-07-31T19:43:33.725Z",
       "hits": 0
     },
     "reddit-search:lightning": {
-      "last_scanned": "2026-07-31T15:35:32.822Z",
+      "last_scanned": "2026-07-31T19:43:47.994Z",
       "hits": 0
     },
     "reddit-search:node costs": {
-      "last_scanned": "2026-07-31T15:35:42.786Z",
+      "last_scanned": "2026-07-31T19:43:58.195Z",
       "hits": 0
     },
     "reddit-search:transaction": {
-      "last_scanned": "2026-07-31T15:36:02.224Z",
+      "last_scanned": "2026-07-31T19:44:08.224Z",
       "hits": 0
     },
     "reddit-search:block": {
-      "last_scanned": "2026-07-31T15:36:12.663Z",
+      "last_scanned": "2026-07-31T19:44:45.841Z",
       "hits": 0
     },
     "linkedin-feed:home": {
@@ -136,6 +136,18 @@
       "first_seen": "2026-07-31T16:29:49.296Z",
       "last_seen": "2026-07-31T16:30:04.601Z",
       "action": "failed",
+      "attempts": 1
+    },
+    "reddit-thread:https://www.reddit.com/r/Bitcoin/comments/1v8p56r/does_bitcoins_fee_market_price_permanence_or_just/": {
+      "first_seen": "2026-07-31T19:44:57.045Z",
+      "last_seen": "2026-07-31T19:44:57.045Z",
+      "action": "attempted",
+      "attempts": 1
+    },
+    "reddit-thread:https://www.reddit.com/r/Bitcoin/comments/1v6r5as/how_are_you_people_ok_with_the_fees_and_expect/": {
+      "first_seen": "2026-07-31T19:46:07.418Z",
+      "last_seen": "2026-07-31T19:46:07.418Z",
+      "action": "attempted",
       "attempts": 1
     }
   }

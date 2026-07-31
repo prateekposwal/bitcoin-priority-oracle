@@ -13,7 +13,7 @@ THRESHOLDS = {
     'fastestFee': {'high': 50, 'low': 1},
     'economyFee': {'high': 20, 'low': 1},
 }
-FRESHNESS_MAX_MIN = 30
+FRESHNESS_MAX_MIN = 120
 
 def latest_from_spool(source, field):
     """Return (value, captureTime) of the newest fee capture in the spool."""

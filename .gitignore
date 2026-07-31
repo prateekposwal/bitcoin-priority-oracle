@@ -21,3 +21,23 @@ captured-data/post-log.json
 captured-data/nostr-key.json
 captured-data/bsahi.db
 captured-data/keys/
+
+# Legacy pre-M3 capture snapshots — regenerable, never commit
+captured-data/2026-*.json
+captured-data/backfill/2026-*/
+captured-data/tracker/2026-*/
+captured-data/btc-rpc/2026-*/
+
+# Spool runtime state — live local state, NOT artifacts (schemas.json IS kept)
+captured-data/spool/queue.jsonl
+captured-data/spool/acks.jsonl
+captured-data/spool/leases.jsonl
+captured-data/spool/history.jsonl
+captured-data/spool/dead-letter.jsonl
+captured-data/spool/corrupt.log
+captured-data/spool/spool-meta.json
+captured-data/spool/ingested.log
+captured-data/spool/schema-violations.log
+captured-data/spool/cursors/
+captured-data/spool/index/
+captured-data/spool/tmp/

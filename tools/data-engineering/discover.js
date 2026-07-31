@@ -4,6 +4,23 @@ var path = require('path');
 
 var discoveredCache = null;
 
+// Discovery allowlist (S3/flagged fix): only known-good Bitcoin data sources may
+// stage. Blocks junk github-repos and random blogs from polluting staging/.
+var ALLOWED_HOSTS = [
+  'mempool.space', 'blockstream.info', 'blockchain.info', 'api.coingecko.com',
+  'api.coindesk.com', 'bitcoinvisuals.com', '1ml.com', 'bitnodes.io', 'lnbits.com',
+  'chain.api.btc.com', 'api.coinpaprika.com', 'api.alternative.me', 'api.blockchair.com',
+  'bitcoinops.org', 'delvingbitcoin.org'
+];
+var MIN_CONFIDENCE = 0.7;
+
+function isStageable(d) {
+  if (!d || typeof d !== 'object') return false;
+  if (d.type !== 'api') return false;
+  if (!(d.confidence >= MIN_CONFIDENCE)) return false;
+  try { return ALLOWED_HOSTS.indexOf(new URL(d.url).hostname) !== -1; } catch (e) { return false; }
+}
+
 var KNOWN_ENDPOINTS = [
   { name: 'Mempool Space', url: 'https://mempool.space/api/', type: 'api', category: 'general' },
   { name: 'Blockstream', url: 'https://blockstream.info/api/', type: 'api', category: 'general' },
@@ -40,38 +57,20 @@ function fetch(url, timeout) {
 
 function searchForNewSources() {
   var discovered = [];
-  var githubUrl = 'https://api.github.com/search/repositories?q=bitcoin+api+data&sort=updated';
-
-  return fetch(githubUrl, 15000)
-    .then(function(ghResult) {
-      if (ghResult.ok && ghResult.body) {
-        try {
-          var json = JSON.parse(ghResult.body);
-          if (json.items && Array.isArray(json.items)) {
-            json.items.forEach(function(item) {
-              discovered.push({
-                name: item.name || 'unknown',
-                url: item.html_url || '',
-                type: 'github-repo',
-                category: 'source',
-                confidence: 0.5,
-                description: (item.description || '').substring(0, 200),
-              });
-            });
-          }
-        } catch (e) {}
-      }
-      return checkKnownEndpoints();
-    })
+  // GitHub repo search removed (S3/flagged): it produced only junk github-repo
+  // entries at confidence 0.5. Discovery is now known-endpoint testing only.
+  return checkKnownEndpoints()
     .then(function(knownResults) {
       knownResults.forEach(function(r) { discovered.push(r); });
+      discovered = discovered.filter(isStageable);
       discoveredCache = discovered.slice();
       return discovered;
     })
     .catch(function() {
       return checkKnownEndpoints().then(function(knownResults) {
-        discoveredCache = knownResults.slice();
-        return knownResults;
+        var filtered = knownResults.filter(isStageable);
+        discoveredCache = filtered.slice();
+        return filtered;
       });
     });
 }
@@ -119,7 +118,7 @@ function getAllDiscovered() {
   var staticList = KNOWN_ENDPOINTS.map(function(ep) {
     return { name: ep.name, url: ep.url, type: ep.type, category: ep.category, confidence: 0.0, description: ep.name + ' API at ' + ep.url };
   });
-  return staticList;
+  return staticList.filter(isStageable);
 }
 
 function findNewEndpoints(currentEndpoints) {
@@ -134,11 +133,11 @@ function findNewEndpoints(currentEndpoints) {
   var newOnes = [];
   all.forEach(function(d) {
     var normalizedUrl = d.url.replace(/\/+$/, '');
-    if (!currentUrls[normalizedUrl]) {
+    if (!currentUrls[normalizedUrl] && isStageable(d)) {
       newOnes.push(d);
     }
   });
   return newOnes;
 }
 
-module.exports = { searchForNewSources: searchForNewSources, testEndpoint: testEndpoint, findNewEndpoints: findNewEndpoints, getAllDiscovered: getAllDiscovered };
+module.exports = { searchForNewSources: searchForNewSources, testEndpoint: testEndpoint, findNewEndpoints: findNewEndpoints, getAllDiscovered: getAllDiscovered, isStageable: isStageable, ALLOWED_HOSTS: ALLOWED_HOSTS, MIN_CONFIDENCE: MIN_CONFIDENCE };

@@ -27,6 +27,17 @@ function idempotentKey(source, captureTime) {
 function Spool(config) {
   EventEmitter.call(this);
   this.cfg = Object.assign({}, DEFAULT_CONFIG, config || {});
+  // S3b: real-time staleness threshold. If not explicitly configured, derive from
+  // the actual capture schedule (2x base interval, floor 30) so healthy sources
+  // on a 60-min cadence are never flagged mid-cycle.
+  if (!(this.cfg.staleAfterMinutes > 0)) {
+    try {
+      var cfgMod = require('./config.js');
+      this.cfg.staleAfterMinutes = (cfgMod.staleAfterMinutes && cfgMod.staleAfterMinutes()) || 120;
+    } catch (e) {
+      this.cfg.staleAfterMinutes = 120;
+    }
+  }
   this.dir = this.cfg.dir;
   this.queueFile = path.join(this.dir, 'queue.jsonl');
   this.acksFile = path.join(this.dir, 'acks.jsonl');
@@ -116,6 +127,7 @@ Spool.prototype._updateCursor = function(source, cycleTs, err, opts) {
     } catch (e) {}
   }
   if (opts.missedCycles !== undefined) cur.missedCycles = opts.missedCycles;
+  if (opts.expectedIntervalMinutes) cur.expectedIntervalMinutes = opts.expectedIntervalMinutes;
   var tmp = path.join(this.tmpDir, source + '.json.tmp');
   fs.writeFileSync(tmp, JSON.stringify(cur, null, 2));
   fs.renameSync(tmp, p);
@@ -401,7 +413,12 @@ Spool.prototype.stats = function() {
         var cur = JSON.parse(fs.readFileSync(curPath, 'utf8'));
         var lastSeen = new Date(cur.lastSeen).getTime();
         var ageMin = (now - lastSeen) / 60000;
-        if (ageMin > self.cfg.staleAfterMinutes) {
+        // S3b: per-source real-time window — a source is stale only after 2x of its
+        // ACTUAL captured schedule (stamped by capture-agent), not a fixed wall clock.
+        var thresh = self.cfg.staleAfterMinutes;
+        var exp = cur.expectedIntervalMinutes || 0;
+        if (exp >= 60) thresh = Math.max(thresh, 2 * exp);
+        if (ageMin > thresh) {
           if (!perSource[s]) perSource[s] = { pending: 0, latest: null };
           perSource[s].stale = true;
           if (stale.indexOf(s) === -1) stale.push(s);

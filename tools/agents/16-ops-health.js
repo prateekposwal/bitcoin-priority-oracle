@@ -105,7 +105,10 @@ function check() {
       try {
         var sender = require('child_process');
         fs.writeFileSync(path.join(REPO, 'tools', 'alerts.json'), JSON.stringify({ alerts: issues.map(function(i) { return '🛡 ' + i; }), timestamp: new Date().toISOString(), source: 'ops-health' }, null, 2));
-        sender.execFile('python3', [path.join(REPO, 'tools', 'webhook_sender.py')], { cwd: REPO, timeout: 30000 }, function() {});
+        sender.execFile('python3', [path.join(REPO, 'tools', 'webhook_sender.py')], { cwd: REPO, timeout: 30000 }, function(err, stdout, stderr) {
+          if (err) log('alert send FAILED: ' + (err.message || '') + ' ' + (stderr || '').trim());
+          else log('alert sent: ' + (stdout || '').trim().split('\n')[0]);
+        });
       } catch (e) { log('alert send error: ' + e.message); }
     } else {
       log('HEALTHY');

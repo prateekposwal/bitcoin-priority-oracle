@@ -39,8 +39,26 @@ function generateDailyQueue() {
   var state = loadState();
   var queued = [];
 
+  // Cross-stack dedupe (S3/flagged): agent 18 consolidates post-log + this queue
+  // + briefs into captured-data/publishing-queue.json. Read it back here to skip
+  // platform/topic pairs already posted today — makes the ledger load-bearing.
+  var postedToday = {};
+  try {
+    var pq = JSON.parse(fs.readFileSync(path.join(__dirname, '..', '..', 'captured-data', 'publishing-queue.json'), 'utf8'));
+    var today = new Date().toISOString().slice(0, 10);
+    if (pq && pq.items) pq.items.forEach(function(it) {
+      if (it.status === 'posted' && it.postedAt && String(it.postedAt).slice(0, 10) === today) {
+        postedToday[it.platform + '|' + it.topic] = true;
+      }
+    });
+  } catch (e) {}
+
   for (var i = 0; i < items.length; i++) {
     var item = items[i];
+    if (postedToday[item.platform + '|' + item.topic]) {
+      log('Queue', 'SKIP (posted today per publishing-queue.json): ' + item.platform + '/' + item.topic);
+      continue;
+    }
     var postId = generatePostId();
     var filename = postId + '.json';
     var post = {

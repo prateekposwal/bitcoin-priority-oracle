@@ -90,7 +90,9 @@ def load_state():
         return {'comments_today': 0, 'day': '', 'commented_threads': [], 'last_comment': 0}
 
 def save_state(s):
-    with open(STATE_FILE, 'w') as f: json.dump(s, f)
+    tmp = STATE_FILE + '.tmp'
+    with open(tmp, 'w') as f: json.dump(s, f)
+    os.replace(tmp, STATE_FILE)
 
 def get_live_data():
     try:
@@ -146,12 +148,15 @@ def score_thread(title):
     if 'node' in topics_hit: score += 1
     return score, topics_hit
 
-def discover_threads():
+def discover_threads(force=False):
     # Batched discovery: ONE tab, only for stale queries, navigates sequentially.
     stale = [q for q in QUERIES if not seen_state.page_fresh('reddit-search', q, DISCOVERY_TTL_MS)]
-    if not stale:
+    if not stale and not force:
         print(f"Gem finder: all {len(QUERIES)} searches fresh (within 4h) — no discovery tabs")
         return []
+    if force:
+        stale = QUERIES[:]
+        print("Gem finder: FORCED discovery pass (last scan yielded no threads)")
     all_threads = []
     osa('tell application "Google Chrome" to make new tab at end of tabs of front window')
     time.sleep(1)
@@ -257,6 +262,12 @@ def run_cycle(target):
 
     data = get_live_data()
     threads = discover_threads()
+    # Forced-refresh fallback: if all searches are fresh AND yielded no threads,
+    # force one discovery pass so a bad scan can't lock out discovery for 4h.
+    if not threads:
+        stale_all = all(seen_state.page_fresh('reddit-search', q, DISCOVERY_TTL_MS) for q in QUERIES)
+        if stale_all:
+            threads = discover_threads(force=True)
     print(f"Gem finder found {len(threads)} relevant threads")
     for t in threads[:8]:
         print(f"  [{t['score']}] {t['title'][:50]} ({','.join(t['topics'])})")
@@ -292,6 +303,31 @@ def run_cycle(target):
     save_state(state)
     print(f"Cycle done. Comments today: {state['comments_today']}/50")
 
+def run_check():
+    """Diagnostic mode: answers 'why 0 comments?' in one command."""
+    print("=== comment-engine --check ===")
+    try:
+        r = subprocess.run(['osascript', '-e', 'tell application "Google Chrome" to get name of front window'], capture_output=True, text=True, timeout=10)
+        print("Chrome reachable:", "YES" if r.returncode == 0 else "NO (" + (r.stderr or '').strip() + ")")
+    except Exception as e:
+        print("Chrome reachable: NO (" + str(e) + ")")
+    try:
+        st = seen_state.stats()
+        print("seen-state:", json.dumps(st))
+    except Exception as e:
+        print("seen-state: error " + str(e))
+    try:
+        data = get_live_data()
+        print("live data:", json.dumps(data))
+    except Exception as e:
+        print("live data: error " + str(e))
+    s = load_state()
+    print("comment-state:", json.dumps(s))
+    print("=== end ===")
+
 if __name__ == '__main__':
-    target = int(sys.argv[1]) if len(sys.argv) > 1 else 5
-    run_cycle(target)
+    if len(sys.argv) > 1 and sys.argv[1] == '--check':
+        run_check()
+    else:
+        target = int(sys.argv[1]) if len(sys.argv) > 1 else 5
+        run_cycle(target)

@@ -1,28 +1,14 @@
 name: Capture Data
 
+# DEPRECATED (M3): superseded by tools/data-engineering/capture-agent.js + spool.
+# Local launchd DE agent is the only capture path. Do not re-enable — the old
+# fire-and-forget capture bypassed the spool and dual-wrote into git.
 on:
-  schedule:
-    - cron: '*/10 * * * *'
   workflow_dispatch:
 
 jobs:
-  capture:
+  noop:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Run capture
-        run: node tools/capture-data.js
-
-      - name: Run block tracker
-        run: node tools/agents/03-block-interval-tracker.js
-
-      - name: Commit and push
-        run: |
-          git config user.name 'Bitcoin Sahi Bot'
-          git config user.email 'bot@bitcoinsahi.com'
-          git add captured-data/
-          git diff --quiet && git diff --staged --quiet || \
-            (git commit -m "data: auto-capture $(date -u '+%Y-%m-%d %H:%M UTC')" && git push)
+      - name: Deprecated
+        run: echo "capture-data.yml DEPRECATED (M3) — superseded by tools/data-engineering/capture-agent.js + spool. Do not re-enable."

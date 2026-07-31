@@ -102,6 +102,13 @@ def osa(script, timeout=15):
 
 # ─── Inbox-driven reply detection ───
 
+def chrome_available():
+    try:
+        r = subprocess.run(['osascript', '-e', 'tell application "Google Chrome" to get name of front window'], capture_output=True, text=True, timeout=10)
+        return r.returncode == 0
+    except Exception:
+        return False
+
 def fetch_inbox():
     """Fetch Reddit inbox JSON via the authenticated browser session."""
     run_js(r'''
@@ -116,6 +123,8 @@ def fetch_inbox():
     ''')
     time.sleep(5)
     raw = run_js('window.__inbox || "none"', timeout=15)
+    if raw in ('ERR', 'TIMEOUT', 'none', 'loading'):
+        return []
     try:
         data = json.loads(raw)
         return data.get('data', {}).get('children', [])
@@ -188,7 +197,10 @@ def run_cycle():
     # 1. Fetch actual inbox replies to us
     inbox = fetch_inbox()
     if not inbox:
-        print("No inbox messages fetched (browser busy or session stale).")
+        if not chrome_available():
+            print("CHROME_UNAVAILABLE — browser not reachable for inbox fetch")
+        else:
+            print("NO_INBOX_MESSAGES — Chrome reachable but inbox empty/not loaded")
         save_reply_state(reply_state)
         return
 

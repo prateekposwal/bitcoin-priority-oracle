@@ -93,7 +93,7 @@ function getFreshnessReport(dataDir) {
           var cur = JSON.parse(fs.readFileSync(path.join(curDir, f), 'utf8'));
           var lastSeenMs = new Date(cur.lastSeen).getTime();
           var ageMinutes = Math.round((now - lastSeenMs) / 60000);
-          var healthy = ageMinutes <= 30;
+          var healthy = ageMinutes <= require('./config.js').staleAfterMinutes();
           report.sources[src] = { lastCapture: cur.lastCycleTs || null, ageMinutes: ageMinutes, healthy: healthy };
           if (lastSeenMs < oldestMs) oldestMs = lastSeenMs;
           if (lastSeenMs > newestMs) newestMs = lastSeenMs;
@@ -131,7 +131,7 @@ function rootFileFreshness(dataDir, report) {
   Object.keys(sourceMap).forEach(function(key) {
     var info = sourceMap[key];
     var ageMinutes = Math.round((now - info.mtime) / 60000);
-    report.sources[key] = { lastCapture: info.mtimeDate.toISOString(), ageMinutes: ageMinutes, healthy: ageMinutes <= 30 };
+    report.sources[key] = { lastCapture: info.mtimeDate.toISOString(), ageMinutes: ageMinutes, healthy: ageMinutes <= require('./config.js').staleAfterMinutes() };
     if (info.mtime < oldestMs) { oldestMs = info.mtime; }
     if (info.mtime > newestMs) { newestMs = info.mtime; }
   });
