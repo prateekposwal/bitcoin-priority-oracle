@@ -14,12 +14,15 @@ function loadJson(p, fb) { try { return JSON.parse(fs.readFileSync(p, 'utf8')); 
 function run() {
   var now = new Date().toISOString();
   var queue = [];
+  var seenIds = {}; // id-dedupe: post-log is authoritative for posted
 
   // post-log.json (published history)
   var postLog = loadJson(path.join(REPO, 'captured-data', 'post-log.json'), { posts: [] });
   (postLog.posts || []).forEach(function(p) {
+    var id = p.id || ('post-' + queue.length);
+    seenIds[id] = true;
     queue.push({
-      id: p.id || ('post-' + queue.length),
+      id: id,
       source: 'post-log',
       platform: p.platform || 'nostr',
       topic: p.topic || 'unknown',
@@ -30,18 +33,34 @@ function run() {
     });
   });
 
-  // marketing queue (ops-center pending)
+  // compliant-posts.json (Python stack — cross-stack blind spot)
+  var compliant = loadJson(path.join(REPO, 'captured-data', 'compliant-posts.json'), { posts: [] });
+  (compliant.posts || []).forEach(function(p) {
+    queue.push({
+      id: 'compliant-' + (p.id || ('c' + queue.length)),
+      source: 'compliant-poster',
+      platform: p.platform || 'unknown',
+      topic: p.topic || 'unknown',
+      status: 'posted',
+      postedAt: p.at || p.postedAt || null,
+      url: p.url || null
+    });
+  });
+
+  // marketing queue (ops-center pending) — skip ids already in post-log
   var opsDir = path.join(REPO, 'reports', 'marketing', 'queue');
   if (fs.existsSync(opsDir)) {
     fs.readdirSync(opsDir).filter(function(f) { return f.endsWith('.json'); }).forEach(function(f) {
       try {
+        var base = f.replace('.json', '');
+        if (seenIds[base]) return; // already posted per post-log
         var item = JSON.parse(fs.readFileSync(path.join(opsDir, f), 'utf8'));
         queue.push({
-          id: 'ops-' + f.replace('.json', ''),
+          id: 'ops-' + base,
           source: 'ops-center',
           platform: item.platform || 'unknown',
           topic: item.topic || 'unknown',
-          status: 'queued',
+          status: item.status || 'queued',
           scheduledFor: item.scheduledFor || item.postedAt || null,
           content: (item.content || '').slice(0, 100)
         });

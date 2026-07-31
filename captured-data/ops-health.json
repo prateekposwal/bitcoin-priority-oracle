@@ -1,32 +1,29 @@
 {
-  "generated_at": "2026-07-31T20:02:47.343Z",
-  "status": "DEGRADED",
-  "issues": [
-    "SPOOL: stale sources: block_height,block_interval,blockchair,blocks,btc_price,btc_rpc,coinpaprika,derived_metrics,difficulty,fear_greed,fee_history,fees,lightning,mempool,mempool_blocks,mining_pools,research_findings",
-    "DE SERVER: unhealthy"
-  ],
+  "generated_at": "2026-07-31T20:17:50.469Z",
+  "status": "HEALTHY",
+  "issues": [],
   "checks": {
     "spool": {
       "accountingOk": true,
       "pending": 0,
       "dead": 0,
-      "stale": 17
+      "stale": 0
     },
     "de_server": {
-      "ok": false,
-      "status": 0,
-      "agent": null
+      "ok": true,
+      "status": 200,
+      "agent": "running"
     },
     "de_agent": {
-      "lastRunAgeMin": 50
+      "lastRunAgeMin": 11
     },
     "orchestrator": {
-      "heartbeatAgeMin": 15,
+      "heartbeatAgeMin": 30,
       "phase": "cycle-complete"
     },
     "db": {
       "errorRatioPct": 2,
-      "total": 3037
+      "total": 3054
     }
   }
 }

@@ -1,11 +1,11 @@
 {
-  "previousMempoolCount": 93404,
-  "previousVsize": 48240366,
+  "previousMempoolCount": 93066,
+  "previousVsize": 47864488,
   "previousFees": {
-    "fastestFee": 4,
+    "fastestFee": 3,
     "halfHourFee": 3,
     "hourFee": 3,
     "economyFee": 2
   },
-  "previousTimestamp": "2026-07-31T19:11:14.870Z"
+  "previousTimestamp": "2026-07-31T20:03:07.615Z"
 }

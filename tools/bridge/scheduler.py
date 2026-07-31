@@ -52,6 +52,13 @@ def run_cycle():
             next_h = cadence.get('nextPostMs', 0) / 3600000
             log(f"{platform}: cadence block (next in {next_h:.1f}h, {cadence.get('postsToday',0)} today)")
             continue
+        # Load-bearing cross-stack dedupe (B5): ledger-gate.js reads
+        # publishing-queue.json — blocks if another stack posted recently.
+        gate = subprocess.run(['node', os.path.join(REPO, 'tools/bridge/ledger-gate.js'), platform],
+                              capture_output=True, text=True, timeout=15, cwd=REPO)
+        if gate.returncode == 1:
+            log(f"{platform}: ledger block ({(gate.stdout or '').strip()})")
+            continue
         try:
             post(platform)
         except Exception as e:

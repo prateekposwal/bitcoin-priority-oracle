@@ -1,8 +1,5 @@
 {
-  "alerts": [
-    "🛡 SPOOL: stale sources: block_height,block_interval,blockchair,blocks,btc_price,btc_rpc,coinpaprika,derived_metrics,difficulty,fear_greed,fee_history,fees,lightning,mempool,mempool_blocks,mining_pools,research_findings",
-    "🛡 DE SERVER: unhealthy"
-  ],
-  "timestamp": "2026-07-31T20:02:47.430Z",
-  "source": "ops-health"
+  "alerts": [],
+  "timestamp": "2026-08-01_01-32-50",
+  "source": "spool"
 }

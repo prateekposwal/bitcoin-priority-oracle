@@ -330,6 +330,16 @@ async function runAllEmployees() {
     var emp = EMPLOYEES[e];
     var post = generatePostContent(emp);
 
+    // Load-bearing ledger gate (B4): respect nostr cadence via publishing-queue.
+    try {
+      var oc = require('./ops-center.js');
+      if (!oc.canPost('nostr', post.topic)) {
+        log(emp.avatar + ' ' + emp.name + ' | SKIP (nostr cadence): ' + post.topic);
+        results.push({ employee: emp.name, topic: post.topic, skipped: true });
+        continue;
+      }
+    } catch (e) {}
+
     try {
       var result = await postToNostr(post.content, post.topic, emp.id);
       var link = 'https://snort.social/e/' + result.eventId;
@@ -338,6 +348,7 @@ async function runAllEmployees() {
         id: emp.id + '-' + Date.now(),
         platform: 'nostr',
         topic: post.topic,
+        status: 'posted',
         author: emp.name,
         authorAvatar: emp.avatar,
         eventId: result.eventId,

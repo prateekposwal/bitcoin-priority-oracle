@@ -159,7 +159,7 @@ async function runCycle() {
       var twResult = await postToTwitter(page, post.content, post.topic);
       if (twResult) {
         markPosted(post.id, twResult);
-        postLog.posts.push({ id: post.id, platform: 'twitter', topic: post.topic, url: twResult, postedAt: new Date().toISOString() });
+        postLog.posts.push({ id: post.id, platform: 'twitter', topic: post.topic, status: 'posted', url: twResult, postedAt: new Date().toISOString() });
         results.push({ platform: 'twitter', status: 'posted', url: twResult });
       }
     } catch(e) { log('Twitter error: ' + e.message); results.push({ platform: 'twitter', status: 'failed', error: e.message }); }
@@ -171,7 +171,7 @@ async function runCycle() {
       var rdResult = await postToReddit(page, rdPost.content, rdPost.topic);
       if (rdResult) {
         markPosted(rdPost.id, rdResult);
-        postLog.posts.push({ id: rdPost.id, platform: 'reddit', topic: rdPost.topic, url: rdResult, postedAt: new Date().toISOString() });
+        postLog.posts.push({ id: rdPost.id, platform: 'reddit', topic: rdPost.topic, status: 'posted', url: rdResult, postedAt: new Date().toISOString() });
         results.push({ platform: 'reddit', status: 'posted', url: rdResult });
       }
     } catch(e) { log('Reddit error: ' + e.message); results.push({ platform: 'reddit', status: 'failed', error: e.message }); }
@@ -181,7 +181,7 @@ async function runCycle() {
       var mdResult = await postToMedium(page, post.content, 'BSAHI: ' + post.topic);
       if (mdResult) {
         markPosted(post.id, mdResult);
-        postLog.posts.push({ id: post.id, platform: 'medium', topic: post.topic, url: mdResult, postedAt: new Date().toISOString() });
+        postLog.posts.push({ id: post.id, platform: 'medium', topic: post.topic, status: 'posted', url: mdResult, postedAt: new Date().toISOString() });
         results.push({ platform: 'medium', status: 'posted', url: mdResult });
       }
     } catch(e) { log('Medium error: ' + e.message); results.push({ platform: 'medium', status: 'failed', error: e.message }); }

@@ -3,7 +3,7 @@ var path = require('path');
 var WebSocket = require('ws');
 var { generateSecretKey, getPublicKey, finalizeEvent, verifyEvent } = require('nostr-tools/pure');
 var { useWebSocketImplementation } = require('nostr-tools/pool');
-var { getQueue, markPosted } = require('./ops-center.js');
+var { getQueue, markPosted, markSkipped } = require('./ops-center.js');
 
 useWebSocketImplementation(WebSocket);
 
@@ -163,12 +163,26 @@ async function runCycle() {
   for (var i = 0; i < toPublish.length; i++) {
     var post = toPublish[i];
     try {
+      // Load-bearing ledger gate (B4): only nostr items post here; other
+      // platforms belong to their own stack, and nostr respects the cadence.
+      var oc = require('./ops-center.js');
+      if (String(post.platform) !== 'nostr') {
+        log('SKIP (platform ' + post.platform + ' not nostr — belongs to its own stack): ' + post.id);
+        markSkipped(post.id, 'platform:' + post.platform);
+        continue;
+      }
+      if (!oc.canPost('nostr', post.topic)) {
+        log('SKIP (nostr cadence per publishing-queue.json): ' + post.id);
+        markSkipped(post.id, 'nostr-dedupe');
+        continue;
+      }
       var result = await publish(post.content, post.topic, 'nostr');
       markPosted(post.id, 'nostr:event:' + result.eventId);
       var entry = {
         id: post.id,
         platform: 'nostr',
         topic: post.topic,
+        status: 'posted',
         eventId: result.eventId,
         confirmedRelays: result.confirmedRelays,
         totalRelays: result.totalRelays,

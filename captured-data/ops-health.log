@@ -16,3 +16,5 @@ Require stack:
 [2026-07-31T19:51:38.879Z] ISSUES: SPOOL: stale sources: block_height,block_interval,blockchair,blocks,btc_price,btc_rpc,coinpaprika,derived_metrics,difficulty,fear_greed,fee_history,fees,lightning,mempool,mempool_blocks,mining_pools,research_findings
 [2026-07-31T20:02:47.373Z] ISSUES: SPOOL: stale sources: block_height,block_interval,blockchair,blocks,btc_price,btc_rpc,coinpaprika,derived_metrics,difficulty,fear_greed,fee_history,fees,lightning,mempool,mempool_blocks,mining_pools,research_findings | DE SERVER: unhealthy
 [2026-07-31T20:02:52.007Z] alert sent: Webhook sent to https://ntfy.sh/bsahi-alerts: 200
+[2026-07-31T20:08:59.208Z] HEALTHY
+[2026-07-31T20:17:50.471Z] HEALTHY

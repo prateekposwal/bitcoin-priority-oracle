@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-07-31T19:11:42.420Z",
-  "total": 46,
+  "generated_at": "2026-07-31T20:19:26.449Z",
+  "total": 36,
   "items": [
     {
       "id": "BSAHI-MS82C9EW-N2YK",
@@ -263,11 +263,58 @@
       "author": null
     },
     {
+      "id": "BSAHI-MS9BJQ4G-VOK0",
+      "source": "post-log",
+      "platform": "nostr",
+      "topic": "storage",
+      "status": "posted",
+      "postedAt": "2026-07-31T19:11:52.938Z",
+      "url": null,
+      "author": null
+    },
+    {
+      "id": "BSAHI-MS9BJYHG-ACYH",
+      "source": "post-log",
+      "platform": "nostr",
+      "topic": "storage",
+      "status": "posted",
+      "postedAt": "2026-07-31T20:03:44.628Z",
+      "url": null,
+      "author": null
+    },
+    {
+      "id": "compliant-c28",
+      "source": "compliant-poster",
+      "platform": "reddit",
+      "topic": "unknown",
+      "status": "posted",
+      "postedAt": "2026-07-31T10:58:02.902Z",
+      "url": "https://www.reddit.com/r/Bitcoin/"
+    },
+    {
+      "id": "compliant-c29",
+      "source": "compliant-poster",
+      "platform": "medium",
+      "topic": "unknown",
+      "status": "posted",
+      "postedAt": "2026-07-31T16:31:47.394Z",
+      "url": "https://medium.com/new-story"
+    },
+    {
+      "id": "compliant-c30",
+      "source": "compliant-poster",
+      "platform": "reddit",
+      "topic": "unknown",
+      "status": "posted",
+      "postedAt": "2026-07-31T17:04:41.455Z",
+      "url": "https://www.reddit.com/r/Bitcoin/"
+    },
+    {
       "id": "ops-BSAHI-MS81T2KU-LUOE",
       "source": "ops-center",
       "platform": "linkedin",
       "topic": "fee",
-      "status": "queued",
+      "status": "posted",
       "scheduledFor": "2026-07-30",
       "content": "Bitcoin's fee market is the most sophisticated congestion pricing mechanism in the digital asset wor"
     },
@@ -276,7 +323,7 @@
       "source": "ops-center",
       "platform": "twitter",
       "topic": "fee",
-      "status": "queued",
+      "status": "posted",
       "scheduledFor": "2026-07-30",
       "content": "1/ Bitcoin's fastest fee is **2 sat/vB** right now. But here's what most people miss about how fees "
     },
@@ -285,7 +332,7 @@
       "source": "ops-center",
       "platform": "linkedin",
       "topic": "fee",
-      "status": "queued",
+      "status": "posted",
       "scheduledFor": "2026-07-30",
       "content": "Bitcoin's fee market is the most sophisticated congestion pricing mechanism in the digital asset wor"
     },
@@ -294,147 +341,12 @@
       "source": "ops-center",
       "platform": "twitter",
       "topic": "fee",
-      "status": "queued",
+      "status": "posted",
       "scheduledFor": "2026-07-30",
       "content": "1/ Bitcoin's fastest fee is **1 sat/vB** right now. But here's what most people miss about how fees "
     },
     {
-      "id": "ops-BSAHI-MS82C9EW-N2YK",
-      "source": "ops-center",
-      "platform": "linkedin",
-      "topic": "fee",
-      "status": "queued",
-      "scheduledFor": "2026-07-30",
-      "content": "Bitcoin's fee market is the most sophisticated congestion pricing mechanism in the digital asset wor"
-    },
-    {
-      "id": "ops-BSAHI-MS82C9EX-HW4L",
-      "source": "ops-center",
-      "platform": "twitter",
-      "topic": "fee",
-      "status": "queued",
-      "scheduledFor": "2026-07-30",
-      "content": "1/ Bitcoin's fastest fee is **1 sat/vB** right now. But here's what most people miss about how fees "
-    },
-    {
-      "id": "ops-BSAHI-MS82CPRP-ORGI",
-      "source": "ops-center",
-      "platform": "linkedin",
-      "topic": "fee",
-      "status": "queued",
-      "scheduledFor": "2026-07-30",
-      "content": "Bitcoin's fee market is the most sophisticated congestion pricing mechanism in the digital asset wor"
-    },
-    {
-      "id": "ops-BSAHI-MS82CPRP-T5KZ",
-      "source": "ops-center",
-      "platform": "twitter",
-      "topic": "fee",
-      "status": "queued",
-      "scheduledFor": "2026-07-30",
-      "content": "1/ Bitcoin's fastest fee is **1 sat/vB** right now. But here's what most people miss about how fees "
-    },
-    {
-      "id": "ops-BSAHI-MS82TQB7-G3EG",
-      "source": "ops-center",
-      "platform": "linkedin",
-      "topic": "fee",
-      "status": "queued",
-      "scheduledFor": "2026-07-30",
-      "content": "Bitcoin's fee market is the most sophisticated congestion pricing mechanism in the digital asset wor"
-    },
-    {
-      "id": "ops-BSAHI-MS82TQB7-VHXX",
-      "source": "ops-center",
-      "platform": "twitter",
-      "topic": "fee",
-      "status": "queued",
-      "scheduledFor": "2026-07-30",
-      "content": "1/ Bitcoin's fastest fee is **1 sat/vB** right now. But here's what most people miss about how fees "
-    },
-    {
-      "id": "ops-BSAHI-MS84Y8G4-B87B",
-      "source": "ops-center",
-      "platform": "twitter",
-      "topic": "fee",
-      "status": "queued",
-      "scheduledFor": "2026-07-30",
-      "content": "1/ Bitcoin's fastest fee is **4 sat/vB** right now. But here's what most people miss about how fees "
-    },
-    {
-      "id": "ops-BSAHI-MS84Y8G4-XGHT",
-      "source": "ops-center",
-      "platform": "linkedin",
-      "topic": "fee",
-      "status": "queued",
-      "scheduledFor": "2026-07-30",
-      "content": "Bitcoin's fee market is the most sophisticated congestion pricing mechanism in the digital asset wor"
-    },
-    {
-      "id": "ops-BSAHI-MS95WS9U-PCW1",
-      "source": "ops-center",
-      "platform": "medium",
-      "topic": "storage",
-      "status": "queued",
-      "scheduledFor": "2026-07-31",
-      "content": "The Storage Cost Coverage Ratio: Do Bitcoin Fees Cover Node Costs?\n\n## A Simple Question\n\nBitcoin tr"
-    },
-    {
-      "id": "ops-BSAHI-MS95WYP4-9HUJ",
-      "source": "ops-center",
-      "platform": "medium",
-      "topic": "storage",
-      "status": "queued",
-      "scheduledFor": "2026-07-31",
-      "content": "The Storage Cost Coverage Ratio: Do Bitcoin Fees Cover Node Costs?\n\n## A Simple Question\n\nBitcoin tr"
-    },
-    {
-      "id": "ops-BSAHI-MS979L0C-BGV4",
-      "source": "ops-center",
-      "platform": "medium",
-      "topic": "storage",
-      "status": "queued",
-      "scheduledFor": "2026-07-31",
-      "content": "The Storage Cost Coverage Ratio: Do Bitcoin Fees Cover Node Costs?\n\n## A Simple Question\n\nBitcoin tr"
-    },
-    {
-      "id": "ops-BSAHI-MS979MAB-RYAC",
-      "source": "ops-center",
-      "platform": "medium",
-      "topic": "storage",
-      "status": "queued",
-      "scheduledFor": "2026-07-31",
-      "content": "The Storage Cost Coverage Ratio: Do Bitcoin Fees Cover Node Costs?\n\n## A Simple Question\n\nBitcoin tr"
-    },
-    {
-      "id": "ops-BSAHI-MS97D708-FSW1",
-      "source": "ops-center",
-      "platform": "medium",
-      "topic": "storage",
-      "status": "queued",
-      "scheduledFor": "2026-07-31",
-      "content": "The Storage Cost Coverage Ratio: Do Bitcoin Fees Cover Node Costs?\n\n## A Simple Question\n\nBitcoin tr"
-    },
-    {
-      "id": "ops-BSAHI-MS97FQH8-0RMH",
-      "source": "ops-center",
-      "platform": "medium",
-      "topic": "storage",
-      "status": "queued",
-      "scheduledFor": "2026-07-31",
-      "content": "The Storage Cost Coverage Ratio: Do Bitcoin Fees Cover Node Costs?\n\n## A Simple Question\n\nBitcoin tr"
-    },
-    {
-      "id": "ops-BSAHI-MS99VBDB-4V42",
-      "source": "ops-center",
-      "platform": "medium",
-      "topic": "storage",
-      "status": "queued",
-      "scheduledFor": "2026-07-31",
-      "content": "The Storage Cost Coverage Ratio: Do Bitcoin Fees Cover Node Costs?\n\n## A Simple Question\n\nBitcoin tr"
-    },
-    {
-      "id": "ops-BSAHI-MS99X03Q-QA5U",
+      "id": "ops-BSAHI-MS9DERA4-1D5T",
       "source": "ops-center",
       "platform": "medium",
       "topic": "storage",

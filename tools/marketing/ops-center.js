@@ -32,6 +32,29 @@ function generatePostId() {
 
 // ─── Content Queue ───
 
+function ledgerBlocked(platform, topic) {
+  // Load-bearing cross-stack dedupe: blocked if the ledger has a posted item on
+  // this platform within WINDOW_HOURS (per-platform cadence), topic-refined
+  // within the window. Returns the blocking item or null.
+  try {
+    var cadence = require('./cadence.js');
+    var pq = JSON.parse(fs.readFileSync(path.join(__dirname, '..', '..', 'captured-data', 'publishing-queue.json'), 'utf8'));
+    var now = Date.now();
+    if (pq && pq.items) {
+      for (var i = 0; i < pq.items.length; i++) {
+        var it = pq.items[i];
+        if (it.status !== 'posted' || !it.postedAt) continue;
+        if (String(it.platform) !== String(platform)) continue;
+        var ageMs = now - new Date(it.postedAt).getTime();
+        if (isNaN(ageMs) || ageMs > cadence.windowMs(platform)) continue;
+        // topic-refined within window: block if same topic OR blocking item has no topic
+        if (!topic || String(it.topic) === String(topic) || !it.topic || it.topic === 'unknown') return it;
+      }
+    }
+  } catch (e) {}
+  return null;
+}
+
 function generateDailyQueue() {
   ensureDir(QUEUE_DIR);
   var agent = require('./agent.js');
@@ -39,24 +62,11 @@ function generateDailyQueue() {
   var state = loadState();
   var queued = [];
 
-  // Cross-stack dedupe (S3/flagged): agent 18 consolidates post-log + this queue
-  // + briefs into captured-data/publishing-queue.json. Read it back here to skip
-  // platform/topic pairs already posted today — makes the ledger load-bearing.
-  var postedToday = {};
-  try {
-    var pq = JSON.parse(fs.readFileSync(path.join(__dirname, '..', '..', 'captured-data', 'publishing-queue.json'), 'utf8'));
-    var today = new Date().toISOString().slice(0, 10);
-    if (pq && pq.items) pq.items.forEach(function(it) {
-      if (it.status === 'posted' && it.postedAt && String(it.postedAt).slice(0, 10) === today) {
-        postedToday[it.platform + '|' + it.topic] = true;
-      }
-    });
-  } catch (e) {}
-
   for (var i = 0; i < items.length; i++) {
     var item = items[i];
-    if (postedToday[item.platform + '|' + item.topic]) {
-      log('Queue', 'SKIP (posted today per publishing-queue.json): ' + item.platform + '/' + item.topic);
+    var block = ledgerBlocked(item.platform, item.topic);
+    if (block) {
+      log('Queue', 'SKIP (posted ' + Math.round((Date.now() - new Date(block.postedAt).getTime()) / 3600000) + 'h ago per publishing-queue.json): ' + item.platform + '/' + item.topic);
       continue;
     }
     var postId = generatePostId();
@@ -113,6 +123,23 @@ function markPosted(postId, url) {
   state.lastRun = new Date().toISOString();
   saveState(state);
   log('Publisher', 'Posted ' + postId + ' to ' + post.platform + ' [' + post.topic + ']');
+
+  // Load-bearing ledger: upsert publishing-queue.json so the single source of
+  // truth reflects the post immediately (agent 18 runs earlier in the cycle).
+  try {
+    var ledgerPath = path.join(__dirname, '..', '..', 'captured-data', 'publishing-queue.json');
+    var ledger = { generated_at: new Date().toISOString(), total: 0, items: [] };
+    try { ledger = JSON.parse(fs.readFileSync(ledgerPath, 'utf8')); } catch (e) {}
+    var found = false;
+    ledger.items.forEach(function(it) {
+      if (it.id === 'ops-' + postId) { it.status = 'posted'; it.postedAt = post.postedAt; it.url = post.url; found = true; }
+    });
+    if (!found) {
+      ledger.items.push({ id: 'ops-' + postId, source: 'ops-center', platform: post.platform, topic: post.topic, status: 'posted', postedAt: post.postedAt, url: post.url });
+    }
+    ledger.total = ledger.items.length;
+    fs.writeFileSync(ledgerPath, JSON.stringify(ledger, null, 2));
+  } catch (e) { log('Publisher', 'ledger upsert failed (non-fatal): ' + e.message); }
 }
 
 function markSkipped(postId, reason) {
@@ -250,4 +277,8 @@ if (require.main === module) {
   }
 }
 
-module.exports = { runCycle: runCycle, generateWeeklyReport: generateWeeklyReport, getQueue: getQueue, markPosted: markPosted, generateDailyQueue: generateDailyQueue };
+function canPost(platform, topic) {
+  return !ledgerBlocked(platform, topic);
+}
+
+module.exports = { runCycle: runCycle, generateWeeklyReport: generateWeeklyReport, getQueue: getQueue, markPosted: markPosted, markSkipped: markSkipped, generateDailyQueue: generateDailyQueue, ledgerBlocked: ledgerBlocked, canPost: canPost };

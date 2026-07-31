@@ -1,29 +1,29 @@
 {
   "version": 1,
-  "updated_at": "2026-07-31T19:46:07.511Z",
+  "updated_at": "2026-07-31T20:20:56.743Z",
   "pages": {
     "reddit-search:fees": {
-      "last_scanned": "2026-07-31T19:43:16.990Z",
+      "last_scanned": "2026-07-31T20:18:25.963Z",
       "hits": 0
     },
     "reddit-search:mempool": {
-      "last_scanned": "2026-07-31T19:43:33.725Z",
+      "last_scanned": "2026-07-31T20:18:54.504Z",
       "hits": 0
     },
     "reddit-search:lightning": {
-      "last_scanned": "2026-07-31T19:43:47.994Z",
+      "last_scanned": "2026-07-31T20:19:26.962Z",
       "hits": 0
     },
     "reddit-search:node costs": {
-      "last_scanned": "2026-07-31T19:43:58.195Z",
+      "last_scanned": "2026-07-31T20:19:52.368Z",
       "hits": 0
     },
     "reddit-search:transaction": {
-      "last_scanned": "2026-07-31T19:44:08.224Z",
+      "last_scanned": "2026-07-31T20:20:01.757Z",
       "hits": 0
     },
     "reddit-search:block": {
-      "last_scanned": "2026-07-31T19:44:45.841Z",
+      "last_scanned": "2026-07-31T20:20:19.500Z",
       "hits": 0
     },
     "linkedin-feed:home": {
@@ -147,6 +147,18 @@
     "reddit-thread:https://www.reddit.com/r/Bitcoin/comments/1v6r5as/how_are_you_people_ok_with_the_fees_and_expect/": {
       "first_seen": "2026-07-31T19:46:07.418Z",
       "last_seen": "2026-07-31T19:46:07.418Z",
+      "action": "attempted",
+      "attempts": 1
+    },
+    "reddit-thread:https://www.reddit.com/r/Bitcoin/comments/1v73s89/the_only_real_security_for_bitcoin_is_people/": {
+      "first_seen": "2026-07-31T20:20:23.286Z",
+      "last_seen": "2026-07-31T20:20:23.286Z",
+      "action": "attempted",
+      "attempts": 1
+    },
+    "reddit-thread:https://www.reddit.com/r/Bitcoin/comments/1vamc24/lightning_thursday_july_30_2026_explore_the/": {
+      "first_seen": "2026-07-31T20:20:56.667Z",
+      "last_seen": "2026-07-31T20:20:56.667Z",
       "action": "attempted",
       "attempts": 1
     }

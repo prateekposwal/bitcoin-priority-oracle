@@ -1,7 +1,7 @@
 {
-  "totalPosted": 21,
-  "totalScheduled": 20,
-  "lastRun": "2026-07-31T19:11:52.937Z",
+  "totalPosted": 22,
+  "totalScheduled": 21,
+  "lastRun": "2026-07-31T20:03:44.627Z",
   "posts": [
     {
       "id": "BSAHI-MS81T2KU-LUOE",
@@ -149,12 +149,19 @@
       "topic": "storage",
       "postedAt": "2026-07-31T19:11:52.914Z",
       "url": "nostr:event:1b9380c20b41af0b9d29c189678ba481027a33089382556d4fbf3cf32ae90108"
+    },
+    {
+      "id": "BSAHI-MS9BJYHG-ACYH",
+      "platform": "medium",
+      "topic": "storage",
+      "postedAt": "2026-07-31T20:03:44.609Z",
+      "url": "nostr:event:0ff50e35973da0a92dd3aa7310ee16e8a16ea91b27e19d6bcac425488d79d692"
     }
   ],
   "platformStats": {
     "linkedin": 6,
     "twitter": 6,
-    "medium": 9
+    "medium": 10
   },
   "cycleCount": 1
 }

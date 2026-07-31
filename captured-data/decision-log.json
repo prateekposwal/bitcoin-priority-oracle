@@ -37,6 +37,25 @@
         "bridgeFlipped": false,
         "forecastModel": "holt-linear-trend"
       }
+    },
+    {
+      "ts": "2026-07-31T20:03:30.982Z",
+      "cycle": 28,
+      "source": "de-agent",
+      "decisions": [
+        "M4 gate: cleanCycles=4/7"
+      ],
+      "issues": [
+        "SPOOL: stale sources: block_height,block_interval,blockchair,blocks,btc_price,btc_rpc,coinpaprika,derived_metrics,difficulty,fear_greed,fee_history,fees,lightning,mempool,mempool_blocks,mining_pools,research_findings",
+        "DE SERVER: unhealthy",
+        "1 endpoints unhealthy"
+      ],
+      "metrics": {
+        "quality": "degraded",
+        "m4CleanCycles": 4,
+        "bridgeFlipped": false,
+        "forecastModel": "holt-linear-trend"
+      }
     }
   ]
 }

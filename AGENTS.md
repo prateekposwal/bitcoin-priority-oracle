@@ -95,3 +95,22 @@
 - Quality: degraded
 - Forecast: holt-linear-trend · rising · regime=spike (327 pts)
 - M4: 3/7 clean cycles · bridgeFlipped=false
+## Session Handoff — 2026-07-31T20:03:30.982Z
+
+### Current State
+- Session mood: neutral
+- Active work: cycle 28 · bridge=on · M4 cleanCycles=4/7
+- Forecast: holt-linear-trend · rising · rmse=1.143 (328 pts)
+
+### Decisions Made
+- M4 gate: cleanCycles=4/7 (no flip)
+
+### Open Issues
+- SPOOL: stale sources: block_height,block_interval,blockchair,blocks,btc_price,btc_rpc,coinpaprika,derived_metrics,difficulty,fear_greed,fee_history,fees,lightning,mempool,mempool_blocks,mining_pools,research_findings
+- DE SERVER: unhealthy
+- 1 endpoints unhealthy
+
+### Metrics
+- Quality: degraded
+- Forecast: holt-linear-trend · rising · regime=normal (328 pts)
+- M4: 4/7 clean cycles · bridgeFlipped=false

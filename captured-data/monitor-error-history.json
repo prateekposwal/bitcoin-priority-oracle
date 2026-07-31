@@ -1,42 +1,6 @@
 {
   "rounds": [
     {
-      "at": "2026-07-31T18:06:47.722Z",
-      "ok": {
-        "fees": true,
-        "btc_price": true,
-        "mempool": true,
-        "mempool_blocks": true,
-        "fee_history": true,
-        "lightning": true,
-        "blocks": true,
-        "block_height": true,
-        "coinpaprika": true,
-        "fear_greed": true,
-        "blockchair": true,
-        "mining_pools": false,
-        "difficulty": true
-      }
-    },
-    {
-      "at": "2026-07-31T18:23:45.514Z",
-      "ok": {
-        "fees": true,
-        "btc_price": true,
-        "mempool": true,
-        "mempool_blocks": true,
-        "fee_history": true,
-        "lightning": true,
-        "blocks": true,
-        "block_height": true,
-        "coinpaprika": true,
-        "fear_greed": true,
-        "blockchair": true,
-        "mining_pools": true,
-        "difficulty": true
-      }
-    },
-    {
       "at": "2026-07-31T18:24:40.980Z",
       "ok": {
         "fees": true,
@@ -182,6 +146,60 @@
     },
     {
       "at": "2026-07-31T19:11:40.882Z",
+      "ok": {
+        "fees": true,
+        "btc_price": true,
+        "mempool": true,
+        "mempool_blocks": true,
+        "fee_history": true,
+        "lightning": true,
+        "blocks": true,
+        "block_height": true,
+        "coinpaprika": true,
+        "fear_greed": true,
+        "blockchair": true,
+        "mining_pools": true,
+        "difficulty": true
+      }
+    },
+    {
+      "at": "2026-07-31T20:03:23.976Z",
+      "ok": {
+        "fees": true,
+        "btc_price": true,
+        "mempool": true,
+        "mempool_blocks": true,
+        "fee_history": true,
+        "lightning": true,
+        "blocks": true,
+        "block_height": true,
+        "coinpaprika": true,
+        "fear_greed": true,
+        "blockchair": true,
+        "mining_pools": false,
+        "difficulty": true
+      }
+    },
+    {
+      "at": "2026-07-31T20:03:30.261Z",
+      "ok": {
+        "fees": true,
+        "btc_price": true,
+        "mempool": true,
+        "mempool_blocks": true,
+        "fee_history": true,
+        "lightning": true,
+        "blocks": true,
+        "block_height": true,
+        "coinpaprika": true,
+        "fear_greed": true,
+        "blockchair": true,
+        "mining_pools": true,
+        "difficulty": true
+      }
+    },
+    {
+      "at": "2026-07-31T20:03:30.583Z",
       "ok": {
         "fees": true,
         "btc_price": true,
