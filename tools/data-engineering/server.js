@@ -140,6 +140,26 @@ var server = http.createServer(function(req, res) {
       res.end(require('fs').readFileSync(postLogPath, 'utf8'));
     } else { jsonResponse(res, { posts: [] }); }
 
+  } else if (route === '/spool/stats') {
+    require('./spool.js').init().then(function(s) { return s.stats(); }).then(function(st) {
+      jsonResponse(res, st);
+    }).catch(function(e) { jsonResponse(res, { error: e.message }, 500); });
+
+  } else if (route === '/spool/sources') {
+    require('./spool.js').init().then(function(s) { return s.stats(); }).then(function(st) {
+      jsonResponse(res, { sources: st.perSource, stale: st.staleSources });
+    }).catch(function(e) { jsonResponse(res, { error: e.message }, 500); });
+
+  } else if (route === '/spool/resolve') {
+    var spSrc = u.searchParams.get('source');
+    var spDay = u.searchParams.get('day');
+    if (!spSrc || !spDay) { jsonResponse(res, { error: 'source and day required' }, 400); }
+    else {
+      require('./spool.js').init().then(function(s) { return s.resolve(spSrc, spDay); }).then(function(entries) {
+        jsonResponse(res, { source: spSrc, day: spDay, entries: entries });
+      }).catch(function(e) { jsonResponse(res, { error: e.message }, 500); });
+    }
+
   } else if (route === '/team' || route === '/team.html') {
     var teamPath = path.resolve(__dirname, '..', '..', 'docs', 'team.html');
     if (require('fs').existsSync(teamPath)) {

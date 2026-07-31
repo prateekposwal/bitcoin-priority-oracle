@@ -1,0 +1,10 @@
+{
+  "source": "coinpaprika",
+  "lastCycleTs": "2026-07-30_01-57-51",
+  "lastEnqueuedAt": "2026-07-31T14:08:03.442Z",
+  "lastSeen": "2026-07-31T14:08:03.442Z",
+  "expectedIntervalMinutes": 10,
+  "status": "healthy",
+  "missedCycles": 0,
+  "lastError": null
+}

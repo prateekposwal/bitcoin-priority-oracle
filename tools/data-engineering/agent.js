@@ -49,6 +49,13 @@ async function runCycle() {
   var freshness = monitor.getFreshnessReport ? await monitor.getFreshnessReport('captured-data') : { sources: {} };
   log('Freshness checked');
 
+  // Step 2b: Ingest new mirror files into spool (buffering + indirection layer)
+  try {
+    var spoolBridge = require('./spool-bridge.js');
+    var ingestResult = await spoolBridge.bridgeOnce();
+    log('Spool: scanned=' + ingestResult.scanned + ' new=' + ingestResult.newFiles + ' ingested=' + ingestResult.ingested + ' failed=' + ingestResult.failed.length);
+  } catch (e) { log('Spool bridge error: ' + e.message); }
+
   // Step 3: Check Bitcoin Core node (if running)
   try {
     var btcResult = await btcRpc.run();

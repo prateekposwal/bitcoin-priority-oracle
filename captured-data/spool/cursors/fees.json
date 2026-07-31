@@ -1,0 +1,10 @@
+{
+  "source": "fees",
+  "lastCycleTs": "2026-07-31_19-39-04",
+  "lastEnqueuedAt": "2026-07-31T14:10:21.480Z",
+  "lastSeen": "2026-07-31T14:10:21.480Z",
+  "expectedIntervalMinutes": 10,
+  "status": "healthy",
+  "missedCycles": 0,
+  "lastError": null
+}

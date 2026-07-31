@@ -12,6 +12,58 @@ from first principles instead of depending on external tools/APIs.
 | **Math for Deep Learning (Gallier)** | Mathematics | Penn CIS | Complete math foundations |
 | **Computer Architecture (Hennessy & Patterson)** | Architecture | archive.org | Quantitative systems thinking |
 
+## Networking (Internet) — The Transferable Design Moves
+
+Read: Comer's *The Internet Book* (5th ed, pdfdrive), Severance's *Introduction to
+Networking*, Clark's *Design Philosophy of the DARPA Internet Protocols*, CMU slides.
+
+1. **Dumb core, smart edges**: the network only transports packets; all intelligence lives
+   at endpoints. New services deploy without touching the core. Build APIs as hosts, not
+   network features.
+2. **Fate-sharing**: hold connection/state at the entity that needs it; lose state only if
+   the entity itself is lost. Stateless gateways = datagram network = survivability.
+3. **End-to-end argument**: any function that *can* be done at endpoints *must* be done
+   there. Build hard functionality once per host, not once per network.
+4. **Encapsulation**: every layer wraps the layer above; each hop only understands its own
+   envelope. Clean boundaries let heterogeneous systems interoperate.
+5. **Adaptive flow control**: sequence numbers + acks + timers + RTT-measured timeout;
+   window grows on success, shrinks on congestion. "A little courtesy goes a long way."
+   Retry with exponential backoff + jitter (email retries for days).
+6. **Congestion collapse prevention**: slow down under congestion, ramp slowly; your own
+   retries must never amplify a problem. A stale/tripwire counter halts a runaway system
+   (TTL = one field that turns an infinite loop into a dropped packet).
+7. **Indirection = flexibility**: DNS decouples identity from location; NAT shares addresses.
+   Address by logical name, not path. Two temporary-address peers need a permanent relay.
+8. **Soft state**: nice to remember, safe to forget — leases, heartbeats, droppable caches
+   refreshed by endpoints. Reconciles survivability with accountability (predates QUIC).
+9. **Minimal assumptions**: assume only "carries a packet, reasonable reliability, some
+   addressing" of anything you integrate with. Breadth comes from assuming little.
+10. **Buffering cures jitter**: accumulate before consuming; smooth bursty producers.
+11. **Index before serve**: precompute indexes offline; never search the live corpus per
+    request. Use structure hints (titles/META) for keywords; keyword search is
+    semantics-blind (false positives).
+12. **Security layered and default-on**: public-key (two keys = never trust a third party);
+    https everywhere; firewalls filter BOTH directions (inbound attacks + own exfiltration);
+    two-factor; the human is the weakest link (phishing, typosquatting, MITM).
+13. **Two-connected redundancy**: ≥2 independent paths survive any single failure; routers
+    self-heal by route rediscovery; the network is never fully operational — design for
+    degradation as the default.
+14. **Reliability is tradeable**: reliable streams (TCP) for files/APIs, best-effort
+    datagrams (UDP) for telemetry/real-time — reliability itself causes delay/jitter.
+15. **Server concurrency**: servers are always-on daemons that spawn per-client isolated
+    copies; one client can't interfere with another.
+16. **Sockets = "open a file"**: address (IP/domain) + port is all you need; lower layers
+    are invisible to application writers.
+17. **Bottleneck governs**: data can't flow faster than the least-capacity (or most-shared)
+    segment; effective capacity = capacity ÷ concurrent users. Speed = capacity, not faster
+    packets; delay matters only for interactive apps (>0.2s).
+18. **Success recipe**: minimalism (smallest mechanism set), tolerance, openness (public
+    specs), proof-by-implementation (3 independent implementations must interoperate).
+19. **Ephemerality**: data without documented standard formats is fragile; "forever storage"
+    is a myth — back up in durable standard encodings yourself.
+20. **Receive-pays economics**: traffic is asymmetric (download ≫ upload); design caches and
+    minimal-upload protocols accordingly.
+
 ---
 
 ## 1. Algorithms (CLRS) — The Transferable Design Moves
@@ -96,6 +148,7 @@ from first principles instead of depending on external tools/APIs.
 6. **Reinforcement learning agents** — Q-learning for auto-tuning capture schedules (ML knowledge).
 7. **Our own neural net** — backprop from scratch (ML + Math knowledge).
 8. **Distributed research computation** — Amdahl-aware parallelism, MapReduce pattern (Architecture).
+9. **Resilient capture infrastructure** — durable spool with fate-shared edge state, adaptive backoff, leases, two-connected source redundancy (Networking knowledge — implemented in `tools/data-engineering/spool.js`).
 
 ---
 *BSAHI Knowledge Base — compiled from deep study of CLRS, Nilsson, Gallier, Hennessy & Patterson.*
