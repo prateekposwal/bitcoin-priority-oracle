@@ -34,3 +34,14 @@ subprocess.TimeoutExpired: Command '['python3', '/Users/prateekposwal/Desktop/bl
 [2026-07-31 14:08:27] RUN: python3 /Users/prateekposwal/Desktop/block-space-economics/tools/bridge/reply-engine.py 
 [2026-07-31 14:10:57] Replies today: 3
 [2026-07-31 14:10:57] RUN: python3 /Users/prateekposwal/Desktop/block-space-economics/tools/bridge/comment-engine.py 8
+[2026-07-31 14:11:58]   [2] Bitcoin Development Update (dev)
+[2026-07-31 14:11:58] STDERR: /Versions/3.9/lib/python3.9/subprocess.py", line 1821, in _execute_child
+    raise child_exception_type(errno_num, err_msg, err_filename)
+FileNotFoundError: [Errno 2] No such file or directory: 'node'
+[2026-07-31 14:11:58] RUN: python3 /Users/prateekposwal/Desktop/block-space-economics/tools/bridge/engage-engine.py 3 3
+[2026-07-31 14:15:58] RUN: python3 /Users/prateekposwal/Desktop/block-space-economics/tools/bridge/scheduler.py 
+[2026-07-31 14:19:06] [19:46:05] [Scheduler] === Compliant publishing cycle ===
+[2026-07-31 14:19:06] STDERR: _check_timeout
+    raise TimeoutExpired(
+subprocess.TimeoutExpired: Command '['python3', '/Users/prateekposwal/Desktop/block-space-economics/tools/bridge/reply-engine.py']' timed out after 180 seconds
+[2026-07-31 14:19:06] === Cycle complete ===

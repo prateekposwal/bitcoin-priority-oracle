@@ -410,6 +410,47 @@ Spool.prototype.compact = function() {
   });
 };
 
+Spool.prototype.deadletter = function(id, reason, opts) {
+  var self = this;
+  return new Promise(function(resolve) {
+    opts = opts || {};
+    var rec = {
+      id: id,
+      source: opts.source || null,
+      captureTime: opts.captureTime || null,
+      reason: String(reason || 'unknown'),
+      detail: opts.detail || null,
+      producer: opts.producer || null,
+      attempts: 0,
+      quarantined: true,
+      diedAt: new Date().toISOString()
+    };
+    try {
+      self._append(self.deadFile, rec, { fsync: self.cfg.fsync });
+      self.dead.add(id);
+      self.totals.dead++;
+      resolve({ ok: true, id: id, dead: true });
+    } catch (e) {
+      resolve({ ok: false, id: id, error: String(e) });
+    }
+  });
+};
+
+Spool.prototype.deadLetterList = function() {
+  var self = this;
+  return new Promise(function(resolve) {
+    var out = [];
+    if (!fs.existsSync(self.deadFile)) return resolve(out);
+    var raw = fs.readFileSync(self.deadFile, 'utf8');
+    var lines = raw.split('\n');
+    for (var i = lines.length - 1; i >= 0; i--) {
+      var rec = parseLine(lines[i]);
+      if (rec) out.push(rec);
+    }
+    resolve(out);
+  });
+};
+
 Spool.prototype.cursor = function(source) {
   var p = path.join(this.cursorsDir, source + '.json');
   if (!fs.existsSync(p)) return Promise.resolve(null);
