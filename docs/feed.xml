@@ -6,7 +6,40 @@
   <description>Bitcoin block space economics research from BSAHI — posted to Nostr in real-time</description>
   <language>en</language>
   <atom:link href="https://bitcoinsahi.com/feed.xml" rel="self" type="application/rss+xml"/>
-  <lastBuildDate>Fri, 31 Jul 2026 16:43:28 GMT</lastBuildDate>
+  <lastBuildDate>Fri, 31 Jul 2026 17:16:56 GMT</lastBuildDate>
+  <item>
+    <title>storage</title>
+    <link>https://snort.social/e/c55f532ad359e77a4a5d75b210cd77febe54ecf090d8f34fff5427952a672190</link>
+    <description><![CDATA[The Storage Cost Coverage Ratio: Do Bitcoin Fees Cover Node Costs?
+
+## A Simple Question
+
+Bitcoin tr]]></description>
+    <pubDate>Fri, 31 Jul 2026 17:16:42 GMT</pubDate>
+    <guid>c55f532ad359e77a4a5d75b210cd77febe54ecf090d8f34fff5427952a672190</guid>
+  </item>
+  <item>
+    <title>storage</title>
+    <link>https://snort.social/e/159f7a300d19be7c29023f4074efe0074103b4438c24f40a49d6be3dc3ef7a52</link>
+    <description><![CDATA[The Storage Cost Coverage Ratio: Do Bitcoin Fees Cover Node Costs?
+
+## A Simple Question
+
+Bitcoin tr]]></description>
+    <pubDate>Fri, 31 Jul 2026 17:14:43 GMT</pubDate>
+    <guid>159f7a300d19be7c29023f4074efe0074103b4438c24f40a49d6be3dc3ef7a52</guid>
+  </item>
+  <item>
+    <title>storage</title>
+    <link>https://snort.social/e/0fb7c01cdb0e7637a3e2d05d8a6941d59a0d161a9e59e6f3aaa8a32648cface1</link>
+    <description><![CDATA[The Storage Cost Coverage Ratio: Do Bitcoin Fees Cover Node Costs?
+
+## A Simple Question
+
+Bitcoin tr]]></description>
+    <pubDate>Fri, 31 Jul 2026 17:11:55 GMT</pubDate>
+    <guid>0fb7c01cdb0e7637a3e2d05d8a6941d59a0d161a9e59e6f3aaa8a32648cface1</guid>
+  </item>
   <item>
     <title>storage</title>
     <link>https://snort.social/e/7b0bc1148465bfa8add30c81b3409a26d61c184319bfe82fbe754f3822787fca</link>
@@ -133,27 +166,6 @@ Bitcoin tr]]></description>
     <description><![CDATA[1/ Bitcoin's fastest fee is **1 sat/vB** right now. But here's what most people miss about how fees ]]></description>
     <pubDate>Thu, 30 Jul 2026 22:06:47 GMT</pubDate>
     <guid>a3068bda14227409c9824d3bd653c62b37d778a7cd0df1164a6a506cf7b8f959</guid>
-  </item>
-  <item>
-    <title>fee</title>
-    <link>https://snort.social/e/3d0607fb649489121761a752423b971ece14df3949e8a74a0e871613daf553b9</link>
-    <description><![CDATA[Bitcoin's fee market is the most sophisticated congestion pricing mechanism in the digital asset wor]]></description>
-    <pubDate>Thu, 30 Jul 2026 22:06:42 GMT</pubDate>
-    <guid>3d0607fb649489121761a752423b971ece14df3949e8a74a0e871613daf553b9</guid>
-  </item>
-  <item>
-    <title>fee</title>
-    <link>https://snort.social/e/08ffc85bfe56b1b139f0c1af16904fa599723339c285c53d10dc9fab5995bd0f</link>
-    <description><![CDATA[1/ Bitcoin's fastest fee is **1 sat/vB** right now. But here's what most people miss about how fees ]]></description>
-    <pubDate>Thu, 30 Jul 2026 22:06:26 GMT</pubDate>
-    <guid>08ffc85bfe56b1b139f0c1af16904fa599723339c285c53d10dc9fab5995bd0f</guid>
-  </item>
-  <item>
-    <title>fee</title>
-    <link>https://snort.social/e/1637bf0d67a88316bcfad31587ab2206a5bb8b859794c233b21026df9138a056</link>
-    <description><![CDATA[Bitcoin's fee market is the most sophisticated congestion pricing mechanism in the digital asset wor]]></description>
-    <pubDate>Thu, 30 Jul 2026 22:06:21 GMT</pubDate>
-    <guid>1637bf0d67a88316bcfad31587ab2206a5bb8b859794c233b21026df9138a056</guid>
   </item>
 </channel>
 </rss>

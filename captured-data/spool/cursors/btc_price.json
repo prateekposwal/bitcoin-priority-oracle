@@ -1,8 +1,8 @@
 {
   "source": "btc_price",
-  "lastCycleTs": "2026-07-31_22-13-00",
-  "lastEnqueuedAt": "2026-07-31T16:43:01.142Z",
-  "lastSeen": "2026-07-31T16:43:01.142Z",
+  "lastCycleTs": "2026-07-31_22-45-57",
+  "lastEnqueuedAt": "2026-07-31T17:15:57.881Z",
+  "lastSeen": "2026-07-31T17:15:57.881Z",
   "expectedIntervalMinutes": 10,
   "status": "healthy",
   "missedCycles": 0,

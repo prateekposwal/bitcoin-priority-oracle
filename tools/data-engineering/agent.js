@@ -100,7 +100,10 @@ async function runCycle() {
   } catch (e) { log('Derived metrics error: ' + e.message); }
 
   // Step 4: Get quality score
-  var quality = monitor.getDataQualityScore ? monitor.getDataQualityScore() : { score: 0 };
+  var quality = { score: 0 };
+  try {
+    quality = monitor.getDataQualityScore ? await monitor.getDataQualityScore() : { score: 0 };
+  } catch (e) { quality = { score: 0 }; }
   log('Data quality score: ' + (quality.score || 'N/A') + '/100');
 
   // Step 4: Every 24 hours, run discovery

@@ -1,1 +1,0 @@
-{"id":"block_interval:2026-07-31_22-30-00","source":"block_interval","captureTime":"2026-07-31_22-30-00","day":"2026-07-31","seq":1400,"enqueuedAt":"2026-07-31T17:03:49.885Z","payload":{"status":200,"data":{"blocks":{"avgInterval":600},"network":{}},"fetchedAt":"2026-07-31T22:30:00Z"},"attempts":0,"producer":"test","schemaVersion":1}

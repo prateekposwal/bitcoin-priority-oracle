@@ -1,8 +1,8 @@
 {
   "source": "derived_metrics",
-  "lastCycleTs": "2026-07-31_22-34-41",
-  "lastEnqueuedAt": "2026-07-31T17:04:41.253Z",
-  "lastSeen": "2026-07-31T17:04:41.253Z",
+  "lastCycleTs": "2026-07-31_22-46-07",
+  "lastEnqueuedAt": "2026-07-31T17:16:07.311Z",
+  "lastSeen": "2026-07-31T17:16:07.311Z",
   "expectedIntervalMinutes": 10,
   "status": "healthy",
   "missedCycles": 0,

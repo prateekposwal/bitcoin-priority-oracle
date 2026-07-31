@@ -82,3 +82,144 @@ DE Server running on http://localhost:3456
 [DE Agent 2026-07-31 16:43:30] Cycle 21 complete in 37s
 [DE Agent 2026-07-31 16:43:30] ISSUES: 1 endpoints unhealthy | 11 sources stale (>30min old)
 DE Server running on http://localhost:3456
+[DE Agent 2026-07-31 17:11:07] Starting — Data Engineer v1
+[DE Agent 2026-07-31 17:11:07] Cycle interval: 60 minutes
+[DE Agent 2026-07-31 17:11:07] Endpoints: 13
+[DE Agent 2026-07-31 17:11:07] Cycle 22 started
+[DE Agent 2026-07-31 17:11:07] Checking 13 endpoints...
+[DE Agent 2026-07-31 17:11:17] Endpoints: 11/13 healthy, 2 unhealthy
+[DE Agent 2026-07-31 17:11:18] Freshness checked
+[DE Agent 2026-07-31 17:11:20] Spool: scanned=179 new=1 ingested=1 validated=13 violated=0 failed=0
+[DE Agent 2026-07-31 17:11:30] Capture-agent: cycle=2026-07-31_22-41-20 captured=13 skipped=0 violated=0 errored=0
+[DE Agent 2026-07-31 17:11:39] Bitcoin Core: 532314 blocks, 3 fee stats, 8 peers
+[DE Agent 2026-07-31 17:11:39]   Fee percentiles (p10/p25/p50/p75/p90): 0.0/0.0/0.0/0.0/0.0 sat/vB
+[tracker] Saved: /Users/prateekposwal/Desktop/block-space-economics/captured-data/tracker/2026-07-31/2026-07-31_17-11-42.json
+[DE Agent 2026-07-31 17:11:42] Block intervals: 403.11s avg
+[DE Agent 2026-07-31 17:11:42] Derived metrics: computed + enqueued
+[DE Agent 2026-07-31 17:11:43] Data quality score: N/A/100
+[DE Agent 2026-07-31 17:11:43] Generating reports...
+[DE Agent 2026-07-31 17:11:54] Reports saved
+[2026-07-31 17:11:54] [BSAHI Publisher] === Full publishing cycle (Nostr + Browser) ===
+[2026-07-31 17:11:54] [BSAHI Publisher] === Publishing cycle ===
+[2026-07-31 17:11:54] [BSAHI Publisher] Queue empty — generating
+[2026-07-31 17:11:55] [Queue] Generated 1 posts for 2026-07-31
+[2026-07-31 17:11:55] [BSAHI Publisher] Published to 6 relays: 0 confirmed, 0 sent, 6 failed
+[2026-07-31 17:11:55] [Publisher] Posted BSAHI-MS979L0C-BGV4 to medium [storage]
+[2026-07-31 17:11:55] [BSAHI Publisher] POSTED | storage | event: 0fb7c01cdb0e7637...
+[2026-07-31 17:11:55] [BSAHI Publisher] 1 posted
+[2026-07-31 17:11:55] [BSAHI Publisher] RSS: /Users/prateekposwal/Desktop/block-space-economics/docs/feed.xml
+[2026-07-31 17:11:55] [BSAHI Publisher] === Cycle complete ===
+[2026-07-31 17:11:56] [BSAHI Browser Publisher] === Browser publishing cycle ===
+[2026-07-31 17:11:56] [BSAHI Browser Publisher] Queue empty — generating
+[2026-07-31 17:11:57] [Queue] Generated 1 posts for 2026-07-31
+[2026-07-31 17:11:57] [BSAHI Browser Publisher] Launching Chrome...
+[2026-07-31 17:12:04] [BSAHI Browser Publisher] Twitter: navigating to compose...
+[2026-07-31 17:12:07] [BSAHI Browser Publisher] Twitter: compose not available
+[2026-07-31 17:12:07] [BSAHI Browser Publisher] Reddit: navigating to submit...
+[2026-07-31 17:12:11] [BSAHI Browser Publisher] Reddit: submit form not available
+[2026-07-31 17:12:14] [BSAHI Browser Publisher] Medium: navigating...
+[2026-07-31 17:12:17] [BSAHI Browser Publisher] Medium: editor not available (may need login)
+[2026-07-31 17:12:19] [BSAHI Browser Publisher] 0 platforms attempted, 0 posted
+[2026-07-31 17:12:19] [BSAHI Browser Publisher] === Cycle complete ===
+[2026-07-31 17:12:19] [BSAHI Publisher] RSS: /Users/prateekposwal/Desktop/block-space-economics/docs/feed.xml
+[2026-07-31 17:12:19] [BSAHI Publisher] === Full cycle complete ===
+[DE Agent 2026-07-31 17:12:19] Publisher: 2 posts in 26s
+[2026-07-31 17:12:19] [BSAHI Publisher] RSS: /Users/prateekposwal/Desktop/block-space-economics/docs/feed.xml
+[DE Agent 2026-07-31 17:12:20] Consumer: drained spool into SQLite
+[DE Agent 2026-07-31 17:12:20] Cycle 22 complete in 73s
+[DE Agent 2026-07-31 17:12:20] ISSUES: 2 endpoints unhealthy
+DE Server running on http://localhost:3456
+[DE Agent 2026-07-31 17:13:48] Starting — Data Engineer v1
+[DE Agent 2026-07-31 17:13:48] Cycle interval: 60 minutes
+[DE Agent 2026-07-31 17:13:48] Endpoints: 13
+[DE Agent 2026-07-31 17:13:48] Cycle 23 started
+[DE Agent 2026-07-31 17:13:48] Checking 13 endpoints...
+[DE Agent 2026-07-31 17:13:58] Endpoints: 11/13 healthy, 2 unhealthy
+[DE Agent 2026-07-31 17:13:58] Freshness checked
+[DE Agent 2026-07-31 17:13:58] Spool: scanned=180 new=1 ingested=1 validated=13 violated=0 failed=0
+[DE Agent 2026-07-31 17:14:00] Capture-agent: cycle=2026-07-31_22-43-58 captured=13 skipped=0 violated=0 errored=0
+[DE Agent 2026-07-31 17:14:00] Bitcoin Core: 532367 blocks, 3 fee stats, 8 peers
+[DE Agent 2026-07-31 17:14:00]   Fee percentiles (p10/p25/p50/p75/p90): 0.0/0.0/0.0/0.0/0.0 sat/vB
+[tracker] Saved: /Users/prateekposwal/Desktop/block-space-economics/captured-data/tracker/2026-07-31/2026-07-31_17-14-07.json
+[DE Agent 2026-07-31 17:14:07] Block intervals: 403.11s avg
+[DE Agent 2026-07-31 17:14:07] Derived metrics: computed + enqueued
+[DE Agent 2026-07-31 17:14:07] Data quality score: N/A/100
+[DE Agent 2026-07-31 17:14:07] Generating reports...
+[DE Agent 2026-07-31 17:14:38] Reports saved
+[2026-07-31 17:14:38] [BSAHI Publisher] === Full publishing cycle (Nostr + Browser) ===
+[2026-07-31 17:14:38] [BSAHI Publisher] === Publishing cycle ===
+[2026-07-31 17:14:43] [BSAHI Publisher] Published to 6 relays: 4 confirmed, 1 sent, 1 failed
+[2026-07-31 17:14:43] [Publisher] Posted BSAHI-MS979MAB-RYAC to medium [storage]
+[2026-07-31 17:14:43] [BSAHI Publisher] POSTED | storage | event: 159f7a300d19be7c...
+[2026-07-31 17:14:43] [BSAHI Publisher] 1 posted
+[2026-07-31 17:14:43] [BSAHI Publisher] RSS: /Users/prateekposwal/Desktop/block-space-economics/docs/feed.xml
+[2026-07-31 17:14:43] [BSAHI Publisher] === Cycle complete ===
+[2026-07-31 17:14:43] [BSAHI Browser Publisher] === Browser publishing cycle ===
+[2026-07-31 17:14:43] [BSAHI Browser Publisher] Queue empty — generating
+[2026-07-31 17:14:44] [Queue] Generated 1 posts for 2026-07-31
+[2026-07-31 17:14:44] [BSAHI Browser Publisher] Launching Chrome...
+[2026-07-31 17:14:45] [BSAHI Browser Publisher] Twitter: navigating to compose...
+[2026-07-31 17:14:49] [BSAHI Browser Publisher] Twitter: compose not available
+[2026-07-31 17:14:49] [BSAHI Browser Publisher] Reddit: navigating to submit...
+[2026-07-31 17:14:53] [BSAHI Browser Publisher] Reddit: submit form not available
+[2026-07-31 17:14:57] [BSAHI Browser Publisher] Medium: navigating...
+[2026-07-31 17:15:00] [BSAHI Browser Publisher] Medium: editor not available (may need login)
+[2026-07-31 17:15:00] [BSAHI Browser Publisher] 0 platforms attempted, 0 posted
+[2026-07-31 17:15:00] [BSAHI Browser Publisher] === Cycle complete ===
+[2026-07-31 17:15:00] [BSAHI Publisher] RSS: /Users/prateekposwal/Desktop/block-space-economics/docs/feed.xml
+[2026-07-31 17:15:00] [BSAHI Publisher] === Full cycle complete ===
+[DE Agent 2026-07-31 17:15:00] Publisher: 2 posts in 22s
+[2026-07-31 17:15:00] [BSAHI Publisher] RSS: /Users/prateekposwal/Desktop/block-space-economics/docs/feed.xml
+[DE Agent 2026-07-31 17:15:01] Consumer: drained spool into SQLite
+[DE Agent 2026-07-31 17:15:01] M4 gate: cleanCycles=0/7 (bridge=on, quality=0)
+[DE Agent 2026-07-31 17:15:01] Cycle 23 complete in 72s
+[DE Agent 2026-07-31 17:15:01] ISSUES: 2 endpoints unhealthy
+DE Server running on http://localhost:3456
+[DE Agent 2026-07-31 17:15:49] Starting — Data Engineer v1
+[DE Agent 2026-07-31 17:15:49] Cycle interval: 60 minutes
+[DE Agent 2026-07-31 17:15:49] Endpoints: 13
+[DE Agent 2026-07-31 17:15:49] Cycle 24 started
+[DE Agent 2026-07-31 17:15:49] Checking 13 endpoints...
+[DE Agent 2026-07-31 17:15:57] Endpoints: 12/13 healthy, 1 unhealthy
+[DE Agent 2026-07-31 17:15:57] Freshness checked
+[DE Agent 2026-07-31 17:15:57] Spool: scanned=181 new=1 ingested=1 validated=13 violated=0 failed=0
+[DE Agent 2026-07-31 17:16:06] Capture-agent: cycle=2026-07-31_22-45-57 captured=13 skipped=0 violated=0 errored=0
+[DE Agent 2026-07-31 17:16:06] Bitcoin Core: 532367 blocks, 3 fee stats, 8 peers
+[DE Agent 2026-07-31 17:16:06]   Fee percentiles (p10/p25/p50/p75/p90): 0.0/0.0/0.0/0.0/0.0 sat/vB
+[tracker] Saved: /Users/prateekposwal/Desktop/block-space-economics/captured-data/tracker/2026-07-31/2026-07-31_17-16-07.json
+[DE Agent 2026-07-31 17:16:07] Block intervals: 403.11s avg
+[DE Agent 2026-07-31 17:16:07] Derived metrics: computed + enqueued
+[DE Agent 2026-07-31 17:16:15] Data quality score: 96/100
+[DE Agent 2026-07-31 17:16:15] Generating reports...
+[DE Agent 2026-07-31 17:16:36] Reports saved
+[DE Agent 2026-07-31 17:16:36] Generating research digest...
+[DE Agent 2026-07-31 17:16:37] Digest saved to reports/digest/
+[2026-07-31 17:16:37] [BSAHI Publisher] === Full publishing cycle (Nostr + Browser) ===
+[2026-07-31 17:16:37] [BSAHI Publisher] === Publishing cycle ===
+[2026-07-31 17:16:42] [BSAHI Publisher] Published to 6 relays: 4 confirmed, 0 sent, 2 failed
+[2026-07-31 17:16:42] [Publisher] Posted BSAHI-MS97D708-FSW1 to medium [storage]
+[2026-07-31 17:16:42] [BSAHI Publisher] POSTED | storage | event: c55f532ad359e77a...
+[2026-07-31 17:16:42] [BSAHI Publisher] 1 posted
+[2026-07-31 17:16:42] [BSAHI Publisher] RSS: /Users/prateekposwal/Desktop/block-space-economics/docs/feed.xml
+[2026-07-31 17:16:42] [BSAHI Publisher] === Cycle complete ===
+[2026-07-31 17:16:42] [BSAHI Browser Publisher] === Browser publishing cycle ===
+[2026-07-31 17:16:42] [BSAHI Browser Publisher] Queue empty — generating
+[2026-07-31 17:16:42] [Queue] Generated 1 posts for 2026-07-31
+[2026-07-31 17:16:42] [BSAHI Browser Publisher] Launching Chrome...
+[2026-07-31 17:16:43] [BSAHI Browser Publisher] Twitter: navigating to compose...
+[2026-07-31 17:16:46] [BSAHI Browser Publisher] Twitter: compose not available
+[2026-07-31 17:16:46] [BSAHI Browser Publisher] Reddit: navigating to submit...
+[2026-07-31 17:16:49] [BSAHI Browser Publisher] Reddit: submit form not available
+[2026-07-31 17:16:52] [BSAHI Browser Publisher] Medium: navigating...
+[2026-07-31 17:16:56] [BSAHI Browser Publisher] Medium: editor not available (may need login)
+[2026-07-31 17:16:56] [BSAHI Browser Publisher] 0 platforms attempted, 0 posted
+[2026-07-31 17:16:56] [BSAHI Browser Publisher] === Cycle complete ===
+[2026-07-31 17:16:56] [BSAHI Publisher] RSS: /Users/prateekposwal/Desktop/block-space-economics/docs/feed.xml
+[2026-07-31 17:16:56] [BSAHI Publisher] === Full cycle complete ===
+[DE Agent 2026-07-31 17:16:56] Publisher: 2 posts in 19s
+[2026-07-31 17:16:56] [BSAHI Publisher] RSS: /Users/prateekposwal/Desktop/block-space-economics/docs/feed.xml
+[DE Agent 2026-07-31 17:16:57] Consumer: drained spool into SQLite
+[DE Agent 2026-07-31 17:16:57] Compaction: removed=1420 kept=0
+[DE Agent 2026-07-31 17:16:57] M4 gate: cleanCycles=1/7 (bridge=on, quality=96)
+[DE Agent 2026-07-31 17:16:57] Cycle 24 complete in 67s
+[DE Agent 2026-07-31 17:16:57] ISSUES: 1 endpoints unhealthy

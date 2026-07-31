@@ -1,8 +1,8 @@
 {
   "source": "block_height",
-  "lastCycleTs": "2026-07-31_22-13-00",
-  "lastEnqueuedAt": "2026-07-31T16:43:01.176Z",
-  "lastSeen": "2026-07-31T16:43:01.176Z",
+  "lastCycleTs": "2026-07-31_22-45-57",
+  "lastEnqueuedAt": "2026-07-31T17:15:58.512Z",
+  "lastSeen": "2026-07-31T17:15:58.512Z",
   "expectedIntervalMinutes": 10,
   "status": "healthy",
   "missedCycles": 0,

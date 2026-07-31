@@ -1,8 +1,8 @@
 {
   "source": "block_interval",
-  "lastCycleTs": "2026-07-31_22-30-00",
-  "lastEnqueuedAt": "2026-07-31T17:03:49.964Z",
-  "lastSeen": "2026-07-31T17:03:49.964Z",
+  "lastCycleTs": "2026-07-31_17-16-07",
+  "lastEnqueuedAt": "2026-07-31T17:16:07.240Z",
+  "lastSeen": "2026-07-31T17:16:07.240Z",
   "expectedIntervalMinutes": 10,
   "status": "healthy",
   "missedCycles": 0,

@@ -1,0 +1,4452 @@
+{
+  "captureTime": "2026-07-31T17:11:20.577Z",
+  "endpoints": {
+    "coinpaprika": {
+      "status": 200,
+      "data": {
+        "id": "btc-bitcoin",
+        "name": "Bitcoin",
+        "symbol": "BTC",
+        "rank": 1,
+        "is_new": false,
+        "is_active": true,
+        "type": "coin",
+        "logo": "https://static.coinpaprika.com/coin/btc-bitcoin/logo.png",
+        "tags": [
+          {
+            "id": "segwit",
+            "name": "Segwit",
+            "coin_counter": 12,
+            "ico_counter": 0
+          },
+          {
+            "id": "cryptocurrency",
+            "name": "Cryptocurrency",
+            "coin_counter": 1281,
+            "ico_counter": 40
+          },
+          {
+            "id": "proof-of-work",
+            "name": "Proof Of Work",
+            "coin_counter": 712,
+            "ico_counter": 0
+          },
+          {
+            "id": "payments",
+            "name": "Payments",
+            "coin_counter": 189,
+            "ico_counter": 39
+          },
+          {
+            "id": "sha256",
+            "name": "Sha256",
+            "coin_counter": 72,
+            "ico_counter": 0
+          },
+          {
+            "id": "mining",
+            "name": "Mining",
+            "coin_counter": 576,
+            "ico_counter": 3
+          },
+          {
+            "id": "lightning-network",
+            "name": "Lightning Network",
+            "coin_counter": 6,
+            "ico_counter": 0
+          },
+          {
+            "id": "layer-1-l1",
+            "name": "Layer 1 (L1)",
+            "coin_counter": 178,
+            "ico_counter": 0
+          },
+          {
+            "id": "ftx-holdings",
+            "name": "FTX Holdings",
+            "coin_counter": 15,
+            "ico_counter": 0
+          }
+        ],
+        "team": [
+          {
+            "id": "satoshi-nakamoto",
+            "name": "Satoshi Nakamoto",
+            "position": "Founder"
+          },
+          {
+            "id": "wladimir-j-van-der-laan",
+            "name": "Wladimir J. van der Laan",
+            "position": "Blockchain Developer"
+          },
+          {
+            "id": "jonas-schnelli",
+            "name": "Jonas Schnelli",
+            "position": "Blockchain Developer"
+          },
+          {
+            "id": "marco-falke",
+            "name": "Marco Falke",
+            "position": "Blockchain Developer"
+          }
+        ],
+        "description": "Bitcoin (BTC) is a decentralized digital currency that enables peer-to-peer transactions without intermediaries, using blockchain technology to ensure security and transparency. It was created in 2009 by an anonymous entity known as Satoshi Nakamoto. Source: CoinPaprika.com",
+        "message": "",
+        "open_source": true,
+        "started_at": "2009-01-03T00:00:00Z",
+        "development_status": "Working product",
+        "hardware_wallet": true,
+        "proof_type": "Proof of Work",
+        "org_structure": "Decentralized",
+        "hash_algorithm": "SHA256",
+        "links": {
+          "explorer": [
+            "https://blockchair.com/bitcoin/?from=coinpaprika",
+            "https://blockchain.com/explorer",
+            "https://blockstream.info/",
+            "https://live.blockcypher.com/btc/",
+            "https://btc.cryptoid.info/btc/"
+          ],
+          "facebook": [
+            "https://www.facebook.com/bitcoins/"
+          ],
+          "reddit": [
+            "https://www.reddit.com/r/bitcoin"
+          ],
+          "source_code": [
+            "https://github.com/bitcoin/bitcoin"
+          ],
+          "website": [
+            "https://bitcoin.org/"
+          ],
+          "youtube": [
+            "https://www.youtube.com/watch?v=Gc2en3nHxA4&"
+          ]
+        },
+        "links_extended": [
+          {
+            "url": "https://bitcoin.org/en/blog",
+            "type": "blog"
+          },
+          {
+            "url": "https://blockchair.com/bitcoin/?from=coinpaprika",
+            "type": "explorer"
+          },
+          {
+            "url": "https://blockchain.com/explorer",
+            "type": "explorer"
+          },
+          {
+            "url": "https://blockstream.info/",
+            "type": "explorer"
+          },
+          {
+            "url": "https://live.blockcypher.com/btc/",
+            "type": "explorer"
+          },
+          {
+            "url": "https://btc.cryptoid.info/btc/",
+            "type": "explorer"
+          },
+          {
+            "url": "https://www.facebook.com/bitcoins/",
+            "type": "facebook"
+          },
+          {
+            "url": "https://bitcointalk.org",
+            "type": "message_board"
+          },
+          {
+            "url": "https://www.reddit.com/r/bitcoin",
+            "type": "reddit",
+            "stats": {
+              "subscribers": 5958815
+            }
+          },
+          {
+            "url": "https://github.com/bitcoin/bitcoin",
+            "type": "source_code",
+            "stats": {
+              "contributors": 1205,
+              "stars": 78841
+            }
+          },
+          {
+            "url": "https://twitter.com/bitcoincoreorg",
+            "type": "twitter",
+            "stats": {
+              "followers": 161310
+            }
+          },
+          {
+            "url": "https://electrum.org/#download",
+            "type": "wallet"
+          },
+          {
+            "url": "https://bitcoin.org/",
+            "type": "website"
+          },
+          {
+            "url": "https://www.youtube.com/watch?v=Gc2en3nHxA4&",
+            "type": "youtube"
+          }
+        ],
+        "whitepaper": {
+          "link": "https://static.coinpaprika.com/storage/cdn/whitepapers/215.pdf",
+          "thumbnail": "https://static.coinpaprika.com/storage/cdn/whitepapers/217.jpg"
+        },
+        "first_data_at": "2010-07-17T00:00:00Z",
+        "last_data_at": "2026-07-31T17:08:00Z"
+      },
+      "fetchedAt": "2026-07-31T17:11:20.576Z"
+    },
+    "fear_greed": {
+      "status": 200,
+      "data": {
+        "name": "Fear and Greed Index",
+        "data": [
+          {
+            "value": "25",
+            "value_classification": "Extreme Fear",
+            "timestamp": "1785456000",
+            "time_until_update": "24520"
+          }
+        ],
+        "metadata": {
+          "error": null
+        }
+      },
+      "fetchedAt": "2026-07-31T17:11:20.928Z"
+    },
+    "fees": {
+      "status": 200,
+      "data": {
+        "fastestFee": 2,
+        "halfHourFee": 1,
+        "hourFee": 1,
+        "economyFee": 1,
+        "minimumFee": 1
+      },
+      "fetchedAt": "2026-07-31T17:11:21.538Z"
+    },
+    "block_height": {
+      "status": 200,
+      "data": 960438,
+      "fetchedAt": "2026-07-31T17:11:21.997Z"
+    },
+    "blockchair": {
+      "status": 200,
+      "data": {
+        "data": {
+          "blocks": 960439,
+          "transactions": 1408416908,
+          "outputs": 3853281798,
+          "circulation": 2006384291655096,
+          "blocks_24h": 157,
+          "transactions_24h": 643954,
+          "difficulty": 126231507121868.2,
+          "volume_24h": 106865243990212,
+          "mempool_transactions": 8014,
+          "mempool_size": 47819486,
+          "mempool_tps": 7.716666666666667,
+          "mempool_total_fee_usd": 2392.6193,
+          "best_block_height": 960438,
+          "best_block_hash": "00000000000000000001f42d4b3a0a0a8540e032456f57e20be026d252df6e0a",
+          "best_block_time": "2026-07-31 17:07:52",
+          "blockchain_size": 758171881509,
+          "average_transaction_fee_24h": 745,
+          "inflation_24h": 49062500000,
+          "median_transaction_fee_24h": 170,
+          "cdd_24h": 44665190.79505876,
+          "mempool_outputs": 43768,
+          "largest_transaction_24h": {
+            "hash": "b63a36ffadf68434ee6dd743400e14254242d91a6202d6fb956609657e36d8e0",
+            "value_usd": 1851690624
+          },
+          "nodes": 302,
+          "hashrate_24h": "985745808751298448052",
+          "inflation_usd_24h": 30809287.5,
+          "average_transaction_fee_usd_24h": 0.46796999056572364,
+          "median_transaction_fee_usd_24h": 0.1067532,
+          "market_price_usd": 62796,
+          "market_price_btc": 1,
+          "market_price_usd_change_24h_percentage": -3.04628,
+          "market_cap_usd": 1259907476797,
+          "market_dominance_percentage": 55.87,
+          "next_retarget_time_estimate": "2026-08-09 01:54:51",
+          "next_difficulty_estimate": 125966952270238,
+          "countdowns": [],
+          "suggested_transaction_fee_per_byte_sat": 2,
+          "hodling_addresses": 59559871
+        },
+        "context": {
+          "code": 200,
+          "source": "A",
+          "state": 960438,
+          "market_price_usd": 62813,
+          "cache": {
+            "live": false,
+            "duration": "Ignore",
+            "since": "2026-07-31 17:10:52",
+            "until": "2026-07-31 17:12:03",
+            "time": 0.0000030994415283203125
+          },
+          "api": {
+            "version": "2.0.95-ie",
+            "last_major_update": "2022-11-07 02:00:00",
+            "next_major_update": "2023-11-12 02:00:00",
+            "documentation": "https://blockchair.com/api/docs",
+            "notice": "Try out our new API v.3: https://3xpl.com/data"
+          },
+          "servers": "API4,BTC5,BTC5",
+          "time": 0.563701868057251,
+          "render_time": 0.0013570785522460938,
+          "full_time": 0.001360177993774414,
+          "request_cost": 1
+        }
+      },
+      "fetchedAt": "2026-07-31T17:11:22.126Z"
+    },
+    "btc_price": {
+      "status": 200,
+      "data": {
+        "time": 1785517506,
+        "USD": 62811,
+        "EUR": 54542,
+        "GBP": 46995,
+        "CAD": 88175,
+        "CHF": 50777,
+        "AUD": 89350,
+        "JPY": 10028228
+      },
+      "fetchedAt": "2026-07-31T17:11:22.458Z"
+    },
+    "mempool": {
+      "status": 200,
+      "data": {
+        "count": 91160,
+        "vsize": 43671878,
+        "total_fee": 10345372,
+        "fee_histogram": [
+          [
+            7.678382,
+            59524
+          ],
+          [
+            4.98452,
+            50571
+          ],
+          [
+            4.007335,
+            56976
+          ],
+          [
+            3.027523,
+            54676
+          ],
+          [
+            2.4736843,
+            50314
+          ],
+          [
+            2.191068,
+            55063
+          ],
+          [
+            2.001302,
+            51338
+          ],
+          [
+            1.2074707,
+            52815
+          ],
+          [
+            1.1100434,
+            50178
+          ],
+          [
+            1.0466378,
+            50129
+          ],
+          [
+            1.0163044,
+            51596
+          ],
+          [
+            1.0079815,
+            56889
+          ],
+          [
+            1.0066226,
+            50859
+          ],
+          [
+            1.0055549,
+            55966
+          ],
+          [
+            1.0044149,
+            79030
+          ],
+          [
+            1.001938,
+            50383
+          ],
+          [
+            1.0003494,
+            51405
+          ],
+          [
+            1,
+            61264
+          ],
+          [
+            0.7706422,
+            50290
+          ],
+          [
+            0.70000523,
+            97200
+          ],
+          [
+            0.60431653,
+            54630
+          ],
+          [
+            0.5611511,
+            69627
+          ],
+          [
+            0.52000695,
+            126904
+          ],
+          [
+            0.50076854,
+            76984
+          ],
+          [
+            0.5006861,
+            52836
+          ],
+          [
+            0.48920864,
+            57847
+          ],
+          [
+            0.46530563,
+            58415
+          ],
+          [
+            0.46392366,
+            53362
+          ],
+          [
+            0.45652175,
+            159186
+          ],
+          [
+            0.4532374,
+            74024
+          ],
+          [
+            0.44604316,
+            222223
+          ],
+          [
+            0.4388489,
+            955242
+          ],
+          [
+            0.40345636,
+            81542
+          ],
+          [
+            0.39370078,
+            97779
+          ],
+          [
+            0.39158005,
+            68124
+          ],
+          [
+            0.37487504,
+            167251
+          ],
+          [
+            0.37483862,
+            72031
+          ],
+          [
+            0.3748178,
+            72035
+          ],
+          [
+            0.37410071,
+            133440
+          ],
+          [
+            0.37387317,
+            72217
+          ],
+          [
+            0.36690646,
+            187886
+          ],
+          [
+            0.3556701,
+            51197
+          ],
+          [
+            0.352518,
+            370812
+          ],
+          [
+            0.34532374,
+            394496
+          ],
+          [
+            0.3381295,
+            80528
+          ],
+          [
+            0.33,
+            50248
+          ],
+          [
+            0.3243243,
+            51837
+          ],
+          [
+            0.31654677,
+            273501
+          ],
+          [
+            0.30835703,
+            93187
+          ],
+          [
+            0.30421376,
+            50391
+          ],
+          [
+            0.30194247,
+            50358
+          ],
+          [
+            0.30073914,
+            51766
+          ],
+          [
+            0.3006552,
+            54166
+          ],
+          [
+            0.3006363,
+            63694
+          ],
+          [
+            0.30062932,
+            59372
+          ],
+          [
+            0.30059993,
+            76254
+          ],
+          [
+            0.3005917,
+            58744
+          ],
+          [
+            0.30057546,
+            56897
+          ],
+          [
+            0.30057448,
+            97959
+          ],
+          [
+            0.30055618,
+            50941
+          ],
+          [
+            0.30054715,
+            64139
+          ],
+          [
+            0.30046967,
+            50901
+          ],
+          [
+            0.3001975,
+            54583
+          ],
+          [
+            0.30015257,
+            53527
+          ],
+          [
+            0.30012017,
+            57287
+          ],
+          [
+            0.30009162,
+            54927
+          ],
+          [
+            0.30007064,
+            51350
+          ],
+          [
+            0.300049,
+            57526
+          ],
+          [
+            0.300027,
+            55404
+          ],
+          [
+            0.3000111,
+            91052
+          ],
+          [
+            0.3000092,
+            98067
+          ],
+          [
+            0.29999816,
+            58497
+          ],
+          [
+            0.29496402,
+            282399
+          ],
+          [
+            0.29146022,
+            53276
+          ],
+          [
+            0.26244345,
+            50975
+          ],
+          [
+            0.26099303,
+            72285
+          ],
+          [
+            0.25050434,
+            78733
+          ],
+          [
+            0.25050065,
+            67912
+          ],
+          [
+            0.25049695,
+            67913
+          ],
+          [
+            0.25049326,
+            67914
+          ],
+          [
+            0.2504896,
+            271660
+          ],
+          [
+            0.2504822,
+            67917
+          ],
+          [
+            0.25047484,
+            135838
+          ],
+          [
+            0.25044534,
+            67927
+          ],
+          [
+            0.24,
+            172012
+          ],
+          [
+            0.2244898,
+            50441
+          ],
+          [
+            0.22323118,
+            51008
+          ],
+          [
+            0.22302158,
+            126460
+          ],
+          [
+            0.220734,
+            53330
+          ],
+          [
+            0.22047739,
+            52536
+          ],
+          [
+            0.22044897,
+            81520
+          ],
+          [
+            0.22041848,
+            91335
+          ],
+          [
+            0.22041424,
+            92798
+          ],
+          [
+            0.22015105,
+            50366
+          ],
+          [
+            0.2200951,
+            52199
+          ],
+          [
+            0.22003284,
+            60109
+          ],
+          [
+            0.21582733,
+            50773
+          ],
+          [
+            0.21428572,
+            50332
+          ],
+          [
+            0.21410532,
+            52866
+          ],
+          [
+            0.21363041,
+            50737
+          ],
+          [
+            0.208,
+            2429014
+          ],
+          [
+            0.20437956,
+            147724
+          ],
+          [
+            0.2032802,
+            78849
+          ],
+          [
+            0.20226218,
+            56064
+          ],
+          [
+            0.20189586,
+            53905
+          ],
+          [
+            0.20178874,
+            57351
+          ],
+          [
+            0.20175026,
+            72922
+          ],
+          [
+            0.2015504,
+            71798
+          ],
+          [
+            0.20062928,
+            54578
+          ],
+          [
+            0.20049942,
+            73363
+          ],
+          [
+            0.20042117,
+            86955
+          ],
+          [
+            0.20039149,
+            88624
+          ],
+          [
+            0.2003887,
+            67918
+          ],
+          [
+            0.2003828,
+            67920
+          ],
+          [
+            0.20038263,
+            67950
+          ],
+          [
+            0.2002361,
+            463326
+          ],
+          [
+            0.2000978,
+            53371
+          ],
+          [
+            0.20008163,
+            89938
+          ],
+          [
+            0.20007724,
+            98137
+          ],
+          [
+            0.20002349,
+            123023
+          ],
+          [
+            0.19899781,
+            60390
+          ],
+          [
+            0.19424461,
+            81134
+          ],
+          [
+            0.18439716,
+            84548
+          ],
+          [
+            0.184,
+            122750
+          ],
+          [
+            0.18199418,
+            50572
+          ],
+          [
+            0.18137507,
+            70102
+          ],
+          [
+            0.18136416,
+            57867
+          ],
+          [
+            0.18135639,
+            67916
+          ],
+          [
+            0.17266187,
+            59757
+          ],
+          [
+            0.16666667,
+            59378
+          ],
+          [
+            0.16216215,
+            53307
+          ],
+          [
+            0.16035016,
+            78288
+          ],
+          [
+            0.16033836,
+            67975
+          ],
+          [
+            0.1603242,
+            135962
+          ],
+          [
+            0.16031949,
+            67983
+          ],
+          [
+            0.15331154,
+            85186
+          ],
+          [
+            0.15230869,
+            52147
+          ],
+          [
+            0.15229973,
+            51832
+          ],
+          [
+            0.15227985,
+            68118
+          ],
+          [
+            0.15227762,
+            67922
+          ],
+          [
+            0.1492248,
+            50423
+          ],
+          [
+            0.14328626,
+            109946
+          ],
+          [
+            0.13669065,
+            377418
+          ],
+          [
+            0.13227187,
+            75421
+          ],
+          [
+            0.13226664,
+            57936
+          ],
+          [
+            0.13226406,
+            55427
+          ],
+          [
+            0.13226049,
+            67919
+          ],
+          [
+            0.13225853,
+            164299
+          ],
+          [
+            0.13225631,
+            68027
+          ],
+          [
+            0.13225465,
+            67922
+          ],
+          [
+            0.13225436,
+            68028
+          ],
+          [
+            0.13225242,
+            68029
+          ],
+          [
+            0.13225047,
+            68030
+          ],
+          [
+            0.13224465,
+            68033
+          ],
+          [
+            0.13188212,
+            119322
+          ],
+          [
+            0.13145025,
+            92454
+          ],
+          [
+            0.13144995,
+            68140
+          ],
+          [
+            0.13101976,
+            89414
+          ],
+          [
+            0.13101953,
+            98222
+          ],
+          [
+            0.13023664,
+            10039639
+          ],
+          [
+            0.1300316,
+            57586
+          ],
+          [
+            0.13000526,
+            89381
+          ],
+          [
+            0.12435233,
+            86995
+          ],
+          [
+            0.12358888,
+            96877
+          ],
+          [
+            0.123587936,
+            93480
+          ],
+          [
+            0.12224284,
+            86810
+          ],
+          [
+            0.12223924,
+            67916
+          ],
+          [
+            0.12223384,
+            67919
+          ],
+          [
+            0.12023073,
+            110228
+          ],
+          [
+            0.120213784,
+            6538851
+          ],
+          [
+            0.119977035,
+            58220
+          ],
+          [
+            0.11543946,
+            115622
+          ],
+          [
+            0.113228105,
+            100742
+          ],
+          [
+            0.11223513,
+            69696
+          ],
+          [
+            0.11223348,
+            67912
+          ],
+          [
+            0.112230174,
+            135828
+          ],
+          [
+            0.112223566,
+            135836
+          ],
+          [
+            0.11221723,
+            51632
+          ],
+          [
+            0.11153846,
+            51889
+          ],
+          [
+            0.10810811,
+            56190
+          ],
+          [
+            0.10638298,
+            158655
+          ],
+          [
+            0.105003506,
+            620451
+          ],
+          [
+            0.105002455,
+            899379
+          ],
+          [
+            0.1050014,
+            99932
+          ],
+          [
+            0.104,
+            3284210
+          ],
+          [
+            0.10280374,
+            63511
+          ],
+          [
+            0.10218978,
+            173952
+          ],
+          [
+            0.10150674,
+            51410
+          ],
+          [
+            0.10144927,
+            90459
+          ],
+          [
+            0.101037264,
+            75904
+          ],
+          [
+            0.10095736,
+            50319
+          ],
+          [
+            0.10087742,
+            86498
+          ],
+          [
+            0.10071942,
+            129118
+          ],
+          [
+            0.10023224,
+            65060
+          ],
+          [
+            0.10021779,
+            56346
+          ],
+          [
+            0.100189395,
+            52140
+          ],
+          [
+            0.1001832,
+            67137
+          ],
+          [
+            0.10008046,
+            88990
+          ],
+          [
+            0.100068584,
+            58705
+          ],
+          [
+            0.10005631,
+            60376
+          ],
+          [
+            0.1000478,
+            100021
+          ],
+          [
+            0.10004488,
+            103403
+          ],
+          [
+            0.10002792,
+            73577
+          ],
+          [
+            0.100024134,
+            95296
+          ],
+          [
+            0.10002018,
+            73004
+          ],
+          [
+            0.10001939,
+            87533
+          ],
+          [
+            0.100016765,
+            89455
+          ],
+          [
+            0.10001484,
+            67360
+          ],
+          [
+            0.10000532,
+            93985
+          ],
+          [
+            0.10000524,
+            95475
+          ],
+          [
+            0.10000518,
+            96475
+          ],
+          [
+            0.10000511,
+            97855
+          ],
+          [
+            0.10000506,
+            98835
+          ],
+          [
+            0.10000427,
+            93666
+          ],
+          [
+            0.100004196,
+            95316
+          ],
+          [
+            0.10000329,
+            91207
+          ],
+          [
+            0.100003205,
+            93587
+          ],
+          [
+            0.1000032,
+            93747
+          ],
+          [
+            0.100003034,
+            98797
+          ],
+          [
+            0.10000303,
+            99197
+          ],
+          [
+            0.10000301,
+            99497
+          ],
+          [
+            0.10000215,
+            93008
+          ],
+          [
+            0.10000211,
+            94788
+          ],
+          [
+            0.10000206,
+            97278
+          ],
+          [
+            0.10000204,
+            97818
+          ],
+          [
+            0.10000101,
+            99129
+          ],
+          [
+            0,
+            3264
+          ]
+        ]
+      },
+      "fetchedAt": "2026-07-31T17:11:22.532Z"
+    },
+    "blocks": {
+      "status": 200,
+      "data": [
+        {
+          "id": "00000000000000000001f42d4b3a0a0a8540e032456f57e20be026d252df6e0a",
+          "height": 960438,
+          "version": 978952192,
+          "timestamp": 1785517672,
+          "tx_count": 4134,
+          "size": 1636190,
+          "weight": 3992873,
+          "merkle_root": "165b59bb6c360f492c2eac16dc5bb4245e53d470360a2db7808129a2d5f32c4e",
+          "previousblockhash": "000000000000000000010dc77796e72afec8167490b6a9cdb5c342f5369a152b",
+          "mediantime": 1785515077,
+          "nonce": 1186021145,
+          "bits": 386022100,
+          "difficulty": 126231507121868.19
+        },
+        {
+          "id": "000000000000000000010dc77796e72afec8167490b6a9cdb5c342f5369a152b",
+          "height": 960437,
+          "version": 580173824,
+          "timestamp": 1785517524,
+          "tx_count": 3798,
+          "size": 1590011,
+          "weight": 3994922,
+          "merkle_root": "e27027eded5f6a49eb6e9c3474df9238e1ffb7a5a3d13f9fcc26a8d44a9c0f62",
+          "previousblockhash": "00000000000000000001a20611b9f7bc3f9f6ff8637c63ffea13771263ba36da",
+          "mediantime": 1785514734,
+          "nonce": 1910779965,
+          "bits": 386022100,
+          "difficulty": 126231507121868.19
+        },
+        {
+          "id": "00000000000000000001a20611b9f7bc3f9f6ff8637c63ffea13771263ba36da",
+          "height": 960436,
+          "version": 636428288,
+          "timestamp": 1785516303,
+          "tx_count": 4229,
+          "size": 1602124,
+          "weight": 3995077,
+          "merkle_root": "6869a0de0b16551c47034d333dcf2a1fe0d3fe9f7d4282698f701b1c05102473",
+          "previousblockhash": "0000000000000000000147a42bf6207f7736246fdb8091dae00177fa81e29e3e",
+          "mediantime": 1785514186,
+          "nonce": 1220265275,
+          "bits": 386022100,
+          "difficulty": 126231507121868.19
+        },
+        {
+          "id": "0000000000000000000147a42bf6207f7736246fdb8091dae00177fa81e29e3e",
+          "height": 960435,
+          "version": 537378816,
+          "timestamp": 1785515606,
+          "tx_count": 4321,
+          "size": 1694372,
+          "weight": 3993428,
+          "merkle_root": "04f4cf9dd561301485eb0fcf27febb060291bdcee78d363a5663b41ce68ea28d",
+          "previousblockhash": "00000000000000000001ebfa4f00b2f83b73e9c383fe0c4cbf79697f8fcffc4b",
+          "mediantime": 1785514181,
+          "nonce": 1880832162,
+          "bits": 386022100,
+          "difficulty": 126231507121868.19
+        },
+        {
+          "id": "00000000000000000001ebfa4f00b2f83b73e9c383fe0c4cbf79697f8fcffc4b",
+          "height": 960434,
+          "version": 593141764,
+          "timestamp": 1785515233,
+          "tx_count": 5533,
+          "size": 1618897,
+          "weight": 3992968,
+          "merkle_root": "2cbe9419337639da509561423cb507a20172e2911f7b6f1aee24ad62f71643c8",
+          "previousblockhash": "0000000000000000000182c80042c038dfed9d9e60b344be2844c7eb374fdcfd",
+          "mediantime": 1785514044,
+          "nonce": 2259253042,
+          "bits": 386022100,
+          "difficulty": 126231507121868.19
+        },
+        {
+          "id": "0000000000000000000182c80042c038dfed9d9e60b344be2844c7eb374fdcfd",
+          "height": 960433,
+          "version": 679632896,
+          "timestamp": 1785515077,
+          "tx_count": 4507,
+          "size": 1552247,
+          "weight": 3997910,
+          "merkle_root": "349f476cd95a4f54de7f81f70b090ae68882ed7aaf99009727a237331fec4801",
+          "previousblockhash": "00000000000000000000f10683aab2385d4e9f1e628b1c317e60961a775beefe",
+          "mediantime": 1785513786,
+          "nonce": 2523622930,
+          "bits": 386022100,
+          "difficulty": 126231507121868.19
+        },
+        {
+          "id": "00000000000000000000f10683aab2385d4e9f1e628b1c317e60961a775beefe",
+          "height": 960432,
+          "version": 536961024,
+          "timestamp": 1785514734,
+          "tx_count": 4609,
+          "size": 1662199,
+          "weight": 3993028,
+          "merkle_root": "a17d43c750b3558ad934e5f476f410dc0130224816328de030bb391f290eab8d",
+          "previousblockhash": "000000000000000000010be52d7fd53b3b20ae665355c58a6ad4cca64f2aa2bf",
+          "mediantime": 1785513558,
+          "nonce": 1255494892,
+          "bits": 386022100,
+          "difficulty": 126231507121868.19
+        },
+        {
+          "id": "000000000000000000010be52d7fd53b3b20ae665355c58a6ad4cca64f2aa2bf",
+          "height": 960431,
+          "version": 537157632,
+          "timestamp": 1785514186,
+          "tx_count": 1897,
+          "size": 1998653,
+          "weight": 3993614,
+          "merkle_root": "97b2cbd0397e433fb25d91fb1f0c7dd81ccaf88d1425d41a94ea69973918d75d",
+          "previousblockhash": "00000000000000000000ba7a923a4715f043af249597cf2cac2a77b5f98e76b4",
+          "mediantime": 1785513246,
+          "nonce": 323473756,
+          "bits": 386022100,
+          "difficulty": 126231507121868.19
+        },
+        {
+          "id": "00000000000000000000ba7a923a4715f043af249597cf2cac2a77b5f98e76b4",
+          "height": 960430,
+          "version": 537509888,
+          "timestamp": 1785514181,
+          "tx_count": 2676,
+          "size": 1901638,
+          "weight": 3993040,
+          "merkle_root": "8e36b3296e797c718ca719b7e0911e2641bce7dc171b510357c929245cf8dce5",
+          "previousblockhash": "00000000000000000000d22bad91665ddf0679262ce9eee57cede65edb14a9d5",
+          "mediantime": 1785512913,
+          "nonce": 3405027690,
+          "bits": 386022100,
+          "difficulty": 126231507121868.19
+        },
+        {
+          "id": "00000000000000000000d22bad91665ddf0679262ce9eee57cede65edb14a9d5",
+          "height": 960429,
+          "version": 708968448,
+          "timestamp": 1785514044,
+          "tx_count": 2862,
+          "size": 1808561,
+          "weight": 3993620,
+          "merkle_root": "41e2feb75e5c5c5a8c88377e5d698019b8c0271cc8348348e3f9344f13403a49",
+          "previousblockhash": "00000000000000000001f840808b394c5ec995c3a433c61ca720c83afc44a45c",
+          "mediantime": 1785512849,
+          "nonce": 1108200462,
+          "bits": 386022100,
+          "difficulty": 126231507121868.19
+        }
+      ],
+      "fetchedAt": "2026-07-31T17:11:22.738Z"
+    },
+    "difficulty": {
+      "status": 200,
+      "data": {
+        "progressPercent": 40.773809523809526,
+        "difficultyChange": -0.846160951298558,
+        "estimatedRetargetDate": 1786241272064,
+        "remainingBlocks": 1194,
+        "remainingTime": 723392064,
+        "previousRetarget": -0.7383735253058887,
+        "previousTime": 1785019866,
+        "nextRetargetHeight": 961632,
+        "timeAvg": 605856,
+        "adjustedTimeAvg": 605856,
+        "timeOffset": 0,
+        "expectedBlocks": 830.0233333333333
+      },
+      "fetchedAt": "2026-07-31T17:11:22.834Z"
+    },
+    "mempool_blocks": {
+      "status": 200,
+      "data": [
+        {
+          "blockSize": 1658993,
+          "blockVSize": 997997,
+          "nTx": 4564,
+          "totalFees": 2582540,
+          "medianFee": 1.1123672031294423,
+          "feeRange": [
+            1,
+            1.0056497175141244,
+            1.0122053479921738,
+            1.0680071813285459,
+            2.0108257061312864,
+            3.522222222222222,
+            201.45278450363196
+          ]
+        },
+        {
+          "blockSize": 1806864,
+          "blockVSize": 997995,
+          "nTx": 5548,
+          "totalFees": 701172,
+          "medianFee": 0.6108713968317971,
+          "feeRange": [
+            0.5,
+            0.5121723518850988,
+            0.5541113105924597,
+            0.5828000350661874,
+            0.6827218361079683,
+            1,
+            1.0040268456375838
+          ]
+        },
+        {
+          "blockSize": 1896466,
+          "blockVSize": 997903,
+          "nTx": 4025,
+          "totalFees": 475171,
+          "medianFee": 0.470233393177738,
+          "feeRange": [
+            0.4452423698384201,
+            0.4452771272443404,
+            0.4457434052757794,
+            0.4554954954954955,
+            0.4767734965790421,
+            0.483759701063524,
+            0.5200041465024797
+          ]
+        },
+        {
+          "blockSize": 1684326,
+          "blockVSize": 997973.25,
+          "nTx": 6865,
+          "totalFees": 443431,
+          "medianFee": 0.4452423698384201,
+          "feeRange": [
+            0.4380610412926391,
+            0.438121546961326,
+            0.4452423698384201,
+            0.4452423698384201,
+            0.4452423698384201,
+            0.4452423698384201,
+            0.4452423698384201
+          ]
+        },
+        {
+          "blockSize": 1446295,
+          "blockVSize": 997995.25,
+          "nTx": 3710,
+          "totalFees": 372279,
+          "medianFee": 0.37481779690428263,
+          "feeRange": [
+            0.29219143576826195,
+            0.3564640487717411,
+            0.35655994978028877,
+            0.35662391245851643,
+            0.3800359066427289,
+            0.3937007874015748,
+            0.4380610412926391
+          ]
+        },
+        {
+          "blockSize": 1710788,
+          "blockVSize": 997915.25,
+          "nTx": 4960,
+          "totalFees": 328545,
+          "medianFee": 0.3255530382497558,
+          "feeRange": [
+            0.30038022813688214,
+            0.32,
+            0.32,
+            0.3372802296376032,
+            0.3515695067264574,
+            0.351632579834948,
+            0.35186268773161694
+          ]
+        },
+        {
+          "blockSize": 2528488,
+          "blockVSize": 997975.75,
+          "nTx": 853,
+          "totalFees": 299822,
+          "medianFee": 0.3005588523362332,
+          "feeRange": [
+            0.2994652406417112,
+            0.30017953321364454,
+            0.30017953321364454,
+            0.30017953321364454,
+            0.30017953321364454,
+            0.3002854718000154,
+            0.3007400957771006
+          ]
+        },
+        {
+          "blockSize": 113253251,
+          "blockVSize": 36730040.75,
+          "nTx": 60692,
+          "totalFees": 5175223,
+          "medianFee": 0.13023565659089018,
+          "feeRange": [
+            0.10000083539472265,
+            0.10364415235637993,
+            0.10500228836087418,
+            0.12021287065004278,
+            0.12021287065004278,
+            0.13023565659089018,
+            0.13023565659089018,
+            0.13023565659089018,
+            0.18218695732885984,
+            0.20740454702890407,
+            0.3000239079345415
+          ]
+        }
+      ],
+      "fetchedAt": "2026-07-31T17:11:22.890Z"
+    },
+    "fee_history": {
+      "status": 200,
+      "data": [
+        {
+          "avgHeight": 960282,
+          "timestamp": 1785431458,
+          "avgFees": 5397821,
+          "USD": 64766
+        },
+        {
+          "avgHeight": 960283,
+          "timestamp": 1785432008,
+          "avgFees": 4128916,
+          "USD": 64766
+        },
+        {
+          "avgHeight": 960284,
+          "timestamp": 1785432206,
+          "avgFees": 2853838,
+          "USD": 64766
+        },
+        {
+          "avgHeight": 960285,
+          "timestamp": 1785432400,
+          "avgFees": 1883065,
+          "USD": 64766
+        },
+        {
+          "avgHeight": 960286,
+          "timestamp": 1785432525,
+          "avgFees": 973919,
+          "USD": 64766
+        },
+        {
+          "avgHeight": 960287,
+          "timestamp": 1785432954,
+          "avgFees": 2561657,
+          "USD": 64766
+        },
+        {
+          "avgHeight": 960288,
+          "timestamp": 1785433298,
+          "avgFees": 1824875,
+          "USD": 64766
+        },
+        {
+          "avgHeight": 960289,
+          "timestamp": 1785435045,
+          "avgFees": 4625474,
+          "USD": 64817
+        },
+        {
+          "avgHeight": 960290,
+          "timestamp": 1785435671,
+          "avgFees": 3886580,
+          "USD": 64817
+        },
+        {
+          "avgHeight": 960291,
+          "timestamp": 1785435813,
+          "avgFees": 1639164,
+          "USD": 64817
+        },
+        {
+          "avgHeight": 960292,
+          "timestamp": 1785436241,
+          "avgFees": 2962485,
+          "USD": 64817
+        },
+        {
+          "avgHeight": 960293,
+          "timestamp": 1785437052,
+          "avgFees": 2783571,
+          "USD": 64817
+        },
+        {
+          "avgHeight": 960294,
+          "timestamp": 1785437160,
+          "avgFees": 1636587,
+          "USD": 64817
+        },
+        {
+          "avgHeight": 960295,
+          "timestamp": 1785438298,
+          "avgFees": 4279227,
+          "USD": 64639
+        },
+        {
+          "avgHeight": 960296,
+          "timestamp": 1785438669,
+          "avgFees": 1615158,
+          "USD": 64639
+        },
+        {
+          "avgHeight": 960297,
+          "timestamp": 1785438976,
+          "avgFees": 1995396,
+          "USD": 64639
+        },
+        {
+          "avgHeight": 960298,
+          "timestamp": 1785439560,
+          "avgFees": 2341450,
+          "USD": 64639
+        },
+        {
+          "avgHeight": 960299,
+          "timestamp": 1785440054,
+          "avgFees": 1990291,
+          "USD": 64639
+        },
+        {
+          "avgHeight": 960300,
+          "timestamp": 1785440560,
+          "avgFees": 1427077,
+          "USD": 64639
+        },
+        {
+          "avgHeight": 960301,
+          "timestamp": 1785441985,
+          "avgFees": 4214848,
+          "USD": 64759
+        },
+        {
+          "avgHeight": 960302,
+          "timestamp": 1785442173,
+          "avgFees": 1925672,
+          "USD": 64759
+        },
+        {
+          "avgHeight": 960303,
+          "timestamp": 1785442273,
+          "avgFees": 1143046,
+          "USD": 64759
+        },
+        {
+          "avgHeight": 960305,
+          "timestamp": 1785442499,
+          "avgFees": 1015616,
+          "USD": 64759
+        },
+        {
+          "avgHeight": 960304,
+          "timestamp": 1785442500,
+          "avgFees": 35748,
+          "USD": 64759
+        },
+        {
+          "avgHeight": 960306,
+          "timestamp": 1785443033,
+          "avgFees": 2144201,
+          "USD": 64759
+        },
+        {
+          "avgHeight": 960307,
+          "timestamp": 1785443110,
+          "avgFees": 835670,
+          "USD": 64759
+        },
+        {
+          "avgHeight": 960308,
+          "timestamp": 1785443343,
+          "avgFees": 534082,
+          "USD": 64759
+        },
+        {
+          "avgHeight": 960309,
+          "timestamp": 1785443749,
+          "avgFees": 1702037,
+          "USD": 64759
+        },
+        {
+          "avgHeight": 960310,
+          "timestamp": 1785443974,
+          "avgFees": 1108657,
+          "USD": 64759
+        },
+        {
+          "avgHeight": 960311,
+          "timestamp": 1785444302,
+          "avgFees": 1292531,
+          "USD": 64759
+        },
+        {
+          "avgHeight": 960312,
+          "timestamp": 1785444810,
+          "avgFees": 1911806,
+          "USD": 64759
+        },
+        {
+          "avgHeight": 960313,
+          "timestamp": 1785444826,
+          "avgFees": 0,
+          "USD": 64759
+        },
+        {
+          "avgHeight": 960314,
+          "timestamp": 1785445246,
+          "avgFees": 1748168,
+          "USD": 64722
+        },
+        {
+          "avgHeight": 960315,
+          "timestamp": 1785445736,
+          "avgFees": 1966691,
+          "USD": 64722
+        },
+        {
+          "avgHeight": 960316,
+          "timestamp": 1785446786,
+          "avgFees": 2927543,
+          "USD": 64722
+        },
+        {
+          "avgHeight": 960317,
+          "timestamp": 1785447324,
+          "avgFees": 1810907,
+          "USD": 64722
+        },
+        {
+          "avgHeight": 960318,
+          "timestamp": 1785448493,
+          "avgFees": 3245271,
+          "USD": 64722
+        },
+        {
+          "avgHeight": 960319,
+          "timestamp": 1785449040,
+          "avgFees": 1503398,
+          "USD": 64670
+        },
+        {
+          "avgHeight": 960320,
+          "timestamp": 1785449957,
+          "avgFees": 2813241,
+          "USD": 64670
+        },
+        {
+          "avgHeight": 960321,
+          "timestamp": 1785450450,
+          "avgFees": 2912967,
+          "USD": 64670
+        },
+        {
+          "avgHeight": 960322,
+          "timestamp": 1785452669,
+          "avgFees": 4959388,
+          "USD": 64795
+        },
+        {
+          "avgHeight": 960323,
+          "timestamp": 1785453746,
+          "avgFees": 4451264,
+          "USD": 64795
+        },
+        {
+          "avgHeight": 960324,
+          "timestamp": 1785455671,
+          "avgFees": 5491980,
+          "USD": 64795
+        },
+        {
+          "avgHeight": 960325,
+          "timestamp": 1785456285,
+          "avgFees": 3894178,
+          "USD": 64730
+        },
+        {
+          "avgHeight": 960326,
+          "timestamp": 1785457071,
+          "avgFees": 3530492,
+          "USD": 64730
+        },
+        {
+          "avgHeight": 960327,
+          "timestamp": 1785457586,
+          "avgFees": 2859826,
+          "USD": 64730
+        },
+        {
+          "avgHeight": 960328,
+          "timestamp": 1785458703,
+          "avgFees": 3679936,
+          "USD": 64730
+        },
+        {
+          "avgHeight": 960329,
+          "timestamp": 1785459244,
+          "avgFees": 2745000,
+          "USD": 64730
+        },
+        {
+          "avgHeight": 960330,
+          "timestamp": 1785459501,
+          "avgFees": 1598036,
+          "USD": 64730
+        },
+        {
+          "avgHeight": 960331,
+          "timestamp": 1785462063,
+          "avgFees": 6844097,
+          "USD": 64670
+        },
+        {
+          "avgHeight": 960332,
+          "timestamp": 1785463301,
+          "avgFees": 5168028,
+          "USD": 64512
+        },
+        {
+          "avgHeight": 960333,
+          "timestamp": 1785464006,
+          "avgFees": 3147005,
+          "USD": 64512
+        },
+        {
+          "avgHeight": 960334,
+          "timestamp": 1785464355,
+          "avgFees": 3901505,
+          "USD": 64512
+        },
+        {
+          "avgHeight": 960335,
+          "timestamp": 1785464637,
+          "avgFees": 3238602,
+          "USD": 64512
+        },
+        {
+          "avgHeight": 960336,
+          "timestamp": 1785465753,
+          "avgFees": 4893695,
+          "USD": 64512
+        },
+        {
+          "avgHeight": 960337,
+          "timestamp": 1785466308,
+          "avgFees": 2895276,
+          "USD": 64512
+        },
+        {
+          "avgHeight": 960338,
+          "timestamp": 1785467405,
+          "avgFees": 4949519,
+          "USD": 64237
+        },
+        {
+          "avgHeight": 960339,
+          "timestamp": 1785467617,
+          "avgFees": 1754268,
+          "USD": 64237
+        },
+        {
+          "avgHeight": 960340,
+          "timestamp": 1785467704,
+          "avgFees": 1262037,
+          "USD": 64237
+        },
+        {
+          "avgHeight": 960341,
+          "timestamp": 1785468426,
+          "avgFees": 3177305,
+          "USD": 64237
+        },
+        {
+          "avgHeight": 960342,
+          "timestamp": 1785470126,
+          "avgFees": 4842298,
+          "USD": 64237
+        },
+        {
+          "avgHeight": 960343,
+          "timestamp": 1785471234,
+          "avgFees": 4460749,
+          "USD": 64309
+        },
+        {
+          "avgHeight": 960344,
+          "timestamp": 1785471298,
+          "avgFees": 1390314,
+          "USD": 64309
+        },
+        {
+          "avgHeight": 960345,
+          "timestamp": 1785473668,
+          "avgFees": 6398431,
+          "USD": 64309
+        },
+        {
+          "avgHeight": 960346,
+          "timestamp": 1785474403,
+          "avgFees": 3627682,
+          "USD": 64255
+        },
+        {
+          "avgHeight": 960347,
+          "timestamp": 1785474986,
+          "avgFees": 2876403,
+          "USD": 64255
+        },
+        {
+          "avgHeight": 960348,
+          "timestamp": 1785475022,
+          "avgFees": 1678202,
+          "USD": 64255
+        },
+        {
+          "avgHeight": 960349,
+          "timestamp": 1785475421,
+          "avgFees": 2006934,
+          "USD": 64255
+        },
+        {
+          "avgHeight": 960350,
+          "timestamp": 1785475479,
+          "avgFees": 807292,
+          "USD": 64255
+        },
+        {
+          "avgHeight": 960351,
+          "timestamp": 1785475607,
+          "avgFees": 1046975,
+          "USD": 64255
+        },
+        {
+          "avgHeight": 960353,
+          "timestamp": 1785476882,
+          "avgFees": 1002950,
+          "USD": 64255
+        },
+        {
+          "avgHeight": 960354,
+          "timestamp": 1785476898,
+          "avgFees": 1300002,
+          "USD": 64255
+        },
+        {
+          "avgHeight": 960352,
+          "timestamp": 1785476910,
+          "avgFees": 3241268,
+          "USD": 64255
+        },
+        {
+          "avgHeight": 960355,
+          "timestamp": 1785476958,
+          "avgFees": 619414,
+          "USD": 64255
+        },
+        {
+          "avgHeight": 960356,
+          "timestamp": 1785477487,
+          "avgFees": 1906060,
+          "USD": 64255
+        },
+        {
+          "avgHeight": 960357,
+          "timestamp": 1785477906,
+          "avgFees": 1407651,
+          "USD": 64304
+        },
+        {
+          "avgHeight": 960358,
+          "timestamp": 1785478216,
+          "avgFees": 1295878,
+          "USD": 64304
+        },
+        {
+          "avgHeight": 960359,
+          "timestamp": 1785479908,
+          "avgFees": 3669079,
+          "USD": 64304
+        },
+        {
+          "avgHeight": 960360,
+          "timestamp": 1785480131,
+          "avgFees": 2116981,
+          "USD": 64304
+        },
+        {
+          "avgHeight": 960361,
+          "timestamp": 1785481003,
+          "avgFees": 2410780,
+          "USD": 64304
+        },
+        {
+          "avgHeight": 960362,
+          "timestamp": 1785481080,
+          "avgFees": 1058988,
+          "USD": 64304
+        },
+        {
+          "avgHeight": 960363,
+          "timestamp": 1785483250,
+          "avgFees": 10806896,
+          "USD": 64198
+        },
+        {
+          "avgHeight": 960364,
+          "timestamp": 1785484886,
+          "avgFees": 6623449,
+          "USD": 63871
+        },
+        {
+          "avgHeight": 960365,
+          "timestamp": 1785485613,
+          "avgFees": 4654090,
+          "USD": 63871
+        },
+        {
+          "avgHeight": 960366,
+          "timestamp": 1785485939,
+          "avgFees": 3273146,
+          "USD": 63871
+        },
+        {
+          "avgHeight": 960367,
+          "timestamp": 1785486141,
+          "avgFees": 2331007,
+          "USD": 63871
+        },
+        {
+          "avgHeight": 960368,
+          "timestamp": 1785486401,
+          "avgFees": 1898699,
+          "USD": 63871
+        },
+        {
+          "avgHeight": 960369,
+          "timestamp": 1785486977,
+          "avgFees": 4087675,
+          "USD": 63871
+        },
+        {
+          "avgHeight": 960370,
+          "timestamp": 1785487125,
+          "avgFees": 1339453,
+          "USD": 63871
+        },
+        {
+          "avgHeight": 960371,
+          "timestamp": 1785487149,
+          "avgFees": 579084,
+          "USD": 63871
+        },
+        {
+          "avgHeight": 960372,
+          "timestamp": 1785487209,
+          "avgFees": 860708,
+          "USD": 63871
+        },
+        {
+          "avgHeight": 960373,
+          "timestamp": 1785487293,
+          "avgFees": 896979,
+          "USD": 63871
+        },
+        {
+          "avgHeight": 960374,
+          "timestamp": 1785487559,
+          "avgFees": 1395244,
+          "USD": 63871
+        },
+        {
+          "avgHeight": 960375,
+          "timestamp": 1785488527,
+          "avgFees": 3316123,
+          "USD": 63770
+        },
+        {
+          "avgHeight": 960376,
+          "timestamp": 1785488959,
+          "avgFees": 2111695,
+          "USD": 63770
+        },
+        {
+          "avgHeight": 960377,
+          "timestamp": 1785489777,
+          "avgFees": 4178966,
+          "USD": 63770
+        },
+        {
+          "avgHeight": 960378,
+          "timestamp": 1785489797,
+          "avgFees": 876531,
+          "USD": 63770
+        },
+        {
+          "avgHeight": 960379,
+          "timestamp": 1785489934,
+          "avgFees": 1228694,
+          "USD": 63770
+        },
+        {
+          "avgHeight": 960380,
+          "timestamp": 1785491057,
+          "avgFees": 3010786,
+          "USD": 63770
+        },
+        {
+          "avgHeight": 960382,
+          "timestamp": 1785491212,
+          "avgFees": 1840540,
+          "USD": 63770
+        },
+        {
+          "avgHeight": 960381,
+          "timestamp": 1785491411,
+          "avgFees": 1639688,
+          "USD": 63770
+        },
+        {
+          "avgHeight": 960383,
+          "timestamp": 1785491437,
+          "avgFees": 1107292,
+          "USD": 63770
+        },
+        {
+          "avgHeight": 960384,
+          "timestamp": 1785491643,
+          "avgFees": 1234382,
+          "USD": 63770
+        },
+        {
+          "avgHeight": 960385,
+          "timestamp": 1785491717,
+          "avgFees": 650009,
+          "USD": 63770
+        },
+        {
+          "avgHeight": 960386,
+          "timestamp": 1785491748,
+          "avgFees": 504240,
+          "USD": 63770
+        },
+        {
+          "avgHeight": 960387,
+          "timestamp": 1785492390,
+          "avgFees": 2629221,
+          "USD": 63650
+        },
+        {
+          "avgHeight": 960388,
+          "timestamp": 1785492976,
+          "avgFees": 2239783,
+          "USD": 63650
+        },
+        {
+          "avgHeight": 960389,
+          "timestamp": 1785493210,
+          "avgFees": 1247084,
+          "USD": 63650
+        },
+        {
+          "avgHeight": 960390,
+          "timestamp": 1785494470,
+          "avgFees": 4410786,
+          "USD": 63650
+        },
+        {
+          "avgHeight": 960391,
+          "timestamp": 1785495589,
+          "avgFees": 4346216,
+          "USD": 63650
+        },
+        {
+          "avgHeight": 960392,
+          "timestamp": 1785496173,
+          "avgFees": 3419217,
+          "USD": 63869
+        },
+        {
+          "avgHeight": 960394,
+          "timestamp": 1785498209,
+          "avgFees": 2815520,
+          "USD": 63869
+        },
+        {
+          "avgHeight": 960393,
+          "timestamp": 1785498474,
+          "avgFees": 6353529,
+          "USD": 63869
+        },
+        {
+          "avgHeight": 960395,
+          "timestamp": 1785499687,
+          "avgFees": 6226461,
+          "USD": 63753
+        },
+        {
+          "avgHeight": 960396,
+          "timestamp": 1785500598,
+          "avgFees": 6298871,
+          "USD": 63753
+        },
+        {
+          "avgHeight": 960397,
+          "timestamp": 1785500681,
+          "avgFees": 3020444,
+          "USD": 63753
+        },
+        {
+          "avgHeight": 960398,
+          "timestamp": 1785501487,
+          "avgFees": 4420894,
+          "USD": 63753
+        },
+        {
+          "avgHeight": 960399,
+          "timestamp": 1785501690,
+          "avgFees": 3043972,
+          "USD": 63753
+        },
+        {
+          "avgHeight": 960400,
+          "timestamp": 1785502007,
+          "avgFees": 3311112,
+          "USD": 63753
+        },
+        {
+          "avgHeight": 960401,
+          "timestamp": 1785502290,
+          "avgFees": 3093545,
+          "USD": 63753
+        },
+        {
+          "avgHeight": 960402,
+          "timestamp": 1785502488,
+          "avgFees": 2599670,
+          "USD": 63753
+        },
+        {
+          "avgHeight": 960403,
+          "timestamp": 1785503074,
+          "avgFees": 4634643,
+          "USD": 63689
+        },
+        {
+          "avgHeight": 960404,
+          "timestamp": 1785503217,
+          "avgFees": 1833378,
+          "USD": 63689
+        },
+        {
+          "avgHeight": 960405,
+          "timestamp": 1785503672,
+          "avgFees": 2631021,
+          "USD": 63689
+        },
+        {
+          "avgHeight": 960407,
+          "timestamp": 1785504390,
+          "avgFees": 1086165,
+          "USD": 63689
+        },
+        {
+          "avgHeight": 960406,
+          "timestamp": 1785504651,
+          "avgFees": 4137679,
+          "USD": 63689
+        },
+        {
+          "avgHeight": 960408,
+          "timestamp": 1785504861,
+          "avgFees": 3300498,
+          "USD": 63689
+        },
+        {
+          "avgHeight": 960409,
+          "timestamp": 1785505363,
+          "avgFees": 22805742,
+          "USD": 63689
+        },
+        {
+          "avgHeight": 960410,
+          "timestamp": 1785505838,
+          "avgFees": 2859003,
+          "USD": 63689
+        },
+        {
+          "avgHeight": 960411,
+          "timestamp": 1785506696,
+          "avgFees": 3491488,
+          "USD": 63209
+        },
+        {
+          "avgHeight": 960412,
+          "timestamp": 1785507111,
+          "avgFees": 3979107,
+          "USD": 63209
+        },
+        {
+          "avgHeight": 960413,
+          "timestamp": 1785508849,
+          "avgFees": 10528519,
+          "USD": 63209
+        },
+        {
+          "avgHeight": 960414,
+          "timestamp": 1785509623,
+          "avgFees": 6715812,
+          "USD": 63209
+        },
+        {
+          "avgHeight": 960415,
+          "timestamp": 1785510012,
+          "avgFees": 4291967,
+          "USD": 62605
+        },
+        {
+          "avgHeight": 960416,
+          "timestamp": 1785510198,
+          "avgFees": 3727384,
+          "USD": 62605
+        },
+        {
+          "avgHeight": 960417,
+          "timestamp": 1785510911,
+          "avgFees": 5210118,
+          "USD": 62605
+        },
+        {
+          "avgHeight": 960418,
+          "timestamp": 1785511215,
+          "avgFees": 3470315,
+          "USD": 62605
+        },
+        {
+          "avgHeight": 960419,
+          "timestamp": 1785511233,
+          "avgFees": 2142013,
+          "USD": 62605
+        },
+        {
+          "avgHeight": 960420,
+          "timestamp": 1785511382,
+          "avgFees": 2795023,
+          "USD": 62605
+        },
+        {
+          "avgHeight": 960421,
+          "timestamp": 1785511434,
+          "avgFees": 2377507,
+          "USD": 62605
+        },
+        {
+          "avgHeight": 960422,
+          "timestamp": 1785511649,
+          "avgFees": 2381849,
+          "USD": 62605
+        },
+        {
+          "avgHeight": 960423,
+          "timestamp": 1785511694,
+          "avgFees": 1218277,
+          "USD": 62605
+        },
+        {
+          "avgHeight": 960424,
+          "timestamp": 1785512849,
+          "avgFees": 9918532,
+          "USD": 62605
+        },
+        {
+          "avgHeight": 960425,
+          "timestamp": 1785512913,
+          "avgFees": 2605460,
+          "USD": 62605
+        },
+        {
+          "avgHeight": 960426,
+          "timestamp": 1785513246,
+          "avgFees": 4209247,
+          "USD": 62605
+        },
+        {
+          "avgHeight": 960427,
+          "timestamp": 1785513558,
+          "avgFees": 3026952,
+          "USD": 62605
+        },
+        {
+          "avgHeight": 960428,
+          "timestamp": 1785513786,
+          "avgFees": 2750757,
+          "USD": 62644
+        },
+        {
+          "avgHeight": 960429,
+          "timestamp": 1785514044,
+          "avgFees": 2357681,
+          "USD": 62644
+        },
+        {
+          "avgHeight": 960430,
+          "timestamp": 1785514181,
+          "avgFees": 1706840,
+          "USD": 62644
+        },
+        {
+          "avgHeight": 960431,
+          "timestamp": 1785514186,
+          "avgFees": 1028685,
+          "USD": 62644
+        },
+        {
+          "avgHeight": 960432,
+          "timestamp": 1785514734,
+          "avgFees": 3515232,
+          "USD": 62644
+        },
+        {
+          "avgHeight": 960433,
+          "timestamp": 1785515077,
+          "avgFees": 2508071,
+          "USD": 62644
+        },
+        {
+          "avgHeight": 960434,
+          "timestamp": 1785515233,
+          "avgFees": 873961,
+          "USD": 62644
+        },
+        {
+          "avgHeight": 960435,
+          "timestamp": 1785515606,
+          "avgFees": 3547085,
+          "USD": 62644
+        },
+        {
+          "avgHeight": 960436,
+          "timestamp": 1785516303,
+          "avgFees": 3798877,
+          "USD": 62644
+        },
+        {
+          "avgHeight": 960437,
+          "timestamp": 1785517524,
+          "avgFees": 8533578,
+          "USD": 62814
+        },
+        {
+          "avgHeight": 960438,
+          "timestamp": 1785517672,
+          "avgFees": 2764495,
+          "USD": 62814
+        }
+      ],
+      "fetchedAt": "2026-07-31T17:11:22.916Z"
+    },
+    "lightning": {
+      "status": 200,
+      "data": {
+        "latest": {
+          "id": 156353,
+          "added": "2026-07-31T00:00:00.000Z",
+          "channel_count": 39128,
+          "node_count": 17216,
+          "total_capacity": 446353575438,
+          "tor_nodes": 8723,
+          "clearnet_nodes": 4682,
+          "unannounced_nodes": 2037,
+          "avg_capacity": 11407523,
+          "avg_fee_rate": 863,
+          "avg_base_fee_mtokens": 880,
+          "med_capacity": 2326241,
+          "med_fee_rate": 100,
+          "med_base_fee_mtokens": 200,
+          "clearnet_tor_nodes": 1774
+        },
+        "previous": {
+          "id": 155371,
+          "added": "2026-07-24T00:00:00.000Z",
+          "channel_count": 39155,
+          "node_count": 17271,
+          "total_capacity": 448202861878,
+          "tor_nodes": 8775,
+          "clearnet_nodes": 4676,
+          "unannounced_nodes": 2037,
+          "avg_capacity": 11446887,
+          "avg_fee_rate": 845,
+          "avg_base_fee_mtokens": 862,
+          "med_capacity": 2094438,
+          "med_fee_rate": 100,
+          "med_base_fee_mtokens": 16,
+          "clearnet_tor_nodes": 1783
+        }
+      },
+      "fetchedAt": "2026-07-31T17:11:23.040Z"
+    },
+    "mining_pools": {
+      "status": 200,
+      "data": {
+        "pools": [
+          {
+            "poolId": 1,
+            "name": "Unknown",
+            "link": "https://learnmeabitcoin.com/technical/coinbase-transaction",
+            "blockCount": 220586,
+            "rank": 1,
+            "emptyBlocks": 84030,
+            "slug": "unknown",
+            "avgMatchRate": 98.84,
+            "avgFeeDelta": "-0.06445079",
+            "poolUniqueId": 0
+          },
+          {
+            "poolId": 45,
+            "name": "AntPool",
+            "link": "https://www.antpool.com",
+            "blockCount": 109057,
+            "rank": 2,
+            "emptyBlocks": 1931,
+            "slug": "antpool",
+            "avgMatchRate": 99.05,
+            "avgFeeDelta": "-0.02926132",
+            "poolUniqueId": 44
+          },
+          {
+            "poolId": 37,
+            "name": "F2Pool",
+            "link": "https://www.f2pool.com",
+            "blockCount": 98325,
+            "rank": 3,
+            "emptyBlocks": 1161,
+            "slug": "f2pool",
+            "avgMatchRate": 99.11,
+            "avgFeeDelta": "-0.04974903",
+            "poolUniqueId": 36
+          },
+          {
+            "poolId": 112,
+            "name": "Foundry USA",
+            "link": "https://foundrydigital.com",
+            "blockCount": 72639,
+            "rank": 4,
+            "emptyBlocks": 0,
+            "slug": "foundryusa",
+            "avgMatchRate": 99.44,
+            "avgFeeDelta": "-0.02274512",
+            "poolUniqueId": 111
+          },
+          {
+            "poolId": 74,
+            "name": "ViaBTC",
+            "link": "https://viabtc.com",
+            "blockCount": 52133,
+            "rank": 5,
+            "emptyBlocks": 162,
+            "slug": "viabtc",
+            "avgMatchRate": 99.3,
+            "avgFeeDelta": "-0.05393657",
+            "poolUniqueId": 73
+          },
+          {
+            "poolId": 7,
+            "name": "BTC.com",
+            "link": "https://pool.btc.com",
+            "blockCount": 42628,
+            "rank": 6,
+            "emptyBlocks": 421,
+            "slug": "btccom",
+            "avgMatchRate": 98.85,
+            "avgFeeDelta": "-0.02637570",
+            "poolUniqueId": 6
+          },
+          {
+            "poolId": 44,
+            "name": "Braiins Pool",
+            "link": "https://braiins.com/pool",
+            "blockCount": 41976,
+            "rank": 7,
+            "emptyBlocks": 230,
+            "slug": "braiinspool",
+            "avgMatchRate": 99.21,
+            "avgFeeDelta": "-0.03408848",
+            "poolUniqueId": 43
+          },
+          {
+            "poolId": 22,
+            "name": "BTC Guild",
+            "link": "https://www.btcguild.com",
+            "blockCount": 32935,
+            "rank": 8,
+            "emptyBlocks": 3,
+            "slug": "btcguild",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 21
+          },
+          {
+            "poolId": 95,
+            "name": "Poolin",
+            "link": "https://www.poolin.com",
+            "blockCount": 28373,
+            "rank": 9,
+            "emptyBlocks": 80,
+            "slug": "poolin",
+            "avgMatchRate": 98.57,
+            "avgFeeDelta": "-0.02687612",
+            "poolUniqueId": 94
+          },
+          {
+            "poolId": 30,
+            "name": "GHash.IO",
+            "link": "https://ghash.io",
+            "blockCount": 23083,
+            "rank": 10,
+            "emptyBlocks": 0,
+            "slug": "ghashio",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 29
+          },
+          {
+            "poolId": 106,
+            "name": "Binance Pool",
+            "link": "https://pool.binance.com",
+            "blockCount": 22006,
+            "rank": 11,
+            "emptyBlocks": 89,
+            "slug": "binancepool",
+            "avgMatchRate": 98.72,
+            "avgFeeDelta": "-0.03032383",
+            "poolUniqueId": 105
+          },
+          {
+            "poolId": 59,
+            "name": "BitFury",
+            "link": "https://bitfury.com",
+            "blockCount": 19513,
+            "rank": 12,
+            "emptyBlocks": 0,
+            "slug": "bitfury",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 58
+          },
+          {
+            "poolId": 55,
+            "name": "BTCC",
+            "link": "https://pool.btcc.com",
+            "blockCount": 18027,
+            "rank": 13,
+            "emptyBlocks": 101,
+            "slug": "btcc",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 54
+          },
+          {
+            "poolId": 12,
+            "name": "BTC.TOP",
+            "link": "https://btc.top",
+            "blockCount": 16732,
+            "rank": 14,
+            "emptyBlocks": 83,
+            "slug": "btctop",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 11
+          },
+          {
+            "poolId": 56,
+            "name": "BWPool",
+            "link": "https://bwpool.net",
+            "blockCount": 12733,
+            "rank": 15,
+            "emptyBlocks": 319,
+            "slug": "bwpool",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 55
+          },
+          {
+            "poolId": 23,
+            "name": "Eligius",
+            "link": "https://eligius.st",
+            "blockCount": 11425,
+            "rank": 16,
+            "emptyBlocks": 296,
+            "slug": "eligius",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 22
+          },
+          {
+            "poolId": 9,
+            "name": "Huobi.pool",
+            "link": "https://www.hpt.com",
+            "blockCount": 9527,
+            "rank": 17,
+            "emptyBlocks": 73,
+            "slug": "huobipool",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 8
+          },
+          {
+            "poolId": 116,
+            "name": "MARA Pool",
+            "link": "https://marapool.com",
+            "blockCount": 9067,
+            "rank": 18,
+            "emptyBlocks": 6,
+            "slug": "marapool",
+            "avgMatchRate": 99.27,
+            "avgFeeDelta": "0.00887209",
+            "poolUniqueId": 115
+          },
+          {
+            "poolId": 103,
+            "name": "SpiderPool",
+            "link": "https://www.spiderpool.com",
+            "blockCount": 8005,
+            "rank": 19,
+            "emptyBlocks": 115,
+            "slug": "spiderpool",
+            "avgMatchRate": 98.43,
+            "avgFeeDelta": "-0.08163140",
+            "poolUniqueId": 102
+          },
+          {
+            "poolId": 5,
+            "name": "Luxor",
+            "link": "https://mining.luxor.tech",
+            "blockCount": 6761,
+            "rank": 20,
+            "emptyBlocks": 20,
+            "slug": "luxor",
+            "avgMatchRate": 99.17,
+            "avgFeeDelta": "-0.03444592",
+            "poolUniqueId": 4
+          },
+          {
+            "poolId": 18,
+            "name": "BitMinter",
+            "link": "https://bitminter.com",
+            "blockCount": 6464,
+            "rank": 21,
+            "emptyBlocks": 131,
+            "slug": "bitminter",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 17
+          },
+          {
+            "poolId": 29,
+            "name": "50BTC",
+            "link": "https://www.50btc.com",
+            "blockCount": 6407,
+            "rank": 22,
+            "emptyBlocks": 0,
+            "slug": "50btc",
+            "avgMatchRate": 85.38,
+            "avgFeeDelta": "-0.00494059",
+            "poolUniqueId": 28
+          },
+          {
+            "poolId": 35,
+            "name": "KnCMiner",
+            "link": "https://portal.kncminer.com/pool",
+            "blockCount": 6290,
+            "rank": 23,
+            "emptyBlocks": 220,
+            "slug": "kncminer",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 34
+          },
+          {
+            "poolId": 72,
+            "name": "Bixin",
+            "link": "https://haopool.com",
+            "blockCount": 5927,
+            "rank": 24,
+            "emptyBlocks": 77,
+            "slug": "bixin",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 71
+          },
+          {
+            "poolId": 25,
+            "name": "EclipseMC",
+            "link": "https://eclipsemc.com",
+            "blockCount": 5898,
+            "rank": 25,
+            "emptyBlocks": 71,
+            "slug": "eclipsemc",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 24
+          },
+          {
+            "poolId": 53,
+            "name": "BitClub",
+            "link": "https://bitclubpool.com",
+            "blockCount": 5672,
+            "rank": 26,
+            "emptyBlocks": 0,
+            "slug": "bitclub",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 52
+          },
+          {
+            "poolId": 6,
+            "name": "1THash",
+            "link": "https://www.1thash.top",
+            "blockCount": 5401,
+            "rank": 27,
+            "emptyBlocks": 13,
+            "slug": "1thash",
+            "avgMatchRate": 99.35,
+            "avgFeeDelta": "-0.01119171",
+            "poolUniqueId": 5
+          },
+          {
+            "poolId": 24,
+            "name": "OzCoin",
+            "link": "https://ozcoin.net",
+            "blockCount": 4845,
+            "rank": 28,
+            "emptyBlocks": 1,
+            "slug": "ozcoin",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 23
+          },
+          {
+            "poolId": 113,
+            "name": "SBI Crypto",
+            "link": "https://sbicrypto.com",
+            "blockCount": 4655,
+            "rank": 29,
+            "emptyBlocks": 14,
+            "slug": "sbicrypto",
+            "avgMatchRate": 98.53,
+            "avgFeeDelta": "-0.08617645",
+            "poolUniqueId": 112
+          },
+          {
+            "poolId": 142,
+            "name": "SECPOOL",
+            "link": "https://www.secpool.com",
+            "blockCount": 4349,
+            "rank": 30,
+            "emptyBlocks": 23,
+            "slug": "secpool",
+            "avgMatchRate": 99.15,
+            "avgFeeDelta": "-0.03873968",
+            "poolUniqueId": 141
+          },
+          {
+            "poolId": 17,
+            "name": "ASICMiner",
+            "link": "https://www.asicminer.co",
+            "blockCount": 3128,
+            "rank": 31,
+            "emptyBlocks": 0,
+            "slug": "asicminer",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 16
+          },
+          {
+            "poolId": 69,
+            "name": "OKExPool",
+            "link": "https://www.okex.com",
+            "blockCount": 2912,
+            "rank": 32,
+            "emptyBlocks": 11,
+            "slug": "okexpool",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 68
+          },
+          {
+            "poolId": 13,
+            "name": "Bitcoin.com",
+            "link": "https://www.bitcoin.com",
+            "blockCount": 2475,
+            "rank": 33,
+            "emptyBlocks": 7,
+            "slug": "bitcoincom",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 12
+          },
+          {
+            "poolId": 49,
+            "name": "KanoPool",
+            "link": "https://kano.is",
+            "blockCount": 2440,
+            "rank": 34,
+            "emptyBlocks": 0,
+            "slug": "kanopool",
+            "avgMatchRate": 99.63,
+            "avgFeeDelta": "-0.01837660",
+            "poolUniqueId": 48
+          },
+          {
+            "poolId": 15,
+            "name": "GBMiners",
+            "link": "https://gbminers.com",
+            "blockCount": 2093,
+            "rank": 35,
+            "emptyBlocks": 1,
+            "slug": "gbminers",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 14
+          },
+          {
+            "poolId": 90,
+            "name": "DPOOL",
+            "link": "https://www.dpool.top",
+            "blockCount": 1918,
+            "rank": 36,
+            "emptyBlocks": 0,
+            "slug": "dpool",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 89
+          },
+          {
+            "poolId": 71,
+            "name": "1Hash",
+            "link": "https://www.1hash.com",
+            "blockCount": 1895,
+            "rank": 37,
+            "emptyBlocks": 110,
+            "slug": "1hash",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 70
+          },
+          {
+            "poolId": 125,
+            "name": "Telco 214",
+            "link": "https://www.telco214.com",
+            "blockCount": 1830,
+            "rank": 38,
+            "emptyBlocks": 0,
+            "slug": "telco214",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 124
+          },
+          {
+            "poolId": 123,
+            "name": "CloudHashing",
+            "link": "https://cloudhashing.com",
+            "blockCount": 1824,
+            "rank": 39,
+            "emptyBlocks": 1,
+            "slug": "cloudhashing",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 122
+          },
+          {
+            "poolId": 108,
+            "name": "Lubian.com",
+            "link": "https://www.lubian.com",
+            "blockCount": 1783,
+            "rank": 40,
+            "emptyBlocks": 0,
+            "slug": "lubiancom",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 107
+          },
+          {
+            "poolId": 60,
+            "name": "21 Inc.",
+            "link": "https://21.co",
+            "blockCount": 1508,
+            "rank": 41,
+            "emptyBlocks": 0,
+            "slug": "21inc",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 59
+          },
+          {
+            "poolId": 10,
+            "name": "WAYI.CN",
+            "link": "https://www.easy2mine.com",
+            "blockCount": 1486,
+            "rank": 42,
+            "emptyBlocks": 6,
+            "slug": "wayicn",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 9
+          },
+          {
+            "poolId": 34,
+            "name": "Polmine",
+            "link": "https://polmine.pl",
+            "blockCount": 1290,
+            "rank": 43,
+            "emptyBlocks": 5,
+            "slug": "polmine",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 33
+          },
+          {
+            "poolId": 143,
+            "name": "OCEAN",
+            "link": "https://ocean.xyz/",
+            "blockCount": 1284,
+            "rank": 44,
+            "emptyBlocks": 4,
+            "slug": "ocean",
+            "avgMatchRate": 92.92,
+            "avgFeeDelta": "-0.18972706",
+            "poolUniqueId": 142
+          },
+          {
+            "poolId": 152,
+            "name": "Carbon Negative",
+            "link": "https://github.com/bitcoin-data/mining-pools/issues/48",
+            "blockCount": 1263,
+            "rank": 45,
+            "emptyBlocks": 0,
+            "slug": "carbonnegative",
+            "avgMatchRate": 99.33,
+            "avgFeeDelta": "-0.03357681",
+            "poolUniqueId": 151
+          },
+          {
+            "poolId": 102,
+            "name": "BytePool",
+            "link": "https://www.bytepool.com",
+            "blockCount": 1002,
+            "rank": 46,
+            "emptyBlocks": 3,
+            "slug": "bytepool",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 101
+          },
+          {
+            "poolId": 3,
+            "name": "ULTIMUSPOOL",
+            "link": "https://www.ultimuspool.com",
+            "blockCount": 974,
+            "rank": 47,
+            "emptyBlocks": 2,
+            "slug": "ultimuspool",
+            "avgMatchRate": 99.34,
+            "avgFeeDelta": "-0.02966938",
+            "poolUniqueId": 2
+          },
+          {
+            "poolId": 104,
+            "name": "NovaBlock",
+            "link": "https://novablock.com",
+            "blockCount": 968,
+            "rank": 48,
+            "emptyBlocks": 2,
+            "slug": "novablock",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 103
+          },
+          {
+            "poolId": 144,
+            "name": "WhitePool",
+            "link": "https://whitebit.com/mining-pool",
+            "blockCount": 936,
+            "rank": 49,
+            "emptyBlocks": 2,
+            "slug": "whitepool",
+            "avgMatchRate": 99.36,
+            "avgFeeDelta": "-0.04006650",
+            "poolUniqueId": 143
+          },
+          {
+            "poolId": 48,
+            "name": "Cointerra",
+            "link": "https://cointerra.com",
+            "blockCount": 870,
+            "rank": 50,
+            "emptyBlocks": 7,
+            "slug": "cointerra",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 47
+          },
+          {
+            "poolId": 111,
+            "name": "EMCDPool",
+            "link": "https://pool.emcd.io",
+            "blockCount": 860,
+            "rank": 51,
+            "emptyBlocks": 1,
+            "slug": "emcdpool",
+            "avgMatchRate": 98.06,
+            "avgFeeDelta": "-0.02498441",
+            "poolUniqueId": 110
+          },
+          {
+            "poolId": 39,
+            "name": "MegaBigPower",
+            "link": "https://megabigpower.com",
+            "blockCount": 816,
+            "rank": 52,
+            "emptyBlocks": 8,
+            "slug": "megabigpower",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 38
+          },
+          {
+            "poolId": 81,
+            "name": "58COIN",
+            "link": "https://www.58coin.com",
+            "blockCount": 745,
+            "rank": 53,
+            "emptyBlocks": 27,
+            "slug": "58coin",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 80
+          },
+          {
+            "poolId": 80,
+            "name": "BTPOOL",
+            "link": "",
+            "blockCount": 703,
+            "rank": 54,
+            "emptyBlocks": 11,
+            "slug": "btpool",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 79
+          },
+          {
+            "poolId": 61,
+            "name": "digitalBTC",
+            "link": "https://digitalbtc.com",
+            "blockCount": 676,
+            "rank": 55,
+            "emptyBlocks": 0,
+            "slug": "digitalbtc",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 60
+          },
+          {
+            "poolId": 38,
+            "name": "HHTT",
+            "link": "https://hhtt.1209k.com",
+            "blockCount": 623,
+            "rank": 56,
+            "emptyBlocks": 0,
+            "slug": "hhtt",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 37
+          },
+          {
+            "poolId": 32,
+            "name": "Bitparking",
+            "link": "https://mmpool.bitparking.com",
+            "blockCount": 583,
+            "rank": 57,
+            "emptyBlocks": 0,
+            "slug": "bitparking",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 31
+          },
+          {
+            "poolId": 91,
+            "name": "Rawpool",
+            "link": "https://www.rawpool.com",
+            "blockCount": 492,
+            "rank": 58,
+            "emptyBlocks": 0,
+            "slug": "rawpool",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 90
+          },
+          {
+            "poolId": 26,
+            "name": "MaxBTC",
+            "link": "https://maxbtc.com",
+            "blockCount": 449,
+            "rank": 59,
+            "emptyBlocks": 0,
+            "slug": "maxbtc",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 25
+          },
+          {
+            "poolId": 11,
+            "name": "CanoePool",
+            "link": "https://btc.canoepool.com",
+            "blockCount": 444,
+            "rank": 60,
+            "emptyBlocks": 1,
+            "slug": "canoepool",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 10
+          },
+          {
+            "poolId": 76,
+            "name": "BATPOOL",
+            "link": "https://www.batpool.com",
+            "blockCount": 441,
+            "rank": 61,
+            "emptyBlocks": 0,
+            "slug": "batpool",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 75
+          },
+          {
+            "poolId": 54,
+            "name": "Bitcoin Affiliate Network",
+            "link": "https://mining.bitcoinaffiliatenetwork.com",
+            "blockCount": 438,
+            "rank": 62,
+            "emptyBlocks": 2,
+            "slug": "bitcoinaffiliatenetwork",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 53
+          },
+          {
+            "poolId": 162,
+            "name": "Mining Squared",
+            "link": "https://pool.bsquared.network/",
+            "blockCount": 382,
+            "rank": 63,
+            "emptyBlocks": 0,
+            "slug": "miningsquared",
+            "avgMatchRate": 99.98,
+            "avgFeeDelta": "-0.04432693",
+            "poolUniqueId": 161
+          },
+          {
+            "poolId": 121,
+            "name": "PEGA Pool",
+            "link": "https://www.pega-pool.com",
+            "blockCount": 350,
+            "rank": 64,
+            "emptyBlocks": 0,
+            "slug": "pegapool",
+            "avgMatchRate": 98.59,
+            "avgFeeDelta": "-0.03774829",
+            "poolUniqueId": 120
+          },
+          {
+            "poolId": 28,
+            "name": "CoinLab",
+            "link": "https://coinlab.com",
+            "blockCount": 346,
+            "rank": 65,
+            "emptyBlocks": 1,
+            "slug": "coinlab",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 27
+          },
+          {
+            "poolId": 27,
+            "name": "TripleMining",
+            "link": "https://www.triplemining.com",
+            "blockCount": 333,
+            "rank": 66,
+            "emptyBlocks": 2,
+            "slug": "triplemining",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 26
+          },
+          {
+            "poolId": 135,
+            "name": "GoGreenLight",
+            "link": "https://www.gogreenlight.se",
+            "blockCount": 333,
+            "rank": 67,
+            "emptyBlocks": 13,
+            "slug": "gogreenlight",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 134
+          },
+          {
+            "poolId": 99,
+            "name": "okpool.top",
+            "link": "https://www.okpool.top",
+            "blockCount": 313,
+            "rank": 68,
+            "emptyBlocks": 0,
+            "slug": "okpooltop",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 98
+          },
+          {
+            "poolId": 50,
+            "name": "Solo CK",
+            "link": "https://solo.ckpool.org",
+            "blockCount": 304,
+            "rank": 69,
+            "emptyBlocks": 0,
+            "slug": "solock",
+            "avgMatchRate": 99.53,
+            "avgFeeDelta": "-0.04226434",
+            "poolUniqueId": 49
+          },
+          {
+            "poolId": 96,
+            "name": "SecretSuperstar",
+            "link": "",
+            "blockCount": 303,
+            "rank": 70,
+            "emptyBlocks": 1,
+            "slug": "secretsuperstar",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 95
+          },
+          {
+            "poolId": 122,
+            "name": "BTC Nuggets",
+            "link": "https://104.197.8.250",
+            "blockCount": 293,
+            "rank": 71,
+            "emptyBlocks": 0,
+            "slug": "btcnuggets",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 121
+          },
+          {
+            "poolId": 52,
+            "name": "NiceHash",
+            "link": "https://www.nicehash.com",
+            "blockCount": 287,
+            "rank": 72,
+            "emptyBlocks": 0,
+            "slug": "nicehash",
+            "avgMatchRate": 98.48,
+            "avgFeeDelta": "-0.03987466",
+            "poolUniqueId": 51
+          },
+          {
+            "poolId": 97,
+            "name": "tigerpool.net",
+            "link": "",
+            "blockCount": 285,
+            "rank": 73,
+            "emptyBlocks": 0,
+            "slug": "tigerpoolnet",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 96
+          },
+          {
+            "poolId": 117,
+            "name": "KuCoinPool",
+            "link": "https://www.kucoin.com/mining-pool",
+            "blockCount": 272,
+            "rank": 74,
+            "emptyBlocks": 2,
+            "slug": "kucoinpool",
+            "avgMatchRate": 97.89,
+            "avgFeeDelta": "-0.02885695",
+            "poolUniqueId": 116
+          },
+          {
+            "poolId": 98,
+            "name": "Sigmapool.com",
+            "link": "https://sigmapool.com",
+            "blockCount": 266,
+            "rank": 75,
+            "emptyBlocks": 0,
+            "slug": "sigmapoolcom",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 97
+          },
+          {
+            "poolId": 109,
+            "name": "OKKONG",
+            "link": "https://hash.okkong.com",
+            "blockCount": 239,
+            "rank": 76,
+            "emptyBlocks": 2,
+            "slug": "okkong",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 108
+          },
+          {
+            "poolId": 42,
+            "name": "Yourbtc.net",
+            "link": "https://yourbtc.net",
+            "blockCount": 226,
+            "rank": 77,
+            "emptyBlocks": 0,
+            "slug": "yourbtcnet",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 41
+          },
+          {
+            "poolId": 4,
+            "name": "Terra Pool",
+            "link": "https://terrapool.io",
+            "blockCount": 213,
+            "rank": 78,
+            "emptyBlocks": 0,
+            "slug": "terrapool",
+            "avgMatchRate": 99.28,
+            "avgFeeDelta": "0.58690155",
+            "poolUniqueId": 3
+          },
+          {
+            "poolId": 83,
+            "name": "shawnp0wers",
+            "link": "https://www.brainofshawn.com",
+            "blockCount": 197,
+            "rank": 79,
+            "emptyBlocks": 0,
+            "slug": "shawnp0wers",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 82
+          },
+          {
+            "poolId": 140,
+            "name": "1M1X",
+            "link": "",
+            "blockCount": 188,
+            "rank": 80,
+            "emptyBlocks": 0,
+            "slug": "1m1x",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 139
+          },
+          {
+            "poolId": 75,
+            "name": "ConnectBTC",
+            "link": "https://www.connectbtc.com",
+            "blockCount": 153,
+            "rank": 81,
+            "emptyBlocks": 0,
+            "slug": "connectbtc",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 74
+          },
+          {
+            "poolId": 159,
+            "name": "GDPool",
+            "link": "",
+            "blockCount": 134,
+            "rank": 82,
+            "emptyBlocks": 0,
+            "slug": "gdpool",
+            "avgMatchRate": 99.87,
+            "avgFeeDelta": "-0.11083960",
+            "poolUniqueId": 158
+          },
+          {
+            "poolId": 19,
+            "name": "BitcoinRussia",
+            "link": "https://bitcoin-russia.ru",
+            "blockCount": 133,
+            "rank": 83,
+            "emptyBlocks": 0,
+            "slug": "bitcoinrussia",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 18
+          },
+          {
+            "poolId": 163,
+            "name": "Innopolis Tech",
+            "link": "https://innopolis.tech/",
+            "blockCount": 126,
+            "rank": 84,
+            "emptyBlocks": 0,
+            "slug": "innopolistech",
+            "avgMatchRate": 99.75,
+            "avgFeeDelta": "-0.10914406",
+            "poolUniqueId": 162
+          },
+          {
+            "poolId": 101,
+            "name": "Tangpool",
+            "link": "https://www.tangpool.com",
+            "blockCount": 124,
+            "rank": 85,
+            "emptyBlocks": 2,
+            "slug": "tangpool",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 100
+          },
+          {
+            "poolId": 124,
+            "name": "digitalX Mintsy",
+            "link": "https://www.mintsy.co",
+            "blockCount": 116,
+            "rank": 86,
+            "emptyBlocks": 0,
+            "slug": "digitalxmintsy",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 123
+          },
+          {
+            "poolId": 57,
+            "name": "EXX&BW",
+            "link": "https://xbtc.exx.com",
+            "blockCount": 116,
+            "rank": 87,
+            "emptyBlocks": 0,
+            "slug": "exxbw",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 56
+          },
+          {
+            "poolId": 82,
+            "name": "Bitcoin India",
+            "link": "https://bitcoin-india.org",
+            "blockCount": 114,
+            "rank": 88,
+            "emptyBlocks": 0,
+            "slug": "bitcoinindia",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 81
+          },
+          {
+            "poolId": 77,
+            "name": "Waterhole",
+            "link": "https://btc.waterhole.io",
+            "blockCount": 111,
+            "rank": 89,
+            "emptyBlocks": 1,
+            "slug": "waterhole",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 76
+          },
+          {
+            "poolId": 41,
+            "name": "NMCbit",
+            "link": "https://nmcbit.com",
+            "blockCount": 105,
+            "rank": 90,
+            "emptyBlocks": 0,
+            "slug": "nmcbit",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 40
+          },
+          {
+            "poolId": 73,
+            "name": "TATMAS Pool",
+            "link": "https://tmsminer.com",
+            "blockCount": 99,
+            "rank": 91,
+            "emptyBlocks": 0,
+            "slug": "tatmaspool",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 72
+          },
+          {
+            "poolId": 105,
+            "name": "MiningCity",
+            "link": "https://www.miningcity.com",
+            "blockCount": 92,
+            "rank": 92,
+            "emptyBlocks": 0,
+            "slug": "miningcity",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 104
+          },
+          {
+            "poolId": 51,
+            "name": "CKPool",
+            "link": "https://ckpool.org",
+            "blockCount": 86,
+            "rank": 93,
+            "emptyBlocks": 0,
+            "slug": "ckpool",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 50
+          },
+          {
+            "poolId": 40,
+            "name": "Mt Red",
+            "link": "https://mtred.com",
+            "blockCount": 77,
+            "rank": 94,
+            "emptyBlocks": 0,
+            "slug": "mtred",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 39
+          },
+          {
+            "poolId": 167,
+            "name": "RedRock Pool",
+            "link": "https://redrock.pro/",
+            "blockCount": 70,
+            "rank": 95,
+            "emptyBlocks": 0,
+            "slug": "redrockpool",
+            "avgMatchRate": 98.65,
+            "avgFeeDelta": "-0.04096746",
+            "poolUniqueId": 166
+          },
+          {
+            "poolId": 114,
+            "name": "ArkPool",
+            "link": "https://www.arkpool.com",
+            "blockCount": 61,
+            "rank": 96,
+            "emptyBlocks": 0,
+            "slug": "arkpool",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 113
+          },
+          {
+            "poolId": 93,
+            "name": "Helix",
+            "link": "",
+            "blockCount": 54,
+            "rank": 97,
+            "emptyBlocks": 0,
+            "slug": "helix",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 92
+          },
+          {
+            "poolId": 62,
+            "name": "8baochi",
+            "link": "https://8baochi.com",
+            "blockCount": 51,
+            "rank": 98,
+            "emptyBlocks": 0,
+            "slug": "8baochi",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 61
+          },
+          {
+            "poolId": 31,
+            "name": "ST Mining Corp",
+            "link": "https://bitcointalk.org/index.php?topic=77000.msg3207708#msg3207708",
+            "blockCount": 48,
+            "rank": 99,
+            "emptyBlocks": 0,
+            "slug": "stminingcorp",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 30
+          },
+          {
+            "poolId": 8,
+            "name": "Bitfarms",
+            "link": "https://www.bitfarms.io",
+            "blockCount": 48,
+            "rank": 100,
+            "emptyBlocks": 0,
+            "slug": "bitfarms",
+            "avgMatchRate": 99.81,
+            "avgFeeDelta": "0.01053557",
+            "poolUniqueId": 7
+          },
+          {
+            "poolId": 100,
+            "name": "Hummerpool",
+            "link": "https://www.hummerpool.com",
+            "blockCount": 46,
+            "rank": 101,
+            "emptyBlocks": 1,
+            "slug": "hummerpool",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 99
+          },
+          {
+            "poolId": 33,
+            "name": "mmpool",
+            "link": "https://mmpool.org/pool",
+            "blockCount": 44,
+            "rank": 102,
+            "emptyBlocks": 0,
+            "slug": "mmpool",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 32
+          },
+          {
+            "poolId": 43,
+            "name": "Give Me Coins",
+            "link": "https://give-me-coins.com",
+            "blockCount": 44,
+            "rank": 103,
+            "emptyBlocks": 0,
+            "slug": "givemecoins",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 42
+          },
+          {
+            "poolId": 84,
+            "name": "PHash.IO",
+            "link": "https://phash.io",
+            "blockCount": 44,
+            "rank": 104,
+            "emptyBlocks": 1,
+            "slug": "phashio",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 83
+          },
+          {
+            "poolId": 21,
+            "name": "simplecoin.us",
+            "link": "https://simplecoin.us",
+            "blockCount": 43,
+            "rank": 105,
+            "emptyBlocks": 0,
+            "slug": "simplecoinus",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 20
+          },
+          {
+            "poolId": 120,
+            "name": "Titan",
+            "link": "https://titan.io",
+            "blockCount": 42,
+            "rank": 106,
+            "emptyBlocks": 0,
+            "slug": "titan",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 119
+          },
+          {
+            "poolId": 88,
+            "name": "MiningKings",
+            "link": "https://miningkings.com",
+            "blockCount": 41,
+            "rank": 107,
+            "emptyBlocks": 0,
+            "slug": "miningkings",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 87
+          },
+          {
+            "poolId": 132,
+            "name": "Eobot",
+            "link": "https://eobot.com",
+            "blockCount": 38,
+            "rank": 108,
+            "emptyBlocks": 0,
+            "slug": "eobot",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 131
+          },
+          {
+            "poolId": 129,
+            "name": "BTCDig",
+            "link": "https://btcdig.com",
+            "blockCount": 33,
+            "rank": 109,
+            "emptyBlocks": 0,
+            "slug": "btcdig",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 128
+          },
+          {
+            "poolId": 158,
+            "name": "BitFuFuPool",
+            "link": "https://www.bitfufu.com/pool",
+            "blockCount": 31,
+            "rank": 110,
+            "emptyBlocks": 0,
+            "slug": "bitfufupool",
+            "avgMatchRate": 99.75,
+            "avgFeeDelta": "-0.02807934",
+            "poolUniqueId": 157
+          },
+          {
+            "poolId": 160,
+            "name": "Mining-Dutch",
+            "link": "https://www.mining-dutch.nl/",
+            "blockCount": 30,
+            "rank": 111,
+            "emptyBlocks": 0,
+            "slug": "miningdutch",
+            "avgMatchRate": 99.66,
+            "avgFeeDelta": "-0.04734835",
+            "poolUniqueId": 159
+          },
+          {
+            "poolId": 86,
+            "name": "HAOZHUZHU",
+            "link": "https://haozhuzhu.com",
+            "blockCount": 26,
+            "rank": 112,
+            "emptyBlocks": 0,
+            "slug": "haozhuzhu",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 85
+          },
+          {
+            "poolId": 128,
+            "name": "transactioncoinmining",
+            "link": "https://sha256.transactioncoinmining.com",
+            "blockCount": 24,
+            "rank": 113,
+            "emptyBlocks": 0,
+            "slug": "transactioncoinmining",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 127
+          },
+          {
+            "poolId": 58,
+            "name": "Bitsolo",
+            "link": "https://bitsolo.net",
+            "blockCount": 22,
+            "rank": 114,
+            "emptyBlocks": 1,
+            "slug": "bitsolo",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 57
+          },
+          {
+            "poolId": 14,
+            "name": "175btc",
+            "link": "https://www.175btc.com",
+            "blockCount": 22,
+            "rank": 115,
+            "emptyBlocks": 0,
+            "slug": "175btc",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 13
+          },
+          {
+            "poolId": 139,
+            "name": "tiger",
+            "link": "",
+            "blockCount": 20,
+            "rank": 116,
+            "emptyBlocks": 0,
+            "slug": "tiger",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 138
+          },
+          {
+            "poolId": 145,
+            "name": "wiz",
+            "link": "https://wiz.biz/",
+            "blockCount": 19,
+            "rank": 117,
+            "emptyBlocks": 2,
+            "slug": "wiz",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 144
+          },
+          {
+            "poolId": 79,
+            "name": "DCEX",
+            "link": "https://dcexploration.cn",
+            "blockCount": 18,
+            "rank": 118,
+            "emptyBlocks": 0,
+            "slug": "dcex",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 78
+          },
+          {
+            "poolId": 68,
+            "name": "HotPool",
+            "link": "https://hotpool.co",
+            "blockCount": 17,
+            "rank": 119,
+            "emptyBlocks": 0,
+            "slug": "hotpool",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 67
+          },
+          {
+            "poolId": 16,
+            "name": "A-XBT",
+            "link": "https://www.a-xbt.com",
+            "blockCount": 16,
+            "rank": 120,
+            "emptyBlocks": 0,
+            "slug": "axbt",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 15
+          },
+          {
+            "poolId": 70,
+            "name": "BCMonster",
+            "link": "https://www.bcmonster.com",
+            "blockCount": 16,
+            "rank": 121,
+            "emptyBlocks": 0,
+            "slug": "bcmonster",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 69
+          },
+          {
+            "poolId": 67,
+            "name": "Bravo Mining",
+            "link": "https://www.bravo-mining.com",
+            "blockCount": 13,
+            "rank": 122,
+            "emptyBlocks": 0,
+            "slug": "bravomining",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 66
+          },
+          {
+            "poolId": 141,
+            "name": "Zulupool",
+            "link": "https://beta.zulupool.com/",
+            "blockCount": 12,
+            "rank": 123,
+            "emptyBlocks": 0,
+            "slug": "zulupool",
+            "avgMatchRate": 99.84,
+            "avgFeeDelta": "-0.00982866",
+            "poolUniqueId": 140
+          },
+          {
+            "poolId": 2,
+            "name": "BlockFills",
+            "link": "https://www.blockfills.com/mining",
+            "blockCount": 10,
+            "rank": 124,
+            "emptyBlocks": 0,
+            "slug": "blockfills",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 1
+          },
+          {
+            "poolId": 63,
+            "name": "myBTCcoin Pool",
+            "link": "https://mybtccoin.com",
+            "blockCount": 10,
+            "rank": 125,
+            "emptyBlocks": 0,
+            "slug": "mybtccoinpool",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 62
+          },
+          {
+            "poolId": 94,
+            "name": "Bitcoin-Ukraine",
+            "link": "https://bitcoin-ukraine.com.ua",
+            "blockCount": 10,
+            "rank": 126,
+            "emptyBlocks": 0,
+            "slug": "bitcoinukraine",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 93
+          },
+          {
+            "poolId": 92,
+            "name": "haominer",
+            "link": "https://haominer.com",
+            "blockCount": 10,
+            "rank": 127,
+            "emptyBlocks": 0,
+            "slug": "haominer",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 91
+          },
+          {
+            "poolId": 20,
+            "name": "BTCServ",
+            "link": "https://btcserv.net",
+            "blockCount": 9,
+            "rank": 128,
+            "emptyBlocks": 0,
+            "slug": "btcserv",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 19
+          },
+          {
+            "poolId": 47,
+            "name": "bcpool.io",
+            "link": "https://bcpool.io",
+            "blockCount": 8,
+            "rank": 129,
+            "emptyBlocks": 0,
+            "slug": "bcpoolio",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 46
+          },
+          {
+            "poolId": 156,
+            "name": "MaxiPool",
+            "link": "https://maxipool.org/",
+            "blockCount": 8,
+            "rank": 130,
+            "emptyBlocks": 0,
+            "slug": "maxipool",
+            "avgMatchRate": 99.59,
+            "avgFeeDelta": "-0.08513630",
+            "poolUniqueId": 155
+          },
+          {
+            "poolId": 148,
+            "name": "wk057",
+            "link": "",
+            "blockCount": 8,
+            "rank": 131,
+            "emptyBlocks": 0,
+            "slug": "wk057",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 147
+          },
+          {
+            "poolId": 161,
+            "name": "Public Pool",
+            "link": "https://web.public-pool.io/",
+            "blockCount": 8,
+            "rank": 132,
+            "emptyBlocks": 0,
+            "slug": "publicpool",
+            "avgMatchRate": 99.8,
+            "avgFeeDelta": "-0.07826510",
+            "poolUniqueId": 160
+          },
+          {
+            "poolId": 133,
+            "name": "UNOMP",
+            "link": "https://199.115.116.7:8925",
+            "blockCount": 6,
+            "rank": 133,
+            "emptyBlocks": 0,
+            "slug": "unomp",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 132
+          },
+          {
+            "poolId": 166,
+            "name": "Parasite",
+            "link": "https://parasite.space",
+            "blockCount": 5,
+            "rank": 134,
+            "emptyBlocks": 0,
+            "slug": "parasite",
+            "avgMatchRate": 99.99,
+            "avgFeeDelta": "-0.03166901",
+            "poolUniqueId": 165
+          },
+          {
+            "poolId": 64,
+            "name": "TBDice",
+            "link": "https://tbdice.org",
+            "blockCount": 4,
+            "rank": 135,
+            "emptyBlocks": 0,
+            "slug": "tbdice",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 63
+          },
+          {
+            "poolId": 155,
+            "name": "Neopool",
+            "link": "https://neopool.com/",
+            "blockCount": 4,
+            "rank": 136,
+            "emptyBlocks": 0,
+            "slug": "neopool",
+            "avgMatchRate": 99.87,
+            "avgFeeDelta": "-0.03808787",
+            "poolUniqueId": 154
+          },
+          {
+            "poolId": 107,
+            "name": "Minerium",
+            "link": "https://www.minerium.com",
+            "blockCount": 4,
+            "rank": 137,
+            "emptyBlocks": 0,
+            "slug": "minerium",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 106
+          },
+          {
+            "poolId": 131,
+            "name": "BTCMP",
+            "link": "https://www.btcmp.com",
+            "blockCount": 4,
+            "rank": 138,
+            "emptyBlocks": 0,
+            "slug": "btcmp",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 130
+          },
+          {
+            "poolId": 168,
+            "name": "Est3lar",
+            "link": "https://est3lar.io",
+            "blockCount": 4,
+            "rank": 139,
+            "emptyBlocks": 0,
+            "slug": "est3lar",
+            "avgMatchRate": 100,
+            "avgFeeDelta": "-0.35399207",
+            "poolUniqueId": 167
+          },
+          {
+            "poolId": 169,
+            "name": "Braiins Solo",
+            "link": "https://solo.braiins.com",
+            "blockCount": 3,
+            "rank": 140,
+            "emptyBlocks": 0,
+            "slug": "braiinssolo",
+            "avgMatchRate": 96.52,
+            "avgFeeDelta": "-0.21761430",
+            "poolUniqueId": 168
+          },
+          {
+            "poolId": 127,
+            "name": "Multipool",
+            "link": "https://www.multipool.us",
+            "blockCount": 3,
+            "rank": 141,
+            "emptyBlocks": 0,
+            "slug": "multipool",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 126
+          },
+          {
+            "poolId": 149,
+            "name": "FutureBit Apollo Solo",
+            "link": "https://www.futurebit.io",
+            "blockCount": 3,
+            "rank": 142,
+            "emptyBlocks": 0,
+            "slug": "futurebitapollosolo",
+            "avgMatchRate": 99.91,
+            "avgFeeDelta": "-0.01705936",
+            "poolUniqueId": 148
+          },
+          {
+            "poolId": 78,
+            "name": "DCExploration",
+            "link": "https://dcexploration.cn",
+            "blockCount": 3,
+            "rank": 143,
+            "emptyBlocks": 0,
+            "slug": "dcexploration",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 77
+          },
+          {
+            "poolId": 134,
+            "name": "Patels",
+            "link": "https://patelsminingpool.com",
+            "blockCount": 2,
+            "rank": 144,
+            "emptyBlocks": 0,
+            "slug": "patels",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 133
+          },
+          {
+            "poolId": 119,
+            "name": "OKMINER",
+            "link": "https://okminer.com",
+            "blockCount": 2,
+            "rank": 145,
+            "emptyBlocks": 0,
+            "slug": "okminer",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 118
+          },
+          {
+            "poolId": 110,
+            "name": "AAO Pool",
+            "link": "https://btc.tmspool.top",
+            "blockCount": 2,
+            "rank": 146,
+            "emptyBlocks": 0,
+            "slug": "aaopool",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 109
+          },
+          {
+            "poolId": 172,
+            "name": "DMND",
+            "link": "https://www.dmnd.work/",
+            "blockCount": 1,
+            "rank": 147,
+            "emptyBlocks": 0,
+            "slug": "dmnd",
+            "avgMatchRate": 99.98,
+            "avgFeeDelta": "-0.00640677",
+            "poolUniqueId": 171
+          },
+          {
+            "poolId": 130,
+            "name": "Tricky's BTC Pool",
+            "link": "https://pool.wemine.uk",
+            "blockCount": 1,
+            "rank": 148,
+            "emptyBlocks": 0,
+            "slug": "trickysbtcpool",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 129
+          },
+          {
+            "poolId": 171,
+            "name": "Noderunners",
+            "link": "https://pool.noderunners.network",
+            "blockCount": 1,
+            "rank": 149,
+            "emptyBlocks": 0,
+            "slug": "noderunners",
+            "avgMatchRate": 100,
+            "avgFeeDelta": "-0.05513727",
+            "poolUniqueId": 170
+          },
+          {
+            "poolId": 154,
+            "name": "Phoenix",
+            "link": "https://phoenixpool.com",
+            "blockCount": 1,
+            "rank": 150,
+            "emptyBlocks": 0,
+            "slug": "phoenix",
+            "avgMatchRate": 100,
+            "avgFeeDelta": "-0.00761304",
+            "poolUniqueId": 153
+          },
+          {
+            "poolId": 85,
+            "name": "RigPool",
+            "link": "https://www.rigpool.com",
+            "blockCount": 1,
+            "rank": 151,
+            "emptyBlocks": 0,
+            "slug": "rigpool",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 84
+          },
+          {
+            "poolId": 170,
+            "name": "SoloPool.com",
+            "link": "https://solopool.com",
+            "blockCount": 1,
+            "rank": 152,
+            "emptyBlocks": 0,
+            "slug": "solopoolcom",
+            "avgMatchRate": 100,
+            "avgFeeDelta": "-0.06901746",
+            "poolUniqueId": 169
+          },
+          {
+            "poolId": 89,
+            "name": "HashBX",
+            "link": "https://hashbx.io",
+            "blockCount": 1,
+            "rank": 153,
+            "emptyBlocks": 0,
+            "slug": "hashbx",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 88
+          },
+          {
+            "poolId": 66,
+            "name": "Nexious",
+            "link": "https://nexious.com",
+            "blockCount": 1,
+            "rank": 154,
+            "emptyBlocks": 0,
+            "slug": "nexious",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 65
+          },
+          {
+            "poolId": 137,
+            "name": "EkanemBTC",
+            "link": "https://ekanembtc.com",
+            "blockCount": 1,
+            "rank": 155,
+            "emptyBlocks": 0,
+            "slug": "ekanembtc",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 136
+          },
+          {
+            "poolId": 65,
+            "name": "HASHPOOL",
+            "link": "https://hashpool.com",
+            "blockCount": 1,
+            "rank": 156,
+            "emptyBlocks": 0,
+            "slug": "hashpool",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 64
+          },
+          {
+            "poolId": 126,
+            "name": "BTC Pool Party",
+            "link": "https://btcpoolparty.com",
+            "blockCount": 1,
+            "rank": 157,
+            "emptyBlocks": 0,
+            "slug": "btcpoolparty",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 125
+          },
+          {
+            "poolId": 87,
+            "name": "7pool",
+            "link": "https://7pool.com",
+            "blockCount": 1,
+            "rank": 158,
+            "emptyBlocks": 0,
+            "slug": "7pool",
+            "avgMatchRate": null,
+            "avgFeeDelta": null,
+            "poolUniqueId": 86
+          }
+        ],
+        "blockCount": 960439,
+        "lastEstimatedHashrate": 981027222411787600000,
+        "lastEstimatedHashrate3d": 910822183034914500000,
+        "lastEstimatedHashrate1w": 891290774707119800000
+      },
+      "fetchedAt": "2026-07-31T17:11:30.254Z"
+    }
+  }
+}
