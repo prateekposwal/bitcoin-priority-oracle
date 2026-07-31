@@ -296,8 +296,37 @@ function generateAnalysis(capture) {
     }
   ];
 
-  // Prefer stories not recently used
-  var story = STORIES[Math.floor(Math.random() * STORIES.length)];
+  // Prefer stories weighted by engagement signal; exclude rotating topics
+  var signal = null;
+  try { signal = require('./feedback.js').getSignal(); } catch (e) {}
+  var topicByAngle = {
+    'the-journey': 'research', 'the-observation': 'fees', 'the-question': 'node',
+    'the-layers': 'lightning', 'the-open-data': 'research', 'the-forecast': 'fees',
+    'the-gap': 'blocks', 'the-ordinary': 'settlement', 'the-lesson': 'cost',
+    'the-community': 'dev', 'the-horizon': 'research', 'the-permissionless': 'research',
+    'the-trust': 'security', 'the-long-game': 'cost', 'the-coin': 'fees'
+  };
+  var eligible = STORIES;
+  if (signal && signal.weights) {
+    var excluded = (signal.rotating_out || []);
+    eligible = STORIES.filter(function(s) { return excluded.indexOf(topicByAngle[s.angle]) === -1; });
+    if (eligible.length === 0) eligible = STORIES;
+    var weights = eligible.map(function(s) {
+      var topic = topicByAngle[s.angle];
+      var w = signal.weights[topic];
+      return (typeof w === 'number' && w > 0) ? w : 0.15;
+    });
+    var total = weights.reduce(function(s, w) { return s + w; }, 0);
+    var r = Math.random() * total;
+    var story = eligible[0];
+    for (var i = 0; i < eligible.length; i++) {
+      r -= weights[i];
+      if (r <= 0) { story = eligible[i]; break; }
+    }
+  } else {
+    var story2 = STORIES[Math.floor(Math.random() * STORIES.length)];
+    story = story2;
+  }
   return story;
 }
 

@@ -8,3 +8,4 @@
 {"at":"2026-07-31T14:52:34.531Z","source":"fees","cycleTs":"2026-07-31_20-22-34","reasons":["fastestFee must be integer, got string"],"producer":"capture-agent","file":null}
 {"at":"2026-07-31T14:52:43.766Z","source":"mining_pools","cycleTs":"2026-07-31_20-22-42","reasons":["totalBlockCount invalid"],"producer":"capture-agent","file":null}
 {"at":"2026-07-31T14:54:05.297Z","source":"fees","cycleTs":"2026-07-31_20-24-05","reasons":["fastestFee must be integer, got string"],"producer":"capture-agent","file":null}
+{"at":"2026-07-31T15:29:02.925Z","source":"fees","cycleTs":"2026-07-31_20-59-02","reasons":["fastestFee must be integer, got string"],"producer":"capture-agent","file":null}

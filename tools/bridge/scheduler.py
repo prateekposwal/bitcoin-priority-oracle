@@ -44,12 +44,8 @@ def post(platform):
 
 def run_cycle():
     log("=== Compliant publishing cycle ===")
-    # Always reply back to comments first
-    run_replies()
-    time.sleep(5)
-    # Engage on LinkedIn + Medium
-    run_engage()
-    time.sleep(5)
+    # Replies + engagement are handled by orchestrator phases 1 & 3 —
+    # scheduler handles publishing only (avoids double-running engines).
     for platform in PLATFORMS:
         cadence = check_cadence(platform)
         if not cadence.get('ok'):

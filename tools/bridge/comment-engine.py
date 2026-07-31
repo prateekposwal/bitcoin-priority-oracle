@@ -17,9 +17,16 @@ Tone rules:
 - Accept criticism gracefully, show how new evidence builds on it
 """
 import subprocess, base64, time, json, os, random, sys
+sys.path.insert(0, os.path.join(os.path.dirname(__file__)))
+import seen_state
 
 REPO = '/Users/prateekposwal/Desktop/block-space-economics'
 STATE_FILE = os.path.join(REPO, 'captured-data', 'comment-state.json')
+
+DISCOVERY_TTL_MS = 4 * 3600 * 1000   # reddit relevance search stable for 4h
+FAILED_RETRY_TTL_MS = 24 * 3600 * 1000  # don't hammer a thread that failed to post
+
+QUERIES = ['fees', 'mempool', 'lightning', 'node costs', 'transaction', 'block']
 
 # ─── Research areas BSAHI cares about ───
 TOPICS = {
@@ -140,12 +147,15 @@ def score_thread(title):
     return score, topics_hit
 
 def discover_threads():
-    # Multiple searches to find the gems
-    queries = ['fees', 'mempool', 'lightning', 'node costs', 'transaction', 'block']
+    # Batched discovery: ONE tab, only for stale queries, navigates sequentially.
+    stale = [q for q in QUERIES if not seen_state.page_fresh('reddit-search', q, DISCOVERY_TTL_MS)]
+    if not stale:
+        print(f"Gem finder: all {len(QUERIES)} searches fresh (within 4h) — no discovery tabs")
+        return []
     all_threads = []
-    for q in queries:
-        osa('tell application "Google Chrome" to make new tab at end of tabs of front window')
-        time.sleep(1)
+    osa('tell application "Google Chrome" to make new tab at end of tabs of front window')
+    time.sleep(1)
+    for q in stale:
         osa(f'tell application "Google Chrome" to set URL of active tab of front window to "https://www.reddit.com/r/Bitcoin/search/?q={q}&restrict_sr=1&sort=relevance&t=week"')
         time.sleep(7)
         threads = run_js(r"""
@@ -161,7 +171,6 @@ def discover_threads():
           return JSON.stringify(out);
         })()
         """)
-        osa('tell application "Google Chrome" to close active tab of front window')
         try:
             ts = json.loads(threads)
             for t in ts:
@@ -172,7 +181,9 @@ def discover_threads():
                     all_threads.append(t)
         except:
             pass
+        seen_state.mark_page_scanned('reddit-search', q)
         time.sleep(1)
+    osa('tell application "Google Chrome" to close active tab of front window')
 
     # Deduplicate and sort by relevance score
     seen = {}
@@ -254,20 +265,27 @@ def run_cycle(target):
     for t in threads:
         if state['comments_today'] >= target: break
         if t['href'] in state.get('commented_threads', []): continue
+        if seen_state.item_seen('reddit-thread', t['href']):
+            print(f"  SKIP (already seen): {t['title'][:40]}")
+            continue
         if not is_in_domain(t['title']):
             print(f"  SKIP (out of domain): {t['title'][:40]}")
             continue
         comment = build_comment(t, data)
         print(f"Commenting [{t['score']}pts] on: {t['title'][:40]}")
+        seen_state.mark_item('reddit-thread', t['href'], 'attempted')
         result = post_comment(t, comment)
         if result and 'CLICKED' in result:
             state['comments_today'] += 1
             state['last_comment'] = time.time()
             state['commented_threads'].append(t['href'])
+            seen_state.mark_item('reddit-thread', t['href'], 'commented')
             save_state(state)
             print(f"  ✓ #{state['comments_today']} posted")
             posted += 1
             time.sleep(random.randint(45, 120))
+        else:
+            print(f"  ✗ failed to post — marking failed (retry after 24h)")
         if posted >= 5:  # cap per cycle; run again for more
             break
 

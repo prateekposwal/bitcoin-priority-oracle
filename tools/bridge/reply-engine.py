@@ -6,14 +6,16 @@ The most important engagement loop: when someone replies to our comment,
 we ALWAYS reply. Replies give direction — they tell us what to research
 and write next.
 
-Flow:
-1. Load threads we've commented on
-2. For each, find replies to OUR comment
-3. Generate a thoughtful response (soft tone, data, builds on their point)
-4. Post the reply
+Flow (v3 — inbox-driven, no forced replies):
+1. Fetch the Reddit inbox (authenticated browser session)
+2. Keep only genuine replies to OUR comments (dest == New_Spare3193)
+3. Skip anything already replied to (seen-state + reply-state)
+4. Post a thoughtful reply (soft tone, data, builds on their point)
 5. Track replied-to comments (never reply twice)
 """
 import subprocess, base64, time, json, os, random, sys
+sys.path.insert(0, os.path.join(os.path.dirname(__file__)))
+import seen_state
 
 REPO = '/Users/prateekposwal/Desktop/block-space-economics'
 STATE_FILE = os.path.join(REPO, 'captured-data', 'comment-state.json')
@@ -98,45 +100,38 @@ def osa(script, timeout=15):
     try: subprocess.run(['osascript', '-e', script], capture_output=True, text=True, timeout=timeout)
     except: pass
 
-# ─── Find replies to our comments ───
+# ─── Inbox-driven reply detection ───
 
-def find_unreplied_comments(thread_hrefs, replied_map):
-    """For each thread we commented on, find replies to OUR comment we haven't answered."""
-    osa('tell application "Google Chrome" to make new tab at end of tabs of front window')
-    time.sleep(1)
-    osa(f'tell application "Google Chrome" to set URL of active tab of front window to "{thread_hrefs[0]}"')
-    time.sleep(9)
-
-    # Find our comment and any replies to it
-    result = run_js(r"""
+def fetch_inbox():
+    """Fetch Reddit inbox JSON via the authenticated browser session."""
+    run_js(r'''
     (function() {
-      // Find comment threads; identify ours (author BSAHI/New_Spare3193) and replies to it
-      var out = [];
-      var comments = document.querySelectorAll('[data-testid="comment"], [id*="t1_"], [class*="Comment"], [class*="md"]');
-      // Simpler: look for reply buttons on comments under ours
-      var replyBtns = document.querySelectorAll('button[aria-label*="Reply"], [data-testid*="reply"], [data-testid="comment_actions"]');
-      for (var i = 0; i < replyBtns.length; i++) {
-        out.push('reply-btn-' + i);
-      }
-      return JSON.stringify(out);
+      window.__inbox = 'loading';
+      fetch('/message/inbox.json?limit=25', { credentials: 'include' })
+        .then(function(r) { return r.text(); })
+        .then(function(t) { window.__inbox = t; })
+        .catch(function(e) { window.__inbox = 'ERR'; });
+      return 'started';
     })()
-    """)
-    osa('tell application "Google Chrome" to close active tab of front window')
-    return result
+    ''')
+    time.sleep(5)
+    raw = run_js('window.__inbox || "none"', timeout=15)
+    try:
+        data = json.loads(raw)
+        return data.get('data', {}).get('children', [])
+    except Exception:
+        return []
 
-def reply_to_comment(thread_href, reply_text):
+def reply_to_comment(context_url, reply_text):
     osa('tell application "Google Chrome" to make new tab at end of tabs of front window')
     time.sleep(1)
-    osa(f'tell application "Google Chrome" to set URL of active tab of front window to "{thread_href}"')
+    osa(f'tell application "Google Chrome" to set URL of active tab of front window to "{context_url}"')
     time.sleep(9)
 
-    # Open reply box on the last comment (the reply to ours)
     opened = run_js(r"""
     (function() {
-      // Click Reply on the most recent comment (which is the reply to ours)
       var replyBtns = document.querySelectorAll('button[aria-label*="Reply"], [data-testid*="reply"]');
       if (replyBtns.length) { replyBtns[replyBtns.length-1].click(); return 'opened'; }
-      // Fallback: find any textarea
       return 'NO_BTN';
     })()
     """)
@@ -145,7 +140,6 @@ def reply_to_comment(thread_href, reply_text):
         osa('tell application "Google Chrome" to close active tab of front window')
         return None
 
-    # Fill reply box
     filled = run_js(r"""
     (function() {
       var box = document.querySelector('[contenteditable="true"][data-testid], [role="textbox"], textarea');
@@ -183,42 +177,64 @@ def build_reply(data):
     return (random.choice(REPLY_OPENERS) + random.choice(REPLY_BUILDS).format(f=data['f'], m=data['m'], b=data['b'])
             + random.choice(REPLY_CLOSERS))
 
-def is_in_domain(text):
-    r = subprocess.run(['node', '-e', f'var d=require("{REPO}/tools/bridge/domain.js"); console.log(d.isInDomain(process.argv[1]))', text], capture_output=True, text=True, timeout=10, cwd=REPO)
-    return r.stdout.strip() == 'true'
-
 def run_cycle():
-    state = load_state()
     reply_state = load_reply_state()
     today = time.strftime('%Y-%m-%d')
     if reply_state['day'] != today:
         reply_state = {'replied': reply_state.get('replied', {}), 'replies_today': 0, 'day': today}
 
-    threads = state.get('commented_threads', [])
-    if not threads:
-        print("No threads commented yet. Run comment-engine first.")
+    data = get_live_data()
+
+    # 1. Fetch actual inbox replies to us
+    inbox = fetch_inbox()
+    if not inbox:
+        print("No inbox messages fetched (browser busy or session stale).")
+        save_reply_state(reply_state)
         return
 
-    data = get_live_data()
-    replied_any = False
-
-    for href in threads:
-        if href in reply_state.get('replied', {}):
+    # 2. Keep only genuine replies to our comments
+    candidates = []
+    seen = set()
+    for c in inbox:
+        d = c.get('data', {})
+        body = (d.get('body') or '').strip()
+        context = d.get('context') or ''
+        is_reply_to_us = d.get('dest') == 'New_Spare3193' or d.get('type') == 'post_reply'
+        if not body or not context or context in seen:
             continue
-        # Check if there are replies to our comment in this thread
-        check = find_unreplied_comments([href], reply_state.get('replied', {}))
-        print(f"Checking {href[:50]}... {check[:50]}")
+        seen.add(context)
+        if not is_reply_to_us:
+            continue
+        candidates.append({'author': d.get('author') or '', 'context': context, 'body': body[:200]})
 
-        # Even if we can't perfectly detect replies, check the thread for new activity
+    if not candidates:
+        print("Inbox has no unreplied replies to our comments.")
+        save_reply_state(reply_state)
+        return
+
+    # 3. Reply only to genuinely new replies (never reply twice)
+    replied_any = False
+    for cand in candidates:
+        if cand['context'] in reply_state.get('replied', {}):
+            continue
+        if seen_state.item_seen('reply-check', cand['context']):
+            print(f"  SKIP (already replied/checked): {cand['context'][:50]}")
+            continue
+        seen_state.mark_item('reply-check', cand['context'], 'attempted')
         reply = build_reply(data)
-        result = reply_to_comment(href, reply)
+        print(f"Replying to {cand['author']} on {cand['context'][:50]}...")
+        result = reply_to_comment('https://www.reddit.com' + cand['context'], reply)
         if result and 'REPLIED' in result:
-            reply_state['replied'][href] = time.time()
+            reply_state['replied'][cand['context']] = time.time()
             reply_state['replies_today'] += 1
+            seen_state.mark_item('reply-check', cand['context'], 'replied')
             save_reply_state(reply_state)
-            print(f"  ✓ Replied on {href[:40]}")
+            print(f"  ✓ Replied #{reply_state['replies_today']}")
             replied_any = True
             break  # one reply per cycle; run again for more
+        else:
+            seen_state.mark_item('reply-check', cand['context'], 'failed')
+            print("  ✗ reply post failed")
 
     save_reply_state(reply_state)
     if not replied_any:

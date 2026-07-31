@@ -1,0 +1,6 @@
+{
+  "cycleMinutes": 30,
+  "rest": { "workHours": 4, "restHours": 2 },
+  "cooldowns": { "discovery": 14400, "linkedinFeed": 7200, "replyRecheck": 21600, "failedRetry": 86400 },
+  "targets": { "commentsPerCycle": 8, "liPerCycle": 3, "mdPerCycle": 3 }
+}

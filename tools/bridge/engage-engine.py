@@ -10,9 +10,14 @@ LinkedIn: comment on Bitcoin/finance/blockchain posts (~20/day)
 Medium:  clap + comment on blockchain stories (~20/day)
 """
 import subprocess, base64, time, json, os, random, sys
+sys.path.insert(0, os.path.join(os.path.dirname(__file__)))
+import seen_state
 
 REPO = '/Users/prateekposwal/Desktop/block-space-economics'
 STATE_FILE = os.path.join(REPO, 'captured-data', 'engage-state.json')
+
+LINKEDIN_FEED_TTL_MS = 2 * 3600 * 1000   # algorithmic feed churns; 2h
+MEDIUM_TAG_TTL_MS = 4 * 3600 * 1000
 
 COMMENT_TEMPLATES = [
     "Appreciate this perspective. It connects to something we have been tracking — live data shows the fee market doing exactly this at {f} sat/vB right now. The numbers back the argument.",
@@ -70,15 +75,16 @@ def osa(script, timeout=15):
 # ─── LinkedIn engagement ───
 
 def discover_linkedin_posts():
+    if seen_state.page_fresh('linkedin-feed', 'home', LINKEDIN_FEED_TTL_MS):
+        print("LinkedIn feed fresh (2h) — skip discovery tab")
+        return []
     osa('tell application "Google Chrome" to make new tab at end of tabs of front window')
     time.sleep(1)
     osa('tell application "Google Chrome" to set URL of active tab of front window to "https://www.linkedin.com/feed/"')
     time.sleep(8)
-    # LinkedIn feed posts — find post text + comment buttons
     posts = run_js(r"""
     (function() {
       var out = [];
-      // Find post containers (feed-shared-update-v2)
       document.querySelectorAll('[data-urn], [class*="feed-shared-update"], [class*="occludable-update"]').forEach(function(el) {
         var text = (el.innerText||'').slice(0, 150);
         if (text.length > 30) out.push({text: text});
@@ -87,8 +93,17 @@ def discover_linkedin_posts():
     })()
     """)
     osa('tell application "Google Chrome" to close active tab of front window')
-    try: return json.loads(posts)
-    except: return []
+    seen_state.mark_page_scanned('linkedin-feed', 'home')
+    try:
+        posts = json.loads(posts)
+        # mark all discovered so future cycles don't re-attempt
+        for p in posts:
+            key = seen_state.sha1(p['text'][:150])
+            if not seen_state.item_seen('linkedin-post', key):
+                seen_state.mark_item('linkedin-post', key, 'discovered')
+        return posts
+    except:
+        return []
 
 def comment_linkedin(post_text):
     osa('tell application "Google Chrome" to make new tab at end of tabs of front window')
@@ -150,6 +165,9 @@ def comment_linkedin(post_text):
 # ─── Medium engagement ───
 
 def discover_medium_stories():
+    if seen_state.page_fresh('medium-tag', 'blockchain', MEDIUM_TAG_TTL_MS):
+        print("Medium tag fresh (4h) — skip discovery tab")
+        return []
     osa('tell application "Google Chrome" to make new tab at end of tabs of front window')
     time.sleep(1)
     osa('tell application "Google Chrome" to set URL of active tab of front window to "https://medium.com/tag/blockchain/latest"')
@@ -162,15 +180,21 @@ def discover_medium_stories():
         var title = (a.getAttribute('aria-label') || a.innerText || '').trim().slice(0, 80);
         if (title.length > 15 && href.includes('medium.com/')) out.push({title: title, href: href});
       });
-      // dedupe
       var seen = {};
       var res = out.filter(function(o){ if(seen[o.href]) return false; seen[o.href]=1; return true; });
       return JSON.stringify(res.slice(0, 10));
     })()
     """)
     osa('tell application "Google Chrome" to close active tab of front window')
-    try: return json.loads(stories)
-    except: return []
+    seen_state.mark_page_scanned('medium-tag', 'blockchain')
+    try:
+        stories = json.loads(stories)
+        for s in stories:
+            if not seen_state.item_seen('medium-story', s['href']):
+                seen_state.mark_item('medium-story', s['href'], 'discovered')
+        return stories
+    except:
+        return []
 
 def engage_medium(story):
     osa('tell application "Google Chrome" to make new tab at end of tabs of front window')
@@ -235,31 +259,52 @@ def run_cycle(li_target, md_target):
 
     data = get_live_data()
 
-    # LinkedIn engagement
-    li_count = 0
-    while state['li_today'] < li_target and li_count < 3:
+    # LinkedIn engagement — discovery ONCE, filter already-done posts
+    if state['li_today'] < li_target:
         posts = discover_linkedin_posts()
-        if not posts: break
-        result = comment_linkedin(posts[0]['text'])
-        if result and 'POSTED' in result:
-            state['li_today'] += 1
-            save_state(state)
-            print(f"LinkedIn comment #{state['li_today']} posted")
-            li_count += 1
-        time.sleep(random.randint(30, 60))
+        fresh = [p for p in posts if not seen_state.item_seen('linkedin-post', seen_state.sha1(p['text'][:150]))]
+        print(f"LinkedIn: {len(posts)} discovered, {len(fresh)} fresh")
+        li_count = 0
+        for p in fresh:
+            if state['li_today'] >= li_target or li_count >= 3: break
+            key = seen_state.sha1(p['text'][:150])
+            seen_state.mark_item('linkedin-post', key, 'attempted')
+            result = comment_linkedin(p['text'])
+            if result and 'POSTED' in result:
+                state['li_today'] += 1
+                seen_state.mark_item('linkedin-post', key, 'done')
+                state['done'].append({'key': 'linkedin-post:' + key, 'ts': time.time()})
+                save_state(state)
+                print(f"LinkedIn comment #{state['li_today']} posted")
+                li_count += 1
+            else:
+                seen_state.mark_item('linkedin-post', key, 'failed')
+            time.sleep(random.randint(30, 60))
+    else:
+        print("LinkedIn daily target met — skip")
 
-    # Medium engagement
-    md_count = 0
-    while state['md_today'] < md_target and md_count < 3:
+    # Medium engagement — discovery ONCE, filter already-done stories
+    if state['md_today'] < md_target:
         stories = discover_medium_stories()
-        if not stories: break
-        result = engage_medium(stories[0])
-        if result:
-            state['md_today'] += 1
-            save_state(state)
-            print(f"Medium engagement #{state['md_today']} done")
-            md_count += 1
-        time.sleep(random.randint(30, 60))
+        fresh = [s for s in stories if not seen_state.item_seen('medium-story', s['href'])]
+        print(f"Medium: {len(stories)} discovered, {len(fresh)} fresh")
+        md_count = 0
+        for s in fresh:
+            if state['md_today'] >= md_target or md_count >= 3: break
+            seen_state.mark_item('medium-story', s['href'], 'attempted')
+            result = engage_medium(s)
+            if result:
+                state['md_today'] += 1
+                seen_state.mark_item('medium-story', s['href'], 'done')
+                state['done'].append({'key': 'medium-story:' + s['href'], 'ts': time.time()})
+                save_state(state)
+                print(f"Medium engagement #{state['md_today']} done")
+                md_count += 1
+            else:
+                seen_state.mark_item('medium-story', s['href'], 'failed')
+            time.sleep(random.randint(30, 60))
+    else:
+        print("Medium daily target met — skip")
 
     save_state(state)
     print(f"Cycle done. LinkedIn: {state['li_today']}/{li_target}, Medium: {state['md_today']}/{md_target}")

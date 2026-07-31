@@ -95,7 +95,33 @@ function redditPost(a) {
   var title = '';
   var body = '';
 
-  var angle = Math.floor(Math.random() * 4);
+  // Engagement feedback: weight angle pick by topic signal (fees/mempool/lightning/blocks)
+  var signal = null;
+  try {
+    signal = require('./feedback.js').getSignal();
+  } catch (e) {}
+  var angleMap = { 0: 'fees', 1: 'mempool', 2: 'lightning', 3: 'blocks' };
+  var angle;
+  if (signal && signal.weights) {
+    var options = Object.keys(angleMap).map(Number);
+    var weights = {};
+    options.forEach(function(k) {
+      var topic = angleMap[k];
+      var w = signal.weights[topic];
+      if (signal.rotating_out && signal.rotating_out.indexOf(topic) !== -1) w = 0;
+      if (typeof w !== 'number' || w <= 0) w = 0.15;
+      weights[k] = w;
+    });
+    var total = options.reduce(function(s, k) { return s + weights[k]; }, 0);
+    var r = Math.random() * total;
+    angle = options[0];
+    for (var i = 0; i < options.length; i++) {
+      r -= weights[options[i]];
+      if (r <= 0) { angle = options[i]; break; }
+    }
+  } else {
+    angle = Math.floor(Math.random() * 4);
+  }
   if (angle === 0) {
     title = 'Current state of the Bitcoin fee market (live data)';
     body = 'Looking at live network data right now:\n\n' +
