@@ -110,9 +110,108 @@ function generateAnalysis(capture) {
         'We built BSAHI to measure both layers together, because you cannot understand one without ' +
         'the other. Our research is published openly, and the data is captured in real time.\n\n' +
         'If this is a question you think about too, we would love to compare notes.'
+    },
+    {
+      angle: 'the-open-data',
+      title: 'Why we publish all our Bitcoin data openly',
+      body: 'There is a lot of great research in this space, but a lot of it stays behind closed doors. ' +
+        'We decided to do the opposite.\n\n' +
+        'BSAHI captures the network continuously — fees, mempool, blocks, Lightning — and publishes ' +
+        'everything we find. The code is open, the methodology is open, and the data is collected ' +
+        'transparently from public sources.\n\n' +
+        'Why? Because block space economics is too important to be a black box. If our conclusion is wrong, ' +
+        'someone should be able to check. If our data is incomplete, someone should be able to add to it. ' +
+        'The research is stronger for it.\n\n' +
+        'Today\'s capture shows the network in its ordinary state:\n\n' +
+        '- Fastest fee: ' + d.fastest + ' sat/vB\n' +
+        '- Mempool: ' + d.mempoolMB + ' MB\n' +
+        '- Price: ' + d.price + '\n\n' +
+        'Nothing dramatic — just the market working. That is the point. We want to document the ordinary, ' +
+        'so the extraordinary stands out when it comes.'
+    },
+    {
+      angle: 'the-forecast',
+      title: 'Can we forecast Bitcoin fees? We are trying.',
+      body: 'Fee forecasting is the hardest problem we have taken on. It is also the most useful.\n\n' +
+        'If you could predict fee pressure hours or days ahead, you could:\n\n' +
+        '- Time your transactions to avoid the rush\n' +
+        '- Understand when demand is genuinely rising vs. noise\n' +
+        '- See the network\'s health before it is obvious\n\n' +
+        'We are building toward this by capturing the raw signals continuously — mempool depth, ' +
+        'fee distributions, block fullness, Lightning pressure. The theory is simple: ' +
+        'demand leaves fingerprints, and we are learning to read them.\n\n' +
+        'Today\'s data:\n\n' +
+        '- Mempool: ' + d.mempoolTx + ' transactions (' + d.mempoolMB + ' MB)\n' +
+        '- Fastest fee: ' + d.fastest + ' sat/vB\n\n' +
+        'This is early work. We will publish our first forecasts openly and be transparent ' +
+        'about how wrong they are. That is the only honest way to learn.'
+    },
+    {
+      angle: 'the-gap',
+      title: 'The gap in Bitcoin research we are trying to fill',
+      body: 'Bitcoin has incredible coverage — price, security, energy, adoption. One area is thin: ' +
+        'the day-to-day economics of the fee market and what it reveals about the network.\n\n' +
+        'Questions we keep coming back to:\n\n' +
+        '- What is the real cost of running a node, and do fees cover it?\n' +
+        '- What drives fee spikes — genuine demand or panic?\n' +
+        '- How much does settlement actually cost as a fraction of value moved?\n' +
+        '- Where does Lightning relieve on-chain pressure, and where does it not?\n\n' +
+        'Nobody has clean, continuous answers. So we are building the tool that provides them.\n\n' +
+        'BSAHI captures the network around the clock and turns it into analysis. ' +
+        'The work is early, but the direction is clear.\n\n' +
+        'If these questions interest you, we would love to think together.'
+    },
+    {
+      angle: 'the-ordinary',
+      title: 'Bitcoin\'s most underrated moment: a quiet block',
+      body: 'Everyone talks about Bitcoin when the price moves. The most interesting moments are the quiet ones.\n\n' +
+        'Take the last block we captured. A few thousand transactions, fees in the single digits, ' +
+        'mempool moderate. Nothing dramatic. And that is exactly what makes it remarkable.\n\n' +
+        'It means the network is working as intended — people settling when it is cheap, ' +
+        'waiting when it is not, and the market balancing supply and demand without anyone ' +
+        'in charge.\n\n' +
+        'From our live capture:\n\n' +
+        '- Block: ~' + d.blockTx + ' transactions\n' +
+        '- Fastest fee: ' + d.fastest + ' sat/vB\n' +
+        '- Mempool: ' + d.mempoolMB + ' MB\n\n' +
+        'BSAHI is built to notice these quiet blocks — the ordinary heartbeat of a healthy ' +
+        'network. The extraordinary is easier to understand when you know what normal looks like.'
+    },
+    {
+      angle: 'the-lesson',
+      title: 'What being wrong in public taught us about Bitcoin research',
+      body: 'Early in building BSAHI, we published a conclusion that later turned out to be too strong. ' +
+        'It was uncomfortable. It was also the best thing that happened to the project.\n\n' +
+        'People pushed back with specific reasons. We went back to the data, refined the model, ' +
+        'and the conclusion got better. The Storage Cost Coverage Ratio we now publish is the ' +
+        'direct result of that correction.\n\n' +
+        'That is how research should work — claims you can check, methods you can audit, ' +
+        'and the willingness to update when new evidence arrives.\n\n' +
+        'That is the culture we are building at BSAHI. The numbers we publish come from live captures:\n\n' +
+        '- Mempool: ' + d.mempoolMB + ' MB\n' +
+        '- Fastest fee: ' + d.fastest + ' sat/vB\n' +
+        '- Price: ' + d.price + '\n\n' +
+        'And they will change. We will update, and we will say so. ' +
+        'That is the point of doing this in public.'
+    },
+    {
+      angle: 'the-community',
+      title: 'Bitcoin research works best when it is a conversation',
+      body: 'We started BSAHI with the idea that research is a dialogue, not a monologue.\n\n' +
+        'Every week we learn from the community — people running nodes, using Lightning, ' +
+        'watching the mempool. Their observations sharpen our questions and our data.\n\n' +
+        'One conversation led us to look harder at node costs. Another pushed us to question ' +
+        'our fee forecast method. Each time, the research got better.\n\n' +
+        'Our current captures are open for anyone to question:\n\n' +
+        '- Mempool: ' + d.mempoolMB + ' MB (' + d.mempoolTx + ' txs)\n' +
+        '- Fastest fee: ' + d.fastest + ' sat/vB\n' +
+        '- Recent block: ~' + d.blockTx + ' transactions\n\n' +
+        'If you see something that does not look right, tell us. That is the conversation ' +
+        'we want to be part of.'
     }
   ];
 
+  // Prefer stories not recently used
   var story = STORIES[Math.floor(Math.random() * STORIES.length)];
   return story;
 }
@@ -126,14 +225,20 @@ function generateFor(platform) {
 }
 
 function canPost(platform) {
-  // Story posts are rarer — Medium 1/day, LinkedIn 1/2days
+  // Story posts: Medium 5/day, LinkedIn 5/day
   try {
     var logData = JSON.parse(fs.readFileSync(POSTED_LOG, 'utf8'));
     var now = Date.now();
-    var recent = logData.posts.filter(function(p) { return p.platform === platform && p.type === 'story'; });
-    var minMs = platform === 'medium' ? 24*3600000 : 48*3600000;
-    var sinceLast = recent.length ? now - new Date(recent[recent.length-1].at).getTime() : Infinity;
-    return { ok: sinceLast >= minMs, nextPostMs: Math.max(0, minMs - sinceLast), postsToday: recent.length };
+    var today = new Date().toISOString().slice(0,10);
+    var recent = logData.posts.filter(function(p) { return p.platform === platform && p.type === 'story' && p.at.slice(0,10) === today; });
+    var minGap = platform === 'medium' ? 4*3600000 : 4*3600000;  // 5/day = ~4.8h apart
+    var lastAt = recent.length ? new Date(logData.posts.filter(function(p){return p.platform===platform&&p.type==='story';}).slice(-1)[0].at).getTime() : 0;
+    var sinceLast = lastAt ? now - lastAt : Infinity;
+    return {
+      ok: recent.length < 5 && sinceLast >= minGap,
+      nextPostMs: Math.max(0, minGap - sinceLast),
+      postsToday: recent.length
+    };
   } catch(e) {
     return { ok: true, nextPostMs: 0, postsToday: 0 };
   }
