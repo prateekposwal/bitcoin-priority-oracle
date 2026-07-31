@@ -144,6 +144,15 @@
       "totalRelays": 6,
       "postedAt": "2026-07-30T23:27:52.808Z",
       "contentPreview": "📈 Economics Analyst: Average transaction value: $53965. Bitcoin settles high-value transactions. Th"
+    },
+    {
+      "id": "reddit-1785494380055",
+      "platform": "reddit",
+      "topic": "settlement",
+      "url": "https://www.reddit.com/r/Bitcoin/comments/1vbnau3/bsahi_bitcoin_block_space_research_live_data/",
+      "author": "BSAHI",
+      "postedAt": "2026-07-31T10:39:40.055Z",
+      "contentPreview": "BSAHI: Bitcoin Block Space Research - Live Data"
     }
   ],
   "cycles": 4
