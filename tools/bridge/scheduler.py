@@ -44,6 +44,12 @@ def post(platform):
 
 def run_cycle():
     log("=== Compliant publishing cycle ===")
+    # Always reply back to comments first
+    run_replies()
+    time.sleep(5)
+    # Engage on LinkedIn + Medium
+    run_engage()
+    time.sleep(5)
     for platform in PLATFORMS:
         cadence = check_cadence(platform)
         if not cadence.get('ok'):
@@ -57,6 +63,17 @@ def run_cycle():
         # Natural pacing between platforms
         time.sleep(8)
     log("=== Cycle complete ===")
+
+def run_replies():
+    # Always answer back — replies give direction
+    r = subprocess.run(['python3', os.path.join(REPO, 'tools/bridge/reply-engine.py')],
+                       capture_output=True, text=True, timeout=180, cwd=REPO)
+    log(r.stdout[-300:] if r.stdout else 'reply engine done')
+
+def run_engage():
+    r = subprocess.run(['python3', os.path.join(REPO, 'tools/bridge/engage-engine.py'), '3', '3'],
+                       capture_output=True, text=True, timeout=180, cwd=REPO)
+    log(r.stdout[-300:] if r.stdout else 'engage engine done')
 
 if __name__ == '__main__':
     if len(sys.argv) > 1 and sys.argv[1] == '--daemon':
