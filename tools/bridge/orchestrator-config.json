@@ -2,5 +2,11 @@
   "cycleMinutes": 30,
   "rest": { "workHours": 4, "restHours": 2 },
   "cooldowns": { "discovery": 14400, "linkedinFeed": 7200, "replyRecheck": 21600, "failedRetry": 86400 },
-  "targets": { "commentsPerCycle": 8, "liPerCycle": 3, "mdPerCycle": 3 }
+  "targets": { "commentsPerCycle": 8, "liPerCycle": 3, "mdPerCycle": 3 },
+  "engage": {
+    "enabled": false,
+    "reason": "LinkedIn/Medium engagement landing 0/3 every cycle; platform policy friction (login walls, TOS risk); re-scope to syndication-only if ever re-enabled",
+    "recordedAt": "2026-07-31",
+    "decisionDoc": "docs/decisions/2026-07-31-engagement.md"
+  }
 }

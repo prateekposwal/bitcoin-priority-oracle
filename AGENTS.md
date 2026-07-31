@@ -58,3 +58,40 @@
 2. **Branch protection** — GitHub → Settings → Branches → Add rule for `main`: require PR + status checks
 3. **Enable Dependabot** — GitHub → Insights → Dependency graph → Enable
 4. **Signed commits** (optional) — GitHub → Settings → SSH and GPG keys
+## Session Handoff — 2026-07-31T19:08:27.349Z
+
+### Current State
+- Session mood: neutral
+- Active work: cycle 27 · bridge=on · M4 cleanCycles=4/7
+- Forecast: holt-linear-trend · rising · rmse=1.145 (327 pts)
+
+### Decisions Made
+- M4 gate: cleanCycles=4/7 (no flip)
+
+### Open Issues
+- SPOOL: stale sources: block_height,block_interval,blockchair,blocks,btc_price,btc_rpc,coinpaprika,derived_metrics,difficulty,fear_greed,fee_history,fees,lightning,mempool,mempool_blocks,mining_pools,research_findings
+- 1 endpoint unhealthy
+
+### Metrics
+- Quality: degraded
+- Forecast: holt-linear-trend · rising · regime=spike (327 pts)
+- M4: 4/7 clean cycles · bridgeFlipped=false
+## Session Handoff — 2026-07-31T19:11:41.574Z
+
+### Current State
+- Session mood: neutral
+- Active work: cycle 27 · bridge=on · M4 cleanCycles=3/7
+- Forecast: holt-linear-trend · rising · rmse=1.145 (327 pts)
+
+### Decisions Made
+- M4 gate: cleanCycles=3/7 (no flip)
+
+### Open Issues
+- SPOOL: stale sources: block_height,block_interval,blockchair,blocks,btc_price,btc_rpc,coinpaprika,derived_metrics,difficulty,fear_greed,fee_history,fees,lightning,mempool,mempool_blocks,mining_pools,research_findings
+- 2 endpoints unhealthy
+- 17 sources stale (>30min old)
+
+### Metrics
+- Quality: degraded
+- Forecast: holt-linear-trend · rising · regime=spike (327 pts)
+- M4: 3/7 clean cycles · bridgeFlipped=false

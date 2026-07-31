@@ -1,0 +1,42 @@
+{
+  "version": "1.0",
+  "traces": [
+    {
+      "ts": "2026-07-31T19:08:27.349Z",
+      "cycle": 27,
+      "source": "de-agent",
+      "decisions": [
+        "M4 gate: cleanCycles=4/7"
+      ],
+      "issues": [
+        "SPOOL: stale sources: block_height,block_interval,blockchair,blocks,btc_price,btc_rpc,coinpaprika,derived_metrics,difficulty,fear_greed,fee_history,fees,lightning,mempool,mempool_blocks,mining_pools,research_findings",
+        "1 endpoint unhealthy"
+      ],
+      "metrics": {
+        "quality": "degraded",
+        "m4CleanCycles": 4,
+        "bridgeFlipped": false,
+        "forecastModel": "holt-linear-trend"
+      }
+    },
+    {
+      "ts": "2026-07-31T19:11:41.574Z",
+      "cycle": 27,
+      "source": "de-agent",
+      "decisions": [
+        "M4 gate: cleanCycles=3/7"
+      ],
+      "issues": [
+        "SPOOL: stale sources: block_height,block_interval,blockchair,blocks,btc_price,btc_rpc,coinpaprika,derived_metrics,difficulty,fear_greed,fee_history,fees,lightning,mempool,mempool_blocks,mining_pools,research_findings",
+        "2 endpoints unhealthy",
+        "17 sources stale (>30min old)"
+      ],
+      "metrics": {
+        "quality": "degraded",
+        "m4CleanCycles": 3,
+        "bridgeFlipped": false,
+        "forecastModel": "holt-linear-trend"
+      }
+    }
+  ]
+}

@@ -329,3 +329,59 @@ DE Agent auto-started (AUTO_START)
 [DE Agent 2026-07-31 18:26:25] Alert dispatcher: forecast + alerts + index self-heal
 [DE Agent 2026-07-31 18:26:25] Cycle 26 complete in 59s
 [DE Agent 2026-07-31 18:26:25] ISSUES: 1 endpoints unhealthy
+DE Server running on http://localhost:3456
+[DE Agent 2026-07-31 19:10:45] Starting — Data Engineer v1
+[DE Agent 2026-07-31 19:10:45] Cycle interval: 60 minutes
+[DE Agent 2026-07-31 19:10:45] Endpoints: 13
+[DE Agent 2026-07-31 19:10:45] Cycle 27 started
+[DE Agent 2026-07-31 19:10:45] Checking 13 endpoints...
+DE Agent auto-started (AUTO_START)
+[DE Agent 2026-07-31 19:10:54] Endpoints: 11/13 healthy, 2 unhealthy
+[DE Agent 2026-07-31 19:10:55] Freshness checked
+[DE Agent 2026-07-31 19:10:55] Spool: scanned=184 new=1 ingested=1 validated=13 violated=0 failed=0
+[DE Agent 2026-07-31 19:11:08] Capture-agent: cycle=2026-08-01_00-40-55 captured=13 skipped=0 violated=0 errored=0
+[DE Agent 2026-07-31 19:11:14] Bitcoin Core: 546935 blocks, 3 fee stats, 8 peers
+[DE Agent 2026-07-31 19:11:14]   Fee percentiles (p10/p25/p50/p75/p90): 0.0/0.0/0.0/0.0/0.0 sat/vB
+[tracker] Saved: /Users/prateekposwal/Desktop/block-space-economics/captured-data/tracker/2026-07-31/2026-07-31_19-11-14.json
+[DE Agent 2026-07-31 19:11:14] Block intervals: 634.44s avg
+[DE Agent 2026-07-31 19:11:14] Derived metrics: computed + enqueued
+[DE Agent 2026-07-31 19:11:15] Research content pipeline: briefs generated
+[DE Agent 2026-07-31 19:11:15] Topic intelligence: refreshed
+[DE Agent 2026-07-31 19:11:31] Data quality score: 96/100
+[DE Agent 2026-07-31 19:11:31] Generating reports...
+[DE Agent 2026-07-31 19:11:41] Reports saved
+[DE Agent 2026-07-31 19:11:41] Session handoff appended to AGENTS.md
+[DE Agent 2026-07-31 19:11:42] Research report + publishing queue generated
+[2026-07-31 19:11:42] [BSAHI Publisher] === Full publishing cycle (Nostr + Browser) ===
+[2026-07-31 19:11:42] [BSAHI Publisher] === Publishing cycle ===
+[2026-07-31 19:11:42] [BSAHI Publisher] Queue empty — generating
+[2026-07-31 19:11:47] [Queue] Generated 1 posts for 2026-07-31
+[2026-07-31 19:11:52] [BSAHI Publisher] Published to 6 relays: 4 confirmed, 0 sent, 2 failed
+[2026-07-31 19:11:52] [Publisher] Posted BSAHI-MS9BJQ4G-VOK0 to medium [storage]
+[2026-07-31 19:11:52] [BSAHI Publisher] POSTED | storage | event: 1b9380c20b41af0b...
+[2026-07-31 19:11:52] [BSAHI Publisher] 1 posted
+[2026-07-31 19:11:52] [BSAHI Publisher] RSS: /Users/prateekposwal/Desktop/block-space-economics/docs/feed.xml
+[2026-07-31 19:11:53] [BSAHI Publisher] === Cycle complete ===
+[2026-07-31 19:11:55] [BSAHI Browser Publisher] === Browser publishing cycle ===
+[2026-07-31 19:11:55] [BSAHI Browser Publisher] Queue empty — generating
+[2026-07-31 19:11:58] [Queue] Generated 1 posts for 2026-07-31
+[2026-07-31 19:11:58] [BSAHI Browser Publisher] Launching Chrome...
+[2026-07-31 19:12:31] [BSAHI Browser Publisher] Twitter: navigating to compose...
+[2026-07-31 19:12:40] [BSAHI Browser Publisher] Twitter: compose not available
+[2026-07-31 19:12:40] [BSAHI Browser Publisher] Reddit: navigating to submit...
+[2026-07-31 19:12:43] [BSAHI Browser Publisher] Reddit: submit form not available
+[2026-07-31 19:12:47] [BSAHI Browser Publisher] Medium: navigating...
+[2026-07-31 19:12:51] [BSAHI Browser Publisher] Medium: editor not available (may need login)
+[2026-07-31 19:12:51] [BSAHI Browser Publisher] 0 platforms attempted, 0 posted
+[2026-07-31 19:12:51] [BSAHI Browser Publisher] === Cycle complete ===
+[2026-07-31 19:12:51] [BSAHI Publisher] RSS: /Users/prateekposwal/Desktop/block-space-economics/docs/feed.xml
+[2026-07-31 19:12:51] [BSAHI Publisher] === Full cycle complete ===
+[DE Agent 2026-07-31 19:12:51] Publisher: 2 posts in 69s
+[2026-07-31 19:12:51] [BSAHI Publisher] RSS: /Users/prateekposwal/Desktop/block-space-economics/docs/feed.xml
+[DE Agent 2026-07-31 19:12:54] Consumer: drained spool into SQLite
+[DE Agent 2026-07-31 19:12:54] M4 gate: cleanCycles=4/7 (bridge=on, quality=96)
+[2026-07-31 19:12:54] [alert-dispatcher] cycle complete
+[2026-07-31 19:12:54] [alert-dispatcher] cycle complete
+[DE Agent 2026-07-31 19:12:54] Alert dispatcher: forecast + alerts + index self-heal
+[DE Agent 2026-07-31 19:12:54] Cycle 27 complete in 130s
+[DE Agent 2026-07-31 19:12:54] ISSUES: 2 endpoints unhealthy | 17 sources stale (>30min old)

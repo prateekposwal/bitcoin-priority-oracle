@@ -168,6 +168,11 @@ async function runCycle() {
         await report.reportToArchitect(dailyReport);
         log('Reports saved');
       }
+      // Session continuity: auto-append AGENTS.md handoff + decision-log trace
+      try {
+        report.appendSessionHandoff({ state: STATE });
+        log('Session handoff appended to AGENTS.md');
+      } catch (e) { log('Session handoff error: ' + e.message); }
       // Research report (17) + publishing queue (18)
       try {
         var rg = require('../../tools/agents/17-report-generator.js');
@@ -247,7 +252,17 @@ async function runCycle() {
       CONFIG.capture.bridge = false;
       STATE.m4.bridgeFlipped = true;
       STATE.m4.bridgeDisabledAt = new Date().toISOString();
-      log('M4: bridge DISABLED after ' + STATE.m4.cleanCycles + ' clean cycles');
+      var flipLine = 'M4 COMPLETE: bridge disabled at ' + STATE.m4.bridgeDisabledAt + ' after ' + STATE.m4.cleanCycles + ' clean cycles';
+      log('==============================================');
+      log(flipLine);
+      log('==============================================');
+      STATE.m4Event = { type: 'M4_COMPLETE', at: STATE.m4.bridgeDisabledAt, cleanCycles: STATE.m4.cleanCycles };
+      try { report.appendSessionHandoff({ state: STATE, m4Event: STATE.m4Event, force: true }); }
+      catch (e) { log('Handoff on M4 flip failed: ' + e.message); }
+      try {
+        var archFile = path.join(__dirname, '..', '..', 'reports', 'architect', 'DE-' + new Date().toISOString().slice(0, 10) + '.md');
+        fs.appendFileSync(archFile, '\n\n## M4 COMPLETE\n- ' + flipLine + '\n');
+      } catch (e) { log('Architect append on M4 flip failed: ' + e.message); }
     }
     saveState();
   } catch (e) { log('Compaction error: ' + e.message); }
@@ -275,6 +290,14 @@ function start() {
   ensureDir(path.resolve(__dirname, '..', '..', 'reports', 'architect'));
   ensureDir(path.dirname(STATE_FILE));
   loadState();
+
+  // M4 durability: config.js is a hardcoded module, so the in-memory flip would
+  // evaporate on restart (and bridgeFlipped=true would block any re-flip).
+  // Re-apply the persisted flip from state so the migration stays complete.
+  if (STATE.m4 && STATE.m4.bridgeFlipped) {
+    CONFIG.capture.bridge = false;
+    log('M4: bridge remains disabled (persisted flip from ' + STATE.m4.bridgeDisabledAt + ')');
+  }
 
   runCycle().catch(function(e) { log('Cycle error: ' + e.message); });
   setInterval(function() {

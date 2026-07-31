@@ -143,6 +143,60 @@
         "mining_pools": true,
         "difficulty": true
       }
+    },
+    {
+      "at": "2026-07-31T19:11:31.506Z",
+      "ok": {
+        "fees": true,
+        "btc_price": true,
+        "mempool": true,
+        "mempool_blocks": true,
+        "fee_history": true,
+        "lightning": true,
+        "blocks": true,
+        "block_height": true,
+        "coinpaprika": true,
+        "fear_greed": true,
+        "blockchair": true,
+        "mining_pools": false,
+        "difficulty": true
+      }
+    },
+    {
+      "at": "2026-07-31T19:11:40.562Z",
+      "ok": {
+        "fees": true,
+        "btc_price": true,
+        "mempool": true,
+        "mempool_blocks": true,
+        "fee_history": true,
+        "lightning": true,
+        "blocks": true,
+        "block_height": true,
+        "coinpaprika": true,
+        "fear_greed": true,
+        "blockchair": true,
+        "mining_pools": true,
+        "difficulty": true
+      }
+    },
+    {
+      "at": "2026-07-31T19:11:40.882Z",
+      "ok": {
+        "fees": true,
+        "btc_price": true,
+        "mempool": true,
+        "mempool_blocks": true,
+        "fee_history": true,
+        "lightning": true,
+        "blocks": true,
+        "block_height": true,
+        "coinpaprika": true,
+        "fear_greed": true,
+        "blockchair": true,
+        "mining_pools": true,
+        "difficulty": true
+      }
     }
   ]
 }

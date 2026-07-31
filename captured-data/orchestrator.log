@@ -216,3 +216,23 @@ ModuleNotFoundError: No module named 'seen_state'
 [2026-07-31 18:11:27] RUN: scheduler.py 
 [2026-07-31 18:12:21] [23:42:21] [Scheduler] === Cycle complete ===
 [2026-07-31 18:12:21] === Cycle complete ===
+[2026-07-31 18:50:44] === Engagement cycle ===
+[2026-07-31 18:50:44] RUN: reply-engine.py 
+[2026-07-31 18:51:09] No inbox messages fetched (browser busy or session stale).
+[2026-07-31 18:51:09] RUN: comment-engine.py 8
+[2026-07-31 18:51:14] Cycle done. Comments today: 0/50
+[2026-07-31 18:51:14] RUN: engage-engine.py 3 3
+[2026-07-31 18:51:16] Cycle done. LinkedIn: 0/3, Medium: 0/3
+[2026-07-31 18:51:16] RUN: scheduler.py 
+[2026-07-31 18:52:14] [00:22:14] [Scheduler] === Cycle complete ===
+[2026-07-31 18:52:14] === Cycle complete ===
+[2026-07-31 19:10:41] Engagement orchestrator v3 started (work 4h / rest 2h)
+[2026-07-31 19:10:41] === Engagement cycle ===
+[2026-07-31 19:10:42] RUN: reply-engine.py 
+[2026-07-31 19:11:14] No inbox messages fetched (browser busy or session stale).
+[2026-07-31 19:11:14] RUN: comment-engine.py 8
+[2026-07-31 19:11:20] Cycle done. Comments today: 0/50
+[2026-07-31 19:11:20] ENGAGE: LinkedIn/Medium engagement disabled (policy) — see docs/decisions/2026-07-31-engagement.md
+[2026-07-31 19:11:20] RUN: scheduler.py 
+[2026-07-31 19:12:09] [00:42:09] [Scheduler] === Cycle complete ===
+[2026-07-31 19:12:09] === Cycle complete ===

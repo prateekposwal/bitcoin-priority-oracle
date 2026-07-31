@@ -333,4 +333,91 @@ function reportToArchitect(report) {
   }
 }
 
-module.exports = { generateDailyReport: generateDailyReport, generateWeeklySummary: generateWeeklySummary, reportToTelos: reportToTelos, reportToArchitect: reportToArchitect };
+function appendSessionHandoff(opts) {
+  opts = opts || {};
+  var repo = path.join(__dirname, '..', '..');
+  var lines = [];
+
+  // 1. State (de-agent)
+  var state = opts.state;
+  if (!state) {
+    try { state = JSON.parse(fs.readFileSync(path.join(repo, 'captured-data', 'de-agent-state.json'), 'utf8')); } catch (e) {}
+  }
+  // 2. Health
+  var health = null;
+  try { health = JSON.parse(fs.readFileSync(path.join(repo, 'captured-data', 'ops-health.json'), 'utf8')); } catch (e) {}
+  // 4. Forecast
+  var fc = null;
+  try { fc = JSON.parse(fs.readFileSync(path.join(repo, 'tools', 'fee_forecast.json'), 'utf8')); } catch (e) {}
+
+  var now = new Date().toISOString();
+  var cycle = state && state.cycleCount ? state.cycleCount : '?';
+  var m4 = state && state.m4 ? state.m4 : {};
+  var issues = [];
+  if (health && Array.isArray(health.issues)) issues = health.issues.slice(0, 3);
+  if (state && Array.isArray(state.issues)) state.issues.forEach(function(i) { if (issues.indexOf(i) === -1) issues.push(i); });
+  if (!issues.length) issues.push('- None');
+  var quality = state && state.qualityScore !== undefined ? state.qualityScore : (health && health.status ? (health.status === 'HEALTHY' ? 'healthy' : 'degraded') : 'n/a');
+
+  lines.push('## Session Handoff — ' + now);
+  lines.push('');
+  lines.push('### Current State');
+  lines.push('- Session mood: neutral');
+  lines.push('- Active work: cycle ' + cycle + ' · bridge=' + (m4.bridgeFlipped ? 'off' : 'on') + ' · M4 cleanCycles=' + (m4.cleanCycles || 0) + '/7');
+  if (fc) lines.push('- Forecast: ' + (fc.model || '?') + ' · ' + fc.trend + ' · ' + (fc.quality ? 'rmse=' + fc.quality.rmse : '') + ' (' + (fc.data_points || 0) + ' pts)');
+  lines.push('');
+  lines.push('### Decisions Made');
+  if (opts.m4Event && opts.m4Event.type === 'M4_COMPLETE') {
+    lines.push('- **M4 COMPLETE**: bridge disabled at ' + opts.m4Event.at + ' after ' + opts.m4Event.cleanCycles + ' clean cycles');
+  } else if (m4.cleanCycles) {
+    lines.push('- M4 gate: cleanCycles=' + m4.cleanCycles + '/7 (no flip' + (m4.bridgeFlipped ? ' — already flipped' : '') + ')');
+  } else {
+    lines.push('- *(No decisions recorded)*');
+  }
+  lines.push('');
+  lines.push('### Open Issues');
+  issues.forEach(function(i) { lines.push('- ' + i); });
+  lines.push('');
+  lines.push('### Metrics');
+  lines.push('- Quality: ' + quality);
+  if (fc) lines.push('- Forecast: ' + fc.model + ' · ' + fc.trend + ' · regime=' + (fc.regime ? fc.regime.current : '?') + ' (' + (fc.data_points || 0) + ' pts)');
+  lines.push('- M4: ' + (m4.cleanCycles || 0) + '/7 clean cycles · bridgeFlipped=' + (m4.bridgeFlipped || false));
+  lines.push('');
+
+  var block = lines.join('\n');
+
+  // Append to AGENTS.md (repo root)
+  var agentsPath = path.join(repo, 'AGENTS.md');
+  var wrote = { agents: false, decisionLog: false };
+  try {
+    fs.appendFileSync(agentsPath, block);
+    wrote.agents = true;
+  } catch (e) {}
+
+  // Append to captured-data/decision-log.json (BSAHI-side structured trace)
+  try {
+    var dlPath = path.join(repo, 'captured-data', 'decision-log.json');
+    var dl = { version: '1.0', traces: [] };
+    try { dl = JSON.parse(fs.readFileSync(dlPath, 'utf8')); } catch (e) {}
+    dl.traces.push({
+      ts: now,
+      cycle: cycle,
+      source: 'de-agent',
+      decisions: (opts.m4Event && opts.m4Event.type === 'M4_COMPLETE') ? ['M4 COMPLETE: bridge disabled'] : ['M4 gate: cleanCycles=' + (m4.cleanCycles || 0) + '/7'],
+      issues: issues,
+      metrics: {
+        quality: quality,
+        m4CleanCycles: m4.cleanCycles || 0,
+        bridgeFlipped: m4.bridgeFlipped || false,
+        forecastModel: fc ? fc.model : null
+      }
+    });
+    dl.traces = dl.traces.slice(-200);
+    fs.writeFileSync(dlPath, JSON.stringify(dl, null, 2));
+    wrote.decisionLog = true;
+  } catch (e) {}
+
+  return { saved: wrote.agents || wrote.decisionLog, appended: true, path: agentsPath, wrote: wrote };
+}
+
+module.exports = { generateDailyReport: generateDailyReport, generateWeeklySummary: generateWeeklySummary, reportToTelos: reportToTelos, reportToArchitect: reportToArchitect, appendSessionHandoff: appendSessionHandoff };

@@ -131,9 +131,8 @@ function cycle() {
   run('tools/bridge/reply-engine.py', [], function() {
     // Phase 2: comment (engagement before publishing)
     run('tools/bridge/comment-engine.py', [String(CFG.targets.commentsPerCycle || 8)], function() {
-      // Phase 3: engage LinkedIn/Medium
-      run('tools/bridge/engage-engine.py', [String(CFG.targets.liPerCycle || 3), String(CFG.targets.mdPerCycle || 3)], function() {
-        // Phase 4: check if engagement threshold met, then publish
+      // Phase 4: check if engagement threshold met, then publish
+      var phase4 = function() {
         run('tools/bridge/scheduler.py', [], function() {
           log('=== Cycle complete ===');
           cycleActive = false;
@@ -141,7 +140,16 @@ function cycle() {
           heartbeat('cycle-complete');
           scheduleNext();
         });
-      });
+      };
+      // Phase 3: LinkedIn/Medium engagement — DISABLED by policy
+      // (docs/decisions/2026-07-31-engagement.md). engage-engine.py kept archived
+      // for syndication-only reuse. Re-enable: set engage.enabled=true + restart.
+      if (CFG.engage && CFG.engage.enabled) {
+        run('tools/bridge/engage-engine.py', [String(CFG.targets.liPerCycle || 3), String(CFG.targets.mdPerCycle || 3)], phase4);
+      } else {
+        log('ENGAGE: LinkedIn/Medium engagement disabled (policy) — see docs/decisions/2026-07-31-engagement.md');
+        phase4();
+      }
     });
   });
 }
