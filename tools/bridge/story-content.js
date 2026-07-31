@@ -208,6 +208,91 @@ function generateAnalysis(capture) {
         '- Recent block: ~' + d.blockTx + ' transactions\n\n' +
         'If you see something that does not look right, tell us. That is the conversation ' +
         'we want to be part of.'
+    },
+    {
+      angle: 'the-horizon',
+      title: 'The idea that changes the horizon: money as a neutral protocol',
+      body: 'Most people think of Bitcoin as digital money. We think of it as something older and stranger: ' +
+        'a neutral protocol for value, like HTTP is for information.\n\n' +
+        'HTTP did not just change websites — it changed how human knowledge is organized. ' +
+        'A neutral protocol invites everyone to build on it without asking permission.\n\n' +
+        'The same is happening with money. Bitcoin is not the end state; it is the substrate. ' +
+        'On top of it, people are building settlement systems, payment networks, and ' +
+        'coordination tools that were impossible before.\n\n' +
+        'From our live capture today:\n\n' +
+        '- Mempool: ' + d.mempoolMB + ' MB — real settlement demand\n' +
+        '- Fastest fee: ' + d.fastest + ' sat/vB — the market pricing scarcity\n' +
+        '- Price: ' + d.price + '\n\n' +
+        'We built BSAHI to study this substrate — its economics, its pressure points, its trajectory. ' +
+        'The horizon is further than most people think.'
+    },
+    {
+      angle: 'the-permissionless',
+      title: 'What permissionless innovation actually looks like',
+      body: 'Permissionless sounds abstract until you see it happening.\n\n' +
+        'Every transaction in the mempool is someone using a system nobody controls. ' +
+        'No bank approved it. No government authorized it. No gatekeeper took a cut. ' +
+        'It just works, because the protocol is open and the rules are enforced by math.\n\n' +
+        'That is the innovation that changes the horizon: not a product, but the absence of ' +
+        'permission as a requirement.\n\n' +
+        'Today\'s mempool shows it in action:\n\n' +
+        '- ' + d.mempoolTx + ' transactions waiting\n' +
+        '- ' + d.mempoolMB + ' MB of demand\n' +
+        '- ' + d.fastest + ' sat/vB to confirm quickly\n\n' +
+        'Each of those transactions is a small act of independence. BSAHI is building ' +
+        'tools to understand this system — and to make its economics visible to everyone.'
+    },
+    {
+      angle: 'the-trust',
+      title: 'Why the fee market is the most honest price in the world',
+      body: 'Prices are usually set by people with power — exchanges, governments, middlemen. ' +
+        'The Bitcoin fee market is different. It is set by thousands of anonymous users bidding ' +
+        'for a scarce resource, with no central authority.\n\n' +
+        'That makes it one of the most honest prices that exists. It reflects what people ' +
+        'actually value in that moment, aggregated without a middleman.\n\n' +
+        'Today it says:\n\n' +
+        '- ' + d.fastest + ' sat/vB for fast confirmation\n' +
+        '- ' + d.economy + ' sat/vB if you can wait\n' +
+        '- ' + d.mempoolMB + ' MB of people choosing to transact\n\n' +
+        'The difference between the fastest and economy fee is time preference. People literally ' +
+        'bid for speed. That is a market in its purest form.\n\n' +
+        'BSAHI exists to study this market — because if you understand the fee market, ' +
+        'you understand what the network is really worth to the people using it.'
+    },
+    {
+      angle: 'the-long-game',
+      title: 'The long game: making the invisible economics of Bitcoin visible',
+      body: 'Bitcoin has a hidden economy running underneath the price. Fees, mempool pressure, ' +
+        'block fullness, Lightning liquidity — these are the forces that determine whether ' +
+        'the network works, and they are almost invisible to most people.\n\n' +
+        'We think that is a problem. You cannot have a serious conversation about a system ' +
+        'you cannot see.\n\n' +
+        'So BSAHI is building the visibility layer. We capture the network continuously ' +
+        'and turn the signals into research anyone can read:\n\n' +
+        '- Storage cost coverage: fees cover ~1.5% of a decade of node storage\n' +
+        '- Live capture: ' + d.mempoolMB + ' MB mempool, ' + d.fastest + ' sat/vB\n' +
+        '- Settlement demand: thousands of transactions per block\n\n' +
+        'This is not about the price. It is about the machinery underneath — the part ' +
+        'that determines whether the whole system holds together for decades.\n\n' +
+        'The long game is making that machinery visible. That is what we are building.'
+    },
+    {
+      angle: 'the-coin',
+      title: 'Bitcoin is a coin toss that landed on its edge',
+      body: 'Twenty years ago, the idea of a decentralized digital currency was a coin toss — ' +
+        'most people thought it would land on one of two sides: total failure or ' +
+        'a niche curiosity. It did neither.\n\n' +
+        'It landed on its edge. It became a settlement network handling billions in value, ' +
+        'a store of value for millions, and the base layer of a growing ecosystem — ' +
+        'while still being a young protocol with open questions.\n\n' +
+        'That is the most interesting part. The system is both proven and unfinished. ' +
+        'The edge it landed on is a horizon, not a destination.\n\n' +
+        'From our capture today:\n\n' +
+        '- Price: ' + d.price + '\n' +
+        '- Mempool: ' + d.mempoolMB + ' MB of activity\n' +
+        '- Fastest fee: ' + d.fastest + ' sat/vB\n\n' +
+        'BSAHI is mapping this edge — the economics of a system that exists between ' +
+        'what was predicted and what is yet to come.'
     }
   ];
 
