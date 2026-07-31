@@ -162,6 +162,35 @@
       "author": "New_Spare3193",
       "postedAt": "2026-07-31T10:59:30.643Z",
       "contentPreview": "Blocks are full - here is what the data says (compliant analysis post)"
+    },
+    {
+      "id": "medium-1785497884849",
+      "platform": "medium",
+      "topic": "network-state",
+      "url": "https://medium.com/@bsahiresearch/bitcoin-network-state-2026-07-31-dc2e0587673d",
+      "author": "BSAHI",
+      "postedAt": "2026-07-31T11:38:04.849Z",
+      "contentPreview": "Bitcoin Network State: 2026-07-31",
+      "status": "removed_by_platform",
+      "note": "Published then removed — 410 Deleted (new account anti-spam)"
+    },
+    {
+      "id": "linkedin-1785498826852",
+      "platform": "linkedin",
+      "topic": "network-state",
+      "url": "https://www.linkedin.com/pulse/bitcoin-network-state-live-metrics-snapshot-will-i-am-n7e6e/",
+      "author": "Will i'am",
+      "postedAt": "2026-07-31T11:53:46.852Z",
+      "contentPreview": "Bitcoin Network State: Live Metrics Snapshot"
+    },
+    {
+      "id": "medium-live-1785498963396",
+      "platform": "medium",
+      "topic": "network-state",
+      "url": "https://medium.com/@bsahiresearch/bitcoin-network-state-2026-07-31-7556b6f8fea1",
+      "author": "BSAHI",
+      "postedAt": "2026-07-31T11:56:03.397Z",
+      "contentPreview": "Bitcoin Network State: 2026-07-31 (full article)"
     }
   ],
   "cycles": 4
