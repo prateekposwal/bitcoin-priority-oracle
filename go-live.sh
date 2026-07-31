@@ -65,7 +65,20 @@ log "[3/4] Starting employee publisher..."
 echo $! > "$PIDDIR/employee-publisher.pid"
 log "  PID: $(cat $PIDDIR/employee-publisher.pid)"
 
-# 4. Bridge Poster (attempts to post to Twitter/Reddit/Medium every 2 hours)
+# 4. Compliant Publisher (posts substantive analysis on natural cadence)
+log "[4/6] Starting compliant publisher..."
+(
+  while true; do
+    log "[Compliant] Running publishing cycle..."
+    cd "$DIR" && python3 tools/bridge/scheduler.py 2>&1 | tee -a "$LOG" || true
+    log "[Compliant] Next cycle in 30 minutes"
+    sleep 1800
+  done
+) &
+echo $! > "$PIDDIR/compliant-publisher.pid"
+log "  PID: $(cat $PIDDIR/compliant-publisher.pid)"
+
+# 5. Bridge Poster (attempts to post to Twitter/Reddit/Medium every 2 hours)
 log "[4/5] Starting bridge poster..."
 (
   while true; do
@@ -78,7 +91,7 @@ log "[4/5] Starting bridge poster..."
 echo $! > "$PIDDIR/bridge-poster.pid"
 log "  PID: $(cat $PIDDIR/bridge-poster.pid)"
 
-# 5. Health check + RSS update
+# 6. Health check + RSS update
 log "[4/4] Starting health monitor..."
 (
   while true; do

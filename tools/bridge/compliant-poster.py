@@ -184,6 +184,36 @@ def post_linkedin(body):
     osa('tell application "Google Chrome" to close active tab of front window')
     return result
 
+def post_medium(title, body):
+    osa('tell application "Google Chrome" to make new tab at end of tabs of front window')
+    time.sleep(1)
+    osa('tell application "Google Chrome" to set URL of active tab of front window to "https://medium.com/new-story"')
+    time.sleep(8)
+
+    # Fill the editor (title + body) via real selection + beforeinput
+    fill_js = f"""
+    (function() {{
+      var editor = document.querySelector('[contenteditable="true"]');
+      if (!editor) return 'NO_EDITOR';
+      editor.focus();
+      var title = {json.dumps(title)};
+      var body = {json.dumps(body)};
+      editor.dispatchEvent(new InputEvent('beforeinput', {{ bubbles:true, cancelable:true, inputType:'insertText', data:title }}));
+      document.execCommand('insertText', false, title);
+      // newline + body
+      editor.dispatchEvent(new InputEvent('beforeinput', {{ bubbles:true, cancelable:true, inputType:'insertParagraph', data:null }}));
+      document.execCommand('insertText', false, body);
+      return 'filled';
+    }})()
+    """
+    print("Fill:", run_js(fill_js))
+    time.sleep(2)
+    # Close tab (Medium has more complex publish flow; leave draft)
+    result = run_js("location.href")
+    osa('tell application "Google Chrome" to close active tab of front window')
+    return result
+
+
 def main():
     platform = sys.argv[1] if len(sys.argv) > 1 else 'reddit'
     cadence = check_cadence(platform)
@@ -209,6 +239,13 @@ def main():
         if 'linkedin.com/feed' in str(url):
             record_post('linkedin', url)
             print("Posted to LinkedIn")
+        else:
+            print("Result:", url)
+    elif platform == 'medium':
+        url = post_medium(content['title'], content['body'])
+        if 'medium.com' in str(url):
+            record_post('medium', url)
+            print("Medium draft created")
         else:
             print("Result:", url)
 
