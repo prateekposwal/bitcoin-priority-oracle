@@ -2,7 +2,6 @@ var child_process = require('child_process');
 var path = require('path');
 
 var AGENTS = [
-  { name: 'Basic Capture',  file: 'tools/capture-data.js',             always: true },
   { name: 'Block Tracker',  file: 'tools/agents/03-block-interval-tracker.js', always: true },
   { name: 'Enhanced',       file: 'tools/agents/02-enhanced-capture.js', always: false },
   { name: 'Backfill',       file: 'tools/agents/01-backfill-runner.js',  always: false },

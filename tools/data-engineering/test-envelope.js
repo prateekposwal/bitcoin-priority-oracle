@@ -53,7 +53,7 @@ test('all real captured samples validate', function() {
 
 test('live-verified fixtures validate (mining_pools, difficulty)', function() {
   var liveFixtures = [
-    { source: 'mining_pools', data: { pools: [{ poolId: 1, name: 'Unknown', blockCount: 220586, rank: 1, slug: 'unknown', avgMatchRate: 98.95, avgFeeDelta: '-0.06039664' }], totalBlockCount: 520217 } },
+    { source: 'mining_pools', data: { pools: [{ poolId: 1, name: 'Unknown', blockCount: 220586, rank: 1, slug: 'unknown', avgMatchRate: 98.95, avgFeeDelta: '-0.06039664' }], blockCount: 520217 } },
     { source: 'difficulty', data: { progressPercent: 39.48, difficultyChange: -2.099, estimatedRetargetDate: 1786256956920, remainingBlocks: 1220, remainingTime: 748635920, previousRetarget: -0.738, previousTime: 1785019866, nextRetargetHeight: 961632, timeAvg: 613636, adjustedTimeAvg: 613636, timeOffset: 0, expectedBlocks: 814.09 } }
   ];
   var report = vc.runConformance(liveFixtures);

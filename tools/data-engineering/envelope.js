@@ -41,7 +41,7 @@ function wrapCapture(source, capture, opts) {
   var payload = { env: env };
   if (capture && capture.status !== undefined) payload.status = capture.status;
   if (capture && capture.error !== undefined) payload.error = capture.error;
-  if (data !== null) payload.data = data;
+  if (data !== null || (capture && 'data' in capture)) payload.data = data;
   payload.fetchedAt = capture && capture.fetchedAt ? capture.fetchedAt : nowIso;
   return payload;
 }

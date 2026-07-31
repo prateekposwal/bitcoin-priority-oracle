@@ -94,7 +94,8 @@ Spool.prototype._writeIndex = function(source, day, entry) {
   this._append(p, entry, {});
 };
 
-Spool.prototype._updateCursor = function(source, cycleTs, err) {
+Spool.prototype._updateCursor = function(source, cycleTs, err, opts) {
+  opts = opts || {};
   var p = path.join(this.cursorsDir, source + '.json');
   var cur = { source: source, lastCycleTs: cycleTs, lastEnqueuedAt: new Date().toISOString(), lastSeen: new Date().toISOString(), expectedIntervalMinutes: this.cfg.expectedIntervalMinutes, status: 'healthy', missedCycles: 0, lastError: null };
   if (fs.existsSync(p)) {
@@ -104,6 +105,14 @@ Spool.prototype._updateCursor = function(source, cycleTs, err) {
     cur.status = 'degraded';
     cur.lastError = String(err).slice(0, 200);
   }
+  if (opts.advance === false && fs.existsSync(p)) {
+    try {
+      var prev = JSON.parse(fs.readFileSync(p, 'utf8'));
+      cur.lastCycleTs = prev.lastCycleTs;
+      cur.lastEnqueuedAt = prev.lastEnqueuedAt;
+    } catch (e) {}
+  }
+  if (opts.missedCycles !== undefined) cur.missedCycles = opts.missedCycles;
   var tmp = path.join(this.tmpDir, source + '.json.tmp');
   fs.writeFileSync(tmp, JSON.stringify(cur, null, 2));
   fs.renameSync(tmp, p);
@@ -157,7 +166,8 @@ Spool.prototype.enqueue = function(source, capture, opts) {
       day: day,
       seq: self.seq,
       enqueuedAt: new Date().toISOString(),
-      payload: capture && capture.data !== undefined ? capture : { data: capture, fetchedAt: new Date().toISOString() },
+      payload: capture && (capture.data !== undefined || (capture.env && capture.env.magic === 'BSAHI-CAPTURE'))
+        ? capture : { data: capture, fetchedAt: new Date().toISOString() },
       attempts: 0,
       producer: opts.producer || 'spool',
       schemaVersion: 1
@@ -458,8 +468,8 @@ Spool.prototype.cursor = function(source) {
   catch (e) { return Promise.resolve(null); }
 };
 
-Spool.prototype.updateCursor = function(source, cycleTs, err) {
-  this._updateCursor(source, cycleTs, err);
+Spool.prototype.updateCursor = function(source, cycleTs, err, opts) {
+  this._updateCursor(source, cycleTs, err, opts);
   return Promise.resolve();
 };
 

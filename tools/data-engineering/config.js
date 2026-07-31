@@ -32,6 +32,16 @@ var CONFIG = {
     latencyWarningMs: 3000,
     reportOnFailure: true,
   },
+  capture: {
+    baseIntervalMinutes: 60,
+    timeoutMs: 15000,
+    degradedMultiplier: 2,
+    recoveryMultiplier: 1.5,
+    recoveryCycles: 2,
+    maxMissedCycles: 3,
+    mirror: true,
+    bridge: true
+  },
   reporting: {
     formats: ['markdown', 'json'],
     maxReportAge: 7,

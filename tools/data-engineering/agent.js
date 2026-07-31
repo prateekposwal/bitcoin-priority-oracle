@@ -49,12 +49,25 @@ async function runCycle() {
   var freshness = monitor.getFreshnessReport ? await monitor.getFreshnessReport('captured-data') : { sources: {} };
   log('Freshness checked');
 
-  // Step 2b: Ingest new mirror files into spool (buffering + indirection layer)
+  // Step 2b: M3 dual-write — envelope bridge + fate-shared capture agent (one shared spool)
   try {
-    var spoolBridge = require('./spool-bridge.js');
-    var ingestResult = await spoolBridge.bridgeOnce();
-    log('Spool: scanned=' + ingestResult.scanned + ' new=' + ingestResult.newFiles + ' ingested=' + ingestResult.ingested + ' failed=' + ingestResult.failed.length);
-  } catch (e) { log('Spool bridge error: ' + e.message); }
+    var spoolMod = require('./spool.js');
+    var spool = await spoolMod.init();
+    if (CONFIG.capture.bridge) {
+      var spoolBridge = require('./spool-bridge.js');
+      var ingestResult = await spoolBridge.ingestOnce(spool);
+      log('Spool: scanned=' + ingestResult.scanned + ' new=' + ingestResult.newFiles +
+          ' ingested=' + ingestResult.ingested + ' validated=' + ingestResult.validated +
+          ' violated=' + ingestResult.violated + ' failed=' + ingestResult.failed.length);
+    }
+    if (CONFIG.capture.mirror) {
+      var capAgent = require('./capture-agent.js').createCaptureAgent(
+        { spool: spool, endpoints: CONFIG.endpoints, config: CONFIG.capture });
+      var capResult = await capAgent.runCycle();
+      log('Capture-agent: cycle=' + capResult.cycleTs + ' captured=' + capResult.captured +
+          ' skipped=' + capResult.skipped + ' violated=' + capResult.violated + ' errored=' + capResult.errored);
+    }
+  } catch (e) { log('Step 2b error: ' + e.message); }
 
   // Step 3: Check Bitcoin Core node (if running)
   try {

@@ -1,8 +1,8 @@
 {
   "source": "blockchair",
-  "lastCycleTs": "2026-07-30_01-57-51",
-  "lastEnqueuedAt": "2026-07-31T14:08:03.454Z",
-  "lastSeen": "2026-07-31T14:08:03.454Z",
+  "lastCycleTs": "2026-07-31_20-23-53",
+  "lastEnqueuedAt": "2026-07-31T14:53:54.575Z",
+  "lastSeen": "2026-07-31T14:53:54.575Z",
   "expectedIntervalMinutes": 10,
   "status": "healthy",
   "missedCycles": 0,

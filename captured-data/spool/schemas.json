@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-31T14:37:10.683Z",
+  "generatedAt": "2026-07-31T14:54:04.848Z",
   "count": 13,
   "schemas": [
     {
@@ -83,7 +83,7 @@
       "name": "capture.mining_pools",
       "source": "mining_pools",
       "major": 1,
-      "minor": 0,
+      "minor": 1,
       "protocolDoc": "docs/protocols/mining_pools.md"
     },
     {

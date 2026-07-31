@@ -1,3 +1,5 @@
+// DEPRECATED (M3): mirror writing moved to tools/data-engineering/capture-agent.js.
+// Kept for historical/manual use only. run-all.js no longer invokes this file.
 var https = require('https');
 var fs = require('fs');
 var path = require('path');
