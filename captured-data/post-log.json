@@ -261,7 +261,17 @@
       "totalRelays": 6,
       "postedAt": "2026-07-31T18:26:07.074Z",
       "contentPreview": "The Storage Cost Coverage Ratio: Do Bitcoin Fees Cover Node Costs?\n\n## A Simple Question\n\nBitcoin tr"
+    },
+    {
+      "id": "BSAHI-MS99X03Q-QA5U",
+      "platform": "nostr",
+      "topic": "storage",
+      "eventId": "28a8b6b1e53ae78aea890e00b35357cb0ffd01f1de25efa36bf214241f248950",
+      "confirmedRelays": 5,
+      "totalRelays": 6,
+      "postedAt": "2026-07-31T18:46:43.218Z",
+      "contentPreview": "The Storage Cost Coverage Ratio: Do Bitcoin Fees Cover Node Costs?\n\n## A Simple Question\n\nBitcoin tr"
     }
   ],
-  "cycles": 17
+  "cycles": 18
 }

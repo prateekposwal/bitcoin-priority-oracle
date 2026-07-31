@@ -11,7 +11,7 @@ var AGENT = 'BSAHI Relay';
 
 // Default: BSAHI research pubkey
 var BSAHI_PUBKEYS = [
-  'b4bc93933169b6a288d08a2599832f05ff6b3a72a801a60b5266a29295bcaedc'
+  '44744d037e50a4f3bc6b44b9ca7c5a3f52e68b0f70789696ccb7e28e274d2d61'
 ];
 
 var NOSTR_RELAYS = [
