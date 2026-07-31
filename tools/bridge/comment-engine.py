@@ -23,8 +23,8 @@ import seen_state
 REPO = '/Users/prateekposwal/Desktop/block-space-economics'
 STATE_FILE = os.path.join(REPO, 'captured-data', 'comment-state.json')
 
-DISCOVERY_TTL_MS = 4 * 3600 * 1000   # reddit relevance search stable for 4h
-FAILED_RETRY_TTL_MS = 24 * 3600 * 1000  # don't hammer a thread that failed to post
+DISCOVERY_TTL_MS = seen_state.cooldown_ms('discovery', 4 * 3600 * 1000)
+FAILED_RETRY_TTL_MS = seen_state.cooldown_ms('failedRetry', 24 * 3600 * 1000)
 
 QUERIES = ['fees', 'mempool', 'lightning', 'node costs', 'transaction', 'block']
 

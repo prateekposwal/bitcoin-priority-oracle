@@ -61,6 +61,40 @@ function checkAllEndpoints(endpoints) {
 function getFreshnessReport(dataDir) {
   var report = { sources: {}, oldest: null, newest: null };
   if (!fs.existsSync(dataDir)) return report;
+
+  // Primary: spool cursor freshness (single source of truth after M3/Top-5).
+  try {
+    var spool = require('./spool.js');
+    return spool.init().then(function(s) { return s.stats(); }).then(function(st) {
+      var now = Date.now();
+      var oldestMs = Infinity, newestMs = 0;
+      var spoolRoot = path.join(__dirname, '..', '..', 'captured-data', 'spool');
+      var curDir = path.join(spoolRoot, 'cursors');
+      var cursorFiles = [];
+      if (fs.existsSync(curDir)) cursorFiles = fs.readdirSync(curDir).filter(function(f) { return f.endsWith('.json'); });
+      cursorFiles.forEach(function(f) {
+        var src = f.replace('.json', '');
+        try {
+          var cur = JSON.parse(fs.readFileSync(path.join(curDir, f), 'utf8'));
+          var lastSeenMs = new Date(cur.lastSeen).getTime();
+          var ageMinutes = Math.round((now - lastSeenMs) / 60000);
+          var healthy = ageMinutes <= 30;
+          report.sources[src] = { lastCapture: cur.lastCycleTs || null, ageMinutes: ageMinutes, healthy: healthy };
+          if (lastSeenMs < oldestMs) oldestMs = lastSeenMs;
+          if (lastSeenMs > newestMs) newestMs = lastSeenMs;
+        } catch (e) {}
+      });
+      report.oldest = oldestMs === Infinity ? null : new Date(oldestMs).toISOString();
+      report.newest = newestMs === 0 ? null : new Date(newestMs).toISOString();
+      if (Object.keys(report.sources).length > 0) return report;
+      return rootFileFreshness(dataDir, report);
+    }).catch(function() { return rootFileFreshness(dataDir, report); });
+  } catch (e) {
+    return rootFileFreshness(dataDir, report);
+  }
+}
+
+function rootFileFreshness(dataDir, report) {
   var entries;
   try { entries = fs.readdirSync(dataDir); } catch (e) { return report; }
   var sourceMap = {};
@@ -69,6 +103,7 @@ function getFreshnessReport(dataDir) {
     var stat;
     try { stat = fs.statSync(fullPath); } catch (e) { return; }
     if (!stat.isFile()) return;
+    if (!/^\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2}\.json$/.test(entry)) return;
     var parts = entry.split('-');
     var sourceKey = parts[0] || 'unknown';
     var captureTime = stat.mtimeMs;
@@ -135,7 +170,7 @@ function getDataQualityScore() {
     if (!fs.existsSync(dataDir)) {
       dataDir = path.join(process.cwd(), 'captured-data');
     }
-    var freshness = getFreshnessReport(dataDir);
+    return Promise.resolve(getFreshnessReport(dataDir)).then(function(freshness) {
     var coverageScore = totalCount > 0 ? Math.round((healthyCount / totalCount) * 20) : 0;
     var freshnessScore = 0;
     var sourceKeys = Object.keys(freshness.sources);
@@ -163,6 +198,7 @@ function getDataQualityScore() {
         score: totalScore,
         components: { freshness: freshnessScore, reliability: reliabilityScore, latency: latencyScore, coverage: coverageScore },
       };
+    });
     });
   });
 }

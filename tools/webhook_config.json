@@ -1,4 +1,6 @@
 {
-  "webhooks": [],
-  "note": "To enable: add your webhook URL. Example: {'url': 'https://your-server.com/hook', 'events': ['high_fee', 'low_fee', 'spike']}"
+  "webhooks": [
+    { "url": "https://ntfy.sh/bsahi-alerts", "events": ["high_fee", "low_fee", "spike", "freshness"] }
+  ],
+  "note": "ntfy.sh requires no account — subscribe via app or web at https://ntfy.sh/bsahi-alerts. Events: high_fee, low_fee, spike, freshness. Add more endpoints as needed."
 }

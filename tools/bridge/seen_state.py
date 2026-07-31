@@ -3,15 +3,28 @@
 BSAHI — seen-state wrapper (python side)
 Consulted by the python engagement engines before opening any tab.
 All reads/writes go through the single canonical Node owner (seen-state.js).
+Also exposes shared config cooldowns (single source of truth: orchestrator-config.json).
 """
 import subprocess, json, os, sys
 
 REPO = '/Users/prateekposwal/Desktop/block-space-economics'
 CLI = os.path.join(REPO, 'tools/bridge/seen-state.js')
+CONFIG_FILE = os.path.join(REPO, 'tools/bridge', 'orchestrator-config.json')
 
 def _run(args):
     r = subprocess.run(['node', CLI] + args, capture_output=True, text=True, timeout=15, cwd=REPO)
     return (r.stdout or '').strip()
+
+def cooldown_ms(key, default_ms):
+    try:
+        with open(CONFIG_FILE) as f:
+            cfg = json.load(f)
+        sec = (cfg.get('cooldowns') or {}).get(key)
+        if sec is None:
+            return default_ms
+        return int(sec) * 1000
+    except Exception:
+        return default_ms
 
 def page_fresh(kind, key, ttl_ms):
     try:

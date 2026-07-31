@@ -1,3 +1,7 @@
+// DEPRECATED (M3/Top-5): legacy dir-watcher pre-dating the spool.
+// Source of truth is captured-data/spool. Superseded by
+// tools/data-engineering/spool-consumer.js (drains spool -> SQLite).
+// Do not run; kept for reference.
 var fs = require('fs');
 var path = require('path');
 var db = require('../db/init.js');

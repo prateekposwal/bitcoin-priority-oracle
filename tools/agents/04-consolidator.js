@@ -1,3 +1,6 @@
+// DEPRECATED (M3/Top-5): merged root captured-data/ day files pre-spool.
+// Source of truth is captured-data/spool + bsafe.db (via spool-consumer).
+// Do not run; kept for reference.
 var fs = require('fs');
 var path = require('path');
 

@@ -16,8 +16,8 @@ import seen_state
 REPO = '/Users/prateekposwal/Desktop/block-space-economics'
 STATE_FILE = os.path.join(REPO, 'captured-data', 'engage-state.json')
 
-LINKEDIN_FEED_TTL_MS = 2 * 3600 * 1000   # algorithmic feed churns; 2h
-MEDIUM_TAG_TTL_MS = 4 * 3600 * 1000
+LINKEDIN_FEED_TTL_MS = seen_state.cooldown_ms('linkedinFeed', 2 * 3600 * 1000)
+MEDIUM_TAG_TTL_MS = seen_state.cooldown_ms('discovery', 4 * 3600 * 1000)
 
 COMMENT_TEMPLATES = [
     "Appreciate this perspective. It connects to something we have been tracking — live data shows the fee market doing exactly this at {f} sat/vB right now. The numbers back the argument.",

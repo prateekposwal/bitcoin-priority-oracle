@@ -1,6 +1,8 @@
 var child_process = require('child_process');
 var path = require('path');
 
+// 05-* was never created in the 01-12 sequence; it is reserved for the
+// derived-metrics agent (tools/agents/05-derived-metrics.js, gap-fill M5).
 var AGENTS = [
   { name: 'Block Tracker',  file: 'tools/agents/03-block-interval-tracker.js', always: true },
   { name: 'Enhanced',       file: 'tools/agents/02-enhanced-capture.js', always: false },

@@ -7,8 +7,6 @@ var { CONFIG } = require('./config.js');
 
 var ROOT = path.resolve(__dirname, '..', '..');
 var CONFIG_PATH = path.join(__dirname, 'config.js');
-var DATA_ENGINE_PATH = path.join(ROOT, 'tools', 'data-engine.js');
-var CAPTURE_DATA_PATH = path.join(ROOT, 'tools', 'capture-data.js');
 var STAGING_DIR = path.join(ROOT, CONFIG.integration.stagingDir);
 
 function log(action, detail) {

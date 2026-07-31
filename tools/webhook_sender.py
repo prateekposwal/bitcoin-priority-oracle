@@ -43,6 +43,8 @@ def main():
                 headers={'Content-Type': 'application/json'}, method='POST')
             r = urllib.request.urlopen(req, timeout=10)
             print(f"Webhook sent to {hook['url']}: {r.status}")
+            if r.status >= 300:
+                print(f"  WARNING non-2xx response: {r.status}")
         except Exception as e:
             print(f"Webhook failed for {hook['url']}: {e}")
 

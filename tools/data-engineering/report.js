@@ -29,6 +29,7 @@ function generateDailyReport() {
   return monitor.checkAllEndpoints(endpoints).then(function(health) {
     return monitor.getDataQualityScore().then(function(quality) {
       return monitor.getErrorReport(endpoints).then(function(errors) {
+        return require('./spool.js').init().then(function(spool) { return spool.stats(); }).catch(function() { return null; }).then(function(spoolStats) {
         var reportDir = config.agent && config.agent.reportDir ? config.agent.reportDir : 'reports/data-engineering';
         var absReportDir = path.resolve(reportDir);
         ensureDir(absReportDir);
@@ -40,28 +41,33 @@ function generateDailyReport() {
 
         var captureCount = 0;
         var dataSizeMB = 0;
-        var capturedDir = path.join(__dirname, '..', '..', 'captured-data');
-        if (fs.existsSync(capturedDir)) {
-          try {
-            var files = fs.readdirSync(capturedDir);
-            files.forEach(function(f) {
-              var fp = path.join(capturedDir, f);
-              try {
-                var stat = fs.statSync(fp);
-                if (stat.isFile()) {
-                  captureCount++;
-                  dataSizeMB += stat.size;
-                }
-              } catch (e) {}
-            });
-            dataSizeMB = Math.round((dataSizeMB / (1024 * 1024)) * 10) / 10;
-          } catch (e) {}
+        if (spoolStats) {
+          captureCount = spoolStats.totals.enqueued;
+          dataSizeMB = Math.round((spoolStats.queueBytes || 0) / (1024 * 1024) * 10) / 10;
+        } else {
+          var capturedDir = path.join(__dirname, '..', '..', 'captured-data');
+          if (fs.existsSync(capturedDir)) {
+            try {
+              var files = fs.readdirSync(capturedDir);
+              files.forEach(function(f) {
+                var fp = path.join(capturedDir, f);
+                try {
+                  var stat = fs.statSync(fp);
+                  if (stat.isFile()) {
+                    captureCount++;
+                    dataSizeMB += stat.size;
+                  }
+                } catch (e) {}
+              });
+              dataSizeMB = Math.round((dataSizeMB / (1024 * 1024)) * 10) / 10;
+            } catch (e) {}
+          }
         }
 
         lines.push('## Overview');
         lines.push('- Quality Score: ' + quality.score + '/100');
         lines.push('- Endpoints: ' + health.healthy + '/' + health.total + ' healthy');
-        lines.push('- Captures today: ' + captureCount + ' files');
+        lines.push('- Spool entries: ' + (spoolStats ? captureCount + ' (' + spoolStats.totals.acked + ' acked, ' + spoolStats.totals.pending + ' pending)' : captureCount + ' files'));
         lines.push('- Data stored: ' + dataSizeMB + ' MB');
         lines.push('');
 
@@ -105,6 +111,7 @@ function generateDailyReport() {
         try { fs.writeFileSync(reportFile, reportStr, 'utf-8'); } catch (e) {}
 
         return reportStr;
+        });
       });
     });
   });

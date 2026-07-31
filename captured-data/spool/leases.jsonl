@@ -1368,3 +1368,5 @@
 {"id":"block_height:2026-07-31_22-13-00","holder":"db-writer","leasedAt":"2026-07-31T16:43:30.293Z","expiresAt":"2026-07-31T16:53:30.293Z"}
 {"id":"fear_greed:2026-07-31_22-13-00","holder":"db-writer","leasedAt":"2026-07-31T16:43:30.297Z","expiresAt":"2026-07-31T16:53:30.297Z"}
 {"id":"mining_pools:2026-07-31_22-13-00","holder":"db-writer","leasedAt":"2026-07-31T16:43:30.304Z","expiresAt":"2026-07-31T16:53:30.304Z"}
+{"id":"block_interval:2026-07-31_22-30-00","holder":"db-writer","leasedAt":"2026-07-31T17:08:48.556Z","expiresAt":"2026-07-31T17:18:48.584Z"}
+{"id":"derived_metrics:2026-07-31_22-34-41","holder":"db-writer","leasedAt":"2026-07-31T17:08:48.983Z","expiresAt":"2026-07-31T17:18:48.983Z"}

@@ -224,7 +224,29 @@ function buildContent(topic) {
 var USED_CONTENT = new Set();
 
 function generatePostContent(emp) {
-  var topic = emp.topics[Math.floor(Math.random() * emp.topics.length)];
+  // Engagement feedback (M7): weight topic pick by topic-signal (fees/research
+  // resonate -> more content; declining -> rotate out). Content itself is always
+  // real spool data — this only varies topic selection, never fabricates.
+  var signal = null;
+  try { signal = require('../bridge/feedback.js').getSignal(); } catch (e) {}
+  var topic;
+  if (signal && signal.weights) {
+    var candidates = emp.topics.filter(function(t) {
+      var w = signal.weights[t];
+      return typeof w === 'number' && w > 0;
+    });
+    if (candidates.length === 0) candidates = emp.topics;
+    var weights = candidates.map(function(t) { return signal.weights[t] || 0.1; });
+    var total = weights.reduce(function(a, b) { return a + b; }, 0);
+    var r = Math.random() * total;
+    topic = candidates[0];
+    for (var i = 0; i < candidates.length; i++) {
+      r -= weights[i];
+      if (r <= 0) { topic = candidates[i]; break; }
+    }
+  } else {
+    topic = emp.topics[Math.floor(Math.random() * emp.topics.length)];
+  }
   var content = buildContent(topic);
 
   var fingerprint = Date.now() + '-' + emp.id + '-' + topic;

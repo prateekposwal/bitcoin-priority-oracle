@@ -92,6 +92,13 @@ async function runCycle() {
     }
   } catch (e) { log('Tracker error: ' + e.message); }
 
+  // Step 4a: Run derived-metrics agent (05) — fills the 01-12 numbering gap
+  try {
+    var derived = require('../../tools/agents/05-derived-metrics.js');
+    await derived.run();
+    log('Derived metrics: computed + enqueued');
+  } catch (e) { log('Derived metrics error: ' + e.message); }
+
   // Step 4: Get quality score
   var quality = monitor.getDataQualityScore ? monitor.getDataQualityScore() : { score: 0 };
   log('Data quality score: ' + (quality.score || 'N/A') + '/100');
@@ -155,6 +162,25 @@ async function runCycle() {
           digest.generateRedditPost();
           log('Digest saved to reports/digest/');
         } catch (e) { log('Digest error: ' + e.message); }
+      } else {
+        try {
+          // M8: staleness guard — regenerate if digest older than 30h
+          var digestDir = path.resolve(__dirname, '..', '..', 'reports', 'digest');
+          if (fs.existsSync(digestDir)) {
+            var newest = null;
+            fs.readdirSync(digestDir).forEach(function(f) {
+              var fp = path.join(digestDir, f);
+              var st = fs.statSync(fp);
+              if (!newest || st.mtimeMs > newest.mtimeMs) newest = { mtimeMs: st.mtimeMs, file: f };
+            });
+            if (newest && (Date.now() - newest.mtimeMs) > 30 * 3600 * 1000) {
+              log('Digest stale (>30h) — regenerating');
+              digest.generateLinkedInPost();
+              digest.generateTweetThread();
+              digest.generateRedditPost();
+            }
+          }
+        } catch (e) { log('Digest staleness check error: ' + e.message); }
       }
     } catch (e) { log('Report error: ' + e.message); }
   }
@@ -175,6 +201,33 @@ async function runCycle() {
     var cResult = await consumer.drainAll();
     log('Consumer: drained spool into SQLite');
   } catch (e) { log('Consumer error: ' + e.message); }
+  try {
+    var spoolMod2 = require('./spool.js');
+    var spool2 = await spoolMod2.init();
+    var st = await spool2.stats();
+    if (STATE.cycleCount % 24 === 0 || st.queueBytes > 5 * 1024 * 1024) {
+      var comp = await spool2.compact();
+      log('Compaction: removed=' + comp.removed + ' kept=' + comp.kept);
+    }
+    // M4 gate recorder: accumulate consecutive clean cycles post-monitor-fix
+    var qualityNow = quality && quality.score ? quality.score : 0;
+    var clean = st.accountingOk && st.totals.pending === 0 && st.staleSources.length === 0 && st.totals.dead === 0 && qualityNow >= 80;
+    STATE.m4 = STATE.m4 || { cleanCycles: 0, lastGateCheck: null, bridgeFlipped: false };
+    if (clean) {
+      STATE.m4.cleanCycles = (STATE.m4.cleanCycles || 0) + 1;
+    } else {
+      STATE.m4.cleanCycles = 0;
+    }
+    STATE.m4.lastGateCheck = new Date().toISOString();
+    log('M4 gate: cleanCycles=' + STATE.m4.cleanCycles + '/7 (bridge=' + (CONFIG.capture.bridge ? 'on' : 'off') + ', quality=' + qualityNow + ')');
+    if (STATE.m4.cleanCycles >= 7 && CONFIG.capture.bridge && !STATE.m4.bridgeFlipped) {
+      CONFIG.capture.bridge = false;
+      STATE.m4.bridgeFlipped = true;
+      STATE.m4.bridgeDisabledAt = new Date().toISOString();
+      log('M4: bridge DISABLED after ' + STATE.m4.cleanCycles + ' clean cycles');
+    }
+    saveState();
+  } catch (e) { log('Compaction error: ' + e.message); }
   try {
     var childProcess = require('child_process');
     childProcess.execFile('python3', [path.resolve(__dirname, '..', '..', 'tools', 'fee_forecast.py')], { cwd: path.resolve(__dirname, '..', '..'), timeout: 30000 }, function() {});

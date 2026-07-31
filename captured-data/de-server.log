@@ -81,3 +81,4 @@ DE Server running on http://localhost:3456
 [DE Agent 2026-07-31 16:43:30] Consumer: drained spool into SQLite
 [DE Agent 2026-07-31 16:43:30] Cycle 21 complete in 37s
 [DE Agent 2026-07-31 16:43:30] ISSUES: 1 endpoints unhealthy | 11 sources stale (>30min old)
+DE Server running on http://localhost:3456

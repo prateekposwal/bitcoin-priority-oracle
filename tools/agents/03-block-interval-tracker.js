@@ -184,6 +184,16 @@ function track() {
 
     var savedPath = writeMetrics(metrics);
 
+    try {
+      var spoolMod = require('../data-engineering/spool.js');
+      spoolMod.init().then(function(spool) {
+        var localTs = metrics.captureTime.replace(/[:T]/g, '-').slice(0, 19).replace('T', '_');
+        var day = localTs.slice(0, 10);
+        var cycleTs = localTs.slice(0, 10) + '_' + localTs.slice(11);
+        return spool.enqueue('block_interval', { status: 200, data: metrics, fetchedAt: metrics.captureTime }, { captureTime: cycleTs, day: day, producer: 'agent-03' });
+      }).catch(function(e) { console.error('[tracker] spool enqueue error:', e.message); });
+    } catch (e) { console.error('[tracker] spool unavailable:', e.message); }
+
     var newState = {
       previousMempoolCount: currentCount,
       previousVsize: currentVsize,

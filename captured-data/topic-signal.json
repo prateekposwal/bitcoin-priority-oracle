@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-31T16:28:22.080Z",
+  "generated_at": "2026-07-31T17:01:58.473Z",
   "topics": {
     "fees": {
       "score": 3.9,
@@ -12,12 +12,12 @@
       "last_event": null
     },
     "blocks": {
-      "score": 2,
+      "score": 1.9,
       "events": 1,
       "last_event": "2026-07-31T12:26:08.708Z"
     },
     "lightning": {
-      "score": 2,
+      "score": 1.9,
       "events": 1,
       "last_event": "2026-07-31T12:26:08.708Z"
     },
@@ -37,7 +37,7 @@
       "last_event": null
     },
     "security": {
-      "score": 2,
+      "score": 1.9,
       "events": 1,
       "last_event": "2026-07-31T12:26:08.708Z"
     },
@@ -47,21 +47,21 @@
       "last_event": null
     },
     "research": {
-      "score": 12.8,
-      "events": 5,
-      "last_event": "2026-07-31T16:28:22.076Z"
+      "score": 14.7,
+      "events": 6,
+      "last_event": "2026-07-31T17:01:58.257Z"
     }
   },
   "weights": {
-    "fees": 0.3342733294522798,
-    "mempool": 0.04128318574017713,
-    "blocks": 0.18777825759622846,
-    "lightning": 0.18777825759622846,
-    "node": 0.04128318574017713,
+    "fees": 0.3064664541212473,
+    "mempool": 0.05768857066210514,
+    "blocks": 0.18207751239167624,
+    "lightning": 0.18207751239167624,
+    "node": 0.05768857066210514,
     "settlement": 0.15,
-    "cost": 0.04128318574017713,
-    "security": 0.18777825759622846,
-    "dev": 0.04128318574017713,
+    "cost": 0.05768857066210514,
+    "security": 0.18207751239167624,
+    "dev": 0.05768857066210514,
     "research": 1
   },
   "declining": [],

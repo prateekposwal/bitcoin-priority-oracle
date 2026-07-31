@@ -183,3 +183,14 @@ ModuleNotFoundError: No module named 'seen_state'
 [2026-07-31 16:30:10] RUN: scheduler.py 
 [2026-07-31 16:31:55] [22:01:55] [Scheduler] === Cycle complete ===
 [2026-07-31 16:31:55] === Cycle complete ===
+[2026-07-31 17:01:56] === Engagement cycle ===
+[2026-07-31 17:01:57] RUN: reply-engine.py 
+[2026-07-31 17:01:58] Feedback: {"fees":0.3064664541212473,"mempool":0.05768857066210514,"blocks":0.18207751239167624,"lightning":0.18207751239167624,"n
+[2026-07-31 17:02:35] No inbox messages fetched (browser busy or session stale).
+[2026-07-31 17:02:35] RUN: comment-engine.py 8
+[2026-07-31 17:02:42] Cycle done. Comments today: 6/50
+[2026-07-31 17:02:42] RUN: engage-engine.py 3 3
+[2026-07-31 17:02:51] Cycle done. LinkedIn: 0/3, Medium: 0/3
+[2026-07-31 17:02:51] RUN: scheduler.py 
+[2026-07-31 17:05:51] [22:35:51] [Scheduler] === Cycle complete ===
+[2026-07-31 17:05:52] === Cycle complete ===

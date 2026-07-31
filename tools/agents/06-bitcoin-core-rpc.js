@@ -177,6 +177,15 @@ async function run() {
   var filePath = path.join(outDir, ts + '.json');
   fs.writeFileSync(filePath, JSON.stringify(results, null, 2));
 
+  try {
+    var spoolMod = require('../data-engineering/spool.js');
+    spoolMod.init().then(function(spool) {
+      var localTs = ts.slice(0, 19).replace(/:/g, '-');
+      var cycleTs = localTs.slice(0, 10) + '_' + localTs.slice(11);
+      return spool.enqueue('btc_rpc', { status: results.ok ? 200 : 0, data: results, error: results.error }, { captureTime: cycleTs, day: dateDir, producer: 'agent-06' });
+    }).catch(function(e) { console.error('[rpc] spool enqueue error:', e.message); });
+  } catch (e) { console.error('[rpc] spool unavailable:', e.message); }
+
   return results;
 }
 

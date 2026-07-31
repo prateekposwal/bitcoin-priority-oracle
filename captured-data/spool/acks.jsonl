@@ -1368,3 +1368,5 @@
 {"id":"block_height:2026-07-31_22-13-00","ackedAt":"2026-07-31T16:43:30.701Z","consumer":"db-writer"}
 {"id":"fear_greed:2026-07-31_22-13-00","ackedAt":"2026-07-31T16:43:30.706Z","consumer":"db-writer"}
 {"id":"mining_pools:2026-07-31_22-13-00","ackedAt":"2026-07-31T16:43:30.711Z","consumer":"db-writer"}
+{"id":"block_interval:2026-07-31_22-30-00","ackedAt":"2026-07-31T17:08:55.988Z","consumer":"db-writer"}
+{"id":"derived_metrics:2026-07-31_22-34-41","ackedAt":"2026-07-31T17:08:56.019Z","consumer":"db-writer"}
