@@ -6,6 +6,8 @@ var { exec } = require('child_process');
 var path = require('path');
 
 var REPO = '/Users/prateekposwal/Desktop/block-space-economics';
+// Ensure node is found by python engines (launchd has minimal PATH)
+process.env.PATH = '/usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin';
 var logFile = path.join(REPO, 'captured-data', 'engagement.log');
 var fs = require('fs');
 
