@@ -231,6 +231,10 @@ def post_comment(thread, comment):
     osa('tell application "Google Chrome" to close active tab of front window')
     return click
 
+def is_in_domain(text):
+    r = subprocess.run(['node', '-e', f'var d=require("{REPO}/tools/bridge/domain.js"); console.log(d.isInDomain(process.argv[1]))', text], capture_output=True, text=True, timeout=10, cwd=REPO)
+    return r.stdout.strip() == 'true'
+
 def run_cycle(target):
     state = load_state()
     today = time.strftime('%Y-%m-%d')
@@ -250,6 +254,9 @@ def run_cycle(target):
     for t in threads:
         if state['comments_today'] >= target: break
         if t['href'] in state.get('commented_threads', []): continue
+        if not is_in_domain(t['title']):
+            print(f"  SKIP (out of domain): {t['title'][:40]}")
+            continue
         comment = build_comment(t, data)
         print(f"Commenting [{t['score']}pts] on: {t['title'][:40]}")
         result = post_comment(t, comment)

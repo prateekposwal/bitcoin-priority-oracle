@@ -183,6 +183,10 @@ def build_reply(data):
     return (random.choice(REPLY_OPENERS) + random.choice(REPLY_BUILDS).format(f=data['f'], m=data['m'], b=data['b'])
             + random.choice(REPLY_CLOSERS))
 
+def is_in_domain(text):
+    r = subprocess.run(['node', '-e', f'var d=require("{REPO}/tools/bridge/domain.js"); console.log(d.isInDomain(process.argv[1]))', text], capture_output=True, text=True, timeout=10, cwd=REPO)
+    return r.stdout.strip() == 'true'
+
 def run_cycle():
     state = load_state()
     reply_state = load_reply_state()
