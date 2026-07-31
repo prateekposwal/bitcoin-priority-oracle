@@ -1,0 +1,17 @@
+{
+  "id": "BSAHI-MS99VBDB-4V42",
+  "platform": "medium",
+  "topic": "storage",
+  "content": "The Storage Cost Coverage Ratio: Do Bitcoin Fees Cover Node Costs?\n\n## A Simple Question\n\nBitcoin transaction fees are paid once. But the data those transactions create is stored by **60,000+ nodes** for **years or decades**.\n\nDoes the fee cover the cost?\n\n## What We Measured\n\nWe defined the **Storage Cost Coverage Ratio** as:\n\n> Fee (USD) / (Bytes × Nodes × Cost per Byte × Years)\n\nCurrent result: **0.0149**\n\nThis means fees cover only **1.5%** of the estimated 10-year storage burden.\n\n## The Data Behind It\n\n- **174** API captures in SQLite\n- **150,000** blocks analyzed\n- **92,703** current mempool transactions\n- **17217** Lightning nodes\n- **4458 BTC** locked in Lightning channels\n\nTop mining pools: Unknown, AntPool, F2Pool\n\n## This Is an Open Question\n\nWe're not claiming the fee market is broken. We're providing the first empirical framework to measure whether it prices storage — a question the literature has not yet answered.\n\n---\n\n*First published on Bitcoin Sahi. Methodology and data: [bsahi.com/learn](https://bitcoinsahi.com/learn)*",
+  "status": "posted",
+  "created": "2026-07-31T18:24:48.719Z",
+  "scheduledFor": "2026-07-31",
+  "postedAt": "2026-07-31T18:26:07.072Z",
+  "url": "nostr:event:9bf7b4db6145947ef702e27bc5faf142d84b9dab916a83be3db7187cffd1d140",
+  "engagement": {
+    "likes": 0,
+    "replies": 0,
+    "shares": 0
+  },
+  "notes": ""
+}

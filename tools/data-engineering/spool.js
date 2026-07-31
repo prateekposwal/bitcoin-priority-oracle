@@ -12,7 +12,8 @@ var DEFAULT_CONFIG = {
   backoffBaseMs: 60000,
   backoffMaxMs: 1800000,
   expectedIntervalMinutes: 10,
-  staleAfterMinutes: 30
+  staleAfterMinutes: 30,
+  indexTtlDays: 90
 };
 
 function parseLine(line) {
@@ -33,6 +34,7 @@ function Spool(config) {
   this.deadFile = path.join(this.dir, 'dead-letter.jsonl');
   this.corruptFile = path.join(this.dir, 'corrupt.log');
   this.metaFile = path.join(this.dir, 'spool-meta.json');
+  this.historyFile = path.join(this.dir, 'history.jsonl');
   this.indexDir = path.join(this.dir, 'index');
   this.cursorsDir = path.join(this.dir, 'cursors');
   this.tmpDir = path.join(this.dir, 'tmp');
@@ -43,6 +45,7 @@ function Spool(config) {
   this.leases = new Map();      // id -> { holder, leasedAt, expiresAt, attempts }
   this.seq = 0;
   this.totals = { enqueued: 0, acked: 0, dead: 0, pending: 0, leased: 0, duplicates: 0 };
+  this.history = { totalEnqueued: 0, totalAcked: 0, totalDead: 0, totalDuplicates: 0, firstEnqueuedAt: null, lastEnqueuedAt: null };
   this.ready = false;
 }
 
@@ -138,6 +141,12 @@ Spool.prototype.init = function() {
     self.dead.add(rec.id);
     self.totals.dead++;
   });
+  this._foldLog(this.historyFile, function(rec) {
+    if (rec.t === 'enq') { self.history.totalEnqueued++; if (!self.history.firstEnqueuedAt) self.history.firstEnqueuedAt = rec.at; self.history.lastEnqueuedAt = rec.at; }
+    else if (rec.t === 'ack') { self.history.totalAcked++; }
+    else if (rec.t === 'dead') { self.history.totalDead++; }
+    else if (rec.t === 'dup') { self.history.totalDuplicates++; }
+  });
   this.ready = true;
   this.emit('ready');
   return Promise.resolve(this);
@@ -156,6 +165,8 @@ Spool.prototype.enqueue = function(source, capture, opts) {
     var id = idempotentKey(source, captureTime);
     if (self.entries.has(id)) {
       self.totals.duplicates++;
+      self.history.totalDuplicates++;
+      self._append(self.historyFile, { t: 'dup', id: id, at: new Date().toISOString() }, {});
       return resolve({ ok: true, id: id, duplicate: true });
     }
     self.seq += 1;
@@ -178,6 +189,10 @@ Spool.prototype.enqueue = function(source, capture, opts) {
       self.entries.set(id, entry);
       self.totals.enqueued++;
       self.totals.pending++;
+      self.history.totalEnqueued++;
+      if (!self.history.firstEnqueuedAt) self.history.firstEnqueuedAt = entry.enqueuedAt;
+      self.history.lastEnqueuedAt = entry.enqueuedAt;
+      self._append(self.historyFile, { t: 'enq', id: id, seq: self.seq, at: entry.enqueuedAt }, {});
       self._updateCursor(source, captureTime);
       resolve({ ok: true, id: id, duplicate: false });
     } catch (e) {
@@ -241,6 +256,8 @@ Spool.prototype.ack = function(id, consumer) {
     self.leases.delete(id);
     self.totals.leased = Math.max(0, self.totals.leased - 1);
     self.totals.acked++;
+    self.history.totalAcked++;
+    self._append(self.historyFile, { t: 'ack', id: id, at: new Date().toISOString() }, {});
     resolve({ ok: true });
   });
 };
@@ -259,6 +276,8 @@ Spool.prototype.requeue = function(id, reason, opts) {
       self.leases.delete(id);
       self.totals.leased = Math.max(0, self.totals.leased - 1);
       self.totals.dead++;
+      self.history.totalDead++;
+      self._append(self.historyFile, { t: 'dead', id: id, at: new Date().toISOString() }, {});
       return resolve({ ok: true, dead: true, id: id });
     }
     var delay = Math.min(self.cfg.backoffBaseMs * Math.pow(2, attempts), self.cfg.backoffMaxMs);
@@ -369,16 +388,25 @@ Spool.prototype.stats = function() {
       perSource[entry.source].pending++;
       if (!perSource[entry.source].latest || entry.seq > perSource[entry.source].latest.seq) perSource[entry.source].latest = entry.captureTime;
     });
-    Object.keys(perSource).forEach(function(s) {
-      var curPath = path.join(self.cursorsDir, s + '.json');
-      if (fs.existsSync(curPath)) {
-        try {
-          var cur = JSON.parse(fs.readFileSync(curPath, 'utf8'));
-          var lastSeen = new Date(cur.lastSeen).getTime();
-          var ageMin = (now - lastSeen) / 60000;
-          if (ageMin > self.cfg.staleAfterMinutes) { perSource[s].stale = true; stale.push(s); }
-        } catch (e) {}
-      }
+    // Staleness from cursors — scan ALL cursor files, not just pending sources.
+    // Post-drain this is meaningful (cursors persist through compaction).
+    var cursorFiles = [];
+    if (fs.existsSync(self.cursorsDir)) {
+      cursorFiles = fs.readdirSync(self.cursorsDir).filter(function(f) { return f.endsWith('.json'); });
+    }
+    cursorFiles.forEach(function(f) {
+      var s = f.replace('.json', '');
+      var curPath = path.join(self.cursorsDir, f);
+      try {
+        var cur = JSON.parse(fs.readFileSync(curPath, 'utf8'));
+        var lastSeen = new Date(cur.lastSeen).getTime();
+        var ageMin = (now - lastSeen) / 60000;
+        if (ageMin > self.cfg.staleAfterMinutes) {
+          if (!perSource[s]) perSource[s] = { pending: 0, latest: null };
+          perSource[s].stale = true;
+          if (stale.indexOf(s) === -1) stale.push(s);
+        }
+      } catch (e) {}
     });
     var queuedBytes = fs.existsSync(self.queueFile) ? fs.statSync(self.queueFile).size : 0;
     var oldest = null;
@@ -408,6 +436,7 @@ Spool.prototype.stats = function() {
       staleSources: stale,
       queueBytes: queuedBytes,
       oldestPending: oldest ? oldest.id : null,
+      history: Object.assign({}, self.history),
       lastCompaction: fs.existsSync(self.metaFile) ? (JSON.parse(fs.readFileSync(self.metaFile, 'utf8')).lastCompaction || null) : null
     });
   });
@@ -434,15 +463,50 @@ Spool.prototype.compact = function() {
     self.acked.clear();
     self.dead.clear();
     self.leases.clear();
-    var meta = { formatVersion: 1, lastCompaction: new Date().toISOString(), totalRemoved: removed, totalKept: kept.length };
+    var pruned = 0;
+    if (self.cfg.indexTtlDays > 0) pruned = self.pruneIndex(self.cfg.indexTtlDays);
+    var meta = { formatVersion: 1, lastCompaction: new Date().toISOString(), totalRemoved: removed, totalKept: kept.length, indexPruned: pruned };
     fs.writeFileSync(self.metaFile, JSON.stringify(meta, null, 2));
-    if (fs.existsSync(self.indexDir)) fs.rmSync(self.indexDir, { recursive: true });
-    kept.forEach(function(e) { self._writeIndex(e.source, e.day, e); });
     self.totals.acked = 0;
     self.totals.dead = 0;
     self.totals.leased = 0;
-    resolve({ removed: removed, kept: kept.length });
+    resolve({ removed: removed, kept: kept.length, indexPruned: pruned });
   });
+};
+
+Spool.prototype.pruneIndex = function(ttlDays) {
+  if (!fs.existsSync(this.indexDir)) return 0;
+  var cutoff = new Date();
+  cutoff.setDate(cutoff.getDate() - ttlDays);
+  var cutoffStr = cutoff.toISOString().slice(0, 10);
+  var pruned = 0;
+  var self = this;
+  fs.readdirSync(this.indexDir).forEach(function(sourceDir) {
+    var dir = path.join(self.indexDir, sourceDir);
+    var stat;
+    try { stat = fs.statSync(dir); } catch (e) { return; }
+    if (!stat.isDirectory()) return;
+    fs.readdirSync(dir).forEach(function(f) {
+      if (!f.endsWith('.jsonl')) return;
+      var day = f.replace('.jsonl', '');
+      if (day < cutoffStr) {
+        try { fs.unlinkSync(path.join(dir, f)); pruned++; } catch (e) {}
+      }
+    });
+  });
+  return pruned;
+};
+
+Spool.prototype.rebuildIndexFromHistory = function(entries) {
+  var self = this;
+  var added = 0;
+  (entries || []).forEach(function(e) {
+    var day = e.day || (e.captureTime ? e.captureTime.slice(0, 10) : null);
+    if (!day) return;
+    self._writeIndex(e.source, day, e);
+    added++;
+  });
+  return added;
 };
 
 Spool.prototype.deadletter = function(id, reason, opts) {
@@ -464,6 +528,8 @@ Spool.prototype.deadletter = function(id, reason, opts) {
       self._append(self.deadFile, rec, { fsync: self.cfg.fsync });
       self.dead.add(id);
       self.totals.dead++;
+      self.history.totalDead++;
+      self._append(self.historyFile, { t: 'dead', id: id, at: new Date().toISOString() }, {});
       resolve({ ok: true, id: id, dead: true });
     } catch (e) {
       resolve({ ok: false, id: id, error: String(e) });

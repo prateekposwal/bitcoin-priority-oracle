@@ -1,12 +1,19 @@
 var child_process = require('child_process');
 var path = require('path');
 
-// 05-* was never created in the 01-12 sequence; it is reserved for the
-// derived-metrics agent (tools/agents/05-derived-metrics.js, gap-fill M5).
 var AGENTS = [
-  { name: 'Block Tracker',  file: 'tools/agents/03-block-interval-tracker.js', always: true },
-  { name: 'Enhanced',       file: 'tools/agents/02-enhanced-capture.js', always: false },
-  { name: 'Backfill',       file: 'tools/agents/01-backfill-runner.js',  always: false },
+  { name: 'Backfill',          file: 'tools/agents/01-backfill-runner.js',           always: false },
+  { name: 'Enhanced',          file: 'tools/agents/02-enhanced-capture.js',          always: false },
+  { name: 'Block Tracker',     file: 'tools/agents/03-block-interval-tracker.js',    always: true },
+  { name: 'Derived Metrics',   file: 'tools/agents/05-derived-metrics.js',           always: true },
+  { name: 'Bitcoin Core RPC',  file: 'tools/agents/06-bitcoin-core-rpc.js',          always: true },
+  { name: 'Research Digest',   file: 'tools/agents/12-research-digest.js',           always: true },
+  { name: 'Alert Dispatcher',  file: 'tools/agents/13-alert-dispatcher.js',          always: true },
+  { name: 'Research Content',  file: 'tools/agents/14-research-content-pipeline.js', always: true },
+  { name: 'Topic Intelligence',file: 'tools/agents/15-topic-intelligence.js',        always: true },
+  { name: 'Ops Health',        file: 'tools/agents/16-ops-health.js',                always: false },
+  { name: 'Report Generator',  file: 'tools/agents/17-report-generator.js',          always: true },
+  { name: 'Publishing Queue',  file: 'tools/agents/18-publishing-queue.js',          always: true },
 ];
 
 function runAgent(agent) {

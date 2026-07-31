@@ -1,0 +1,417 @@
+{
+  "generated_at": "2026-07-31T18:26:02.007Z",
+  "total": 43,
+  "items": [
+    {
+      "id": "BSAHI-MS82C9EW-N2YK",
+      "source": "post-log",
+      "platform": "nostr",
+      "topic": "fee",
+      "status": "posted",
+      "postedAt": "2026-07-30T22:06:21.296Z",
+      "url": null,
+      "author": null
+    },
+    {
+      "id": "BSAHI-MS82C9EX-HW4L",
+      "source": "post-log",
+      "platform": "nostr",
+      "topic": "fee",
+      "status": "posted",
+      "postedAt": "2026-07-30T22:06:26.303Z",
+      "url": null,
+      "author": null
+    },
+    {
+      "id": "BSAHI-MS82CPRP-ORGI",
+      "source": "post-log",
+      "platform": "nostr",
+      "topic": "fee",
+      "status": "posted",
+      "postedAt": "2026-07-30T22:06:42.476Z",
+      "url": null,
+      "author": null
+    },
+    {
+      "id": "BSAHI-MS82CPRP-T5KZ",
+      "source": "post-log",
+      "platform": "nostr",
+      "topic": "fee",
+      "status": "posted",
+      "postedAt": "2026-07-30T22:06:47.490Z",
+      "url": null,
+      "author": null
+    },
+    {
+      "id": "BSAHI-MS82TQB7-G3EG",
+      "source": "post-log",
+      "platform": "nostr",
+      "topic": "fee",
+      "status": "posted",
+      "postedAt": "2026-07-30T22:19:56.372Z",
+      "url": null,
+      "author": null
+    },
+    {
+      "id": "BSAHI-MS82TQB7-VHXX",
+      "source": "post-log",
+      "platform": "nostr",
+      "topic": "fee",
+      "status": "posted",
+      "postedAt": "2026-07-30T22:20:01.379Z",
+      "url": null,
+      "author": null
+    },
+    {
+      "id": "BSAHI-MS84Y8G4-B87B",
+      "source": "post-log",
+      "platform": "nostr",
+      "topic": "fee",
+      "status": "posted",
+      "postedAt": "2026-07-30T23:19:25.728Z",
+      "url": null,
+      "author": null
+    },
+    {
+      "id": "BSAHI-MS84Y8G4-XGHT",
+      "source": "post-log",
+      "platform": "nostr",
+      "topic": "fee",
+      "status": "posted",
+      "postedAt": "2026-07-30T23:19:30.751Z",
+      "url": null,
+      "author": null
+    },
+    {
+      "id": "satoshi-1785454060747",
+      "source": "post-log",
+      "platform": "nostr",
+      "topic": "fee",
+      "status": "posted",
+      "postedAt": "2026-07-30T23:27:40.747Z",
+      "url": "https://snort.social/e/90a509e564c23690907fe6a762a6eb04bdcf16993c25ed2e8c621841694fbdc2",
+      "author": "Satoshi Block"
+    },
+    {
+      "id": "hal-1785454063756",
+      "source": "post-log",
+      "platform": "nostr",
+      "topic": "capacity",
+      "status": "posted",
+      "postedAt": "2026-07-30T23:27:43.757Z",
+      "url": "https://snort.social/e/8d48105f3cdaf72679e10cb69c9934ee6a64a2dcfd2b1f74adf925769487ce91",
+      "author": "Hal Finney Jr"
+    },
+    {
+      "id": "lisa-1785454066793",
+      "source": "post-log",
+      "platform": "nostr",
+      "topic": "exchange",
+      "status": "posted",
+      "postedAt": "2026-07-30T23:27:46.793Z",
+      "url": "https://snort.social/e/7af050f18160fdcf313ef5cad977ff97be6dc5c8e94c67eb838056be12e33092",
+      "author": "Lisa Nakamoto"
+    },
+    {
+      "id": "wei-1785454069801",
+      "source": "post-log",
+      "platform": "nostr",
+      "topic": "fork",
+      "status": "posted",
+      "postedAt": "2026-07-30T23:27:49.801Z",
+      "url": "https://snort.social/e/015d6a3f4450362e5028215ca64064e441330f156f4ef62323129049b4ed286e",
+      "author": "Wei Dai III"
+    },
+    {
+      "id": "nick-1785454072808",
+      "source": "post-log",
+      "platform": "nostr",
+      "topic": "economy",
+      "status": "posted",
+      "postedAt": "2026-07-30T23:27:52.808Z",
+      "url": "https://snort.social/e/11ef36ec19f566740fa81fbb415deebd00f019f56251526b4ea2c6299e096692",
+      "author": "Nick Szabo Jr"
+    },
+    {
+      "id": "reddit-1785494380055",
+      "source": "post-log",
+      "platform": "reddit",
+      "topic": "settlement",
+      "status": "posted",
+      "postedAt": "2026-07-31T10:39:40.055Z",
+      "url": "https://www.reddit.com/r/Bitcoin/comments/1vbnau3/bsahi_bitcoin_block_space_research_live_data/",
+      "author": "BSAHI"
+    },
+    {
+      "id": "reddit-compliant-1785495570642",
+      "source": "post-log",
+      "platform": "reddit",
+      "topic": "fee-market",
+      "status": "posted",
+      "postedAt": "2026-07-31T10:59:30.643Z",
+      "url": "https://www.reddit.com/r/Bitcoin/comments/1vbnntr/blocks_are_full_here_is_what_the_data_says/",
+      "author": "New_Spare3193"
+    },
+    {
+      "id": "medium-1785497884849",
+      "source": "post-log",
+      "platform": "medium",
+      "topic": "network-state",
+      "status": "posted",
+      "postedAt": "2026-07-31T11:38:04.849Z",
+      "url": "https://medium.com/@bsahiresearch/bitcoin-network-state-2026-07-31-dc2e0587673d",
+      "author": "BSAHI"
+    },
+    {
+      "id": "linkedin-1785498826852",
+      "source": "post-log",
+      "platform": "linkedin",
+      "topic": "network-state",
+      "status": "posted",
+      "postedAt": "2026-07-31T11:53:46.852Z",
+      "url": "https://www.linkedin.com/pulse/bitcoin-network-state-live-metrics-snapshot-will-i-am-n7e6e/",
+      "author": "Will i'am"
+    },
+    {
+      "id": "medium-live-1785498963396",
+      "source": "post-log",
+      "platform": "medium",
+      "topic": "network-state",
+      "status": "posted",
+      "postedAt": "2026-07-31T11:56:03.397Z",
+      "url": "https://medium.com/@bsahiresearch/bitcoin-network-state-2026-07-31-7556b6f8fea1",
+      "author": "BSAHI"
+    },
+    {
+      "id": "BSAHI-MS95WS9U-PCW1",
+      "source": "post-log",
+      "platform": "nostr",
+      "topic": "storage",
+      "status": "posted",
+      "postedAt": "2026-07-31T16:34:04.151Z",
+      "url": null,
+      "author": null
+    },
+    {
+      "id": "BSAHI-MS95WYP4-9HUJ",
+      "source": "post-log",
+      "platform": "nostr",
+      "topic": "storage",
+      "status": "posted",
+      "postedAt": "2026-07-31T16:43:26.148Z",
+      "url": null,
+      "author": null
+    },
+    {
+      "id": "BSAHI-MS979L0C-BGV4",
+      "source": "post-log",
+      "platform": "nostr",
+      "topic": "storage",
+      "status": "posted",
+      "postedAt": "2026-07-31T17:11:55.658Z",
+      "url": null,
+      "author": null
+    },
+    {
+      "id": "BSAHI-MS979MAB-RYAC",
+      "source": "post-log",
+      "platform": "nostr",
+      "topic": "storage",
+      "status": "posted",
+      "postedAt": "2026-07-31T17:14:43.526Z",
+      "url": null,
+      "author": null
+    },
+    {
+      "id": "BSAHI-MS97D708-FSW1",
+      "source": "post-log",
+      "platform": "nostr",
+      "topic": "storage",
+      "status": "posted",
+      "postedAt": "2026-07-31T17:16:42.206Z",
+      "url": null,
+      "author": null
+    },
+    {
+      "id": "BSAHI-MS97FQH8-0RMH",
+      "source": "post-log",
+      "platform": "nostr",
+      "topic": "storage",
+      "status": "posted",
+      "postedAt": "2026-07-31T18:24:47.775Z",
+      "url": null,
+      "author": null
+    },
+    {
+      "id": "ops-BSAHI-MS81T2KU-LUOE",
+      "source": "ops-center",
+      "platform": "linkedin",
+      "topic": "fee",
+      "status": "queued",
+      "scheduledFor": "2026-07-30",
+      "content": "Bitcoin's fee market is the most sophisticated congestion pricing mechanism in the digital asset wor"
+    },
+    {
+      "id": "ops-BSAHI-MS81T2KW-YJA0",
+      "source": "ops-center",
+      "platform": "twitter",
+      "topic": "fee",
+      "status": "queued",
+      "scheduledFor": "2026-07-30",
+      "content": "1/ Bitcoin's fastest fee is **2 sat/vB** right now. But here's what most people miss about how fees "
+    },
+    {
+      "id": "ops-BSAHI-MS825T4O-2MBM",
+      "source": "ops-center",
+      "platform": "linkedin",
+      "topic": "fee",
+      "status": "queued",
+      "scheduledFor": "2026-07-30",
+      "content": "Bitcoin's fee market is the most sophisticated congestion pricing mechanism in the digital asset wor"
+    },
+    {
+      "id": "ops-BSAHI-MS825T4O-K3SC",
+      "source": "ops-center",
+      "platform": "twitter",
+      "topic": "fee",
+      "status": "queued",
+      "scheduledFor": "2026-07-30",
+      "content": "1/ Bitcoin's fastest fee is **1 sat/vB** right now. But here's what most people miss about how fees "
+    },
+    {
+      "id": "ops-BSAHI-MS82C9EW-N2YK",
+      "source": "ops-center",
+      "platform": "linkedin",
+      "topic": "fee",
+      "status": "queued",
+      "scheduledFor": "2026-07-30",
+      "content": "Bitcoin's fee market is the most sophisticated congestion pricing mechanism in the digital asset wor"
+    },
+    {
+      "id": "ops-BSAHI-MS82C9EX-HW4L",
+      "source": "ops-center",
+      "platform": "twitter",
+      "topic": "fee",
+      "status": "queued",
+      "scheduledFor": "2026-07-30",
+      "content": "1/ Bitcoin's fastest fee is **1 sat/vB** right now. But here's what most people miss about how fees "
+    },
+    {
+      "id": "ops-BSAHI-MS82CPRP-ORGI",
+      "source": "ops-center",
+      "platform": "linkedin",
+      "topic": "fee",
+      "status": "queued",
+      "scheduledFor": "2026-07-30",
+      "content": "Bitcoin's fee market is the most sophisticated congestion pricing mechanism in the digital asset wor"
+    },
+    {
+      "id": "ops-BSAHI-MS82CPRP-T5KZ",
+      "source": "ops-center",
+      "platform": "twitter",
+      "topic": "fee",
+      "status": "queued",
+      "scheduledFor": "2026-07-30",
+      "content": "1/ Bitcoin's fastest fee is **1 sat/vB** right now. But here's what most people miss about how fees "
+    },
+    {
+      "id": "ops-BSAHI-MS82TQB7-G3EG",
+      "source": "ops-center",
+      "platform": "linkedin",
+      "topic": "fee",
+      "status": "queued",
+      "scheduledFor": "2026-07-30",
+      "content": "Bitcoin's fee market is the most sophisticated congestion pricing mechanism in the digital asset wor"
+    },
+    {
+      "id": "ops-BSAHI-MS82TQB7-VHXX",
+      "source": "ops-center",
+      "platform": "twitter",
+      "topic": "fee",
+      "status": "queued",
+      "scheduledFor": "2026-07-30",
+      "content": "1/ Bitcoin's fastest fee is **1 sat/vB** right now. But here's what most people miss about how fees "
+    },
+    {
+      "id": "ops-BSAHI-MS84Y8G4-B87B",
+      "source": "ops-center",
+      "platform": "twitter",
+      "topic": "fee",
+      "status": "queued",
+      "scheduledFor": "2026-07-30",
+      "content": "1/ Bitcoin's fastest fee is **4 sat/vB** right now. But here's what most people miss about how fees "
+    },
+    {
+      "id": "ops-BSAHI-MS84Y8G4-XGHT",
+      "source": "ops-center",
+      "platform": "linkedin",
+      "topic": "fee",
+      "status": "queued",
+      "scheduledFor": "2026-07-30",
+      "content": "Bitcoin's fee market is the most sophisticated congestion pricing mechanism in the digital asset wor"
+    },
+    {
+      "id": "ops-BSAHI-MS95WS9U-PCW1",
+      "source": "ops-center",
+      "platform": "medium",
+      "topic": "storage",
+      "status": "queued",
+      "scheduledFor": "2026-07-31",
+      "content": "The Storage Cost Coverage Ratio: Do Bitcoin Fees Cover Node Costs?\n\n## A Simple Question\n\nBitcoin tr"
+    },
+    {
+      "id": "ops-BSAHI-MS95WYP4-9HUJ",
+      "source": "ops-center",
+      "platform": "medium",
+      "topic": "storage",
+      "status": "queued",
+      "scheduledFor": "2026-07-31",
+      "content": "The Storage Cost Coverage Ratio: Do Bitcoin Fees Cover Node Costs?\n\n## A Simple Question\n\nBitcoin tr"
+    },
+    {
+      "id": "ops-BSAHI-MS979L0C-BGV4",
+      "source": "ops-center",
+      "platform": "medium",
+      "topic": "storage",
+      "status": "queued",
+      "scheduledFor": "2026-07-31",
+      "content": "The Storage Cost Coverage Ratio: Do Bitcoin Fees Cover Node Costs?\n\n## A Simple Question\n\nBitcoin tr"
+    },
+    {
+      "id": "ops-BSAHI-MS979MAB-RYAC",
+      "source": "ops-center",
+      "platform": "medium",
+      "topic": "storage",
+      "status": "queued",
+      "scheduledFor": "2026-07-31",
+      "content": "The Storage Cost Coverage Ratio: Do Bitcoin Fees Cover Node Costs?\n\n## A Simple Question\n\nBitcoin tr"
+    },
+    {
+      "id": "ops-BSAHI-MS97D708-FSW1",
+      "source": "ops-center",
+      "platform": "medium",
+      "topic": "storage",
+      "status": "queued",
+      "scheduledFor": "2026-07-31",
+      "content": "The Storage Cost Coverage Ratio: Do Bitcoin Fees Cover Node Costs?\n\n## A Simple Question\n\nBitcoin tr"
+    },
+    {
+      "id": "ops-BSAHI-MS97FQH8-0RMH",
+      "source": "ops-center",
+      "platform": "medium",
+      "topic": "storage",
+      "status": "queued",
+      "scheduledFor": "2026-07-31",
+      "content": "The Storage Cost Coverage Ratio: Do Bitcoin Fees Cover Node Costs?\n\n## A Simple Question\n\nBitcoin tr"
+    },
+    {
+      "id": "ops-BSAHI-MS99VBDB-4V42",
+      "source": "ops-center",
+      "platform": "medium",
+      "topic": "storage",
+      "status": "queued",
+      "scheduledFor": "2026-07-31",
+      "content": "The Storage Cost Coverage Ratio: Do Bitcoin Fees Cover Node Costs?\n\n## A Simple Question\n\nBitcoin tr"
+    }
+  ]
+}

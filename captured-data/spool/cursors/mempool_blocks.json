@@ -1,8 +1,8 @@
 {
   "source": "mempool_blocks",
-  "lastCycleTs": "2026-07-31_22-45-57",
-  "lastEnqueuedAt": "2026-07-31T17:15:58.664Z",
-  "lastSeen": "2026-07-31T17:15:58.664Z",
+  "lastCycleTs": "2026-07-31_23-55-30",
+  "lastEnqueuedAt": "2026-07-31T18:25:39.972Z",
+  "lastSeen": "2026-07-31T18:25:39.972Z",
   "expectedIntervalMinutes": 10,
   "status": "healthy",
   "missedCycles": 0,

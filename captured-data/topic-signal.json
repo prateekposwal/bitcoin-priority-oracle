@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-31T17:01:58.473Z",
+  "generated_at": "2026-07-31T18:06:06.962Z",
   "topics": {
     "fees": {
       "score": 3.9,
@@ -47,22 +47,52 @@
       "last_event": null
     },
     "research": {
-      "score": 14.7,
-      "events": 6,
-      "last_event": "2026-07-31T17:01:58.257Z"
+      "score": 16.7,
+      "events": 7,
+      "last_event": "2026-07-31T18:06:06.952Z"
+    },
+    "capacity": {
+      "score": 1.3,
+      "events": 1,
+      "last_event": "2026-07-30T23:27:43.757Z"
+    },
+    "exchange": {
+      "score": 1.3,
+      "events": 1,
+      "last_event": "2026-07-30T23:27:46.793Z"
+    },
+    "fork": {
+      "score": 1.3,
+      "events": 1,
+      "last_event": "2026-07-30T23:27:49.801Z"
+    },
+    "miner": {
+      "score": 0,
+      "events": 0,
+      "last_event": null
+    },
+    "economy": {
+      "score": 1.3,
+      "events": 1,
+      "last_event": "2026-07-30T23:27:52.808Z"
     }
   },
   "weights": {
-    "fees": 0.3064664541212473,
-    "mempool": 0.05768857066210514,
-    "blocks": 0.18207751239167624,
-    "lightning": 0.18207751239167624,
-    "node": 0.05768857066210514,
-    "settlement": 0.15,
-    "cost": 0.05768857066210514,
-    "security": 0.18207751239167624,
-    "dev": 0.05768857066210514,
-    "research": 1
+    "fees": 0.2899824919319539,
+    "mempool": 0.0755711904258832,
+    "blocks": 0.18277684117891857,
+    "lightning": 0.18277684117891857,
+    "node": 0.0755711904258832,
+    "settlement": 0.15513056858690183,
+    "cost": 0.0755711904258832,
+    "security": 0.18277684117891857,
+    "dev": 0.0755711904258832,
+    "research": 1,
+    "capacity": 0.15,
+    "exchange": 0.15000037362174773,
+    "fork": 0.15000074379955822,
+    "miner": 0.0755711904258832,
+    "economy": 0.1500011138561445
   },
   "declining": [],
   "rotating_out": [],

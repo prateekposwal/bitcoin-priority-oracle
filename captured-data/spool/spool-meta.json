@@ -1,6 +1,7 @@
 {
   "formatVersion": 1,
-  "lastCompaction": "2026-07-31T17:16:57.234Z",
-  "totalRemoved": 1420,
-  "totalKept": 0
+  "lastCompaction": "2026-07-31T18:04:53.991Z",
+  "totalRemoved": 0,
+  "totalKept": 0,
+  "indexPruned": 0
 }

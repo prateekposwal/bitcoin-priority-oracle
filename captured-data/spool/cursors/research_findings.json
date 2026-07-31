@@ -1,0 +1,10 @@
+{
+  "source": "research_findings",
+  "lastCycleTs": "2026-07-31_23-55-46",
+  "lastEnqueuedAt": "2026-07-31T18:25:46.306Z",
+  "lastSeen": "2026-07-31T18:25:46.306Z",
+  "expectedIntervalMinutes": 10,
+  "status": "healthy",
+  "missedCycles": 0,
+  "lastError": null
+}

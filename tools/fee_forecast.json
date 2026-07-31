@@ -1,25 +1,25 @@
 {
-  "generated_at": "2026-07-31T17:15:01.155084+00:00",
-  "data_points": 150,
-  "first_capture": "2026-07-30_01-53-50",
-  "last_capture": "2026-07-31_22-43-58",
-  "latest_fastest_fee": 3.0,
-  "slope": 0.004,
+  "generated_at": "2026-07-31T18:36:01.436214+00:00",
+  "data_points": 327,
+  "first_capture": "2026-07-30_11-41-11",
+  "last_capture": "2026-07-31_23-55-30",
+  "latest_fastest_fee": 5.0,
+  "slope": 0.001,
   "trend": "stable",
   "forecast": [
     {
       "day_offset": 1,
-      "predicted_fastest_fee": 2.6,
+      "predicted_fastest_fee": 2.5,
       "trend": "stable"
     },
     {
       "day_offset": 2,
-      "predicted_fastest_fee": 2.6,
+      "predicted_fastest_fee": 2.5,
       "trend": "stable"
     },
     {
       "day_offset": 3,
-      "predicted_fastest_fee": 2.6,
+      "predicted_fastest_fee": 2.5,
       "trend": "stable"
     }
   ],

@@ -99,6 +99,18 @@ async function runCycle() {
     log('Derived metrics: computed + enqueued');
   } catch (e) { log('Derived metrics error: ' + e.message); }
 
+  // Step 4b: Research content pipeline (14) + topic intelligence (15)
+  try {
+    var rc = require('../../tools/agents/14-research-content-pipeline.js');
+    await rc.run();
+    log('Research content pipeline: briefs generated');
+  } catch (e) { log('Research content pipeline error: ' + e.message); }
+  try {
+    var ti = require('../../tools/agents/15-topic-intelligence.js');
+    await ti.run();
+    log('Topic intelligence: refreshed');
+  } catch (e) { log('Topic intelligence error: ' + e.message); }
+
   // Step 4: Get quality score
   var quality = { score: 0 };
   try {
@@ -156,6 +168,14 @@ async function runCycle() {
         await report.reportToArchitect(dailyReport);
         log('Reports saved');
       }
+      // Research report (17) + publishing queue (18)
+      try {
+        var rg = require('../../tools/agents/17-report-generator.js');
+        await rg.run();
+        var pq = require('../../tools/agents/18-publishing-queue.js');
+        await pq.run();
+        log('Research report + publishing queue generated');
+      } catch (e) { log('Research report/publishing-queue error: ' + e.message); }
       // Generate research digest every 4 cycles (daily at 60min cycle)
       if (STATE.cycleCount % 4 === 0) {
         try {
@@ -232,10 +252,10 @@ async function runCycle() {
     saveState();
   } catch (e) { log('Compaction error: ' + e.message); }
   try {
-    var childProcess = require('child_process');
-    childProcess.execFile('python3', [path.resolve(__dirname, '..', '..', 'tools', 'fee_forecast.py')], { cwd: path.resolve(__dirname, '..', '..'), timeout: 30000 }, function() {});
-    childProcess.execFile('python3', [path.resolve(__dirname, '..', '..', 'tools', 'alert_webhook.py'), '--spool'], { cwd: path.resolve(__dirname, '..', '..'), timeout: 30000 }, function() {});
-  } catch (e) { log('Forecast/alerts error: ' + e.message); }
+    var alertDispatcher = require('../../tools/agents/13-alert-dispatcher.js');
+    await alertDispatcher.run();
+    log('Alert dispatcher: forecast + alerts + index self-heal');
+  } catch (e) { log('Alert dispatcher error: ' + e.message); }
 
   STATE.lastRun = Date.now();
   saveState();

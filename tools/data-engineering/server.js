@@ -182,6 +182,15 @@ var server = http.createServer(function(req, res) {
 
 server.listen(PORT, function() {
   console.log('DE Server running on http://localhost:' + PORT);
+  // AUTO_START: launchd KeepAlive restarts must self-heal the agent.
+  // Set AUTO_START=1 in the plist env (or default to on for autonomous mode).
+  if (process.env.AUTO_START !== '0') {
+    if (!agentRunning) {
+      agent.start();
+      agentRunning = true;
+      console.log('DE Agent auto-started (AUTO_START)');
+    }
+  }
 });
 
 module.exports = server;

@@ -1,8 +1,8 @@
 {
   "source": "fee_history",
-  "lastCycleTs": "2026-07-31_22-45-57",
-  "lastEnqueuedAt": "2026-07-31T17:15:59.206Z",
-  "lastSeen": "2026-07-31T17:15:59.206Z",
+  "lastCycleTs": "2026-07-31_23-55-30",
+  "lastEnqueuedAt": "2026-07-31T18:25:39.869Z",
+  "lastSeen": "2026-07-31T18:25:39.869Z",
   "expectedIntervalMinutes": 10,
   "status": "healthy",
   "missedCycles": 0,

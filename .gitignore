@@ -16,3 +16,7 @@ profiles/
 sessions/
 relay-data/
 captured-data/post-log.json
+
+# Secrets + runtime DB — keep local only, never push
+captured-data/nostr-key.json
+captured-data/bsahi.db

@@ -15,6 +15,87 @@ function freshSpool() {
   return spoolMod.init({ dir: dir, fsync: false });
 }
 
+test('compaction preserves index history (drained case)', function() {
+  var dir = path.join(TMP, 'spool-idx1-' + Date.now());
+  var spool;
+  return spoolMod.init({ dir: dir, fsync: false }).then(function(s) {
+    spool = s;
+    return s.enqueue('fees', { data: 1 }, { captureTime: '2026-07-31_08-00-00', day: '2026-07-31' }).then(function() {
+      return s.enqueue('fees', { data: 2 }, { captureTime: '2026-07-31_08-10-00', day: '2026-07-31' });
+    }).then(function() { return s; });
+  }).then(function(s) {
+    return s.dequeueById('fees:2026-07-31_08-00-00', { consumer: 't' }).then(function(e) { return s.ack(e.id, 't'); }).then(function() {
+      return s.dequeueById('fees:2026-07-31_08-10-00', { consumer: 't' }).then(function(e) { return s.ack(e.id, 't'); });
+    }).then(function() { return s.compact(); });
+  }).then(function(r) {
+    assert.strictEqual(r.kept, 0, 'queue fully drained');
+    return spoolMod.init({ dir: dir, fsync: false });
+  }).then(function(s2) {
+    return s2.resolve('fees', '2026-07-31');
+  }).then(function(entries) {
+    assert.strictEqual(entries.length, 2, 'index history survives compaction even when queue drained');
+  });
+});
+
+test('compaction preserves history with pending', function() {
+  var dir = path.join(TMP, 'spool-idx2-' + Date.now());
+  return spoolMod.init({ dir: dir, fsync: false }).then(function(s) {
+    return s.enqueue('fees', { data: 1 }, { captureTime: '2026-07-31_09-00-00', day: '2026-07-31' }).then(function() {
+      return s.enqueue('fees', { data: 2 }, { captureTime: '2026-07-31_09-10-00', day: '2026-07-31' }).then(function() {
+        return s.enqueue('fees', { data: 3 }, { captureTime: '2026-07-31_09-20-00', day: '2026-07-31' });
+      });
+    }).then(function() { return s; });
+  }).then(function(s) {
+    return s.dequeueById('fees:2026-07-31_09-00-00', { consumer: 't' }).then(function(e) { return s.ack(e.id, 't'); }).then(function() { return s.compact(); });
+  }).then(function(r) {
+    assert.strictEqual(r.kept, 2, 'two pending kept in queue');
+    return spoolMod.init({ dir: dir, fsync: false });
+  }).then(function(s2) {
+    return s2.resolve('fees', '2026-07-31');
+  }).then(function(entries) {
+    assert.strictEqual(entries.length, 3, 'index has all 3 (acked + pending)');
+  });
+});
+
+test('history counters survive compact + reload', function() {
+  var dir = path.join(TMP, 'spool-hist-' + Date.now());
+  return spoolMod.init({ dir: dir, fsync: false }).then(function(s) {
+    return s.enqueue('fees', { data: 1 }, { captureTime: '2026-07-31_10-00-00', day: '2026-07-31' }).then(function() {
+      return s.enqueue('mempool', { data: 2 }, { captureTime: '2026-07-31_10-00-00', day: '2026-07-31' });
+    }).then(function() { return s; });
+  }).then(function(s) {
+    return s.dequeueById('fees:2026-07-31_10-00-00', { consumer: 't' }).then(function(e) { return s.ack(e.id, 't'); }).then(function() { return s.compact(); });
+  }).then(function() {
+    return spoolMod.init({ dir: dir, fsync: false });
+  }).then(function(s2) {
+    return s2.stats();
+  }).then(function(st) {
+    assert.strictEqual(st.history.totalEnqueued, 2, 'lifetime enqueued survives compact+reload');
+    assert.strictEqual(st.history.totalAcked, 1, 'lifetime acked survives');
+  });
+});
+
+test('stale sources detected without pending', function() {
+  var dir = path.join(TMP, 'spool-stale-' + Date.now());
+  return spoolMod.init({ dir: dir, fsync: false, staleAfterMinutes: 30 }).then(function(s) {
+    return s.enqueue('fees', { data: 1 }, { captureTime: '2026-07-31_11-00-00', day: '2026-07-31' }).then(function() { return s; });
+  }).then(function(s) {
+    // rewrite cursor lastSeen to 40 min ago
+    var curPath = path.join(s.dir, 'cursors', 'fees.json');
+    var cur = JSON.parse(fs.readFileSync(curPath, 'utf8'));
+    cur.lastSeen = new Date(Date.now() - 40 * 60000).toISOString();
+    fs.writeFileSync(curPath, JSON.stringify(cur));
+    return s.dequeueById('fees:2026-07-31_11-00-00', { consumer: 't' }).then(function(e) { return s.ack(e.id, 't'); }).then(function() { return s.compact(); });
+  }).then(function() {
+    return spoolMod.init({ dir: dir, fsync: false, staleAfterMinutes: 30 });
+  }).then(function(s2) {
+    return s2.stats();
+  }).then(function(st) {
+    assert.strictEqual(st.totals.pending, 0, 'no pending');
+    assert.ok(st.staleSources.indexOf('fees') !== -1, 'stale detected from cursor even with no pending');
+  });
+});
+
 function run() {
   var idx = 0;
   function next() {

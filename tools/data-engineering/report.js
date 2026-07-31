@@ -41,9 +41,18 @@ function generateDailyReport() {
 
         var captureCount = 0;
         var dataSizeMB = 0;
+        var lifetime = 0;
+        var todayCount = 0;
         if (spoolStats) {
-          captureCount = spoolStats.totals.enqueued;
+          lifetime = spoolStats.history ? spoolStats.history.totalEnqueued : spoolStats.totals.enqueued;
+          captureCount = lifetime;
           dataSizeMB = Math.round((spoolStats.queueBytes || 0) / (1024 * 1024) * 10) / 10;
+          try {
+            var db = require('../db/init.js');
+            var todayRows = db.query("SELECT COUNT(*) AS c FROM captures WHERE date(captured_at) = date('now')");
+            if (todayRows && todayRows[0]) todayCount = todayRows[0].c || 0;
+          } catch (e) {}
+          try { dataSizeMB = Math.round((fs.statSync(path.join(__dirname, '..', '..', 'captured-data', 'bsahi.db')).size) / (1024 * 1024) * 10) / 10; } catch (e) {}
         } else {
           var capturedDir = path.join(__dirname, '..', '..', 'captured-data');
           if (fs.existsSync(capturedDir)) {
@@ -67,7 +76,7 @@ function generateDailyReport() {
         lines.push('## Overview');
         lines.push('- Quality Score: ' + quality.score + '/100');
         lines.push('- Endpoints: ' + health.healthy + '/' + health.total + ' healthy');
-        lines.push('- Spool entries: ' + (spoolStats ? captureCount + ' (' + spoolStats.totals.acked + ' acked, ' + spoolStats.totals.pending + ' pending)' : captureCount + ' files'));
+        lines.push('- Spool lifetime: ' + lifetime + ' entries (' + todayCount + ' today, ' + (spoolStats ? spoolStats.totals.acked + ' acked, ' + spoolStats.totals.pending + ' pending' : '') + ')');
         lines.push('- Data stored: ' + dataSizeMB + ' MB');
         lines.push('');
 

@@ -20,6 +20,10 @@ process.env.PATH = '/usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sb
 var logFile = path.join(REPO, 'captured-data', 'engagement.log');
 var REST_FILE = path.join(REPO, 'captured-data', 'work-rest-state.json');
 var PID_FILE = path.join(REPO, 'captured-data', 'orchestrator.pid');
+var HEARTBEAT_FILE = path.join(REPO, 'captured-data', 'orchestrator-heartbeat.json');
+var cycleActive = false;
+var watchdog = null;
+var cycleCount = 0;
 var CFG = (function() { try { return JSON.parse(fs.readFileSync(path.join(REPO, 'tools/bridge/orchestrator-config.json'), 'utf8')); } catch (e) { return { cycleMinutes: 30, rest: { workHours: 4, restHours: 2 }, targets: { commentsPerCycle: 8, liPerCycle: 3, mdPerCycle: 3 } }; } })();
 
 var WORK_MS = (CFG.rest.workHours || 4) * 3600 * 1000;
@@ -64,15 +68,9 @@ function run(script, args, cb) {
 }
 
 function feedbackRefresh() {
+  // Replaced by agent 15 (topic-intelligence) — richer per-topic signal.
   try {
-    exec('node ' + path.join(REPO, 'tools/bridge/feedback.js'), { cwd: REPO, timeout: 20000 }, function(err, stdout) {
-      if (err || !stdout) return;
-      try {
-        var start = stdout.indexOf('{');
-        var sig = JSON.parse(stdout.slice(start));
-        if (sig && sig.weights) log('Feedback: ' + JSON.stringify(sig.weights).slice(0, 120));
-      } catch (e) {}
-    });
+    exec('node ' + path.join(REPO, 'tools/agents/15-topic-intelligence.js'), { cwd: REPO, timeout: 20000 }, function() {});
   } catch (e) {}
 }
 
@@ -95,6 +93,12 @@ function shouldWork() {
   return { work: true, s: s };
 }
 
+function heartbeat(phase) {
+  try {
+    fs.writeFileSync(HEARTBEAT_FILE, JSON.stringify({ at: new Date().toISOString(), pid: process.pid, phase: phase, mode: (loadRest() || {}).mode, cycle: cycleCount }));
+  } catch (e) {}
+}
+
 function cycle() {
   var gate = shouldWork();
   if (!gate.work) {
@@ -102,9 +106,23 @@ function cycle() {
     s.cycles_skipped_during_rest = (s.cycles_skipped_during_rest || 0) + 1;
     saveRest(s);
     log('Rest — cycle skipped (' + s.cycles_skipped_during_rest + ' during rest)');
+    heartbeat('rest-skip');
     scheduleNext();
     return;
   }
+
+  cycleCount++;
+  cycleActive = true;
+  heartbeat('cycle-start');
+  if (watchdog) clearTimeout(watchdog);
+  watchdog = setTimeout(function() {
+    if (cycleActive) {
+      log('WATCHDOG: chain stalled — forcing reschedule');
+      cycleActive = false;
+      heartbeat('watchdog');
+      scheduleNext();
+    }
+  }, CYCLE_MS + 10 * 60 * 1000);
 
   log('=== Engagement cycle ===');
   feedbackRefresh();
@@ -118,6 +136,9 @@ function cycle() {
         // Phase 4: check if engagement threshold met, then publish
         run('tools/bridge/scheduler.py', [], function() {
           log('=== Cycle complete ===');
+          cycleActive = false;
+          if (watchdog) { clearTimeout(watchdog); watchdog = null; }
+          heartbeat('cycle-complete');
           scheduleNext();
         });
       });
@@ -126,6 +147,8 @@ function cycle() {
 }
 
 function scheduleNext() {
+  if (cycleActive) { log('cycle already active — skipping schedule'); return; }
+  if (watchdog) { clearTimeout(watchdog); watchdog = null; }
   var s = loadRest();
   var delay = CYCLE_MS;
   if (s.mode === 'rest') {
@@ -136,5 +159,11 @@ function scheduleNext() {
 }
 
 acquirePid();
+process.on('uncaughtException', function(err) {
+  log('UNCAUGHT: ' + (err && err.message));
+  cycleActive = false;
+  if (watchdog) { clearTimeout(watchdog); watchdog = null; }
+  scheduleNext();
+});
 log('Engagement orchestrator v3 started (work ' + (CFG.rest.workHours || 4) + 'h / rest ' + (CFG.rest.restHours || 2) + 'h)');
 cycle();

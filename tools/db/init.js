@@ -28,7 +28,7 @@ function runSQL(sql, params) {
     if (sql.trim().toUpperCase().startsWith('SELECT')) {
       var fullSql = '.mode json\n' + sql + ';';
       fs.writeFileSync(tmpFile, fullSql);
-      var result = require('child_process').execSync('sqlite3 "' + DB_PATH + '" < "' + tmpFile + '"', { stdio: 'pipe', encoding: 'utf8' });
+      var result = require('child_process').execSync('sqlite3 "' + DB_PATH + '" < "' + tmpFile + '"', { stdio: 'pipe', encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 });
       try { fs.unlinkSync(tmpFile); } catch (e) {}
       try { return JSON.parse(result); } catch (e) { return result.trim(); }
     } else {

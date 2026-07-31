@@ -1,8 +1,8 @@
 {
   "source": "btc_rpc",
-  "lastCycleTs": "2026-07-31_17-16-06",
-  "lastEnqueuedAt": "2026-07-31T17:16:06.676Z",
-  "lastSeen": "2026-07-31T17:16:06.676Z",
+  "lastCycleTs": "2026-07-31_18-25-44",
+  "lastEnqueuedAt": "2026-07-31T18:25:44.558Z",
+  "lastSeen": "2026-07-31T18:25:44.558Z",
   "expectedIntervalMinutes": 10,
   "status": "healthy",
   "missedCycles": 0,

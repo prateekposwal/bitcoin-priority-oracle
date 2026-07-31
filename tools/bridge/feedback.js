@@ -4,10 +4,10 @@ var path = require('path');
 
 var SIGNAL_FILE = path.join(__dirname, '..', '..', 'captured-data', 'topic-signal.json');
 
-var TOPICS = ['fees', 'mempool', 'blocks', 'lightning', 'node', 'settlement', 'cost', 'security', 'dev', 'research'];
+var TOPICS = ['fees', 'mempool', 'blocks', 'lightning', 'node', 'settlement', 'cost', 'security', 'dev', 'research', 'capacity', 'exchange', 'fork', 'miner', 'economy'];
 
 var TOPIC_KEYWORDS = {
-  'fees': ['fee', 'sat/vb', 'fee market', 'fee spike'],
+  'fees': ['fee ', 'fees', 'fee market', 'fee spike', 'sat/vb', 'sats/vb'],
   'mempool': ['mempool', 'backlog', 'unconfirmed'],
   'blocks': ['block', 'block size', 'block space', 'full block'],
   'lightning': ['lightning', 'ln', 'routing', 'channel'],
@@ -16,7 +16,12 @@ var TOPIC_KEYWORDS = {
   'cost': ['cost', 'expensive', 'incentive', 'miner revenue'],
   'security': ['security', 'wallet', 'hack', 'stolen'],
   'dev': ['bip', 'upgrade', 'protocol', 'testnet'],
-  'research': ['research', 'open data', 'measuring', 'capture', 'study']
+  'research': ['research', 'open data', 'measuring', 'capture', 'study'],
+  'capacity': ['capacity', 'block space util', 'settlement capacity', 'blockspace'],
+  'exchange': ['exchange', 'withdrawal', 'batching', 'batch', 'coinbase'],
+  'fork': ['fork', 'activation', 'signaling', 'consensus change'],
+  'miner': ['miner', 'mining', 'hashrate', 'difficulty', 'subsidy'],
+  'economy': ['economy', 'economic', 'incentive', 'fee share', 'revenue']
 };
 
 function loadJson(p, fallback) {

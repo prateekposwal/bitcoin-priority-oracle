@@ -2,6 +2,21 @@ var https = require('https');
 var fs = require('fs');
 var path = require('path');
 
+var ERROR_HISTORY_FILE = path.join(__dirname, '..', '..', 'captured-data', 'monitor-error-history.json');
+var MAX_WINDOW = 12;
+
+function loadErrorHistory() {
+  try { return JSON.parse(fs.readFileSync(ERROR_HISTORY_FILE, 'utf8')); }
+  catch (e) { return { rounds: [] }; }
+}
+
+function saveErrorHistory(history) {
+  try {
+    if (!fs.existsSync(path.dirname(ERROR_HISTORY_FILE))) fs.mkdirSync(path.dirname(ERROR_HISTORY_FILE), { recursive: true });
+    fs.writeFileSync(ERROR_HISTORY_FILE, JSON.stringify(history, null, 2));
+  } catch (e) {}
+}
+
 function fetchEndpoint(url, timeout) {
   return new Promise(function(resolve) {
     timeout = timeout || 10000;
@@ -126,19 +141,22 @@ function rootFileFreshness(dataDir, report) {
 }
 
 function getErrorReport(endpoints) {
-  var attempts = 3;
-  var errorCounts = {};
-  var totalErrors = 0;
-  var totalChecks = 0;
-  var tasks = [];
-  for (var i = 0; i < attempts; i++) {
-    tasks.push(checkAllEndpoints(endpoints));
-  }
-  return Promise.all(tasks).then(function(rounds) {
-    rounds.forEach(function(round) {
-      Object.keys(round.results).forEach(function(key) {
+  // 1 round per cycle + 12-round sliding window (stabilizes vs transient 3-round noise)
+  return checkAllEndpoints(endpoints).then(function(round) {
+    var history = loadErrorHistory();
+    var okMap = {};
+    Object.keys(round.results).forEach(function(key) { okMap[key] = round.results[key].ok; });
+    history.rounds.push({ at: new Date().toISOString(), ok: okMap });
+    history.rounds = history.rounds.slice(-MAX_WINDOW);
+    saveErrorHistory(history);
+
+    var errorCounts = {};
+    var totalErrors = 0;
+    var totalChecks = 0;
+    history.rounds.forEach(function(r) {
+      Object.keys(r.ok).forEach(function(key) {
         totalChecks++;
-        if (!round.results[key].ok) {
+        if (!r.ok[key]) {
           errorCounts[key] = (errorCounts[key] || 0) + 1;
           totalErrors++;
         }

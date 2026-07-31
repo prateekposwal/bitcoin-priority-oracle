@@ -12,3 +12,5 @@
 {"at":"2026-07-31T15:55:51.862Z","source":"fees","cycleTs":"2026-07-31_21-25-51","reasons":["fastestFee must be integer, got string"],"producer":"capture-agent","file":null}
 {"at":"2026-07-31T16:43:07.643Z","source":"fees","cycleTs":"2026-07-31_22-13-07","reasons":["fastestFee must be integer, got string"],"producer":"capture-agent","file":null}
 {"at":"2026-07-31T17:08:27.764Z","source":"fees","cycleTs":"2026-07-31_22-38-27","reasons":["fastestFee must be integer, got string"],"producer":"capture-agent","file":null}
+{"at":"2026-07-31T18:11:05.792Z","source":"fees","cycleTs":"2026-07-31_23-41-05","reasons":["fastestFee must be integer, got string"],"producer":"capture-agent","file":null}
+{"at":"2026-07-31T18:37:24.248Z","source":"fees","cycleTs":"2026-08-01_00-07-24","reasons":["fastestFee must be integer, got string"],"producer":"capture-agent","file":null}

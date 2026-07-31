@@ -194,3 +194,25 @@ ModuleNotFoundError: No module named 'seen_state'
 [2026-07-31 17:02:51] RUN: scheduler.py 
 [2026-07-31 17:05:51] [22:35:51] [Scheduler] === Cycle complete ===
 [2026-07-31 17:05:52] === Cycle complete ===
+[2026-07-31 17:42:43] === Engagement cycle ===
+[2026-07-31 17:42:43] RUN: reply-engine.py 
+[2026-07-31 17:42:44] Feedback: {"fees":0.2857946874291408,"mempool":0.06988441379669245,"blocks":0.17783955061291665,"lightning":0.17783955061291665,"n
+[2026-07-31 17:42:50] No inbox messages fetched (browser busy or session stale).
+[2026-07-31 17:42:50] RUN: comment-engine.py 8
+[2026-07-31 17:42:50] Cycle done. Comments today: 6/50
+[2026-07-31 17:42:50] RUN: engage-engine.py 3 3
+[2026-07-31 17:43:00] Cycle done. LinkedIn: 0/3, Medium: 0/3
+[2026-07-31 17:43:00] RUN: scheduler.py 
+[2026-07-31 17:43:37] [23:13:37] [Scheduler] === Cycle complete ===
+[2026-07-31 17:43:37] === Cycle complete ===
+[2026-07-31 18:11:19] Engagement orchestrator v3 started (work 4h / rest 2h)
+[2026-07-31 18:11:19] === Engagement cycle ===
+[2026-07-31 18:11:19] RUN: reply-engine.py 
+[2026-07-31 18:11:27] No inbox messages fetched (browser busy or session stale).
+[2026-07-31 18:11:27] RUN: comment-engine.py 8
+[2026-07-31 18:11:27] Cycle done. Comments today: 6/50
+[2026-07-31 18:11:27] RUN: engage-engine.py 3 3
+[2026-07-31 18:11:27] Cycle done. LinkedIn: 0/3, Medium: 0/3
+[2026-07-31 18:11:27] RUN: scheduler.py 
+[2026-07-31 18:12:21] [23:42:21] [Scheduler] === Cycle complete ===
+[2026-07-31 18:12:21] === Cycle complete ===

@@ -1,0 +1,148 @@
+{
+  "rounds": [
+    {
+      "at": "2026-07-31T18:06:47.722Z",
+      "ok": {
+        "fees": true,
+        "btc_price": true,
+        "mempool": true,
+        "mempool_blocks": true,
+        "fee_history": true,
+        "lightning": true,
+        "blocks": true,
+        "block_height": true,
+        "coinpaprika": true,
+        "fear_greed": true,
+        "blockchair": true,
+        "mining_pools": false,
+        "difficulty": true
+      }
+    },
+    {
+      "at": "2026-07-31T18:23:45.514Z",
+      "ok": {
+        "fees": true,
+        "btc_price": true,
+        "mempool": true,
+        "mempool_blocks": true,
+        "fee_history": true,
+        "lightning": true,
+        "blocks": true,
+        "block_height": true,
+        "coinpaprika": true,
+        "fear_greed": true,
+        "blockchair": true,
+        "mining_pools": true,
+        "difficulty": true
+      }
+    },
+    {
+      "at": "2026-07-31T18:24:40.980Z",
+      "ok": {
+        "fees": true,
+        "btc_price": true,
+        "mempool": true,
+        "mempool_blocks": true,
+        "fee_history": true,
+        "lightning": true,
+        "blocks": true,
+        "block_height": true,
+        "coinpaprika": true,
+        "fear_greed": true,
+        "blockchair": true,
+        "mining_pools": true,
+        "difficulty": true
+      }
+    },
+    {
+      "at": "2026-07-31T18:24:42.163Z",
+      "ok": {
+        "fees": true,
+        "btc_price": true,
+        "mempool": true,
+        "mempool_blocks": true,
+        "fee_history": true,
+        "lightning": true,
+        "blocks": true,
+        "block_height": true,
+        "coinpaprika": true,
+        "fear_greed": true,
+        "blockchair": true,
+        "mining_pools": true,
+        "difficulty": true
+      }
+    },
+    {
+      "at": "2026-07-31T18:24:42.506Z",
+      "ok": {
+        "fees": true,
+        "btc_price": true,
+        "mempool": true,
+        "mempool_blocks": true,
+        "fee_history": true,
+        "lightning": true,
+        "blocks": true,
+        "block_height": true,
+        "coinpaprika": true,
+        "fear_greed": true,
+        "blockchair": true,
+        "mining_pools": true,
+        "difficulty": true
+      }
+    },
+    {
+      "at": "2026-07-31T18:25:52.790Z",
+      "ok": {
+        "fees": false,
+        "btc_price": true,
+        "mempool": true,
+        "mempool_blocks": true,
+        "fee_history": true,
+        "lightning": true,
+        "blocks": true,
+        "block_height": true,
+        "coinpaprika": true,
+        "fear_greed": true,
+        "blockchair": true,
+        "mining_pools": true,
+        "difficulty": true
+      }
+    },
+    {
+      "at": "2026-07-31T18:25:57.884Z",
+      "ok": {
+        "fees": true,
+        "btc_price": true,
+        "mempool": true,
+        "mempool_blocks": true,
+        "fee_history": true,
+        "lightning": true,
+        "blocks": true,
+        "block_height": true,
+        "coinpaprika": true,
+        "fear_greed": true,
+        "blockchair": true,
+        "mining_pools": true,
+        "difficulty": true
+      }
+    },
+    {
+      "at": "2026-07-31T18:26:01.891Z",
+      "ok": {
+        "fees": false,
+        "btc_price": true,
+        "mempool": true,
+        "mempool_blocks": true,
+        "fee_history": true,
+        "lightning": true,
+        "blocks": true,
+        "block_height": true,
+        "coinpaprika": true,
+        "fear_greed": true,
+        "blockchair": true,
+        "mining_pools": true,
+        "difficulty": true
+      }
+    }
+  ]
+}

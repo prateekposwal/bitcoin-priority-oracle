@@ -227,16 +227,17 @@ function generatePostContent(emp) {
   // Engagement feedback (M7): weight topic pick by topic-signal (fees/research
   // resonate -> more content; declining -> rotate out). Content itself is always
   // real spool data — this only varies topic selection, never fabricates.
+  function signalKey(t) { return t === 'fee' ? 'fees' : t; }
   var signal = null;
   try { signal = require('../bridge/feedback.js').getSignal(); } catch (e) {}
   var topic;
   if (signal && signal.weights) {
     var candidates = emp.topics.filter(function(t) {
-      var w = signal.weights[t];
+      var w = signal.weights[signalKey(t)];
       return typeof w === 'number' && w > 0;
     });
     if (candidates.length === 0) candidates = emp.topics;
-    var weights = candidates.map(function(t) { return signal.weights[t] || 0.1; });
+    var weights = candidates.map(function(t) { return signal.weights[signalKey(t)] || 0.1; });
     var total = weights.reduce(function(a, b) { return a + b; }, 0);
     var r = Math.random() * total;
     topic = candidates[0];

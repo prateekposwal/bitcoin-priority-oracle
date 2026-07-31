@@ -14,8 +14,9 @@ function usage() {
     '  node spool-cli.js resolve <source> <day>    resolve logical name -> entries',
     '  node spool-cli.js consume <source> <day> --handler <file.js> [--consumer <name>]',
     '  node spool-cli.js retry [source]            requeue dead-lettered entries',
-    '  node spool-cli.js compact                   compact queue, rebuild index',
-    '  node spool-cli.js dead-letter ls|clear      inspect/clear dead-letter',
+  '  node spool-cli.js compact                   compact queue, index preserved',
+  '  node spool-cli.js rebuild-index             rebuild index history from SQLite',
+  '  node spool-cli.js dead-letter ls|clear      inspect/clear dead-letter',
     '  node spool-cli.js cursor <source>           show cursor state for a source',
     ''
   ].join('\n'));
@@ -103,9 +104,50 @@ function main(argv) {
 
     case 'compact':
       getSpool().then(function(s) { return s.compact(); }).then(function(r) {
-        console.log('Compacted: removed ' + r.removed + ', kept ' + r.kept);
+        console.log('Compacted: removed ' + r.removed + ', kept ' + r.kept + ', indexPruned ' + r.indexPruned);
       });
       break;
+
+    case 'rebuild-index': {
+      getSpool().then(function(s) {
+        var db = require('../db/init.js');
+        var sources = db.query("SELECT DISTINCT source FROM captures WHERE json_data != '' AND json_data != 'null'") || [];
+        var entries = [];
+        var seq = 0;
+        var byTs = {};
+        sources.forEach(function(r) {
+          var src = r.source;
+          if (!src) return;
+          var rows = db.query("SELECT captured_at, json_data, status FROM captures WHERE source = '" + src.replace(/'/g, "''") + "' AND json_data != '' AND json_data != 'null'") || [];
+          rows.forEach(function(row) {
+            var capturedAt = row.captured_at || new Date().toISOString();
+            var local = new Date(capturedAt);
+            if (isNaN(local.getTime())) return;
+            var ts = local.getFullYear() + '-' + String(local.getMonth() + 1).padStart(2, '0') + '-' + String(local.getDate()).padStart(2, '0') + '_' + String(local.getHours()).padStart(2, '0') + '-' + String(local.getMinutes()).padStart(2, '0') + '-' + String(local.getSeconds()).padStart(2, '0');
+            var key = src + ':' + ts;
+            if (byTs[key]) return;
+            byTs[key] = true;
+            var data = null;
+            try { data = JSON.parse(row.json_data); } catch (e) {}
+            entries.push({
+              id: key,
+              source: src,
+              captureTime: ts,
+              day: ts.slice(0, 10),
+              seq: ++seq,
+              enqueuedAt: capturedAt,
+              payload: { status: row.status || 200, data: data, fetchedAt: capturedAt },
+              attempts: 0,
+              producer: 'rebuild',
+              schemaVersion: 1
+            });
+          });
+        });
+        var added = s.rebuildIndexFromHistory(entries);
+        console.log('rebuild-index: ' + added + ' entries written to spool/index');
+      });
+      break;
+    }
 
     case 'dead-letter': {
       var action = argv[3] || 'ls';
