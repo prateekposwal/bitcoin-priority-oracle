@@ -74,3 +74,101 @@ FileNotFoundError: [Errno 2] No such file or directory: 'node'
     raise TimeoutExpired(
 subprocess.TimeoutExpired: Command '['python3', '/Users/prateekposwal/Desktop/block-space-economics/tools/bridge/reply-engine.py']' timed out after 180 seconds
 [2026-07-31 15:21:10] === Cycle complete ===
+[2026-07-31 15:30:35] Engagement orchestrator v3 started (work 4h / rest 2h)
+[2026-07-31 15:30:35] === Engagement cycle ===
+[2026-07-31 15:30:35] RUN: reply-engine.py 
+[2026-07-31 15:30:44] Engagement orchestrator v3 started (work 4h / rest 2h)
+[2026-07-31 15:30:44] === Engagement cycle ===
+[2026-07-31 15:30:44] RUN: reply-engine.py 
+[2026-07-31 15:30:54] Engagement orchestrator v3 started (work 4h / rest 2h)
+[2026-07-31 15:30:54] === Engagement cycle ===
+[2026-07-31 15:30:54] RUN: reply-engine.py 
+[2026-07-31 15:31:08] Engagement orchestrator v3 started (work 4h / rest 2h)
+[2026-07-31 15:31:08] === Engagement cycle ===
+[2026-07-31 15:31:08] RUN: reply-engine.py 
+[2026-07-31 15:31:16] Engagement orchestrator v3 started (work 4h / rest 2h)
+[2026-07-31 15:31:16] === Engagement cycle ===
+[2026-07-31 15:31:16] RUN: reply-engine.py 
+[2026-07-31 15:31:43] Engagement orchestrator v3 started (work 4h / rest 2h)
+[2026-07-31 15:31:44] === Engagement cycle ===
+[2026-07-31 15:31:45] RUN: reply-engine.py 
+[2026-07-31 15:31:50] Engagement orchestrator v3 started (work 4h / rest 2h)
+[2026-07-31 15:31:50] === Engagement cycle ===
+[2026-07-31 15:31:50] RUN: reply-engine.py 
+[2026-07-31 15:32:02] Engagement orchestrator v3 started (work 4h / rest 2h)
+[2026-07-31 15:32:02] === Engagement cycle ===
+[2026-07-31 15:32:02] RUN: reply-engine.py 
+[2026-07-31 15:32:10] Engagement orchestrator v3 started (work 4h / rest 2h)
+[2026-07-31 15:32:10] === Engagement cycle ===
+[2026-07-31 15:32:10] RUN: reply-engine.py 
+[2026-07-31 15:32:21] Engagement orchestrator v3 started (work 4h / rest 2h)
+[2026-07-31 15:32:21] === Engagement cycle ===
+[2026-07-31 15:32:21] RUN: reply-engine.py 
+[2026-07-31 15:32:30] Engagement orchestrator v3 started (work 4h / rest 2h)
+[2026-07-31 15:32:30] === Engagement cycle ===
+[2026-07-31 15:32:30] RUN: reply-engine.py 
+[2026-07-31 15:32:41] Engagement orchestrator v3 started (work 4h / rest 2h)
+[2026-07-31 15:32:41] === Engagement cycle ===
+[2026-07-31 15:32:41] RUN: reply-engine.py 
+[2026-07-31 15:32:51] Engagement orchestrator v3 started (work 4h / rest 2h)
+[2026-07-31 15:32:51] === Engagement cycle ===
+[2026-07-31 15:32:51] RUN: reply-engine.py 
+[2026-07-31 15:33:01] Engagement orchestrator v3 started (work 4h / rest 2h)
+[2026-07-31 15:33:01] === Engagement cycle ===
+[2026-07-31 15:33:01] RUN: reply-engine.py 
+[2026-07-31 15:33:14] Engagement orchestrator v3 started (work 4h / rest 2h)
+[2026-07-31 15:33:14] === Engagement cycle ===
+[2026-07-31 15:33:14] RUN: reply-engine.py 
+[2026-07-31 15:33:22] Engagement orchestrator v3 started (work 4h / rest 2h)
+[2026-07-31 15:33:22] === Engagement cycle ===
+[2026-07-31 15:33:22] RUN: reply-engine.py 
+[2026-07-31 15:33:34] Engagement orchestrator v3 started (work 4h / rest 2h)
+[2026-07-31 15:33:34] === Engagement cycle ===
+[2026-07-31 15:33:34] RUN: reply-engine.py 
+[2026-07-31 15:33:34] Feedback: {"fees":0.33444987333555487,"mempool":0.04117902911249925,"blocks":0.18781445122402704,"lightning":0.18781445122402704,"
+[2026-07-31 15:33:34] STDERR: ecent call last):
+  File "/Users/prateekposwal/Desktop/block-space-economics/tools/bridge/reply-engine.py", line 18, in <module>
+    import seen_state
+ModuleNotFoundError: No module named 'seen_state'
+[2026-07-31 15:33:34] RUN: comment-engine.py 8
+[2026-07-31 15:33:34] STDERR: ent call last):
+  File "/Users/prateekposwal/Desktop/block-space-economics/tools/bridge/comment-engine.py", line 21, in <module>
+    import seen_state
+ModuleNotFoundError: No module named 'seen_state'
+[2026-07-31 15:33:34] RUN: engage-engine.py 3 3
+[2026-07-31 15:33:34] STDERR: cent call last):
+  File "/Users/prateekposwal/Desktop/block-space-economics/tools/bridge/engage-engine.py", line 14, in <module>
+    import seen_state
+ModuleNotFoundError: No module named 'seen_state'
+[2026-07-31 15:33:34] RUN: scheduler.py 
+[2026-07-31 15:33:55] Engagement orchestrator v3 started (work 4h / rest 2h)
+[2026-07-31 15:33:56] === Engagement cycle ===
+[2026-07-31 15:33:56] RUN: reply-engine.py 
+[2026-07-31 15:33:58] Feedback: {"fees":0.3344485776553381,"mempool":0.04117979353253706,"blocks":0.1878141855939376,"lightning":0.1878141855939376,"nod
+[2026-07-31 15:33:58] STDERR: ecent call last):
+  File "/Users/prateekposwal/Desktop/block-space-economics/tools/bridge/reply-engine.py", line 18, in <module>
+    import seen_state
+ModuleNotFoundError: No module named 'seen_state'
+[2026-07-31 15:33:58] RUN: comment-engine.py 8
+[2026-07-31 15:33:58] STDERR: ent call last):
+  File "/Users/prateekposwal/Desktop/block-space-economics/tools/bridge/comment-engine.py", line 21, in <module>
+    import seen_state
+ModuleNotFoundError: No module named 'seen_state'
+[2026-07-31 15:33:58] RUN: engage-engine.py 3 3
+[2026-07-31 15:33:58] STDERR: cent call last):
+  File "/Users/prateekposwal/Desktop/block-space-economics/tools/bridge/engage-engine.py", line 14, in <module>
+    import seen_state
+ModuleNotFoundError: No module named 'seen_state'
+[2026-07-31 15:33:58] RUN: scheduler.py 
+[2026-07-31 15:34:44] Engagement orchestrator v3 started (work 4h / rest 2h)
+[2026-07-31 15:34:44] === Engagement cycle ===
+[2026-07-31 15:34:44] RUN: reply-engine.py 
+[2026-07-31 15:34:44] Feedback: {"fees":0.3344461046047641,"mempool":0.04118125257265266,"blocks":0.1878136785887084,"lightning":0.1878136785887084,"nod
+[2026-07-31 15:34:50] No inbox messages fetched (browser busy or session stale).
+[2026-07-31 15:34:51] RUN: comment-engine.py 8
+[2026-07-31 15:36:16] Cycle done. Comments today: 6/50
+[2026-07-31 15:36:17] RUN: engage-engine.py 3 3
+[2026-07-31 15:36:58] Cycle done. LinkedIn: 0/3, Medium: 0/3
+[2026-07-31 15:36:58] RUN: scheduler.py 
+[2026-07-31 15:37:59] [21:07:59] [Scheduler] === Cycle complete ===
+[2026-07-31 15:37:59] === Cycle complete ===

@@ -66,7 +66,12 @@ function run(script, args, cb) {
 function feedbackRefresh() {
   try {
     exec('node ' + path.join(REPO, 'tools/bridge/feedback.js'), { cwd: REPO, timeout: 20000 }, function(err, stdout) {
-      if (!err && stdout) { var sig = JSON.parse(stdout.split('\n')[1] || '{}'); log('Feedback: ' + JSON.stringify(sig.weights).slice(0, 120)); }
+      if (err || !stdout) return;
+      try {
+        var start = stdout.indexOf('{');
+        var sig = JSON.parse(stdout.slice(start));
+        if (sig && sig.weights) log('Feedback: ' + JSON.stringify(sig.weights).slice(0, 120));
+      } catch (e) {}
     });
   } catch (e) {}
 }
