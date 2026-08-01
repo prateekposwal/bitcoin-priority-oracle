@@ -1,0 +1,18 @@
+{
+  "n_samples": 10000,
+  "spec_version": "2.0.1",
+  "distributions": {
+    "N": "tri(10K,150K,mode 60K)",
+    "C": "tri(500,2000,mode 925)",
+    "T": "tri(5,30,mode 10)",
+    "P": "tri(30K,120K,mode 62.9K)"
+  },
+  "p5": 0.0339,
+  "p25": 0.0622,
+  "p50": 0.0991,
+  "p75": 0.1632,
+  "p95": 0.338,
+  "below_1x_pct": 99.8,
+  "point_estimate": 0.1719,
+  "mean": 0.1322
+}

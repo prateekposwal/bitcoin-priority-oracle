@@ -20,7 +20,7 @@ The witness discount substantially reduced the cost of storing witness-resident 
 | Average inscription data | ~400 bytes (in witness, ~100 vbytes block weight) |
 | Cost to store 1 byte for 1 year | ~1.93e-6 $/byte/yr |
 | Lifetime storage cost per inscription | ~$0.0077 (10yr assumed UTXO life) |
-| Unpriced externality at 100K/mo | ~$9,200/yr spread across all nodes |
+| Unpriced storage liabilities at 100K/mo | ~$9,200 (10-yr) · ~$920/yr steady-state, spread across all nodes |
 | Current fee range | $0.06–$0.13 (low activity) to $5–50 (peak) |
 
 ## The Gap
