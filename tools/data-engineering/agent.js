@@ -108,6 +108,15 @@ async function runCycle() {
     }
   } catch (e) { log('Node geo error: ' + e.message); }
 
+  // Step 4d: Node census (25) — real getnodeaddresses count; daily
+  try {
+    if (STATE.cycleCount % 24 === 0) {
+      var nodeCensus = require('../../tools/agents/25-node-census.js');
+      var census = await nodeCensus.run();
+      log('Node census: ' + (census.totalKnownAddresses || 0) + ' known addresses');
+    }
+  } catch (e) { log('Node census error: ' + e.message); }
+
   // Step 4b: Research content pipeline (14) + topic intelligence (15)
   try {
     var rc = require('../../tools/agents/14-research-content-pipeline.js');

@@ -7,8 +7,35 @@ var path = require('path');
 
 var BACKFILL_DIR = path.resolve(__dirname, '..', '..', 'captured-data', 'backfill');
 var POSTED_LOG = path.resolve(__dirname, '..', '..', 'captured-data', 'compliant-posts.json');
+var BRIEFS_FILE = path.resolve(__dirname, '..', '..', 'captured-data', 'content-briefs.json');
+var QUEUE_FILE = path.resolve(__dirname, '..', '..', 'captured-data', 'publishing-queue.json');
+
+function loadJson(p, fallback) {
+  try { return JSON.parse(fs.readFileSync(p, 'utf8')); }
+  catch (e) { return fallback; }
+}
 
 function log(msg) { console.log('[' + new Date().toISOString().slice(11,19) + '] [Content] ' + msg); }
+
+// ─── Pending brief consumption (closes the research→posting gap) ───
+// Agent-14 ranks briefs by engagement priority; agent-18 queues them as
+// 'pending'. Nothing previously consumed them for posting — this is the fix.
+function takePendingBrief() {
+  var queue = loadJson(QUEUE_FILE, { items: [] }).items || [];
+  var briefs = loadJson(BRIEFS_FILE, { briefs: [] }).briefs || [];
+  var briefById = {};
+  briefs.forEach(function(b) { briefById[b.id] = b; });
+  var pending = queue.filter(function(i) { return i.source === 'content-brief' && i.status === 'pending'; });
+  if (!pending.length) return null;
+  var b = briefById[pending[0].id] || pending[0];
+  return {
+    title: (b.title || b.topic || 'Bitcoin block-space research').slice(0, 120),
+    summary: (b.summary || b.title || '').slice(0, 300),
+    url: b.url || '',
+    id: b.id,
+    confidence: b.confidence || 0.5
+  };
+}
 
 function getLatestCapture() {
   var dirs = fs.readdirSync(BACKFILL_DIR).filter(function(d) { return d.startsWith('2026'); }).sort();
@@ -208,17 +235,31 @@ function mediumPost(a) {
   };
 }
 
-function generateFor(platform) {
-  var capture = getLatestCapture();
-  if (!capture) return null;
-  var a = generateAnalysis(capture);
-  var post = null;
-  if (platform === 'reddit') post = redditPost(a);
-  else if (platform === 'linkedin') post = linkedinPost(a);
-  else if (platform === 'medium') post = mediumPost(a);
-  if (post) post.capturedAt = capture.captureTime;
-  return post;
-}
+ function generateFor(platform) {
+   var brief = takePendingBrief();
+   if (brief) {
+     // Research-driven brief: preference over generated analysis.
+     // Substantive (title + summary + source URL), not a link-drop.
+     var post = null;
+     if (platform === 'reddit') {
+       post = { title: brief.title, body: brief.summary + (brief.url ? '\n\nSource: https://bitcoinsahi.com/' + brief.url.replace(/\.md$/, '.html') : '') };
+     } else if (platform === 'linkedin') {
+       post = { title: brief.title, body: brief.summary + (brief.url ? '\n\nFull analysis: https://bitcoinsahi.com/' + brief.url.replace(/\.md$/, '.html') : '') };
+     } else if (platform === 'medium') {
+       post = { title: brief.title, body: brief.summary + (brief.url ? '\n\nFull analysis: https://bitcoinsahi.com/' + brief.url.replace(/\.md$/, '.html') : '') };
+     }
+     if (post) { post.briefId = brief.id; post.capturedAt = new Date().toISOString(); return post; }
+   }
+   var capture = getLatestCapture();
+   if (!capture) return null;
+   var a = generateAnalysis(capture);
+   var post = null;
+   if (platform === 'reddit') post = redditPost(a);
+   else if (platform === 'linkedin') post = linkedinPost(a);
+   else if (platform === 'medium') post = mediumPost(a);
+   if (post) post.capturedAt = capture.captureTime;
+   return post;
+ }
 
 // ─── Cadence management — anti-spam ───
 

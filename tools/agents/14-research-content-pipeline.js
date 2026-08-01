@@ -28,6 +28,14 @@ function loadResearch() {
 function buildBrief(row) {
   var title = row.title || row.finding || '';
   var summary = row.details || row.finding || '';
+  // If details is JSON metadata (e.g. storage-ratio's {"version":...}), prefer the
+  // human-readable finding text instead of dumping raw JSON into a post.
+  if (String(summary).indexOf('{') === 0) {
+    try {
+      JSON.parse(summary);
+      summary = row.finding || '';
+    } catch (e) { summary = row.finding || ''; }
+  }
   var source = row.source || row.agent || 'research';
   var topic = row.category || source;
   return {
