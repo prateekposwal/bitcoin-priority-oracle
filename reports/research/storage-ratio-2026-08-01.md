@@ -1,5 +1,6 @@
 # Storage Cost Coverage Ratio Report
-Generated: 2026-08-01 17:11:14 UTC
+Generated: 2026-08-01 19:15:14 UTC
+Methodology version: 2.0.0 (research/model-spec.json)
 
 ## Thesis
 
@@ -19,15 +20,16 @@ subsidizes storage beyond what the fee covers.
 | Estimated full nodes | 60,000 |
 | Storage horizon | 10 years |
 | Avg block size | 1.5 MB |
+| Methodology version | 2.0.0 |
 
 ## Results (from 24h fee history)
 
 | Metric | Value |
 |--------|-------|
-| Blocks sampled | 152 |
-| Avg coverage ratio | 0.0180 |
-| Min ratio | 0.0032 |
-| Max ratio | 0.0820 |
+| Blocks sampled | 158 |
+| Avg coverage ratio | 0.1719 |
+| Min ratio | 0.0311 |
+| Max ratio | 0.8197 |
 | Interpretation | Fees BELOW storage cost |
 
 - 100.0% of blocks have fees covering less than 1× the estimated 10-year storage cost
@@ -35,9 +37,9 @@ subsidizes storage beyond what the fee covers.
 ### Ratio Distribution (last 24h)
 
 ```
-<0.1     ██████████████████████████████████████████████████ (152)
-0.1-0.5   (0)
-0.5-1     (0)
+<0.1     ████████████████ (51)
+0.1-0.5  █████████████████████████████████ (103)
+0.5-1    █ (4)
 1-2       (0)
 2-5       (0)
 5-10      (0)
@@ -46,7 +48,7 @@ subsidizes storage beyond what the fee covers.
 
 ## Discussion
 
-Average ratio of 0.02 suggests that current fees do NOT fully cover the estimated
+Average ratio of 0.17 suggests that current fees do NOT fully cover the estimated
 10-year storage cost across the network. The difference represents an
 unpriced externality borne by node operators.
 
@@ -57,6 +59,7 @@ unpriced externality borne by node operators.
 - Storage horizon of 10 years is an assumption. Some nodes prune earlier, some keep archival data forever.
 - Block size is averaged. Individual blocks vary significantly.
 - This model does not account for bandwidth costs of block propagation.
+- Computed under methodology v2.0.0 (research/model-spec.json). Param changes bump the version; ratio moves without param changes are fee-regime signal.
 
 ## Next Steps
 
