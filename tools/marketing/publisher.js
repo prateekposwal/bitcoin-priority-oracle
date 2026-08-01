@@ -230,9 +230,32 @@ function escapeXml(s) {
   return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&apos;');
 }
 
+function stripMarkdown(s) {
+  return String(s || '')
+    .replace(/^#{1,6}\s*/gm, '')
+    .replace(/\*\*|__|\*|_/g, '')
+    .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
+    .replace(/`/g, '')
+    .replace(/\s+/g, ' ').trim();
+}
+
+function firstWords(s, n) { var w = stripMarkdown(s).split(' ').filter(Boolean); return w.slice(0, n).join(' '); }
+
+function buildFeedTitle(topic, seq, preview) {
+  var t = (topic || 'BSAHI').trim();
+  t = t.charAt(0).toUpperCase() + t.slice(1);
+  var words = firstWords(preview, 6);
+  return words ? (t + ' #' + seq + ' — ' + words) : (t + ' #' + seq);
+}
+
 function generateRSSFeed() {
   var postLog = loadPostLog();
   var items = postLog.posts;
+
+  // Per-topic totals for descending sequence numbers (oldest = #1).
+  var totals = {};
+  items.forEach(function(p) { if (p && p.topic) totals[p.topic] = (totals[p.topic] || 0) + 1; });
+  var used = {};
 
   var rss = '<?xml version="1.0" encoding="UTF-8"?>\n';
   rss += '<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">\n';
@@ -251,8 +274,11 @@ function generateRSSFeed() {
     if (!p || !p.eventId || typeof p.eventId !== 'string' || !/^[0-9a-f]{64}$/.test(p.eventId)) continue;
     if (seen[p.eventId]) continue;
     seen[p.eventId] = true;
+    var topic = p.topic || 'BSAHI';
+    used[topic] = (used[topic] || 0) + 1;
+    var seq = totals[topic] - used[topic] + 1;
     rss += '  <item>\n';
-    rss += '    <title>' + escapeXml(p.topic || 'BSAHI') + '</title>\n';
+    rss += '    <title>' + escapeXml(buildFeedTitle(topic, seq, p.contentPreview)) + '</title>\n';
     rss += '    <link>https://snort.social/e/' + p.eventId + '</link>\n';
     rss += '    <description><![CDATA[' + (p.contentPreview || '') + ']]></description>\n';
     rss += '    <pubDate>' + new Date(p.postedAt).toUTCString() + '</pubDate>\n';
@@ -355,4 +381,4 @@ if (require.main === module) {
   })().catch(function(e) { console.error(e); process.exit(1); });
 }
 
-module.exports = { runCycle: runCycle, runFullCycle: runFullCycle, getStats: getStats, generateRSSFeed: generateRSSFeed, generateReport: generateReport };
+module.exports = { runCycle: runCycle, runFullCycle: runFullCycle, getStats: getStats, generateRSSFeed: generateRSSFeed, generateReport: generateReport, buildFeedTitle: buildFeedTitle };

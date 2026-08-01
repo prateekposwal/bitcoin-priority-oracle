@@ -1,0 +1,21 @@
+{
+  "ci": {
+    "collect": {
+      "url": [
+        "https://bitcoinsahi.com/",
+        "https://bitcoinsahi.com/live",
+        "https://bitcoinsahi.com/learn",
+        "https://bitcoinsahi.com/capacity",
+        "https://bitcoinsahi.com/fork-tracker"
+      ],
+      "numberOfRuns": 1,
+      "settings": {
+        "chromeFlags": "--no-sandbox --headless=new",
+        "throttlingMethod": "provided",
+        "formFactor": "desktop"
+      }
+    },
+    "assert": { "assertions": {} },
+    "upload": { "target": "filesystem", "outputDir": "lighthouseci" }
+  }
+}

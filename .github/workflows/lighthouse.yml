@@ -1,0 +1,31 @@
+name: Lighthouse Audit (soft, report-only)
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 5 * * 1'   # Mondays 05:00 UTC
+
+permissions:
+  contents: write
+
+jobs:
+  lighthouse:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install LHCI
+        run: npm install -g @lhci/cli@0.14.0
+      - name: Run Lighthouse on the 5 pages
+        run: npx lhci autorun
+      - name: Commit weekly report (never blocks)
+        continue-on-error: true
+        run: |
+          git config user.name "bsahi-lighthouse-bot"
+          git config user.email "lighthouse@bitcoinsahi.com"
+          git add lighthouseci/
+          git diff --cached --quiet || git commit -m "chore(lighthouse): weekly audit $(date -u '+%Y-%m-%d')"
+          git pull --rebase origin main || true
+          git push

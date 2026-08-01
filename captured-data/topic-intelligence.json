@@ -1,15 +1,15 @@
 {
-  "generated_at": "2026-08-01T12:50:26.680Z",
+  "generated_at": "2026-08-01T16:14:36.568Z",
   "fee_market": {
-    "trend_7d": "falling",
-    "latest": 3,
-    "samples": 340
+    "trend_7d": "flat",
+    "latest": 4,
+    "samples": 343
   },
   "topics": {
     "fees": {
       "score": 3.9,
       "weight": 0.2899824919319539,
-      "trend_7d": "falling",
+      "trend_7d": "flat",
       "best_platform": "nostr",
       "cadence_per_day": 2
     },

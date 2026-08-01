@@ -3,17 +3,25 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Live fee, mempool, and block data to decide when to send on Bitcoin.">
+  <meta name="description" content="Live Bitcoin fee rates, mempool depth, and block data. Check sat/vB fees, congestion, and block production in real time — decide when to send on Bitcoin.">
   <meta property="og:title" content="Bitcoin Sahi — Decision Center">
-  <meta property="og:description" content="Live fee, mempool, and block data to decide when to send on Bitcoin.">
+  <meta property="og:description" content="Live Bitcoin fee rates, mempool depth, and block data. Check sat/vB fees, congestion, and block production in real time — decide when to send on Bitcoin.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://bitcoinsahi.com/live">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Bitcoin Sahi — Decision Center">
-  <meta name="twitter:description" content="Live fee, mempool, and block data to decide when to send on Bitcoin.">
+  <meta name="twitter:description" content="Live Bitcoin fee rates, mempool depth, and block data. Check sat/vB fees, congestion, and block production in real time — decide when to send on Bitcoin.">
   <meta name="theme-color" content="#1A1612">
   <link rel="canonical" href="https://bitcoinsahi.com/live">
-<title>Bitcoin Sahi — Decision Center</title>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://bitcoinsahi.com/"},{"@type":"ListItem","position":2,"name":"Live Bitcoin Fees &amp; Mempool Data","item":"https://bitcoinsahi.com/live"}]}
+  </script>
+  <meta property="og:image" content="https://bitcoinsahi.com/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Bitcoin block space, live — bitcoinsahi.com">
+  <meta name="twitter:image" content="https://bitcoinsahi.com/og-image.png">
+<title>Live Bitcoin Fees &amp; Mempool Data — Bitcoin Sahi</title>
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 html{font-size:16px}
@@ -27,6 +35,8 @@ body{background:#1A1612;color:#EADCC8;font-family:-apple-system,BlinkMacSystemFo
 .tab-btn.active{color:#D4933A;border-color:#D4933A;background:rgba(212,147,58,.12)}
 
 .content { max-width: 1600px; margin: 0 auto; padding: 32px 40px 80px; }
+.page-h1 { font-size: 1.6rem; font-weight: 700; color: #EADCC8; margin: 0 0 8px; letter-spacing: -0.01em; }
+.page-intro { font-size: .95rem; color: #9B8B78; margin-bottom: 20px; max-width: 720px; line-height: 1.6; }
 .tab-panel { display: none; }
 .tab-panel.active { display: block; }
 
@@ -170,12 +180,15 @@ body{background:#1A1612;color:#EADCC8;font-family:-apple-system,BlinkMacSystemFo
   <a href="/fork-tracker" style="padding:10px 20px;border-radius:10px;font-size:15px;font-weight:500;color:#888;background:transparent;border:1px solid transparent;cursor:pointer;white-space:nowrap;transition:all 0.2s;text-decoration:none;margin-left:auto;">Fork</a>
 </div>
 
-<div class="content">
+ <div class="content">
+
+ <h1 class="page-h1">Live Bitcoin Fees &amp; Mempool Data</h1>
+ <p class="page-intro">Real-time Bitcoin fee rates, mempool depth, and block data from mempool.space and the BSAHI research engine — decide when to send, open channels, batch withdrawals, or run a node.</p>
 
 <!-- SEND -->
 <div class="tab-panel active" id="panel-send">
   <div class="dc">
-    <div class="dc-q">Should I send now?</div>
+    <h2 class="dc-q">Should I send now?</h2>
     <div class="dc-a" id="send-verdict">Checking...</div>
     <div class="dc-sub">Based on current network conditions</div>
   </div>
@@ -206,7 +219,7 @@ body{background:#1A1612;color:#EADCC8;font-family:-apple-system,BlinkMacSystemFo
 <!-- LIGHTNING -->
 <div class="tab-panel" id="panel-lightning">
   <div class="dc">
-    <div class="dc-q">Should I open channels today?</div>
+    <h2 class="dc-q">Should I open channels today?</h2>
     <div class="dc-a" id="ln-verdict">Checking...</div>
     <div class="dc-sub" id="ln-cost">Estimating channel cost...</div>
   </div>
@@ -236,7 +249,7 @@ body{background:#1A1612;color:#EADCC8;font-family:-apple-system,BlinkMacSystemFo
 <!-- EXCHANGE -->
 <div class="tab-panel" id="panel-exchange">
   <div class="dc">
-    <div class="dc-q">Should I batch withdrawals?</div>
+    <h2 class="dc-q">Should I batch withdrawals?</h2>
     <div class="dc-a" id="ex-verdict">Checking...</div>
     <div class="dc-sub" id="ex-saving">Estimating batch savings...</div>
   </div>
@@ -266,7 +279,7 @@ body{background:#1A1612;color:#EADCC8;font-family:-apple-system,BlinkMacSystemFo
 <!-- NODE -->
 <div class="tab-panel" id="panel-node">
   <div class="dc">
-    <div class="dc-q">Your node at a glance</div>
+    <h2 class="dc-q">Your node at a glance</h2>
     <div class="dc-a orange" id="node-cost">$924</div>
     <div class="dc-sub">Estimated annual cost to run a full node</div>
   </div>
@@ -296,7 +309,7 @@ body{background:#1A1612;color:#EADCC8;font-family:-apple-system,BlinkMacSystemFo
 <!-- MINER -->
 <div class="tab-panel" id="panel-miner">
   <div class="dc">
-    <div class="dc-q">Block reward breakdown</div>
+    <h2 class="dc-q">Block reward breakdown</h2>
     <div class="dc-a orange" id="miner-reward">Checking...</div>
     <div class="dc-sub">Subsidy + fees for the latest block</div>
   </div>
@@ -332,7 +345,7 @@ body{background:#1A1612;color:#EADCC8;font-family:-apple-system,BlinkMacSystemFo
 <!-- RESEARCH -->
 <div class="tab-panel" id="panel-research">
   <div class="dc">
-    <div class="dc-q">Latest data</div>
+    <h2 class="dc-q">Latest data</h2>
     <div class="dc-sub" style="margin-bottom:12px;">Fee history, model outputs, and datasets</div>
     <button id="csv-download-btn" style="display:block;width:100%;padding:10px;background:#2A2622;border:1px solid transparent;border-radius:8px;color:#F7931A;font-size:14px;font-weight:600;cursor:pointer;transition:all 0.2s;font-family:inherit;margin-bottom:8px;text-align:center;">⬇ Download Fee History CSV</button>
     <div id="data-freshness" style="font-size:10px;color:rgba(255,255,255,0.25);text-align:center;margin-top:4px;">Data refreshes every 60s from mempool.space</div>
@@ -374,7 +387,7 @@ body{background:#1A1612;color:#EADCC8;font-family:-apple-system,BlinkMacSystemFo
 <!-- DEVELOPER -->
 <div class="tab-panel" id="panel-developer">
   <div class="dc">
-    <div class="dc-q">Bitcoin Network Data</div>
+    <h2 class="dc-q">Bitcoin Network Data</h2>
     <div class="dc-a green" id="dev-verdict">All systems operational</div>
     <div class="dc-sub">13+ data sources · 4 featured below · Updated every 60s · <span id="dev-uptime">99.9%</span> uptime · <a href="mailto:prateek@block-space-economics.com" style="color:#D4933A;text-decoration:none;font-weight:500;">Need more? →</a></div>
   </div>
@@ -1022,6 +1035,9 @@ var lastFastestFee = 0;
     };
   }
 })();
+</script>
+<script>
+if ('serviceWorker' in navigator) { navigator.serviceWorker.register('/sw.js').catch(function(){}); }
 </script>
 </body>
 </html>

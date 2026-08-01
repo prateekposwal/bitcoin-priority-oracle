@@ -5,6 +5,13 @@
   <url><loc>https://bitcoinsahi.com/capacity</loc><lastmod>2026-08-01</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
   <url><loc>https://bitcoinsahi.com/learn</loc><lastmod>2026-08-01</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
   <url><loc>https://bitcoinsahi.com/fork-tracker</loc><lastmod>2026-08-01</lastmod><changefreq>daily</changefreq><priority>0.6</priority></url>
+  <url><loc>https://bitcoinsahi.com/research/</loc><lastmod>2026-08-01</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://bitcoinsahi.com/research/bip141_analysis.html</loc><lastmod>2026-08-01</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://bitcoinsahi.com/research/data_platform_guide.html</loc><lastmod>2026-08-01</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://bitcoinsahi.com/research/problem_statement.html</loc><lastmod>2026-08-01</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://bitcoinsahi.com/research/pruning_externality_analysis.html</loc><lastmod>2026-08-01</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://bitcoinsahi.com/research/utxo_cost_note.html</loc><lastmod>2026-08-01</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://bitcoinsahi.com/research/verification_appendix.html</loc><lastmod>2026-08-01</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://bitcoinsahi.com/feed.xml</loc><lastmod>2026-08-01</lastmod><changefreq>hourly</changefreq><priority>0.4</priority></url>
   <url><loc>https://bitcoinsahi.com/api/v1/</loc><changefreq>daily</changefreq><priority>0.3</priority></url>
   <url><loc>https://bitcoinsahi.com/data/snapshot.json</loc><lastmod>2026-08-01T12:52:28Z</lastmod><changefreq>hourly</changefreq><priority>0.3</priority></url>

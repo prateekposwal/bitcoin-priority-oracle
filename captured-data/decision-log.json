@@ -313,6 +313,40 @@
         "bridgeFlipped": false,
         "forecastModel": "holt-linear-trend"
       }
+    },
+    {
+      "ts": "2026-08-01T14:01:27.644Z",
+      "cycle": 44,
+      "source": "de-agent",
+      "decisions": [
+        "M4 gate: cleanCycles=0/7"
+      ],
+      "issues": [
+        "1 endpoints unhealthy"
+      ],
+      "metrics": {
+        "quality": "healthy",
+        "m4CleanCycles": 0,
+        "bridgeFlipped": false,
+        "forecastModel": "holt-linear-trend"
+      }
+    },
+    {
+      "ts": "2026-08-01T16:15:05.274Z",
+      "cycle": 46,
+      "source": "de-agent",
+      "decisions": [
+        "M4 gate: cleanCycles=1/7"
+      ],
+      "issues": [
+        "6 endpoints unhealthy"
+      ],
+      "metrics": {
+        "quality": "healthy",
+        "m4CleanCycles": 1,
+        "bridgeFlipped": false,
+        "forecastModel": "holt-linear-trend"
+      }
     }
   ]
 }

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-01T12:51:41.660Z",
+  "generated_at": "2026-08-01T16:22:00.804Z",
   "host": "bitcoinsahi.com",
   "status": "HEALTHY",
   "checks": [
@@ -7,31 +7,31 @@
       "route": "/",
       "expected": 200,
       "status": 200,
-      "ttfbMs": 3395,
-      "bytes": 19500,
+      "ttfbMs": 4863,
+      "bytes": 19854,
       "ok": true
     },
     {
       "route": "/live",
       "expected": 200,
       "status": 200,
-      "ttfbMs": 1016,
-      "bytes": 58930,
+      "ttfbMs": 3967,
+      "bytes": 59099,
       "ok": true
     },
     {
       "route": "/capacity",
       "expected": 200,
       "status": 200,
-      "ttfbMs": 1530,
-      "bytes": 30135,
+      "ttfbMs": 3987,
+      "bytes": 30500,
       "ok": true
     },
     {
       "route": "/learn",
       "expected": 200,
       "status": 200,
-      "ttfbMs": 911,
+      "ttfbMs": 3987,
       "bytes": 43788,
       "ok": true
     },
@@ -39,31 +39,31 @@
       "route": "/fork-tracker",
       "expected": 200,
       "status": 200,
-      "ttfbMs": 1557,
-      "bytes": 33053,
+      "ttfbMs": 3983,
+      "bytes": 33357,
       "ok": true
     },
     {
       "route": "/feed.xml",
       "expected": 200,
       "status": 200,
-      "ttfbMs": 933,
-      "bytes": 8249,
+      "ttfbMs": 4041,
+      "bytes": 13812,
       "ok": true
     },
     {
       "route": "/data/snapshot.json",
       "expected": 200,
       "status": 200,
-      "ttfbMs": 803,
-      "bytes": 21921,
+      "ttfbMs": 3952,
+      "bytes": 428,
       "ok": true
     },
     {
       "route": "/api/v1/",
       "expected": 200,
       "status": 200,
-      "ttfbMs": 1473,
+      "ttfbMs": 3979,
       "bytes": 3863,
       "ok": true
     },
@@ -71,7 +71,7 @@
       "route": "/robots.txt",
       "expected": 200,
       "status": 200,
-      "ttfbMs": 1418,
+      "ttfbMs": 3949,
       "bytes": 68,
       "ok": true
     },
@@ -79,8 +79,8 @@
       "route": "/sitemap.xml",
       "expected": 200,
       "status": 200,
-      "ttfbMs": 1369,
-      "bytes": 1001,
+      "ttfbMs": 4036,
+      "bytes": 1214,
       "ok": true
     }
   ],

@@ -1257,3 +1257,6 @@ Call log:
 [DE Agent 2026-08-01 12:54:52] Alert dispatcher: forecast + alerts + index self-heal
 [DE Agent 2026-08-01 12:54:52] Cycle 43 complete in 305s
 [DE Agent 2026-08-01 12:54:52] ISSUES: 8 endpoints unhealthy
+[2026-08-01 14:01:52] [alert-dispatcher] cycle complete
+[2026-08-01 15:37:02] [alert-dispatcher] cycle complete
+[2026-08-01 16:15:22] [alert-dispatcher] cycle complete

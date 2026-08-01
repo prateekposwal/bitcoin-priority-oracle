@@ -7,7 +7,7 @@ var fs = require('fs');
 
 var REPO = path.resolve(__dirname, '..', '..');
 var OUT = path.join(REPO, 'reports', 'a11y', 'audit-' + new Date().toISOString().slice(0, 10) + '.md');
-var TARGETS = ['index.html', 'live.html', 'learn.html', 'capacity.html', 'fork-tracker.html', 'tools/viz-core.js', 'tools/viz-developer.js', 'tools/data-engine.js'];
+var TARGETS = ['index.html', 'live.html', 'learn.html', 'capacity.html', 'fork-tracker.html', 'tools/viz-core.js', 'tools/viz-developer.js'];
 
 function run() {
   var issues = [];
