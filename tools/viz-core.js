@@ -1,6 +1,7 @@
 var VIZ = (function() {
   var anims = {};
   var _drawFns = {};  // module-local registry — never self-reference VIZ inside the IIFE
+  var REDUCED = (typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
 
   function create(id, opts) {
     opts = opts || {};
@@ -15,6 +16,13 @@ var VIZ = (function() {
   function start(id, drawFn, interval) {
     interval = interval || 50;
     _drawFns[id] = { fn: drawFn, interval: interval };
+    if (REDUCED) { // render one static frame, don't loop
+      try {
+        var el = document.getElementById(id);
+        if (el) drawFn(el.getContext('2d'), el.width, el.height, Date.now() / 1000);
+      } catch (e) {}
+      return;
+    }
     if (anims[id]) clearInterval(anims[id]);
     anims[id] = setInterval(function() {
       var el = document.getElementById(id);
@@ -81,6 +89,14 @@ var VIZ = (function() {
 
   function register(id, fn, interval) {
     _drawFns[id] = { fn: fn, interval: interval || 50 };
+  }
+
+  // Auto-pause all canvas loops when the tab is hidden (performance + battery).
+  if (typeof document !== 'undefined') {
+    document.addEventListener('visibilitychange', function() {
+      if (document.hidden) pauseAll();
+      else if (!REDUCED) resumeAll();
+    });
   }
 
   return { create: create, start: start, responsiveSize: responsiveSize, feeColor: feeColor, roundRect: roundRect, pauseAll: pauseAll, resumeAll: resumeAll, register: register };

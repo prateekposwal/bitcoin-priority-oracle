@@ -1,60 +1,23 @@
-# ⬡ BSAHI — Platform Distribution Report
+# Distribution Report
 
-## Active Platforms (Posting Now)
+_Generated 2026-08-01T12:59:57.020Z from captured-data/post-log.json (single source of truth)._
 
-| Platform | Type | Link | Status |
-|----------|------|------|--------|
-| **Nostr** | Decentralized social | [Snort Profile](https://snort.social/p/44744d037e50a4f3bc6b44b9ca7c5a3f52e68b0f70789696ccb7e28e274d2d61) | ✅ 13 posts, 6 relays |
-| **BSAHI Website** | Research hub | [bitcoinsahi.com](https://bitcoinsahi.com) | ✅ RSS + feed |
-| **GitHub** | Code + research | [block-space-economics](https://github.com/prateekposwal/block-space-economics) | ✅ Repo + issues |
+## Totals
+- **36 posts** across 4 platforms
 
-## Bridge-Ready Platforms (Session Needed)
+## By platform
+- linkedin: 1
+- medium: 2
+- nostr: 31
+- reddit: 2
 
-| Platform | Link | How to Activate |
-|----------|------|----------------|
-| **Twitter/X** | [x.com](https://x.com) | Open Chrome → log into Twitter once → bridge posts automatically |
-| **Reddit** | [reddit.com](https://reddit.com/r/Bitcoin) | Open Chrome → log into Reddit once → bridge posts automatically |
-| **Medium** | [medium.com](https://medium.com) | Open Chrome → log into Medium once → bridge posts automatically |
+## By researcher persona
+- Hal Finney Jr: 1
+- Lisa Nakamoto: 1
+- Nick Szabo Jr: 1
+- Satoshi Block: 1
+- Wei Dai III: 1
+- (unattributed/legacy): 31
 
-## Community-Supported Platforms
-
-| Platform | Link | How It Works |
-|----------|------|-------------|
-| **Stacker News** | [stacker.news](https://stacker.news) | Nostr-based — community relays BSAHI content |
-| **Relay Nodes** | — | Anyone runs `node relay-node.js` to bridge to their accounts |
-
-## Potential Platforms (Need Research)
-
-| Platform | Link | Notes |
-|----------|------|-------|
-| **BitcoinTalk** | [bitcointalk.org](https://bitcointalk.org) | OG Bitcoin forum — needs account + 10 posts |
-| **Hacker News** | [news.ycombinator.com](https://news.ycombinator.com) | Tech audience — needs account |
-| **Bitcoin Stack Exchange** | [bitcoin.stackexchange.com](https://bitcoin.stackexchange.com) | Q&A — needs 125 reputation to post |
-| **Bitcoin Magazine** | [bitcoinmagazine.com](https://bitcoinmagazine.com) | Publication — accepts contributions |
-| **Hashnode** | [hashnode.com](https://hashnode.com) | Dev blogging — can cross-post |
-| **Dev.to** | [dev.to](https://dev.to) | Dev community — Bitcoin content welcome |
-
-## Post by Platform
-
-```
-Nostr       → ✅ 13 posts (6/6 relays each)
-Website     → ✅ RSS + team dashboard
-GitHub      → ✅ Research papers + source code
-Stacker News → ⏳ Available via Nostr key
-Twitter/X   → ⏳ Bridge ready (needs session)
-Reddit      → ⏳ Bridge ready (needs session)
-Medium      → ⏳ Bridge ready (needs session)
-```
-
-## All Links
-
-- **Nostr Profile:** https://snort.social/p/44744d037e50a4f3bc6b44b9ca7c5a3f52e68b0f70789696ccb7e28e274d2d61
-- **NIP-05:** `_@bitcoinsahi.com`
-- **Website:** https://bitcoinsahi.com
-- **GitHub:** https://github.com/prateekposwal/block-space-economics
-- **RSS Feed:** https://bitcoinsahi.com/feed.xml
-- **Team Dashboard:** https://bitcoinsahi.com/team.html
-
----
-
-*BSAHI Autonomous Distribution — reports/marketing/distribution-report.md*
+## Nostr identity
+- NIP-05: `_@bitcoinsahi.com` → `44744d037e50a4f3bc6b44b9ca7c5a3f52e68b0f70789696ccb7e28e274d2d61`

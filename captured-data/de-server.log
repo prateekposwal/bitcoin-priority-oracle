@@ -1208,3 +1208,52 @@ Digest saved to /Users/prateekposwal/Desktop/block-space-economics/reports/diges
 [DE Agent 2026-08-01 11:51:11] Alert dispatcher: forecast + alerts + index self-heal
 [DE Agent 2026-08-01 11:51:11] Cycle 42 complete in 85s
 [DE Agent 2026-08-01 11:51:11] ISSUES: 1 endpoints unhealthy
+[DE Agent 2026-08-01 12:49:46] Cycle 43 started
+[DE Agent 2026-08-01 12:49:46] Checking 13 endpoints...
+[DE Agent 2026-08-01 12:49:55] Endpoints: 5/13 healthy, 8 unhealthy
+[DE Agent 2026-08-01 12:49:57] Freshness checked
+[DE Agent 2026-08-01 12:49:58] Spool: scanned=200 new=1 ingested=1 validated=13 violated=0 failed=0
+[DE Agent 2026-08-01 12:50:04] Capture-agent: cycle=2026-08-01_18-19-58 captured=13 skipped=0 violated=0 errored=0
+[DE Agent 2026-08-01 12:50:18] Bitcoin Core: 593079 blocks, 3 fee stats, 8 peers
+[DE Agent 2026-08-01 12:50:18]   Fee percentiles (p10/p25/p50/p75/p90): 0.0/0.0/0.0/0.0/0.1 sat/vB
+[tracker] Saved: /Users/prateekposwal/Desktop/block-space-economics/captured-data/tracker/2026-08-01/2026-08-01_12-50-23.json
+[DE Agent 2026-08-01 12:50:24] Block intervals: 654.33s avg
+[DE Agent 2026-08-01 12:50:25] Derived metrics: computed + enqueued
+[DE Agent 2026-08-01 12:50:26] Research content pipeline: briefs generated
+[DE Agent 2026-08-01 12:50:26] Topic intelligence: refreshed
+[DE Agent 2026-08-01 12:50:42] Data quality score: 66/100
+[DE Agent 2026-08-01 12:50:43] Generating reports...
+[DE Agent 2026-08-01 12:51:15] Reports saved
+[DE Agent 2026-08-01 12:51:16] Session handoff appended to AGENTS.md
+[DE Agent 2026-08-01 12:51:16] Research report + publishing queue generated
+[2026-08-01 12:51:17] [BSAHI Publisher] === Full publishing cycle (Nostr + Browser) ===
+[2026-08-01 12:51:17] [BSAHI Publisher] === Publishing cycle ===
+[2026-08-01 12:51:17] [BSAHI Publisher] SKIP (platform reddit not nostr — belongs to its own stack): BSAHI-MSAB8KEB-VPTU
+[2026-08-01 12:51:17] [Publisher] Skipped BSAHI-MSAB8KEB-VPTU: platform:reddit
+[2026-08-01 12:51:17] [BSAHI Publisher] 0 posted
+[2026-08-01 12:51:17] [BSAHI Publisher] RSS: /Users/prateekposwal/Desktop/block-space-economics/docs/feed.xml
+[2026-08-01 12:51:17] [BSAHI Publisher] === Cycle complete ===
+[2026-08-01 12:51:17] [BSAHI Browser Publisher] === Browser publishing cycle ===
+[2026-08-01 12:51:17] [BSAHI Browser Publisher] Queue empty — generating
+[2026-08-01 12:51:21] [Queue] Generated 1 posts for 2026-08-01
+[2026-08-01 12:51:21] [BSAHI Browser Publisher] Launching Chrome...
+[2026-08-01 12:54:25] [BSAHI Publisher] Browser error: browserType.launchPersistentContext: Timeout 180000ms exceeded.
+Call log:
+  - <launching> /Applications/Google Chrome.app/Contents/MacOS/Google Chrome --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-edgeupdater --disable-extensions --disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,BoundaryEventDispatchTracksNodeRemoval,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,BlockOriginHeaderModificationOnRedirect,Translate,AutoDeElevate,OptimizationHints,msForceBrowserSignIn,msEdgeUpdateLaunchServicesPreferredVersion --enable-features=CDPScreenshotNewSurface --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --disable-updater-scheduler --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --disable-infobars --disable-search-engine-choice-screen --disable-sync --enable-unsafe-swiftshader --no-sandbox --no-sandbox --window-size=1280,800 --user-data-dir=/Users/prateekposwal/Library/Application Support/Google/Chrome/Default --remote-debugging-pipe about:blank
+  - <launched> pid=99996
+  - [pid=99996][err] [99996:23288665:0801/182315.993110:ERROR:content/browser/network_service_instance_impl.cc:721] Network service crashed or was terminated, restarting service.
+  - [pid=99996][err] Trying to load the allocator multiple times. This is *not* supported.
+  - [pid=99996][err] [99996:23290075:0801/182322.774721:ERROR:google_apis/gcm/engine/registration_request.cc:291] Registration response error message: DEPRECATED_ENDPOINT
+  - [pid=99996][err] [99996:23290075:0801/182356.504456:ERROR:google_apis/gcm/engine/registration_request.cc:291] Registration response error message: DEPRECATED_ENDPOINT
+
+[2026-08-01 12:54:25] [BSAHI Publisher] RSS: /Users/prateekposwal/Desktop/block-space-economics/docs/feed.xml
+[2026-08-01 12:54:25] [BSAHI Publisher] === Full cycle complete ===
+[DE Agent 2026-08-01 12:54:25] Publisher: 2 posts in 188s
+[2026-08-01 12:54:25] [BSAHI Publisher] RSS: /Users/prateekposwal/Desktop/block-space-economics/docs/feed.xml
+[DE Agent 2026-08-01 12:54:38] Consumer: drained spool into SQLite
+[DE Agent 2026-08-01 12:54:39] M4 gate: cleanCycles=0/7 (bridge=on, quality=66, coreStale=[])
+[2026-08-01 12:54:51] [alert-dispatcher] cycle complete
+[2026-08-01 12:54:51] [alert-dispatcher] cycle complete
+[DE Agent 2026-08-01 12:54:52] Alert dispatcher: forecast + alerts + index self-heal
+[DE Agent 2026-08-01 12:54:52] Cycle 43 complete in 305s
+[DE Agent 2026-08-01 12:54:52] ISSUES: 8 endpoints unhealthy

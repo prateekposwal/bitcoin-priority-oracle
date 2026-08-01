@@ -41,3 +41,23 @@ captured-data/spool/schema-violations.log
 captured-data/spool/cursors/
 captured-data/spool/index/
 captured-data/spool/tmp/
+
+# Runtime state written by 24/7 launchd agents — live local state, not artifacts
+captured-data/engagement.log
+captured-data/ops-health.json
+captured-data/ops-health.log
+captured-data/ops-health.out.log
+captured-data/ops-health.err.log
+captured-data/site-health.json
+captured-data/site-health.log
+captured-data/site-health.out.log
+captured-data/site-health.err.log
+captured-data/snapshot.out.log
+captured-data/snapshot.err.log
+captured-data/orchestrator-heartbeat.json
+captured-data/orchestrator.log
+captured-data/orchestrator.err.log
+captured-data/orchestrator.pid
+captured-data/alert-dispatcher-state.json
+captured-data/web-snapshot-state.json
+captured-data/report-agent-state.json

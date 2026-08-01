@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-08-01T11:50:52.148Z",
-  "total": 46,
+  "generated_at": "2026-08-01T12:51:16.647Z",
+  "total": 48,
   "items": [
     {
       "id": "BSAHI-MS82C9EW-N2YK",
@@ -451,6 +451,24 @@
       "status": "skipped",
       "scheduledFor": "2026-08-01",
       "content": "## The Physical Bitcoin\n\nBitcoin isn't just code. It's **150,000 blocks**, **17190 Lightning nodes**"
+    },
+    {
+      "id": "ops-BSAHI-MSAB8KAU-6N1F",
+      "source": "ops-center",
+      "platform": "reddit",
+      "topic": "network",
+      "status": "skipped",
+      "scheduledFor": "2026-08-01",
+      "content": "## The Physical Bitcoin\n\nBitcoin isn't just code. It's **150,000 blocks**, **17189 Lightning nodes**"
+    },
+    {
+      "id": "ops-BSAHI-MSAB8KEB-VPTU",
+      "source": "ops-center",
+      "platform": "reddit",
+      "topic": "network",
+      "status": "queued",
+      "scheduledFor": "2026-08-01",
+      "content": "## The Physical Bitcoin\n\nBitcoin isn't just code. It's **150,000 blocks**, **17189 Lightning nodes**"
     }
   ]
 }

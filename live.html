@@ -376,7 +376,7 @@ body{background:#1A1612;color:#EADCC8;font-family:-apple-system,BlinkMacSystemFo
   <div class="dc">
     <div class="dc-q">Bitcoin Network Data</div>
     <div class="dc-a green" id="dev-verdict">All systems operational</div>
-    <div class="dc-sub">13 data sources · 4 featured below · Updated every 60s · <span id="dev-uptime">99.9%</span> uptime · <a href="mailto:prateek@block-space-economics.com" style="color:#D4933A;text-decoration:none;font-weight:500;">Need more? →</a></div>
+    <div class="dc-sub">13+ data sources · 4 featured below · Updated every 60s · <span id="dev-uptime">99.9%</span> uptime · <a href="mailto:prateek@block-space-economics.com" style="color:#D4933A;text-decoration:none;font-weight:500;">Need more? →</a></div>
   </div>
   <div class="viz-section">
     <div class="viz-section-title" style="display:flex;align-items:center;justify-content:space-between;">
@@ -412,15 +412,15 @@ body{background:#1A1612;color:#EADCC8;font-family:-apple-system,BlinkMacSystemFo
   </div>
 </div>
 
-<script src="tools/data-engine.js"></script>
-<script src="tools/viz-core.js"></script>
-<script src="tools/viz-send.js"></script>
-<script src="tools/viz-lightning.js"></script>
-<script src="tools/viz-exchange.js"></script>
-<script src="tools/viz-node.js"></script>
-<script src="tools/viz-miner.js"></script>
-<script src="tools/viz-research.js"></script>
-<script src="tools/viz-developer.js"></script>
+<script defer src="tools/data-engine.js"></script>
+<script defer src="tools/viz-core.js"></script>
+<script defer src="tools/viz-send.js"></script>
+<script defer src="tools/viz-lightning.js"></script>
+<script defer src="tools/viz-exchange.js"></script>
+<script defer src="tools/viz-node.js"></script>
+<script defer src="tools/viz-miner.js"></script>
+<script defer src="tools/viz-research.js"></script>
+<script defer src="tools/viz-developer.js"></script>
  <script>
 // BSAHI snapshot tier: enrich the page with forecast/alerts/curated data.
 // Graceful degradation — if snapshot missing/stale, mempool.space path is unaffected.
@@ -535,6 +535,7 @@ document.getElementById('csv-download-btn').addEventListener('click', function()
   }
 });
 
+function bootLive() {
 if (typeof DATA_ENGINE !== 'undefined') {
   DATA_ENGINE.start();
 }
@@ -845,7 +846,7 @@ if (typeof DATA_ENGINE !== 'undefined') {
   // Developer brief
   var briefDev = document.getElementById('brief-developer-text');
   if (briefDev) {
-    briefDev.innerHTML = 'All <strong>13</strong> data sources operational · Avg latency: <strong>' + latencyTracker.lastLatency + 'ms</strong> · Last update: <strong>' + (d.last_updated ? new Date(d.last_updated).toLocaleTimeString() : '--') + '</strong> · <span class="tag tag-green">100% uptime</span>';
+    briefDev.innerHTML = 'All data sources operational · Avg latency: <strong>' + latencyTracker.lastLatency + 'ms</strong> · Last update: <strong>' + (d.last_updated ? new Date(d.last_updated).toLocaleTimeString() : '--') + '</strong> · <span class="tag tag-green">100% uptime</span>';
   }
 
   // --- Streaming Metrics Ticker ---
@@ -883,6 +884,10 @@ if (typeof DATA_ENGINE !== 'undefined') {
   } catch (e) {}
 });
 }
+}
+
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bootLive);
+else bootLive();
 
 // WebSocket for instant updates
 var feeFlashActive = 0;

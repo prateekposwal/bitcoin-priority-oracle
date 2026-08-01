@@ -73,11 +73,16 @@ function run() {
 
   fs.writeFileSync(STATE_FILE, JSON.stringify({ lastRun: new Date().toISOString(), historyPoints: history.length, posts: snapshot.totalPosts }, null, 2));
 
-  // Optional auto-commit
+  // Optional auto-commit — BLOCKING execSync so process.exit(0) cannot kill the child.
   if (process.argv.indexOf('--commit') !== -1) {
-    exec('git add data/ && git diff --cached --quiet || (git commit -m "chore: public snapshot ' + new Date().toISOString().slice(0, 16) + '" && git push)', { cwd: REPO, timeout: 60000 }, function(err) {
-      if (err) console.error('snapshot commit failed:', err.message);
-    });
+    try {
+      require('child_process').execSync(
+        'git add data/ && git diff --cached --quiet || (git -c user.name="bsahi-snapshot-bot" -c user.email="snapshot@bitcoinsahi.com" commit -m "chore: public snapshot ' + new Date().toISOString().slice(0, 16) + '" && git pull --rebase origin main && git push)',
+        { cwd: REPO, timeout: 90000, stdio: 'inherit' }
+      );
+    } catch (e) {
+      console.error('snapshot commit failed:', e.message);
+    }
   }
   if (require.main === module) console.log('web-snapshot: ' + history.length + ' history pts, ' + snapshot.totalPosts + ' posts');
   return snapshot;

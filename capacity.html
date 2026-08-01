@@ -449,7 +449,7 @@ function drawSettlement() {
   setCtx.textAlign = 'center';
   setCtx.fillText('⚡ ' + (fees.fastestFee || '--') + ' sat/vB fastest · ~' + ((d && d.mempool ? Math.round((d.mempool.count||0) / 600 * 60 * 60) : 0)).toLocaleString() + ' tx/hour', w / 2, h - 44);
 
-  requestAnimationFrame(drawSettlement);
+  settleRaf = requestAnimationFrame(drawSettlement);
 }
 
 function roundRect(ctx, x, y, w, h, r) {
@@ -618,7 +618,19 @@ window.addEventListener('resize', resizeSet);
         if (feeFlashActive === 0) setTimeout(function() { el.style.boxShadow = ''; el.style.transition = ''; }, 150);
       });
     }
+    flashRaf = requestAnimationFrame(flashLoop);
+var settleRaf = null;
+var flashRaf = null;
+document.addEventListener('visibilitychange', function() {
+  if (document.hidden) {
+    if (settleRaf) cancelAnimationFrame(settleRaf);
+    if (flashRaf) cancelAnimationFrame(flashRaf);
+  } else {
+    settleRaf = requestAnimationFrame(drawSettlement);
     requestAnimationFrame(flashLoop);
+  }
+});
+
   })();
 })();
 </script>

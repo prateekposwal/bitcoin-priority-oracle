@@ -706,6 +706,17 @@ if (fetchTimer) clearInterval(fetchTimer);
 fetchTimer = setInterval(fetchData, FETCH_INTERVAL);
 }
 
+// Pause polling when the tab is hidden (battery/network courtesy).
+document.addEventListener('visibilitychange', function() {
+  if (document.hidden) {
+    if (updateTimer) clearInterval(updateTimer);
+    if (fetchTimer) clearInterval(fetchTimer);
+  } else {
+    startTimers();
+    fetchData();
+  }
+});
+
 function init() {
 fetchData();
 startTimers();

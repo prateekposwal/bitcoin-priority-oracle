@@ -1,4 +1,6 @@
 var VIZ_Developer = (function() {
+  var REDUCED_MOTION = (typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+
   var DATA_SOURCES = [
     { key: 'fees', name: 'Recommended Fees', url: 'https://mempool.space/api/v1/fees/recommended', method: 'GET',
       purpose: 'Determines transaction cost, channel open cost, and withdrawal batching',

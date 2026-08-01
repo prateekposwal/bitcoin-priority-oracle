@@ -113,6 +113,21 @@
     <p>An autonomous research engine measuring Bitcoin's fee market, mempool, and block space in real time. Live data from the Bitcoin network, published openly.</p>
   </div>
 
+  <!-- Visible hero overlay -->
+  <div style="position:fixed;top:110px;left:50%;transform:translateX(-50%);z-index:25;text-align:center;pointer-events:none;max-width:640px;width:calc(100% - 40px);">
+    <h1 style="font-size:clamp(24px,4vw,40px);color:#EADCC8;margin:0;">Bitcoin block space, <span style="color:#F7931A;">live</span>.</h1>
+    <p style="color:rgba(234,220,200,0.7);margin:10px 0 18px;font-size:clamp(13px,1.8vw,16px);">An autonomous research engine measuring Bitcoin's fee market, mempool and block space in real time.</p>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:22px;">
+      <span style="background:rgba(26,22,18,0.75);border:1px solid #3A3228;border-radius:10px;padding:8px 14px;font-size:13px;"><span id="hero-fee" style="color:#F7931A;font-weight:700;">--</span> sat/vB fastest</span>
+      <span style="background:rgba(26,22,18,0.75);border:1px solid #3A3228;border-radius:10px;padding:8px 14px;font-size:13px;"><span id="hero-posts" style="color:#F7931A;font-weight:700;">--</span> research posts</span>
+      <span style="background:rgba(26,22,18,0.75);border:1px solid #3A3228;border-radius:10px;padding:8px 14px;font-size:13px;"><span id="hero-forecast" style="color:#F7931A;font-weight:700;">--</span> 3-day forecast</span>
+    </div>
+    <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;pointer-events:auto;">
+      <a href="/live" class="cta" style="background:#F7931A;color:#1A1612;padding:13px 26px;border-radius:100px;font-weight:700;text-decoration:none;font-size:15px;">Should I send now?</a>
+      <a href="/learn" style="background:rgba(26,22,18,0.75);border:1px solid #3A3228;color:#EADCC8;padding:13px 26px;border-radius:100px;font-weight:600;text-decoration:none;font-size:15px;">Learn the research</a>
+    </div>
+  </div>
+
   <div class="state-bar" id="state-bar">
     <div class="state-label" id="state-label" style="color:#3FB950;">Network calm</div>
     <div class="state-desc" id="state-desc">Fees are low. Good time to send.</div>
@@ -153,6 +168,20 @@
   <script src="tools/viz-core.js"></script>
   <script src="tools/viz-fees.js"></script>
   <script>
+    // Populate hero stats from the public snapshot (graceful if absent/stale).
+    try {
+      fetch('/data/snapshot.json').then(function(r) { return r.json(); }).then(function(s) {
+        if (!s || !s.generated_at) return;
+        var ageMin = (Date.now() - new Date(s.generated_at).getTime()) / 60000;
+        if (ageMin > 120) return;
+        if (s.fees && s.fees.fastestFee !== undefined) document.getElementById('hero-fee').textContent = s.fees.fastestFee;
+        if (s.totalPosts) document.getElementById('hero-posts').textContent = s.totalPosts;
+        if (s.forecast && s.forecast.length) {
+          document.getElementById('hero-forecast').textContent = s.forecast[0].predicted_fastest_fee + ' sat/vB';
+        }
+      }).catch(function() {});
+    } catch (e) {}
+
     DATA_ENGINE.start();
     VIZ_Fees.init('viz-fees');
 

@@ -296,6 +296,23 @@
         "bridgeFlipped": false,
         "forecastModel": "holt-linear-trend"
       }
+    },
+    {
+      "ts": "2026-08-01T12:51:16.042Z",
+      "cycle": 43,
+      "source": "de-agent",
+      "decisions": [
+        "M4 gate: cleanCycles=0/7"
+      ],
+      "issues": [
+        "8 endpoints unhealthy"
+      ],
+      "metrics": {
+        "quality": "healthy",
+        "m4CleanCycles": 0,
+        "bridgeFlipped": false,
+        "forecastModel": "holt-linear-trend"
+      }
     }
   ]
 }

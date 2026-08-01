@@ -1,4 +1,6 @@
 var DATA_ENGINE = (function () {
+  var REDUCED_MOTION = (typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+
   'use strict';
 
   var DATA = {

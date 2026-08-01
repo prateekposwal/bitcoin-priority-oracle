@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-08-01T11:46:34.533Z",
+  "generated_at": "2026-08-01T12:51:41.660Z",
   "host": "bitcoinsahi.com",
-  "status": "DEGRADED",
+  "status": "HEALTHY",
   "checks": [
     {
       "route": "/",
       "expected": 200,
       "status": 200,
-      "ttfbMs": 778,
+      "ttfbMs": 3395,
       "bytes": 19500,
       "ok": true
     },
@@ -15,56 +15,55 @@
       "route": "/live",
       "expected": 200,
       "status": 200,
-      "ttfbMs": 753,
-      "bytes": 58397,
+      "ttfbMs": 1016,
+      "bytes": 58930,
       "ok": true
     },
     {
       "route": "/capacity",
       "expected": 200,
       "status": 200,
-      "ttfbMs": 730,
-      "bytes": 29957,
+      "ttfbMs": 1530,
+      "bytes": 30135,
       "ok": true
     },
     {
       "route": "/learn",
       "expected": 200,
       "status": 200,
-      "ttfbMs": 729,
-      "bytes": 38077,
+      "ttfbMs": 911,
+      "bytes": 43788,
       "ok": true
     },
     {
       "route": "/fork-tracker",
       "expected": 200,
       "status": 200,
-      "ttfbMs": 729,
-      "bytes": 32875,
+      "ttfbMs": 1557,
+      "bytes": 33053,
       "ok": true
     },
     {
       "route": "/feed.xml",
       "expected": 200,
       "status": 200,
-      "ttfbMs": 730,
+      "ttfbMs": 933,
       "bytes": 8249,
       "ok": true
     },
     {
       "route": "/data/snapshot.json",
       "expected": 200,
-      "status": 0,
-      "ttfbMs": 10570,
-      "bytes": 0,
-      "ok": false,
-      "error": "timeout"
+      "status": 200,
+      "ttfbMs": 803,
+      "bytes": 21921,
+      "ok": true
     },
     {
       "route": "/api/v1/",
       "expected": 200,
       "status": 200,
-      "ttfbMs": 727,
+      "ttfbMs": 1473,
       "bytes": 3863,
       "ok": true
     },
@@ -72,7 +71,7 @@
       "route": "/robots.txt",
       "expected": 200,
       "status": 200,
-      "ttfbMs": 718,
+      "ttfbMs": 1418,
       "bytes": 68,
       "ok": true
     },
@@ -80,20 +79,10 @@
       "route": "/sitemap.xml",
       "expected": 200,
       "status": 200,
-      "ttfbMs": 718,
+      "ttfbMs": 1369,
       "bytes": 1001,
       "ok": true
     }
   ],
-  "failures": [
-    {
-      "route": "/data/snapshot.json",
-      "expected": 200,
-      "status": 0,
-      "ttfbMs": 10570,
-      "bytes": 0,
-      "ok": false,
-      "error": "timeout"
-    }
-  ]
+  "failures": []
 }

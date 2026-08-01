@@ -232,7 +232,7 @@ function escapeXml(s) {
 
 function generateRSSFeed() {
   var postLog = loadPostLog();
-  var items = postLog.posts.slice(-20);
+  var items = postLog.posts;
 
   var rss = '<?xml version="1.0" encoding="UTF-8"?>\n';
   rss += '<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">\n';

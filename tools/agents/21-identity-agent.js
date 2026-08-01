@@ -58,8 +58,8 @@ function run() {
     }
   });
 
-  // 4. team.html + index.html reference current pubkey if any
-  ['team.html', 'index.html'].forEach(function(f) {
+  // 4. index.html references current pubkey if any (team.html removed from public site)
+  ['index.html'].forEach(function(f) {
     var p = path.join(REPO, f);
     if (fs.existsSync(p)) {
       var c = fs.readFileSync(p, 'utf8');
