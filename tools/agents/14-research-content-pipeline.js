@@ -2,10 +2,12 @@
 // BSAHI — 14 Research Content Pipeline
 // Enqueues research findings into the spool (research_findings source) and
 // emits content briefs for compliant/story/employee publishers. Bridges the
-// research -> publishing gap (compliant-content/story-content currently read
-// captured-data/backfill, not the spool).
+// research -> publishing gap.
+// Sources (A+B hybrid): DB research_findings (live, from runner + storage-ratio)
+// first; research/*.md + storage-ratio report files as fallback when DB is thin.
 var path = require('path');
 var fs = require('fs');
+var crypto = require('crypto');
 var spoolMod = require('../data-engineering/spool.js');
 
 var REPO = path.resolve(__dirname, '..', '..');
@@ -20,23 +22,83 @@ function loadResearch() {
 
 function buildBrief(row) {
   var title = row.title || row.finding || '';
-  var summary = row.summary || row.details || '';
-  var source = row.source || 'research';
-  var topic = source;
+  var summary = row.details || row.finding || '';
+  var source = row.source || row.agent || 'research';
+  var topic = row.category || source;
   return {
     id: 'brief-' + (row.id || Date.now()),
     source: source,
     topic: topic,
     title: String(title).slice(0, 120),
     summary: String(summary).slice(0, 300),
+    url: row.url || '',
+    confidence: row.confidence != null ? row.confidence : 0.5,
     createdAt: new Date().toISOString(),
     status: 'pending'
   };
 }
 
+function firstPara(md) {
+  var m = String(md).replace(/\r/g, '').split('\n').filter(function(l) {
+    return l.trim() && l[0] !== '#' && l[0] !== '-' && l[0] !== '|' && l.indexOf('```') === -1 && l.indexOf('![') === -1;
+  });
+  return m.length ? m[0].trim().slice(0, 300) : '';
+}
+
+function scanResearchFiles() {
+  var briefs = [];
+  try {
+    fs.readdirSync(path.join(REPO, 'research')).forEach(function(f) {
+      if (!/\.md$/.test(f)) return;
+      if (f === 'architect-notes.md') return; // internal notes, not a brief
+      var md = fs.readFileSync(path.join(REPO, 'research', f), 'utf8');
+      var m = md.match(/^#\s+(.+)$/m);
+      var title = (m && m[1]) || f.replace('.md', '');
+      briefs.push({ source: 'research-file', topic: 'research', title: String(title).slice(0, 120), summary: firstPara(md), url: 'research/' + f, confidence: 0.5 });
+    });
+  } catch (e) {}
+  try {
+    fs.readdirSync(path.join(REPO, 'reports', 'research')).forEach(function(f) {
+      if (f.indexOf('storage-ratio-') !== 0) return;
+      var md = fs.readFileSync(path.join(REPO, 'reports', 'research', f), 'utf8');
+      var m = md.match(/Avg coverage ratio\s*\|\s*([\d.]+)/);
+      var title = m ? 'Storage Cost Coverage Ratio: ' + m[1] : 'Storage Cost Coverage Ratio Report';
+      briefs.push({ source: 'storage-ratio', topic: 'storage-externality', title: String(title).slice(0, 120), summary: firstPara(md), url: 'reports/research/' + f, confidence: 0.95 });
+    });
+  } catch (e) {}
+  return briefs;
+}
+
+function backfill() {
+  // One-time bootstrap: persist .md-derived findings as DB rows (idempotent).
+  try {
+    var db = require('../db/init.js');
+    var mdBriefs = scanResearchFiles();
+    var inserted = 0;
+    mdBriefs.forEach(function(b) {
+      var existing = db.query("SELECT id FROM research_findings WHERE source='" + String(b.source).replace(/'/g, "''") + "' AND title='" + String(b.title).replace(/'/g, "''") + "'");
+      if (existing && existing.length) return;
+      db.insertResearchFinding(b.source, b.title, b.summary, '', b.confidence, b.topic, b.url, 0);
+      inserted++;
+    });
+    console.log('backfill: ' + inserted + ' findings persisted');
+  } catch (e) { console.error('backfill error:', e.message); }
+}
+
 function run() {
   var findings = loadResearch();
-  var briefs = findings.map(buildBrief);
+  var dbBriefs = findings.map(buildBrief);
+  // Option B fallback: only when DB is thin (< 20 rows).
+  var mdBriefs = dbBriefs.length >= 20 ? [] : scanResearchFiles();
+  var seen = {};
+  var briefs = [];
+  dbBriefs.concat(mdBriefs).forEach(function(b) {
+    var key = (b.source + '|' + b.title).toLowerCase();
+    if (seen[key]) return;
+    seen[key] = true;
+    briefs.push(b);
+  });
+  briefs = briefs.slice(0, 20);
   fs.writeFileSync(BRIEFS_FILE, JSON.stringify({ generated_at: new Date().toISOString(), briefs: briefs }, null, 2));
 
   return spoolMod.init().then(function(spool) {
@@ -54,7 +116,8 @@ function run() {
 }
 
 if (require.main === module) {
+  if (process.argv[2] === '--backfill') { backfill(); process.exit(0); }
   run().then(function() { process.exit(0); }).catch(function(e) { console.error(e); process.exit(1); });
 }
 
-module.exports = { run: run };
+module.exports = { run: run, backfill: backfill, scanResearchFiles: scanResearchFiles };

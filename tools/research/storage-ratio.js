@@ -84,7 +84,7 @@ function computeFromBlockStats() {
       results.push({
         height: b.height,
         ratio: ratio.ratio,
-        storageCostBtc: ratio.storageCost,
+        storageCostBtc: ratio.storageCostUsd,
         feeBtc: ratio.feeBtc,
         txBytes: size,
         feePercentiles: b.fee_percentiles,
@@ -210,6 +210,20 @@ function generateReport() {
   var dateStr = new Date().toISOString().slice(0, 10);
   var filePath = path.join(reportDir, 'storage-ratio-' + dateStr + '.md');
   fs.writeFileSync(filePath, lines.join('\n'));
+
+  // Persist the flagship finding into research_findings (first-class DB row).
+  try {
+    var avgRatio = feeHistoryRatios.length > 0 ? (feeHistoryRatios.reduce(function(a, b) { return a + b.ratio; }, 0) / feeHistoryRatios.length).toFixed(4) : 'N/A';
+    var pctBelow = feeHistoryRatios.length > 0 ? (feeHistoryRatios.filter(function(r) { return r.ratio < 1; }).length / feeHistoryRatios.length * 100).toFixed(1) + '%' : 'N/A';
+    var db = require('../db/init.js');
+    db.insertResearchFinding(
+      'Storage Ratio',
+      'Storage Cost Coverage Ratio: ' + avgRatio,
+      'Fees cover ' + pctBelow + ' of the estimated 10-year storage cost across nodes — an unpriced permanence externality.',
+      JSON.stringify({ blocks: feeHistoryRatios.length, avgRatio: avgRatio }),
+      0.95, 'storage-externality', 'reports/research/storage-ratio-' + dateStr + '.md', 0
+    );
+  } catch (e) { console.log('storage-ratio insert failed:', e.message); }
 
   return { filePath: filePath, blocks: feeHistoryRatios.length, avgRatio: feeHistoryRatios.length > 0 ? (feeHistoryRatios.reduce(function(a, b) { return a + b.ratio; }, 0) / feeHistoryRatios.length).toFixed(4) : 'N/A', belowThreshold: feeHistoryRatios.length > 0 ? (feeHistoryRatios.filter(function(r) { return r.ratio < 1; }).length / feeHistoryRatios.length * 100).toFixed(1) + '%' : 'N/A' };
 }

@@ -64,8 +64,14 @@ CREATE INDEX IF NOT EXISTS idx_tx_fee_rate ON transactions(fee_rate_satvb);
 
 CREATE TABLE IF NOT EXISTS research_findings (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  agent TEXT NOT NULL,
+  agent TEXT,
+  source TEXT,
+  title TEXT,
   finding TEXT NOT NULL,
+  details TEXT,
+  confidence REAL DEFAULT 0.5,
+  category TEXT DEFAULT 'general',
+  url TEXT,
   cycle_id INTEGER,
   created_at TEXT DEFAULT (datetime('now'))
 );

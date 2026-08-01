@@ -106,6 +106,14 @@ async function runCycle() {
       var result = await fetchers[i].run();
       results.push(result);
       log('  ' + result.agent + ': ' + result.findings.length + ' findings');
+      // Persist live findings into research_findings (agent-14's producer edge).
+      var db = require('../db/init.js');
+      var NOISE = ['No new findings this cycle', 'No new papers found this cycle'];
+      for (var j = 0; j < (result.findings || []).length; j++) {
+        var f = String(result.findings[j]);
+        if (f.indexOf('Error:') === 0 || NOISE.indexOf(f) !== -1) continue;
+        db.insertResearchFinding(result.agent, f.slice(0, 120), f, '', 0.7, 'research-cycle', '', STATE.cycleCount);
+      }
     } catch (e) {
       log('  Agent ' + (i + 1) + ' error: ' + e.message);
       results.push({ agent: 'Agent ' + (i + 1), findings: ['Error: ' + e.message], timestamp: new Date().toISOString() });

@@ -74,6 +74,15 @@ function insertBlockStats(height, hash, timestamp, txCount, size, weight, avgFee
   return runSQL(sql);
 }
 
+function insertResearchFinding(source, title, finding, details, confidence, category, url, cycleId) {
+  var escaped = function(v) { return "'" + String(v).replace(/'/g, "''") + "'"; };
+  var sql = 'INSERT INTO research_findings (source, title, finding, details, confidence, category, url, cycle_id, created_at) VALUES (' +
+    escaped(source || '') + ', ' + escaped(title || '') + ', ' + escaped(finding || '') + ', ' +
+    escaped(details || '') + ', ' + (confidence == null ? 0.5 : confidence) + ', ' +
+    escaped(category || 'general') + ', ' + escaped(url || '') + ', ' + (cycleId || 0) + ", datetime('now'))";
+  return runSQL(sql);
+}
+
 function query(sql) {
   return runSQL(sql);
 }
@@ -164,4 +173,4 @@ if (require.main === module) {
   }
 }
 
-module.exports = { getDB: getDB, runSQL: runSQL, insertCapture: insertCapture, insertBlockStats: insertBlockStats, query: query, migrateExistingFiles: migrateExistingFiles, getStats: getStats };
+module.exports = { getDB: getDB, runSQL: runSQL, insertCapture: insertCapture, insertBlockStats: insertBlockStats, insertResearchFinding: insertResearchFinding, query: query, migrateExistingFiles: migrateExistingFiles, getStats: getStats };
