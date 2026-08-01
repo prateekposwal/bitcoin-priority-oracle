@@ -107,9 +107,14 @@
 <body>
   <canvas id="viz-fees"></canvas>
 
-  <!-- SEO-visible content layer (hidden visually, crawler-readable) -->
+  <!-- Visible H1 (only content per architect) -->
+  <div style="position:fixed;top:110px;left:50%;transform:translateX(-50%);z-index:25;text-align:center;pointer-events:none;max-width:640px;width:calc(100% - 40px);">
+    <h1 style="font-size:clamp(20px,3.5vw,34px);color:#EADCC8;margin:0;letter-spacing:0.5px;">Bitcoin block space, <span style="color:#F7931A;">live</span>.</h1>
+  </div>
+
+  <!-- SEO content layer (crawler-readable) -->
   <div style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;" aria-hidden="false">
-    <h1>Bitcoin Sahi — Block Space Research</h1>
+    <h1>Bitcoin block space, live.</h1>
     <p>An autonomous research engine measuring Bitcoin's fee market, mempool, and block space in real time. Live data from the Bitcoin network, published openly.</p>
   </div>
 
