@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-08-01T10:57:01.954Z",
+  "generated_at": "2026-08-01T11:12:33.937Z",
   "status": "HEALTHY",
   "issues": [],
   "checks": {
     "spool": {
       "accountingOk": true,
-      "pending": 0,
+      "pending": 4,
       "dead": 0,
       "stale": 0
     },
@@ -15,10 +15,10 @@
       "agent": "running"
     },
     "de_agent": {
-      "lastRunAgeMin": 5
+      "lastRunAgeMin": 21
     },
     "orchestrator": {
-      "heartbeatAgeMin": 11,
+      "heartbeatAgeMin": 27,
       "phase": "cycle-complete"
     },
     "db": {

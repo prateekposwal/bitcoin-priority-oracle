@@ -525,13 +525,14 @@ document.getElementById('csv-download-btn').addEventListener('click', function()
 if (typeof DATA_ENGINE !== 'undefined') {
   DATA_ENGINE.start();
 }
-VIZ_Send && VIZ_Send.init('viz-send');
-VIZ_Lightning && VIZ_Lightning.init('viz-lightning');
-VIZ_Exchange && VIZ_Exchange.init('viz-exchange');
-VIZ_Node && VIZ_Node.init('viz-node');
-VIZ_Miner && VIZ_Miner.init('viz-miner');
-VIZ_Research && VIZ_Research.init('viz-research');
-VIZ_Developer && VIZ_Developer.init('viz-developer');
+// Initialize the 7 viz modules defensively — one module failure must not halt the rest.
+try { VIZ_Send && VIZ_Send.init('viz-send'); } catch (e) { console.error('viz-send init:', e); }
+try { VIZ_Lightning && VIZ_Lightning.init('viz-lightning'); } catch (e) { console.error('viz-lightning init:', e); }
+try { VIZ_Exchange && VIZ_Exchange.init('viz-exchange'); } catch (e) { console.error('viz-exchange init:', e); }
+try { VIZ_Node && VIZ_Node.init('viz-node'); } catch (e) { console.error('viz-node init:', e); }
+try { VIZ_Miner && VIZ_Miner.init('viz-miner'); } catch (e) { console.error('viz-miner init:', e); }
+try { VIZ_Research && VIZ_Research.init('viz-research'); } catch (e) { console.error('viz-research init:', e); }
+try { VIZ_Developer && VIZ_Developer.init('viz-developer'); } catch (e) { console.error('viz-developer init:', e); }
 
 if (typeof DATA_ENGINE !== 'undefined') {
   DATA_ENGINE.onUpdate(function() {

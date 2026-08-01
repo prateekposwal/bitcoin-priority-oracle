@@ -5,7 +5,6 @@
   <url><loc>https://bitcoinsahi.com/capacity</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
   <url><loc>https://bitcoinsahi.com/learn</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
   <url><loc>https://bitcoinsahi.com/fork-tracker</loc><changefreq>daily</changefreq><priority>0.6</priority></url>
-  <url><loc>https://bitcoinsahi.com/team.html</loc><changefreq>weekly</changefreq><priority>0.5</priority></url>
   <url><loc>https://bitcoinsahi.com/feed.xml</loc><changefreq>hourly</changefreq><priority>0.4</priority></url>
   <url><loc>https://bitcoinsahi.com/api/v1/</loc><changefreq>daily</changefreq><priority>0.3</priority></url>
   <url><loc>https://bitcoinsahi.com/data/snapshot.json</loc><changefreq>hourly</changefreq><priority>0.3</priority></url>

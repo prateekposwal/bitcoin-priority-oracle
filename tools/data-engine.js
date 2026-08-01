@@ -246,7 +246,7 @@ var DATA_ENGINE = (function () {
   function notify() {
     DATA.last_updated = new Date().toISOString();
     for (var i = 0; i < listeners.length; i++) {
-      try { listeners[i](DATA); } catch (e) {}
+      try { listeners[i](DATA); } catch (e) { if (window.console) console.error('onUpdate listener error:', e); }
     }
   }
 
