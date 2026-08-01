@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="https://github.com/bitcoin/bips/blob/master/bip-0141.mediawiki Bitcoin block space economics research from BSAHI — live fee, mempool, and settlement data from t">
+<meta name="description" content="The witness discount (4 WU per non-witness byte, 1 WU per witness byte) was designed to: Bitcoin block space economics research from BSAHI — live fee, mempool, ">
 <meta property="og:title" content="Bip141 Analysis">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://bitcoinsahi.com/research/bip141_analysis.html">
@@ -62,9 +62,9 @@ footer .links a:hover{color:#D4933A}</style>
 <li>Price state growth differentially</li>
 <li>Create an economic disincentive for data-heavy transactions</li>
 <li>Replace the 1MB block size limit with a state-pricing mechanism</li>
+</ul>
 <h3>Quote from BIP-141</h3>
 <blockquote>&quot;The overall effect of the new rules is to allow the maximum block size to increase between 1MB and 4MB depending on how much of the block is comprised of witness data.&quot;</blockquote>
-</ul>
 <p>This confirms the intended purpose was capacity increase, not state pricing.</p>
 <h3>The Unintended Consequence</h3>
 <p>Inscriptions use <code>OP_FALSE OP_IF &lt;data&gt; OP_ENDIF</code> to store arbitrary data in the witness. Because witness data gets the 4× weight discount, a 400-byte inscription:</p>

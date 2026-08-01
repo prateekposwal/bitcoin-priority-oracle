@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-01T16:04:59.886Z",
+  "generated_at": "2026-08-01T16:35:38.491Z",
   "freshness_min": 0,
   "fees": {
-    "fastestFee": 2
+    "fastestFee": 4
   },
   "btc_price": null,
   "block_height": null,
@@ -11,17 +11,17 @@
   "forecast": [
     {
       "day_offset": 1,
-      "predicted_fastest_fee": 2.4,
+      "predicted_fastest_fee": 2.9,
       "trend": "stable"
     },
     {
       "day_offset": 2,
-      "predicted_fastest_fee": 2.3,
+      "predicted_fastest_fee": 2.9,
       "trend": "stable"
     },
     {
       "day_offset": 3,
-      "predicted_fastest_fee": 2.3,
+      "predicted_fastest_fee": 2.9,
       "trend": "stable"
     }
   ],
@@ -1394,6 +1394,10 @@
     {
       "date": "2026-08-01",
       "fastestFee": 2
+    },
+    {
+      "date": "2026-08-01",
+      "fastestFee": 4
     }
   ],
   "totalPosts": 36

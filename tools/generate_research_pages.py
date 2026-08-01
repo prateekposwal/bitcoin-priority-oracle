@@ -40,11 +40,17 @@ footer .links a:hover{color:#D4933A}'''
 
 
 def inline(s):
+    # F3: tokenize links on the RAW string first so html.escape doesn't break them
+    tokens = []
+    def link_repl(m):
+        tokens.append((m.group(1), m.group(2)))
+        return '\x00L%d\x00' % (len(tokens) - 1)
+    s = re.sub(r'\[([^\]]+)\]\(([^)]+)\)', link_repl, s)
     s = html.escape(s)
     s = re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', s)
     s = re.sub(r'`([^`]+)`', r'<code>\1</code>', s)
-    s = re.sub(r'\[([^\]]+)\]\(([^)]+)\)', r'<a href="\2">\1</a>', s)
-    s = re.sub(r'`([^`]+)`', r'<code>\1</code>', s)
+    for idx, (text, url) in enumerate(tokens):
+        s = s.replace('\x00L%d\x00' % idx, '<a href="' + html.escape(url) + '">' + html.escape(text) + '</a>')
     return s
 
 
@@ -62,7 +68,9 @@ def render_md(text):
     def flush_table():
         nonlocal table_buf, in_table
         if table_buf:
-            rows = [r for r in table_buf if r]
+            rows = [r for r in table_buf if r and r.strip()]
+            # F1: skip separator rows like |---|----| (all-dash cells)
+            rows = [r for r in rows if not all(re.fullmatch(r'-{2,}', c.strip()) for c in r.strip().strip('|').split('|') if c.strip())]
             if len(rows) >= 2:
                 out.append('<table>')
                 for ri, r in enumerate(rows):
@@ -73,6 +81,11 @@ def render_md(text):
             table_buf = []
             in_table = False
 
+    def flush_lists():
+        nonlocal in_ul, in_ol
+        if in_ul: out.append('</ul>'); in_ul = False
+        if in_ol: out.append('</ol>'); in_ol = False
+
     while i < len(lines):
         line = lines[i]
         if line.strip().startswith('```'):
@@ -82,6 +95,7 @@ def render_md(text):
                 in_code = False
             else:
                 flush_table()
+                flush_lists()
                 in_code = True
             i += 1
             continue
@@ -90,6 +104,7 @@ def render_md(text):
             i += 1
             continue
         if line.strip().startswith('|'):
+            flush_lists()
             in_table = True
             table_buf.append(line)
             i += 1
@@ -101,12 +116,16 @@ def render_md(text):
             continue
         m = re.match(r'^(#{1,3})\s+(.*)', s)
         if m:
+            # F2: flush open lists before block elements
+            flush_lists()
             # Demote: page title is the H1, so md #->h2, ##->h3, ###->h4
             lvl = min(len(m.group(1)) + 1, 4)
             out.append('<h' + str(lvl) + '>' + inline(m.group(2)) + '</h' + str(lvl) + '>')
         elif s == '---':
+            flush_lists()
             out.append('<hr>')
         elif s.startswith('> '):
+            flush_lists()
             out.append('<blockquote>' + inline(s[2:]) + '</blockquote>')
         elif re.match(r'^(-|\*)\s+', s):
             if not in_ul: out.append('<ul>')
@@ -117,13 +136,11 @@ def render_md(text):
             out.append('<li>' + inline(re.sub(r'^\d+\.\s+', '', s)) + '</li>')
             in_ol = True
         else:
-            if in_ul: out.append('</ul>'); in_ul = False
-            if in_ol: out.append('</ol>'); in_ol = False
+            flush_lists()
             out.append('<p>' + inline(s) + '</p>')
         i += 1
     flush_table()
-    if in_ul: out.append('</ul>')
-    if in_ol: out.append('</ol>')
+    flush_lists()
     if in_code:
         out.append('<pre><code>' + html.escape('\n'.join(code_buf)) + '</code></pre>')
     return '\n'.join(out)
@@ -134,11 +151,31 @@ def humanize(name):
 
 
 def first_para(text):
+    """First meaningful paragraph: skip headings, tables, lists, bare URLs,
+    hr, and front-matter lines like 'Project:'/'Date:'/'Sources:'."""
     for line in text.split('\n'):
         s = line.strip()
-        if s and not s.startswith('#'):
-            return html.unescape(re.sub(r'\*\*|__|`', '', s))
+        if not s or s.startswith('#') or s.startswith('|') or s == '---':
+            continue
+        if re.match(r'^(-|\*|\d+\.)\s+', s):
+            continue
+        if re.match(r'^[A-Za-z]+:', s) and len(s.split(':')) == 2 and len(s) < 40:
+            continue
+        if re.match(r'^\*\*[A-Za-z]+:\*\*', s):  # bold front-matter: **Project:** ...
+            continue
+        if re.match(r'^https?://', s):
+            continue
+        clean = html.unescape(re.sub(r'\*\*|__|`|\[([^\]]*)\]\([^)]*\)', r'\1', s))
+        if clean:
+            return clean
     return ''
+
+
+def truncate_words(s, n):
+    words = s.split(' ')
+    if len(words) <= n:
+        return s
+    return ' '.join(words[:n]) + '…'
 
 
 def make_desc(title, first_para_text):
@@ -203,7 +240,7 @@ def main():
 
     # index page
     items = ''.join(
-        '<li><a href="/research/%s.html">%s</a> — %s</li>' % (n, t, html.escape(d[:120]))
+        '<li><a href="/research/%s.html">%s</a> — %s</li>' % (n, t, html.escape(truncate_words(d, 20)))
         for n, t, d in summaries
     )
     index = '''<!DOCTYPE html>

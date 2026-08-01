@@ -27,7 +27,7 @@
   <meta name="twitter:image" content="https://bitcoinsahi.com/og-image.png">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    html, body { width: 100%; min-height: 100%; overflow-x: hidden; overflow-y: auto; background: #1A1612; font-family: -apple-system, system-ui, sans-serif; }
+    html, body { width: 100%; height: 100%; overflow: hidden; background: #1A1612; font-family: -apple-system, system-ui, sans-serif; }
     #viz-fees { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; }
 
     .state-bar { position: fixed; top: 16px; left: 50%; transform: translateX(-50%); z-index: 20; text-align: center; pointer-events: none; }
@@ -110,20 +110,6 @@
       #dollar-context { top: 48%; font-size: 9px; }
       #narrative-frame { top: 51%; }
     }
-    .page-lower { position: relative; z-index: 12; max-width: 720px; margin: 0 auto; padding: 32px 24px 160px; background: #1A1612; }
-    .intro-block p { color: #9B8B78; font-size: .95rem; line-height: 1.7; }
-    .stats-block { margin-top: 28px; border: 1px solid #3A3228; border-radius: 12px; background: #1F1B16; padding: 20px; }
-    .stats-block h2 { color: #EADCC8; font-size: 1.05rem; margin-bottom: 14px; }
-    .stats-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 12px; }
-    .stat { background: #1A1612; border: 1px solid #3A3228; border-radius: 10px; padding: 14px; }
-    .stat-k { display: block; font-size: .7rem; color: #6A5D4E; text-transform: uppercase; letter-spacing: .08em; font-weight: 600; margin-bottom: 4px; }
-    .stat-v { font-size: 1.3rem; font-weight: 700; color: #EADCC8; font-family: 'SF Mono', monospace; font-variant-numeric: tabular-nums; }
-    .stats-note { font-size: .75rem; color: #6A5D4E; margin-top: 12px; }
-    .research-strip { margin-top: 28px; border-top: 1px solid #3A3228; padding: 20px 4px; }
-    .research-strip h2 { color: #EADCC8; font-size: 1.05rem; margin-bottom: 8px; }
-    .research-strip p { color: #9B8B78; font-size: .9rem; line-height: 1.6; }
-    .strip-link { display: inline-block; margin-top: 10px; color: #D4933A; font-weight: 600; text-decoration: none; }
-    @media (max-width:600px) { .stats-grid { grid-template-columns: 1fr; } }
   @media (prefers-reduced-motion: reduce) {
     .state-bar, .bottom-area, .legend-panel { animation: none !important; transition: none !important; }
   }
@@ -137,9 +123,21 @@
     <h1 style="font-size:clamp(20px,3.5vw,34px);color:#EADCC8;margin:0;letter-spacing:0.5px;">Bitcoin block space, <span style="color:#F7931A;">live</span>.</h1>
   </div>
 
-  <!-- SEO content layer (crawler-readable, minimal) -->
+  <!-- SEO content layer (crawler-readable, invisible to visitors) -->
   <div style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;" aria-hidden="false">
     <p>Bitcoin Sahi — live Bitcoin fee, mempool, and block data from an autonomous research engine measuring block space economics in real time.</p>
+    <p>Bitcoin Sahi is an autonomous research engine measuring Bitcoin's fee market, mempool, and block space in real time. Every bar above is one block; the floating particles are transactions waiting in the mempool.</p>
+    <h2>Live network state</h2>
+    <ul>
+      <li>Fastest fee: <span id="vs-fastest">--</span> sat/vB</li>
+      <li>Economy fee: <span id="vs-economy">--</span> sat/vB</li>
+      <li>Mempool: <span id="vs-mempool">--</span> txs</li>
+      <li>Block height: <span id="vs-height">--</span></li>
+    </ul>
+    <p id="vs-note">Updated live from the Bitcoin network.</p>
+    <h2>Latest research</h2>
+    <p>Open research on block space economics — the cost of inscriptions, the SegWit witness discount, and UTXO storage externalities.</p>
+    <a href="/learn">Read the research →</a>
   </div>
 
   <div class="state-bar" id="state-bar">
@@ -170,26 +168,6 @@
     </div>
 
     <!-- Visible below-the-fold content (public-facing, not SEO-hidden) -->
-    <main class="page-lower">
-      <section class="intro-block">
-        <p>Bitcoin Sahi is an autonomous research engine measuring Bitcoin's fee market, mempool, and block space in real time. Every bar above is one block; the floating particles are transactions waiting in the mempool.</p>
-      </section>
-      <section class="stats-block" aria-label="Live network statistics">
-        <h2>Live network state</h2>
-        <div class="stats-grid">
-          <div class="stat"><span class="stat-k">Fastest fee</span><span class="stat-v" id="vs-fastest">--</span></div>
-          <div class="stat"><span class="stat-k">Economy fee</span><span class="stat-v" id="vs-economy">--</span></div>
-          <div class="stat"><span class="stat-k">Mempool</span><span class="stat-v" id="vs-mempool">--</span></div>
-          <div class="stat"><span class="stat-k">Block height</span><span class="stat-v" id="vs-height">--</span></div>
-        </div>
-        <p class="stats-note" id="vs-note">Updated live from the Bitcoin network.</p>
-      </section>
-      <section class="research-strip">
-        <h2>Latest research</h2>
-        <p>Open research on block space economics — the cost of inscriptions, the SegWit witness discount, and UTXO storage externalities.</p>
-        <a class="strip-link" href="/learn">Read the research →</a>
-      </section>
-    </main>
 
 
   <div id="genesis-strip"><canvas id="genesis-canvas"></canvas></div>

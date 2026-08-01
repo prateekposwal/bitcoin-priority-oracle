@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Project: Bitcoin Priority Oracle Bitcoin block space economics research from BSAHI — live fee, mempool, and settlement data from the autonomous research engine.">
+<meta name="description" content="The Bitcoin fee market prices congestion (inclusion in the next block) but not permanence (lifetime storage in every full node&#x27;s UTXO set). This note quantifies">
 <meta property="og:title" content="Utxo Cost Note">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://bitcoinsahi.com/research/utxo_cost_note.html">
@@ -69,11 +69,11 @@ InscriptionStorageCost = CostPerBytePerYear * inscription_bytes * assumed_lifeti
 <li><code>Bandwidth_annual = $50/mo × 12 = $600/yr</code></li>
 <li><code>Electricity_annual = (150W × 24h × 365) / 1000 × $0.12/kWh = $157.68/yr</code></li>
 <li><code>UTXO_bytes_added_per_year = 400 bytes × 100,000 inscriptions × 12 = 480,000,000 bytes</code></li>
+</ul>
 <hr>
 <h3>Key Numbers</h3>
 <table>
 <tr><th>Metric</th><th>Value</th></tr>
-<tr><td>---</td><td>---</td></tr>
 <tr><td>Annual node cost (hardware)</td><td>$166.67</td></tr>
 <tr><td>Annual node cost (bandwidth)</td><td>$600.00</td></tr>
 <tr><td>Annual node cost (electricity)</td><td>$157.68</td></tr>
@@ -86,7 +86,6 @@ InscriptionStorageCost = CostPerBytePerYear * inscription_bytes * assumed_lifeti
 </table>
 <hr>
 <h3>SegWit Weight Formula Impact</h3>
-</ul>
 <p>BIP-141 defines block weight as:</p>
 <pre><code>block_weight = base_size × 3 + total_size ≤ 4,000,000</code></pre>
 <p>This means:</p>
@@ -100,18 +99,17 @@ InscriptionStorageCost = CostPerBytePerYear * inscription_bytes * assumed_lifeti
 <li><strong>The marginal cost to include inscription data in a block is artificially low</strong> — the SegWit discount was designed to fix malleability, not to subsidize data storage.</li>
 <li><strong>The gap between congestion cost and storage cost is widened</strong> — the discount makes it cheap to write data, but every node must store the full (non-discounted) UTXO data forever.</li>
 <li><strong>A data-conscious relay policy</strong> would need to account for the full byte cost, not the discounted vbyte cost, when assessing state impact.</li>
+</ol>
 <hr>
 <h3>Fee Market Comparison</h3>
 <table>
 <tr><th></th><th>Congestion pricing (current market)</th><th>Storage cost (modeled)</th></tr>
-<tr><td>---</td><td>---</td><td>---</td></tr>
 <tr><td>What it prices</td><td>Space in next block (~10 min)</td><td>Lifetime storage in every node</td></tr>
 <tr><td>Inscription fee</td><td>$5–$50 (one-time)</td><td>$0.0077 (10yr)</td></tr>
 <tr><td>Payer</td><td>Sender (once)</td><td>All future node operators (forever)</td></tr>
 <tr><td>Market mechanism</td><td>Competitive fee auction</td><td>None — unpriced externality</td></tr>
 <tr><td>Orders of magnitude</td><td>6–7× higher per tx</td><td>—</td></tr>
 </table>
-</ol>
 <p><strong>Key observation:</strong> The current fee market is functioning well for congestion, but there is no mechanism for storage cost recovery. Even if the absolute numbers are small today, the externality scales with inscription volume. At 10× current rates (1M inscriptions/mo), the annual storage externality reaches ~$92K/yr across the network.</p>
 <hr>
 <h3>Open Questions</h3>

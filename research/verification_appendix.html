@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Sources: Bitcoin block space economics research from BSAHI — live fee, mempool, and settlement data from the autonomous research engine. Bitcoin block space eco">
+<meta name="description" content="python Bitcoin block space economics research from BSAHI — live fee, mempool, and settlement data from the autonomous research engine. Bitcoin block space econo">
 <meta property="og:title" content="Verification Appendix">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://bitcoinsahi.com/research/verification_appendix.html">
@@ -64,8 +64,8 @@ footer .links a:hover{color:#D4933A}</style>
 <li>10-20% of nodes run on such hardware per <a href="https://bitnodes.io/">bitnodes.io surveys</a></li>
 <li>$500/3yr allows for SSD replacement and accounts for higher-spec machines</li>
 <li>After 3 years, hardware needs replacement (SSD wear from constant writes)</li>
-<h4>2. Bandwidth: $50/mo ($600/yr)</h4>
 </ul>
+<h4>2. Bandwidth: $50/mo ($600/yr)</h4>
 <p><strong>Sources:</strong></p>
 <ul>
 <li><a href="https://bitcoin.org/en/full-node#minimum-requirements">Bitcoin.org Full Node Requirements</a>: *&quot;200 gigabytes upload or more a month&quot;*</li>
@@ -79,8 +79,8 @@ footer .links a:hover{color:#D4933A}</style>
 <li>At $50/mo for unlimited residential broadband, bandwidth is the dominant cost</li>
 <li>Some ISPs charge overage fees above 1TB — node usage (220 GB) is well within typical caps</li>
 <li>Could reduce to ~$30/mo with lower-tier plans or $70/mo for business-grade</li>
-<h4>3. Electricity: $158/yr</h4>
 </ul>
+<h4>3. Electricity: $158/yr</h4>
 <p><strong>Sources:</strong></p>
 <ul>
 <li><a href="https://www.eia.gov/electricity/monthly/">US EIA Average Electricity Price</a> — $0.125/kWh residential (2024)</li>
@@ -96,8 +96,8 @@ footer .links a:hover{color:#D4933A}</style>
 <li>Most nodes run on hardware consuming 30-150W (not Raspberry Pis)</li>
 <li>Global average electricity cost varies widely ($0.05-$0.40/kWh)</li>
 <li>Our $0.12/kWh is close to US residential average</li>
-<h4>4. Inscription Size: 400 bytes UTXO data</h4>
 </ul>
+<h4>4. Inscription Size: 400 bytes UTXO data</h4>
 <p><strong>Sources:</strong></p>
 <ul>
 <li><a href="https://docs.ordinals.com/">Ordinals Theory</a> — inscription data encoding</li>
@@ -114,8 +114,8 @@ footer .links a:hover{color:#D4933A}</style>
 <li>Witness bytes weigh 1 WU, non-witness weigh 4 WU (4:1 ratio)</li>
 <li>400 bytes in witness = 400 WU = 100 vbytes (75% discount vs 1,600 WU in non-witness)</li>
 <li><strong>Verification:</strong> Run <code>research/verify_inscriptions.py</code> to decode recent inscription txs</li>
-<h4>5. Inscription Volume: 100K/month</h4>
 </ul>
+<h4>5. Inscription Volume: 100K/month</h4>
 <p><strong>Sources:</strong></p>
 <ul>
 <li><a href="https://dune.com/dataalways/ordinals">Dune Analytics: Ordinals Dashboard</a> — daily inscription counts</li>
@@ -129,6 +129,7 @@ footer .links a:hover{color:#D4933A}</style>
 <li>Monthly average: ~100,000 (conservative)</li>
 <li>At 100K/month × 400 bytes = 40 GB/month × 460.8M UTXO bytes/yr</li>
 <li><strong>Verification:</strong> Run <code>research/fetch_inscription_stats.py</code> to pull live data</li>
+</ul>
 <hr>
 <h3>Verification Scripts</h3>
 <h4>Script 1: Fetch Real Inscription Stats</h4>
@@ -264,7 +265,6 @@ if __name__ == &quot;__main__&quot;:
 <h3>Sensitivity Analysis</h3>
 <table>
 <tr><th>Parameter</th><th>Low Estimate</th><th>Base Estimate</th><th>High Estimate</th><th>Impact on Cost/Byte</th></tr>
-<tr><td>-----------</td><td>-------------</td><td>---------------</td><td>--------------</td><td>-------------------</td></tr>
 <tr><td>Hardware cost/3yr</td><td>$200 (RPi 4 only)</td><td>$500</td><td>$1,000 (high-end mini PC)</td><td>±40%</td></tr>
 <tr><td>Bandwidth/mo</td><td>$30 (budget ISP)</td><td>$50</td><td>$100 (business grade)</td><td>±50%</td></tr>
 <tr><td>Electricity/kWh</td><td>$0.08 (low cost area)</td><td>$0.12</td><td>$0.40 (high cost area)</td><td>±90%</td></tr>
@@ -272,7 +272,6 @@ if __name__ == &quot;__main__&quot;:
 <tr><td>Inscription size</td><td>200 bytes</td><td>400 bytes</td><td>1,000 bytes</td><td>±60%</td></tr>
 <tr><td>Inscription volume/mo</td><td>50,000</td><td>100,000</td><td>300,000</td><td>±60%</td></tr>
 </table>
-</ul>
 <p><strong>Key finding:</strong> Even at the most conservative estimates (lowest hardware, lowest bandwidth, most efficient node), the cost per byte per year is within ~2× of the base estimate. The conclusion — that storage cost is orders of magnitude below current fees — is robust.</p>
 <hr>
 <h3>How to Reproduce Every Number</h3>
