@@ -35,6 +35,7 @@
     "research/monte_carlo.py": { "import": "json.load spec", "uses": ["C","I_bytes","I_rate","T"] },
     "research/generate_chart_social.py": { "import": "json.load spec", "uses": ["L_insc","C"] },
     "research/generate_charts.py": { "import": "json.load spec", "uses": ["L_insc"] },
-    "learn.html / embed.html / bridge/*": { "import": "serve values via agent-15 metrics", "uses": ["SCCR","L_insc"] }
+    "learn.html / embed.html / bridge/*": { "import": "serve values via agent-15 metrics", "uses": ["SCCR","L_insc"] },
+    "research/backtest.py": { "import": "json.load spec (2023 historical scenario overrides canonical inputs for validation only)", "uses": ["C","I_bytes","I_rate","T","cb_insc"], "note": "Historical backtest leg — 2023-era params are intentional overrides, not canonical." }
   }
 }
