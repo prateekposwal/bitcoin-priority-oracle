@@ -99,6 +99,15 @@ async function runCycle() {
     log('Derived metrics: computed + enqueued');
   } catch (e) { log('Derived metrics error: ' + e.message); }
 
+  // Step 4c: Node geo distribution (11) — every 24 cycles (~daily) to respect geo-lookup rate limits
+  try {
+    if (STATE.cycleCount % 24 === 0) {
+      var nodeGeo = require('../../tools/agents/11-node-geo.js');
+      await nodeGeo.run();
+      log('Node geo: distribution refreshed');
+    }
+  } catch (e) { log('Node geo error: ' + e.message); }
+
   // Step 4b: Research content pipeline (14) + topic intelligence (15)
   try {
     var rc = require('../../tools/agents/14-research-content-pipeline.js');
