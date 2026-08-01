@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-08-01T10:52:02.166Z",
+  "generated_at": "2026-08-01T11:02:12.033Z",
   "hero_h1": "Bitcoin Sahi — Block Space Research",
   "value_prop": "An autonomous research engine measuring Bitcoin's fee market, mempool, and block space in real time. The network's economics, captured continuously and published openly.",
-  "live_snapshot_md": "Live network snapshot: fastest fee 2 sat/vB, price $63,013, height 960551. Fee trend: stable.",
-  "last_updated": "2026-08-01T10:52:02.167Z",
+  "live_snapshot_md": "Live network snapshot: fastest fee 2 sat/vB, Fee trend: stable.",
+  "last_updated": "2026-08-01T11:02:12.034Z",
   "fee_trend": "stable",
   "latest_fee_satvb": 2
 }

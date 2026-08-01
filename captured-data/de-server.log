@@ -1157,3 +1157,4 @@ Digest saved to /Users/prateekposwal/Desktop/block-space-economics/reports/diges
 [DE Agent 2026-08-01 10:51:33] Alert dispatcher: forecast + alerts + index self-heal
 [DE Agent 2026-08-01 10:51:33] Cycle 41 complete in 107s
 [DE Agent 2026-08-01 10:51:33] ISSUES: 10 endpoints unhealthy | 1 sources stale (>120min old)
+[2026-08-01 11:02:11] [alert-dispatcher] cycle complete

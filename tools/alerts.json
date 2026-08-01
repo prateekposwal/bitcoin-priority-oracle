@@ -1,13 +1,5 @@
 {
-  "alerts": [
-    "🛡 SITE /fork-tracker -> 0 (timeout)",
-    "🛡 SITE /feed.xml -> 404",
-    "🛡 SITE /team.html -> 404",
-    "🛡 SITE /.well-known/nostr.json -> 404",
-    "🛡 SITE /data/snapshot.json -> 404",
-    "🛡 SITE /robots.txt -> 404",
-    "🛡 SITE /sitemap.xml -> 404"
-  ],
-  "timestamp": "2026-08-01T10:56:32.787Z",
-  "source": "site-health"
+  "alerts": [],
+  "timestamp": "2026-08-01_16-20-02",
+  "source": "spool"
 }
