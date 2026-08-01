@@ -3,7 +3,7 @@
   "data_points": 343,
   "first_capture": "2026-07-30_11-41-11",
   "last_capture": "2026-08-01_21-44-15",
-  "latest_fastest_fee": 4,
+  "latest_fastest_fee": 4.0,
   "slope": 0.018,
   "trend": "stable",
   "forecast": [
@@ -27,7 +27,7 @@
   "params": {
     "alpha": 0.3,
     "beta": 0.1,
-    "z_score_threshold": 2,
+    "z_score_threshold": 2.0,
     "regime_window": 24
   },
   "regime": {
