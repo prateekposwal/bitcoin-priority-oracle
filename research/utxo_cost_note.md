@@ -8,9 +8,9 @@
 
 ## Summary
 
-The Bitcoin fee market prices **congestion** (inclusion in the next block) but not **permanence** (lifetime storage in every full node's UTXO set). This note quantifies the gap.
+The Bitcoin fee market prices **congestion** (inclusion in the next block) but not **permanence** (lifetime storage in every full node's blockchain history). This note quantifies the gap.
 
-A full Bitcoin node costs approximately **$925/year** to operate (hardware depreciation + bandwidth + electricity). At the current inscription rate of ~100K/month, each average 400-byte inscription adds ~0.45 GB/year of UTXO growth across the network. The modeled storage cost is **$0.0000019/byte/year** — or roughly **$0.008 per inscription over a 10-year lifetime**.
+A full Bitcoin node costs approximately **$925/year** to operate (hardware depreciation + bandwidth + electricity). At the current inscription rate of ~100K/month, each average 400-byte inscription adds ~0.45 GB/year of UTXO growth across the network. The modeled storage cost is **≈1.93e-6 $/byte/year** (1.925729e-6, marginal inscription attribution) — or roughly **$0.0077 per inscription over a 10-year lifetime**.
 
 Current inscription fees ($5–50) are 650–6,500× above the modeled storage cost, but they are a **one-time congestion payment**, not a recurring storage payment.
 
@@ -43,7 +43,7 @@ Where:
 | Annual node cost (electricity) | $157.68 |
 | **Total annual node cost** | **$924.35** |
 | UTXO growth from inscriptions | 480 MB/yr (0.45 GB/yr) |
-| **Cost per byte per year** | **$0.0000019** ($1.9e-6) |
+| **Cost per byte per year** | **≈1.93e-6 $/byte/yr** (1.925729e-6) |
 | Cost per inscription per year | $0.00077 |
 | **Cost per inscription (10yr lifetime)** | **$0.0077** |
 | Cost for 100K inscriptions (10yr) | $770 |
@@ -66,7 +66,7 @@ This means:
 Inscriptions store data in the witness using `OP_FALSE OP_IF <data> OP_ENDIF`, benefiting from this discount. A 400-byte inscription's data occupies only ~100 vbytes of block space. This means:
 
 1. **The marginal cost to include inscription data in a block is artificially low** — the SegWit discount was designed to fix malleability, not to subsidize data storage.
-2. **The gap between congestion cost and storage cost is widened** — the discount makes it cheap to write data, but every node must store the full (non-discounted) UTXO data forever.
+2. **The gap between congestion cost and storage cost is widened** — the discount makes it cheap to write data, but every node must store the full (non-discounted) blockchain data long-term.
 3. **A data-conscious relay policy** would need to account for the full byte cost, not the discounted vbyte cost, when assessing state impact.
 
 ---
@@ -77,7 +77,7 @@ Inscriptions store data in the witness using `OP_FALSE OP_IF <data> OP_ENDIF`, b
 |---|---|---|
 | What it prices | Space in next block (~10 min) | Lifetime storage in every node |
 | Inscription fee | $5–$50 (one-time) | $0.0077 (10yr) |
-| Payer | Sender (once) | All future node operators (forever) |
+| Payer | Sender (once) | All future node operators (long-term) |
 | Market mechanism | Competitive fee auction | None — unpriced externality |
 | Orders of magnitude | 6–7× higher per tx | — |
 
@@ -87,7 +87,7 @@ Inscriptions store data in the witness using `OP_FALSE OP_IF <data> OP_ENDIF`, b
 
 ## Open Questions
 
-1. **Is the externality economically significant?** At current volumes, the modeled storage cost per inscription is small ($0.008 over 10yr). But UTXO set growth compounds, and nodes are not compensated for carrying historical state.
+1. **Is the externality economically significant?** At current volumes, the modeled storage cost per inscription is small ($0.0077 over 10yr). But UTXO set growth compounds, and nodes are not compensated for carrying historical state.
 
 2. **Do node operators run pruned nodes?** If most nodes prune, they don't bear the full UTXO set cost. However, archival nodes and miners validating new blocks do carry the full set. The distribution matters.
 

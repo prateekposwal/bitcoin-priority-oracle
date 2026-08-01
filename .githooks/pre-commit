@@ -1,9 +1,25 @@
 #!/bin/sh
 # Pre-commit hook: validate JavaScript syntax before every commit
 # Install: git config core.hooksPath .githooks
+# NOTE: launchd/automation environments have a minimal PATH, so resolve node
+# explicitly instead of relying on shell PATH (fixes "node: command not found").
+
+if command -v node >/dev/null 2>&1; then
+  NODE="$(command -v node)"
+elif [ -x /usr/local/bin/node ]; then
+  NODE=/usr/local/bin/node
+elif [ -x /opt/homebrew/bin/node ]; then
+  NODE=/opt/homebrew/bin/node
+elif [ -x "$HOME/.nvm/versions/node"/*/bin/node ] 2>/dev/null; then
+  NODE="$(ls -d "$HOME"/.nvm/versions/node/*/bin/node 2>/dev/null | head -1)"
+else
+  echo "=== Pre-commit validation ==="
+  echo "❌ node not found in PATH or known locations; skipping validation."
+  exit 0
+fi
 
 echo "=== Pre-commit validation ==="
-node tools/validate.js
+"$NODE" tools/validate.js
 if [ $? -ne 0 ]; then
   echo ""
   echo "❌ Commit blocked: fix errors above before committing."

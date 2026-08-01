@@ -266,3 +266,27 @@ python3 research/verify_inscription_size.py <txid>
 3. **How long do inscription UTXOs actually live?** — Assume 10yr, but if inscription UTXOs are spent quickly (e.g., trading), the storage cost is lower. If they're never spent (collector behavior), the cost is higher (permanent).
 
 4. **How many node operators are there?** — Estimates range from 10,000 to 100,000 reachable nodes. The aggregate storage cost is $9.24K/yr. Per node: $0.09 to $0.92/yr. Is this economically significant?
+
+---
+
+## Model Reconciliation (v2.0.0)
+
+| Aspect | storage-ratio.js (SCCR) | utxo_cost_model.py (inscription externality) |
+|---|---|---|
+| Quantity estimated | cb for Storage Cost Coverage Ratio (all block data) | cb for marginal inscription burden |
+| Annual node cost C | 925 | 924.35 (component sum, rounded) |
+| Denominator | B_block × blocks/yr = 7.8894e10 bytes/yr (all block bytes) | 400 bytes × 100K/mo × 12 = 4.8e8 bytes/yr (inscription-only) |
+| cb current | 1.172459e-7 | 1.925729e-6 |
+| cb corrected | 1.172459e-8 (horizon-free) | unchanged |
+| Attribution | block-average | marginal |
+| Horizon T | twice (bug: /T in denominator L48/77 AND ×T in L33) | once (×T in final lifetime only) |
+
+**Decomposition:** the observed 16.4× gap between the two models = 164× denominator gap ÷ 10× time-horizon bug.
+
+**Verdict:** Finding 1 is primarily intentional-but-unexplained differing denominators (164×), partially masked by the 10× bug; Finding 2 is a confirmed 10× dimensional error (cb inflated ×10, ratio deflated ×10).
+
+---
+
+## Reproducibility
+
+> **Internal validation note (v2.0.0).** Internal validation identified an inconsistency in the Storage Cost Coverage Ratio implementation, traced it to a duplicated time-horizon term, corrected the implementation, regenerated all reported values, and confirmed the qualitative conclusions unchanged. Specifically, methodology.json v1.0.0 and tools/research/storage-ratio.js applied the storage horizon T twice — once dividing the denominator of cost-per-byte-per-year (`nodeCostPerYear / (avgBlockSizeBytes × blocksPerYear / yearsOfStorage)`) and again in the lifetime-cost product (`bytes × cb × years`). This inflated modeled storage cost — and deflated the coverage ratio — by exactly 10×. The canonical definition of cb is horizon-free (`cb = C / bytes-per-year`); T enters only through `L = cb × B × T`. After the correction, the per-node lifetime storage cost of an average block falls from $1.76 to $0.176, the network figure from $105.5K to $10.6K, and the average coverage ratio rises from 0.0172 to 0.174. All sampled blocks remain below the 1.0 threshold, so the direction of the finding — transaction fees do not cover the estimated storage externality — is unchanged. A second discrepancy, the 16.4× gap between the two cost models, was traced to intentionally different attribution denominators (block-average vs inscription-marginal byte counts; denominator ratio 164×), not to the time-horizon bug; it is documented in the Model Reconciliation table. All quantities in this paper are regenerated from research/model-spec.json; no script redefines a model constant.

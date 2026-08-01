@@ -1,5 +1,17 @@
 # Bitcoin Priority Oracle — Research Context
 
+## Core Operating Principle — NEVER CONFUSE WITH UNDONE WORK (Architect Mandate, 2026-08-01)
+
+Every session in this repo MUST honor these load-bearing rules:
+
+1. **DONE vs LEFT is mandatory.** Every report/status/plan ends with (a) a `DONE (verified)` list
+   and (b) a `LEFT / TODO (verified)` list — explicitly labeled. Mixing done + pending without
+   labels is a FAILURE.
+2. **DONE means SHIPPED.** "Done" = verified AND committed/pushed/deployed/live. Uncommitted,
+   unshipped, or not-live work goes in LEFT, never DONE.
+3. **Pattern identification + gap filling.** When work is complete, scan for recurring patterns
+   and structural gaps; propose or execute the fix that closes them. Do not stop at "task complete."
+
 ## Project Identity
 - **Name:** Bitcoin Priority Oracle
 - **Domain:** Bitcoin block space economics
@@ -41,7 +53,7 @@
 - **Pruned analysis completed** — Inscriptions are 0.91% of block space. Unavoidable cost: ~$2.53/yr/node. Negligible at current volumes.
 
 ## Key Numbers
-- Node cost: $925/yr · Storage/inscription: $0.008 · Externality: $9.2K/yr
+- Node cost: $925/yr · Storage/inscription: $0.0077 · Externality: $9.2K/yr
 - Current fees: $0.06–$25 · Fee-to-storage ratio: 8×–3,000×
 
 ## Open Questions
@@ -404,4 +416,39 @@
 ### Metrics
 - Quality: healthy
 - Forecast: holt-linear-trend · stable · regime=normal (342 pts)
+- M4: 1/7 clean cycles · bridgeFlipped=false
+## Session Handoff — 2026-08-01T18:14:48.160Z
+
+### Current State
+- Session mood: neutral
+- Active work: cycle 48 · bridge=on · M4 cleanCycles=0/7
+- Forecast: holt-linear-trend · stable · rmse=1.156 (343 pts)
+
+### Decisions Made
+- *(No decisions recorded)*
+
+### Open Issues
+- DE AGENT: last run 111 min ago
+- 6 endpoints unhealthy
+
+### Metrics
+- Quality: degraded
+- Forecast: holt-linear-trend · stable · regime=normal (343 pts)
+- M4: 0/7 clean cycles · bridgeFlipped=false
+## Session Handoff — 2026-08-01T19:15:17.808Z
+
+### Current State
+- Session mood: neutral
+- Active work: cycle 49 · bridge=on · M4 cleanCycles=1/7
+- Forecast: holt-linear-trend · stable · rmse=1.154 (345 pts)
+
+### Decisions Made
+- M4 gate: cleanCycles=1/7 (no flip)
+
+### Open Issues
+- 1 endpoints unhealthy
+
+### Metrics
+- Quality: healthy
+- Forecast: holt-linear-trend · stable · regime=normal (345 pts)
 - M4: 1/7 clean cycles · bridgeFlipped=false

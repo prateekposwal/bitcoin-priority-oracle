@@ -73,6 +73,6 @@ share of miner revenue — the subsidy→fee transition becomes visible in real 
 4. **Permanence vs congestion historically** — Mt. Gox-era blocks (~1.5 KB, nearly empty) vs today's inscription-heavy blocks. Block composition over time (payments vs data vs settlement).
 5. **Lightning's effect on the externality — refuted naïvely** — L2 increases per-payment on-chain cost ratio (channel opens/closes) while decreasing fee revenue; channel churn can worsen the externality.
 6. **Fork economics as controlled experiment** — run the storage-ratio model against BCH (8-32 MB) and BSV (128 MB) data: their per-byte cost falls on fewer nodes, fee-per-byte collapses. Three-way comparison.
-7. **The causal chain** — malleability fix → 4× weight discount → witness-as-data → Ordinals → fee pressure → storage externality materializes. The history explains why BSAHI's ratio (0.0149) exists.
+7. **The causal chain** — malleability fix → 4× weight discount → witness-as-data → Ordinals → fee pressure → storage externality materializes. The history explains why BSAHI's storage cost coverage ratio finding exists (corrected to v2.0.0 — see research/verification_appendix.md).
 
 _Research note — compiled from the History of Bitcoin (Wikipedia) and linked sub-articles, read in full._

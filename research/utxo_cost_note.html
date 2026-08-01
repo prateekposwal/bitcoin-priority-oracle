@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="The Bitcoin fee market prices congestion (inclusion in the next block) but not permanence (lifetime storage in every full node&#x27;s UTXO set). This note quantifies">
+<meta name="description" content="The Bitcoin fee market prices congestion (inclusion in the next block) but not permanence (lifetime storage in every full node&#x27;s blockchain history). This note ">
 <meta property="og:title" content="Utxo Cost Note">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://bitcoinsahi.com/research/utxo_cost_note.html">
@@ -53,8 +53,8 @@ footer .links a:hover{color:#D4933A}</style>
 <p><strong>Date:</strong> 2026-07-28</p>
 <hr>
 <h3>Summary</h3>
-<p>The Bitcoin fee market prices <strong>congestion</strong> (inclusion in the next block) but not <strong>permanence</strong> (lifetime storage in every full node&#x27;s UTXO set). This note quantifies the gap.</p>
-<p>A full Bitcoin node costs approximately <strong>$925/year</strong> to operate (hardware depreciation + bandwidth + electricity). At the current inscription rate of ~100K/month, each average 400-byte inscription adds ~0.45 GB/year of UTXO growth across the network. The modeled storage cost is <strong>$0.0000019/byte/year</strong> — or roughly <strong>$0.008 per inscription over a 10-year lifetime</strong>.</p>
+<p>The Bitcoin fee market prices <strong>congestion</strong> (inclusion in the next block) but not <strong>permanence</strong> (lifetime storage in every full node&#x27;s blockchain history). This note quantifies the gap.</p>
+<p>A full Bitcoin node costs approximately <strong>$925/year</strong> to operate (hardware depreciation + bandwidth + electricity). At the current inscription rate of ~100K/month, each average 400-byte inscription adds ~0.45 GB/year of UTXO growth across the network. The modeled storage cost is <strong>≈1.93e-6 $/byte/year</strong> (1.925729e-6, marginal inscription attribution) — or roughly <strong>$0.0077 per inscription over a 10-year lifetime</strong>.</p>
 <p>Current inscription fees ($5–50) are 650–6,500× above the modeled storage cost, but they are a <strong>one-time congestion payment</strong>, not a recurring storage payment.</p>
 <hr>
 <h3>Cost Model Formula</h3>
@@ -79,7 +79,7 @@ InscriptionStorageCost = CostPerBytePerYear * inscription_bytes * assumed_lifeti
 <tr><td>Annual node cost (electricity)</td><td>$157.68</td></tr>
 <tr><td><strong>Total annual node cost</strong></td><td><strong>$924.35</strong></td></tr>
 <tr><td>UTXO growth from inscriptions</td><td>480 MB/yr (0.45 GB/yr)</td></tr>
-<tr><td><strong>Cost per byte per year</strong></td><td><strong>$0.0000019</strong> ($1.9e-6)</td></tr>
+<tr><td><strong>Cost per byte per year</strong></td><td><strong>≈1.93e-6 $/byte/yr</strong> (1.925729e-6)</td></tr>
 <tr><td>Cost per inscription per year</td><td>$0.00077</td></tr>
 <tr><td><strong>Cost per inscription (10yr lifetime)</strong></td><td><strong>$0.0077</strong></td></tr>
 <tr><td>Cost for 100K inscriptions (10yr)</td><td>$770</td></tr>
@@ -97,7 +97,7 @@ InscriptionStorageCost = CostPerBytePerYear * inscription_bytes * assumed_lifeti
 <p>Inscriptions store data in the witness using <code>OP_FALSE OP_IF &lt;data&gt; OP_ENDIF</code>, benefiting from this discount. A 400-byte inscription&#x27;s data occupies only ~100 vbytes of block space. This means:</p>
 <ol>
 <li><strong>The marginal cost to include inscription data in a block is artificially low</strong> — the SegWit discount was designed to fix malleability, not to subsidize data storage.</li>
-<li><strong>The gap between congestion cost and storage cost is widened</strong> — the discount makes it cheap to write data, but every node must store the full (non-discounted) UTXO data forever.</li>
+<li><strong>The gap between congestion cost and storage cost is widened</strong> — the discount makes it cheap to write data, but every node must store the full (non-discounted) blockchain data long-term.</li>
 <li><strong>A data-conscious relay policy</strong> would need to account for the full byte cost, not the discounted vbyte cost, when assessing state impact.</li>
 </ol>
 <hr>
@@ -106,7 +106,7 @@ InscriptionStorageCost = CostPerBytePerYear * inscription_bytes * assumed_lifeti
 <tr><th></th><th>Congestion pricing (current market)</th><th>Storage cost (modeled)</th></tr>
 <tr><td>What it prices</td><td>Space in next block (~10 min)</td><td>Lifetime storage in every node</td></tr>
 <tr><td>Inscription fee</td><td>$5–$50 (one-time)</td><td>$0.0077 (10yr)</td></tr>
-<tr><td>Payer</td><td>Sender (once)</td><td>All future node operators (forever)</td></tr>
+<tr><td>Payer</td><td>Sender (once)</td><td>All future node operators (long-term)</td></tr>
 <tr><td>Market mechanism</td><td>Competitive fee auction</td><td>None — unpriced externality</td></tr>
 <tr><td>Orders of magnitude</td><td>6–7× higher per tx</td><td>—</td></tr>
 </table>
@@ -114,7 +114,7 @@ InscriptionStorageCost = CostPerBytePerYear * inscription_bytes * assumed_lifeti
 <hr>
 <h3>Open Questions</h3>
 <ol>
-<li><strong>Is the externality economically significant?</strong> At current volumes, the modeled storage cost per inscription is small ($0.008 over 10yr). But UTXO set growth compounds, and nodes are not compensated for carrying historical state.</li>
+<li><strong>Is the externality economically significant?</strong> At current volumes, the modeled storage cost per inscription is small ($0.0077 over 10yr). But UTXO set growth compounds, and nodes are not compensated for carrying historical state.</li>
 <li><strong>Do node operators run pruned nodes?</strong> If most nodes prune, they don&#x27;t bear the full UTXO set cost. However, archival nodes and miners validating new blocks do carry the full set. The distribution matters.</li>
 <li><strong>Should SegWit&#x27;s discount be revisited for data transactions?</strong> The 4:1 witness discount was designed for signature data (malleability fix), not arbitrary data storage. A state-conscious relay policy might treat witness data differently than script data.</li>
 <li><strong>What would a storage cost oracle look like?</strong> Any oracle would need to estimate node costs, UTXO growth rates, and projected lifetimes — all noisy parameters. The model is useful for directional insight but not for precise fee setting.</li>

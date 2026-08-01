@@ -13,6 +13,11 @@ var spoolMod = require('../data-engineering/spool.js');
 var REPO = path.resolve(__dirname, '..', '..');
 var BRIEFS_FILE = path.join(REPO, 'captured-data', 'content-briefs.json');
 
+function loadJson(p, fallback) {
+  try { return JSON.parse(fs.readFileSync(p, 'utf8')); }
+  catch (e) { return fallback; }
+}
+
 function loadResearch() {
   try {
     var db = require('../db/init.js');
@@ -99,6 +104,46 @@ function run() {
     briefs.push(b);
   });
   briefs = briefs.slice(0, 20);
+
+  // Storage-ratio history hygiene: the DB keeps v1.0.0 rows for the changelog,
+  // but only the LATEST (highest ratio, v2.0.0-tagged) Storage Cost Coverage
+  // Ratio finding may be 'pending'. Older ratio rows are marked 'superseded'
+  // so the publishing queue never carries stale 0.0149/0.0172/0.0176 pending
+  // items (P1.11/P1.12).
+  var ratioBriefs = briefs.filter(function(b) { return /^Storage Cost Coverage Ratio:/.test(b.title); });
+  if (ratioBriefs.length > 1) {
+    var maxRatio = 0;
+    ratioBriefs.forEach(function(b) {
+      var r = parseFloat(String(b.title).match(/[\d.]+/) || '0') || 0;
+      if (r > maxRatio) maxRatio = r;
+    });
+    var keep = null;
+    ratioBriefs.forEach(function(b) {
+      var r = parseFloat(String(b.title).match(/[\d.]+/) || '0') || 0;
+      var isMax = Math.abs(r - maxRatio) < 1e-9;
+      var hasV2 = /v2\.0\.0/.test(b.title);
+      if (isMax && hasV2) keep = b;
+      else if (isMax && !keep) keep = b;
+    });
+    ratioBriefs.forEach(function(b) { if (b !== keep) b.status = 'superseded'; });
+  }
+
+  // Engagement-driven agenda ordering: top-3 research-priority topics rank first.
+  var priorities = loadJson(path.join(REPO, 'captured-data', 'research-priority.json'), { priorities: [] }).priorities || [];
+  var rankMap = {};
+  priorities.forEach(function(p, i) { rankMap[p.topic] = Math.min(i + 1, 4); });
+  var ANGLE_TOPIC_MAP = { 'storage-externality': 'cost', 'research': 'research',
+    'fees': 'fees', 'lightning': 'lightning', 'blocks': 'blocks',
+    'fork': 'fork', 'economy': 'economy', 'capacity': 'capacity' };
+  var scoreByTopic = {};
+  priorities.forEach(function(p) { scoreByTopic[p.topic] = p.score; });
+  briefs.forEach(function(b) {
+    var t = ANGLE_TOPIC_MAP[b.topic] || 'research';
+    b.priority_rank = rankMap[t] || 5;
+    b.priority_score = t === 'research' ? 0 : (scoreByTopic[t] || 0);
+  });
+  briefs.sort(function(a, b) { return a.priority_rank - b.priority_rank; });
+
   fs.writeFileSync(BRIEFS_FILE, JSON.stringify({ generated_at: new Date().toISOString(), briefs: briefs }, null, 2));
 
   return spoolMod.init().then(function(spool) {

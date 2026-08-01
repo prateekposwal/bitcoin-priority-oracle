@@ -1,0 +1,11 @@
+{
+  "version": "1.1.0",
+  "date": "2026-08-02",
+  "supersededBy": "research/model-spec.json",
+  "status": "deprecated",
+  "params": { "nodeCostPerYear": 925, "estimatedNodeCount": 60000, "yearsOfStorage": 10, "avgBlockSizeBytes": 1500000 },
+  "changelog": [
+    { "version": "1.1.0", "date": "2026-08-02", "change": "Deprecated in favor of research/model-spec.json v2.0.0. v1.0.0's derived.costPerBytePerYear contained a duplicated time-horizon term (10x error); the canonical spec is horizon-free." },
+    { "version": "1.0.0", "date": "2026-07-30", "change": "Initial methodology." }
+  ]
+}

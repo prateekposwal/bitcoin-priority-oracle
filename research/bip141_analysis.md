@@ -28,7 +28,7 @@ Inscriptions use `OP_FALSE OP_IF <data> OP_ENDIF` to store arbitrary data in the
 - Counts as 100 vbytes toward the 4M WU block limit
 - Without SegWit, the same data would cost 1,600 WU (at 4 WU/byte)
 
-This makes inscription data 75% cheaper than it would be without the SegWit discount — a pricing accident that nobody designed but everyone benefits from (or bears the cost of, depending on perspective).
+This makes inscription data 75% cheaper than it would be without the SegWit discount — a pricing accident that nobody designed but everyone benefits from (or bears the cost of, depending on perspective). Note that the 4:1 discount applies to all witness data — SegWit financial transactions benefit identically; the accident is that it also subsidizes data-bearing constructions.
 
 ## Key References
 

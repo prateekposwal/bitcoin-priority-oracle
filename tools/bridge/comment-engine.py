@@ -55,7 +55,7 @@ DATA_LINES = {
     'mempool': "Our live data shows the mempool at {m} MB, which suggests people are choosing to wait rather than bid up.",
     'blocks': "The recent block we captured had ~{b} transactions. Full, but the fee distribution shows most users are not overpaying.",
     'lightning': "We track Lightning alongside on-chain — the two layers are moving in opposite directions, which is exactly the design.",
-    'node': "On node costs: our Storage Cost Coverage Ratio research suggests fees cover roughly 1.5% of a decade of storage costs. Early and directional, but worth watching.",
+    'node': "On node costs: our Storage Cost Coverage Ratio research suggests fees cover roughly 17% of a decade of storage costs. Early and directional, but worth watching.",
     'settlement': "At {f} sat/vB fastest, settlement is still cheap relative to the value moved. That ratio is the part most people miss.",
     'cost': "The cost question is central to everything we do. Fees {f} sat/vB, mempool {m} MB — the market is pricing scarcity in real time.",
     'security': "On the security side — it is a reminder that the weakest link is almost never the protocol. We focus on the economics, but self-custody basics matter more.",

@@ -12,7 +12,7 @@
 
 - [x] Estimate: what does it cost to run a full Bitcoin node per year? (HW + bandwidth + electricity) → `research/utxo_cost_model.py`, $925/yr
 - [x] Calculate: how many bytes of UTXO data does the average inscription add? → ~400 bytes (100 vbytes)
-- [x] Model: node cost / byte / year → $0.0000019/byte/yr, $0.008/inscription lifetime
+- [x] Model: node cost / byte / year → ≈1.93e-6 $/byte/yr, ~$0.0077/inscription lifetime
 - [x] Document: the SegWit weight formula's impact on inscription economics → `research/bip141_analysis.md`
 - [x] Simulate: how UTXO set growth affects node operator costs → model handles 50K-300K/mo scenarios
 - [x] Verification appendix with source links → `research/verification_appendix.md`
@@ -96,7 +96,7 @@ The research hinges on one question that emerged from community feedback:
 
 > **Is the "data permanence externality" a real, economically significant problem — or is the existing fee market sufficient?**
 
-The fee market prices **congestion** (inclusion in the next block). It does not price **permanence** (lifetime storage in every full node's UTXO set). These are two different market failures.
+The fee market prices **congestion** (inclusion in the next block). It does not price **permanence** (lifetime storage in every full node's blockchain history). These are two different market failures.
 
 | | Congestion pricing | Permanence cost |
 |---|---|---|
@@ -112,12 +112,12 @@ The fee market prices **congestion** (inclusion in the next block). It does not 
 
 - [x] Define metric: StorageCostCoverageRatio = TransactionFee / (Bytes × ReplicationFactor × CostPerBytePerYear × Years)
 - [x] Build reproducible computation module → `tools/research/storage-ratio.js`
-- [x] Generate first report: 148 blocks, avg ratio 0.0149 (1.49%) → `reports/research/storage-ratio-2026-07-30.md`
+- [x] Generate first report: 148 blocks, avg ratio 0.0149 (1.49%) → `reports/research/storage-ratio-2026-07-30.md` *(superseded by the v2.0.0 correction — see research/model-spec.json; corrected avg ≈ 0.174)*
 - [ ] Feed Bitcoin Core `getblockstats → utxo_size_inc` for per-block UTXO growth data
 - [ ] Track ratio over time as new data accumulates
 - [ ] Publish as research note (arXiv, Bitcoin Optech, r/BitcoinEngineering)
 
-**Key finding:** 100% of sampled blocks have fees covering less than 1× the estimated 10-year storage cost. Average coverage: **1.49%**. This is the first empirical evidence that Bitcoin's fee market does not price the storage externality.
+**Key finding (v1.0.0, superseded):** 100% of sampled blocks had fees covering less than 1× the estimated 10-year storage cost. Average coverage: **1.49%**. Corrected in v2.0.0 (duplicated time-horizon term removed) — the regenerated average is ≈ **17.4%** (see research/verification_appendix.md Model Reconciliation); the direction of the finding is unchanged.
 
 ## Open Questions
 

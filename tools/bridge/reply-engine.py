@@ -33,7 +33,7 @@ REPLY_OPENERS = [
 REPLY_BUILDS = [
     " Looking at the live capture again: fees at {f} sat/vB, mempool at {m} MB. Your point holds in the current numbers, which makes the longer-term question even more interesting.",
     " The data actually supports part of your argument — {b} txs in the last block, fees still modest. Where we differ is on what that implies going forward. Worth watching the next few cycles.",
-    " You are right to push on this. Our Storage Cost Coverage Ratio is early and directional — if the fee share grows over time, the conclusion strengthens; if not, we update. That is the plan.",
+    " You are right to push on this. Our Storage Cost Coverage Ratio (~17% of a decade of storage costs covered) is early and directional — if the fee share grows over time, the conclusion strengthens; if not, we update. That is the plan.",
     " Interesting angle. Our captures show the mempool at {m} MB, which is consistent with what you describe. We will keep measuring and share if the pattern shifts.",
 ]
 

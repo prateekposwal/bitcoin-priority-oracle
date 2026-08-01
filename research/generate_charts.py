@@ -1,8 +1,16 @@
+import json
+import os
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mticker
 import numpy as np
+
+# Values sourced from research/model-spec.json v2.0.0 (P1.9).
+with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'model-spec.json')) as _f:
+    Q = json.load(_f)['quantities']
+L_INSC = Q['L_insc']['value']  # 0.00770292 lifetime storage cost per inscription (USD)
+C = Q['C']['value']            # 925 canonical annual node cost (USD/yr)
 
 plt.rcParams.update({
     'font.family': 'sans-serif',
@@ -29,12 +37,12 @@ wedges, texts, autotexts = ax1.pie(
     textprops={'fontsize': 9}, pctdistance=0.75,
     wedgeprops={'linewidth': 1, 'edgecolor': '#f8f9fa'}
 )
-ax1.set_title('Annual Full Node Cost: $924/yr', fontweight='bold', fontsize=13, pad=10)
+ax1.set_title(f'Annual Full Node Cost: ${C:.0f}/yr', fontweight='bold', fontsize=13, pad=10)
 
 # ── Panel 2: Fee vs storage cost comparison (log scale) ──
 ax2 = fig.add_subplot(2, 2, 2)
 categories = ['Modeled\nstorage cost\n(10yr)', 'Current fee\n(low activity)', 'Current fee\n(moderate)', 'Peak fee\n(inscription mania)']
-values = [0.008, 0.06, 0.50, 25.00]
+values = [L_INSC, 0.06, 0.50, 25.00]
 bar_colors = ['#47b39c', '#4a6fa5', '#dd6b4b', '#c0392b']
 bars = ax2.bar(range(len(categories)), values, color=bar_colors, width=0.6, edgecolor='white', linewidth=1.2)
 ax2.set_yscale('log')
@@ -49,11 +57,11 @@ for bar, val in zip(bars, values):
 ax2.set_ylim(bottom=0.001, top=80)
 
 # Annotations showing ratio
-ax2.annotate('', xy=(0, 0.008), xytext=(1, 0.06),
+ax2.annotate('', xy=(0, L_INSC), xytext=(1, 0.06),
              arrowprops=dict(arrowstyle='<->', color='#666', lw=1.5))
 ax2.text(0.5, 0.02, '~8×', ha='center', fontsize=8, color='#666', fontweight='bold')
 
-ax2.annotate('', xy=(0, 0.008), xytext=(4, 25),
+ax2.annotate('', xy=(0, L_INSC), xytext=(4, 25),
              arrowprops=dict(arrowstyle='<->', color='#666', lw=1.5))
 ax2.text(2, 0.5, '~3,000×', ha='center', fontsize=8, color='#666', fontweight='bold')
 
@@ -99,7 +107,7 @@ for bar, val in zip(bars2, fee_vs_storage):
     ax4.text(bar.get_x() + bar.get_width()/2, bar.get_height()*1.02,
              f'{val}×', ha='center', va='bottom', fontsize=10, fontweight='bold')
 # Reference line
-ax4.axhline(y=1, color='#666', linestyle=':', linewidth=0.8, label='Storage cost = $0.008')
+ax4.axhline(y=1, color='#666', linestyle=':', linewidth=0.8, label=f'Storage cost = ${L_INSC:.4f}')
 ax4.text(2.3, 1.5, 'Storage cost', fontsize=7, color='#666')
 ax4.set_ylim(bottom=0, top=3800)
 

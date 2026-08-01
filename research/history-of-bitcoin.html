@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="A block-space-economics reading of Bitcoin&#x27;s history. Every episode below is Bitcoin block space economics research from BSAHI — live fee, mempool, and settleme">
+<meta property="og:title" content="History-Of-Bitcoin">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://bitcoinsahi.com/research/history-of-bitcoin.html">
+<meta property="og:image" content="https://bitcoinsahi.com/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#1A1612">
+<link rel="canonical" href="https://bitcoinsahi.com/research/history-of-bitcoin.html">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://bitcoinsahi.com/"},{"@type":"ListItem","position":2,"name":"Research","item":"https://bitcoinsahi.com/research/"},{"@type":"ListItem","position":3,"name":"History-Of-Bitcoin","item":"https://bitcoinsahi.com/research/history-of-bitcoin.html"}]}
+</script>
+<title>History-Of-Bitcoin — BSAHI Research</title>
+<style>body{background:#1A1612;color:#E8E5E0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;margin:0;padding:0}
+header{background:#231F19;border-bottom:1px solid #3A3228;padding:16px 24px}
+.header-inner{max-width:960px;margin:0 auto;display:flex;align-items:center;justify-content:space-between}
+.brand{color:#F7931A;font-weight:700;text-decoration:none;font-size:1.1rem}
+.nav{display:flex;gap:14px;align-items:center}
+.nav-item{padding:6px 14px;font-size:.875rem;font-weight:500;color:#9B8B78;border-radius:6px;text-decoration:none;transition:all .2s}
+.nav-item:hover{color:#EADCC8;background:#2A251E}
+.nav-item.active{background:#2A251E;color:#EADCC8}
+.container{max-width:960px;margin:0 auto;padding:40px 24px 80px}
+h1{color:#F7931A;font-size:1.9rem;margin:0 0 8px}
+h2{color:#EADCC8;font-size:1.3rem;margin:28px 0 12px}
+h3{color:#EADCC8;font-size:1.1rem;margin:20px 0 8px}
+p{color:#C9C2B8;line-height:1.8;margin:0 0 14px}
+a{color:#D4933A}
+table{border-collapse:collapse;margin:14px 0;width:100%}
+th,td{border:1px solid #3A3228;padding:8px 12px;text-align:left;font-size:.9rem}
+th{background:#231F19;color:#EADCC8}
+blockquote{border-left:3px solid #F7931A;margin:14px 0;padding:4px 16px;color:#9B8B78;background:#1F1B16}
+pre,code{background:#231F19;border-radius:6px;font-family:'SF Mono',Menlo,monospace}
+pre{padding:14px;overflow-x:auto}
+code{padding:2px 5px;font-size:.88em}
+ul,ol{color:#C9C2B8;line-height:1.7;padding-left:24px}
+hr{border:none;border-top:1px solid #3A3228;margin:24px 0}
+footer{border-top:1px solid #3A3228;padding:24px;text-align:center;font-size:.85rem;color:#6A5D4E}
+footer .links{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-bottom:10px}
+footer .links a{color:#6A5D4E;text-decoration:none}
+footer .links a:hover{color:#D4933A}</style>
+</head>
+<body>
+<header><div class="header-inner"><a href="/" class="brand">⬡ BSAHI</a><nav class="nav"><a href="/" class="nav-item">Home</a><a href="/live" class="nav-item">Live Fees</a><a href="/learn" class="nav-item">Learn</a><a href="/capacity" class="nav-item">Capacity</a><a href="/fork-tracker" class="nav-item">Fork Tracker</a><span class="nav-item active">Research</span></nav></div></header>
+<div class="container">
+<h1>History-Of-Bitcoin</h1>
+<h2>History of Bitcoin — Research Note</h2>
+<p>A block-space-economics reading of Bitcoin&#x27;s history. Every episode below is</p>
+<p>selected for what it teaches about the pricing of block space, congestion, and</p>
+<p>permanence — the axes BSAHI studies.</p>
+<h3>Origins: the cypherpunk prehistory</h3>
+<ul>
+<li><strong>David Chaum, DigiCash/ecash (1989)</strong> — issuer-based blind-signature cash; anonymous but centralized. Failed commercially (&quot;no banks wanted to sign on&quot;). Lesson: centralized issuance killed ecash; Bitcoin&#x27;s permissionless replicated state is what created the storage commons.</li>
+<li><strong>Dwork &amp; Naor, &quot;Pricing via Processing&quot; (1992)</strong> — computational puzzles as a price on resource use; the seed of proof-of-work.</li>
+<li><strong>Adam Back, Hashcash (1997)</strong> — practical PoW for anti-spam; Satoshi cites it directly in §4.</li>
+<li><strong>Wei Dai, b-money (1998)</strong> — first distributed digital cash; anonymous, PoW-issued.</li>
+<li><strong>Nick Szabo, bit gold (1998/2005)</strong> — chained PoW as collectible scarcity; closest direct ancestor.</li>
+<li><strong>Hal Finney, RPOW (2004)</strong> — reusable PoW tokens.</li>
+</ul>
+<h3>Launch (2008-2009)</h3>
+<ul>
+<li><strong>Oct 31 2008</strong> — whitepaper posted to the cryptography mailing list.</li>
+<li><strong>Jan 3 2009</strong> — genesis block (50 BTC) embeds the Times headline: &quot;Chancellor on brink of second bailout for banks.&quot;</li>
+<li><strong>Jan 12 2009</strong> — Hal Finney receives the first transaction (10 BTC).</li>
+</ul>
+<h3>Early market (2010-2012)</h3>
+<ul>
+<li><strong>May 22 2010 — Pizza Day</strong>: 10,000 BTC ≈ $41 for two pizzas; first price ~$0.004.</li>
+<li><strong>Nov 28 2012 — Halving #1</strong> (block 210,000): subsidy 50 → 25.</li>
+</ul>
+<h3>The scaling debate → the forks (2015-2017) — the battle over block space</h3>
+<p>The single most important episode for BSAHI: the 1 MB block-size cap (a 2010</p>
+<p>anti-DoS guardrail) became the first political economy of block space.</p>
+<ul>
+<li><strong>Big-block camp</strong> (XT 8MB, Classic 2MB, Unlimited no-limit): block space isn&#x27;t scarce; raise the cap and the fee market vanishes.</li>
+<li><strong>Small-block camp</strong> (Core): block space stays scarce; the fee market funds security; scale on layer 2 (Lightning) and via SegWit.</li>
+<li><strong>Feb 2017 Hong Kong Agreement</strong> (SegWit + 2MB) collapses within months.</li>
+<li><strong>May 2017 New York Agreement (SegWit2x)</strong> — ~80% hash power signs; the 2MB half <strong>canceled Nov 8 2017</strong> — consensus, not hash power, decides.</li>
+<li><strong>SegWit (BIP 141) activates Aug 24 2017 (block 481,824)</strong> — witness data at 1/4 weight → effective capacity 1→~4 MB without a hard fork. Designed for malleability (enabling Lightning); capacity was the real purpose; <strong>state pricing was explicitly not</strong> (BSAHI&#x27;s bip141_analysis.md).</li>
+<li><strong>Aug 1 2017 — Bitcoin Cash splits</strong> (8 MB blocks, later 32 MB) at block 478,558.</li>
+<li><strong>Nov 15 2018 — Bitcoin SV splits</strong> BCH (128 MB blocks) — the fork of a fork.</li>
+</ul>
+<p>Three chains, three answers to &quot;how big should a block be.&quot;</p>
+<h3>The halvings (subsidy → fee transition)</h3>
+<table>
+<tr><th>Halving</th><th>Block</th><th>Date</th><th>Subsidy</th></tr>
+<tr><td>#1</td><td>210,000</td><td>Nov 28 2012</td><td>50 → 25</td></tr>
+<tr><td>#2</td><td>420,000</td><td>Jul 9 2016</td><td>25 → 12.5</td></tr>
+<tr><td>#3</td><td>630,000</td><td>May 11 2020</td><td>12.5 → 6.25</td></tr>
+<tr><td>#4</td><td>840,000</td><td>Apr 20 2024</td><td>6.25 → 3.125</td></tr>
+<tr><td>#5 (est)</td><td>1,050,000</td><td>~2028</td><td>3.125 → 1.5625</td></tr>
+</table>
+<p>#4 is the first halving where fees (inscriptions/Runes-driven) are a material</p>
+<p>share of miner revenue — the subsidy→fee transition becomes visible in real time.</p>
+<h3>2021: Taproot, El Salvador, the $69K bull run</h3>
+<ul>
+<li><strong>Taproot activates Nov 14 2021 (block 709,632)</strong> — BIP 340 Schnorr, BIP 341 Taproot (MAST), BIP 342 Tapscript. Lowered per-input cost; enabled complex contracts; made future data-bearing outputs cheaper — which mattered once Ordinals arrived.</li>
+<li><strong>El Salvador: BTC legal tender Sept 7 2021</strong> — the first national test.</li>
+<li>Cycle ATH ~$69K (Nov 2021); 2022 crash via Terra/3AC/FTX.</li>
+</ul>
+<h3>2023-2025: Ordinals, ETFs, Halving #4, six figures</h3>
+<ul>
+<li><strong>Jan 2023 — Ordinals go live</strong> (Casey Rodarmor): inscriptions embed data via <code>OP_FALSE OP_IF ... OP_ENDIF</code> in witness data, exploiting the 4× SegWit weight discount. BRC-20 (Mar 2023), Runes at the halving (Apr 2024). The storage externality becomes measurable in the fee market.</li>
+<li><strong>Jan 10 2024 — SEC approves 11 spot ETFs.</strong> Demand-side institutional gateway that does not touch on-chain fees.</li>
+<li><strong>Apr 20 2024 — Halving #4</strong> at block 840,000.</li>
+<li><strong>Dec 5 2024 — price crosses $100,000.</strong></li>
+</ul>
+<h3>New research angles for BSAHI</h3>
+<ol>
+<li><strong>SegWit discount as history (F2)</strong> — a dated narrative: 2017 malleability decision → 2023 inscriptions. The history IS the argument.</li>
+<li><strong>Block-size limits as political economy</strong> — a &quot;who said what&quot; timeline (XT/Classic/Unlimited/NYA/UASF) framed as competing claims about whether block space is priced resource or free utility.</li>
+<li><strong>Subsidy vs fee share per halving era</strong> — chart from block_stats (subsidy_btc, avg_fee_sats) across 2012/2016/2020/2024 windows. Testable prediction: inscriptions pushed fee share to a historical high post-2024.</li>
+<li><strong>Permanence vs congestion historically</strong> — Mt. Gox-era blocks (~1.5 KB, nearly empty) vs today&#x27;s inscription-heavy blocks. Block composition over time (payments vs data vs settlement).</li>
+<li><strong>Lightning&#x27;s effect on the externality — refuted naïvely</strong> — L2 increases per-payment on-chain cost ratio (channel opens/closes) while decreasing fee revenue; channel churn can worsen the externality.</li>
+<li><strong>Fork economics as controlled experiment</strong> — run the storage-ratio model against BCH (8-32 MB) and BSV (128 MB) data: their per-byte cost falls on fewer nodes, fee-per-byte collapses. Three-way comparison.</li>
+<li><strong>The causal chain</strong> — malleability fix → 4× weight discount → witness-as-data → Ordinals → fee pressure → storage externality materializes. The history explains why BSAHI&#x27;s storage cost coverage ratio finding exists (corrected to v2.0.0 — see research/verification_appendix.md).</li>
+</ol>
+<p>_Research note — compiled from the History of Bitcoin (Wikipedia) and linked sub-articles, read in full._</p>
+<p style="margin-top:32px;"><a href="/research">← All research</a> · <a href="/learn">← Back to Learn</a></p>
+</div>
+<footer><div class="links"><a href="/">Home</a><a href="/live">Decide</a><a href="/learn">Learn</a><a href="/capacity">Capacity</a><a href="/fork-tracker">Fork</a><a href="/research">Research</a></div><div>Bitcoin Sahi — research and decision platform for the Bitcoin block space economy</div></footer>
+</body>
+</html>

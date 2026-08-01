@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Bitcoin&#x27;s fee market prices congestion (space in the next block) but not permanence (space in every full node&#x27;s UTXO set for the lifetime of the output).">
+<meta name="description" content="Bitcoin&#x27;s fee market prices competition for inclusion in the next block, but it does not explicitly price the long-term resource costs of permanently recorded b">
 <meta property="og:title" content="Problem Statement">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://bitcoinsahi.com/research/problem_statement.html">
@@ -49,17 +49,18 @@ footer .links a:hover{color:#D4933A}</style>
 <h1>Problem Statement</h1>
 <h2>The Bitcoin Block Space Problem: A Frame</h2>
 <h3>One Sentence</h3>
-<p><strong>Bitcoin&#x27;s fee market prices congestion (space in the next block) but not permanence (space in every full node&#x27;s UTXO set for the lifetime of the output).</strong></p>
+<p><strong>Bitcoin&#x27;s fee market prices competition for inclusion in the next block, but it does not explicitly price the long-term resource costs of permanently recorded blockchain data.</strong></p>
+<p><strong>Scope:</strong> this paper measures the storage leg of a broader resource-pricing question. Bandwidth, validation, and UTXO-maintenance legs are future work.</p>
 <h3>The Question</h3>
-<p>Does Bitcoin&#x27;s fee market correctly price the lifetime cost of permanent data storage?</p>
-<p>BIP-141 (SegWit) created a 4× weight discount for witness data. This was designed to fix transaction malleability — not to price state growth. The discount made inscriptions (Ordinals, Runes, BRC-20) economically viable at scale. An unintended side effect of a different design goal.</p>
+<p>Does Bitcoin&#x27;s fee market fully internalize the long-term costs imposed by permanently recorded blockchain data, or does it primarily price short-term competition for block space?</p>
+<p>The witness discount substantially reduced the cost of storing witness-resident data relative to non-witness data. Years later, inscription protocols took advantage of that pricing structure.</p>
 <h3>What We Know</h3>
 <table>
 <tr><th>Metric</th><th>Value</th></tr>
 <tr><td>Annual node operation cost</td><td>~$925 (HW + bandwidth + electricity)</td></tr>
 <tr><td>Average inscription data</td><td>~400 bytes (in witness, ~100 vbytes block weight)</td></tr>
-<tr><td>Cost to store 1 byte for 1 year</td><td>~$0.0000019</td></tr>
-<tr><td>Lifetime storage cost per inscription</td><td>~$0.008 (10yr assumed UTXO life)</td></tr>
+<tr><td>Cost to store 1 byte for 1 year</td><td>~1.93e-6 $/byte/yr</td></tr>
+<tr><td>Lifetime storage cost per inscription</td><td>~$0.0077 (10yr assumed UTXO life)</td></tr>
 <tr><td>Unpriced externality at 100K/mo</td><td>~$9,200/yr spread across all nodes</td></tr>
 <tr><td>Current fee range</td><td>$0.06–$0.13 (low activity) to $5–50 (peak)</td></tr>
 </table>
@@ -67,20 +68,22 @@ footer .links a:hover{color:#D4933A}</style>
 <p>The fee market works well for its designed purpose: allocating block space among competing transactions during congestion. A high-fee transaction gets confirmed faster. This is <strong>congestion pricing</strong>.</p>
 <p>But storage cost is fundamentally different:</p>
 <ul>
-<li><strong>One-time payment</strong> (fee) vs <strong>recurring cost</strong> (storage forever)</li>
+<li><strong>One-time payment</strong> (fee) vs <strong>recurring cost</strong> (long-term replicated storage across the network)</li>
 <li><strong>Payer chooses</strong> to pay vs <strong>node operators bear</strong> the cost involuntarily</li>
 <li><strong>~10 min horizon</strong> (next block) vs <strong>indefinite horizon</strong> (UTXO lives until spent)</li>
 </ul>
-<p>The SegWit discount amplifies this: inscription data in witness pays 1/4 the weight of non-witness data, making it cheaper to add permanent state than to send a financial transaction.</p>
+<p>The witness discount reduces the marginal block-space cost of witness-resident data relative to non-witness data. Whether that discount appropriately reflects its long-term resource costs is part of the research question.</p>
 <h3>What We&#x27;re NOT Saying</h3>
 <ul>
 <li>❌ Not proposing a fix</li>
 <li>❌ Not claiming the externality is economically significant (it might not be)</li>
 <li>❌ Not claiming the SegWit discount was a mistake (it wasn&#x27;t — it solved malleability)</li>
+<li>❌ Not arguing that Bitcoin is &#x27;broken&#x27; — the fee market solves block-space allocation well; whether it internalizes long-lived resource costs is an empirical question.</li>
 <li>✅ Just framing the question clearly so it can be debated</li>
 </ul>
-<h3>The Open Question</h3>
-<p><strong>Is the &quot;data permanence externality&quot; economically significant enough to warrant a protocol-level response?</strong></p>
+<h3>The Open Question / Hypothesis</h3>
+<p><strong>Hypothesis:</strong> Bitcoin&#x27;s fee market efficiently allocates scarce block space, but may not fully internalize every long-lived resource cost created by confirmed transactions.</p>
+<p><strong>Pruning-consistency note:</strong> the externality exists in theory but is not economically significant at current volumes; the contribution is the reproducible ratio framework, not the magnitude.</p>
 <p>Arguments for &quot;yes&quot;: Unpriced externalities lead to overconsumption. At scale, UTXO growth increases node operation costs. The SegWit discount was never designed as a state-pricing mechanism.</p>
 <p>Arguments for &quot;no&quot;: Most nodes are pruned. Storage is cheap and getting cheaper. The fee market already caps inscription volume during congestion. Node operators choose to run nodes.</p>
 <p>This research provides the cost data. The community decides whether it matters.</p>

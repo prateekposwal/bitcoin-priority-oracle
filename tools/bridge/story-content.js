@@ -86,7 +86,7 @@ function generateAnalysis(capture) {
       body: 'Everyone says running a node is important. Few people talk about what it costs.\n\n' +
         'We are trying to answer that question with data.\n\n' +
         'Our early research suggests something striking: over a 10-year horizon, transaction fees cover only ' +
-        'about 1.5% of storage costs for a full node. That is the Storage Cost Coverage Ratio — and it is the ' +
+        'about 17% of storage costs for a full node (below 1x). That is the Storage Cost Coverage Ratio — and it is the ' +
         'kind of number that changes how you think about the network\'s long-term sustainability.\n\n' +
         'The fee market is the funding mechanism for Bitcoin\'s infrastructure. Understanding the ratio ' +
         'between what blocks earn and what running the network costs is essential to forecasting ' +
@@ -269,7 +269,7 @@ function generateAnalysis(capture) {
         'you cannot see.\n\n' +
         'So BSAHI is building the visibility layer. We capture the network continuously ' +
         'and turn the signals into research anyone can read:\n\n' +
-        '- Storage cost coverage: fees cover ~1.5% of a decade of node storage\n' +
+        '- Storage cost coverage: fees cover ~17% of a decade of node storage\n' +
         '- Live capture: ' + d.mempoolMB + ' MB mempool, ' + d.fastest + ' sat/vB\n' +
         '- Settlement demand: thousands of transactions per block\n\n' +
         'This is not about the price. It is about the machinery underneath — the part ' +

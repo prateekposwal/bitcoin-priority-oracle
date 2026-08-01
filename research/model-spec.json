@@ -1,0 +1,40 @@
+{
+  "schema": "bsahi.model-spec/1",
+  "file": "research/model-spec.json",
+  "version": "2.0.0",
+  "supersedes": "research/methodology.json v1.0.0",
+  "date": "2026-08-02",
+  "status": "canonical",
+  "quantities": {
+    "C":        { "symbol": "C", "name": "annual node operating cost", "units": "USD/year", "kind": "input", "value": 925, "canonicalSource": "research/verification_appendix.md (166.67+600+157.68=924.35, rounded to 925)", "note": "Python model exact component sum is 924.35; 925 is the pinned canonical value." },
+    "C_insc":   { "symbol": "C_insc", "name": "annual node operating cost (python-exact component sum)", "units": "USD/year", "kind": "input", "value": 924.35, "canonicalSource": "166.67 + 600 + 157.68 (component sum); C=925 is the pinned rounded canonical", "note": "Used ONLY by the marginal inscription branch so cb_insc and L_insc reproduce the python model's historic values exactly." },
+    "N":        { "symbol": "N", "name": "full-node replication factor", "units": "nodes", "kind": "input", "value": 60000, "canonicalSource": "TODO-bitcoin-oracle.md R2 (estimate, not census)" },
+    "T":        { "symbol": "T", "name": "storage horizon", "units": "years", "kind": "input", "value": 10, "canonicalSource": "research/verification_appendix.md Open Q3 (assumption)" },
+    "B_block":  { "symbol": "B_block", "name": "average block size", "units": "bytes", "kind": "input", "value": 1500000, "canonicalSource": "captured-data block_stats / spool fees (1.5MB approximation)" },
+    "I_bytes":  { "symbol": "I_bytes", "name": "avg inscription UTXO footprint", "units": "bytes", "kind": "input", "value": 400, "canonicalSource": "research/verification_appendix.md section 4 (envelope estimate)" },
+    "I_rate":   { "symbol": "I_rate", "name": "inscription issuance rate", "units": "inscriptions/month", "kind": "input", "value": 100000, "canonicalSource": "research/verification_appendix.md section 5 (Dune/Ordinals avg)" },
+    "R_blocks": { "symbol": "R_blocks", "name": "blocks per year", "units": "blocks/year", "kind": "derived", "formula": "365.25 * 24 * 6", "value": 52596 },
+    "B_all_yr": { "symbol": "B_all_yr", "name": "total block bytes per year", "units": "bytes/year", "kind": "derived", "formula": "B_block * R_blocks", "value": 7.8894e10 },
+    "B_insc_yr":{ "symbol": "B_insc_yr", "name": "inscription bytes per year", "units": "bytes/year", "kind": "derived", "formula": "I_bytes * I_rate * 12", "value": 4.8e8 },
+    "cb":       { "symbol": "cb", "name": "cost per byte per year (block-average, CANONICAL)", "units": "USD/(byte*year)", "kind": "derived", "formula": "C / B_all_yr", "value": 1.17246e-8, "note": "Horizon-free by design. T enters ONLY via L. Replaces methodology.json v1.0.0's /T-bugged formula." },
+    "cb_insc":  { "symbol": "cb_insc", "name": "cost per byte per year (marginal inscription attribution)", "units": "USD/(byte*year)", "kind": "derived", "formula": "C_insc / B_insc_yr", "value": 1.92573e-6, "note": "Secondary attribution for the inscription-externality branch. cb_insc/cb = 164.25x ≈ B_all_yr/B_insc_yr = 164.36x — the reconciliation table's denominator gap (164x)." },
+    "L":        { "symbol": "L", "name": "lifetime storage cost per node, one average block", "units": "USD/block", "kind": "derived", "formula": "cb * B_block * T", "value": 0.175869 },
+    "L_net":    { "symbol": "L_net", "name": "lifetime network storage cost, one average block", "units": "USD/block", "kind": "derived", "formula": "L * N", "value": 10552.1 },
+    "L_insc":   { "symbol": "L_insc", "name": "lifetime storage cost per inscription", "units": "USD/inscription", "kind": "derived", "formula": "cb_insc * I_bytes * T", "value": 0.00770292 },
+    "SCCR":     { "symbol": "SCCR", "name": "storage cost coverage ratio", "units": "dimensionless", "kind": "derived", "formula": "fee_USD / L_net", "value": "per-block; avg ~0.174 over 2026-08-01 capture", "note": "Structural property: SCCR is invariant to B_block (cb ∝ 1/B, L ∝ B)." }
+  },
+  "assumptions": ["60K node count is estimate", "homogeneous node costs", "10-yr archival horizon", "block size averaged", "bandwidth propagation cost excluded"],
+  "derived": { "singleEvaluator": "tools/research/derive-model.js", "note": "Formulas live in this file; derive-model.js is the ONLY place formulas are evaluated; scripts import values." },
+  "changelog": [
+    { "version": "2.0.0", "date": "2026-08-02", "change": "Canonical spec. Removed duplicated time-horizon term (cb is horizon-free; T applies only via L). Pins C=925 (python exact 924.35). Documents block-average vs marginal cb variants. Supersedes methodology.json v1.0.0." }
+  ],
+  "consumers": {
+    "tools/research/storage-ratio.js": { "import": "require('../../research/model-spec.json')", "uses": ["C","N","T","B_block","cb","L","L_net"] },
+    "research/utxo_cost_model.py": { "import": "json.load spec", "uses": ["C","C_insc","I_bytes","I_rate","cb_insc","L_insc","T"] },
+    "research/sensitivity.py": { "import": "json.load spec", "uses": ["C","I_bytes","I_rate","T"] },
+    "research/monte_carlo.py": { "import": "json.load spec", "uses": ["C","I_bytes","I_rate","T"] },
+    "research/generate_chart_social.py": { "import": "json.load spec", "uses": ["L_insc","C"] },
+    "research/generate_charts.py": { "import": "json.load spec", "uses": ["L_insc"] },
+    "learn.html / embed.html / bridge/*": { "import": "serve values via agent-15 metrics", "uses": ["SCCR","L_insc"] }
+  }
+}

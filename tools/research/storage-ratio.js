@@ -6,16 +6,22 @@ var https = require('https');
 var DB_PATH = path.resolve(__dirname, '..', '..', 'captured-data', 'bsahi.db');
 var RPC_ARGS = '-rpcuser=bsahi -rpcpassword=bsahi';
 
+// Canonical spec (v2.0.0): research/model-spec.json supersedes methodology.json.
+// CONFIG maps spec quantities to the script's param names; MODEL_VERSION drives
+// report + DB row versioning.
+var SPEC = require('../../research/model-spec.json');
+var Q = SPEC.quantities;
 var CONFIG = {
-  nodeCostPerYear: 925,
-  estimatedNodeCount: 60000,
-  yearsOfStorage: 10,
-  avgBlockSizeBytes: 1500000,
+  nodeCostPerYear: Q.C.value,
+  estimatedNodeCount: Q.N.value,
+  yearsOfStorage: Q.T.value,
+  avgBlockSizeBytes: Q.B_block.value
 };
+var MODEL_VERSION = SPEC.version;
 
 function sqlQuery(sql) {
   try {
-    var tmpFile = '/tmp/bsahi-sr-' + Date.now() + '.sql';
+    var tmpFile = '/tmp/bsahi-sr-' + process.pid + '-' + Date.now() + '-' + Math.floor(Math.random()*1e9) + '.sql';
     fs.writeFileSync(tmpFile, '.mode json\n' + sql);
     var result = child_process.execSync('sqlite3 "' + DB_PATH + '" < "' + tmpFile + '"', { encoding: 'utf8', timeout: 10000 });
     try { fs.unlinkSync(tmpFile); } catch (e) {}
@@ -34,13 +40,15 @@ function bitcoinCli(method, params) {
 function computeRatio(txFeeSats, txBytes, replicationFactor, costPerBytePerYear, years, btcPriceUsd) {
   if (!txFeeSats || !txBytes || txBytes === 0) return null;
   btcPriceUsd = btcPriceUsd || 64000;
+  // T enters ONLY here (model-spec.json v2.0.0); cb is horizon-free.
   var storageCostPerNode = txBytes * costPerBytePerYear * years;
   var totalNetworkCostUsd = storageCostPerNode * replicationFactor;
   var feeUsd = (txFeeSats / 100000000) * btcPriceUsd;
   return { ratio: totalNetworkCostUsd > 0 ? (feeUsd / totalNetworkCostUsd) : 0, storageCostUsd: totalNetworkCostUsd, feeUsd: feeUsd, feeBtc: txFeeSats / 100000000, txBytes: txBytes };
 }
 
-function computeFromFeeHistory() {
+function computeFromFeeHistory(cfg) {
+  cfg = cfg || CONFIG;
   var results = [];
   var captures = sqlQuery("SELECT json_data FROM captures WHERE source='fee_history' ORDER BY captured_at DESC LIMIT 1");
   if (!captures || captures.length === 0) return results;
@@ -48,14 +56,14 @@ function computeFromFeeHistory() {
     var data = JSON.parse(captures[0].json_data);
     if (!Array.isArray(data)) return results;
 
-    var costPerBytePerYear = CONFIG.nodeCostPerYear / (CONFIG.avgBlockSizeBytes * 365.25 * 24 * 6 / CONFIG.yearsOfStorage);
-    var replicationFactor = CONFIG.estimatedNodeCount;
+    var costPerBytePerYear = cfg.nodeCostPerYear / (cfg.avgBlockSizeBytes * 365.25 * 24 * 6);
+    var replicationFactor = cfg.estimatedNodeCount;
 
     for (var i = 0; i < data.length; i++) {
       var entry = data[i];
       var avgFees = entry.avgFees || 0;
       var btcPrice = entry.USD || 64000;
-      var ratio = computeRatio(avgFees, CONFIG.avgBlockSizeBytes, replicationFactor, costPerBytePerYear, CONFIG.yearsOfStorage, btcPrice);
+      var ratio = computeRatio(avgFees, cfg.avgBlockSizeBytes, replicationFactor, costPerBytePerYear, cfg.yearsOfStorage, btcPrice);
       if (ratio) {
         results.push({
           height: entry.avgHeight,
@@ -77,7 +85,7 @@ function computeFromBlockStats() {
   for (var i = 0; i < blocks.length; i++) {
     var b = blocks[i];
     var size = b.size || CONFIG.avgBlockSizeBytes;
-    var costPerBytePerYear = CONFIG.nodeCostPerYear / (size * 365.25 * 24 * 6 / CONFIG.yearsOfStorage);
+    var costPerBytePerYear = CONFIG.nodeCostPerYear / (size * 365.25 * 24 * 6);
     var replicationFactor = CONFIG.estimatedNodeCount;
     var ratio = computeRatio(b.avg_fee_sats, size, replicationFactor, costPerBytePerYear, CONFIG.yearsOfStorage);
     if (ratio) {
@@ -101,6 +109,7 @@ function generateReport() {
   var lines = [];
   lines.push('# Storage Cost Coverage Ratio Report');
   lines.push('Generated: ' + new Date().toISOString().replace('T', ' ').slice(0, 19) + ' UTC');
+  lines.push('Methodology version: ' + MODEL_VERSION + ' (research/model-spec.json)');
   lines.push('');
   lines.push('## Thesis');
   lines.push('');
@@ -121,6 +130,7 @@ function generateReport() {
   lines.push('| Estimated full nodes | ' + CONFIG.estimatedNodeCount.toLocaleString() + ' |');
   lines.push('| Storage horizon | ' + CONFIG.yearsOfStorage + ' years |');
   lines.push('| Avg block size | ' + (CONFIG.avgBlockSizeBytes / 1000000).toFixed(1) + ' MB |');
+  lines.push('| Methodology version | ' + MODEL_VERSION + ' |');
   lines.push('');
 
   if (feeHistoryRatios.length > 0) {
@@ -142,7 +152,7 @@ function generateReport() {
 
     var below1 = ratios.filter(function(r) { return r < 1; }).length;
     var pctBelow = (below1 / ratios.length * 100).toFixed(1);
-    lines.push('- ' + pctBelow + '% of blocks have fees covering less than 1× the estimated 10-year storage cost');
+    lines.push('- ' + pctBelow + '% of blocks have fees covering less than 1× the estimated ' + CONFIG.yearsOfStorage + '-year storage cost');
     lines.push('');
 
     lines.push('### Ratio Distribution (last 24h)');
@@ -194,6 +204,7 @@ function generateReport() {
   lines.push('- Storage horizon of ' + CONFIG.yearsOfStorage + ' years is an assumption. Some nodes prune earlier, some keep archival data forever.');
   lines.push('- Block size is averaged. Individual blocks vary significantly.');
   lines.push('- This model does not account for bandwidth costs of block propagation.');
+  lines.push('- Computed under methodology v' + MODEL_VERSION + ' (research/model-spec.json). Param changes bump the version; ratio moves without param changes are fee-regime signal.');
   lines.push('');
   lines.push('## Next Steps');
   lines.push('');
@@ -218,9 +229,9 @@ function generateReport() {
     var db = require('../db/init.js');
     db.insertResearchFinding(
       'Storage Ratio',
-      'Storage Cost Coverage Ratio: ' + avgRatio,
-      'Fees cover ' + pctBelow + ' of the estimated 10-year storage cost across nodes — an unpriced permanence externality.',
-      JSON.stringify({ blocks: feeHistoryRatios.length, avgRatio: avgRatio }),
+      'Storage Cost Coverage Ratio: ' + avgRatio + ' (v' + MODEL_VERSION + ')',
+      'Fees fall below the estimated ' + CONFIG.yearsOfStorage + '-year storage cost in ' + pctBelow + ' of sampled blocks — an unpriced permanence externality.',
+      JSON.stringify({ version: MODEL_VERSION, params: CONFIG, blocks: feeHistoryRatios.length, avgRatio: avgRatio }),
       0.95, 'storage-externality', 'reports/research/storage-ratio-' + dateStr + '.md', 0
     );
   } catch (e) { console.log('storage-ratio insert failed:', e.message); }
@@ -228,13 +239,44 @@ function generateReport() {
   return { filePath: filePath, blocks: feeHistoryRatios.length, avgRatio: feeHistoryRatios.length > 0 ? (feeHistoryRatios.reduce(function(a, b) { return a + b.ratio; }, 0) / feeHistoryRatios.length).toFixed(4) : 'N/A', belowThreshold: feeHistoryRatios.length > 0 ? (feeHistoryRatios.filter(function(r) { return r.ratio < 1; }).length / feeHistoryRatios.length * 100).toFixed(1) + '%' : 'N/A' };
 }
 
+function sensitivityGrid() {
+  var rows = [];
+  var base = CONFIG;
+  var grid = {
+    nodeCostPerYear: [600, 925, 1400],
+    estimatedNodeCount: [30000, 60000, 100000],
+    yearsOfStorage: [5, 10, 15],
+    avgBlockSizeBytes: [1000000, 1500000, 2000000]
+  };
+  Object.keys(grid).forEach(function(k) {
+    grid[k].forEach(function(v) {
+      var p = {};
+      Object.keys(base).forEach(function(b) { p[b] = base[b]; });
+      p[k] = v;
+      var ratios = computeFromFeeHistory(p);
+      var avg = ratios.length ? ratios.reduce(function(a, b) { return a + b.ratio; }, 0) / ratios.length : 0;
+      rows.push({ param: k, value: v, avgRatio: Math.round(avg * 10000) / 10000 });
+    });
+  });
+  return rows;
+}
+
 if (require.main === module) {
+  if (process.argv[2] === '--sensitivity') {
+    console.log('Storage Cost Coverage Ratio — sensitivity grid (methodology v' + MODEL_VERSION + ')');
+    console.log('param'.padEnd(20) + 'value'.padEnd(12) + 'avgRatio');
+    sensitivityGrid().forEach(function(r) {
+      console.log(r.param.padEnd(20) + String(r.value).padEnd(12) + r.avgRatio.toFixed(4));
+    });
+    process.exit(0);
+  }
   var result = generateReport();
   console.log('Storage Cost Coverage Ratio Report');
   console.log('  File: ' + result.filePath);
+  console.log('  Methodology: v' + MODEL_VERSION);
   console.log('  Blocks sampled: ' + result.blocks);
   console.log('  Avg ratio: ' + result.avgRatio);
   console.log('  Below 1.0: ' + result.belowThreshold);
 }
 
-module.exports = { generateReport: generateReport, computeRatio: computeRatio, computeFromFeeHistory: computeFromFeeHistory };
+module.exports = { generateReport: generateReport, computeRatio: computeRatio, computeFromFeeHistory: computeFromFeeHistory, sensitivityGrid: sensitivityGrid };

@@ -34,7 +34,7 @@ The feedback surfaced a deeper question that we hadn't properly articulated:
 
 > **Does Bitcoin's fee market price the lifetime cost of permanent data storage?**
 
-The SegWit discount (BIP-141) was designed to fix transaction malleability — not to price state. It accidentally created a 4× discount for witness data, which made inscriptions economically viable at scale. But nobody designed this as a state-pricing mechanism. It was a side effect of a different design goal.
+The SegWit discount (BIP-141) was designed to fix transaction malleability — not to price state. It accidentally created a 4× discount for witness data, which inscription protocols later took advantage of. But nobody designed this as a state-pricing mechanism. It was a side effect of a different design goal.
 
 The question of whether Bitcoin's block weight formula appropriately prices state growth is **open**. No BIP, no soft fork, no academic paper has settled it. The question touches on:
 

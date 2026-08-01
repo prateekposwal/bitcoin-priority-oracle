@@ -1,4 +1,13 @@
-import random, math, statistics, json
+import json, os
+import random, math, statistics
+
+# Canonical centers from research/model-spec.json v2.0.0 (P1.8).
+with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'model-spec.json')) as _f:
+    Q = json.load(_f)['quantities']
+SPEC_C = Q['C']['value']   # 925 pinned canonical node cost (USD/yr); component sum is 924.35
+I_BYTES = Q['I_bytes']['value']    # 400
+I_RATE = Q['I_rate']['value']      # 100000
+T = Q['T']['value']                # 10
 
 def run_simulation():
     hw_cost = random.triangular(200, 1000, 500)
@@ -6,9 +15,9 @@ def run_simulation():
     bw_monthly = random.triangular(20, 100, 50)
     node_watts = random.triangular(30, 250, 150)
     elec_rate = random.triangular(0.08, 0.40, 0.12)
-    insc_bytes = random.triangular(200, 1000, 400)
-    insc_monthly = random.triangular(30000, 300000, 100000)
-    utxo_life = random.triangular(2, 30, 10)
+    insc_bytes = random.triangular(200, 1000, I_BYTES)
+    insc_monthly = random.triangular(30000, 300000, I_RATE)
+    utxo_life = random.triangular(2, 30, T)
 
     hw_annual = hw_cost / hw_lifetime
     bw_annual = bw_monthly * 12

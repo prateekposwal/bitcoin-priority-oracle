@@ -1,12 +1,21 @@
+import json
+import os
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import numpy as np
 
+# Canonical centers from research/model-spec.json v2.0.0 (P1.8).
+with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'model-spec.json')) as _f:
+    Q = json.load(_f)['quantities']
+SPEC_C = Q['C']['value']  # 925 pinned canonical node cost (USD/yr); component sum is 924.35
+
 base = {
     'hw_cost': 500, 'hw_lifetime': 3, 'bw_monthly': 50,
     'node_watts': 150, 'elec_rate': 0.12,
-    'insc_bytes': 400, 'insc_monthly': 100000, 'utxo_life': 10,
+    'insc_bytes': Q['I_bytes']['value'],     # 400  (spec)
+    'insc_monthly': Q['I_rate']['value'],    # 100000 (spec)
+    'utxo_life': Q['T']['value'],            # 10   (spec)
 }
 
 def compute(params):

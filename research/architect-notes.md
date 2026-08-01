@@ -35,4 +35,4 @@ The agents will read these and reference them in their next cycle.
 <!-- Add overarching research directions, questions to explore -->
 
 - Core thesis: Bitcoin's fee market prices short-term block inclusion competition. It does NOT price lifetime storage costs across all full nodes. Storage Cost Coverage Ratio = TransactionFee / EstimatedLifetimeStorageCost. This is our novel research contribution — a reproducible model to measure the gap between one-time fees and cumulative network storage burden.
-- FIRST STORAGE RATIO REPORT COMPLETE: 148 blocks sampled, avg coverage ratio 0.0149 (1.49%). 100% of blocks have fees below 1x storage cost. This means current fees cover only ~1.5% of the estimated 10-year storage cost across 60K nodes. This is the empirical evidence for the unpriced externality thesis.
+- STORAGE RATIO REPORT v2.0.0: 158 blocks sampled, avg coverage ratio 0.1719 (17.2%) (corrected in model-spec.json v2.0.0). 100% of sampled blocks have fees below 1x storage cost. Current fees cover ~17% of the estimated 10-year storage cost across 60K nodes. This is the empirical evidence for the unpriced externality thesis.
