@@ -8,7 +8,7 @@ var fs = require('fs');
 var { exec } = require('child_process');
 
 var REPO = path.resolve(__dirname, '..', '..');
-var DATA_DIR = path.join(REPO, 'docs', 'data');
+var DATA_DIR = path.join(REPO, 'data');
 var STATE_FILE = path.join(REPO, 'captured-data', 'web-snapshot-state.json');
 
 function loadJson(p, fb) { try { return JSON.parse(fs.readFileSync(p, 'utf8')); } catch (e) { return fb; } }
@@ -75,7 +75,7 @@ function run() {
 
   // Optional auto-commit
   if (process.argv.indexOf('--commit') !== -1) {
-    exec('git add docs/data/ && git diff --cached --quiet || (git commit -m "chore: public snapshot ' + new Date().toISOString().slice(0, 16) + '" && git push)', { cwd: REPO, timeout: 60000 }, function(err) {
+    exec('git add data/ && git diff --cached --quiet || (git commit -m "chore: public snapshot ' + new Date().toISOString().slice(0, 16) + '" && git push)', { cwd: REPO, timeout: 60000 }, function(err) {
       if (err) console.error('snapshot commit failed:', err.message);
     });
   }

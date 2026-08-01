@@ -6,7 +6,7 @@ var path = require('path');
 var fs = require('fs');
 
 var REPO = path.resolve(__dirname, '..', '..');
-var OUT = path.join(REPO, 'docs', 'data', 'content.json');
+var OUT = path.join(REPO, 'data', 'content.json');
 
 function loadJson(p, fb) { try { return JSON.parse(fs.readFileSync(p, 'utf8')); } catch (e) { return fb; } }
 

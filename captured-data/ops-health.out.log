@@ -70,3 +70,4 @@
 [2026-08-01T10:25:43.256Z] alert sent: Webhook sent to https://ntfy.sh/bsahi-alerts: 200
 [2026-08-01T10:41:19.835Z] ISSUES: SPOOL: stale sources: block_interval
 [2026-08-01T10:41:22.434Z] alert sent: Webhook sent to https://ntfy.sh/bsahi-alerts: 200
+[2026-08-01T10:57:01.956Z] HEALTHY

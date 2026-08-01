@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-01T10:56:21.103Z",
+  "generated_at": "2026-08-01T10:59:33.086Z",
   "freshness_min": 0,
   "fees": {
     "fastestFee": 2
@@ -25,7 +25,15 @@
       "trend": "stable"
     }
   ],
-  "alerts": [],
+  "alerts": [
+    "🛡 SITE /fork-tracker -> 0 (timeout)",
+    "🛡 SITE /feed.xml -> 404",
+    "🛡 SITE /team.html -> 404",
+    "🛡 SITE /.well-known/nostr.json -> 404",
+    "🛡 SITE /data/snapshot.json -> 404",
+    "🛡 SITE /robots.txt -> 404",
+    "🛡 SITE /sitemap.xml -> 404"
+  ],
   "history": [
     {
       "date": "2026-07-30",

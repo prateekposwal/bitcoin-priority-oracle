@@ -1,15 +1,13 @@
 {
-  "generated_at": "2026-08-01T10:41:19.834Z",
-  "status": "DEGRADED",
-  "issues": [
-    "SPOOL: stale sources: block_interval"
-  ],
+  "generated_at": "2026-08-01T10:57:01.954Z",
+  "status": "HEALTHY",
+  "issues": [],
   "checks": {
     "spool": {
       "accountingOk": true,
       "pending": 0,
       "dead": 0,
-      "stale": 1
+      "stale": 0
     },
     "de_server": {
       "ok": true,
@@ -17,15 +15,15 @@
       "agent": "running"
     },
     "de_agent": {
-      "lastRunAgeMin": 52
+      "lastRunAgeMin": 5
     },
     "orchestrator": {
-      "heartbeatAgeMin": 0,
-      "phase": "cycle-start"
+      "heartbeatAgeMin": 11,
+      "phase": "cycle-complete"
     },
     "db": {
       "errorRatioPct": 3,
-      "total": 3223
+      "total": 3240
     }
   }
 }

@@ -9,7 +9,7 @@ import json, os, sys, glob, hashlib, urllib.request
 from datetime import datetime, timezone
 
 REPO = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-DATA_DIR = os.path.join(REPO, 'docs', 'data')
+DATA_DIR = os.path.join(REPO, 'data')
 
 def fetch(url, timeout=15):
     req = urllib.request.Request(url, headers={'User-Agent': 'BSAHI-Snapshot/1.0'})
