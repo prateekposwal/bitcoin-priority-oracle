@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-01T21:31:47.469Z",
+  "generated_at": "2026-08-01T22:01:48.181Z",
   "freshness_min": 0,
   "fees": {
     "fastestFee": 1
@@ -11,18 +11,18 @@
   "forecast": [
     {
       "day_offset": 1,
-      "predicted_fastest_fee": 1.7,
-      "trend": "stable"
+      "predicted_fastest_fee": 1.4,
+      "trend": "falling"
     },
     {
       "day_offset": 2,
-      "predicted_fastest_fee": 1.6,
-      "trend": "stable"
+      "predicted_fastest_fee": 1.3,
+      "trend": "falling"
     },
     {
       "day_offset": 3,
-      "predicted_fastest_fee": 1.5,
-      "trend": "stable"
+      "predicted_fastest_fee": 1.2,
+      "trend": "falling"
     }
   ],
   "alerts": [],
@@ -1418,6 +1418,10 @@
     {
       "date": "2026-08-02",
       "fastestFee": 3
+    },
+    {
+      "date": "2026-08-02",
+      "fastestFee": 1
     },
     {
       "date": "2026-08-02",
