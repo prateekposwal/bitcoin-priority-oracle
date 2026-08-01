@@ -5,6 +5,10 @@ on:
     - cron: '0 12 * * *'   # 12:00 UTC daily
   workflow_dispatch:        # manual trigger
 
+permissions:
+  contents: write
+  issues: write
+
 jobs:
   research:
     runs-on: ubuntu-latest
@@ -17,10 +21,12 @@ jobs:
       - name: Run research monitor
         run: python3 tools/research_monitor.py
 
-      - name: Run UTXO cost model
+      - name: Run UTXO cost model (non-fatal)
+        continue-on-error: true
         run: python3 research/utxo_cost_model.py
 
       - name: Check for significant changes and create alert
+        continue-on-error: true
         run: |
           python3 -c "
           import json
@@ -48,8 +54,20 @@ jobs:
             echo "No alerts"
           fi
 
-      - name: Create GitHub Issue for alerts
-        if: hashFiles('alert_output.txt') != ''
+      # COMMIT FIRST — data must reach main even if the issue step fails.
+      - name: Commit updated data
+        run: |
+          git config user.name "research-bot"
+          git config user.email "bot@bitcoinsahi.com"
+          git add tools/live_data.json tools/fee_history.json tools/fee_history.csv \
+                  tools/fee_forecast.json tools/alerts.json research/*.md
+          git diff --cached --quiet || git commit -m "chore: daily research update $(date +%Y-%m-%d)"
+          git pull --rebase origin main || true
+          git push
+
+      - name: Create GitHub Issue for alerts (best-effort)
+        if: always()
+        continue-on-error: true
         uses: actions/github-script@v7
         with:
           script: |
@@ -64,12 +82,3 @@ jobs:
                 body: alerts
               });
             }
-
-      - name: Commit updated data
-        run: |
-          git config user.name "research-bot"
-          git config user.email "bot@bitcoinsahi.com"
-          git add tools/live_data.json research/*.md
-          git diff --quiet && git diff --staged --quiet || \
-            git commit -m "chore: daily research update $(date +%Y-%m-%d)"
-          git push

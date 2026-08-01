@@ -1,0 +1,30 @@
+name: Data Snapshot
+
+on:
+  schedule:
+    - cron: '*/30 * * * *'   # every 30 min
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Generate snapshot
+        run: python3 tools/generate_snapshot.py
+
+      - name: Commit snapshot data
+        run: |
+          git config user.name "bsahi-snapshot-bot"
+          git config user.email "snapshot@bitcoinsahi.com"
+          git add docs/data/
+          git diff --cached --quiet || git commit -m "chore: public snapshot $(date -u '+%Y-%m-%d %H:%M UTC')"
+          git pull --rebase origin main || true
+          git push

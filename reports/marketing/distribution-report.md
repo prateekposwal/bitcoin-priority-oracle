@@ -4,7 +4,7 @@
 
 | Platform | Type | Link | Status |
 |----------|------|------|--------|
-| **Nostr** | Decentralized social | [Snort Profile](https://snort.social/p/b4bc93933169b6a288d08a2599832f05ff6b3a72a801a60b5266a29295bcaedc) | ✅ 13 posts, 6 relays |
+| **Nostr** | Decentralized social | [Snort Profile](https://snort.social/p/44744d037e50a4f3bc6b44b9ca7c5a3f52e68b0f70789696ccb7e28e274d2d61) | ✅ 13 posts, 6 relays |
 | **BSAHI Website** | Research hub | [bitcoinsahi.com](https://bitcoinsahi.com) | ✅ RSS + feed |
 | **GitHub** | Code + research | [block-space-economics](https://github.com/prateekposwal/block-space-economics) | ✅ Repo + issues |
 
@@ -48,7 +48,7 @@ Medium      → ⏳ Bridge ready (needs session)
 
 ## All Links
 
-- **Nostr Profile:** https://snort.social/p/b4bc93933169b6a288d08a2599832f05ff6b3a72a801a60b5266a29295bcaedc
+- **Nostr Profile:** https://snort.social/p/44744d037e50a4f3bc6b44b9ca7c5a3f52e68b0f70789696ccb7e28e274d2d61
 - **NIP-05:** `_@bitcoinsahi.com`
 - **Website:** https://bitcoinsahi.com
 - **GitHub:** https://github.com/prateekposwal/block-space-economics

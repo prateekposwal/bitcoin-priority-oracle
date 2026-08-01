@@ -13,6 +13,8 @@ var VIZ = (function() {
 
   function start(id, drawFn, interval) {
     interval = interval || 50;
+    VIZ._drawFns = VIZ._drawFns || {};
+    VIZ._drawFns[id] = { fn: drawFn, interval: interval };
     if (anims[id]) clearInterval(anims[id]);
     anims[id] = setInterval(function() {
       var el = document.getElementById(id);
@@ -64,5 +66,22 @@ var VIZ = (function() {
     ctx.closePath();
   }
 
-  return { create: create, start: start, responsiveSize: responsiveSize, feeColor: feeColor, roundRect: roundRect };
+  function pauseAll() {
+    Object.keys(anims).forEach(function(id) {
+      if (anims[id]) clearInterval(anims[id]);
+    });
+  }
+
+  function resumeAll() {
+    // Re-start intervals — the individual modules keep their draw fns via VIZ._drawFns.
+    Object.keys(VIZ._drawFns || {}).forEach(function(id) {
+      var entry = VIZ._drawFns[id];
+      if (entry) start(id, entry.fn, entry.interval);
+    });
+  }
+
+  // Modules register their draw fns here so resumeAll can restore them.
+  VIZ._drawFns = VIZ._drawFns || {};
+
+  return { create: create, start: start, responsiveSize: responsiveSize, feeColor: feeColor, roundRect: roundRect, pauseAll: pauseAll, resumeAll: resumeAll, register: function(id, fn, interval) { VIZ._drawFns[id] = { fn: fn, interval: interval || 50 }; } };
 })();

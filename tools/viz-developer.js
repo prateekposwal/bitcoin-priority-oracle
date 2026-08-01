@@ -127,8 +127,12 @@ var VIZ_Developer = (function() {
       '<a href="mailto:prateek@block-space-economics.com" style="display:inline-block;padding:10px 24px;background:#F7931A;color:#1A1612;font-size:14px;font-weight:700;border-radius:100px;text-decoration:none;">Contact about block data →</a>';
     container.appendChild(cta);
 
-    fetchDEStatus();
-    setInterval(fetchDEStatus, 60000);
+    // DE-agent live status is localhost-only (private DE server). Gate it so the
+    // public site renders the static "offline" state instead of a dead fetch.
+    if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
+      fetchDEStatus();
+      setInterval(fetchDEStatus, 60000);
+    }
   }
 
   function fetchDEStatus() { try {

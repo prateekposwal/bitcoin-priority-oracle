@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.bsahi.snapshot</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>/usr/local/bin/node</string>
+        <string>/Users/prateekposwal/Desktop/block-space-economics/tools/agents/19-web-snapshot-agent.js</string>
+        <string>--commit</string>
+    </array>
+    <key>WorkingDirectory</key>
+    <string>/Users/prateekposwal/Desktop/block-space-economics</string>
+    <key>StartInterval</key>
+    <integer>1800</integer>
+    <key>RunAtLoad</key>
+    <true/>
+    <key>StandardOutPath</key>
+    <string>/Users/prateekposwal/Desktop/block-space-economics/captured-data/snapshot.out.log</string>
+    <key>StandardErrorPath</key>
+    <string>/Users/prateekposwal/Desktop/block-space-economics/captured-data/snapshot.err.log</string>
+</dict>
+</plist>

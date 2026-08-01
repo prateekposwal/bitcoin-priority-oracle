@@ -17,8 +17,11 @@ Knowledge citations (per constant/function):
 - CLRS, "Introduction to Algorithms" §streaming/running statistics: Welford's
   online mean/variance (single pass, O(1) memory, numerically stable).
 """
-import json, os, glob, math
+import json, os, glob, math, sys
 from datetime import datetime, timezone
+
+def sys_argv():
+    return sys.argv
 
 # ── Model parameters (knowledge pillars) ───────────────────────────────────────
 ALPHA = 0.3          # Nilsson: smoothing — weight on newest point in S_t = a*x_t + (1-a)*S_{t-1}
@@ -164,8 +167,34 @@ def linear_regression(dates, fees):
     return slope, intercept
 
 
+def load_history_fallback():
+    """Runner-safe fallback: when the spool index is empty (CI runner has no
+    local spool), load tools/fee_history.json (committed daily by research-monitor)
+    as the series. Returns [(captureTime, value)]."""
+    hist_file = os.path.join(os.path.dirname(__file__), 'fee_history.json')
+    if not os.path.exists(hist_file):
+        return []
+    try:
+        with open(hist_file) as f:
+            hist = json.load(f)
+    except Exception:
+        return []
+    points = []
+    for h in hist:
+        v = h.get('fastestFee')
+        d = h.get('date')
+        if v is not None and d:
+            try:
+                points.append((d + '_00-00-00', float(v)))
+            except (TypeError, ValueError):
+                pass
+    return points
+
+
 def main():
     history = load_spool_series('fees', 'fastestFee')
+    if len(history) < 2 and '--history' in sys_argv():
+        history = load_history_fallback()
     n = len(history)
     fees = [v for _, v in history]
     if n < 2:

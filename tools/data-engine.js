@@ -86,7 +86,22 @@ var DATA_ENGINE = (function () {
     if (!db) return;
     try {
       var tx = db.transaction(STORE_NAME, 'readwrite');
-      tx.objectStore(STORE_NAME).add(entry);
+      var store = tx.objectStore(STORE_NAME);
+      store.add(entry);
+      // Prune: cap entries at 20K with 30-day TTL (bounded per-user growth).
+      try {
+        var countReq = store.count();
+        countReq.onsuccess = function() {
+          if (countReq.result > 20000) {
+            var allReq = store.getAllKeys();
+            allReq.onsuccess = function() {
+              var keys = (allReq.result || []).sort();
+              var excess = keys.length - 20000;
+              for (var i = 0; i < excess; i++) store.delete(keys[i]);
+            };
+          }
+        };
+      } catch (e) {}
     } catch (e) {}
   }
 

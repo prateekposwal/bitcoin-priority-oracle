@@ -225,6 +225,10 @@ function getStats() {
   };
 }
 
+function escapeXml(s) {
+  return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&apos;');
+}
+
 function generateRSSFeed() {
   var postLog = loadPostLog();
   var items = postLog.posts.slice(-20);
@@ -239,12 +243,17 @@ function generateRSSFeed() {
   rss += '  <atom:link href="https://bitcoinsahi.com/feed.xml" rel="self" type="application/rss+xml"/>\n';
   rss += '  <lastBuildDate>' + new Date().toUTCString() + '</lastBuildDate>\n';
 
+  var seen = {};
   for (var i = items.length - 1; i >= 0; i--) {
     var p = items[i];
+    // Guard: skip items without a valid eventId (no more guid>undefined), dedupe by eventId.
+    if (!p || !p.eventId || typeof p.eventId !== 'string' || !/^[0-9a-f]{64}$/.test(p.eventId)) continue;
+    if (seen[p.eventId]) continue;
+    seen[p.eventId] = true;
     rss += '  <item>\n';
-    rss += '    <title>' + p.topic + '</title>\n';
+    rss += '    <title>' + escapeXml(p.topic || 'BSAHI') + '</title>\n';
     rss += '    <link>https://snort.social/e/' + p.eventId + '</link>\n';
-    rss += '    <description><![CDATA[' + p.contentPreview + ']]></description>\n';
+    rss += '    <description><![CDATA[' + (p.contentPreview || '') + ']]></description>\n';
     rss += '    <pubDate>' + new Date(p.postedAt).toUTCString() + '</pubDate>\n';
     rss += '    <guid>' + p.eventId + '</guid>\n';
     rss += '  </item>\n';
@@ -252,7 +261,7 @@ function generateRSSFeed() {
 
   rss += '</channel>\n</rss>\n';
 
-  var rssDir = path.resolve(__dirname, '..', '..', 'docs');
+  var rssDir = path.resolve(__dirname, '..', '..');
   if (!fs.existsSync(rssDir)) fs.mkdirSync(rssDir, { recursive: true });
   var rssPath = path.join(rssDir, 'feed.xml');
   fs.writeFileSync(rssPath, rss);

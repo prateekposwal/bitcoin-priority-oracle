@@ -3,6 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="The BSAHI research team — the autonomous agents behind the block space research platform.">
+<meta property="og:title" content="BSAHI — Team Dashboard">
+<meta property="og:description" content="The autonomous agents behind Bitcoin block space research.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://bitcoinsahi.com/team.html">
+<meta name="twitter:card" content="summary">
+<meta name="theme-color" content="#1A1612">
+<link rel="canonical" href="https://bitcoinsahi.com/team.html">
 <title>BSAHI — Team Dashboard</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -75,26 +83,14 @@
       teamEl.appendChild(card);
     });
 
-    // Fetch live stats from DE server
-    fetch('http://localhost:3456/employees').then(function(r) { return r.json(); }).then(function(data) {
-      if (!data || !data.length) return;
-      var posted = 0, onboarded = 0;
-      data.forEach(function(emp, i) {
-        posted += emp.totalPosts || 0;
-        if (emp.onboarded) onboarded++;
-        var cards = teamEl.children;
-        if (cards[i]) {
-          var statusEl = cards[i].querySelector('.status');
-          if (emp.onboarded) {
-            statusEl.className = 'status status-ready';
-            statusEl.textContent = '✓ Active — ' + (emp.totalPosts || 0) + ' posts';
-          }
-        }
-      });
-      document.getElementById('totalPosts').textContent = posted;
-      document.getElementById('activeEmps').textContent = onboarded + ' / ' + data.length;
-      document.getElementById('lastCycle').textContent = data.reduce(function(l, e) { return e.lastPost > l ? e.lastPost : l; }, '') ? new Date(data.reduce(function(l, e) { return e.lastPost > l ? e.lastPost : l; }, '')).toLocaleString() : '—';
-    }).catch(function() {});
+    // Live stats come from the public snapshot tier (data/snapshot.json);
+    // the static roster below is the source of truth on this public page.
+    fetch('/data/snapshot.json').then(function(r) { return r.json(); }).then(function(data) {
+      document.getElementById('totalPosts').textContent = (data && data.totalPosts) ? data.totalPosts : '—';
+      document.getElementById('lastCycle').textContent = (data && data.generated_at) ? new Date(data.generated_at).toLocaleString() : '—';
+    }).catch(function() {
+      document.getElementById('totalPosts').textContent = '—';
+    });
   </script>
 </body>
 </html>

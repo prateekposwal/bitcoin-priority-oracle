@@ -291,3 +291,21 @@ ModuleNotFoundError: No module named 'seen_state'
 [2026-08-01 05:12:36] RUN: scheduler.py 
 [2026-08-01 05:19:05] [10:49:05] [Scheduler] === Cycle complete ===
 [2026-08-01 05:19:05] === Cycle complete ===
+[2026-08-01 05:51:50] === Engagement cycle ===
+[2026-08-01 05:51:50] RUN: reply-engine.py 
+[2026-08-01 05:51:56] CHROME_UNAVAILABLE — browser not reachable for inbox fetch
+[2026-08-01 05:51:56] RUN: comment-engine.py 8
+[2026-08-01 05:52:58] Cycle done. Comments today: 0/50
+[2026-08-01 05:52:58] ENGAGE: LinkedIn/Medium engagement disabled (policy) — see docs/decisions/2026-07-31-engagement.md
+[2026-08-01 05:52:58] RUN: scheduler.py 
+[2026-08-01 05:54:55] [11:24:55] [Scheduler] === Cycle complete ===
+[2026-08-01 05:54:55] === Cycle complete ===
+[2026-08-01 10:41:17] === Engagement cycle ===
+[2026-08-01 10:41:17] RUN: reply-engine.py 
+[2026-08-01 10:41:30] CHROME_UNAVAILABLE — browser not reachable for inbox fetch
+[2026-08-01 10:41:30] RUN: comment-engine.py 8
+[2026-08-01 10:43:44] Cycle done. Comments today: 0/50
+[2026-08-01 10:43:44] ENGAGE: LinkedIn/Medium engagement disabled (policy) — see docs/decisions/2026-07-31-engagement.md
+[2026-08-01 10:43:44] RUN: scheduler.py 
+[2026-08-01 10:45:32] [16:15:32] [Scheduler] === Cycle complete ===
+[2026-08-01 10:45:32] === Cycle complete ===

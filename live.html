@@ -3,6 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Live fee, mempool, and block data to decide when to send on Bitcoin.">
+  <meta property="og:title" content="Bitcoin Sahi — Decision Center">
+  <meta property="og:description" content="Live fee, mempool, and block data to decide when to send on Bitcoin.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://bitcoinsahi.com/live">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Bitcoin Sahi — Decision Center">
+  <meta name="twitter:description" content="Live fee, mempool, and block data to decide when to send on Bitcoin.">
+  <meta name="theme-color" content="#1A1612">
+  <link rel="canonical" href="https://bitcoinsahi.com/live">
 <title>Bitcoin Sahi — Decision Center</title>
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
@@ -408,8 +418,31 @@ body{background:#1A1612;color:#EADCC8;font-family:-apple-system,BlinkMacSystemFo
 <script src="tools/viz-miner.js"></script>
 <script src="tools/viz-research.js"></script>
 <script src="tools/viz-developer.js"></script>
-<script>
+ <script>
+// BSAHI snapshot tier: enrich the page with forecast/alerts/curated data.
+// Graceful degradation — if snapshot missing/stale, mempool.space path is unaffected.
+try {
+  fetch('/data/snapshot.json').then(function(r) { return r.json(); }).then(function(s) {
+    if (!s || !s.generated_at) return;
+    var ageMin = (Date.now() - new Date(s.generated_at).getTime()) / 60000;
+    if (ageMin > 120) return; // stale — skip
+    var el = document.getElementById('data-freshness');
+    if (el) el.textContent = 'BSAHI snapshot ' + Math.round(ageMin) + 'm ago · forecast ' + (s.fee_trend || 'stable');
+    if (s.forecast && s.forecast.length) {
+      var f = s.forecast[0];
+      var b = document.getElementById('forecast-badge');
+      if (b) b.textContent = 'Forecast +' + f.day_offset + 'd: ~' + f.predicted_fastest_fee + ' sat/vB (' + f.trend + ')';
+    }
+  }).catch(function() {});
+} catch (e) {}
+
+// Pause all viz animation when the tab is hidden (performance).
+document.addEventListener('visibilitychange', function() {
+  if (document.hidden) { if (window.VIZ && VIZ.pauseAll) VIZ.pauseAll(); }
+  else { if (window.VIZ && VIZ.resumeAll) VIZ.resumeAll(); }
+});
 var latencyTracker = { lastLatency: 0 };
+
 
 function measureLatency() {
   var start = Date.now();

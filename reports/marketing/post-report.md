@@ -52,9 +52,9 @@ All posts go through the BSAHI Nostr identity verified at `_@bitcoinsahi.com` (N
 
 ## BSAHI Identity
 
-- **Nostr Public Key:** `b4bc93933169b6a288d08a2599832f05ff6b3a72a801a60b5266a29295bcaedc`
+- **Nostr Public Key:** `44744d037e50a4f3bc6b44b9ca7c5a3f52e68b0f70789696ccb7e28e274d2d61`
 - **NIP-05:** `_@bitcoinsahi.com`
-- **Snort Profile:** https://snort.social/p/b4bc93933169b6a288d08a2599832f05ff6b3a72a801a60b5266a29295bcaedc
+- **Snort Profile:** https://snort.social/p/44744d037e50a4f3bc6b44b9ca7c5a3f52e68b0f70789696ccb7e28e274d2d61
 - **Relays:** damus.io, nos.lol, nostr.band, snort.social, bitcoiner.social, primal.net
 
 ---

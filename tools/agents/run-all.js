@@ -14,6 +14,12 @@ var AGENTS = [
   { name: 'Ops Health',        file: 'tools/agents/16-ops-health.js',                always: false },
   { name: 'Report Generator',  file: 'tools/agents/17-report-generator.js',          always: true },
   { name: 'Publishing Queue',  file: 'tools/agents/18-publishing-queue.js',          always: true },
+  { name: 'Web Snapshot',      file: 'tools/agents/19-web-snapshot-agent.js',        always: false },
+  { name: 'Site Health',       file: 'tools/agents/20-site-health-agent.js',         always: false },
+  { name: 'Identity Audit',    file: 'tools/agents/21-identity-agent.js',            always: true },
+  { name: 'Content Optimizer', file: 'tools/agents/22-content-optimizer.js',         always: true },
+  { name: 'SEO Audit',         file: 'tools/agents/23-seo-agent.js',                 always: true },
+  { name: 'A11y/Perf Audit',   file: 'tools/agents/24-a11y-performance-agent.js',    always: true },
 ];
 
 function runAgent(agent) {
