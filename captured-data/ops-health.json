@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-01T11:12:33.937Z",
+  "generated_at": "2026-08-01T11:42:58.829Z",
   "status": "HEALTHY",
   "issues": [],
   "checks": {
@@ -15,10 +15,10 @@
       "agent": "running"
     },
     "de_agent": {
-      "lastRunAgeMin": 21
+      "lastRunAgeMin": 51
     },
     "orchestrator": {
-      "heartbeatAgeMin": 27,
+      "heartbeatAgeMin": 24,
       "phase": "cycle-complete"
     },
     "db": {

@@ -1,3 +1,4 @@
+var REDUCED_MOTION = (typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
 // Lightning Network interactive node graph
 var VIZ_Lightning = (function() {
   var canvas, ctx, w = 800, h = 400;
@@ -441,7 +442,7 @@ var VIZ_Lightning = (function() {
 
     frameCount++;
     } catch (e) {}
-    animId = requestAnimationFrame(loop);
+    animId = REDUCED_MOTION ? 0 : requestAnimationFrame(loop);
   }
 
   return { init: init, resize: resize };

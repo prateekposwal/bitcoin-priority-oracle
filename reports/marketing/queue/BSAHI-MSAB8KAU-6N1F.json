@@ -1,0 +1,17 @@
+{
+  "id": "BSAHI-MSAB8KAU-6N1F",
+  "platform": "reddit",
+  "topic": "network",
+  "content": "## The Physical Bitcoin\n\nBitcoin isn't just code. It's **150,000 blocks**, **17189 Lightning nodes**, and **174 data points** we've collected from our own node.\n\n## Current Network State\n\n- Block height: 150,000\n- Fastest fee: 2 sat/vB (24h avg: 2.4)\n- Mempool: 86,169 transactions\n- Lightning: 17189 nodes, 38436 channels, 4364 BTC capacity\n\n## Geographic Distribution\n\n1. **United States**: 62 reachable nodes\n2. **Germany**: 36 reachable nodes\n3. **The Netherlands**: 13 reachable nodes\n4. **Russia**: 13 reachable nodes\n5. **Canada**: 9 reachable nodes\n\nThis data comes from our own Bitcoin Core node's `getnodeaddresses` RPC, geo-located via ip-api.com.\n\n---\n\n*Live dashboard: [bsahi.com/capacity](https://bitcoinsahi.com/capacity)*",
+  "status": "skipped",
+  "created": "2026-08-01T11:50:52.614Z",
+  "scheduledFor": "2026-08-01",
+  "postedAt": null,
+  "url": null,
+  "engagement": {
+    "likes": 0,
+    "replies": 0,
+    "shares": 0
+  },
+  "notes": "platform:reddit"
+}

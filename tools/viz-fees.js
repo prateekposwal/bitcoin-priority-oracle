@@ -1,3 +1,4 @@
+var REDUCED_MOTION = (typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
 // Bitcoin Sahi — Living Fee Visualization
 // Obviously alive — particles float, numbers animate, bars flow
 
@@ -33,7 +34,7 @@ var VIZ_Fees = (function() {
     
     DATA_ENGINE.start();
     
-    setInterval(function() {
+    setInterval(function() { if (REDUCED_MOTION) return;
       var count = w < 480 ? 1 : w < 768 ? 2 : 3;
       var maxBarArea = h - bottomMargin;
       var speedMultiplier = 1 + (displayFee / 50) * 1.5;
@@ -180,7 +181,7 @@ var VIZ_Fees = (function() {
     ctx.fillStyle = grad;
     ctx.fillRect(0, 0, w, h);
 
-    requestAnimationFrame(loop);
+    if (!REDUCED_MOTION) requestAnimationFrame(loop);
   }
 
   function getFeeAt(idx) {

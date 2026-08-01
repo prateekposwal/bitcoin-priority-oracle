@@ -1158,3 +1158,53 @@ Digest saved to /Users/prateekposwal/Desktop/block-space-economics/reports/diges
 [DE Agent 2026-08-01 10:51:33] Cycle 41 complete in 107s
 [DE Agent 2026-08-01 10:51:33] ISSUES: 10 endpoints unhealthy | 1 sources stale (>120min old)
 [2026-08-01 11:02:11] [alert-dispatcher] cycle complete
+[DE Agent 2026-08-01 11:49:46] Cycle 42 started
+[DE Agent 2026-08-01 11:49:46] Checking 13 endpoints...
+[DE Agent 2026-08-01 11:49:54] Endpoints: 12/13 healthy, 1 unhealthy
+[DE Agent 2026-08-01 11:49:54] Freshness checked
+[DE Agent 2026-08-01 11:49:54] Spool: scanned=199 new=1 ingested=1 validated=13 violated=0 failed=0
+[DE Agent 2026-08-01 11:50:04] Capture-agent: cycle=2026-08-01_17-19-54 captured=13 skipped=0 violated=0 errored=0
+[DE Agent 2026-08-01 11:50:04] Bitcoin Core: 587395 blocks, 3 fee stats, 8 peers
+[DE Agent 2026-08-01 11:50:04]   Fee percentiles (p10/p25/p50/p75/p90): 0.0/0.0/0.0/0.0/0.0 sat/vB
+[tracker] Saved: /Users/prateekposwal/Desktop/block-space-economics/captured-data/tracker/2026-08-01/2026-08-01_11-50-05.json
+[DE Agent 2026-08-01 11:50:05] Block intervals: 512.78s avg
+[DE Agent 2026-08-01 11:50:05] Derived metrics: computed + enqueued
+[DE Agent 2026-08-01 11:50:05] Research content pipeline: briefs generated
+[DE Agent 2026-08-01 11:50:05] Topic intelligence: refreshed
+[DE Agent 2026-08-01 11:50:20] Data quality score: 66/100
+[DE Agent 2026-08-01 11:50:20] Generating reports...
+[DE Agent 2026-08-01 11:50:52] Reports saved
+[DE Agent 2026-08-01 11:50:52] Session handoff appended to AGENTS.md
+[DE Agent 2026-08-01 11:50:52] Research report + publishing queue generated
+[2026-08-01 11:50:52] [BSAHI Publisher] === Full publishing cycle (Nostr + Browser) ===
+[2026-08-01 11:50:52] [BSAHI Publisher] === Publishing cycle ===
+[2026-08-01 11:50:52] [BSAHI Publisher] Queue empty — generating
+[2026-08-01 11:50:52] [Queue] Generated 1 posts for 2026-08-01
+[2026-08-01 11:50:52] [BSAHI Publisher] SKIP (platform reddit not nostr — belongs to its own stack): BSAHI-MSAB8KAU-6N1F
+[2026-08-01 11:50:52] [Publisher] Skipped BSAHI-MSAB8KAU-6N1F: platform:reddit
+[2026-08-01 11:50:52] [BSAHI Publisher] 0 posted
+[2026-08-01 11:50:52] [BSAHI Publisher] RSS: /Users/prateekposwal/Desktop/block-space-economics/docs/feed.xml
+[2026-08-01 11:50:52] [BSAHI Publisher] === Cycle complete ===
+[2026-08-01 11:50:52] [BSAHI Browser Publisher] === Browser publishing cycle ===
+[2026-08-01 11:50:52] [BSAHI Browser Publisher] Queue empty — generating
+[2026-08-01 11:50:52] [Queue] Generated 1 posts for 2026-08-01
+[2026-08-01 11:50:52] [BSAHI Browser Publisher] Launching Chrome...
+[2026-08-01 11:50:57] [BSAHI Browser Publisher] Twitter: navigating to compose...
+[2026-08-01 11:51:00] [BSAHI Browser Publisher] Twitter: compose not available
+[2026-08-01 11:51:00] [BSAHI Browser Publisher] Reddit: navigating to submit...
+[2026-08-01 11:51:03] [BSAHI Browser Publisher] Reddit: submit form not available
+[2026-08-01 11:51:06] [BSAHI Browser Publisher] Medium: navigating...
+[2026-08-01 11:51:09] [BSAHI Browser Publisher] Medium: editor not available (may need login)
+[2026-08-01 11:51:09] [BSAHI Browser Publisher] 0 platforms attempted, 0 posted
+[2026-08-01 11:51:09] [BSAHI Browser Publisher] === Cycle complete ===
+[2026-08-01 11:51:09] [BSAHI Publisher] RSS: /Users/prateekposwal/Desktop/block-space-economics/docs/feed.xml
+[2026-08-01 11:51:09] [BSAHI Publisher] === Full cycle complete ===
+[DE Agent 2026-08-01 11:51:09] Publisher: 2 posts in 18s
+[2026-08-01 11:51:09] [BSAHI Publisher] RSS: /Users/prateekposwal/Desktop/block-space-economics/docs/feed.xml
+[DE Agent 2026-08-01 11:51:10] Consumer: drained spool into SQLite
+[DE Agent 2026-08-01 11:51:10] M4 gate: cleanCycles=0/7 (bridge=on, quality=66, coreStale=[])
+[2026-08-01 11:51:11] [alert-dispatcher] cycle complete
+[2026-08-01 11:51:11] [alert-dispatcher] cycle complete
+[DE Agent 2026-08-01 11:51:11] Alert dispatcher: forecast + alerts + index self-heal
+[DE Agent 2026-08-01 11:51:11] Cycle 42 complete in 85s
+[DE Agent 2026-08-01 11:51:11] ISSUES: 1 endpoints unhealthy

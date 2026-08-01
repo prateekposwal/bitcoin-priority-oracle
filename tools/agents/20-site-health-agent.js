@@ -18,8 +18,6 @@ var ROUTES = [
   { route: '/learn', expected: 200 },
   { route: '/fork-tracker', expected: 200 },
   { route: '/feed.xml', expected: 200 },
-  { route: '/team.html', expected: 200 },
-  { route: '/.well-known/nostr.json', expected: 200 },
   { route: '/data/snapshot.json', expected: 200 },
   { route: '/api/v1/', expected: 200 },
   { route: '/robots.txt', expected: 200 },

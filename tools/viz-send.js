@@ -1,3 +1,4 @@
+var REDUCED_MOTION = (typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
 var VIZ_Send = (function() {
   var canvas, ctx, w, h;
   var PAD = { top: 60, right: 150, bottom: 50, left: 70 };
@@ -94,7 +95,7 @@ var VIZ_Send = (function() {
     displayBtcPrice += (btcPrice - displayBtcPrice) * 0.05;
     ctx.clearRect(0, 0, w, h);
     var n = bars.length;
-    if (n === 0) { requestAnimationFrame(tick); return; }
+    if (n === 0) { if (!REDUCED_MOTION) requestAnimationFrame(tick); return; }
 
     var cL = PAD.left, cR = w - PAD.right;
     var cT = PAD.top, cB = h - PAD.bottom;
@@ -267,7 +268,7 @@ var VIZ_Send = (function() {
     }
 
     } catch (e) {}
-    requestAnimationFrame(tick);
+    if (!REDUCED_MOTION) requestAnimationFrame(tick);
   }
 
   return { init: init, resize: resize };

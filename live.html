@@ -150,6 +150,9 @@ body{background:#1A1612;color:#EADCC8;font-family:-apple-system,BlinkMacSystemFo
 .ds-card .ds-url{color:#D4933A;text-decoration:none}
 .ds-card .ds-url:hover{text-decoration:underline}
 .ds-card .ds-data-preview{font-size:.75rem;color:#6A5D4E;background:#1A1612;border:1px solid #3A3228;border-radius:4px;padding:6px 8px;margin-top:6px;max-height:40px;overflow:hidden}
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+  }
 </style>
 </head>
 <body>
@@ -437,10 +440,20 @@ try {
 } catch (e) {}
 
 // Pause all viz animation when the tab is hidden (performance).
-document.addEventListener('visibilitychange', function() {
-  if (document.hidden) { if (window.VIZ && VIZ.pauseAll) VIZ.pauseAll(); }
-  else { if (window.VIZ && VIZ.resumeAll) VIZ.resumeAll(); }
-});
+ document.addEventListener('visibilitychange', function() {
+   if (document.hidden) {
+     if (window.VIZ && VIZ.pauseAll) VIZ.pauseAll();
+     // Cancel the fee-trend rAF loop when hidden (performance).
+     try {
+       Object.keys(window._feeTrendAnimRunning || {}).forEach(function(id) {
+         if (window._feeTrendAnimRunning[id]) cancelAnimationFrame(window._feeTrendAnimRunning[id]);
+         window._feeTrendAnimRunning[id] = null;
+       });
+     } catch (e) {}
+   } else {
+     if (window.VIZ && VIZ.resumeAll) VIZ.resumeAll();
+   }
+ });
 var latencyTracker = { lastLatency: 0 };
 
 

@@ -1,3 +1,4 @@
+var REDUCED_MOTION = (typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
 var VIZ_Miner = (function() {
   var canvas, ctx, w = 0, h = 0;
   var feeHistory = [];
@@ -100,7 +101,7 @@ var VIZ_Miner = (function() {
     ctx.fillRect(0, 0, w, h);
 
     } catch (e) {}
-    requestAnimationFrame(loop);
+    if (!REDUCED_MOTION) requestAnimationFrame(loop);
   }
 
   function drawTitle() {

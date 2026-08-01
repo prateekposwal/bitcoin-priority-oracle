@@ -8,7 +8,8 @@
       "confirmedRelays": 4,
       "totalRelays": 6,
       "postedAt": "2026-07-30T22:06:21.296Z",
-      "contentPreview": "Bitcoin's fee market is the most sophisticated congestion pricing mechanism in the digital asset wor"
+      "contentPreview": "Bitcoin's fee market is the most sophisticated congestion pricing mechanism in the digital asset wor",
+      "persona": null
     },
     {
       "id": "BSAHI-MS82C9EX-HW4L",
@@ -18,7 +19,8 @@
       "confirmedRelays": 4,
       "totalRelays": 6,
       "postedAt": "2026-07-30T22:06:26.303Z",
-      "contentPreview": "1/ Bitcoin's fastest fee is **1 sat/vB** right now. But here's what most people miss about how fees "
+      "contentPreview": "1/ Bitcoin's fastest fee is **1 sat/vB** right now. But here's what most people miss about how fees ",
+      "persona": null
     },
     {
       "id": "BSAHI-MS82CPRP-ORGI",
@@ -28,7 +30,8 @@
       "confirmedRelays": 2,
       "totalRelays": 6,
       "postedAt": "2026-07-30T22:06:42.476Z",
-      "contentPreview": "Bitcoin's fee market is the most sophisticated congestion pricing mechanism in the digital asset wor"
+      "contentPreview": "Bitcoin's fee market is the most sophisticated congestion pricing mechanism in the digital asset wor",
+      "persona": null
     },
     {
       "id": "BSAHI-MS82CPRP-T5KZ",
@@ -38,7 +41,8 @@
       "confirmedRelays": 3,
       "totalRelays": 6,
       "postedAt": "2026-07-30T22:06:47.490Z",
-      "contentPreview": "1/ Bitcoin's fastest fee is **1 sat/vB** right now. But here's what most people miss about how fees "
+      "contentPreview": "1/ Bitcoin's fastest fee is **1 sat/vB** right now. But here's what most people miss about how fees ",
+      "persona": null
     },
     {
       "id": "BSAHI-MS82TQB7-G3EG",
@@ -48,7 +52,8 @@
       "confirmedRelays": 4,
       "totalRelays": 6,
       "postedAt": "2026-07-30T22:19:56.372Z",
-      "contentPreview": "Bitcoin's fee market is the most sophisticated congestion pricing mechanism in the digital asset wor"
+      "contentPreview": "Bitcoin's fee market is the most sophisticated congestion pricing mechanism in the digital asset wor",
+      "persona": null
     },
     {
       "id": "BSAHI-MS82TQB7-VHXX",
@@ -58,7 +63,8 @@
       "confirmedRelays": 5,
       "totalRelays": 6,
       "postedAt": "2026-07-30T22:20:01.379Z",
-      "contentPreview": "1/ Bitcoin's fastest fee is **1 sat/vB** right now. But here's what most people miss about how fees "
+      "contentPreview": "1/ Bitcoin's fastest fee is **1 sat/vB** right now. But here's what most people miss about how fees ",
+      "persona": null
     },
     {
       "id": "BSAHI-MS84Y8G4-B87B",
@@ -68,7 +74,8 @@
       "confirmedRelays": 4,
       "totalRelays": 6,
       "postedAt": "2026-07-30T23:19:25.728Z",
-      "contentPreview": "1/ Bitcoin's fastest fee is **4 sat/vB** right now. But here's what most people miss about how fees "
+      "contentPreview": "1/ Bitcoin's fastest fee is **4 sat/vB** right now. But here's what most people miss about how fees ",
+      "persona": null
     },
     {
       "id": "BSAHI-MS84Y8G4-XGHT",
@@ -78,7 +85,8 @@
       "confirmedRelays": 5,
       "totalRelays": 6,
       "postedAt": "2026-07-30T23:19:30.751Z",
-      "contentPreview": "Bitcoin's fee market is the most sophisticated congestion pricing mechanism in the digital asset wor"
+      "contentPreview": "Bitcoin's fee market is the most sophisticated congestion pricing mechanism in the digital asset wor",
+      "persona": null
     },
     {
       "id": "satoshi-1785454060747",
@@ -91,7 +99,8 @@
       "confirmedRelays": 6,
       "totalRelays": 6,
       "postedAt": "2026-07-30T23:27:40.747Z",
-      "contentPreview": "⚡ Block Space Analyst: Low fee environment: 14.5 sat/vB. The fee market works both ways. When demand"
+      "contentPreview": "⚡ Block Space Analyst: Low fee environment: 14.5 sat/vB. The fee market works both ways. When demand",
+      "persona": "satoshi"
     },
     {
       "id": "hal-1785454063756",
@@ -104,7 +113,8 @@
       "confirmedRelays": 6,
       "totalRelays": 6,
       "postedAt": "2026-07-30T23:27:43.757Z",
-      "contentPreview": "🔬 Research Engineer: Lightning Network adds 4426 BTC capacity for instant settlements. Trust-minimi"
+      "contentPreview": "🔬 Research Engineer: Lightning Network adds 4426 BTC capacity for instant settlements. Trust-minimi",
+      "persona": "hal"
     },
     {
       "id": "lisa-1785454066793",
@@ -117,7 +127,8 @@
       "confirmedRelays": 6,
       "totalRelays": 6,
       "postedAt": "2026-07-30T23:27:46.793Z",
-      "contentPreview": "📊 Data Journalist: Exchange batching analysis: 70% of withdrawals are batched. Remaining 33% are in"
+      "contentPreview": "📊 Data Journalist: Exchange batching analysis: 70% of withdrawals are batched. Remaining 33% are in",
+      "persona": "lisa"
     },
     {
       "id": "wei-1785454069801",
@@ -130,7 +141,8 @@
       "confirmedRelays": 6,
       "totalRelays": 6,
       "postedAt": "2026-07-30T23:27:49.801Z",
-      "contentPreview": "🧮 Protocol Researcher: BIP-110 signaling at 83%. Thresholds approaching. What happens at the fork b"
+      "contentPreview": "🧮 Protocol Researcher: BIP-110 signaling at 83%. Thresholds approaching. What happens at the fork b",
+      "persona": "wei"
     },
     {
       "id": "nick-1785454072808",
@@ -143,7 +155,8 @@
       "confirmedRelays": 6,
       "totalRelays": 6,
       "postedAt": "2026-07-30T23:27:52.808Z",
-      "contentPreview": "📈 Economics Analyst: Average transaction value: $53965. Bitcoin settles high-value transactions. Th"
+      "contentPreview": "📈 Economics Analyst: Average transaction value: $53965. Bitcoin settles high-value transactions. Th",
+      "persona": "nick"
     },
     {
       "id": "reddit-1785494380055",
@@ -152,7 +165,8 @@
       "url": "https://www.reddit.com/r/Bitcoin/comments/1vbnau3/bsahi_bitcoin_block_space_research_live_data/",
       "author": "BSAHI",
       "postedAt": "2026-07-31T10:39:40.055Z",
-      "contentPreview": "BSAHI: Bitcoin Block Space Research - Live Data"
+      "contentPreview": "BSAHI: Bitcoin Block Space Research - Live Data",
+      "persona": null
     },
     {
       "id": "reddit-compliant-1785495570642",
@@ -161,7 +175,8 @@
       "url": "https://www.reddit.com/r/Bitcoin/comments/1vbnntr/blocks_are_full_here_is_what_the_data_says/",
       "author": "New_Spare3193",
       "postedAt": "2026-07-31T10:59:30.643Z",
-      "contentPreview": "Blocks are full - here is what the data says (compliant analysis post)"
+      "contentPreview": "Blocks are full - here is what the data says (compliant analysis post)",
+      "persona": null
     },
     {
       "id": "medium-1785497884849",
@@ -172,7 +187,8 @@
       "postedAt": "2026-07-31T11:38:04.849Z",
       "contentPreview": "Bitcoin Network State: 2026-07-31",
       "status": "removed_by_platform",
-      "note": "Published then removed — 410 Deleted (new account anti-spam)"
+      "note": "Published then removed — 410 Deleted (new account anti-spam)",
+      "persona": null
     },
     {
       "id": "linkedin-1785498826852",
@@ -181,7 +197,8 @@
       "url": "https://www.linkedin.com/pulse/bitcoin-network-state-live-metrics-snapshot-will-i-am-n7e6e/",
       "author": "Will i'am",
       "postedAt": "2026-07-31T11:53:46.852Z",
-      "contentPreview": "Bitcoin Network State: Live Metrics Snapshot"
+      "contentPreview": "Bitcoin Network State: Live Metrics Snapshot",
+      "persona": null
     },
     {
       "id": "medium-live-1785498963396",
@@ -190,7 +207,8 @@
       "url": "https://medium.com/@bsahiresearch/bitcoin-network-state-2026-07-31-7556b6f8fea1",
       "author": "BSAHI",
       "postedAt": "2026-07-31T11:56:03.397Z",
-      "contentPreview": "Bitcoin Network State: 2026-07-31 (full article)"
+      "contentPreview": "Bitcoin Network State: 2026-07-31 (full article)",
+      "persona": null
     },
     {
       "id": "BSAHI-MS95WS9U-PCW1",
@@ -200,7 +218,8 @@
       "confirmedRelays": 4,
       "totalRelays": 6,
       "postedAt": "2026-07-31T16:34:04.151Z",
-      "contentPreview": "The Storage Cost Coverage Ratio: Do Bitcoin Fees Cover Node Costs?\n\n## A Simple Question\n\nBitcoin tr"
+      "contentPreview": "The Storage Cost Coverage Ratio: Do Bitcoin Fees Cover Node Costs?\n\n## A Simple Question\n\nBitcoin tr",
+      "persona": null
     },
     {
       "id": "BSAHI-MS95WYP4-9HUJ",
@@ -210,7 +229,8 @@
       "confirmedRelays": 4,
       "totalRelays": 6,
       "postedAt": "2026-07-31T16:43:26.148Z",
-      "contentPreview": "The Storage Cost Coverage Ratio: Do Bitcoin Fees Cover Node Costs?\n\n## A Simple Question\n\nBitcoin tr"
+      "contentPreview": "The Storage Cost Coverage Ratio: Do Bitcoin Fees Cover Node Costs?\n\n## A Simple Question\n\nBitcoin tr",
+      "persona": null
     },
     {
       "id": "BSAHI-MS979L0C-BGV4",
@@ -220,7 +240,8 @@
       "confirmedRelays": 0,
       "totalRelays": 6,
       "postedAt": "2026-07-31T17:11:55.658Z",
-      "contentPreview": "The Storage Cost Coverage Ratio: Do Bitcoin Fees Cover Node Costs?\n\n## A Simple Question\n\nBitcoin tr"
+      "contentPreview": "The Storage Cost Coverage Ratio: Do Bitcoin Fees Cover Node Costs?\n\n## A Simple Question\n\nBitcoin tr",
+      "persona": null
     },
     {
       "id": "BSAHI-MS979MAB-RYAC",
@@ -230,7 +251,8 @@
       "confirmedRelays": 4,
       "totalRelays": 6,
       "postedAt": "2026-07-31T17:14:43.526Z",
-      "contentPreview": "The Storage Cost Coverage Ratio: Do Bitcoin Fees Cover Node Costs?\n\n## A Simple Question\n\nBitcoin tr"
+      "contentPreview": "The Storage Cost Coverage Ratio: Do Bitcoin Fees Cover Node Costs?\n\n## A Simple Question\n\nBitcoin tr",
+      "persona": null
     },
     {
       "id": "BSAHI-MS97D708-FSW1",
@@ -240,7 +262,8 @@
       "confirmedRelays": 4,
       "totalRelays": 6,
       "postedAt": "2026-07-31T17:16:42.206Z",
-      "contentPreview": "The Storage Cost Coverage Ratio: Do Bitcoin Fees Cover Node Costs?\n\n## A Simple Question\n\nBitcoin tr"
+      "contentPreview": "The Storage Cost Coverage Ratio: Do Bitcoin Fees Cover Node Costs?\n\n## A Simple Question\n\nBitcoin tr",
+      "persona": null
     },
     {
       "id": "BSAHI-MS97FQH8-0RMH",
@@ -250,7 +273,8 @@
       "confirmedRelays": 4,
       "totalRelays": 6,
       "postedAt": "2026-07-31T18:24:47.775Z",
-      "contentPreview": "The Storage Cost Coverage Ratio: Do Bitcoin Fees Cover Node Costs?\n\n## A Simple Question\n\nBitcoin tr"
+      "contentPreview": "The Storage Cost Coverage Ratio: Do Bitcoin Fees Cover Node Costs?\n\n## A Simple Question\n\nBitcoin tr",
+      "persona": null
     },
     {
       "id": "BSAHI-MS99VBDB-4V42",
@@ -260,7 +284,8 @@
       "confirmedRelays": 4,
       "totalRelays": 6,
       "postedAt": "2026-07-31T18:26:07.074Z",
-      "contentPreview": "The Storage Cost Coverage Ratio: Do Bitcoin Fees Cover Node Costs?\n\n## A Simple Question\n\nBitcoin tr"
+      "contentPreview": "The Storage Cost Coverage Ratio: Do Bitcoin Fees Cover Node Costs?\n\n## A Simple Question\n\nBitcoin tr",
+      "persona": null
     },
     {
       "id": "BSAHI-MS99X03Q-QA5U",
@@ -270,7 +295,8 @@
       "confirmedRelays": 5,
       "totalRelays": 6,
       "postedAt": "2026-07-31T18:46:43.218Z",
-      "contentPreview": "The Storage Cost Coverage Ratio: Do Bitcoin Fees Cover Node Costs?\n\n## A Simple Question\n\nBitcoin tr"
+      "contentPreview": "The Storage Cost Coverage Ratio: Do Bitcoin Fees Cover Node Costs?\n\n## A Simple Question\n\nBitcoin tr",
+      "persona": null
     },
     {
       "id": "BSAHI-MS9BJQ4G-VOK0",
@@ -280,7 +306,8 @@
       "confirmedRelays": 4,
       "totalRelays": 6,
       "postedAt": "2026-07-31T19:11:52.938Z",
-      "contentPreview": "The Storage Cost Coverage Ratio: Do Bitcoin Fees Cover Node Costs?\n\n## A Simple Question\n\nBitcoin tr"
+      "contentPreview": "The Storage Cost Coverage Ratio: Do Bitcoin Fees Cover Node Costs?\n\n## A Simple Question\n\nBitcoin tr",
+      "persona": null
     },
     {
       "id": "BSAHI-MS9BJYHG-ACYH",
@@ -290,7 +317,8 @@
       "confirmedRelays": 3,
       "totalRelays": 6,
       "postedAt": "2026-07-31T20:03:44.628Z",
-      "contentPreview": "The Storage Cost Coverage Ratio: Do Bitcoin Fees Cover Node Costs?\n\n## A Simple Question\n\nBitcoin tr"
+      "contentPreview": "The Storage Cost Coverage Ratio: Do Bitcoin Fees Cover Node Costs?\n\n## A Simple Question\n\nBitcoin tr",
+      "persona": null
     },
     {
       "id": "BSAHI-MS9DERA4-1D5T",
@@ -300,7 +328,8 @@
       "confirmedRelays": 0,
       "totalRelays": 6,
       "postedAt": "2026-07-31T21:03:32.668Z",
-      "contentPreview": "The Storage Cost Coverage Ratio: Do Bitcoin Fees Cover Node Costs?\n\n## A Simple Question\n\nBitcoin tr"
+      "contentPreview": "The Storage Cost Coverage Ratio: Do Bitcoin Fees Cover Node Costs?\n\n## A Simple Question\n\nBitcoin tr",
+      "persona": null
     },
     {
       "id": "BSAHI-MS9FJGAQ-48C7",
@@ -310,7 +339,8 @@
       "confirmedRelays": 1,
       "totalRelays": 6,
       "postedAt": "2026-07-31T22:18:37.836Z",
-      "contentPreview": "The Storage Cost Coverage Ratio: Do Bitcoin Fees Cover Node Costs?\n\n## A Simple Question\n\nBitcoin tr"
+      "contentPreview": "The Storage Cost Coverage Ratio: Do Bitcoin Fees Cover Node Costs?\n\n## A Simple Question\n\nBitcoin tr",
+      "persona": null
     },
     {
       "id": "BSAHI-MS9I80J7-56HI",
@@ -320,7 +350,8 @@
       "confirmedRelays": 5,
       "totalRelays": 6,
       "postedAt": "2026-07-31T23:23:52.491Z",
-      "contentPreview": "The Storage Cost Coverage Ratio: Do Bitcoin Fees Cover Node Costs?\n\n## A Simple Question\n\nBitcoin tr"
+      "contentPreview": "The Storage Cost Coverage Ratio: Do Bitcoin Fees Cover Node Costs?\n\n## A Simple Question\n\nBitcoin tr",
+      "persona": null
     },
     {
       "id": "BSAHI-MS9KK0O0-MMXC",
@@ -330,7 +361,8 @@
       "confirmedRelays": 5,
       "totalRelays": 6,
       "postedAt": "2026-08-01T01:03:58.212Z",
-      "contentPreview": "The Storage Cost Coverage Ratio: Do Bitcoin Fees Cover Node Costs?\n\n## A Simple Question\n\nBitcoin tr"
+      "contentPreview": "The Storage Cost Coverage Ratio: Do Bitcoin Fees Cover Node Costs?\n\n## A Simple Question\n\nBitcoin tr",
+      "persona": null
     },
     {
       "id": "BSAHI-MS9O4OE8-X8GC",
@@ -340,7 +372,8 @@
       "confirmedRelays": 4,
       "totalRelays": 6,
       "postedAt": "2026-08-01T01:59:37.581Z",
-      "contentPreview": "## The Physical Bitcoin\n\nBitcoin isn't just code. It's **150,000 blocks**, **17420 Lightning nodes**"
+      "contentPreview": "## The Physical Bitcoin\n\nBitcoin isn't just code. It's **150,000 blocks**, **17420 Lightning nodes**",
+      "persona": null
     },
     {
       "id": "BSAHI-MS9Q4827-JVBI",
@@ -350,7 +383,8 @@
       "confirmedRelays": 0,
       "totalRelays": 6,
       "postedAt": "2026-08-01T03:38:17.985Z",
-      "contentPreview": "## The Physical Bitcoin\n\nBitcoin isn't just code. It's **150,000 blocks**, **17183 Lightning nodes**"
+      "contentPreview": "## The Physical Bitcoin\n\nBitcoin isn't just code. It's **150,000 blocks**, **17183 Lightning nodes**",
+      "persona": null
     },
     {
       "id": "BSAHI-MS9TN48O-P3RP",
@@ -360,7 +394,8 @@
       "confirmedRelays": 4,
       "totalRelays": 6,
       "postedAt": "2026-08-01T04:06:56.650Z",
-      "contentPreview": "## The Physical Bitcoin\n\nBitcoin isn't just code. It's **150,000 blocks**, **17420 Lightning nodes**"
+      "contentPreview": "## The Physical Bitcoin\n\nBitcoin isn't just code. It's **150,000 blocks**, **17420 Lightning nodes**",
+      "persona": null
     },
     {
       "id": "BSAHI-MS9UNZUX-JBKZ",
@@ -370,8 +405,9 @@
       "confirmedRelays": 3,
       "totalRelays": 6,
       "postedAt": "2026-08-01T04:47:45.381Z",
-      "contentPreview": "## The Physical Bitcoin\n\nBitcoin isn't just code. It's **150,000 blocks**, **17420 Lightning nodes**"
+      "contentPreview": "## The Physical Bitcoin\n\nBitcoin isn't just code. It's **150,000 blocks**, **17420 Lightning nodes**",
+      "persona": null
     }
   ],
-  "cycles": 37
+  "cycles": 39
 }

@@ -183,6 +183,7 @@ async function runCycle() {
         platform: 'nostr',
         topic: post.topic,
         status: 'posted',
+        persona: post.persona || null,
         eventId: result.eventId,
         confirmedRelays: result.confirmedRelays,
         totalRelays: result.totalRelays,

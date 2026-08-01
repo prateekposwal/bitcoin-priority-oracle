@@ -1,60 +1,6 @@
 {
   "rounds": [
     {
-      "at": "2026-08-01T06:43:41.706Z",
-      "ok": {
-        "fees": false,
-        "btc_price": false,
-        "mempool": false,
-        "mempool_blocks": false,
-        "fee_history": false,
-        "lightning": false,
-        "blocks": false,
-        "block_height": false,
-        "coinpaprika": false,
-        "fear_greed": false,
-        "blockchair": false,
-        "mining_pools": false,
-        "difficulty": false
-      }
-    },
-    {
-      "at": "2026-08-01T06:43:41.733Z",
-      "ok": {
-        "fees": false,
-        "btc_price": false,
-        "mempool": false,
-        "mempool_blocks": false,
-        "fee_history": false,
-        "lightning": false,
-        "blocks": false,
-        "block_height": false,
-        "coinpaprika": false,
-        "fear_greed": false,
-        "blockchair": false,
-        "mining_pools": false,
-        "difficulty": false
-      }
-    },
-    {
-      "at": "2026-08-01T06:43:41.739Z",
-      "ok": {
-        "fees": false,
-        "btc_price": false,
-        "mempool": false,
-        "mempool_blocks": false,
-        "fee_history": false,
-        "lightning": false,
-        "blocks": false,
-        "block_height": false,
-        "coinpaprika": false,
-        "fear_greed": false,
-        "blockchair": false,
-        "mining_pools": false,
-        "difficulty": false
-      }
-    },
-    {
       "at": "2026-08-01T08:39:02.327Z",
       "ok": {
         "fees": false,
@@ -200,6 +146,60 @@
     },
     {
       "at": "2026-08-01T10:51:14.415Z",
+      "ok": {
+        "fees": true,
+        "btc_price": true,
+        "mempool": true,
+        "mempool_blocks": true,
+        "fee_history": true,
+        "lightning": true,
+        "blocks": true,
+        "block_height": true,
+        "coinpaprika": true,
+        "fear_greed": true,
+        "blockchair": true,
+        "mining_pools": false,
+        "difficulty": true
+      }
+    },
+    {
+      "at": "2026-08-01T11:50:20.403Z",
+      "ok": {
+        "fees": true,
+        "btc_price": true,
+        "mempool": true,
+        "mempool_blocks": true,
+        "fee_history": true,
+        "lightning": true,
+        "blocks": true,
+        "block_height": true,
+        "coinpaprika": true,
+        "fear_greed": true,
+        "blockchair": true,
+        "mining_pools": false,
+        "difficulty": true
+      }
+    },
+    {
+      "at": "2026-08-01T11:50:44.313Z",
+      "ok": {
+        "fees": true,
+        "btc_price": true,
+        "mempool": true,
+        "mempool_blocks": true,
+        "fee_history": true,
+        "lightning": true,
+        "blocks": true,
+        "block_height": true,
+        "coinpaprika": true,
+        "fear_greed": true,
+        "blockchair": true,
+        "mining_pools": false,
+        "difficulty": true
+      }
+    },
+    {
+      "at": "2026-08-01T11:50:51.897Z",
       "ok": {
         "fees": true,
         "btc_price": true,

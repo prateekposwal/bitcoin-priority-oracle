@@ -75,7 +75,7 @@ var VIZ_Developer = (function() {
         '<div id="storage-bar-wrap" style="flex:1;min-width:' + (isNarrow ? '60px' : '100px') + ';max-width:' + (isNarrow ? '200px' : '300px') + ';height:4px;background:#2A2622;border-radius:2px;overflow:hidden;">' +
           '<div id="storage-bar" style="height:100%;width:0%;background:#3FB950;border-radius:2px;transition:width 0.5s;"></div>' +
         '</div>' +
-        '<span id="storage-text" style="font-size:' + (isNarrow ? '8px' : '10px') + ';color:rgba(255,255,255,0.3);">--</span>' +
+        '<span id="storage-text" style="font-size:' + (isNarrow ? '8px' : '10px') + ';color:rgba(255,255,255,0.6);">--</span>' +
       '</div>' +
       '<div style="display:flex;gap:6px;flex-wrap:wrap;">' +
         '<button class="data-btn" data-action="csv" style="padding:6px 10px;background:#2A2622;border:1px solid rgba(255,255,255,0.08);border-radius:6px;color:#F7931A;font-size:' + (isNarrow ? '10px' : '12px') + ';font-weight:600;cursor:pointer;font-family:inherit;">⬇ CSV</button>' +
@@ -111,7 +111,7 @@ var VIZ_Developer = (function() {
         '<span style="font-size:12px;font-weight:600;color:rgba(247,147,26,0.7);">\u{1F916} Data Engineering Agent</span>' +
         '<span id="de-agent-status" style="font-size:11px;color:rgba(255,255,255,0.35);">Status unknown</span>' +
       '</div>' +
-      '<div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:6px;font-size:11px;color:rgba(255,255,255,0.3);">' +
+      '<div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:6px;font-size:11px;color:rgba(255,255,255,0.6);">' +
         '<span>Sources: <strong id="de-agent-sources" style="color:rgba(255,255,255,0.6);">--</strong></span>' +
         '<span>Quality: <strong id="de-agent-quality" style="color:#3FB950;">--</strong></span>' +
         '<span>Updated: <strong id="de-agent-cycle" style="color:rgba(255,255,255,0.6);">--</strong></span>' +
@@ -147,7 +147,7 @@ var VIZ_Developer = (function() {
       if (cEl) cEl.textContent = data.lastRun ? new Date(data.lastRun).toLocaleTimeString() : '--';
     }).catch(function() {
       el.textContent = '\u26AA Agent offline';
-      el.style.color = 'rgba(255,255,255,0.3)';
+      el.style.color = 'rgba(255,255,255,0.6)';
     });
   } catch (e) {} }
 
@@ -172,7 +172,7 @@ var VIZ_Developer = (function() {
       '<span style="font-weight:600;color:#EADCC8;">4 featured</span>' +
       '<span style="color:rgba(255,255,255,0.4);">Avg ' + avgLat + ' ms</span>' +
       '<span style="color:rgba(255,255,255,0.4);"><span style="color:' + (checked ? (uptime > 90 ? '#3BA35D' : uptime > 50 ? '#D4762A' : '#C0392B') : '#6A5D4E') + ';">' + (checked ? uptime + '%' : '--') + '</span> uptime</span>' +
-      '<span style="color:rgba(255,255,255,0.3);font-size:11px;">Updated ' + freshness + '</span>';
+      '<span style="color:rgba(255,255,255,0.6);font-size:11px;">Updated ' + freshness + '</span>';
 
     var verdict = document.getElementById('dev-verdict');
     if (verdict) {

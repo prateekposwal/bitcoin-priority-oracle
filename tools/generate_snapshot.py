@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 BSAHI — Public Snapshot Generator (runner-safe, no local spool required).
-Builds docs/data/snapshot.json + fee_forecast.json + alerts.json + fee_history.json
+Builds data/snapshot.json + fee_forecast.json + alerts.json + fee_history.json
 from public API inputs so the GitHub Actions snapshot tier works even when the
 local Mac is off. Writes only on content change (hash compare) to dedupe commits.
 """
@@ -17,7 +17,9 @@ def fetch(url, timeout=15):
         return r.read().decode('utf-8')
 
 def load_local(name, fb):
-    p = os.path.join(REPO, 'tools', name)
+    p = os.path.join(REPO, 'captured-data', name)
+    if not os.path.exists(p):
+        p = os.path.join(REPO, 'tools', name)
     try:
         with open(p) as f:
             return json.load(f)

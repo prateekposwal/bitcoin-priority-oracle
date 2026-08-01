@@ -1,3 +1,4 @@
+var REDUCED_MOTION = (typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
 const VIZ_Research = (() => {
   const REGIME_COLORS = {
     very_low: { bg: 'rgba(59,163,93,0.15)', text: '#3BA35D', label: 'Very Low' },
@@ -75,7 +76,7 @@ const VIZ_Research = (() => {
   }
 
   function loop() { try { animTime += 0.02; draw(); } catch (e) {}
-    rafId = requestAnimationFrame(loop);
+    rafId = REDUCED_MOTION ? 0 : requestAnimationFrame(loop);
   }
 
   function resize() {

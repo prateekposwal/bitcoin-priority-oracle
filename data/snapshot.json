@@ -1,24 +1,1386 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-01T11:02:03.094177+00:00",
+  "generated_at": "2026-08-01T11:47:50.712Z",
   "freshness_min": 0,
   "fees": {
-    "fastestFee": 2,
-    "halfHourFee": 1,
-    "hourFee": 1,
-    "economyFee": 1,
-    "minimumFee": 1
+    "fastestFee": 2
   },
-  "btc_price": 62993,
-  "block_height": 960552,
-  "mempool_tx": 86658,
-  "forecast": [],
-  "alerts": [],
-  "history": [
+  "btc_price": null,
+  "block_height": null,
+  "mempool_tx": null,
+  "forecast": [
     {
-      "date": "2026-07-28",
-      "fastestFee": 3
+      "day_offset": 1,
+      "predicted_fastest_fee": 2.1,
+      "trend": "stable"
+    },
+    {
+      "day_offset": 2,
+      "predicted_fastest_fee": 2,
+      "trend": "stable"
+    },
+    {
+      "day_offset": 3,
+      "predicted_fastest_fee": 1.9,
+      "trend": "stable"
     }
   ],
-  "totalPosts": 0
+  "alerts": [
+    "🛡 SITE /data/snapshot.json -> 0 (timeout)"
+  ],
+  "history": [
+    {
+      "date": "2026-07-30",
+      "fastestFee": 5
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 4
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 4
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 5
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 4
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 5
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 4
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 4
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 5
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-30",
+      "fastestFee": 4
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 4
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 4
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 4
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 4
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 5
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 4
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 4
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 5
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 4
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 4
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 4
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 5
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 5
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 5
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 4
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 4
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 4
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 4
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 4
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 5
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 4
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 4
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 5
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 4
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 4
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 4
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 5
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 5
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 5
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 4
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 5
+    },
+    {
+      "date": "2026-07-31",
+      "fastestFee": 5
+    },
+    {
+      "date": "2026-08-01",
+      "fastestFee": 4
+    },
+    {
+      "date": "2026-08-01",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-08-01",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-08-01",
+      "fastestFee": 5
+    },
+    {
+      "date": "2026-08-01",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-08-01",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-08-01",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-08-01",
+      "fastestFee": 4
+    },
+    {
+      "date": "2026-08-01",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-08-01",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-08-01",
+      "fastestFee": 2
+    }
+  ],
+  "totalPosts": 36
 }

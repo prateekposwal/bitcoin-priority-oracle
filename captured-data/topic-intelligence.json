@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-08-01T11:16:06.042Z",
+  "generated_at": "2026-08-01T11:50:05.442Z",
   "fee_market": {
     "trend_7d": "falling",
-    "latest": 2,
-    "samples": 338
+    "latest": 1,
+    "samples": 339
   },
   "topics": {
     "fees": {

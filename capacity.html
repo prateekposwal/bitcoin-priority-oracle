@@ -86,6 +86,9 @@ a:hover{color:#E8B86D}
   .gauge-grid{grid-template-columns:1fr 1fr}
   .hero{padding:40px 16px 24px}
 }
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+  }
 </style>
 </head>
 <body>

@@ -1,3 +1,4 @@
+var REDUCED_MOTION = (typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
 var VIZ_Exchange = (function() {
   var canvas, ctx, w = 0, h = 0;
   var economyFee = 3;
@@ -249,7 +250,7 @@ var VIZ_Exchange = (function() {
   }
 
   function loop() { try { draw(); } catch (e) {}
-    requestAnimationFrame(loop);
+    if (!REDUCED_MOTION) requestAnimationFrame(loop);
   }
 
   function getPos(e) {

@@ -1,3 +1,4 @@
+var REDUCED_MOTION = (typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
 var VIZ_Node = (function() {
   var canvas, ctx, w = 0, h = 0;
   var animFrame = null;
@@ -279,7 +280,7 @@ var VIZ_Node = (function() {
   }
 
   function loop() { try { draw(); } catch (e) {}
-    requestAnimationFrame(loop);
+    if (!REDUCED_MOTION) requestAnimationFrame(loop);
   }
 
   function getCosts() {

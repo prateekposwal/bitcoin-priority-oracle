@@ -349,6 +349,7 @@ async function runAllEmployees() {
         platform: 'nostr',
         topic: post.topic,
         status: 'posted',
+        persona: emp.id,
         author: emp.name,
         authorAvatar: emp.avatar,
         eventId: result.eventId,

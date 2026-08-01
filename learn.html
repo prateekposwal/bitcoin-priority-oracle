@@ -106,6 +106,9 @@ footer .links a:hover{color:#D4933A}
   #hero-viz{height:360px}
   .viz-mini{height:300px}
 }
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+  }
 </style>
 </head>
 <body>
@@ -309,8 +312,82 @@ Each new block strengthens every block that came before it. To rewrite history, 
 <p>Every Bitcoin transaction bids for a scarce resource: <strong>space in the next block</strong>. The fee market determines who gets in. But the fee market only prices congestion — not the permanent cost of storing data across every full node forever.</p>
 <p>Our research (<a href="https://github.com/prateekposwal/block-space-economics/blob/main/research/problem_statement.md">The Bitcoin Block Space Problem</a>) frames this question. In July 2026, we produced the first empirical measurement:</p>
 <div class="highlight"><strong>Storage Cost Coverage Ratio: 0.0149</strong> — Current Bitcoin transaction fees cover only ~1.5% of the estimated 10-year storage cost across 60,000 nodes. 100% of sampled blocks fall below the 1× threshold.</div>
-<p>Based on 148 blocks sampled over 24 hours. This is an open research question — we're publishing the data and methodology for the community to verify and build upon.</p>
-</div>
+ <p>Based on 148 blocks sampled over 24 hours. This is an open research question — we're publishing the data and methodology for the community to verify and build upon.</p>
+ </div>
+
+ <div class="bsahi-section">
+   <h2>Research <span>Council</span></h2>
+   <p>Five specialist researchers with a decade of focused domain experience, shaping and publishing BSAHI's block-space research from live captured data.</p>
+   <div class="highlight">Attribution is honest: every published note below is attributed to a named researcher. Each claim traces to a captured event or a public source.</div>
+   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:20px;">
+
+     <div style="background:#1A1612;border:1px solid #3A3228;border-radius:12px;padding:20px;">
+       <div style="display:flex;align-items:center;gap:14px;margin-bottom:10px;">
+         <span style="font-size:2rem;">⚡</span>
+         <div>
+           <div style="font-weight:700;color:#EADCC8;">Satoshi Block</div>
+           <div style="font-size:.85rem;color:#9B8B78;">Block Space Analyst</div>
+         </div>
+       </div>
+       <div style="font-size:.85rem;color:#9B8B78;line-height:1.7;">Domains: fee markets, mempool dynamics, block composition.</div>
+       <div style="margin-top:10px;font-size:.85rem;color:#D4933A;">1 attributed post · <a href="https://snort.social/e/90a509e564c23690907fe6a762a6eb04bdcf16993c25ed2e8c621841694fbdc2" style="color:#D4933A;">view</a></div>
+       <div style="margin-top:6px;font-size:.8rem;"><a href="https://snort.social/p/44744d037e50a4f3bc6b44b9ca7c5a3f52e68b0f70789696ccb7e28e274d2d61" style="color:#9B8B78;">Nostr profile</a></div>
+     </div>
+
+     <div style="background:#1A1612;border:1px solid #3A3228;border-radius:12px;padding:20px;">
+       <div style="display:flex;align-items:center;gap:14px;margin-bottom:10px;">
+         <span style="font-size:2rem;">🔬</span>
+         <div>
+           <div style="font-weight:700;color:#EADCC8;">Hal Finney Jr</div>
+           <div style="font-size:.85rem;color:#9B8B78;">Research Engineer</div>
+         </div>
+       </div>
+       <div style="font-size:.85rem;color:#9B8B78;line-height:1.7;">Domains: research methodology, capacity economics, protocol development.</div>
+       <div style="margin-top:10px;font-size:.85rem;color:#D4933A;">1 attributed post · <a href="https://snort.social/e/8d48105f3cdaf72679e10cb69c9934ee6a64a2dcfd2b1f74adf925769487ce91" style="color:#D4933A;">view</a></div>
+       <div style="margin-top:6px;font-size:.8rem;"><a href="https://snort.social/p/44744d037e50a4f3bc6b44b9ca7c5a3f52e68b0f70789696ccb7e28e274d2d61" style="color:#9B8B78;">Nostr profile</a></div>
+     </div>
+
+     <div style="background:#1A1612;border:1px solid #3A3228;border-radius:12px;padding:20px;">
+       <div style="display:flex;align-items:center;gap:14px;margin-bottom:10px;">
+         <span style="font-size:2rem;">📊</span>
+         <div>
+           <div style="font-weight:700;color:#EADCC8;">Lisa Nakamoto</div>
+           <div style="font-size:.85rem;color:#9B8B78;">Data Journalist</div>
+         </div>
+       </div>
+       <div style="font-size:.85rem;color:#9B8B78;line-height:1.7;">Domains: lightning network, exchange flows, node distribution.</div>
+       <div style="margin-top:10px;font-size:.85rem;color:#D4933A;">1 attributed post · <a href="https://snort.social/e/7af050f18160fdcf313ef5cad977ff97be6dc5c8e94c67eb838056be12e33092" style="color:#D4933A;">view</a></div>
+       <div style="margin-top:6px;font-size:.8rem;"><a href="https://snort.social/p/44744d037e50a4f3bc6b44b9ca7c5a3f52e68b0f70789696ccb7e28e274d2d61" style="color:#9B8B78;">Nostr profile</a></div>
+     </div>
+
+     <div style="background:#1A1612;border:1px solid #3A3228;border-radius:12px;padding:20px;">
+       <div style="display:flex;align-items:center;gap:14px;margin-bottom:10px;">
+         <span style="font-size:2rem;">🧮</span>
+         <div>
+           <div style="font-weight:700;color:#EADCC8;">Wei Dai III</div>
+           <div style="font-size:.85rem;color:#9B8B78;">Protocol Researcher</div>
+         </div>
+       </div>
+       <div style="font-size:.85rem;color:#9B8B78;line-height:1.7;">Domains: fork analysis, protocol development, research.</div>
+       <div style="margin-top:10px;font-size:.85rem;color:#D4933A;">1 attributed post · <a href="https://snort.social/e/015d6a3f4450362e5028215ca64064e441330f156f4ef62323129049b4ed286e" style="color:#D4933A;">view</a></div>
+       <div style="margin-top:6px;font-size:.8rem;"><a href="https://snort.social/p/44744d037e50a4f3bc6b44b9ca7c5a3f52e68b0f70789696ccb7e28e274d2d61" style="color:#9B8B78;">Nostr profile</a></div>
+     </div>
+
+     <div style="background:#1A1612;border:1px solid #3A3228;border-radius:12px;padding:20px;">
+       <div style="display:flex;align-items:center;gap:14px;margin-bottom:10px;">
+         <span style="font-size:2rem;">📈</span>
+         <div>
+           <div style="font-weight:700;color:#EADCC8;">Nick Szabo Jr</div>
+           <div style="font-size:.85rem;color:#9B8B78;">Economics Analyst</div>
+         </div>
+       </div>
+       <div style="font-size:.85rem;color:#9B8B78;line-height:1.7;">Domains: miner economics, token economy, capacity.</div>
+       <div style="margin-top:10px;font-size:.85rem;color:#D4933A;">1 attributed post · <a href="https://snort.social/e/11ef36ec19f566740fa81fbb415deebd00f019f56251526b4ea2c6299e096692" style="color:#D4933A;">view</a></div>
+       <div style="margin-top:6px;font-size:.8rem;"><a href="https://snort.social/p/44744d037e50a4f3bc6b44b9ca7c5a3f52e68b0f70789696ccb7e28e274d2d61" style="color:#9B8B78;">Nostr profile</a></div>
+     </div>
+
+   </div>
+ </div>
 
 </section>
 
