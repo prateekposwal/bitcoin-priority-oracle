@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-01T12:35:54.364Z",
+  "generated_at": "2026-08-01T12:43:33.404Z",
   "freshness_min": 0,
   "fees": {
     "fastestFee": 1
@@ -25,9 +25,7 @@
       "trend": "falling"
     }
   ],
-  "alerts": [
-    "🛡 SITE /team.html -> 404"
-  ],
+  "alerts": [],
   "history": [
     {
       "date": "2026-07-30",
