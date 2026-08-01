@@ -145,7 +145,7 @@ function run() {
   return spoolMod.init().then(function(spool) {
     var now = new Date();
     var ts = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0') + '_' + String(now.getHours()).padStart(2, '0') + '-' + String(now.getMinutes()).padStart(2, '0') + '-' + String(now.getSeconds()).padStart(2, '0');
-    return spool.enqueue('derived_metrics', { status: 200, data: metrics, fetchedAt: new Date().toISOString() }, { captureTime: ts, day: ts.slice(0, 10), producer: 'agent-05' });
+    return spool.enqueue('derived_metrics', { status: 200, data: metrics, fetchedAt: new Date().toISOString() }, { captureTime: ts, day: ts.slice(0, 10), producer: 'agent-05', expectedIntervalMinutes: 60 });
   }).then(function(r) {
     if (require.main === module) console.log('derived-metrics: enqueued ' + (r.ok ? 'ok' : 'duplicate') + ' — ' + JSON.stringify(metrics.fees));
     return metrics;

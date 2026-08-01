@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-07-31T20:19:26.449Z",
-  "total": 36,
+  "generated_at": "2026-08-01T05:34:23.925Z",
+  "total": 44,
   "items": [
     {
       "id": "BSAHI-MS82C9EW-N2YK",
@@ -283,7 +283,87 @@
       "author": null
     },
     {
-      "id": "compliant-c28",
+      "id": "BSAHI-MS9DERA4-1D5T",
+      "source": "post-log",
+      "platform": "nostr",
+      "topic": "storage",
+      "status": "posted",
+      "postedAt": "2026-07-31T21:03:32.668Z",
+      "url": null,
+      "author": null
+    },
+    {
+      "id": "BSAHI-MS9FJGAQ-48C7",
+      "source": "post-log",
+      "platform": "nostr",
+      "topic": "storage",
+      "status": "posted",
+      "postedAt": "2026-07-31T22:18:37.836Z",
+      "url": null,
+      "author": null
+    },
+    {
+      "id": "BSAHI-MS9I80J7-56HI",
+      "source": "post-log",
+      "platform": "nostr",
+      "topic": "storage",
+      "status": "posted",
+      "postedAt": "2026-07-31T23:23:52.491Z",
+      "url": null,
+      "author": null
+    },
+    {
+      "id": "BSAHI-MS9KK0O0-MMXC",
+      "source": "post-log",
+      "platform": "nostr",
+      "topic": "storage",
+      "status": "posted",
+      "postedAt": "2026-08-01T01:03:58.212Z",
+      "url": null,
+      "author": null
+    },
+    {
+      "id": "BSAHI-MS9O4OE8-X8GC",
+      "source": "post-log",
+      "platform": "nostr",
+      "topic": "network",
+      "status": "posted",
+      "postedAt": "2026-08-01T01:59:37.581Z",
+      "url": null,
+      "author": null
+    },
+    {
+      "id": "BSAHI-MS9Q4827-JVBI",
+      "source": "post-log",
+      "platform": "nostr",
+      "topic": "network",
+      "status": "posted",
+      "postedAt": "2026-08-01T03:38:17.985Z",
+      "url": null,
+      "author": null
+    },
+    {
+      "id": "BSAHI-MS9TN48O-P3RP",
+      "source": "post-log",
+      "platform": "nostr",
+      "topic": "network",
+      "status": "posted",
+      "postedAt": "2026-08-01T04:06:56.650Z",
+      "url": null,
+      "author": null
+    },
+    {
+      "id": "BSAHI-MS9UNZUX-JBKZ",
+      "source": "post-log",
+      "platform": "nostr",
+      "topic": "network",
+      "status": "posted",
+      "postedAt": "2026-08-01T04:47:45.381Z",
+      "url": null,
+      "author": null
+    },
+    {
+      "id": "compliant-c36",
       "source": "compliant-poster",
       "platform": "reddit",
       "topic": "unknown",
@@ -292,7 +372,7 @@
       "url": "https://www.reddit.com/r/Bitcoin/"
     },
     {
-      "id": "compliant-c29",
+      "id": "compliant-c37",
       "source": "compliant-poster",
       "platform": "medium",
       "topic": "unknown",
@@ -301,7 +381,7 @@
       "url": "https://medium.com/new-story"
     },
     {
-      "id": "compliant-c30",
+      "id": "compliant-c38",
       "source": "compliant-poster",
       "platform": "reddit",
       "topic": "unknown",
@@ -346,13 +426,13 @@
       "content": "1/ Bitcoin's fastest fee is **1 sat/vB** right now. But here's what most people miss about how fees "
     },
     {
-      "id": "ops-BSAHI-MS9DERA4-1D5T",
+      "id": "ops-BSAHI-MS9WODO2-2SO9",
       "source": "ops-center",
-      "platform": "medium",
-      "topic": "storage",
+      "platform": "reddit",
+      "topic": "network",
       "status": "queued",
-      "scheduledFor": "2026-07-31",
-      "content": "The Storage Cost Coverage Ratio: Do Bitcoin Fees Cover Node Costs?\n\n## A Simple Question\n\nBitcoin tr"
+      "scheduledFor": "2026-08-01",
+      "content": "## The Physical Bitcoin\n\nBitcoin isn't just code. It's **150,000 blocks**, **17420 Lightning nodes**"
     }
   ]
 }

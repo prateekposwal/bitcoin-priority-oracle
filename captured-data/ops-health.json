@@ -1,13 +1,15 @@
 {
-  "generated_at": "2026-07-31T20:17:50.469Z",
-  "status": "HEALTHY",
-  "issues": [],
+  "generated_at": "2026-08-01T05:22:21.637Z",
+  "status": "DEGRADED",
+  "issues": [
+    "SPOOL: stale sources: block_interval,btc_rpc,derived_metrics,research_findings"
+  ],
   "checks": {
     "spool": {
       "accountingOk": true,
       "pending": 0,
       "dead": 0,
-      "stale": 0
+      "stale": 4
     },
     "de_server": {
       "ok": true,
@@ -15,15 +17,15 @@
       "agent": "running"
     },
     "de_agent": {
-      "lastRunAgeMin": 11
+      "lastRunAgeMin": 15
     },
     "orchestrator": {
-      "heartbeatAgeMin": 30,
+      "heartbeatAgeMin": 3,
       "phase": "cycle-complete"
     },
     "db": {
       "errorRatioPct": 2,
-      "total": 3054
+      "total": 3158
     }
   }
 }

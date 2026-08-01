@@ -6,7 +6,87 @@
   <description>Bitcoin block space economics research from BSAHI — posted to Nostr in real-time</description>
   <language>en</language>
   <atom:link href="https://bitcoinsahi.com/feed.xml" rel="self" type="application/rss+xml"/>
-  <lastBuildDate>Fri, 31 Jul 2026 20:06:57 GMT</lastBuildDate>
+  <lastBuildDate>Sat, 01 Aug 2026 05:34:42 GMT</lastBuildDate>
+  <item>
+    <title>network</title>
+    <link>https://snort.social/e/0a92edf9c2092e9581516708b3a9980052ab6dfae1894d641e067b0b57f1f00f</link>
+    <description><![CDATA[## The Physical Bitcoin
+
+Bitcoin isn't just code. It's **150,000 blocks**, **17420 Lightning nodes**]]></description>
+    <pubDate>Sat, 01 Aug 2026 04:47:45 GMT</pubDate>
+    <guid>0a92edf9c2092e9581516708b3a9980052ab6dfae1894d641e067b0b57f1f00f</guid>
+  </item>
+  <item>
+    <title>network</title>
+    <link>https://snort.social/e/a59cfd0d23b2974da67f5393ca97b43469848331d80b9af1629a37d7a6bae175</link>
+    <description><![CDATA[## The Physical Bitcoin
+
+Bitcoin isn't just code. It's **150,000 blocks**, **17420 Lightning nodes**]]></description>
+    <pubDate>Sat, 01 Aug 2026 04:06:56 GMT</pubDate>
+    <guid>a59cfd0d23b2974da67f5393ca97b43469848331d80b9af1629a37d7a6bae175</guid>
+  </item>
+  <item>
+    <title>network</title>
+    <link>https://snort.social/e/0e97ff0c441949821c784c37347d0bd7e0a4e3b4d24673772c0d48a3c536191b</link>
+    <description><![CDATA[## The Physical Bitcoin
+
+Bitcoin isn't just code. It's **150,000 blocks**, **17183 Lightning nodes**]]></description>
+    <pubDate>Sat, 01 Aug 2026 03:38:17 GMT</pubDate>
+    <guid>0e97ff0c441949821c784c37347d0bd7e0a4e3b4d24673772c0d48a3c536191b</guid>
+  </item>
+  <item>
+    <title>network</title>
+    <link>https://snort.social/e/d3c2cafb5b02ef0abe202612be3531f6a6fbb8493fbba5022e61777fa3e7e045</link>
+    <description><![CDATA[## The Physical Bitcoin
+
+Bitcoin isn't just code. It's **150,000 blocks**, **17420 Lightning nodes**]]></description>
+    <pubDate>Sat, 01 Aug 2026 01:59:37 GMT</pubDate>
+    <guid>d3c2cafb5b02ef0abe202612be3531f6a6fbb8493fbba5022e61777fa3e7e045</guid>
+  </item>
+  <item>
+    <title>storage</title>
+    <link>https://snort.social/e/98304b21d1d25c6b77e9a8563ba8f736bff2f388d5eac4550e70107f5976ed0b</link>
+    <description><![CDATA[The Storage Cost Coverage Ratio: Do Bitcoin Fees Cover Node Costs?
+
+## A Simple Question
+
+Bitcoin tr]]></description>
+    <pubDate>Sat, 01 Aug 2026 01:03:58 GMT</pubDate>
+    <guid>98304b21d1d25c6b77e9a8563ba8f736bff2f388d5eac4550e70107f5976ed0b</guid>
+  </item>
+  <item>
+    <title>storage</title>
+    <link>https://snort.social/e/825c4450232079dae970b3e51b4f9096f9aca8a6c44610300dbb3ef41f1e1e85</link>
+    <description><![CDATA[The Storage Cost Coverage Ratio: Do Bitcoin Fees Cover Node Costs?
+
+## A Simple Question
+
+Bitcoin tr]]></description>
+    <pubDate>Fri, 31 Jul 2026 23:23:52 GMT</pubDate>
+    <guid>825c4450232079dae970b3e51b4f9096f9aca8a6c44610300dbb3ef41f1e1e85</guid>
+  </item>
+  <item>
+    <title>storage</title>
+    <link>https://snort.social/e/6aee28cff8bf2e9c6733efdbf162bf310777fce18559fcfb62e7daab444762f2</link>
+    <description><![CDATA[The Storage Cost Coverage Ratio: Do Bitcoin Fees Cover Node Costs?
+
+## A Simple Question
+
+Bitcoin tr]]></description>
+    <pubDate>Fri, 31 Jul 2026 22:18:37 GMT</pubDate>
+    <guid>6aee28cff8bf2e9c6733efdbf162bf310777fce18559fcfb62e7daab444762f2</guid>
+  </item>
+  <item>
+    <title>storage</title>
+    <link>https://snort.social/e/eebbacbce33795acfd60ded438ce5de1c7b1725d5a88d1650e483b250435ce29</link>
+    <description><![CDATA[The Storage Cost Coverage Ratio: Do Bitcoin Fees Cover Node Costs?
+
+## A Simple Question
+
+Bitcoin tr]]></description>
+    <pubDate>Fri, 31 Jul 2026 21:03:32 GMT</pubDate>
+    <guid>eebbacbce33795acfd60ded438ce5de1c7b1725d5a88d1650e483b250435ce29</guid>
+  </item>
   <item>
     <title>storage</title>
     <link>https://snort.social/e/0ff50e35973da0a92dd3aa7310ee16e8a16ea91b27e19d6bcac425488d79d692</link>
@@ -130,62 +210,6 @@ Bitcoin tr]]></description>
     <description><![CDATA[Bitcoin Network State: Live Metrics Snapshot]]></description>
     <pubDate>Fri, 31 Jul 2026 11:53:46 GMT</pubDate>
     <guid>undefined</guid>
-  </item>
-  <item>
-    <title>network-state</title>
-    <link>https://snort.social/e/undefined</link>
-    <description><![CDATA[Bitcoin Network State: 2026-07-31]]></description>
-    <pubDate>Fri, 31 Jul 2026 11:38:04 GMT</pubDate>
-    <guid>undefined</guid>
-  </item>
-  <item>
-    <title>fee-market</title>
-    <link>https://snort.social/e/undefined</link>
-    <description><![CDATA[Blocks are full - here is what the data says (compliant analysis post)]]></description>
-    <pubDate>Fri, 31 Jul 2026 10:59:30 GMT</pubDate>
-    <guid>undefined</guid>
-  </item>
-  <item>
-    <title>settlement</title>
-    <link>https://snort.social/e/undefined</link>
-    <description><![CDATA[BSAHI: Bitcoin Block Space Research - Live Data]]></description>
-    <pubDate>Fri, 31 Jul 2026 10:39:40 GMT</pubDate>
-    <guid>undefined</guid>
-  </item>
-  <item>
-    <title>economy</title>
-    <link>https://snort.social/e/11ef36ec19f566740fa81fbb415deebd00f019f56251526b4ea2c6299e096692</link>
-    <description><![CDATA[📈 Economics Analyst: Average transaction value: $53965. Bitcoin settles high-value transactions. Th]]></description>
-    <pubDate>Thu, 30 Jul 2026 23:27:52 GMT</pubDate>
-    <guid>11ef36ec19f566740fa81fbb415deebd00f019f56251526b4ea2c6299e096692</guid>
-  </item>
-  <item>
-    <title>fork</title>
-    <link>https://snort.social/e/015d6a3f4450362e5028215ca64064e441330f156f4ef62323129049b4ed286e</link>
-    <description><![CDATA[🧮 Protocol Researcher: BIP-110 signaling at 83%. Thresholds approaching. What happens at the fork b]]></description>
-    <pubDate>Thu, 30 Jul 2026 23:27:49 GMT</pubDate>
-    <guid>015d6a3f4450362e5028215ca64064e441330f156f4ef62323129049b4ed286e</guid>
-  </item>
-  <item>
-    <title>exchange</title>
-    <link>https://snort.social/e/7af050f18160fdcf313ef5cad977ff97be6dc5c8e94c67eb838056be12e33092</link>
-    <description><![CDATA[📊 Data Journalist: Exchange batching analysis: 70% of withdrawals are batched. Remaining 33% are in]]></description>
-    <pubDate>Thu, 30 Jul 2026 23:27:46 GMT</pubDate>
-    <guid>7af050f18160fdcf313ef5cad977ff97be6dc5c8e94c67eb838056be12e33092</guid>
-  </item>
-  <item>
-    <title>capacity</title>
-    <link>https://snort.social/e/8d48105f3cdaf72679e10cb69c9934ee6a64a2dcfd2b1f74adf925769487ce91</link>
-    <description><![CDATA[🔬 Research Engineer: Lightning Network adds 4426 BTC capacity for instant settlements. Trust-minimi]]></description>
-    <pubDate>Thu, 30 Jul 2026 23:27:43 GMT</pubDate>
-    <guid>8d48105f3cdaf72679e10cb69c9934ee6a64a2dcfd2b1f74adf925769487ce91</guid>
-  </item>
-  <item>
-    <title>fee</title>
-    <link>https://snort.social/e/90a509e564c23690907fe6a762a6eb04bdcf16993c25ed2e8c621841694fbdc2</link>
-    <description><![CDATA[⚡ Block Space Analyst: Low fee environment: 14.5 sat/vB. The fee market works both ways. When demand]]></description>
-    <pubDate>Thu, 30 Jul 2026 23:27:40 GMT</pubDate>
-    <guid>90a509e564c23690907fe6a762a6eb04bdcf16993c25ed2e8c621841694fbdc2</guid>
   </item>
 </channel>
 </rss>

@@ -1,7 +1,7 @@
 {
-  "totalPosted": 22,
-  "totalScheduled": 21,
-  "lastRun": "2026-07-31T20:03:44.627Z",
+  "totalPosted": 30,
+  "totalScheduled": 30,
+  "lastRun": "2026-08-01T04:47:45.349Z",
   "posts": [
     {
       "id": "BSAHI-MS81T2KU-LUOE",
@@ -156,12 +156,69 @@
       "topic": "storage",
       "postedAt": "2026-07-31T20:03:44.609Z",
       "url": "nostr:event:0ff50e35973da0a92dd3aa7310ee16e8a16ea91b27e19d6bcac425488d79d692"
+    },
+    {
+      "id": "BSAHI-MS9DERA4-1D5T",
+      "platform": "medium",
+      "topic": "storage",
+      "postedAt": "2026-07-31T21:03:32.666Z",
+      "url": "nostr:event:eebbacbce33795acfd60ded438ce5de1c7b1725d5a88d1650e483b250435ce29"
+    },
+    {
+      "id": "BSAHI-MS9FJGAQ-48C7",
+      "platform": "medium",
+      "topic": "storage",
+      "postedAt": "2026-07-31T22:18:37.834Z",
+      "url": "nostr:event:6aee28cff8bf2e9c6733efdbf162bf310777fce18559fcfb62e7daab444762f2"
+    },
+    {
+      "id": "BSAHI-MS9I80J7-56HI",
+      "platform": "medium",
+      "topic": "storage",
+      "postedAt": "2026-07-31T23:23:52.415Z",
+      "url": "nostr:event:825c4450232079dae970b3e51b4f9096f9aca8a6c44610300dbb3ef41f1e1e85"
+    },
+    {
+      "id": "BSAHI-MS9KK0O0-MMXC",
+      "platform": "medium",
+      "topic": "storage",
+      "postedAt": "2026-08-01T01:03:58.158Z",
+      "url": "nostr:event:98304b21d1d25c6b77e9a8563ba8f736bff2f388d5eac4550e70107f5976ed0b"
+    },
+    {
+      "id": "BSAHI-MS9O4OE8-X8GC",
+      "platform": "reddit",
+      "topic": "network",
+      "postedAt": "2026-08-01T01:59:37.574Z",
+      "url": "nostr:event:d3c2cafb5b02ef0abe202612be3531f6a6fbb8493fbba5022e61777fa3e7e045"
+    },
+    {
+      "id": "BSAHI-MS9Q4827-JVBI",
+      "platform": "reddit",
+      "topic": "network",
+      "postedAt": "2026-08-01T03:38:17.984Z",
+      "url": "nostr:event:0e97ff0c441949821c784c37347d0bd7e0a4e3b4d24673772c0d48a3c536191b"
+    },
+    {
+      "id": "BSAHI-MS9TN48O-P3RP",
+      "platform": "reddit",
+      "topic": "network",
+      "postedAt": "2026-08-01T04:06:56.593Z",
+      "url": "nostr:event:a59cfd0d23b2974da67f5393ca97b43469848331d80b9af1629a37d7a6bae175"
+    },
+    {
+      "id": "BSAHI-MS9UNZUX-JBKZ",
+      "platform": "reddit",
+      "topic": "network",
+      "postedAt": "2026-08-01T04:47:45.279Z",
+      "url": "nostr:event:0a92edf9c2092e9581516708b3a9980052ab6dfae1894d641e067b0b57f1f00f"
     }
   ],
   "platformStats": {
     "linkedin": 6,
     "twitter": 6,
-    "medium": 10
+    "medium": 14,
+    "reddit": 4
   },
   "cycleCount": 1
 }

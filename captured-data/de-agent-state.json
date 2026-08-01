@@ -1,6 +1,6 @@
 {
-  "lastRun": 1785528431282,
-  "cycleCount": 28,
+  "lastRun": 1785562483673,
+  "cycleCount": 37,
   "discoveredSources": [
     {
       "name": "trend-scan.github.io",
@@ -268,11 +268,11 @@
     }
   ],
   "issues": [
-    "1 endpoints unhealthy"
+    "2 endpoints unhealthy"
   ],
   "m4": {
-    "cleanCycles": 5,
-    "lastGateCheck": "2026-07-31T20:07:05.380Z",
+    "cleanCycles": 0,
+    "lastGateCheck": "2026-08-01T05:34:43.403Z",
     "bridgeFlipped": false
   }
 }

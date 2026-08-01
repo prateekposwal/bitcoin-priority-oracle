@@ -96,6 +96,57 @@ test('stale sources detected without pending', function() {
   });
 });
 
+test('enqueue forwards expectedIntervalMinutes to cursor', function() {
+  var dir = path.join(TMP, 'spool-cadence-' + Date.now());
+  return spoolMod.init({ dir: dir, fsync: false }).then(function(s) {
+    return s.enqueue('block_interval', { data: 1 }, { captureTime: '2026-08-01_10-00-00', day: '2026-08-01', producer: 'agent-03', expectedIntervalMinutes: 60 });
+  }).then(function() {
+    return spoolMod.init({ dir: dir, fsync: false });
+  }).then(function(s) {
+    return s.cursor('block_interval');
+  }).then(function(cur) {
+    assert.strictEqual(cur.expectedIntervalMinutes, 60, 'cursor stamped with real cadence');
+  });
+});
+
+test('cursor with 60-min cadence not stale at 34min', function() {
+  var dir = path.join(TMP, 'spool-stale2-' + Date.now());
+  var spool;
+  return spoolMod.init({ dir: dir, fsync: false, staleAfterMinutes: 30 }).then(function(s) {
+    spool = s;
+    return s.enqueue('block_interval', { data: 1 }, { captureTime: '2026-08-01_10-00-00', day: '2026-08-01', expectedIntervalMinutes: 60 });
+  }).then(function() {
+    var curPath = path.join(spool.cursorsDir, 'block_interval.json');
+    var cur = JSON.parse(fs.readFileSync(curPath, 'utf8'));
+    cur.lastSeen = new Date(Date.now() - 34 * 60000).toISOString();
+    fs.writeFileSync(curPath, JSON.stringify(cur));
+    return spoolMod.init({ dir: dir, fsync: false, staleAfterMinutes: 30 });
+  }).then(function(s2) {
+    return s2.stats();
+  }).then(function(st) {
+    assert.strictEqual(st.staleSources.length, 0, '34min old with 60-min cadence is NOT stale (threshold 120)');
+  });
+});
+
+test('cursor with legacy 10-min cadence stale at 34min', function() {
+  var dir = path.join(TMP, 'spool-stale3-' + Date.now());
+  var spool;
+  return spoolMod.init({ dir: dir, fsync: false, staleAfterMinutes: 30 }).then(function(s) {
+    spool = s;
+    return s.enqueue('x', { data: 1 }, { captureTime: '2026-08-01_10-00-00', day: '2026-08-01' });
+  }).then(function() {
+    var curPath = path.join(spool.cursorsDir, 'x.json');
+    var cur = JSON.parse(fs.readFileSync(curPath, 'utf8'));
+    cur.lastSeen = new Date(Date.now() - 34 * 60000).toISOString();
+    fs.writeFileSync(curPath, JSON.stringify(cur));
+    return spoolMod.init({ dir: dir, fsync: false, staleAfterMinutes: 30 });
+  }).then(function(s2) {
+    return s2.stats();
+  }).then(function(st) {
+    assert.ok(st.staleSources.indexOf('x') !== -1, '34min old with 10-min cadence IS stale');
+  });
+});
+
 function run() {
   var idx = 0;
   function next() {

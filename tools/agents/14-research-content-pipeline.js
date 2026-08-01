@@ -46,7 +46,7 @@ function run() {
       status: 200,
       data: { findings: findings.slice(0, 20), briefsGenerated: briefs.length },
       fetchedAt: new Date().toISOString()
-    }, { captureTime: ts, day: ts.slice(0, 10), producer: 'agent-14' });
+    }, { captureTime: ts, day: ts.slice(0, 10), producer: 'agent-14', expectedIntervalMinutes: 60 });
   }).then(function(r) {
     if (require.main === module) console.log('research-content-pipeline: ' + (r.ok ? 'enqueued' : 'duplicate') + ', ' + findings.length + ' findings -> ' + briefs.length + ' briefs');
     return { findings: findings.length, briefs: briefs.length };

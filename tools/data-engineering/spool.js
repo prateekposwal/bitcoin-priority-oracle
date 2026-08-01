@@ -205,7 +205,8 @@ Spool.prototype.enqueue = function(source, capture, opts) {
       if (!self.history.firstEnqueuedAt) self.history.firstEnqueuedAt = entry.enqueuedAt;
       self.history.lastEnqueuedAt = entry.enqueuedAt;
       self._append(self.historyFile, { t: 'enq', id: id, seq: self.seq, at: entry.enqueuedAt }, {});
-      self._updateCursor(source, captureTime);
+      self._updateCursor(source, captureTime, undefined,
+        opts.expectedIntervalMinutes ? { expectedIntervalMinutes: opts.expectedIntervalMinutes } : undefined);
       resolve({ ok: true, id: id, duplicate: false });
     } catch (e) {
       try { self._updateCursor(source, captureTime, e); } catch (e2) {}

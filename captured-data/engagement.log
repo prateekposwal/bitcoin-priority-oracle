@@ -254,3 +254,40 @@ ModuleNotFoundError: No module named 'seen_state'
 [2026-07-31 20:21:23] RUN: scheduler.py 
 [2026-07-31 20:22:11] [01:52:11] [Scheduler] === Cycle complete ===
 [2026-07-31 20:22:11] === Cycle complete ===
+[2026-07-31 20:24:01] Engagement orchestrator v3 started (work 4h / rest 2h)
+[2026-07-31 20:24:02] === Engagement cycle ===
+[2026-07-31 20:24:02] RUN: reply-engine.py 
+[2026-07-31 20:24:10] CHROME_UNAVAILABLE — browser not reachable for inbox fetch
+[2026-07-31 20:24:10] RUN: comment-engine.py 8
+[2026-07-31 20:25:12] Cycle done. Comments today: 0/50
+[2026-07-31 20:25:12] ENGAGE: LinkedIn/Medium engagement disabled (policy) — see docs/decisions/2026-07-31-engagement.md
+[2026-07-31 20:25:12] RUN: scheduler.py 
+[2026-07-31 20:25:13] [01:55:13] [Scheduler] === Cycle complete ===
+[2026-07-31 20:25:13] === Cycle complete ===
+[2026-07-31 21:01:19] === Engagement cycle ===
+[2026-07-31 21:01:20] RUN: reply-engine.py 
+[2026-07-31 21:01:41] CHROME_UNAVAILABLE — browser not reachable for inbox fetch
+[2026-07-31 21:01:41] RUN: comment-engine.py 8
+[2026-07-31 21:02:52] Cycle done. Comments today: 0/50
+[2026-07-31 21:02:52] ENGAGE: LinkedIn/Medium engagement disabled (policy) — see docs/decisions/2026-07-31-engagement.md
+[2026-07-31 21:02:52] RUN: scheduler.py 
+[2026-07-31 21:02:52] [02:32:52] [Scheduler] === Cycle complete ===
+[2026-07-31 21:02:52] === Cycle complete ===
+[2026-07-31 21:38:52] === Engagement cycle ===
+[2026-07-31 21:38:53] RUN: reply-engine.py 
+[2026-07-31 21:39:21] CHROME_UNAVAILABLE — browser not reachable for inbox fetch
+[2026-07-31 21:39:21] RUN: comment-engine.py 8
+[2026-07-31 21:40:26] Cycle done. Comments today: 0/50
+[2026-07-31 21:40:26] ENGAGE: LinkedIn/Medium engagement disabled (policy) — see docs/decisions/2026-07-31-engagement.md
+[2026-07-31 21:40:26] RUN: scheduler.py 
+[2026-07-31 21:40:30] [03:10:30] [Scheduler] === Cycle complete ===
+[2026-07-31 21:40:30] === Cycle complete ===
+[2026-08-01 05:10:38] === Engagement cycle ===
+[2026-08-01 05:10:38] RUN: reply-engine.py 
+[2026-08-01 05:10:45] CHROME_UNAVAILABLE — browser not reachable for inbox fetch
+[2026-08-01 05:10:45] RUN: comment-engine.py 8
+[2026-08-01 05:12:36] Cycle done. Comments today: 0/50
+[2026-08-01 05:12:36] ENGAGE: LinkedIn/Medium engagement disabled (policy) — see docs/decisions/2026-07-31-engagement.md
+[2026-08-01 05:12:36] RUN: scheduler.py 
+[2026-08-01 05:19:05] [10:49:05] [Scheduler] === Cycle complete ===
+[2026-08-01 05:19:05] === Cycle complete ===

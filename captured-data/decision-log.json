@@ -56,6 +56,154 @@
         "bridgeFlipped": false,
         "forecastModel": "holt-linear-trend"
       }
+    },
+    {
+      "ts": "2026-07-31T21:03:27.528Z",
+      "cycle": 29,
+      "source": "de-agent",
+      "decisions": [
+        "M4 gate: cleanCycles=5/7"
+      ],
+      "issues": [
+        "SPOOL: stale sources: block_interval,btc_rpc,derived_metrics,research_findings",
+        "1 endpoints unhealthy"
+      ],
+      "metrics": {
+        "quality": "degraded",
+        "m4CleanCycles": 5,
+        "bridgeFlipped": false,
+        "forecastModel": "holt-linear-trend"
+      }
+    },
+    {
+      "ts": "2026-07-31T22:18:32.745Z",
+      "cycle": 30,
+      "source": "de-agent",
+      "decisions": [
+        "M4 gate: cleanCycles=6/7"
+      ],
+      "issues": [
+        "SPOOL: stale sources: block_interval,btc_rpc,derived_metrics,research_findings",
+        "1 endpoints unhealthy"
+      ],
+      "metrics": {
+        "quality": "degraded",
+        "m4CleanCycles": 6,
+        "bridgeFlipped": false,
+        "forecastModel": "holt-linear-trend"
+      }
+    },
+    {
+      "ts": "2026-07-31T23:23:47.236Z",
+      "cycle": 31,
+      "source": "de-agent",
+      "decisions": [
+        "M4 gate: cleanCycles=0/7"
+      ],
+      "issues": [
+        "SPOOL: stale sources: block_interval,btc_rpc,derived_metrics,research_findings",
+        "ORCHESTRATOR: heartbeat 103 min ago",
+        "1 endpoints unhealthy"
+      ],
+      "metrics": {
+        "quality": "degraded",
+        "m4CleanCycles": 0,
+        "bridgeFlipped": false,
+        "forecastModel": "holt-linear-trend"
+      }
+    },
+    {
+      "ts": "2026-08-01T01:03:48.998Z",
+      "cycle": 32,
+      "source": "de-agent",
+      "decisions": [
+        "M4 gate: cleanCycles=1/7"
+      ],
+      "issues": [
+        "ORCHESTRATOR: heartbeat 192 min ago",
+        "2 endpoints unhealthy"
+      ],
+      "metrics": {
+        "quality": "degraded",
+        "m4CleanCycles": 1,
+        "bridgeFlipped": false,
+        "forecastModel": "holt-linear-trend"
+      }
+    },
+    {
+      "ts": "2026-08-01T01:59:32.234Z",
+      "cycle": 33,
+      "source": "de-agent",
+      "decisions": [
+        "M4 gate: cleanCycles=0/7"
+      ],
+      "issues": [
+        "SPOOL: stale sources: block_interval,btc_rpc,derived_metrics,research_findings",
+        "ORCHESTRATOR: heartbeat 252 min ago",
+        "2 endpoints unhealthy"
+      ],
+      "metrics": {
+        "quality": "degraded",
+        "m4CleanCycles": 0,
+        "bridgeFlipped": false,
+        "forecastModel": "holt-linear-trend"
+      }
+    },
+    {
+      "ts": "2026-08-01T03:22:17.673Z",
+      "cycle": 34,
+      "source": "de-agent",
+      "decisions": [
+        "M4 gate: cleanCycles=0/7"
+      ],
+      "issues": [
+        "SPOOL: stale sources: block_interval,btc_rpc,derived_metrics,research_findings",
+        "ORCHESTRATOR: heartbeat 313 min ago",
+        "1 endpoints unhealthy"
+      ],
+      "metrics": {
+        "quality": "degraded",
+        "m4CleanCycles": 0,
+        "bridgeFlipped": false,
+        "forecastModel": "holt-linear-trend"
+      }
+    },
+    {
+      "ts": "2026-08-01T04:47:39.859Z",
+      "cycle": 36,
+      "source": "de-agent",
+      "decisions": [
+        "M4 gate: cleanCycles=0/7"
+      ],
+      "issues": [
+        "SPOOL: stale sources: block_interval,btc_rpc,derived_metrics,research_findings",
+        "ORCHESTRATOR: heartbeat 420 min ago",
+        "2 endpoints unhealthy"
+      ],
+      "metrics": {
+        "quality": "degraded",
+        "m4CleanCycles": 0,
+        "bridgeFlipped": false,
+        "forecastModel": "holt-linear-trend"
+      }
+    },
+    {
+      "ts": "2026-08-01T05:34:23.854Z",
+      "cycle": 37,
+      "source": "de-agent",
+      "decisions": [
+        "M4 gate: cleanCycles=0/7"
+      ],
+      "issues": [
+        "SPOOL: stale sources: block_interval,btc_rpc,derived_metrics,research_findings",
+        "2 endpoints unhealthy"
+      ],
+      "metrics": {
+        "quality": "degraded",
+        "m4CleanCycles": 0,
+        "bridgeFlipped": false,
+        "forecastModel": "holt-linear-trend"
+      }
     }
   ]
 }

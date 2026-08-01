@@ -239,9 +239,18 @@ async function runCycle() {
       var comp = await spool2.compact();
       log('Compaction: removed=' + comp.removed + ' kept=' + comp.kept);
     }
-    // M4 gate recorder: accumulate consecutive clean cycles post-monitor-fix
+    // M4 gate recorder: accumulate consecutive clean cycles post-monitor-fix.
+    // Gate scope = CORE capture path (CONFIG.endpoints keys). Aux agent sources
+    // (block_interval, btc_rpc, derived_metrics, research_findings) are derived/
+    // agent-generated and are not part of the legacy-bridge capture path.
     var qualityNow = quality && quality.score ? quality.score : 0;
-    var clean = st.accountingOk && st.totals.pending === 0 && st.staleSources.length === 0 && st.totals.dead === 0 && qualityNow >= 80;
+    var coreKeys = CONFIG.endpoints.map(function(e) { return e.key; });
+    var coreStale = (st.staleSources || []).filter(function(s) { return coreKeys.indexOf(s) !== -1; });
+    var corePending = 0;
+    coreKeys.forEach(function(k) {
+      if (st.perSource[k]) corePending += st.perSource[k].pending || 0;
+    });
+    var clean = st.accountingOk && corePending === 0 && coreStale.length === 0 && st.totals.dead === 0 && qualityNow >= 80;
     STATE.m4 = STATE.m4 || { cleanCycles: 0, lastGateCheck: null, bridgeFlipped: false };
     if (clean) {
       STATE.m4.cleanCycles = (STATE.m4.cleanCycles || 0) + 1;
@@ -249,7 +258,7 @@ async function runCycle() {
       STATE.m4.cleanCycles = 0;
     }
     STATE.m4.lastGateCheck = new Date().toISOString();
-    log('M4 gate: cleanCycles=' + STATE.m4.cleanCycles + '/7 (bridge=' + (CONFIG.capture.bridge ? 'on' : 'off') + ', quality=' + qualityNow + ')');
+    log('M4 gate: cleanCycles=' + STATE.m4.cleanCycles + '/7 (bridge=' + (CONFIG.capture.bridge ? 'on' : 'off') + ', quality=' + qualityNow + ', coreStale=[' + coreStale.join(',') + '])');
     if (STATE.m4.cleanCycles >= 7 && CONFIG.capture.bridge && !STATE.m4.bridgeFlipped) {
       CONFIG.capture.bridge = false;
       STATE.m4.bridgeFlipped = true;
