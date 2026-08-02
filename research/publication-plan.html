@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="&quot;Storage Cost Internalization in Bitcoin&#x27;s Fee Market&quot;, keeping &quot;The Bitcoin Block Bitcoin block space economics research from BSAHI — live fee, mempool, and se">
+<meta property="og:title" content="Publication-Plan">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://bitcoinsahi.com/research/publication-plan.html">
+<meta property="og:image" content="https://bitcoinsahi.com/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#1A1612">
+<link rel="canonical" href="https://bitcoinsahi.com/research/publication-plan.html">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://bitcoinsahi.com/"},{"@type":"ListItem","position":2,"name":"Research","item":"https://bitcoinsahi.com/research/"},{"@type":"ListItem","position":3,"name":"Publication-Plan","item":"https://bitcoinsahi.com/research/publication-plan.html"}]}
+</script>
+<title>Publication-Plan — BSAHI Research</title>
+<style>body{background:#1A1612;color:#E8E5E0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;margin:0;padding:0}
+header{background:#231F19;border-bottom:1px solid #3A3228;padding:16px 24px}
+.header-inner{max-width:960px;margin:0 auto;display:flex;align-items:center;justify-content:space-between}
+.brand{color:#F7931A;font-weight:700;text-decoration:none;font-size:1.1rem}
+.nav{display:flex;gap:14px;align-items:center}
+.nav-item{padding:6px 14px;font-size:.875rem;font-weight:500;color:#9B8B78;border-radius:6px;text-decoration:none;transition:all .2s}
+.nav-item:hover{color:#EADCC8;background:#2A251E}
+.nav-item.active{background:#2A251E;color:#EADCC8}
+.container{max-width:960px;margin:0 auto;padding:40px 24px 80px}
+h1{color:#F7931A;font-size:1.9rem;margin:0 0 8px}
+h2{color:#EADCC8;font-size:1.3rem;margin:28px 0 12px}
+h3{color:#EADCC8;font-size:1.1rem;margin:20px 0 8px}
+p{color:#C9C2B8;line-height:1.8;margin:0 0 14px}
+a{color:#D4933A}
+table{border-collapse:collapse;margin:14px 0;width:100%}
+th,td{border:1px solid #3A3228;padding:8px 12px;text-align:left;font-size:.9rem}
+th{background:#231F19;color:#EADCC8}
+blockquote{border-left:3px solid #F7931A;margin:14px 0;padding:4px 16px;color:#9B8B78;background:#1F1B16}
+pre,code{background:#231F19;border-radius:6px;font-family:'SF Mono',Menlo,monospace}
+pre{padding:14px;overflow-x:auto}
+code{padding:2px 5px;font-size:.88em}
+ul,ol{color:#C9C2B8;line-height:1.7;padding-left:24px}
+hr{border:none;border-top:1px solid #3A3228;margin:24px 0}
+footer{border-top:1px solid #3A3228;padding:24px;text-align:center;font-size:.85rem;color:#6A5D4E}
+footer .links{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-bottom:10px}
+footer .links a{color:#6A5D4E;text-decoration:none}
+footer .links a:hover{color:#D4933A}</style>
+</head>
+<body>
+<header><div class="header-inner"><a href="/" class="brand">⬡ BSAHI</a><nav class="nav"><a href="/" class="nav-item">Home</a><a href="/live" class="nav-item">Live Fees</a><a href="/learn" class="nav-item">Learn</a><a href="/capacity" class="nav-item">Capacity</a><a href="/fork-tracker" class="nav-item">Fork Tracker</a><span class="nav-item active">Research</span></nav></div></header>
+<div class="container">
+<h1>Publication-Plan</h1>
+<h2>Phase I Publication Plan — &quot;Storage Cost Internalization in Bitcoin&#x27;s Fee Market&quot; (Working Paper v2.1.0)</h2>
+<p><strong>Status:</strong> DRAFT (2026-08-02) — greenlit at roadmap adoption (Prateek, &quot;continue :)&quot;)</p>
+<p><strong>Scope:</strong> submit <code>research/working-paper.md</code> v2.1.0 (SCCR storage paper, now titled</p>
+<p><strong>&quot;Storage Cost Internalization in Bitcoin&#x27;s Fee Market&quot;</strong>, keeping &quot;The Bitcoin Block</p>
+<p>Space Problem&quot; as the program subtitle) with the archival-vs-pruned companion note</p>
+<p>(<code>research/archival-vs-pruned-note.md</code>).</p>
+<p><strong>Renamed 2026-08-02:</strong> from &quot;The Bitcoin Block Space Problem: Does the Fee Market</p>
+<p>Internalize Long-Term Storage Costs?&quot; — the new title is the economics-native phrasing</p>
+<p>(see §8.3 Cost Internalization Ratio) and avoids the protocol-critique reading a Core</p>
+<p>reviewer flagged (reviewer-simulation.md Reviewer A objection 3).</p>
+<p><strong>Paper-series framing (roadmap):</strong> this is <strong>Paper 1</strong> (storage). The roadmap&#x27;s</p>
+<p>Resource Internalization Framework continues as <strong>Paper 2 (UTXO leg, UCIR)</strong>, **Paper 3</p>
+<p>(validation leg, VCIR as bounded study)<strong>, </strong>Paper 4 (unified Resource Coverage Matrix)** —</p>
+<p>each builds on Paper 1&#x27;s reproducible-metric template. Do NOT mix Paper 2–4 content into</p>
+<p>Paper 1 (roadmap §6 amendment 1).</p>
+<p><strong>Target:</strong> arXiv (cs.CR / econ.GN) + Bitcoin Optech newsletter; r/BitcoinEngineering</p>
+<p>already engaged (v1/v2 history).</p>
+<hr>
+<h3>1. Target venues</h3>
+<table>
+<tr><th>Venue</th><th>Where</th><th>What goes in</th><th>Notes</th></tr>
+<tr><td><strong>arXiv</strong></td><td>arxiv.org, submit via account</td><td>Working paper v2.1.0 (+ companion note as appendix or separate posting)</td><td>Category: <strong>cs.CR</strong> (cryptography &amp; security — Bitcoin/blockchain work is routinely filed here) or <strong>econ.GN</strong> (general economics — the framing is an externality/economics paper). Recommend cs.CR primary with the economics framing kept prominent in the abstract. arXiv is not peer-reviewed; it is a preprint server — the paper&#x27;s reproducible-measurement asset maps well to it.</td></tr>
+<tr><td><strong>Bitcoin Optech newsletter</strong></td><td>bitcoinops.org — newsletter submission/contact</td><td>Short research summary + link to preprint</td><td>Optech regularly cites new Bitcoin research. Submission is a summary pitch, not the full paper. Value: reaches node operators and engineers — exactly the &quot;who bears the cost&quot; audience.</td></tr>
+<tr><td>(follow-on) <strong>r/BitcoinEngineering</strong></td><td>reddit.com/r/BitcoinEngineering</td><td>Announcement thread + link</td><td>Existing community from v1/v2; post *after* arXiv is live (link-first).</td></tr>
+<tr><td>(follow-on, optional) <strong>Workshop/venue</strong></td><td>e.g. Bitcoin Research Day / academic workshops</td><td>Full paper</td><td>Only after community feedback validates the framing. Do NOT pre-commit.</td></tr>
+</table>
+<h3>2. Submission steps (arXiv)</h3>
+<ol>
+<li><strong>Author list &amp; account.</strong> <strong>RECOMMENDATION (Prateek to ratify):</strong> author line</li>
+</ol>
+<p>= <strong>Prateek Poswal, Independent Researcher</strong> (Bitcoin Sahi Research Council</p>
+<p>acknowledged in the paper body, not the byline). Full three-option analysis,</p>
+<p>ORCID rationale, and exact signup steps in <code>research/author-identity.md</code>.</p>
+<p>arXiv accounts are free; a new submitter may need endorsement — first</p>
+<p>submissions to cs.* often require endorsement by an existing arXiv author.</p>
+<p>Check <code>arxiv.org</code> endorsement rules before submitting. *(ACTION — needs</p>
+<p>Prateek: arXiv account email + author details + any existing arXiv account +</p>
+<p>ORCID iD. Default if no response: Independent Researcher, no affiliation.)*</p>
+<ol>
+<li><strong>License.</strong> <strong>RECOMMENDATION (Prateek to ratify):</strong> <strong>MIT</strong> for code +</li>
+</ol>
+<p><strong>CC BY 4.0</strong> for the paper, matched by the CC BY 4.0 license field on arXiv.</p>
+<p>Exact draft texts (LICENSE file replacement + paper notice + arXiv field) in</p>
+<p><code>research/license-draft.md</code>. The repo LICENSE file is currently a stub</p>
+<p>(&quot;All Rights Reserved&quot;) — do NOT change it until Prateek ratifies the pair.</p>
+<ol>
+<li><strong>Abstract.</strong> Rewrite to arXiv constraints (~1 paragraph, ≤ ~1500 chars):</li>
+</ol>
+<p>state the question, the SCCR definition, the primary-source census (≥32K), the</p>
+<p>banded result (~22–29%, ~99–100% below 1×), and the reproducibility claim.</p>
+<p>The current abstract (working-paper §1) is close; trim to venue style.</p>
+<p>Banded claims only — never the strong form (100% below 1×).</p>
+<ol>
+<li><strong>Source format.</strong> <strong>DONE (2026-08-02):</strong> full LaTeX source exists at</li>
+</ol>
+<p><code>research/working-paper.tex</code> (compilable skeleton — abstract verbatim, all</p>
+<p>10 sections, 8 tables, references; conversion status noted in the file</p>
+<p>header). LaTeX toolchain NOT present on the dev machine (no pdflatex) —</p>
+<p>compile <code>pdflatex working-paper.tex</code> on any TeX installation before</p>
+<p>submission, and diff content against working-paper.md. Fallback remains the</p>
+<p>PDF export of working-paper.html.</p>
+<ol>
+<li><strong>Units &amp; notation consistency check.</strong> The paper v2.1.0 already added units</li>
+</ol>
+<p>everywhere (dimensionless ratios, USD/block, nodes, yr). Before upload: run a</p>
+<p>final pass confirming (i) every table row carries units, (ii) SCCR is stated</p>
+<p>dimensionless, (iii) no bare &quot;0.29&quot; without a date+capture qualifier, (iv) the</p>
+<p>canonical live value is read from model-spec v2.0.1, never hardcoded</p>
+<p>(working-paper §5.3 discipline).</p>
+<ol>
+<li><strong>Claims-within-evidence check.</strong> Confirm every headline is the *banded*</li>
+</ol>
+<p>statement (~22–29%, ~99–100% below 1×, &quot;lower bound ≥32K&quot;, &quot;T=10 assumption&quot;),</p>
+<p>not the strong form (100% below 1×). The strong form does not survive the real</p>
+<p>census (working-paper §5.4) — do not resurrect it in the arXiv abstract.</p>
+<ol>
+<li><strong>Upload</strong> → arXiv moderation (usually 1–3 business days) → preprint URL.</li>
+<li><strong>Register the DOI/preprint URL</strong> in the repo (TODO-bitcoin-oracle.md R5</li>
+</ol>
+<p>publication item + site surfaces).</p>
+<h3>3. Submission steps (Bitcoin Optech)</h3>
+<ol>
+<li>Draft a <strong>2–4 sentence research summary</strong>: what was measured (SCCR, live data,</li>
+</ol>
+<p>≥32K census), the headline (fees cover ~22–29% of modeled 10-yr storage cost),</p>
+<p>and the reproducible framework. Keep it neutral — Optech is a technical</p>
+<p>newsletter, not an advocacy venue.</p>
+<ol>
+<li>Submit via the Optech website contact/newsletter-submission path (or the</li>
+</ol>
+<p>publicly listed address), linking the arXiv preprint once live.</p>
+<ol>
+<li>Follow up with the companion note&#x27;s data-gap framing as the &quot;what&#x27;s next&quot;</li>
+</ol>
+<p>line (split measurement, agent-26 probe) — it demonstrates research hygiene.</p>
+<h3>4. Pre-submit checklist (both venues)</h3>
+<ul>
+<li>[ ] <strong>Author list confirmed</strong> (Prateek: ratify Independent Researcher + ORCID iD + arXiv account) — *needed from Prateek (see research/author-identity.md)*</li>
+<li>[ ] <strong>License chosen</strong> (recommend MIT code + CC BY 4.0 paper; drafts in research/license-draft.md; LICENSE file untouched until Prateek ratifies)</li>
+<li>[ ] <strong>Abstract rewritten</strong> to venue constraints, banded claims only</li>
+<li>[ ] <strong>Units consistency pass</strong> (every quantity tagged; no undated headline numbers)</li>
+<li>[ ] <strong>Claims-within-evidence pass</strong> (banded ~22–29% / ~99–100%; ≥32K lower bound; T=10 assumption stated)</li>
+<li>[ ] <strong>Companion note final</strong> (<code>archival-vs-pruned-note.md</code> — Prateek review pending)</li>
+<li>[ ] <strong>Source format decided</strong> — LaTeX source EXISTS (<code>research/working-paper.tex</code>); needs a compile pass on a machine with pdflatex (toolchain absent locally)</li>
+<li>[ ] <strong>Reproducibility line intact</strong>: model-spec v2.0.1 + three independent implementations (JS/Python/C) named</li>
+<li>[ ] <strong>Prior-work honesty intact</strong>: Liu et al. 2021 (arXiv:2103.05866) acknowledged as closest prior work; contribution = measurement, not the observation (working-paper §8.2)</li>
+<li>[ ] <strong>Dead-claims audit</strong>: no reference to v1/v2 oracle framing (refuted); no BIP-110 claim beyond documented DOA status</li>
+</ul>
+<h3>5. What the archival-vs-pruned note adds to the submission</h3>
+<ul>
+<li><strong>Addresses the obvious reviewer question</strong> (&quot;doesn&#x27;t pruning destroy your</li>
+</ul>
+<p>storage-cost premise?&quot;) before it is asked — the note states the T=10/N</p>
+<p>conditioning explicitly.</p>
+<ul>
+<li><strong>Demonstrates measurement hygiene</strong> — the data gap is *named* (census =</li>
+</ul>
+<p>reachability only) and the closing path is *specified* (agent-26 probing,</p>
+<p>survey, third-party reconciliation), not hand-waved.</p>
+<ul>
+<li><strong>Bounds the claim</strong> — the note shows SCCR-as-computed is an upper bound on the</li>
+</ul>
+<p>burden borne by typical nodes if the pruned share is large, and that even a 78%</p>
+<p>pruning rate would not flip the headline (N_archival ≈ 7K vs the 7,130 knife</p>
+<p>edge) — turning a limitation into a quantified robustness statement.</p>
+<ul>
+<li><strong>Sequencing:</strong> ships with or immediately after the paper; the actual split</li>
+</ul>
+<p>measurement is Phase I follow-on, *not* a submission blocker.</p>
+<h3>6. After-arXiv builds (ready now, deploy on publication)</h3>
+<h4>6.1 Live SCCR dashboard + static API (built 2026-08-02)</h4>
+<p>The static site (GitHub Pages) cannot serve a dynamic backend API until the</p>
+<p>deferred backend decision (R5-gated, TODO-bitcoin-oracle.md). The honest</p>
+<p>interim is <strong>static JSON endpoints shipped with every snapshot</strong>:</p>
+<table>
+<tr><th>Static file</th><th>Serves as</th><th>Producer</th></tr>
+<tr><td><code>data/sccr.json</code></td><td>live dashboard widget (learn.html)</td><td><code>tools/research/sccr_live.py</code></td></tr>
+<tr><td><code>data/sccr_latest.json</code></td><td><code>/sccr/latest</code></td><td><code>tools/research/sccr_live.py</code></td></tr>
+<tr><td><code>data/sccr_history.json</code></td><td><code>/sccr/history</code></td><td><code>tools/research/sccr_live.py</code></td></tr>
+</table>
+<ul>
+<li><code>python3 tools/research/sccr_live.py</code> computes the latest SCCR from the live</li>
+</ul>
+<p>capture and writes all three files (history appends, dedup by date).</p>
+<ul>
+<li>The snapshot agent (<code>tools/agents/19-web-snapshot-agent.js</code>) invokes it on</li>
+</ul>
+<p>every run, so <code>sccr*.json</code> ship with each <code>data/</code> publish.</p>
+<ul>
+<li>GH Actions fallback (<code>tools/generate_snapshot.py</code>) carries the last committed</li>
+</ul>
+<p><code>sccr*.json</code> (runner has no local DB — it ships committed values, honest).</p>
+<ul>
+<li><code>learn.html</code> now has a live SCCR dashboard section reading <code>data/sccr.json</code>.</li>
+<li><code>/sccr/block/{height}</code> is NOT served statically (needs the full history map);</li>
+</ul>
+<p>documented as backend-only once the R5-gated backend lands. Do not claim it.</p>
+<h4>6.2 Interactive paper (Phase-4 goal — spec only, do NOT build now)</h4>
+<p><strong>Goal (after publication):</strong> an interactive version of the paper where every</p>
+<p>equation traces to data → code → result: &quot;equation → data → code → result&quot;.</p>
+<p><strong>Spec (what to build later, not now):</strong></p>
+<ol>
+<li>Every model quantity in the paper (C, N, T, B_block, cb, L, L_net, SCCR)</li>
+</ol>
+<p>links to its <code>model-spec.json</code> entry and its producing script.</p>
+<ol>
+<li>Every reported number links to the exact capture it came from (frozen input</li>
+</ol>
+<p>files in <code>research/reproduce/input/</code> are the traceable unit).</p>
+<ol>
+<li>The SCCR chart (<code>research/reproduce/output/sccr_chart.png</code>) is regenerated</li>
+</ol>
+<p>live from <code>data/sccr_history.json</code> — the dashboard widget is the first</p>
+<p>interactive element already built.</p>
+<ol>
+<li>Architecture: static HTML + the <code>data/sccr*.json</code> endpoints + a small JS</li>
+</ol>
+<p>renderer (same pattern as the learn.html dashboard section). No backend.</p>
+<ol>
+<li>Content: a <code>/research/paper/</code> page with the paper text inline and</li>
+</ol>
+<p>data-links; equations rendered as MathML or KaTeX; each table cell marked</p>
+<p>with its traceability breadcrumb (spec entry → script line → capture file).</p>
+<p><strong>Status:</strong> SPEC ONLY (2026-08-02). Not started. Deferred until after the</p>
+<p>preprint is live — building it now would delay submission and duplicate the</p>
+<p>learn.html dashboard work already shipped.</p>
+<h3>7. DONE vs LEFT</h3>
+<p><strong>DONE (verified, 2026-08-02 execution plan):</strong></p>
+<ul>
+<li>Full LaTeX source (<code>research/working-paper.tex</code>) — compilable skeleton; toolchain NOT local (flag for compile pass).</li>
+<li>Author identity + ORCID recommendation (<code>research/author-identity.md</code>); license drafts (<code>research/license-draft.md</code>).</li>
+<li>Live SCCR dashboard + static API files (<code>tools/research/sccr_live.py</code>, <code>data/sccr*.json</code>, learn.html section, snapshot-agent wiring).</li>
+<li>Reproduction kit (frozen input, Python + C implementations, cross-check script) — three implementations all agree (0.2186, 171 blocks).</li>
+<li>Literature audit (<code>research/literature-audit.md</code>), reviewer simulation (<code>research/reviewer-simulation.md</code>), community review plan (<code>research/community-review-plan.md</code>).</li>
+<li>Paper renamed + reviewer fixes F1–F8 applied to working-paper.md; HTML regenerated.</li>
+</ul>
+<p><strong>DONE (verified):</strong></p>
+<ul>
+<li>Venue analysis (arXiv cs.CR/econ.GN, Optech, follow-ons) with rationale.</li>
+<li>Submission steps for both venues, pre-submit checklist (10 items), companion-note contribution.</li>
+<li>Checklist items that do not need new input are all marked actionable in §4.</li>
+</ul>
+<p><strong>LEFT / TODO (verified):</strong></p>
+<ul>
+<li>[ ] Prateek: arXiv account + author list (name/affiliation/ORCID) + license preference</li>
+<li>[ ] Prateek: review <code>archival-vs-pruned-note.md</code> (data-gap framing sign-off)</li>
+<li>[ ] Abstract rewrite + LaTeX-or-PDF decision (mechanical once author/license known)</li>
+<li>[ ] Actual submission (arXiv upload + Optech pitch) — after Prateek&#x27;s inputs land</li>
+<li>[ ] Post-publication: update TODO-bitcoin-oracle.md R5 item + site surfaces with the preprint URL</li>
+</ul>
+<hr>
+<p>*Bitcoin Sahi Research Council — Publication plan for &quot;Storage Cost Internalization in Bitcoin&#x27;s Fee Market&quot; (working-paper v2.1.0, Phase I), 2026-08-02*</p>
+<p style="margin-top:32px;"><a href="/research">← All research</a> · <a href="/learn">← Back to Learn</a></p>
+</div>
+<footer><div class="links"><a href="/">Home</a><a href="/live">Decide</a><a href="/learn">Learn</a><a href="/capacity">Capacity</a><a href="/fork-tracker">Fork</a><a href="/research">Research</a></div><div>Bitcoin Sahi — research and decision platform for the Bitcoin block space economy</div></footer>
+</body>
+</html>

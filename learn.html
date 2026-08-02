@@ -334,9 +334,39 @@ Each new block strengthens every block that came before it. To rewrite history, 
 <h2>Why <span>Block Space</span> Matters</h2>
 <p>Every Bitcoin transaction bids for a scarce resource: <strong>space in the next block</strong>. The fee market determines who gets in. But the fee market only prices congestion — not the permanent cost of storing data across every full node long-term.</p>
 <p>Our research (<a href="https://github.com/prateekposwal/block-space-economics/blob/main/research/problem_statement.md">The Bitcoin Block Space Problem</a>) frames this question. In July 2026, we produced the first empirical measurement (corrected to v2.0.0 after an internal audit — see the <a href="/research/verification_appendix.html">reproducibility note</a>):</p>
-<div class="highlight"><strong id="storage-ratio-value">Storage Cost Coverage Ratio: 0.2252</strong> — Current Bitcoin transaction fees cover ~22.5% of the estimated 10-year storage cost across the real node census (N=32K). 100% of sampled blocks fall below the 1× threshold.</div>
- <p>Based on 158 blocks sampled over 24 hours. This is an open research question — we're publishing the data and methodology for the community to verify and build upon.</p>
+<div class="highlight"><strong id="storage-ratio-value">Storage Cost Coverage Ratio: <span id="sccr-live">loading…</span></strong> — Current Bitcoin transaction fees cover <span id="sccr-pct">…</span>% of the estimated 10-year storage cost across the real node census (N=32K). <span id="sccr-below">…</span>% of sampled blocks fall below the 1× threshold.</div>
+ <p id="sccr-meta">Live SCCR measured continuously from captured fee data (see <a href="/research/working-paper.html">the working paper (Storage Cost Internalization in Bitcoin's Fee Market)</a> and <a href="/research/reproduce/">the reproduction kit</a>).</p>
  </div>
+
+ <div class="bsahi-section" id="sccr-dashboard">
+   <h2>Live <span>SCCR</span> Dashboard</h2>
+   <p style="font-size:.9rem;color:#9B8B78;">Storage Cost Coverage Ratio — the share of estimated long-term replicated storage cost that current transaction fees cover. Reads <code>data/sccr.json</code> (static API endpoint <code>/sccr/latest</code>).</p>
+   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:16px;">
+     <div style="background:#231F19;border:1px solid #3A3228;border-radius:8px;padding:14px;"><div style="font-size:.75rem;color:#9B8B78;">SCCR (avg)</div><div id="sccr-card-avg" style="font-size:1.6rem;font-weight:700;color:#F7931A;">—</div></div>
+     <div style="background:#231F19;border:1px solid #3A3228;border-radius:8px;padding:14px;"><div style="font-size:.75rem;color:#9B8B78;">Blocks sampled</div><div id="sccr-card-blocks" style="font-size:1.6rem;font-weight:700;color:#EADCC8;">—</div></div>
+     <div style="background:#231F19;border:1px solid #3A3228;border-radius:8px;padding:14px;"><div style="font-size:.75rem;color:#9B8B78;">Below 1×</div><div id="sccr-card-below" style="font-size:1.6rem;font-weight:700;color:#EADCC8;">—</div></div>
+     <div style="background:#231F19;border:1px solid #3A3228;border-radius:8px;padding:14px;"><div style="font-size:.75rem;color:#9B8B78;">Capture date</div><div id="sccr-card-date" style="font-size:1.1rem;font-weight:600;color:#EADCC8;">—</div></div>
+   </div>
+   <p style="font-size:.8rem;color:#6A5D4E;margin-top:10px;">Model: SCCR = fee_USD / L_net · N=32K real census (≥32K lower bound) · T=10 yr assumption · model-spec v2.0.1. The ratio moves with the fee market — this is a live, dated measurement, not a static figure.</p>
+ </div>
+
+ <script>
+ (function () {
+   fetch('/data/sccr.json').then(function (r) { return r.json(); }).then(function (d) {
+     function set(id, v) { var el = document.getElementById(id); if (el) el.textContent = v; }
+     set('sccr-live', d.avg_sccr ? d.avg_sccr.toFixed(4) : '—');
+     set('sccr-pct', d.avg_sccr ? (d.avg_sccr * 100).toFixed(1) : '…');
+     set('sccr-below', d.below_1x_pct != null ? d.below_1x_pct : '…');
+     set('sccr-meta', 'Measured ' + (d.blocks || '—') + ' blocks on ' + (d.date || '—') + ' (model-spec v' + (d.spec_version || '—') + '). See the <a href="/research/working-paper.html">working paper</a> and <a href="/research/reproduce/">reproduction kit</a>.');
+     set('sccr-card-avg', d.avg_sccr ? d.avg_sccr.toFixed(4) : '—');
+     set('sccr-card-blocks', d.blocks || '—');
+     set('sccr-card-below', d.below_1x_pct != null ? d.below_1x_pct + '%' : '—');
+     set('sccr-card-date', d.date || '—');
+   }).catch(function () {
+     var el = document.getElementById('sccr-live'); if (el) el.textContent = 'unavailable';
+   });
+ })();
+ </script>
 
  <div class="bsahi-section">
    <h2>Research <span>Council</span></h2>

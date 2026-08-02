@@ -50,10 +50,19 @@ function computeRatio(txFeeSats, txBytes, replicationFactor, costPerBytePerYear,
 function computeFromFeeHistory(cfg) {
   cfg = cfg || CONFIG;
   var results = [];
-  var captures = sqlQuery("SELECT json_data FROM captures WHERE source='fee_history' ORDER BY captured_at DESC LIMIT 1");
-  if (!captures || captures.length === 0) return results;
+  var data = null;
+  // Reproducibility hook: SCCR_INPUT_FILE overrides the DB capture with a
+  // frozen JSON input so external/cross-language reproduction reads the SAME
+  // data as Python and C (see research/reproduce/cross_check.sh). Canonical
+  // behavior (DB capture) is unchanged when the env var is absent.
+  if (process.env.SCCR_INPUT_FILE) {
+    try { data = JSON.parse(fs.readFileSync(process.env.SCCR_INPUT_FILE, 'utf8')); } catch (e) { data = null; }
+  } else {
+    var captures = sqlQuery("SELECT json_data FROM captures WHERE source='fee_history' ORDER BY captured_at DESC LIMIT 1");
+    if (!captures || captures.length === 0) return results;
+    try { data = JSON.parse(captures[0].json_data); } catch (e) { data = null; }
+  }
   try {
-    var data = JSON.parse(captures[0].json_data);
     if (!Array.isArray(data)) return results;
 
     var costPerBytePerYear = cfg.nodeCostPerYear / (cfg.avgBlockSizeBytes * 365.25 * 24 * 6);

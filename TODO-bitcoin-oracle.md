@@ -144,7 +144,7 @@ The fee market prices **congestion** (inclusion in the next block). It does not 
 3. Can covenant proposals reduce UTXO churn from inscriptions?
 4. What would a "storage cost oracle" look like — and is it even possible without trust?
 5. Is the "externality of data permanence" actually a problem with economic significance, or is the existing fee market sufficient?
-6. Should the SCCR research be published to arXiv / Bitcoin Optech (the R5 publication sub-task)? — **IN FLIGHT**: Phase I greenlit 2026-08-02; checklist in `research/publication-plan.md`; awaiting Prateek's arXiv account + author details
+6. Should the SCCR research be published to arXiv / Bitcoin Optech (the R5 publication sub-task)? — **IN FLIGHT**: Phase I greenlit 2026-08-02; pre-publication execution plan COMPLETE 2026-08-02 (reproduction kit w/ 3 verified implementations, literature audit, reviewer simulation, LaTeX source, live SCCR dashboard + static API, community review plan, paper renamed); checklist in `research/publication-plan.md`; awaiting Prateek's arXiv account + author identity + ORCID + license ratification (see `research/author-identity.md`, `research/license-draft.md`)
 
 ## Remaining Work Summary (2026-08-02)
 
@@ -155,12 +155,12 @@ The fee market prices **congestion** (inclusion in the next block). It does not 
 > `docs/decisions/2026-08-02-project-decisions.md`.
 
 **Data layer (in progress to complete):**
-- [ ] Automate SCCR tracking via launchd (storage-ratio.js)
+- [x] Automate SCCR tracking via launchd (storage-ratio.js) — plist `com.bsahi.sccr-tracker.plist` exists; live writer `tools/research/sccr_live.py` additionally ships `data/sccr.json` + static API files on every snapshot
 - [x] Add fee-source failover for mempool.space single point of failure — RATIFIED (Decision 2); blockstream/blockchair fallbacks live 2026-08-02
 - [ ] Site freshness label + sitemap update (working-paper.html, history-of-bitcoin.html)
 
 **Research layer:**
-- [ ] arXiv / Bitcoin Optech submission of the working paper (unblocked) — submission checklist drafted in `research/publication-plan.md`
+- [ ] arXiv / Bitcoin Optech submission of the working paper (unblocked) — submission checklist in `research/publication-plan.md`; LaTeX source `research/working-paper.tex` ready (needs pdflatex compile pass — toolchain absent locally); author/ORCID/license decisions pending from Prateek
 - [x] Roadmap adoption recorded — `research/roadmap.md` §7 (ratified 2026-08-02, amendments in §6)
 - [x] Archival-vs-pruned companion note DRAFTED — `research/archival-vs-pruned-note.md` (honest data-gap framing: census captures N, NOT pruned-vs-archival split; measurement gap documented) — **LEFT: Prateek review before it ships with the paper**
 - [ ] v3.0 archival-vs-pruned study — node-census pruned-vs-archival distribution (working-paper §10, Q2/Q3) — companion note drafted; measurement of the split itself remains OPEN (see note)

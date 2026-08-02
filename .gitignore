@@ -61,3 +61,6 @@ captured-data/orchestrator.pid
 captured-data/alert-dispatcher-state.json
 captured-data/web-snapshot-state.json
 captured-data/report-agent-state.json
+
+# Reproduction kit compiled artifacts (source is canonical)
+research/reproduce/reproduce_sccr

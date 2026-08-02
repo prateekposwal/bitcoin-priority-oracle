@@ -38,7 +38,9 @@ partial/external pricing the structural equilibrium? (This is working-paper §10
 
 - **Phase I — Complete & publish the storage paper** (focused; do NOT mix
   UTXO/validation in). Remaining items: independent reproduction (3 implementations
-  already exist — JS/Python/C), SCCR over time (automated tracking; manual only now),
+  now exist — JS/Python/C; the C implementation was created 2026-08-02 in the
+  pre-publication execution plan and all three are verified to agree per-block
+  via `research/reproduce/cross_check.sh`), SCCR over time (automated tracking; manual only now),
   sensitivity (exists), limitations (exists).
 - **Phase II — Resource Accounting Framework, one new metric per resource:**
   - **UCIR** (UTXO Growth): RAM/lookup/validation cost per lifetime UTXO
@@ -79,7 +81,8 @@ Rule: a metric that fails Q2 may still appear in the Resource Coverage Matrix as
 **DONE (verified) — already in the repo and load-bearing for the roadmap:**
 
 - **Storage leg (SCCR) is complete and canonical** — `model-spec.json` v2.0.1;
-  `tools/research/storage-ratio.js`; three independent implementations (JS/Python/C);
+  `tools/research/storage-ratio.js`; three independent implementations (JS/Python/C,
+  all verified agreeing per-block via `research/reproduce/cross_check.sh`);
   joint Monte Carlo (`research/sccr_monte_carlo.py`); knife-edge thresholds (N≈7.1K /
   BTC≈$283K live baseline); live value 0.2252 (2026-08-02, 168 blocks), ~100% below 1×.
 - **The UTXO leg exists on the cost side** — `research/utxo_cost_model.py`

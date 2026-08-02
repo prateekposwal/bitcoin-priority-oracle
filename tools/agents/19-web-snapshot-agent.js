@@ -87,6 +87,19 @@ function run() {
   writeOnChange('alerts.json', alerts);
   if (history.length) writeOnChange('fee_history.json', history);
 
+  // Live SCCR dashboard + static API files (/sccr/latest, /sccr/history).
+  // Runs the python live writer; its outputs are read below so they ship with
+  // this snapshot commit even if the writer writes before we copy.
+  try {
+    exec('python3 tools/research/sccr_live.py', { cwd: REPO, timeout: 30000 }, function (err, so, se) {
+      if (err) { console.error('sccr_live failed:', (se || '').slice(0, 200)); return; }
+      ['sccr.json', 'sccr_latest.json', 'sccr_history.json'].forEach(function (f) {
+        var d = loadJson(path.join(DATA_DIR, f), null);
+        if (d) writeOnChange(f, d);
+      });
+    });
+  } catch (e) { console.error('sccr_live exec error:', e.message); }
+
   fs.writeFileSync(STATE_FILE, JSON.stringify({ lastRun: new Date().toISOString(), historyPoints: history.length, posts: snapshot.totalPosts }, null, 2));
 
   // Optional auto-commit — BLOCKING execSync so process.exit(0) cannot kill the child.

@@ -1,7 +1,7 @@
-# The Bitcoin Block Space Problem: Does the Fee Market Internalize Long-Term Storage Costs?
+# Storage Cost Internalization in Bitcoin's Fee Market
 
-**BSAHI Working Paper — v2.1.0** (model-spec.json v2.0.1)
-*Bitcoin Sahi Research Council · 2026-08-02*
+**The Bitcoin Block Space Problem** — BSAHI Working Paper v2.1.0 (model-spec.json v2.0.1)
+*Prepared by Prateek Poswal (Independent Researcher) within the Bitcoin Sahi Research Council program · 2026-08-02*
 
 ---
 
@@ -85,7 +85,7 @@ Measured from live `fee_history` captures, node count N=32,000 (real census). Tw
 
 **Fee-regime + node-count dependence:** the ratio tracks both the fee market and the replication factor. Under the earlier N=60K assumption the average was 0.156–0.172 (dimensionless) with 100% below 1×; at the real census N=32K it rises to ~0.22–0.29 with ~99–100% below 1× (a few high-fee blocks exceed coverage in the dated capture). The headline is a *distribution over time and parameters*, not a point.
 
-**Interpretation:** transaction fees cover, on average, roughly **22–29%** of the estimated 10-year replicated storage cost of an average block across the ≥32K observed nodes. Most sampled blocks' fees remain below their estimated storage cost.
+**Interpretation:** transaction fees cover, on average, roughly **22–29%** of the estimated 10-year replicated storage cost of an average block across the ≥32K observed nodes. Most sampled blocks' fees remain below their estimated storage cost. **Point-in-time discipline:** every figure in this section is a dated, capture-specific measurement — the time-series is live and growing (daily SCCR tracker, `com.bsahi.sccr-tracker.plist`), and the paper deliberately reports snapshots rather than a stationary number.
 
 ### 5.2 The inscription externality (marginal branch)
 
@@ -135,7 +135,7 @@ The SCCR is homogeneous of degree 1 in its scale parameters: `SCCR ∝ (fee × p
 
 **Live recompute (2026-08-02 baseline, SCCR = 0.2228 at N=32K):** because the baseline ratio itself rose, the average now inverts at **N ≈ 7,130 nodes** or **BTC ≈ $283,000**; the "100% below 1×" break on the dated capture is unchanged at N ≈ 49,200 (the max block is 0.832× at N=32K on the live capture, still below 1×). Both the dated and live thresholds are reported; the model-spec v2.0.1 note retains the v2.0.0-era values (10.3K / $366K).
 
-**The real census (primary source).** We replaced the 60K assumption with data from a live Bitcoin Core node (`getnodeaddresses`, agent-25/node-census): **32,000 known addresses** — the RPC maximum, meaning the node's address manager is saturated at the cap and the true reachable set is *at least* 32K. Independent estimates span ~10K–100K; BSAHI's own earlier marketing data used ~27.8K.
+**The real census (primary source).** We replaced the 60K assumption with data from a live Bitcoin Core node (`getnodeaddresses`, agent-25/node-census): **32,000 known addresses** — the RPC maximum, meaning the node's address manager is saturated at the cap and the true reachable set is *at least* 32K. At census time the node also reported **8 live outbound P2P connections** (agent-25, 2026-08-02) — the observed live reachable set is small relative to the 32K known-address lower bound, which is exactly why we report the addrman saturation as the primary figure. Independent estimates span ~10K–100K; BSAHI's own earlier marketing data used ~27.8K.
 
 **Consequence of the real N=32,000 (recomputed, dated 156-block capture):**
 
@@ -145,7 +145,7 @@ The SCCR is homogeneous of degree 1 in its scale parameters: `SCCR ∝ (fee × p
 | Max per-block ratio (dimensionless) | 0.820 | **1.537** |
 | Blocks below 1× | 100.0% | **98.7%** (154/156) |
 
-**This is a substantive finding, not a cosmetic one:** with a defensible node count, fees cover *more* of the modeled storage cost than the 60K assumption implied (~29% vs ~17%), and a handful of high-fee blocks now *exceed* 1× coverage. The direction of the headline is unchanged — most blocks are still below 1× — but the strong form ("100% below 1×") does **not** survive the real census on the dated capture. **The defensible claim is: ~22–29% average coverage, ~99–100% of sampled blocks below 1×, at the real observed node count (≥32K).**
+**This is a substantive finding, not a cosmetic one.** Note: 1× is a **descriptive calibration point, not a normative target** — the paper measures whether fees cover modeled storage cost; it does not claim 1× is the "right" level of coverage. With a defensible node count, fees cover *more* of the modeled storage cost than the 60K assumption implied (~29% vs ~17%), and a handful of high-fee blocks now *exceed* 1× coverage. The direction of the headline is unchanged — most blocks are still below 1× — but the strong form ("100% below 1×") does **not** survive the real census on the dated capture. **The defensible claim is: ~22–29% average coverage, ~99–100% of sampled blocks below 1×, at the real observed node count (≥32K).**
 
 **Joint Monte Carlo on the headline** (`research/sccr_monte_carlo.py`, 10,000 samples, N ~ Tri(10K,150K,mode 60K), C ~ Tri($500,$2000,mode $925), T ~ Tri(5,30,mode 10), P ~ Tri($30K,$120K,mode $62.9K)):
 
@@ -202,7 +202,7 @@ The correction increased the estimated SCCR by an order of magnitude but did not
 1. **The node count (≥32K from the live census) is a lower bound**, not a complete enumeration — the addrman caps at 32,000 addresses, so the true reachable set is at least 32K, and independent estimates span ~10K–100K reachable nodes (pruned vs. archival). The SCCR is inversely proportional to node count: at the live baseline the average inverts above 1× only below ~7.1K nodes, and the "100% below 1×" claim breaks below ~49K nodes at the dated capture (see §5.4).
 2. **Node costs are homogeneous** in the model; hardware/bandwidth/electricity vary by geography and operator.
 3. **10-year horizon is an assumption**; pruning shortens actual retention, permanent storage extends it.
-4. **No discounting.** A one-time fee (USD/block) is compared against an undiscounted 10-yr storage-cost sum (USD/block); discounting the liability at r=5%/yr (8%/yr) reduces the present value by ~27% (45%). The ratio therefore overstates the liability as commonly valued.
+4. **No discounting; constant-cost assumption.** A one-time fee (USD/block) is compared against an undiscounted 10-yr storage-cost sum (USD/block); discounting the liability at r=5%/yr (8%/yr) reduces the present value by ~27% (45%). A declining $/GB storage-cost trend would likewise lower the future liability (the T=10 constant-cost figure is conservative in the same direction as the discounting caveat). Both effects mean the ratio overstates the liability as commonly valued.
 5. **Bandwidth is included in the fixed node cost (C) yet marginal bandwidth-propagation cost is excluded from the storage leg.** This is the fixed-vs-marginal distinction, not a double count: C prices the node's *average* bandwidth bill; the excluded term is the *marginal* cost of propagating one more block to one more node.
 6. **Marginal vs. average attribution** changes the per-byte cost by 164× (dimensionless) — the choice is explicit and documented, not hidden.
 
@@ -218,18 +218,24 @@ The correction increased the estimated SCCR by an order of magnitude but did not
 
 ### 8.1 Is this an externality?
 
-Following standard environmental-economics usage (Pigou, 1920; Coase, 1960), a **negative externality** arises when a transaction's cost is borne by parties who did not consent to the transaction. Applied to Bitcoin: an inscription's fee is paid by its creator; the long-term storage cost is borne by node operators who neither created the transaction nor were compensated for it. Two qualifications are stated honestly:
+Following standard environmental-economics usage (Pigou, 1920; Coase, 1960), a **negative externality** arises when a transaction's cost is borne by parties who did not consent to the transaction. Applied to Bitcoin: an inscription's fee is paid by its creator; the long-term storage cost is borne by node operators who neither created the transaction nor were compensated for it. In mechanism terms this is a **two-sided** structure — the payer (transaction creator) and the bearer (node operator) are different agents, and the fee is a one-time congestion payment while the cost recurs over the storage horizon. Two qualifications are stated honestly:
 
 1. **Voluntary participation.** Node operators choose to run nodes (and may prune). The Pigouvian case is therefore weaker than for a physical externality (e.g. pollution) — the correct framing is an *unpriced but avoidable* cost, not an imposed one. Our problem statement's "arguments for no" (node operators choose; storage is cheap; pruned nodes avoid ~70–97% of the cost) are engaged directly in §5.
 2. **Measurement, not pricing.** This paper *measures* a ratio; it contains no price mechanism and proposes no policy. Whether the measured gap constitutes a welfare-relevant externality is left to the reader and the literature.
 
 ### 8.2 Related work and novelty
 
-- **Aronoff, Praizner, Sabouri (2026), arXiv:2604.17183** — structural VCG fee model; treats the mempool as a market for scarce block space; does not model storage externalities. Our fee-market framing builds on this.
-- **Liu, Fang, Cheung, Cai, Huang (2021), arXiv:2103.05866** — *"An Incentive Mechanism for Sustainable Blockchain Storage."* Argues storage costs have "in general not been properly compensated by the users' transaction fees" and identifies two types of negative externalities, including an "insufficient fee issue." **This is the closest prior work** and we acknowledge it directly: our contribution is not the observation that fees may under-price storage (already argued in 2021), but a *measured, reproducible, Bitcoin-live-data quantification* (the SCCR) with a reconciliation of cost models and a knife-edge sensitivity bound. **We do not claim the observation is novel; we claim the measurement is.**
+- **Aronoff, Praizner, Sabouri (2026), arXiv:2604.17183** — *"A Model and Estimation of the Bitcoin Transaction Fee."* Structural VCG fee model; treats the mempool as a market for scarce block space; does not model storage externalities. Our fee-market framing builds on this.
+- **Liu, Fang, Cheung, Cai, Huang (2021), arXiv:2103.05866** — *"An Incentive Mechanism for Sustainable Blockchain Storage."* Argues storage costs have "in general not been properly compensated by the users' transaction fees" and identifies two types of negative externalities, including an "insufficient fee issue." **This is the closest prior work** and we acknowledge it directly: our contribution is not the observation that fees may under-price storage (already argued in 2021), but a *measured, reproducible, Bitcoin-live-data quantification* (the SCCR) with (i) a reconciliation of cost models, (ii) knife-edge sensitivity bounds, (iii) regime dynamics (the ratio moves with the fee market), and (iv) a multi-resource framework for the broader class of long-lived resource costs (roadmap.md, RIR program). **We do not claim the observation is novel; we claim the measurement is.**
 - **Ethereum state-rent / gas-as-state-pricing literature** and **Sompolinsky–Zohar** (qualitative storage/bandwidth incentive analysis) are adjacent threads we build toward but do not model.
 
-### 8.3 Terminology
+### 8.3 The efficient-markets objection (named rebuttal)
+
+**Objection:** if block space is priced at the margin by a market that clears, then marginal cost is internalized by definition — the fee IS the price, so there is no externality to measure.
+
+**Rebuttal:** this conflates two different horizons. The fee market prices *inclusion in the next block* — a static, congestion-clearing price with a ~10-min horizon. The storage cost the SCCR measures is a *recurring* cost over an indefinite horizon (the data persists in every full node's history). A market can clear for the short-horizon good (block space now) while not pricing the long-horizon good (permanent replicated storage). The paper's measurement question is precisely whether the one-time congestion price also covers the recurring storage cost; §5 shows the empirical answer (banded ~22–29% coverage at N=32K). The efficient-markets framing is therefore not contradicted — it is *scoped*: it describes the short-horizon market, and the paper measures the long-horizon gap.
+
+### 8.4 Terminology
 
 "Storage Cost Coverage Ratio" may read as a solvency/insurance term. The economics-native phrasing is **Cost Internalization Ratio** (the share of a long-lived resource cost internalized by the one-time fee). We keep SCCR as the operationalized estimator throughout for continuity, but note it is *not* a coverage ratio in the insurance sense — it is a fee-to-marginal-social-cost comparison.
 
@@ -274,7 +280,7 @@ We invite the community to reproduce, challenge, and extend this framework. All 
 
 1. Pigou, A. C. *The Economics of Welfare.* Macmillan, 1920.
 2. Coase, R. H. "The Problem of Social Cost." *Journal of Law and Economics* 3 (1960): 1–44.
-3. Aronoff, D., Praizner, J., Sabouri, S. "Structural Fee Markets for Blockchain Block Space." arXiv:2604.17183, 2026.
-4. Liu, J., Fang, L., Cheung, B., Cai, W., Huang, J. "An Incentive Mechanism for Sustainable Blockchain Storage." arXiv:2103.05866, 2021.
+3. Aronoff, D., Praizner, J., Sabouri, S. "A Model and Estimation of the Bitcoin Transaction Fee." arXiv:2604.17183, 2026.
+4. Liu, Y., Fang, Z., Cheung, M. H., Cai, W., Huang, J. "An Incentive Mechanism for Sustainable Blockchain Storage." arXiv:2103.05866, 2021.
 5. BIP 141: Segregated Witness. Bitcoin Improvement Proposal, 2015–2017.
 6. Sompolinsky, Y., Zohar, A. "Secure High-Rate Transaction Processing in Bitcoin." *FC 2015.*

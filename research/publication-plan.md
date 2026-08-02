@@ -1,8 +1,19 @@
-# Phase I Publication Plan — Working Paper v2.1.0
+# Phase I Publication Plan — "Storage Cost Internalization in Bitcoin's Fee Market" (Working Paper v2.1.0)
 
 **Status:** DRAFT (2026-08-02) — greenlit at roadmap adoption (Prateek, "continue :)")
-**Scope:** submit `research/working-paper.md` v2.1.0 (SCCR storage paper) with the
-archival-vs-pruned companion note (`research/archival-vs-pruned-note.md`).
+**Scope:** submit `research/working-paper.md` v2.1.0 (SCCR storage paper, now titled
+**"Storage Cost Internalization in Bitcoin's Fee Market"**, keeping "The Bitcoin Block
+Space Problem" as the program subtitle) with the archival-vs-pruned companion note
+(`research/archival-vs-pruned-note.md`).
+**Renamed 2026-08-02:** from "The Bitcoin Block Space Problem: Does the Fee Market
+Internalize Long-Term Storage Costs?" — the new title is the economics-native phrasing
+(see §8.3 Cost Internalization Ratio) and avoids the protocol-critique reading a Core
+reviewer flagged (reviewer-simulation.md Reviewer A objection 3).
+**Paper-series framing (roadmap):** this is **Paper 1** (storage). The roadmap's
+Resource Internalization Framework continues as **Paper 2 (UTXO leg, UCIR)**, **Paper 3
+(validation leg, VCIR as bounded study)**, **Paper 4 (unified Resource Coverage Matrix)** —
+each builds on Paper 1's reproducible-metric template. Do NOT mix Paper 2–4 content into
+Paper 1 (roadmap §6 amendment 1).
 **Target:** arXiv (cs.CR / econ.GN) + Bitcoin Optech newsletter; r/BitcoinEngineering
 already engaged (v1/v2 history).
 
@@ -19,25 +30,32 @@ already engaged (v1/v2 history).
 
 ## 2. Submission steps (arXiv)
 
-1. **Author list & account.** Confirm the author list with Prateek (lead author
-   name, affiliation if any, ORCID if available). arXiv accounts are free; a new
-   submitter may need endorsement — first submissions to cs.* often require
-   endorsement by an existing arXiv author. Check `arxiv.org` endorsement rules
-   before submitting. *(ACTION — needs Prateek: arXiv account email + author
-   details + any existing arXiv account.)*
-2. **License.** arXiv requires a license choice. Recommend **arXiv perpetual
-   non-exclusive license** (standard) or **CC BY 4.0** for maximal reuse. Note:
-   the repo is currently **unlicensed** (LICENSE file is a stub) — decide whether
-   the paper itself carries a license independent of the repo.
+1. **Author list & account.** **RECOMMENDATION (Prateek to ratify):** author line
+   = **Prateek Poswal, Independent Researcher** (Bitcoin Sahi Research Council
+   acknowledged in the paper body, not the byline). Full three-option analysis,
+   ORCID rationale, and exact signup steps in `research/author-identity.md`.
+   arXiv accounts are free; a new submitter may need endorsement — first
+   submissions to cs.* often require endorsement by an existing arXiv author.
+   Check `arxiv.org` endorsement rules before submitting. *(ACTION — needs
+   Prateek: arXiv account email + author details + any existing arXiv account +
+   ORCID iD. Default if no response: Independent Researcher, no affiliation.)*
+2. **License.** **RECOMMENDATION (Prateek to ratify):** **MIT** for code +
+   **CC BY 4.0** for the paper, matched by the CC BY 4.0 license field on arXiv.
+   Exact draft texts (LICENSE file replacement + paper notice + arXiv field) in
+   `research/license-draft.md`. The repo LICENSE file is currently a stub
+   ("All Rights Reserved") — do NOT change it until Prateek ratifies the pair.
 3. **Abstract.** Rewrite to arXiv constraints (~1 paragraph, ≤ ~1500 chars):
    state the question, the SCCR definition, the primary-source census (≥32K), the
    banded result (~22–29%, ~99–100% below 1×), and the reproducibility claim.
    The current abstract (working-paper §1) is close; trim to venue style.
-4. **Source format.** arXiv accepts PDF or LaTeX. The repo holds Markdown +
-   HTML (`research/working-paper.md`, `.html`). Decision needed: (a) submit the
-   PDF export of working-paper.html as-is, or (b) generate a LaTeX source from the
-   Markdown for arXiv-native rendering. Recommend (b) if effort is acceptable —
-   LaTeX is the arXiv norm and reviewers expect it; (a) is the fast path.
+   Banded claims only — never the strong form (100% below 1×).
+4. **Source format.** **DONE (2026-08-02):** full LaTeX source exists at
+   `research/working-paper.tex` (compilable skeleton — abstract verbatim, all
+   10 sections, 8 tables, references; conversion status noted in the file
+   header). LaTeX toolchain NOT present on the dev machine (no pdflatex) —
+   compile `pdflatex working-paper.tex` on any TeX installation before
+   submission, and diff content against working-paper.md. Fallback remains the
+   PDF export of working-paper.html.
 5. **Units & notation consistency check.** The paper v2.1.0 already added units
    everywhere (dimensionless ratios, USD/block, nodes, yr). Before upload: run a
    final pass confirming (i) every table row carries units, (ii) SCCR is stated
@@ -65,13 +83,13 @@ already engaged (v1/v2 history).
 
 ## 4. Pre-submit checklist (both venues)
 
-- [ ] **Author list confirmed** (Prateek: name, affiliation/ORCID, arXiv account) — *needed from Prateek*
-- [ ] **License chosen** (arXiv perpetual vs CC BY 4.0; repo LICENSE decision)
+- [ ] **Author list confirmed** (Prateek: ratify Independent Researcher + ORCID iD + arXiv account) — *needed from Prateek (see research/author-identity.md)*
+- [ ] **License chosen** (recommend MIT code + CC BY 4.0 paper; drafts in research/license-draft.md; LICENSE file untouched until Prateek ratifies)
 - [ ] **Abstract rewritten** to venue constraints, banded claims only
 - [ ] **Units consistency pass** (every quantity tagged; no undated headline numbers)
 - [ ] **Claims-within-evidence pass** (banded ~22–29% / ~99–100%; ≥32K lower bound; T=10 assumption stated)
 - [ ] **Companion note final** (`archival-vs-pruned-note.md` — Prateek review pending)
-- [ ] **Source format decided** (PDF export vs LaTeX)
+- [ ] **Source format decided** — LaTeX source EXISTS (`research/working-paper.tex`); needs a compile pass on a machine with pdflatex (toolchain absent locally)
 - [ ] **Reproducibility line intact**: model-spec v2.0.1 + three independent implementations (JS/Python/C) named
 - [ ] **Prior-work honesty intact**: Liu et al. 2021 (arXiv:2103.05866) acknowledged as closest prior work; contribution = measurement, not the observation (working-paper §8.2)
 - [ ] **Dead-claims audit**: no reference to v1/v2 oracle framing (refuted); no BIP-110 claim beyond documented DOA status
@@ -91,7 +109,62 @@ already engaged (v1/v2 history).
 - **Sequencing:** ships with or immediately after the paper; the actual split
   measurement is Phase I follow-on, *not* a submission blocker.
 
-## 6. DONE vs LEFT
+## 6. After-arXiv builds (ready now, deploy on publication)
+
+### 6.1 Live SCCR dashboard + static API (built 2026-08-02)
+
+The static site (GitHub Pages) cannot serve a dynamic backend API until the
+deferred backend decision (R5-gated, TODO-bitcoin-oracle.md). The honest
+interim is **static JSON endpoints shipped with every snapshot**:
+
+| Static file | Serves as | Producer |
+|---|---|---|
+| `data/sccr.json` | live dashboard widget (learn.html) | `tools/research/sccr_live.py` |
+| `data/sccr_latest.json` | `/sccr/latest` | `tools/research/sccr_live.py` |
+| `data/sccr_history.json` | `/sccr/history` | `tools/research/sccr_live.py` |
+
+- `python3 tools/research/sccr_live.py` computes the latest SCCR from the live
+  capture and writes all three files (history appends, dedup by date).
+- The snapshot agent (`tools/agents/19-web-snapshot-agent.js`) invokes it on
+  every run, so `sccr*.json` ship with each `data/` publish.
+- GH Actions fallback (`tools/generate_snapshot.py`) carries the last committed
+  `sccr*.json` (runner has no local DB — it ships committed values, honest).
+- `learn.html` now has a live SCCR dashboard section reading `data/sccr.json`.
+- `/sccr/block/{height}` is NOT served statically (needs the full history map);
+  documented as backend-only once the R5-gated backend lands. Do not claim it.
+
+### 6.2 Interactive paper (Phase-4 goal — spec only, do NOT build now)
+
+**Goal (after publication):** an interactive version of the paper where every
+equation traces to data → code → result: "equation → data → code → result".
+
+**Spec (what to build later, not now):**
+1. Every model quantity in the paper (C, N, T, B_block, cb, L, L_net, SCCR)
+   links to its `model-spec.json` entry and its producing script.
+2. Every reported number links to the exact capture it came from (frozen input
+   files in `research/reproduce/input/` are the traceable unit).
+3. The SCCR chart (`research/reproduce/output/sccr_chart.png`) is regenerated
+   live from `data/sccr_history.json` — the dashboard widget is the first
+   interactive element already built.
+4. Architecture: static HTML + the `data/sccr*.json` endpoints + a small JS
+   renderer (same pattern as the learn.html dashboard section). No backend.
+5. Content: a `/research/paper/` page with the paper text inline and
+   data-links; equations rendered as MathML or KaTeX; each table cell marked
+   with its traceability breadcrumb (spec entry → script line → capture file).
+
+**Status:** SPEC ONLY (2026-08-02). Not started. Deferred until after the
+preprint is live — building it now would delay submission and duplicate the
+learn.html dashboard work already shipped.
+
+## 7. DONE vs LEFT
+
+**DONE (verified, 2026-08-02 execution plan):**
+- Full LaTeX source (`research/working-paper.tex`) — compilable skeleton; toolchain NOT local (flag for compile pass).
+- Author identity + ORCID recommendation (`research/author-identity.md`); license drafts (`research/license-draft.md`).
+- Live SCCR dashboard + static API files (`tools/research/sccr_live.py`, `data/sccr*.json`, learn.html section, snapshot-agent wiring).
+- Reproduction kit (frozen input, Python + C implementations, cross-check script) — three implementations all agree (0.2186, 171 blocks).
+- Literature audit (`research/literature-audit.md`), reviewer simulation (`research/reviewer-simulation.md`), community review plan (`research/community-review-plan.md`).
+- Paper renamed + reviewer fixes F1–F8 applied to working-paper.md; HTML regenerated.
 
 **DONE (verified):**
 - Venue analysis (arXiv cs.CR/econ.GN, Optech, follow-ons) with rationale.
@@ -107,4 +180,4 @@ already engaged (v1/v2 history).
 
 ---
 
-*Bitcoin Sahi Research Council — Publication plan for working-paper v2.1.0 (Phase I), 2026-08-02*
+*Bitcoin Sahi Research Council — Publication plan for "Storage Cost Internalization in Bitcoin's Fee Market" (working-paper v2.1.0, Phase I), 2026-08-02*

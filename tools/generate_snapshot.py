@@ -123,6 +123,13 @@ def main():
     fh = load_local('fee_history.json', [])
     if fh:
         write_on_change('fee_history.json', fh)
+    # Static SCCR API files: carried from committed data/ (computed locally by
+    # sccr_live.py). The GH runner has no local DB, so it ships the last
+    # committed values rather than recomputing.
+    for f in ('sccr.json', 'sccr_latest.json', 'sccr_history.json'):
+        d = load_local(f, None)
+        if d:
+            write_on_change(f, d)
     print("snapshot complete")
 
 if __name__ == '__main__':

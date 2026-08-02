@@ -789,3 +789,81 @@ Every session in this repo MUST honor these load-bearing rules:
 - Quality: healthy
 - Forecast: holt-linear-trend · stable · regime=normal (362 pts)
 - M4: 0/7 clean cycles · bridgeFlipped=true
+## Session Handoff — 2026-08-02T11:51:28.738Z
+
+### Current State
+- Session mood: neutral
+- Active work: cycle 66 · bridge=off · M4 cleanCycles=2/7
+- Forecast: holt-linear-trend · stable · rmse=1.138 (364 pts)
+
+### Decisions Made
+- M4 gate: cleanCycles=2/7 (no flip — already flipped)
+
+### Open Issues
+- 1 sources stale (>120min old)
+
+### Metrics
+- Quality: healthy
+- Forecast: holt-linear-trend · stable · regime=normal (364 pts)
+- M4: 2/7 clean cycles · bridgeFlipped=true
+## Session Handoff — 2026-08-02T12:51:27.109Z
+
+### Current State
+- Session mood: neutral
+- Active work: cycle 67 · bridge=off · M4 cleanCycles=3/7
+- Forecast: holt-linear-trend · stable · rmse=1.138 (365 pts)
+
+### Decisions Made
+- M4 gate: cleanCycles=3/7 (no flip — already flipped)
+
+### Open Issues
+- 1 sources stale (>120min old)
+
+### Metrics
+- Quality: healthy
+- Forecast: holt-linear-trend · stable · regime=normal (365 pts)
+- M4: 3/7 clean cycles · bridgeFlipped=true
+## Session Handoff — 2026-08-02T13:51:19.499Z
+
+### Current State
+- Session mood: neutral
+- Active work: cycle 68 · bridge=off · M4 cleanCycles=4/7
+- Forecast: holt-linear-trend · stable · rmse=1.138 (364 pts)
+
+### Decisions Made
+- M4 gate: cleanCycles=4/7 (no flip — already flipped)
+
+### Open Issues
+- DE AGENT: last run 1294 min ago
+- 1 sources stale (>120min old)
+
+### Metrics
+- Quality: degraded
+- Forecast: holt-linear-trend · stable · regime=normal (364 pts)
+- M4: 4/7 clean cycles · bridgeFlipped=true
+## Session Handoff — 2026-08-02 (pre-publication execution plan)
+
+### Current State
+- Session mood: focused
+- Active work: SCCR paper pre-publication execution plan (all 5 phases) — COMPLETE
+
+### Decisions Made
+- Paper renamed → **"Storage Cost Internalization in Bitcoin's Fee Market"** (program subtitle: The Bitcoin Block Space Problem); applied across working-paper.md/.html/.tex, README, publication-plan.
+- Reproduction kit created (`research/reproduce/`): frozen input capture, Python + C implementations, cross-check script — **all three implementations (JS/Python/C) verified agreeing** (avg 0.2186, 171 blocks, per-block max diff 5e-7). The C implementation did NOT exist before this session despite the paper claiming "three independent implementations" — gap closed.
+- Live SCCR dashboard + static API built: `tools/research/sccr_live.py` → `data/sccr.json|sccr_latest.json|sccr_history.json` (serving /sccr/latest, /sccr/history until R5-gated backend); wired into snapshot agent (19) + GH Actions fallback; learn.html live dashboard section added.
+- Reviewer fixes F1–F8 applied to working-paper.md (efficient-markets objection, 1×-descriptive note, live connection counts, cost-trend limitation, two-sided framing, citation fixes, novelty sharpening, point-in-time language).
+- Literature audit verified Liu et al. 2021 (closest prior) + Aronoff et al. 2026 (title in paper was WRONG — fixed to "A Model and Estimation of the Bitcoin Transaction Fee"); no prior reproducible fee-to-resource metric found in searched sources.
+- LaTeX source `research/working-paper.tex` produced (compilable skeleton, 8 tables, references; pdflatex NOT available on dev machine — flagged).
+- License: MIT (code) + CC BY 4.0 (paper) drafted in `research/license-draft.md`; LICENSE file NOT changed (needs Prateek ratification).
+- Author identity recommendation: **Prateek Poswal, Independent Researcher** (`research/author-identity.md`); ORCID signup steps included.
+
+### Open Issues
+- **DECISIONS NEEDED (Prateek):** arXiv account, ORCID iD, author identity ratification (default: Independent Researcher), license ratification (default: MIT+CC BY 4.0). See DECISIONS section of the execution report + research/author-identity.md + research/license-draft.md.
+- External reproduction (someone uninvolved) — Prateek's task; protocol + log in `research/reproduce/`.
+- LaTeX needs a compile pass on a machine with pdflatex (toolchain absent locally).
+- Companion note `archival-vs-pruned-note.md` still awaiting Prateek review before it ships.
+
+### Metrics
+- Validation: `node tools/validate.js` ✅ PASS (0 errors)
+- Reproduction: 3/3 implementations agree (0.2186, 171 blocks, 100% below 1×)
+- Live SCCR at session end: 0.2151 (169 blocks — rolling 24h window)
