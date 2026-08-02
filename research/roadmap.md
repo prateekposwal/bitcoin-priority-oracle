@@ -199,7 +199,15 @@ dashboard never fabricates a cell).
 
 
 **Earn the right (advisor, 2026-08-03): "Frameworks grow through evidence, not
-naming."** Do NOT invent UCIR/VCIR/RCIR before their time. SCCR must become
+naming."**
+
+**Advisor's prioritization principle (verbatim, 2026-08-03): "prioritize
+questions that depend on new evidence rather than extending the taxonomy."**
+This governs the post-publication agenda (§11): evidence-generating questions
+come first; taxonomy extension (naming/applying the framework elsewhere) follows
+the evidence, never precedes it. "Don't let the vision outrun the evidence."
+
+ Do NOT invent UCIR/VCIR/RCIR before their time. SCCR must become
 *accepted* first — externally reproduced, published, and engaged with — and the
 family grows one accepted measurement at a time. Naming a ratio before it is
 measured is not planning; it is premature commitment. Concretely: every
@@ -421,6 +429,67 @@ result. All seven are framed as questions with defined promotion criteria; none
 may appear on any surface as an established finding until it has passed the
 4-question gate and the SCCR evidence ladder. The live SCCR dashboard is the
 first *cell* of direction 7, not the index itself.
+
+---
+
+## 11. Post-publication research agenda (evidence-first) — advisor priorities (2026-08-03)
+
+*Added 2026-08-03 from the advisor's post-publication research priorities — the
+"what I would research next" list delivered after the SCCR paper's review. The
+advisor's governing principle, stated verbatim: **"prioritize questions that
+depend on new evidence rather than extending the taxonomy."** Consistent with the
+evidence/hypothesis discipline in §4 and the seven reviewer hypotheses in §10:
+every priority below is a **RESEARCH DIRECTION** — a question that generates new
+evidence — not an established metric and not a taxonomy extension. A direction
+graduates to an ESTABLISHED METRIC only by the unchanged promotion path (4-question
+gate, §4 + SCCR evidence ladder).*
+
+| # | Priority | Research question (evidence-first framing) | Cross-ref / tag |
+|---|---|---|---|
+| 1 | **UTXO accounting (UCIR leg)** | What do UTXOs actually cost nodes in **RAM and lookup time** — measured, not storage-only? (The UCIR leg: cost side exists in `utxo_cost_model.py`; the fee-side numerator is still unmodeled.) | RESEARCH DIRECTION — UCIR hypothesis (§4/§5); data path was R5-gated, now decidable post-Phase-I (§6) |
+| 2 | **Validation accounting (VCIR leg)** | What does validation actually cost in **CPU across script classes and transaction classes** — benchmarked on pinned hardware? (VCIR failed Q2 at the §4 gate as a headline metric; a pinned-benchmark bound is the honest ceiling.) | RESEARCH DIRECTION — VCIR bounded benchmark (§4), never a headline ratio |
+| 3 | **Historical SCCR** | How has SCCR moved **across market cycles**, not just contemporary captures? (Partials already computed: 2017 ≈ 10.0, 2021 ≈ 8.0, 2023 ≈ 5.0, 2024 ≈ 4.8, era-adjusted node counts — working-paper §10 Q7.) | RESEARCH DIRECTION — Phase IV (§8); **closest to done of the five**; no dedicated script yet (see note below) |
+| 4 | **Attribute pricing** | Does Bitcoin's single fee price reflect **only congestion, or partially other resource attributes**? (Already in the roadmap as "the ONE experiment," §8 Q2 / working-paper §11 Q2; would substantially strengthen the framework.) | RESEARCH DIRECTION — empirical discriminator for reviewer directions 1/3 (§10) |
+| 5 | **Cross-chain methodology** | Can the **same measurement method** be applied to another blockchain without changing the framework? (Compare METHODOLOGY not rankings; no early ETH-vs-BTC.) | RESEARCH DIRECTION — Phase V (§9); the one taxonomy-application item, listed last per the advisor's principle |
+
+**Historical SCCR feasibility — closest to done (verified 2026-08-03).** The
+historical partials are already in working-paper §10 Q7 and cited in roadmap §5:
+SCCR averaged **above 1×** in the 2017–2024 fee-peak years (2017 ≈ 10.0, 2021 ≈
+8.0, 2023 ≈ 5.0, 2024 ≈ 4.8, era-adjusted node counts), making 2025–2026 the
+first sustained sub-1× regime. They were computed era-by-era from public
+fee-price and node-count estimates (blockchain.com daily charts) using the
+canonical formula `SCCR = fee_BTC × P × R_blocks / (C × T × N)`. **No dedicated
+historical computation script exists in the repo** (`tools/research/sccr_dynamics.py`
+covers Q1–Q6/Q8 of the v3.0 agenda, not the historical Q7 series). A dedicated
+study would require: (a) a dated historical fee/nodes data fetcher, (b) a
+reproducible era-parameter table (node counts, block sizes, C), (c) a
+recomputation that cross-checks against the §10 Q7 partials, and (d) a
+falsification-condition hook to working-paper §10 falsification #3 (if
+re-measured fee-peak years show fees *covering* costs in a stationary way, the
+partial-internalization reading changes). Post-publication — plan note only; not
+built this session.
+
+**Prioritized sequencing (program-state view, 2026-08-03).** The advisor's
+framing orders evidence questions before taxonomy extension; given the program
+state (Phase I = storage paper at the D5 external-reproduction gate; SCCR is
+Metric #1; the family grows one accepted measurement at a time, §4), the
+execution order is:
+
+| Order | Priority | One-line rationale |
+|---|---|---|
+| **1** | **Historical SCCR** | **Natural FIRST** — the cheapest: partials already exist (§10 Q7), the canonical formula is unchanged, and a reproducibility script converts an in-paper claim into standing evidence while feeding falsification condition #3 |
+| **2** | **Attribute pricing** | The falsifiable core — "the ONE experiment"; validates or challenges the whole framework premise (per-resource ratios as measurable objects), and reuses the historical fee dataset assembled by #1 |
+| 3 | **UTXO accounting** | The roadmap's chosen next metric (4/5 at the gate, §6); cost side already modeled; with Phase I shipping, the deferred data-path decision can now be reopened |
+| 4 | **Validation accounting** | Bounded pinned-benchmark bound only (Q2 ceiling, §4); cheap to add, low ceiling — evidence, but never a headline ratio |
+| 5 | **Cross-chain methodology** | Taxonomy-application, not new evidence — Phase V research horizon (§9); last per the advisor's principle |
+
+**Why historical SCCR is the natural FIRST post-publication study:** it is the
+only priority of the five where the partial result already exists (working-paper
+§10 Q7), the canonical formula is unchanged (`SCCR = fee_BTC × P × R_blocks /
+(C × T × N)`), and the marginal effort is a reproducibility script over
+historical fee/node data — the least-risk, highest-certainty evidence win
+immediately post-publication. It also assembles the historical fee dataset that
+attribute pricing's regression needs, so #1 feeds #2.
 
 ---
 
