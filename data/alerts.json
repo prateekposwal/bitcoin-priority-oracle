@@ -1,16 +1,5 @@
 {
-  "alerts": [
-    "🛡 SITE / -> 0 (timeout)",
-    "🛡 SITE /live -> 0 (timeout)",
-    "🛡 SITE /capacity -> 0 (timeout)",
-    "🛡 SITE /learn -> 0 (timeout)",
-    "🛡 SITE /fork-tracker -> 0 (timeout)",
-    "🛡 SITE /feed.xml -> 0 (timeout)",
-    "🛡 SITE /data/snapshot.json -> 0 (timeout)",
-    "🛡 SITE /api/v1/ -> 0 (timeout)",
-    "🛡 SITE /robots.txt -> 0 (timeout)",
-    "🛡 SITE /sitemap.xml -> 0 (timeout)"
-  ],
-  "timestamp": "2026-08-02T06:29:58.911Z",
-  "source": "site-health"
+  "alerts": [],
+  "timestamp": "2026-08-02_12-31-38",
+  "source": "spool"
 }
