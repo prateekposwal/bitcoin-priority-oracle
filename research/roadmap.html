@@ -176,13 +176,13 @@ footer .links a:hover{color:#D4933A}</style>
 <p>and their revenue is off-chain (subscriptions/API fees), so the fee-market</p>
 <p>numerator is structurally near-zero — DCIR is the family&#x27;s likely</p>
 <p>*persistent-negative* row (near-zero internalization by design). See</p>
-<p>working-paper §11 Q3 for the full coverage matrix.</p>
+<p><code>future-directions-v3.md</code> §2 Q3 for the full coverage matrix.</p>
 <ul>
 <li><strong>Phase IV — Dynamic questions:</strong> SCCR over time (2015 / 2017 SegWit / 2021 /</li>
 </ul>
 <p>2023 Ordinals / today); network-evolution equilibrium (does SCCR move toward 1 as</p>
 <p>nodes/price/fees/L2 grow?). Overlaps working-paper §10 (see §4). **First</p>
-<p>answers 2026-08-02 (working-paper §11 Q1–Q5, computed by</p>
+<p>answers 2026-08-02 (companion <code>future-directions-v3.md</code> §2 Q1–Q5, computed by</p>
 <p><code>tools/research/sccr_dynamics.py</code>):** Q1 4-way scenario (BTC $1M, fees up, nodes</p>
 <p>up, storage cheaper) <strong>overshoots</strong> — SCCR ≈ 8.9, price lever dominates; Q4</p>
 <p>price-only path: SCCR crosses 1× at <strong>P* ≈ $283K</strong> (storage fully internalized,</p>
@@ -340,7 +340,7 @@ footer .links a:hover{color:#D4933A}</style>
 <tr><td>Greenlight Phase I publication path</td><td>✅ GREENLIT — arXiv / Bitcoin Optech submission of working-paper v2.1.0 with the archival-vs-pruned companion note; see <code>research/publication-plan.md</code></td></tr>
 <tr><td>Decide UCIR data path</td><td>⏸️ DEFERRED — not needed until Phase I ships (public-API approximation vs R5-gate reopen for node sync)</td></tr>
 <tr><td><strong>Program rename → &quot;Bitcoin Resource Accounting&quot;</strong></td><td>✅ <strong>RENAMED 2026-08-02</strong> — Prateek directive; program identity now &quot;Bitcoin Resource Accounting&quot;, Paper-1 title unchanged; SCCR = Metric #1; reframe: &quot;Can we build a complete accounting system for every long-lived resource consumed by Bitcoin…?&quot; (see §1)</td></tr>
-<tr><td><strong>Deep-question answers (v3.0, Q1–Q5)</strong></td><td>✅ <strong>COMPUTED 2026-08-02</strong> — <code>tools/research/sccr_dynamics.py</code>; answers in working-paper §11; summary in §8 below</td></tr>
+<tr><td><strong>Deep-question answers (v3.0, Q1–Q5)</strong></td><td>✅ <strong>COMPUTED 2026-08-02</strong> — <code>tools/research/sccr_dynamics.py</code>; answers in companion <code>future-directions-v3.md</code> §2; summary in §8 below</td></tr>
 <tr><td><strong>Cross-chain Phase V scope</strong></td><td>✅ <strong>EXPANDED 2026-08-02</strong> — six candidate systems with honest fit map (§9); research horizon only</td></tr>
 </table>
 <p><strong>Phase I deliverables produced at adoption:</strong> <code>research/archival-vs-pruned-note.md</code></p>
@@ -351,7 +351,7 @@ footer .links a:hover{color:#D4933A}</style>
 <h3>8. Phase IV first answers — the five deep questions (2026-08-02)</h3>
 <p>Computed with <code>tools/research/sccr_dynamics.py</code> (canonical model-spec v2.0.1</p>
 <p>quantities; live baseline SCCR = 0.2228 @ N=32K, C=$925, T=10, P≈$63K, ~2 sat/vB;</p>
-<p>frozen-capture cross-check 0.2186). Full derivations in working-paper §11.</p>
+<p>frozen-capture cross-check 0.2186). Full derivations in companion <code>future-directions-v3.md</code> §2.</p>
 <p><strong>Model output vs judgment are separated in the paper</strong>; this section is the</p>
 <p>roadmap-level summary.</p>
 <h4>Q1 — What force pushes SCCR toward equilibrium? (4-way scenario)</h4>
@@ -415,7 +415,7 @@ footer .links a:hover{color:#D4933A}</style>
 </ul>
 <p><code>RIR_i = fee_contribution_toward_resource_i / estimated_lifetime_cost_of_resource_i</code></p>
 <p>with a 6-row coverage matrix (SCCR/UCIR/VCIR/RCIR/BCIR/<strong>DCIR</strong>) in</p>
-<p>working-paper §11 Q3. <strong>SCCR = Metric #1</strong> (the only measured member).</p>
+<p>companion <code>future-directions-v3.md</code> §2 Q3. <strong>SCCR = Metric #1</strong> (the only measured member).</p>
 <p>**DCIR (indexer leg) was verified ABSENT from this roadmap as of 2026-08-02</p>
 <p>and is now added** — Phase III, likely persistent-negative row (indexers</p>
 <p>recover costs off-chain, so the fee-market numerator is structurally near</p>
@@ -424,7 +424,7 @@ footer .links a:hover{color:#D4933A}</style>
 <h3>9. Phase V — Cross-chain: distributed-systems economics (2026-08-02)</h3>
 <p>The framework&#x27;s core structure — **one-time payment → long-lived shared</p>
 <p>resource** — generalizes to any distributed system. This turns the Bitcoin paper</p>
-<p>into *distributed-systems economics* (working-paper §12). **Research horizon,</p>
+<p>into *distributed-systems economics* (companion <code>future-directions-v3.md</code> §3). **Research horizon,</p>
 <p>not a near-term deliverable.**</p>
 <table>
 <tr><th>System</th><th>Long-lived shared resource</th><th>One-time payment</th><th>RIR well-defined?</th><th>Honest fit</th></tr>
@@ -453,7 +453,7 @@ footer .links a:hover{color:#D4933A}</style>
 <p>surface only as a hypothesis.*</p>
 <table>
 <tr><th>#</th><th>Direction</th><th>Research question (hypothesis framing)</th><th>Promotion criteria (4-question gate, §4)</th></tr>
-<tr><td>1</td><td><strong>Resource Attribution Theory</strong></td><td>Which resource actually determines fee formation — not &quot;what resources exist.&quot; SCCR establishes storage coverage; the attribution question is whether storage (or validation, or bandwidth, or congestion alone) is the binding attribute in fee formation.</td><td>Q1 real? Q2 cost reproducibly estimable? Q3 fee contribution comparable? Q4 economically interesting? → then the attribute-pricing regression (working-paper §11 Q2) as the empirical discriminator</td></tr>
+<tr><td>1</td><td><strong>Resource Attribution Theory</strong></td><td>Which resource actually determines fee formation — not &quot;what resources exist.&quot; SCCR establishes storage coverage; the attribution question is whether storage (or validation, or bandwidth, or congestion alone) is the binding attribute in fee formation.</td><td>Q1 real? Q2 cost reproducibly estimable? Q3 fee contribution comparable? Q4 economically interesting? → then the attribute-pricing regression (companion <code>future-directions-v3.md</code> §2 Q2) as the empirical discriminator</td></tr>
 <tr><td>2</td><td><strong>Resource Elasticity</strong></td><td>Does the fee change when storage doubles / CPU doubles? Elasticity (∂fee/∂resource) may matter more than ratio levels: a resource with high elasticity is priced by the market even when its ratio looks low.</td><td>Q1–Q4 gate + a measured response design: historical regime breaks (SegWit 2017, Ordinals 2023, fee-peak years) and cross-sectional fee-density variation</td></tr>
 <tr><td>3</td><td><strong>Market Efficiency / Price Discovery</strong></td><td>Resource → internalization → elasticity → price discovery: is Bitcoin a resource economy in which the fee market *discovers* resource prices over time, or is the single fee price pure congestion clearing?</td><td>Q1–Q4 gate + attribute-pricing regression; requires the fee-density dataset across regime breaks (Phase IV data)</td></tr>
 <tr><td>4</td><td><strong>Resource Vector</strong></td><td>Bitcoin as a multi-axis resource space: storage, validation, bandwidth, relay, memory, latency — each an axis with its own cost surface and (potential) internalization ratio. Formalizes the RIR family as a vector <strong>R = (SCCR, UCIR, VCIR, RCIR, BCIR, DCIR, …)</strong>.</td><td>Each axis passes the 4-question gate independently before entering the vector; the vector is a representation, not a result</td></tr>
@@ -482,7 +482,7 @@ footer .links a:hover{color:#D4933A}</style>
 <tr><td>1</td><td><strong>UTXO accounting (UCIR leg)</strong></td><td>What do UTXOs actually cost nodes in <strong>RAM and lookup time</strong> — measured, not storage-only? (The UCIR leg: cost side exists in <code>utxo_cost_model.py</code>; the fee-side numerator is still unmodeled.)</td><td>RESEARCH DIRECTION — UCIR hypothesis (§4/§5); data path was R5-gated, now decidable post-Phase-I (§6)</td></tr>
 <tr><td>2</td><td><strong>Validation accounting (VCIR leg)</strong></td><td>What does validation actually cost in <strong>CPU across script classes and transaction classes</strong> — benchmarked on pinned hardware? (VCIR failed Q2 at the §4 gate as a headline metric; a pinned-benchmark bound is the honest ceiling.)</td><td>RESEARCH DIRECTION — VCIR bounded benchmark (§4), never a headline ratio</td></tr>
 <tr><td>3</td><td><strong>Historical SCCR</strong></td><td>How has SCCR moved <strong>across market cycles</strong>, not just contemporary captures? (Partials already computed: 2017 ≈ 10.0, 2021 ≈ 8.0, 2023 ≈ 5.0, 2024 ≈ 4.8, era-adjusted node counts — working-paper §10 Q7.)</td><td>RESEARCH DIRECTION — Phase IV (§8); <strong>closest to done of the five</strong>; no dedicated script yet (see note below)</td></tr>
-<tr><td>4</td><td><strong>Attribute pricing</strong></td><td>Does Bitcoin&#x27;s single fee price reflect <strong>only congestion, or partially other resource attributes</strong>? (Already in the roadmap as &quot;the ONE experiment,&quot; §8 Q2 / working-paper §11 Q2; would substantially strengthen the framework.)</td><td>RESEARCH DIRECTION — empirical discriminator for reviewer directions 1/3 (§10)</td></tr>
+<tr><td>4</td><td><strong>Attribute pricing</strong></td><td>Does Bitcoin&#x27;s single fee price reflect <strong>only congestion, or partially other resource attributes</strong>? (Already in the roadmap as &quot;the ONE experiment,&quot; §8 Q2 / companion <code>future-directions-v3.md</code> §2 Q2; would substantially strengthen the framework.)</td><td>RESEARCH DIRECTION — empirical discriminator for reviewer directions 1/3 (§10)</td></tr>
 <tr><td>5</td><td><strong>Cross-chain methodology</strong></td><td>Can the <strong>same measurement method</strong> be applied to another blockchain without changing the framework? (Compare METHODOLOGY not rankings; no early ETH-vs-BTC.)</td><td>RESEARCH DIRECTION — Phase V (§9); the one taxonomy-application item, listed last per the advisor&#x27;s principle</td></tr>
 </table>
 <p><strong>Historical SCCR feasibility — closest to done (verified 2026-08-03).</strong> The</p>

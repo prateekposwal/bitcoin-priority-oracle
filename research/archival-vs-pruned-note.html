@@ -67,11 +67,11 @@ footer .links a:hover{color:#D4933A}</style>
 <p>Working-paper §7 limitation 3 states it plainly: *&quot;10-year horizon is an</p>
 <p>assumption; pruning shortens actual retention, permanent storage extends it.&quot;*</p>
 <ul>
-<li><strong>N (replication) = 32,000 nodes</strong> — a primary-source census (agent-25,</li>
+<li><strong>N (replication) = 32,000 nodes</strong> — a lower-bound census via the</li>
 </ul>
-<p><code>getnodeaddresses</code>, addrman saturated at the RPC max). The census measures</p>
-<p>*reachable node count*, a lower bound (≥32K). It says nothing about how many of</p>
-<p>those nodes retain the full chain vs. prune.</p>
+<p><code>getnodeaddresses</code> RPC on a live Bitcoin Core node (addrman saturated at the</p>
+<p>RPC max). The census measures *reachable node count*, a lower bound (≥32K). It</p>
+<p>says nothing about how many of those nodes retain the full chain vs. prune.</p>
 <p>If a large share of nodes prune, then <strong>who bears the storage cost</strong> changes: only</p>
 <p>archival nodes carry the disk/lifetime-storage burden the SCCR denominator prices.</p>
 <p>The measured ratio is then an *upper bound* on the cost actually borne by any</p>
@@ -79,8 +79,8 @@ footer .links a:hover{color:#D4933A}</style>
 <p>fraction of the network is archival, and does the fee market price storage for</p>
 <p>*that* class?</p>
 <h3>2. What the data actually is (investigated, 2026-08-02)</h3>
-<h4>2.1 The node census (agent-25) — reachability only</h4>
-<p>Source: <code>tools/agents/25-node-census.js</code> → <code>captured-data/spool/index/node_census/</code></p>
+<h4>2.1 The node census (getnodeaddresses RPC) — reachability only</h4>
+<p>Source: <code>getnodeaddresses</code> RPC query (agent 25-node-census script) → <code>captured-data/spool/index/node_census/</code></p>
 <p>(schema <code>capture.node_census@1.0</code>). Fields captured per run, verified across all</p>
 <p>captures:</p>
 <table>
@@ -150,7 +150,7 @@ footer .links a:hover{color:#D4933A}</style>
 <li><strong>Extended census probing pruning behavior (recommended first step).</strong> The</li>
 </ol>
 <p>Bitcoin P2P protocol does not advertise pruning state in <code>getnodeaddresses</code>;</p>
-<p>however a connected node&#x27;s *behavior* is observable. An extension of agent-25</p>
+<p>however a connected node&#x27;s *behavior* is observable. An extension of the census</p>
 <p>would: (a) attempt historical-block requests (<code>getdata</code> for old heights) against</p>
 <p>a sample of reachable peers and record who serves them — archival nodes serve,</p>
 <p>pruned nodes refuse (an established technique in the literature); (b) correlate</p>
@@ -180,7 +180,7 @@ footer .links a:hover{color:#D4933A}</style>
 <h3>5. DONE vs LEFT</h3>
 <p><strong>DONE (verified):</strong></p>
 <ul>
-<li>Census data investigated (agent-25 source, all spool captures, node-geo,</li>
+<li>Census data investigated (getnodeaddresses source, all spool captures, node-geo,</li>
 </ul>
 <p>pruning_externality_analysis) — confirmed: reachability-only, no split.</p>
 <ul>

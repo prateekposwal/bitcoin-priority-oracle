@@ -5,10 +5,10 @@ v2.0.1 · `research/roadmap.md` (adopted 2026-08-02)
 **Status:** READY-TO-USE (2026-08-03) — four polished abstracts/explainers for
 the submission and site, one per audience, written for the peer-review package.
 **Numbers used (verified against the repo):** banded headline **SCCR ≈ 0.22–0.29**
-(dimensionless, dated captures at the ≥32K real census); **frozen-capture
-reproduction 0.2186** (171 blocks, min 0.0584 / max 0.8320, 171/171 below 1×,
-reproduced by JS/Python/C); **live rolling value 0.2151** (169 blocks, rolling
-24h window, 2026-08-02 session). SCCR is the **first member of the RIR family**
+(dimensionless, dated captures at the ≥32K lower-bound census; **range across the
+true-N band: ~0.07–0.71**); **frozen-capture reproduction 0.2186** (171 blocks,
+min 0.0584 / max 0.8320, 171/171 below 1×, reproduced by JS/Python/C); **live
+rolling value 0.2151** (169 blocks, rolling 24h window, 2026-08-02 session). SCCR is the **first member of the RIR family**
 (Resource Internalization Ratios); every other member (UCIR, VCIR, RCIR, BCIR,
 DCIR) is a research hypothesis, not a measured result. All surfaces must state
 the banded claim — never the strong form ("100% below 1×" does not survive the
@@ -61,13 +61,13 @@ three independent implementations. We document our own v2.0.0 correction
 transparently (a duplicated time-horizon term, fixed; the direction of the
 finding survived), reconcile two cost models that disagreed by 16.4×
 (dimensionless: a 164× denominator gap ÷ a 10× bug), and bound the result with a
-joint Monte Carlo (99.8% of draws below 1× under the old N band; ~99% at the
-real census).
+joint Monte Carlo (99.9% of draws below 1× under the current N band; 99.8%
+under the old band).
 
 **The numbers.** Banded estimate: **SCCR ≈ 0.22–0.29** (dimensionless) at the
 ≥32K census; frozen-capture reproduction **0.2186**; live rolling **0.2151**;
-~99–100% of sampled blocks below 1× (the strong "100%" form does not survive the
-real census on the dated capture — stated honestly). 1× is a descriptive
+~98.7–100% of sampled blocks below 1× at N=32K (the strong "100%" form does not
+survive the lower-bound census on the dated capture — stated honestly). 1× is a descriptive
 calibration point, not a normative target; voluntary participation weakens the
 welfare interpretation but not the measurement.
 
@@ -89,8 +89,10 @@ real resource economics.
 **The explainer.** Every Bitcoin transaction pays a fee for the next block, then
 imposes a decades-long storage cost on the node network. We measured the ratio
 between those two numbers — the **Storage Cost Coverage Ratio (SCCR)** — live,
-from real fee data and a real node census (≥32,000 nodes, a lower bound). Today
-fees cover roughly **22–29%** of modeled 10-year storage cost (latest live
+from real fee data and a lower-bound node census (≥32,000 known addresses — the
+RPC cap, not a complete enumeration). Today
+fees cover roughly **22–29%** of modeled 10-year storage cost at N=32K
+(**~7–71% across the true-N band**) (latest live
 rolling value: **0.2151**; frozen-capture reproduction: **0.2186**).
 
 **Why it matters for capital allocation.** The ratio is linear in BTC price: at

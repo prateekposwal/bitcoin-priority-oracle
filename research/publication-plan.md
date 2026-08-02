@@ -295,7 +295,7 @@ All seven recorded in `docs/decisions/2026-08-02-publication-decisions.md`:
 | D7 | Companion note | Publish simultaneously | ✅ RECOMMENDED/RESOLVED |
 
 The roadmap rename (2026-08-02) makes this Paper 1 of **Bitcoin Resource
-Accounting**; SCCR is Metric #1 of the RIR family (working-paper §11 Q3).
+Accounting**; SCCR is Metric #1 of the RIR family (companion `future-directions-v3.md` §2 Q3).
 
 ---
 

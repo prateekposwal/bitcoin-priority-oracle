@@ -1,0 +1,36 @@
+{
+  "n_samples": 10000,
+  "seed": 20260803,
+  "distributions": {
+    "N": "tri(10K,100K,mode 32K)",
+    "C": "tri(600,1400,mode 925)",
+    "T": "tri(5,15,mode 10)",
+    "P": "tri(30K,120K,mode 63018)"
+  },
+  "anchors": {
+    "live_sccr": 0.2228,
+    "live_P_usd": 63018.0,
+    "frozen_sccr": 0.218605,
+    "n_census": 32000.0,
+    "C_canon": 925.0,
+    "T_canon": 10.0
+  },
+  "live_anchor": {
+    "p5": 0.0705,
+    "p25": 0.1167,
+    "p50": 0.1731,
+    "p75": 0.2601,
+    "p95": 0.4671,
+    "below_1x_pct": 99.9,
+    "mean": 0.2088
+  },
+  "frozen_anchor": {
+    "p5": 0.0692,
+    "p25": 0.1145,
+    "p50": 0.1699,
+    "p75": 0.2552,
+    "p95": 0.4583,
+    "below_1x_pct": 99.9,
+    "mean": 0.2049
+  }
+}

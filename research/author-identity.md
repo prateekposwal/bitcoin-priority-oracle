@@ -62,7 +62,7 @@ under Option A this becomes "Prateek Poswal · Independent Researcher · 2026-08
   `Prateek Poswal / Independent Researcher (Bitcoin Sahi Research)` — matches
   Prateek's directive
 - [ ] `research/working-paper.md` header line (title block) — program-name
-  context added in §11 addendum; full byline application LEFT until ORCID lands
+  context added in the companion `future-directions-v3.md` §2 addendum; full byline application LEFT until ORCID lands
 - [ ] `research/working-paper.html` (regenerate via `tools/generate_research_pages.py`)
 - [ ] `research/publication-plan.md` §2 (author list item)
 - [ ] README.md © line (already correct: Prateek Poswal)

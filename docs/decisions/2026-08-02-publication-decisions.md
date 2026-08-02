@@ -157,6 +157,57 @@ note sign-off, + abstract/moderator-pitch final pass (publication-plan §2 step 
 ---
 ---
 
+## Addendum 4 — second reviewer critique (harsher, technical) — executed 2026-08-03
+
+Second (harsher, more technical) reviewer critique received; reviewed by TELOS (as
+Aviku) and executed in `../block-space-economics`. The reviewer's 8 points, our
+disposition, and what changed:
+
+1. **Precision theater around a fragile input** — ADMITTED (the strongest point).
+   SCCR was reported to 4 decimals while N (the dominant driver) is uncertain
+   3–10× and 32K is the RPC addrman cap, not a census. Executed: headline reframed
+   as a **range** (0.07–0.71 across N=10K–100K; 0.2228–0.293 at N=32K lower-bound
+   census); ONE "Final numbers" table added near the top (point + N-range +
+   Monte Carlo P5–P95 = 0.07–0.47, median 0.17, 99.9% below 1×); "real census"
+   phrase softened to "lower-bound census / known-address census (addrman cap)"
+   everywhere; new current-N-band MC script
+   `research/sccr_monte_carlo_range.py` (+ `tools/sccr_monte_carlo_range_output.json`).
+   Historical/intermediate values remain in §5–§6 as documented provenance, not in
+   the headline.
+2. **Scope creep (§10–12)** — EXECUTED. Core paper slimmed 620→412 lines:
+   sections 10–12 (v3.0 agenda, deep questions, cross-chain) moved to a dedicated
+   companion `research/future-directions-v3.md`; core §10 is now a compact
+   eight-question table + pointers. Roadmap §8/§9 already carried this content;
+   cross-references across roadmap/framework-paper-outline/publication-plan/
+   author-identity updated to the companion (verified: 0 stale §11/§12 refs).
+   The LaTeX source already excluded §11–12, so the arXiv form now matches the
+   .md structure.
+3. **"fees paid" undefined** — EXECUTED. Defined once in §4.1, verified against
+   code: `fee_USD = avgFees/1e8 × USD` (total tx fees/block in USD, excludes
+   subsidy; mempool.space 24h fee history; identical across JS/Python/C).
+4. **Price–fee independence caveat** — EXECUTED. Added to §5.3: price and fee
+   levels co-move historically; single-lever rows are ceteris-paribus isolations,
+   not forecasts.
+5. **SCCR vs Cost Internalization Ratio naming** — EXECUTED. SCCR / Storage Cost
+   Coverage Ratio is now the primary name (matches prior advisor's fix + "Metric
+   #1" language); Cost Internalization Ratio mentioned once (§8.4) as the family
+   name. Applied to .md/.html/.tex + companion.
+6. **Internal agent labels** — EXECUTED. "agent-25"/"agent-06" replaced with
+   plain descriptions ("`getnodeaddresses` RPC query on a live Bitcoin Core
+   node"; "getblockstats RPC pipeline") in the paper, the archival companion, and
+   the future-directions companion.
+7. **Repetition of non-claims** — EXECUTED (partial). The "not broken"/"not
+   normative" statements stay prominent in §1/§2/abstract; redundant inline
+   restatements trimmed (§5.4) and softened where load-bearing.
+8. **Softening until D5 lands** — EXECUTED. D5 status note ("external
+   reproduction pending; results stated to the precision the evidence licenses,
+   N-band range carries the uncertainty") added to the abstract and conclusion.
+
+**Open items after addendum 4 (unchanged):** D2 ORCID, D3 arXiv account, D4
+LICENSE ratification (pre-freeze requirement), **D5 external reproducer (the
+only submission blocker — UNCHANGED by this review)**, D6 LaTeX compile pass
+(source updated, still needs a pdflatex machine), D7 companion-note sign-off.
+
 *Bitcoin Sahi Research Council — Publication decisions (2026-08-02), recorded by
 TELOS (as Aviku). Extends research/author-identity.md, research/license-draft.md,
 research/publication-plan.md.*

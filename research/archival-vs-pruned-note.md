@@ -22,10 +22,10 @@ Two of those terms rest on assumptions that pruning directly conditions:
   `canonicalSource: "research/verification_appendix.md Open Q3 (assumption)"`.
   Working-paper §7 limitation 3 states it plainly: *"10-year horizon is an
   assumption; pruning shortens actual retention, permanent storage extends it."*
-- **N (replication) = 32,000 nodes** — a primary-source census (agent-25,
-  `getnodeaddresses`, addrman saturated at the RPC max). The census measures
-  *reachable node count*, a lower bound (≥32K). It says nothing about how many of
-  those nodes retain the full chain vs. prune.
+- **N (replication) = 32,000 nodes** — a lower-bound census via the
+  `getnodeaddresses` RPC on a live Bitcoin Core node (addrman saturated at the
+  RPC max). The census measures *reachable node count*, a lower bound (≥32K). It
+  says nothing about how many of those nodes retain the full chain vs. prune.
 
 If a large share of nodes prune, then **who bears the storage cost** changes: only
 archival nodes carry the disk/lifetime-storage burden the SCCR denominator prices.
@@ -36,9 +36,9 @@ fraction of the network is archival, and does the fee market price storage for
 
 ## 2. What the data actually is (investigated, 2026-08-02)
 
-### 2.1 The node census (agent-25) — reachability only
+### 2.1 The node census (getnodeaddresses RPC) — reachability only
 
-Source: `tools/agents/25-node-census.js` → `captured-data/spool/index/node_census/`
+Source: `getnodeaddresses` RPC query (agent 25-node-census script) → `captured-data/spool/index/node_census/`
 (schema `capture.node_census@1.0`). Fields captured per run, verified across all
 captures:
 
@@ -108,7 +108,7 @@ order of increasing effort:
 
 1. **Extended census probing pruning behavior (recommended first step).** The
    Bitcoin P2P protocol does not advertise pruning state in `getnodeaddresses`;
-   however a connected node's *behavior* is observable. An extension of agent-25
+   however a connected node's *behavior* is observable. An extension of the census
    would: (a) attempt historical-block requests (`getdata` for old heights) against
    a sample of reachable peers and record who serves them — archival nodes serve,
    pruned nodes refuse (an established technique in the literature); (b) correlate
@@ -134,7 +134,7 @@ measurement is Phase I follow-on work, not a blocker for v2.1.0 submission.
 ## 5. DONE vs LEFT
 
 **DONE (verified):**
-- Census data investigated (agent-25 source, all spool captures, node-geo,
+- Census data investigated (getnodeaddresses source, all spool captures, node-geo,
   pruning_externality_analysis) — confirmed: reachability-only, no split.
 - Data gap stated honestly; no fabricated split.
 - Bias direction derived from the model (upper-bound framing).

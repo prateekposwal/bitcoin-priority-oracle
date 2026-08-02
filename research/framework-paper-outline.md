@@ -144,7 +144,7 @@ the thesis paragraph, before §1.
   measurement; storage leg 🟢 (SCCR measured).
 - **The section's central question:** what does the single sat/vB price actually
   carry signal about — one attribute (congestion) or many? (Attribute pricing;
-  working-paper §11 Q2.) Answered empirically in a later paper, framed here.
+  companion `future-directions-v3.md` §2 Q2.) Answered empirically in a later paper, framed here.
 
 ### §4 Which resources are shared? (⚪ FRAMING — the one-time-payment → long-lived-shared-resource structure)
 
@@ -153,7 +153,7 @@ the thesis paragraph, before §1.
   once; the cost it creates is borne by many, over time, involuntarily (node
   operators who neither created the transaction nor were compensated). Three
   mismatches structure the whole family (sharpened 2026-08-03 per advisor
-  review; working-paper §11 Q4):
+  review; companion `future-directions-v3.md` §2 Q4):
   - **Attribute mismatch** — fee per-(v)byte vs. validation cost per
     transaction-*class* (VCIR);
   - **Stock/flow mismatch** — fee is a *flow* vs. UTXO cost is a *stock*

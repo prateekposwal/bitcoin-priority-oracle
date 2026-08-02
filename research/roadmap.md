@@ -133,11 +133,11 @@ partial/external pricing the structural equilibrium? (This is working-paper §10
   and their revenue is off-chain (subscriptions/API fees), so the fee-market
   numerator is structurally near-zero — DCIR is the family's likely
   *persistent-negative* row (near-zero internalization by design). See
-  working-paper §11 Q3 for the full coverage matrix.
+  `future-directions-v3.md` §2 Q3 for the full coverage matrix.
 - **Phase IV — Dynamic questions:** SCCR over time (2015 / 2017 SegWit / 2021 /
   2023 Ordinals / today); network-evolution equilibrium (does SCCR move toward 1 as
   nodes/price/fees/L2 grow?). Overlaps working-paper §10 (see §4). **First
-  answers 2026-08-02 (working-paper §11 Q1–Q5, computed by
+  answers 2026-08-02 (companion `future-directions-v3.md` §2 Q1–Q5, computed by
   `tools/research/sccr_dynamics.py`):** Q1 4-way scenario (BTC $1M, fees up, nodes
   up, storage cheaper) **overshoots** — SCCR ≈ 8.9, price lever dominates; Q4
   price-only path: SCCR crosses 1× at **P* ≈ $283K** (storage fully internalized,
@@ -288,7 +288,7 @@ requests.
 | Greenlight Phase I publication path | ✅ GREENLIT — arXiv / Bitcoin Optech submission of working-paper v2.1.0 with the archival-vs-pruned companion note; see `research/publication-plan.md` |
 | Decide UCIR data path | ⏸️ DEFERRED — not needed until Phase I ships (public-API approximation vs R5-gate reopen for node sync) |
 | **Program rename → "Bitcoin Resource Accounting"** | ✅ **RENAMED 2026-08-02** — Prateek directive; program identity now "Bitcoin Resource Accounting", Paper-1 title unchanged; SCCR = Metric #1; reframe: "Can we build a complete accounting system for every long-lived resource consumed by Bitcoin…?" (see §1) |
-| **Deep-question answers (v3.0, Q1–Q5)** | ✅ **COMPUTED 2026-08-02** — `tools/research/sccr_dynamics.py`; answers in working-paper §11; summary in §8 below |
+| **Deep-question answers (v3.0, Q1–Q5)** | ✅ **COMPUTED 2026-08-02** — `tools/research/sccr_dynamics.py`; answers in companion `future-directions-v3.md` §2; summary in §8 below |
 | **Cross-chain Phase V scope** | ✅ **EXPANDED 2026-08-02** — six candidate systems with honest fit map (§9); research horizon only |
 
 **Phase I deliverables produced at adoption:** `research/archival-vs-pruned-note.md`
@@ -302,7 +302,7 @@ count N but NOT the pruned-vs-archival split) and `research/publication-plan.md`
 
 Computed with `tools/research/sccr_dynamics.py` (canonical model-spec v2.0.1
 quantities; live baseline SCCR = 0.2228 @ N=32K, C=$925, T=10, P≈$63K, ~2 sat/vB;
-frozen-capture cross-check 0.2186). Full derivations in working-paper §11.
+frozen-capture cross-check 0.2186). Full derivations in companion `future-directions-v3.md` §2.
 **Model output vs judgment are separated in the paper**; this section is the
 roadmap-level summary.
 
@@ -370,7 +370,7 @@ magnitudes exactly but cannot predict relative rates.**
 - **Q3 (RIR family):** formalized as
   `RIR_i = fee_contribution_toward_resource_i / estimated_lifetime_cost_of_resource_i`
   with a 6-row coverage matrix (SCCR/UCIR/VCIR/RCIR/BCIR/**DCIR**) in
-  working-paper §11 Q3. **SCCR = Metric #1** (the only measured member).
+  companion `future-directions-v3.md` §2 Q3. **SCCR = Metric #1** (the only measured member).
   **DCIR (indexer leg) was verified ABSENT from this roadmap as of 2026-08-02
   and is now added** — Phase III, likely persistent-negative row (indexers
   recover costs off-chain, so the fee-market numerator is structurally near
@@ -382,7 +382,7 @@ magnitudes exactly but cannot predict relative rates.**
 
 The framework's core structure — **one-time payment → long-lived shared
 resource** — generalizes to any distributed system. This turns the Bitcoin paper
-into *distributed-systems economics* (working-paper §12). **Research horizon,
+into *distributed-systems economics* (companion `future-directions-v3.md` §3). **Research horizon,
 not a near-term deliverable.**
 
 | System | Long-lived shared resource | One-time payment | RIR well-defined? | Honest fit |
@@ -416,7 +416,7 @@ surface only as a hypothesis.*
 
 | # | Direction | Research question (hypothesis framing) | Promotion criteria (4-question gate, §4) |
 |---|---|---|---|
-| 1 | **Resource Attribution Theory** | Which resource actually determines fee formation — not "what resources exist." SCCR establishes storage coverage; the attribution question is whether storage (or validation, or bandwidth, or congestion alone) is the binding attribute in fee formation. | Q1 real? Q2 cost reproducibly estimable? Q3 fee contribution comparable? Q4 economically interesting? → then the attribute-pricing regression (working-paper §11 Q2) as the empirical discriminator |
+| 1 | **Resource Attribution Theory** | Which resource actually determines fee formation — not "what resources exist." SCCR establishes storage coverage; the attribution question is whether storage (or validation, or bandwidth, or congestion alone) is the binding attribute in fee formation. | Q1 real? Q2 cost reproducibly estimable? Q3 fee contribution comparable? Q4 economically interesting? → then the attribute-pricing regression (companion `future-directions-v3.md` §2 Q2) as the empirical discriminator |
 | 2 | **Resource Elasticity** | Does the fee change when storage doubles / CPU doubles? Elasticity (∂fee/∂resource) may matter more than ratio levels: a resource with high elasticity is priced by the market even when its ratio looks low. | Q1–Q4 gate + a measured response design: historical regime breaks (SegWit 2017, Ordinals 2023, fee-peak years) and cross-sectional fee-density variation |
 | 3 | **Market Efficiency / Price Discovery** | Resource → internalization → elasticity → price discovery: is Bitcoin a resource economy in which the fee market *discovers* resource prices over time, or is the single fee price pure congestion clearing? | Q1–Q4 gate + attribute-pricing regression; requires the fee-density dataset across regime breaks (Phase IV data) |
 | 4 | **Resource Vector** | Bitcoin as a multi-axis resource space: storage, validation, bandwidth, relay, memory, latency — each an axis with its own cost surface and (potential) internalization ratio. Formalizes the RIR family as a vector **R = (SCCR, UCIR, VCIR, RCIR, BCIR, DCIR, …)**. | Each axis passes the 4-question gate independently before entering the vector; the vector is a representation, not a result |
@@ -449,7 +449,7 @@ gate, §4 + SCCR evidence ladder).*
 | 1 | **UTXO accounting (UCIR leg)** | What do UTXOs actually cost nodes in **RAM and lookup time** — measured, not storage-only? (The UCIR leg: cost side exists in `utxo_cost_model.py`; the fee-side numerator is still unmodeled.) | RESEARCH DIRECTION — UCIR hypothesis (§4/§5); data path was R5-gated, now decidable post-Phase-I (§6) |
 | 2 | **Validation accounting (VCIR leg)** | What does validation actually cost in **CPU across script classes and transaction classes** — benchmarked on pinned hardware? (VCIR failed Q2 at the §4 gate as a headline metric; a pinned-benchmark bound is the honest ceiling.) | RESEARCH DIRECTION — VCIR bounded benchmark (§4), never a headline ratio |
 | 3 | **Historical SCCR** | How has SCCR moved **across market cycles**, not just contemporary captures? (Partials already computed: 2017 ≈ 10.0, 2021 ≈ 8.0, 2023 ≈ 5.0, 2024 ≈ 4.8, era-adjusted node counts — working-paper §10 Q7.) | RESEARCH DIRECTION — Phase IV (§8); **closest to done of the five**; no dedicated script yet (see note below) |
-| 4 | **Attribute pricing** | Does Bitcoin's single fee price reflect **only congestion, or partially other resource attributes**? (Already in the roadmap as "the ONE experiment," §8 Q2 / working-paper §11 Q2; would substantially strengthen the framework.) | RESEARCH DIRECTION — empirical discriminator for reviewer directions 1/3 (§10) |
+| 4 | **Attribute pricing** | Does Bitcoin's single fee price reflect **only congestion, or partially other resource attributes**? (Already in the roadmap as "the ONE experiment," §8 Q2 / companion `future-directions-v3.md` §2 Q2; would substantially strengthen the framework.) | RESEARCH DIRECTION — empirical discriminator for reviewer directions 1/3 (§10) |
 | 5 | **Cross-chain methodology** | Can the **same measurement method** be applied to another blockchain without changing the framework? (Compare METHODOLOGY not rankings; no early ETH-vs-BTC.) | RESEARCH DIRECTION — Phase V (§9); the one taxonomy-application item, listed last per the advisor's principle |
 
 **Historical SCCR feasibility — closest to done (verified 2026-08-03).** The
