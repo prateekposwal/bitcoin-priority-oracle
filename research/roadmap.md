@@ -199,6 +199,20 @@ dashboard never fabricates a cell).
 | **DCIR** | 🟡 **RESEARCH HYPOTHESIS** — structural argument (off-chain revenue ⇒ fee-market numerator ~0); no measurement | Phase III; likely persistent-negative row |
 
 
+**Calibration note (2026-08-03): two claims, two confidence levels.** The paper
+makes two different claims, and confidence in them is calibrated differently.
+**"The arithmetic is correct and consistent"** — established by internal
+cross-checks (three independent implementations agreeing per-block) and, once D5
+lands, by external reproduction. Confidence here is well-calibrated.
+**"The modeling choices are the right ones"** — C = $925/yr bundling, T = 10
+horizon, storage-as-first-resource, and the externality framing are documented
+assumptions, not established facts, and stay open to external challenge.
+Confidence here is tentative until D5 lands and the first external challenges
+are absorbed. A successful reproduction confirms the first claim only; it never
+confirms the second. The SCCR row's "ESTABLISHED METRIC (validated)" label means
+the measurement (first claim) is validated — the modeling choices (second
+claim) remain assumptions until the community says otherwise.
+
 **Earn the right (advisor, 2026-08-03): "Frameworks grow through evidence, not
 naming."**
 

@@ -308,6 +308,19 @@ clone and reproduced the published result" — the reproducibility milestone in
 reply (quote + date + reproducer, anonymous ok) in the reproduction log, then
 execute the sequence below in order. **No more polishing.***
 
+**What the trigger requires (2026-08-03 refinement).** The trigger fires on
+**reproduction of the number**: the reproducer confirms the published result
+from a clean clone (avg 0.2186, min 0.0584, max 0.8320, 100% below 1×). It does
+**not** require the reproducer to agree with the paper's framing or assumptions.
+A reproducer who reproduces the number but challenges a documented modeling
+choice (C = $925/yr bundling, T = 10 horizon, storage-as-first-resource, the
+externality reading) has still met the milestone: the objection is recorded as
+feedback in the community-feedback triage (`research/community-review-plan.md`
+§4) and folded into the next revision — it does not block submission. Only a
+reproducer who **cannot** reproduce the number (materially different result
+from a clean clone, not reconciled) blocks submission, until reconciled; that
+is falsifier 1 of working-paper §7.1.
+
 1. **Freeze the repository.** Stop all content changes. Verify `git status`
    shows exactly the tree the reproducer ran; note the freeze in the
    reproduction log + decisions tracker. Any change needed after this point is a

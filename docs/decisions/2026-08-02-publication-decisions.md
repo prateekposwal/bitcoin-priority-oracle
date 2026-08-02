@@ -211,3 +211,42 @@ only submission blocker — UNCHANGED by this review)**, D6 LaTeX compile pass
 *Bitcoin Sahi Research Council — Publication decisions (2026-08-02), recorded by
 TELOS (as Aviku). Extends research/author-identity.md, research/license-draft.md,
 research/publication-plan.md.*
+
+---
+
+## Addendum 5 — third reviewer exchange: "reproduced vs. framing disagreement" — executed 2026-08-03
+
+Third reviewer exchange (sharp, conceptual) received; the load-bearing
+refinement was encoded in `../block-space-economics`:
+
+**The distinction:** *"reproduced the number but disagrees with the
+framing/assumptions"* is **not** the same as *"failed to reproduce the number."*
+
+- **Failed to reproduce** (an independent party following the published protocol
+  gets a materially different number from a clean clone) = a **genuine
+  falsification of the measurement** → the paper's headline falls; blocks
+  submission (working-paper §7.1, falsifier 1).
+- **Reproduced the number, disagrees with framing/assumptions** (e.g., disputes
+  C = $925/yr bundling, T = 10 horizon, storage-as-first-resource, the
+  externality reading) = **NOT a falsification** — honest scientific
+  disagreement about documented assumptions, folded into future revisions the
+  way the Liu et al. (2021) prior work was reconciled (working-paper §8.2);
+  recorded as community feedback, never as a failed reproduction.
+
+**Executed:** working-paper §7.1 explicit two-outcome passage (md/tex/html);
+external-reproduction log — third outcome category "Reproduced number, disagrees
+with framing" in the result/verdict handling, with the recording rule (number
+reproduced correctly = milestone met even if assumptions are challenged; the
+disagreement goes to the community-feedback triage, `community-review-plan.md`
+§4); D5 GO/SUBMIT trigger clarified in `external-reproduction.md` +
+publication-plan §8 (fires on reproduction-of-the-number regardless of framing
+objections — those refine the next revision but do not block submission;
+cannot-reproduce BLOCKS submission until reconciled); roadmap §4 calibration
+note (arithmetic well-calibrated vs. modeling choices tentative until D5
+lands). HTML regenerated, validate.js PASS.
+
+**Open items after addendum 5 (unchanged):** D2 ORCID, D3 arXiv account, D4
+LICENSE ratification (pre-freeze requirement), **D5 external reproducer (the
+only submission blocker — UNCHANGED: the trigger still requires one uninvolved
+human reproduction of the number; framing objections do not substitute for it,
+they may accompany it)**, D6 LaTeX compile pass, D7 companion-note sign-off.

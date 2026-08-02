@@ -84,6 +84,23 @@ below.
 | External #2 | *(pending)* | *(pending)* | |
 | External #3 | *(pending)* | *(pending)* | |
 
+## Outcome categories — three, not two
+
+An external run is recorded under exactly one of three outcomes. Never collapse
+the middle one into either neighbor — **"reproduced the number but disagrees
+with the framing" is not a failed reproduction**; it is honest scientific
+disagreement about documented assumptions (working-paper §7.1).
+
+| Outcome | What it means | Effect on the D5 milestone | Where it is recorded |
+|---|---|---|---|
+| ✅ **Reproduced** | Number matches from a clean clone (avg 0.2186, min 0.0584, max 0.8320, 100% below 1×) | **Milestone MET** — GO/SUBMIT trigger fires | Detail row below (Verdict = Reproduced) |
+| 🟡 **Reproduced number, disagrees with framing** | Number matches, but the reproducer challenges a documented assumption (C = $925/yr bundling, T = 10 horizon, storage-as-first-resource, externality reading) | **Milestone MET** — the number was reproduced; the disagreement is feedback, not failure | Detail row below (Verdict = "Reproduced + framing objection") **and** logged in the community-feedback triage (`research/community-review-plan.md` §4 → `research/community-feedback.md`) |
+| ❌ **Failed to reproduce** | Materially different number from a clean clone (different avg/band or per-block mismatch), not reconciled | **Milestone NOT met** — submission BLOCKED until reconciled | Detail row below (Verdict = Failed); investigated as falsifier 1 of working-paper §7.1 |
+
+**Recording rule:** the number reproduced correctly = milestone met even if the
+reproducer challenges assumptions; the disagreement goes to community feedback,
+never into the Fail column.
+
 ## Phrasing rule
 
 Use **"Independently reproduced by external participants following the published
@@ -91,7 +108,7 @@ reproduction protocol"** — **NOT** "externally verified."
 
 ## When a result lands, also record the detail row here:
 
-| Date | Reproducer | Language/Env | Avg SCCR | Min | Max | Below 1× | Per-block max dev | Verdict |
+| Date | Reproducer | Language/Env | Avg SCCR | Min | Max | Below 1× | Per-block max dev | Verdict (Reproduced / Reproduced + framing objection / Failed) |
 |---|---|---|---|---|---|---|---|---|
 | *(pending)* | | | | | | | | |
 
@@ -104,8 +121,19 @@ reproduction protocol"** — **NOT** "externally verified."
 >
 > **→ milestone achieved → stop polishing → submit.**
 >
-> Until that reply lands, the submission gate stays closed. When it lands: record
-> the reply (quote + date + reproducer, anonymous ok) in this log, then submit.
+> **The trigger fires on reproduction of the number — regardless of framing
+> objections.** A reproducer who confirms the numbers but disputes a documented
+> assumption (C bundling, T = 10, storage-first, externality reading) has still met
+> the milestone: record the objection in the community-feedback triage
+> (`research/community-review-plan.md` §4 → `research/community-feedback.md`) and
+> fold it into the next revision — it does not block submission. Conversely, a
+> reproducer who **cannot** reproduce the number (materially different result from
+> a clean clone, not reconciled) **blocks submission** until the discrepancy is
+> reconciled; that is falsifier 1 of working-paper §7.1.
+>
+> Until a reproduction-of-the-number reply lands, the submission gate stays
+> closed. When it lands: record the reply (quote + date + reproducer, anonymous
+> ok) in this log, then submit.
 
 **Recruit assets (2026-08-03):** copy-paste message `recruit-message.md` ·
 personalized variants `recruit-message-personalized.md` · verified contact list

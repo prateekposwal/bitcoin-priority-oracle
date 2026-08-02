@@ -101,6 +101,24 @@ a{color:#b3541e} .back{font-size:.85rem}</style>
 <tr><th>External #3</th><th>*(pending)*</th><th>*(pending)*</th><th></th></tr>
 </table>
 
+<h2>Outcome categories — three, not two</h2>
+
+<p>An external run is recorded under exactly one of three outcomes. Never collapse</p>
+<p>the middle one into either neighbor — **&quot;reproduced the number but disagrees</p>
+<p>with the framing&quot; is not a failed reproduction**; it is honest scientific</p>
+<p>disagreement about documented assumptions (working-paper §7.1).</p>
+
+<table>
+<tr><td>Outcome</td><td>What it means</td><td>Effect on the D5 milestone</td><td>Where it is recorded</td></tr>
+<tr><th>✅ **Reproduced**</th><th>Number matches from a clean clone (avg 0.2186, min 0.0584, max 0.8320, 100% below 1×)</th><th>**Milestone MET** — GO/SUBMIT trigger fires</th><th>Detail row below (Verdict = Reproduced)</th></tr>
+<tr><th>🟡 **Reproduced number, disagrees with framing**</th><th>Number matches, but the reproducer challenges a documented assumption (C = $925/yr bundling, T = 10 horizon, storage-as-first-resource, externality reading)</th><th>**Milestone MET** — the number was reproduced; the disagreement is feedback, not failure</th><th>Detail row below (Verdict = &quot;Reproduced + framing objection&quot;) **and** logged in the community-feedback triage (`research/community-review-plan.md` §4 → `research/community-feedback.md`)</th></tr>
+<tr><th>❌ **Failed to reproduce**</th><th>Materially different number from a clean clone (different avg/band or per-block mismatch), not reconciled</th><th>**Milestone NOT met** — submission BLOCKED until reconciled</th><th>Detail row below (Verdict = Failed); investigated as falsifier 1 of working-paper §7.1</th></tr>
+</table>
+
+<p>**Recording rule:** the number reproduced correctly = milestone met even if the</p>
+<p>reproducer challenges assumptions; the disagreement goes to community feedback,</p>
+<p>never into the Fail column.</p>
+
 <h2>Phrasing rule</h2>
 
 <p>Use **&quot;Independently reproduced by external participants following the published</p>
@@ -109,7 +127,7 @@ a{color:#b3541e} .back{font-size:.85rem}</style>
 <h2>When a result lands, also record the detail row here:</h2>
 
 <table>
-<tr><td>Date</td><td>Reproducer</td><td>Language/Env</td><td>Avg SCCR</td><td>Min</td><td>Max</td><td>Below 1×</td><td>Per-block max dev</td><td>Verdict</td></tr>
+<tr><td>Date</td><td>Reproducer</td><td>Language/Env</td><td>Avg SCCR</td><td>Min</td><td>Max</td><td>Below 1×</td><td>Per-block max dev</td><td>Verdict (Reproduced / Reproduced + framing objection / Failed)</td></tr>
 <tr><th>*(pending)*</th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr>
 </table>
 
@@ -122,8 +140,19 @@ a{color:#b3541e} .back{font-size:.85rem}</style>
 <blockquote></blockquote>
 <blockquote>**→ milestone achieved → stop polishing → submit.**</blockquote>
 <blockquote></blockquote>
-<blockquote>Until that reply lands, the submission gate stays closed. When it lands: record</blockquote>
-<blockquote>the reply (quote + date + reproducer, anonymous ok) in this log, then submit.</blockquote>
+<blockquote>**The trigger fires on reproduction of the number — regardless of framing</blockquote>
+<blockquote>objections.** A reproducer who confirms the numbers but disputes a documented</blockquote>
+<blockquote>assumption (C bundling, T = 10, storage-first, externality reading) has still met</blockquote>
+<blockquote>the milestone: record the objection in the community-feedback triage</blockquote>
+<blockquote>(`research/community-review-plan.md` §4 → `research/community-feedback.md`) and</blockquote>
+<blockquote>fold it into the next revision — it does not block submission. Conversely, a</blockquote>
+<blockquote>reproducer who **cannot** reproduce the number (materially different result from</blockquote>
+<blockquote>a clean clone, not reconciled) **blocks submission** until the discrepancy is</blockquote>
+<blockquote>reconciled; that is falsifier 1 of working-paper §7.1.</blockquote>
+<blockquote></blockquote>
+<blockquote>Until a reproduction-of-the-number reply lands, the submission gate stays</blockquote>
+<blockquote>closed. When it lands: record the reply (quote + date + reproducer, anonymous</blockquote>
+<blockquote>ok) in this log, then submit.</blockquote>
 
 <p>**Recruit assets (2026-08-03):** copy-paste message `recruit-message.md` ·</p>
 <p>personalized variants `recruit-message-personalized.md` · verified contact list</p>
