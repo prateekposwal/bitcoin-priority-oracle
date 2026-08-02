@@ -30,6 +30,25 @@ already engaged (v1/v2 history).
 
 ---
 
+## 0. Positioning aspiration — the frame, not the number
+
+*(Added 2026-08-03, after the advisor's closing prediction: five years from now,
+if this succeeds, this paper is not cited for the number 0.2186 — it is cited
+because readers write "Following the Bitcoin Resource Accounting framework
+introduced by Poswal, we define…".)* The durable goal of this publication is to
+introduce a reusable **frame** — **Bitcoin Resource Accounting**, with SCCR as its
+first named metric (Metric #1) — not to publish a single measurement. A frame is
+a definition others can adopt, a notation that persists, a shared vocabulary, and
+enough adoption that "framework introduced by X" is the natural citation form;
+the number is the evidence the frame works, and the frame is what gets cited.
+This aspiration does not relax the evidence discipline anywhere: the frame is
+introduced through evidence, not naming — SCCR is earned (measured, reproduced),
+the framework is proposed (Paper 4, theory-first, minimal equations), every
+unmeasured leg stays a research hypothesis, and every public surface leads with
+the frame while the banded number evidences it.
+
+---
+
 ## 1. Target venues
 
 | Venue | Where | What goes in | Notes |
