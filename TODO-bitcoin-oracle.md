@@ -144,7 +144,7 @@ The fee market prices **congestion** (inclusion in the next block). It does not 
 3. Can covenant proposals reduce UTXO churn from inscriptions?
 4. What would a "storage cost oracle" look like — and is it even possible without trust?
 5. Is the "externality of data permanence" actually a problem with economic significance, or is the existing fee market sufficient?
-6. Should the SCCR research be published to arXiv / Bitcoin Optech (the R5 publication sub-task)?
+6. Should the SCCR research be published to arXiv / Bitcoin Optech (the R5 publication sub-task)? — **IN FLIGHT**: Phase I greenlit 2026-08-02; checklist in `research/publication-plan.md`; awaiting Prateek's arXiv account + author details
 
 ## Remaining Work Summary (2026-08-02)
 
@@ -160,10 +160,21 @@ The fee market prices **congestion** (inclusion in the next block). It does not 
 - [ ] Site freshness label + sitemap update (working-paper.html, history-of-bitcoin.html)
 
 **Research layer:**
-- [ ] arXiv / Bitcoin Optech submission of the working paper (unblocked)
-- [ ] v3.0 archival-vs-pruned study — node-census pruned-vs-archival distribution (working-paper §10, Q2/Q3) — unblocked by ratification
+- [ ] arXiv / Bitcoin Optech submission of the working paper (unblocked) — submission checklist drafted in `research/publication-plan.md`
+- [x] Roadmap adoption recorded — `research/roadmap.md` §7 (ratified 2026-08-02, amendments in §6)
+- [x] Archival-vs-pruned companion note DRAFTED — `research/archival-vs-pruned-note.md` (honest data-gap framing: census captures N, NOT pruned-vs-archival split; measurement gap documented) — **LEFT: Prateek review before it ships with the paper**
+- [ ] v3.0 archival-vs-pruned study — node-census pruned-vs-archival distribution (working-paper §10, Q2/Q3) — companion note drafted; measurement of the split itself remains OPEN (see note)
 - [x] Publish decision ratification from Prateek (scope/data-source/deployment) — RATIFIED 2026-08-02
 - [x] Formally drop utxo_size_inc until Core node is synced — RATIFIED (Decision 2); node sync deferred, R5-gated
 
 **Docs (2026-08-02):**
 - [ ] README (setup, architecture, quick start) + launchd runbook + known-issues list
+
+**Roadmap (2026-08-02):** Resource Internalization Framework ADOPTED as the
+program thesis — `research/roadmap.md` (phases I–V, unified RIR formula, central
+question, 4-question gate). Prateek ratified 2026-08-02 ("continue :)") WITH the
+§6 amendments: UCIR 4/5 (validation-cost carve-out scoped to RAM/lookup per
+lifetime UTXO), VCIR demoted to bounded analytical sub-study, BCIR research-hard,
+RCIR next model-possible leg, archival-vs-pruned as Phase I companion note.
+Phase I publication path GREENLIT (see `research/publication-plan.md`); UCIR data
+path deferred until Phase I ships.
