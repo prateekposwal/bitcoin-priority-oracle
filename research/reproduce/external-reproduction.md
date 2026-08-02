@@ -21,6 +21,7 @@ repo into a clean temp dir, then **only** the published instructions
 | Python 3.9 (system, no pip installs needed) | ✅ works (stdlib only for compute; chart skips gracefully if matplotlib absent) |
 | Input data (171 entries, heights 960562→960732) | ✅ committed + versioned in `input/fee_history_capture.json`; `reproduce.py` **defaults to it** (no DB needed) |
 | Node (JS impl) | ✅ works from clone |
+| **Definitive re-test (post-push, 2026-08-03):** fresh clone of the **live GitHub repo** (`59573b0`), one-command path + `cross_check.sh`, then `git status` | ✅ **PASS** — 0.2186, all three agree, working tree **completely clean** after all runs (deterministic, zero dirty state) |
 
 ### Gaps found and fixed by the simulation (all fixed, all committed)
 
