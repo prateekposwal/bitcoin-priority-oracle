@@ -179,6 +179,23 @@ learn.html dashboard work already shipped.
 
 ## 7. DONE vs LEFT
 
+**DONE (2026-08-03, peer-review execution):** reviewer-prescribed fixes applied to
+working-paper.md / .tex / (HTML regenerated): abstract opening rewritten
+(reviewer's suggested framing); §1 scope expanded (why-storage "first measurable
+resource", storage≠state, 1× descriptive-not-normative stated early); §2 new
+non-normative-1× bullet; §4.1 SCCR fraction diagram + explicit-notation block
+(bundled C = C_storage+C_bandwidth+C_misc → storage-and-hosting coverage ratio;
+cb(t)=C(t)/B_year(t) time-dependence; L_network=ΣL_i heterogeneous nodes ↔
+archival-vs-pruned note; storage≠UTXO-state); §4.2 average-vs-marginal
+discussion; §5.1 point-in-time discipline tied to cb(t); §7 limitations 2 & 7
+strengthened (bundled C, why-storage); §8.1 voluntary-participation line.
+Roadmap §10 added: seven reviewer-prescribed directions as RESEARCH HYPOTHESES
+(Resource Attribution Theory, Resource Elasticity, Market Efficiency/Price
+Discovery, Resource Vector, Cross-layer Accounting/Lightning, Miner Incentive
+Accounting, Bitcoin Resource Index) with 4-question-gate promotion criteria.
+New deliverable: `research/audience-summaries.md` (developers/researchers/
+investors/general public). D5 remains the only submission blocker.
+
 **DONE (2026-08-03, advisor-feedback execution):** working-paper §7.1
 falsifiability section (md/html/tex); roadmap §4 evidence-status table +
 hypothesis labels; framework-paper outline (`research/framework-paper-outline.md`,

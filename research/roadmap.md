@@ -313,4 +313,33 @@ system must pass the 4-question gate (§4) before a metric is named.
 
 ---
 
+## 10. Reviewer-prescribed research directions (2026-08-03) — seven RESEARCH HYPOTHESES
+
+*Added 2026-08-03 post peer-review of the SCCR paper. Evidence/hypothesis
+boundary kept sharp: every direction below is a **RESEARCH HYPOTHESIS** — a
+framed question with a defined promotion path — **not** an established result
+and not a claim that the result will obtain. Promotion criteria are uniform:
+a direction graduates to an ESTABLISHED METRIC only by passing the 4-question
+gate (§4) **and** the SCCR evidence ladder (canonical spec → live capture →
+independent implementations → cross-check). Until then it may be named on any
+surface only as a hypothesis.*
+
+| # | Direction | Research question (hypothesis framing) | Promotion criteria (4-question gate, §4) |
+|---|---|---|---|
+| 1 | **Resource Attribution Theory** | Which resource actually determines fee formation — not "what resources exist." SCCR establishes storage coverage; the attribution question is whether storage (or validation, or bandwidth, or congestion alone) is the binding attribute in fee formation. | Q1 real? Q2 cost reproducibly estimable? Q3 fee contribution comparable? Q4 economically interesting? → then the attribute-pricing regression (working-paper §11 Q2) as the empirical discriminator |
+| 2 | **Resource Elasticity** | Does the fee change when storage doubles / CPU doubles? Elasticity (∂fee/∂resource) may matter more than ratio levels: a resource with high elasticity is priced by the market even when its ratio looks low. | Q1–Q4 gate + a measured response design: historical regime breaks (SegWit 2017, Ordinals 2023, fee-peak years) and cross-sectional fee-density variation |
+| 3 | **Market Efficiency / Price Discovery** | Resource → internalization → elasticity → price discovery: is Bitcoin a resource economy in which the fee market *discovers* resource prices over time, or is the single fee price pure congestion clearing? | Q1–Q4 gate + attribute-pricing regression; requires the fee-density dataset across regime breaks (Phase IV data) |
+| 4 | **Resource Vector** | Bitcoin as a multi-axis resource space: storage, validation, bandwidth, relay, memory, latency — each an axis with its own cost surface and (potential) internalization ratio. Formalizes the RIR family as a vector **R = (SCCR, UCIR, VCIR, RCIR, BCIR, DCIR, …)**. | Each axis passes the 4-question gate independently before entering the vector; the vector is a representation, not a result |
+| 5 | **Cross-layer Accounting (Lightning)** | 1 payment → 1 channel → 1 block → 1000 users: what resources did Lightning actually save? The counterfactual resource bill of on-chain vs. routed payments. | Q1–Q4 gate; needs a payment-routing dataset + channel-close economics; Phase IV scope |
+| 6 | **Miner Incentive Accounting** | Miner revenue → security budget → storage burden: the miner-centric complement to the node-cost/user-fee framing. What do miners spend fee revenue on, and does any of it cover the node storage burden? | Q1–Q4 gate; miner revenue/cost data are public; storage-burden attribution is the new leg; Phase IV scope |
+| 7 | **Bitcoin Resource Index** | A daily-updated dashboard: **Storage 22% / Validation ? / Relay ? / Bandwidth ? / Security ?** — one index page, updated daily. **The live SCCR dashboard is the first cell** (`/sccr/latest`, `data/sccr*.json`); the index is the aggregation surface for the RIR family as each metric is promoted. | Each cell is a promoted RIR (4-question gate + evidence ladder); unmeasured cells render "?" — the dashboard never fabricates a cell |
+
+**Boundary rule (unchanged, reaffirmed):** naming a direction is not claiming a
+result. All seven are framed as questions with defined promotion criteria; none
+may appear on any surface as an established finding until it has passed the
+4-question gate and the SCCR evidence ladder. The live SCCR dashboard is the
+first *cell* of direction 7, not the index itself.
+
+---
+
 *Bitcoin Sahi Research Council — Bitcoin Resource Accounting Roadmap (2026-08-02)*

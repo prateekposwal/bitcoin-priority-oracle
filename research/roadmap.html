@@ -360,6 +360,31 @@ footer .links a:hover{color:#D4933A}</style>
 <p>measure). Do not overclaim — Phase V is the research horizon, and each new</p>
 <p>system must pass the 4-question gate (§4) before a metric is named.</p>
 <hr>
+<h3>10. Reviewer-prescribed research directions (2026-08-03) — seven RESEARCH HYPOTHESES</h3>
+<p>*Added 2026-08-03 post peer-review of the SCCR paper. Evidence/hypothesis</p>
+<p>boundary kept sharp: every direction below is a <strong>RESEARCH HYPOTHESIS</strong> — a</p>
+<p>framed question with a defined promotion path — <strong>not</strong> an established result</p>
+<p>and not a claim that the result will obtain. Promotion criteria are uniform:</p>
+<p>a direction graduates to an ESTABLISHED METRIC only by passing the 4-question</p>
+<p>gate (§4) <strong>and</strong> the SCCR evidence ladder (canonical spec → live capture →</p>
+<p>independent implementations → cross-check). Until then it may be named on any</p>
+<p>surface only as a hypothesis.*</p>
+<table>
+<tr><th>#</th><th>Direction</th><th>Research question (hypothesis framing)</th><th>Promotion criteria (4-question gate, §4)</th></tr>
+<tr><td>1</td><td><strong>Resource Attribution Theory</strong></td><td>Which resource actually determines fee formation — not &quot;what resources exist.&quot; SCCR establishes storage coverage; the attribution question is whether storage (or validation, or bandwidth, or congestion alone) is the binding attribute in fee formation.</td><td>Q1 real? Q2 cost reproducibly estimable? Q3 fee contribution comparable? Q4 economically interesting? → then the attribute-pricing regression (working-paper §11 Q2) as the empirical discriminator</td></tr>
+<tr><td>2</td><td><strong>Resource Elasticity</strong></td><td>Does the fee change when storage doubles / CPU doubles? Elasticity (∂fee/∂resource) may matter more than ratio levels: a resource with high elasticity is priced by the market even when its ratio looks low.</td><td>Q1–Q4 gate + a measured response design: historical regime breaks (SegWit 2017, Ordinals 2023, fee-peak years) and cross-sectional fee-density variation</td></tr>
+<tr><td>3</td><td><strong>Market Efficiency / Price Discovery</strong></td><td>Resource → internalization → elasticity → price discovery: is Bitcoin a resource economy in which the fee market *discovers* resource prices over time, or is the single fee price pure congestion clearing?</td><td>Q1–Q4 gate + attribute-pricing regression; requires the fee-density dataset across regime breaks (Phase IV data)</td></tr>
+<tr><td>4</td><td><strong>Resource Vector</strong></td><td>Bitcoin as a multi-axis resource space: storage, validation, bandwidth, relay, memory, latency — each an axis with its own cost surface and (potential) internalization ratio. Formalizes the RIR family as a vector <strong>R = (SCCR, UCIR, VCIR, RCIR, BCIR, DCIR, …)</strong>.</td><td>Each axis passes the 4-question gate independently before entering the vector; the vector is a representation, not a result</td></tr>
+<tr><td>5</td><td><strong>Cross-layer Accounting (Lightning)</strong></td><td>1 payment → 1 channel → 1 block → 1000 users: what resources did Lightning actually save? The counterfactual resource bill of on-chain vs. routed payments.</td><td>Q1–Q4 gate; needs a payment-routing dataset + channel-close economics; Phase IV scope</td></tr>
+<tr><td>6</td><td><strong>Miner Incentive Accounting</strong></td><td>Miner revenue → security budget → storage burden: the miner-centric complement to the node-cost/user-fee framing. What do miners spend fee revenue on, and does any of it cover the node storage burden?</td><td>Q1–Q4 gate; miner revenue/cost data are public; storage-burden attribution is the new leg; Phase IV scope</td></tr>
+<tr><td>7</td><td><strong>Bitcoin Resource Index</strong></td><td>A daily-updated dashboard: <strong>Storage 22% / Validation ? / Relay ? / Bandwidth ? / Security ?</strong> — one index page, updated daily. <strong>The live SCCR dashboard is the first cell</strong> (<code>/sccr/latest</code>, <code>data/sccr*.json</code>); the index is the aggregation surface for the RIR family as each metric is promoted.</td><td>Each cell is a promoted RIR (4-question gate + evidence ladder); unmeasured cells render &quot;?&quot; — the dashboard never fabricates a cell</td></tr>
+</table>
+<p><strong>Boundary rule (unchanged, reaffirmed):</strong> naming a direction is not claiming a</p>
+<p>result. All seven are framed as questions with defined promotion criteria; none</p>
+<p>may appear on any surface as an established finding until it has passed the</p>
+<p>4-question gate and the SCCR evidence ladder. The live SCCR dashboard is the</p>
+<p>first *cell* of direction 7, not the index itself.</p>
+<hr>
 <p>*Bitcoin Sahi Research Council — Bitcoin Resource Accounting Roadmap (2026-08-02)*</p>
 <p style="margin-top:32px;"><a href="/research">← All research</a> · <a href="/learn">← Back to Learn</a></p>
 </div>

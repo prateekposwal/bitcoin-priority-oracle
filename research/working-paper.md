@@ -7,7 +7,7 @@
 
 ## Abstract
 
-Bitcoin's fee market allocates scarce block space among competing transactions. This paper asks a distinct empirical question: does the fee market *also* internalize the long-term resource costs imposed by permanently recorded blockchain data? We define a **Storage Cost Coverage Ratio (SCCR)** — the ratio of transaction fees paid (USD) to the estimated lifetime storage cost borne by full nodes (USD) — and measure it against live fee-history data using a **primary-source node census (≥32,000 known addresses from a live Bitcoin Core node)**. Across 156 sampled blocks, the average ratio is **~0.29 (dimensionless)**: fees cover roughly **29%** of the estimated 10-year replicated storage cost of an average block, and **~99% of sampled blocks fall below the 1× threshold** (a small number of high-fee blocks exceed it). A live re-measure on 2026-08-02 gives **~0.225 (dimensionless)** (168 blocks, model-spec v2.0.1); a re-read of the same capture at time of writing (167 blocks) gave 0.2228 with 100% of blocks below 1× — the ratio moves with the fee market. We reconcile two cost models that previously disagreed by 16.4× (dimensionless), document the correction transparently (model-spec.json v2.0.0), and bound the result against parameter uncertainty (joint Monte Carlo: 99.8% of draws below 1× under the old N band; ~99% at the real census). We present the framework as reproducible, falsifiable research — not a claim that Bitcoin is broken.
+Bitcoin has a market price for block space, but no explicit market price for long-lived resource consumption. This paper measures one of those resources — replicated storage — and asks how much of its modeled cost is covered by transaction fees. We define a **Storage Cost Coverage Ratio (SCCR)** — the ratio of transaction fees paid (USD) to the estimated lifetime storage cost borne by full nodes (USD) — and measure it against live fee-history data using a **primary-source node census (≥32,000 known addresses from a live Bitcoin Core node)**. Across 156 sampled blocks, the average ratio is **~0.29 (dimensionless)**: fees cover roughly **29%** of the estimated 10-year replicated storage cost of an average block, and **~99% of sampled blocks fall below the 1× threshold** (a small number of high-fee blocks exceed it). A live re-measure on 2026-08-02 gives **~0.225 (dimensionless)** (168 blocks, model-spec v2.0.1); a re-read of the same capture at time of writing (167 blocks) gave 0.2228 with 100% of blocks below 1× — the ratio moves with the fee market. We reconcile two cost models that previously disagreed by 16.4× (dimensionless), document the correction transparently (model-spec.json v2.0.0), and bound the result against parameter uncertainty (joint Monte Carlo: 99.8% of draws below 1× under the old N band; ~99% at the real census). We present the framework as reproducible, falsifiable research — not a claim that Bitcoin is broken.
 
 **Hypothesis:** Bitcoin's fee market efficiently allocates scarce block space, but may not fully internalize every long-lived resource cost created by confirmed transactions.
 
@@ -27,12 +27,19 @@ The fee market solves a short-term optimization problem extremely well: during c
 
 **Scope:** this paper measures the **storage leg** of a broader resource-pricing question. Bandwidth, validation, and UTXO-maintenance legs are future work (see §7).
 
+**Why storage? It is not the "most important" resource — it is simply the first measurable one.** The program's discipline is: take the resource with a reproducible cost estimate and a live fee attribution, measure it, and leave the rest to the roadmap (RIR family, §7 and `roadmap.md` Phase II). Storage qualified first because its cost leg (`C`, `N`, `T`) and its fee leg (block fees, USD) are both estimable from primary sources. Every other resource is a named research hypothesis, not a measured result.
+
+**Storage ≠ state.** SCCR measures the cost of replicated **history** — the permanent record of confirmed blocks retained by full nodes. It does *not* measure the **UTXO set**, the live ledger state every node maintains in RAM and index structures. State permanence is a separate resource with its own accounting leg (UCIR, §7 / `roadmap.md` Phase II); this paper's storage leg must not be read as a state-cost measurement.
+
+**1× is a descriptive calibration point, not a normative target.** Stated at the outset so no reader mistakes the paper for a claim that fees *should* cover 100% of modeled storage cost. The paper measures whether they do; it prescribes nothing. The thresholds in §5.4 are reference points on that measurement, not policy targets.
+
 ## 2. What We're NOT Saying
 
 - ❌ Not proposing a fix
 - ❌ Not claiming the externality is economically significant at current volumes (it may not be)
 - ❌ Not claiming the SegWit discount was a mistake (it solved transaction malleability)
 - ❌ **Not arguing that Bitcoin is 'broken'** — the fee market solves block-space allocation well; whether it internalizes long-lived resource costs is an empirical question
+- ❌ **Not claiming fees *should* cover 100% of storage cost** — the 1× threshold is a descriptive calibration point, not a normative target (§1, §5.4)
 - ✅ Just framing the question clearly and measurably
 
 ## 3. The SegWit Pricing Structure
@@ -62,11 +69,27 @@ All quantities, units, and formulas live in **`research/model-spec.json` (v2.0.1
 | Network lifetime cost/block | L_net | USD/block | 5,628 | L × N (=32K) |
 | **Storage Cost Coverage Ratio** | **SCCR** | dimensionless | **~0.29** (156 blocks, N=32K, dated 2026-08-01); **0.2228** (167 blocks, live 2026-08-02) | fee_USD / L_net |
 
+```
+                    Fees Paid (USD / block)
+   SCCR  =  ─────────────────────────────────────────────
+            Modeled Lifetime Storage Cost (USD / block)
+            = L_network = C × T × N / R_blocks
+```
+
 **Design principle:** `cb` is **horizon-free** (C / annual bytes). The horizon `T` enters **only** through `L = cb × B × T`. This corrects the v1.0.0 implementation, which applied `T` twice (see §6).
+
+**Explicit notation (hidden assumptions made visible).** The canonical quantities above bundle four assumptions that the model treats as scalars. Each is stated explicitly here so readers can see exactly what is and is not modeled; none changes the arithmetic of §5:
+
+1. **C is a bundled cost, not pure storage.** `C = C_storage + C_bandwidth + C_misc` — the $925/yr annual node cost bundles the disk/SSD component, the bandwidth bill, and electricity/hardware depreciation (component sum 166.67 + 600 + 157.68; `utxo_cost_model.py`). The current model treats C as a single bundled scalar, so the headline ratio is strictly a **storage-and-hosting coverage ratio**, not a pure storage ratio. The bandwidth-vs-storage decomposition is a documented future refinement — exactly the RCIR and BCIR legs (§7 / `roadmap.md` Phase II/III).
+2. **`cb` is time-dependent, not stationary.** The canonical `cb` is a point-in-time ratio `cb(t) = C(t) / B_year(t)` — the node's annual cost at time t divided by the network's byte production in that year. `B_year(t)` itself depends on block fullness: 95%-full blocks produce ~7.5×10¹⁰ bytes/yr vs ~5.5×10¹⁰ at 70%-full blocks, moving `cb` (and SCCR) even with C, N, and T fixed. SCCR as measured is therefore a **point-in-time estimate over its capture window**, consistent with the paper's dated-snapshot discipline (§5.1); the live tracker accumulates the time series (§5.1).
+3. **N is a heterogeneous vector, not a scalar.** The model writes `L_network = L·N`; the explicit forward notation is `L_network = Σᵢ Lᵢ`, where each node class i (archival full node, pruned node, exchange node, research/indexer node) carries different storage behavior and hence a different per-node lifetime cost Lᵢ. This is precisely the archival-vs-pruned measurement gap documented in the companion note (`research/archival-vs-pruned-note.md`): the census measures reachable count N (≥32K, a lower bound), not the retention distribution. SCCR-as-computed is an upper bound on the burden borne by any single node class; a measured pruned/archival split is Phase I follow-on.
+4. **Storage ≠ state (UTXO).** SCCR prices replicated *history* — the permanent record of confirmed blocks — not the UTXO set, the live ledger *state* nodes maintain in RAM and index structures. State permanence is a separate resource with its own accounting leg (UCIR, §7 / `roadmap.md` Phase II). A reader must not read the storage leg as a state-cost measurement; the two resources have different cost drivers (bytes retained vs. live-set size).
 
 ### 4.2 The marginal-inscription attribution (secondary)
 
 The inscription-externality branch uses a **marginal attribution**: `cb_insc = C / (inscription bytes/yr) = 1.92573e-6` USD/(byte·yr). This differs from `cb` by a factor of **164.4× (dimensionless)** — not an error, but two different denominators (all block bytes vs. inscription-only bytes). The paper headline uses the block-average `cb`; the marginal figure appears only in the inscription-externality analysis. The 16.4× (dimensionless) figure reported in earlier versions was this 164× (dimensionless) denominator gap **divided by** the 10× (dimensionless) bug — see §6.
+
+**Why average, not marginal?** `cb` is an *average* (accounting) attribution: total node cost divided by total bytes. The 164× (dimensionless) marginal branch (`cb_insc`) attributes the same cost to inscription bytes only — a *marginal* (optimization) view. Both are valid; they answer different questions. Average cost is the right tool for **accounting** — "what share of the network's modeled hosting bill does the fee market cover?" — which is this paper's question. Marginal cost is the right tool for **optimization** — "what does one more byte cost the network?" — which is the inscription-externality branch's question. The paper uses the average for its headline (accounting) and documents the marginal variant explicitly (the 164× marginal-inscription branch above), rather than burying the choice. A future marginal-attribution study would be a legitimate companion, not a correction.
 
 ## 5. Findings
 
@@ -85,7 +108,7 @@ Measured from live `fee_history` captures, node count N=32,000 (real census). Tw
 
 **Fee-regime + node-count dependence:** the ratio tracks both the fee market and the replication factor. Under the earlier N=60K assumption the average was 0.156–0.172 (dimensionless) with 100% below 1×; at the real census N=32K it rises to ~0.22–0.29 with ~99–100% below 1× (a few high-fee blocks exceed coverage in the dated capture). The headline is a *distribution over time and parameters*, not a point.
 
-**Interpretation:** transaction fees cover, on average, roughly **22–29%** of the estimated 10-year replicated storage cost of an average block across the ≥32K observed nodes. Most sampled blocks' fees remain below their estimated storage cost. **Point-in-time discipline:** every figure in this section is a dated, capture-specific measurement — the time-series is live and growing (daily SCCR tracker, `com.bsahi.sccr-tracker.plist`), and the paper deliberately reports snapshots rather than a stationary number.
+**Interpretation:** transaction fees cover, on average, roughly **22–29%** of the estimated 10-year replicated storage cost of an average block across the ≥32K observed nodes. Most sampled blocks' fees remain below their estimated storage cost. **Point-in-time discipline:** every figure in this section is a dated, capture-specific measurement — the time-series is live and growing (daily SCCR tracker, `com.bsahi.sccr-tracker.plist`), and the paper deliberately reports snapshots rather than a stationary number. This is not a convenience but a consequence of the model: `cb(t) = C(t)/B_year(t)` is itself time-dependent (§4.1), so the ratio is a snapshot over its capture window by construction — block fullness, node costs, and fee levels all move between captures.
 
 ### 5.2 The inscription externality (marginal branch)
 
@@ -202,11 +225,13 @@ The correction increased the estimated SCCR by an order of magnitude but did not
 
 **Limitations:**
 1. **The node count (≥32K from the live census) is a lower bound**, not a complete enumeration — the addrman caps at 32,000 addresses, so the true reachable set is at least 32K, and independent estimates span ~10K–100K reachable nodes (pruned vs. archival). The SCCR is inversely proportional to node count: at the live baseline the average inverts above 1× only below ~7.1K nodes, and the "100% below 1×" claim breaks below ~49K nodes at the dated capture (see §5.4).
-2. **Node costs are homogeneous** in the model; hardware/bandwidth/electricity vary by geography and operator.
+2. **Node costs are homogeneous — and bundled.** Hardware/bandwidth/electricity vary by geography and operator; the model treats them as one scalar C = $925/yr. Because C is bundled (C = C_storage + C_bandwidth + C_misc, §4.1), the headline ratio is strictly a **storage-and-hosting coverage ratio**, not a pure-storage ratio, and the bandwidth-vs-storage decomposition is a documented future refinement — the RCIR and BCIR legs (§7 future work / `roadmap.md` Phase II/III).
 3. **10-year horizon is an assumption**; pruning shortens actual retention, permanent storage extends it.
 4. **No discounting; constant-cost assumption.** A one-time fee (USD/block) is compared against an undiscounted 10-yr storage-cost sum (USD/block); discounting the liability at r=5%/yr (8%/yr) reduces the present value by ~27% (45%). A declining $/GB storage-cost trend would likewise lower the future liability (the T=10 constant-cost figure is conservative in the same direction as the discounting caveat). Both effects mean the ratio overstates the liability as commonly valued.
 5. **Bandwidth is included in the fixed node cost (C) yet marginal bandwidth-propagation cost is excluded from the storage leg.** This is the fixed-vs-marginal distinction, not a double count: C prices the node's *average* bandwidth bill; the excluded term is the *marginal* cost of propagating one more block to one more node.
 6. **Marginal vs. average attribution** changes the per-byte cost by 164× (dimensionless) — the choice is explicit and documented, not hidden.
+
+7. **Why storage at all?** The paper does not claim storage is Bitcoin's most important resource — **it is simply the first measurable one**: the first long-lived resource with a reproducible cost estimate and a live fee attribution. Bandwidth, validation, UTXO, relay, and indexer serving are named research hypotheses with their own metrics (`roadmap.md` §4), none yet measured. Storage led because it could be measured, not because it ranks first in economic importance.
 
 **Future work (the resource-pricing program):**
 - **UTXO leg:** capture `getblockstats → utxo_size_inc` (already produced by agent-06, currently dropped at DB write)
@@ -240,7 +265,7 @@ We do not believe any of these falsifiers currently obtain; we list them so the 
 
 Following standard environmental-economics usage (Pigou, 1920; Coase, 1960), a **negative externality** arises when a transaction's cost is borne by parties who did not consent to the transaction. Applied to Bitcoin: an inscription's fee is paid by its creator; the long-term storage cost is borne by node operators who neither created the transaction nor were compensated for it. In mechanism terms this is a **two-sided** structure — the payer (transaction creator) and the bearer (node operator) are different agents, and the fee is a one-time congestion payment while the cost recurs over the storage horizon. Two qualifications are stated honestly:
 
-1. **Voluntary participation.** Node operators choose to run nodes (and may prune). The Pigouvian case is therefore weaker than for a physical externality (e.g. pollution) — the correct framing is an *unpriced but avoidable* cost, not an imposed one. Our problem statement's "arguments for no" (node operators choose; storage is cheap; pruned nodes avoid ~70–97% of the cost) are engaged directly in §5.
+1. **Voluntary participation.** Node operators choose to run nodes (and may prune). The Pigouvian case is therefore weaker than for a physical externality (e.g. pollution) — the correct framing is an *unpriced but avoidable* cost, not an imposed one. Our problem statement's "arguments for no" (node operators choose; storage is cheap; pruned nodes avoid ~70–97% of the cost) are engaged directly in §5. **Voluntary participation weakens the welfare interpretation, but not the measurement** — the ratio still quantifies what the fee market covers of a real, recurring cost borne by the storage-bearing class, whatever the operator's freedom to exit.
 2. **Measurement, not pricing.** This paper *measures* a ratio; it contains no price mechanism and proposes no policy. Whether the measured gap constitutes a welfare-relevant externality is left to the reader and the literature.
 
 ### 8.2 Related work and novelty
