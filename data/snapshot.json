@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-02T12:53:23.867Z",
+  "generated_at": "2026-08-02T13:28:18.096Z",
   "freshness_min": 0,
   "fees": {
-    "fastestFee": 2
+    "fastestFee": 1
   },
   "btc_price": 63084,
   "block_height": 960732,
@@ -11,21 +11,23 @@
   "forecast": [
     {
       "day_offset": 1,
-      "predicted_fastest_fee": 1.5,
+      "predicted_fastest_fee": 1,
       "trend": "stable"
     },
     {
       "day_offset": 2,
-      "predicted_fastest_fee": 1.5,
+      "predicted_fastest_fee": 1,
       "trend": "stable"
     },
     {
       "day_offset": 3,
-      "predicted_fastest_fee": 1.5,
+      "predicted_fastest_fee": 1,
       "trend": "stable"
     }
   ],
-  "alerts": [],
+  "alerts": [
+    "🛡 DE AGENT: last run 1264 min ago"
+  ],
   "history": [
     {
       "date": "2026-07-30",
