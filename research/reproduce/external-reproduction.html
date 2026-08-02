@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<title>External Reproduction — Bitcoin Resource Accounting</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/style.css">
+<style>body{font-family:-apple-system,sans-serif;max-width:820px;margin:0 auto;padding:2rem 1.25rem;line-height:1.6;color:#1d2733}
+h1{font-size:1.6rem} h2{font-size:1.3rem} h3{font-size:1.1rem}
+table{border-collapse:collapse;width:100%;margin:1rem 0}
+th,td{border:1px solid #d0d7de;padding:6px 10px;text-align:left;font-size:.9rem}
+th{background:#f6f8fa} pre{background:#f6f8fa;padding:1rem;overflow-x:auto;border-radius:6px}
+blockquote{border-left:3px solid #d4933a;margin:0;padding-left:1rem;color:#444}
+a{color:#b3541e} .back{font-size:.85rem}</style>
+</head><body>
+<p class="back"><a href="/research/">← Research</a></p>
+<h1>External Reproduction Log</h1>
+
+<p>**Status:** 🟡 IN PROGRESS — kit verified reproducible-by-stranger (fresh-clone</p>
+<p>simulation 2026-08-03 PASS); **actual external reproducer still NOT engaged —</p>
+<p>that is the one remaining human step (Prateek sends the recruit message).**</p>
+
+<p>---</p>
+
+<h2>✅ Fresh-clone simulation (2026-08-03) — the closest autonomous proxy</h2>
+
+<p>An uninvolved person was simulated exactly: fresh `git clone` of the public</p>
+<p>repo into a clean temp dir, then **only** the published instructions</p>
+<p>(`README.md` → &quot;Reproduce in 30 seconds&quot; + `research/reproduce/README.md` →</p>
+<p>&quot;Run all three&quot;) were followed. No insider knowledge, no extra files, no help.</p>
+
+<table>
+<tr><td>Path tested</td><td>Result</td></tr>
+<tr><th>`python3 tools/research/reproduce.py` (one-command)</th><th>✅ **PASS** — exit 0, prints avg **0.2186**, min 0.0584, max 0.8320, 171/171 below 1×, writes chart</th></tr>
+<tr><th>`bash research/reproduce/cross_check.sh` (all three)</th><th>✅ **PASS** — JS / Python / C all agree (avg 0.218605, min 0.058357, max 0.831961), VERDICT: ALL THREE AGREE</th></tr>
+<tr><th>`gcc -O2 -o reproduce_sccr reproduce_sccr.c -lm` (C from source)</th><th>✅ **PASS** — compiles clean on macOS, produces 0.2186</th></tr>
+<tr><th>Python 3.9 (system, no pip installs needed)</th><th>✅ works (stdlib only for compute; chart skips gracefully if matplotlib absent)</th></tr>
+<tr><th>Input data (171 entries, heights 960562→960732)</th><th>✅ committed + versioned in `input/fee_history_capture.json`; `reproduce.py` **defaults to it** (no DB needed)</th></tr>
+<tr><th>Node (JS impl)</th><th>✅ works from clone</th></tr>
+<tr><th>**Definitive re-test (post-push, 2026-08-03):** fresh clone of the **live GitHub repo** (`59573b0`), one-command path + `cross_check.sh`, then `git status`</th><th>✅ **PASS** — 0.2186, all three agree, working tree **completely clean** after all runs (deterministic, zero dirty state)</th></tr>
+</table>
+
+<h3>Gaps found and fixed by the simulation (all fixed, all committed)</h3>
+
+<p>1. **❌→✅ C binary missing in clones.** `cross_check.sh` step 3/3 called</p>
+<p>`./research/reproduce/reproduce_sccr`, but the binary is gitignored — a</p>
+<p>stranger following &quot;Run all three&quot; hit `No such file or directory` and the</p>
+<p>script failed (exit 1). **Fix:** `cross_check.sh` now auto-compiles the C</p>
+<p>source when the binary is absent (with a clear message + fallback gcc</p>
+<p>command).</p>
+<p>2. **❌→✅ Scary sqlite errors in JS step.** `storage-ratio.js` in frozen-input</p>
+<p>mode still tried DB queries (`no such table: block_stats / research_findings`</p>
+<p>printed to stderr) and overwrote the committed dated report file in the</p>
+<p>clone. **Fix:** `SCCR_INPUT_FILE` mode is now fully DB-free and</p>
+<p>side-effect-free — no sqlite queries, no research_findings insert, no report</p>
+<p>file written; output explicitly says &quot;frozen-input reproduction — no report</p>
+<p>written&quot;. Canonical live-DB behavior unchanged when env var absent.</p>
+<p>3. **❌→✅ Heights not sorted (contiguous-set but unordered).** A stranger</p>
+<p>checking `heights == list(range(960562, 960733))` would get `False` even</p>
+<p>though all 171 heights were present. **Fix:** `input/fee_history_capture.json`</p>
+<p>normalized to ascending height order — order-invariant computation (verified:</p>
+<p>all three implementations still produce identical avg/min/max, and per-block</p>
+<p>values unchanged), so this is a pure determinism improvement. Reference</p>
+<p>outputs (`output/reproduce_sccr_python.json`, `sccr_chart.png`) regenerated.</p>
+
+<h2>📦 Shareable package (for the human step)</h2>
+
+<li>**Repo (the whole package):** `https://github.com/prateekposwal/block-space-economics`</li>
+<p>(public; live at bitcoinsahi.com)</p>
+<li>**Protocol:** `research/reproduce/README.md` → *External reproduction protocol (3 steps)*</li>
+<li>**Input:** `research/reproduce/input/fee_history_capture.json` (171 entries, committed)</li>
+<li>**Expected output:** avg **0.2186**, min **0.0584**, max **0.8320**, 100% below 1×</li>
+<li>**Recruit message (copy-paste ready):** `research/reproduce/recruit-message.md`</li>
+
+<h2>⏳ The one remaining human step (requires Prateek)</h2>
+
+<p>External reproduction is **Prateek&#x27;s task**: an *uninvolved* person must run the</p>
+<p>3-step protocol. TELOS cannot recruit a real human, and autonomous posting is</p>
+<p>blocked on two gates:</p>
+
+<p>1. **arXiv is NOT yet live** (`TODO-bitcoin-oracle.md` R5: arXiv/Optech not</p>
+<p>submitted; awaiting Prateek&#x27;s arXiv account/ORCID/license). The community</p>
+<p>review plan&#x27;s outreach list is explicitly sequenced *after* the preprint</p>
+<p>URL exists, so those venues (Optech, Delving, bitcoin-dev, Chaincode,</p>
+<p>r/BitcoinEngineering) are not ready.</p>
+<p>2. **The Nostr publisher uses Prateek&#x27;s key** (`captured-data/nostr-key.json`,</p>
+<p>gitignored). Posting through `tools/marketing/publisher.js` would use his</p>
+<p>account — **not** something TELOS does without his explicit say-so.</p>
+
+<p>**What Prateek does (≈5 min):** open `research/reproduce/recruit-message.md`,</p>
+<p>copy the message into an email/DM to one person (friend, colleague, any</p>
+<p>technically-literate non-crypto person), and send. Then record the result</p>
+<p>below.</p>
+
+<h2>Result table (ready to fill)</h2>
+
+<table>
+<tr><td>Reproducer</td><td>Environment</td><td>Result</td><td>Notes</td></tr>
+<tr><th>**You (Prateek)**</th><th>macOS (darwin); Python 3.9 + Node + gcc</th><th>**0.2186** (Reference)</th><th>Reference run — the published numbers (avg 0.2186, min 0.0584, max 0.8320, 100% below 1×); confirmed by fresh-clone simulation 2026-08-03</th></tr>
+<tr><th>External #1</th><th>*(pending)*</th><th>*(pending)*</th><th></th></tr>
+<tr><th>External #2</th><th>*(pending)*</th><th>*(pending)*</th><th></th></tr>
+<tr><th>External #3</th><th>*(pending)*</th><th>*(pending)*</th><th></th></tr>
+</table>
+
+<h2>Phrasing rule</h2>
+
+<p>Use **&quot;Independently reproduced by external participants following the published</p>
+<p>reproduction protocol&quot;** — **NOT** &quot;externally verified.&quot;</p>
+
+<h2>When a result lands, also record the detail row here:</h2>
+
+<table>
+<tr><td>Date</td><td>Reproducer</td><td>Language/Env</td><td>Avg SCCR</td><td>Min</td><td>Max</td><td>Below 1×</td><td>Per-block max dev</td><td>Verdict</td></tr>
+<tr><th>*(pending)*</th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr>
+</table>
+
+<h2>✅ GO / SUBMIT TRIGGER — &quot;reproducibility milestone achieved&quot; (advisor rule)</h2>
+
+<blockquote>**Milestone achieved** when any external participant replies with the equivalent</blockquote>
+<blockquote>of: **&quot;I cloned it, ran one command, and got 0.2186&quot;** — i.e., an uninvolved human</blockquote>
+<blockquote>independently confirms the published numbers from a clean clone, following the</blockquote>
+<blockquote>published protocol.</blockquote>
+<blockquote></blockquote>
+<blockquote>**→ milestone achieved → stop polishing → submit.**</blockquote>
+<blockquote></blockquote>
+<blockquote>Until that reply lands, the submission gate stays closed. When it lands: record</blockquote>
+<blockquote>the reply (quote + date + reproducer, anonymous ok) in this log, then submit.</blockquote>
+
+<p>**Recruit assets (2026-08-03):** copy-paste message `recruit-message.md` ·</p>
+<p>personalized variants `recruit-message-personalized.md` · verified contact list</p>
+<p>`external-reproducer-contacts.md` (8 verified channels; no fabricated emails).</p>
+
+<p>---</p>
+
+<p>*Bitcoin Sahi Research — external reproduction log (working-paper v2.1.0,</p>
+<p>model-spec v2.0.1). Simulation + fixes 2026-08-03.*</p>
+
+</body></html>
