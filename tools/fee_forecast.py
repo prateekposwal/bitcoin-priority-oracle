@@ -169,9 +169,12 @@ def linear_regression(dates, fees):
 
 def load_history_fallback():
     """Runner-safe fallback: when the spool index is empty (CI runner has no
-    local spool), load tools/fee_history.json (committed daily by research-monitor)
-    as the series. Returns [(captureTime, value)]."""
-    hist_file = os.path.join(os.path.dirname(__file__), 'fee_history.json')
+    local spool), load the committed data/fee_history.json (rich, written by the
+    local snapshot agent) — NOT the 1-entry tools/ stub — as the series.
+    Returns [(captureTime, value)]."""
+    hist_file = os.path.join(os.path.dirname(__file__), '..', 'data', 'fee_history.json')
+    if not os.path.exists(hist_file):
+        hist_file = os.path.join(os.path.dirname(__file__), 'fee_history.json')
     if not os.path.exists(hist_file):
         return []
     try:

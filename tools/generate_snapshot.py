@@ -17,14 +17,18 @@ def fetch(url, timeout=15):
         return r.read().decode('utf-8')
 
 def load_local(name, fb):
-    p = os.path.join(REPO, 'captured-data', name)
-    if not os.path.exists(p):
-        p = os.path.join(REPO, 'tools', name)
-    try:
-        with open(p) as f:
-            return json.load(f)
-    except Exception:
-        return fb
+    # Priority: committed rich data/ first, then captured-data/, then tools/ stubs.
+    # This stops the GH-Actions runner from overwriting live history with the
+    # 1-entry tools/ stub (the pre-fix bug that made the site show empty charts).
+    for base in (os.path.join(REPO, 'data'), os.path.join(REPO, 'captured-data'), os.path.join(REPO, 'tools')):
+        p = os.path.join(base, name)
+        if os.path.exists(p):
+            try:
+                with open(p) as f:
+                    return json.load(f)
+            except Exception:
+                continue
+    return fb
 
 def write_on_change(name, data):
     os.makedirs(DATA_DIR, exist_ok=True)

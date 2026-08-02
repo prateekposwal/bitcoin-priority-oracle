@@ -315,10 +315,18 @@
     try {
       fetch('/data/snapshot.json').then(function(r) { return r.json(); }).then(function(s) {
         if (!s || !s.generated_at) return;
-        if ((Date.now() - new Date(s.generated_at).getTime()) / 60000 > 120) return;
-        updateVisibleStats({ fees: s.fees || {}, mempool: { count: s.mempool_tx }, block_height: s.block_height });
+        var ageMin = (Date.now() - new Date(s.generated_at).getTime()) / 60000;
         var n = document.getElementById('vs-note');
-        if (n) n.textContent = 'Snapshot from ' + s.generated_at.slice(0, 16) + ' · live data refreshes every 60s';
+        if (!n) return;
+        if (ageMin > 120) {
+          n.textContent = '⚠ Data stale — last snapshot ' + Math.round(ageMin / 60) + 'h ago (pipeline check needed)';
+          n.style.color = '#E0653A';
+          return;
+        }
+        updateVisibleStats({ fees: s.fees || {}, mempool: { count: s.mempool_tx }, block_height: s.block_height });
+        var ago = ageMin < 90 ? Math.round(ageMin) + ' min ago' : Math.round(ageMin / 60) + 'h ago';
+        n.textContent = 'Snapshot from ' + s.generated_at.slice(0, 16) + ' · ' + ago + ' · live data refreshes every 60s';
+        n.style.color = '';
       }).catch(function() {});
     } catch (e) {}
 

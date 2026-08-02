@@ -321,7 +321,7 @@ Each new block strengthens every block that came before it. To rewrite history, 
 </div>
 <div style="background:#1A1612;border:1px solid #3A3228;border-radius:10px;padding:16px;display:flex;align-items:center;gap:16px;">
 <span style="font-size:1.5rem;color:#D4933A;font-weight:800;">⬡</span>
-<div><div style="font-weight:600;color:#EADCC8;margin-bottom:2px;">Layer 3: Research Agents</div><div style="font-size:.85rem;color:#6A5D4E;">5 specialist agents (Bitcoin Core, Lightning, APIs, General, Academic) scanning GitHub, arXiv, forums every 4 hours. First empirical finding: <strong style="color:#D4933A;">Storage Cost Coverage Ratio: 0.1719</strong> — fees cover ~17.2% of the estimated 10-year storage cost.</div></div>
+<div><div style="font-weight:600;color:#EADCC8;margin-bottom:2px;">Layer 3: Research Agents</div><div style="font-size:.85rem;color:#6A5D4E;">5 specialist agents (Bitcoin Core, Lightning, APIs, General, Academic) scanning GitHub, arXiv, forums every 4 hours. First empirical finding: <strong style="color:#D4933A;">Storage Cost Coverage Ratio: 0.2252</strong> — fees cover ~22.5% of the estimated 10-year storage cost at the real node census (N=32K).</div></div>
 </div>
 <div style="background:#1A1612;border:1px solid #3A3228;border-radius:10px;padding:16px;display:flex;align-items:center;gap:16px;">
 <span style="font-size:1.5rem;color:#D4933A;font-weight:800;">⬡</span>
@@ -334,7 +334,7 @@ Each new block strengthens every block that came before it. To rewrite history, 
 <h2>Why <span>Block Space</span> Matters</h2>
 <p>Every Bitcoin transaction bids for a scarce resource: <strong>space in the next block</strong>. The fee market determines who gets in. But the fee market only prices congestion — not the permanent cost of storing data across every full node long-term.</p>
 <p>Our research (<a href="https://github.com/prateekposwal/block-space-economics/blob/main/research/problem_statement.md">The Bitcoin Block Space Problem</a>) frames this question. In July 2026, we produced the first empirical measurement (corrected to v2.0.0 after an internal audit — see the <a href="/research/verification_appendix.html">reproducibility note</a>):</p>
-<div class="highlight"><strong id="storage-ratio-value">Storage Cost Coverage Ratio: 0.1719</strong> — Current Bitcoin transaction fees cover ~17.2% of the estimated 10-year storage cost across 60,000 nodes. 100% of sampled blocks fall below the 1× threshold.</div>
+<div class="highlight"><strong id="storage-ratio-value">Storage Cost Coverage Ratio: 0.2252</strong> — Current Bitcoin transaction fees cover ~22.5% of the estimated 10-year storage cost across the real node census (N=32K). 100% of sampled blocks fall below the 1× threshold.</div>
  <p>Based on 158 blocks sampled over 24 hours. This is an open research question — we're publishing the data and methodology for the community to verify and build upon.</p>
  </div>
 

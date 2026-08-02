@@ -12,9 +12,9 @@ var passed = 0;
 
 function test(name, fn) { tests.push({ name: name, fn: fn }); }
 
-test('registry loads all 13 schemas', function() {
+test('registry loads all 17 schemas (13 + block_hash, raw_block_tip, hashrate, mempool_recent — 2026-08-02)', function() {
   var all = registry.loadAll();
-  assert.strictEqual(Object.keys(all).length, 13, '13 schemas');
+  assert.strictEqual(Object.keys(all).length, registry.SOURCES.length, 'schemas match SOURCES registry');
   assert.ok(all.fees && all.fees.schema && all.fees.validate, 'fees module shape');
   assert.strictEqual(all.fees.schema.name, 'capture.fees');
   assert.ok(all.block_height.validate(960410).ok, 'scalar block_height');
@@ -22,14 +22,14 @@ test('registry loads all 13 schemas', function() {
 
 test('registry init writes schemas.json snapshot', function() {
   var snap = registry.init();
-  assert.strictEqual(snap.count, 13);
+  assert.strictEqual(snap.count, registry.SOURCES.length);
   assert.ok(fs.existsSync(path.resolve(__dirname, '..', '..', 'captured-data', 'spool', 'schemas.json')));
 });
 
 test('all real captured samples validate', function() {
   return spoolMod.init().then(function(s) {
     return Promise.all(registry.SOURCES.map(function(src) {
-      return Promise.all(['2026-07-31', '2026-07-30'].map(function(day) {
+      return Promise.all(['2026-08-02', '2026-07-31', '2026-07-30'].map(function(day) { // 08-02 added: new sources (block_hash, raw_block_tip, hashrate, mempool_recent) have real samples from today
         return s.resolve(src, day);
       })).then(function(byDay) {
         var all = byDay[0].concat(byDay[1]);

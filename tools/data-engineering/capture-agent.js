@@ -14,14 +14,99 @@ function localTsString(d) {
     String(d.getSeconds()).padStart(2, '0');
 }
 
+
+function chainFetch(ep, cfg) {
+  // Chained capture: first URL's trimmed body substitutes ':hash' in subsequent URLs.
+  var urls = ep.chain || [];
+  var chainCfg = { timeoutMs: ep.timeoutMs || cfg.timeoutMs || 30000 };
+  var cur = null;
+  var firstBody = null; // first hop's body = the :hash substitution source (keep it, cur gets overwritten)
+  var step = 0;
+  function one(url) {
+    return new Promise(function(resolve) {
+      var u = new URL(url);
+      var req = https.request({
+        hostname: u.hostname, path: u.pathname + u.search, method: 'GET',
+        timeout: chainCfg.timeoutMs, autoSelectFamily: true, headers: { 'User-Agent': 'BitcoinSahi/1.0' }
+      }, function(res) {
+        var body = '';
+        var fetchedAt = new Date().toISOString();
+        res.on('data', function(c) { body += c; });
+        res.on('end', function() {
+          resolve({ status: res.statusCode, data: body, rawBody: body, fetchedAt: fetchedAt });
+        });
+      });
+      req.on('error', function(e) { resolve({ status: 0, error: e.message, fetchedAt: new Date().toISOString() }); });
+      req.on('timeout', function() { req.destroy(); resolve({ status: 0, error: 'timeout', fetchedAt: new Date().toISOString() }); });
+      req.end();
+    });
+  }
+  function next() {
+    if (step >= urls.length) return Promise.resolve(cur);
+    var url = urls[step];
+    if (step > 0 && cur && cur.rawBody && url.indexOf(':hash') !== -1) {
+      url = url.replace(':hash', cur.rawBody.trim());
+    }
+    return one(url).then(function(r) {
+      if (r.status === 0 || r.status >= 400) { r.step = step; return r; }
+      cur = r;
+      if (step === 0) firstBody = r.rawBody; // tip hash hop
+      step++;
+      return next();
+    });
+  }
+  return next().then(function(r) {
+    if (r && r.step !== undefined && r.status === 0) return r; // failed mid-chain
+    // Final step: shape a capture object for the raw-block source.
+    var hash = firstBody && /^[0-9a-f]{64}$/i.test(firstBody.trim()) ? firstBody.trim() : null;
+    if (hash === null) return { status: 0, error: 'chain: invalid tip hash', fetchedAt: new Date().toISOString() };
+    var rawHex = (cur && typeof cur.rawBody === 'string') ? cur.rawBody.trim() : '';
+    if (!rawHex) return { status: 0, error: 'chain: empty raw block', fetchedAt: new Date().toISOString() };
+    return { status: 200, data: { blockHash: hash, rawHex: rawHex, size: rawHex.length / 2, fetchedAt: cur.fetchedAt }, fetchedAt: cur.fetchedAt };
+  });
+}
+
 function defaultFetch(ep, cfg) {
+  if (ep.chain && ep.chain.length > 1) {
+    return chainFetch(ep, cfg);
+  }
+  return fetchUrl(ep.url, cfg.timeoutMs).then(function(res) {
+    if (res.status !== 0 && res.status < 400) return res;
+    // Primary failed — try fallbacks (single point of failure protection for the
+    // mempool.space core series; added 2026-08-02).
+    if (Array.isArray(ep.fallbacks) && ep.fallbacks.length) {
+      var fbs = ep.fallbacks.slice();
+      var attempt = function() {
+        if (!fbs.length) return res;
+        var fb = fbs.shift();
+        return fetchUrl(fb.url, fb.timeoutMs || cfg.timeoutMs).then(function(r) {
+          if (r.status === 0 || r.status >= 400) return attempt();
+          if (typeof fb.adapt === 'function') {
+            try {
+              var adapted = fb.adapt(r.data);
+              return { status: 200, data: adapted, fetchedAt: r.fetchedAt, source: fb.label || 'fallback' };
+            } catch (e) {
+              return attempt();
+            }
+          }
+          return { status: r.status, data: r.data, fetchedAt: r.fetchedAt, source: fb.label || 'fallback' };
+        });
+      };
+      return attempt();
+    }
+    return res;
+  });
+}
+
+function fetchUrl(url, timeoutMs) {
   return new Promise(function(resolve) {
-    var u = new URL(ep.url);
+    var u = new URL(url);
     var req = https.request({
       hostname: u.hostname,
       path: u.pathname + u.search,
       method: 'GET',
-      timeout: cfg.timeoutMs,
+      timeout: timeoutMs,
+      autoSelectFamily: true, // 2026-08-02: Happy Eyeballs — race v4/v6; network fluctuates per-host
       headers: { 'User-Agent': 'BitcoinSahi/1.0' }
     }, function(res) {
       var body = '';

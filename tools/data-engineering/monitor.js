@@ -17,12 +17,19 @@ function saveErrorHistory(history) {
   } catch (e) {}
 }
 
+function getTimeoutMs(endpoint) {
+  // 2026-08-02: hard fetch timeout is now decoupled from the health threshold.
+  // maxLatency = healthy threshold; timeoutMs = how long we wait before aborting.
+  if (endpoint.timeoutMs) return endpoint.timeoutMs;
+  return (endpoint.maxLatency || 3000) + 2000;
+}
+
 function fetchEndpoint(url, timeout) {
   return new Promise(function(resolve) {
     timeout = timeout || 10000;
     try {
       var u = new URL(url);
-      var opts = { hostname: u.hostname, path: u.pathname + u.search, method: 'GET', timeout: timeout, headers: { 'User-Agent': 'DataEngineMonitor/1.0' } };
+      var opts = { hostname: u.hostname, path: u.pathname + u.search, method: 'GET', timeout: timeout, autoSelectFamily: true, headers: { 'User-Agent': 'DataEngineMonitor/1.0' } }; // autoSelectFamily (Happy Eyeballs) — 2026-08-02: network fluctuates (blockstream/blockchair/alternative.me black-hole v6; mempool.space v4 dropped intermittently). Race v4/v6, use whichever connects.
       var start = Date.now();
       var req = https.request(opts, function(res) {
         var body = '';
@@ -38,31 +45,96 @@ function fetchEndpoint(url, timeout) {
   });
 }
 
-function checkEndpoint(endpoint) {
-  return fetchEndpoint(endpoint.url, (endpoint.maxLatency || 3000) + 2000)
-    .then(function(res) {
-      var ok = res.ok && (!endpoint.maxLatency || res.latency <= endpoint.maxLatency);
+function fetchChain(endpoint, timeout) {
+  // Multi-step chain: first URL's body (trimmed) is used to substitute ':hash' in later URLs.
+  // Used for raw_block_tip: tip hash → raw block (same host keeps it fast and single-tenant).
+  var urls = endpoint.chain || [];
+  var cur = null;
+  var step = 0;
+  function next() {
+    if (step >= urls.length) {
+      // Last step succeeded — return its result as the endpoint result.
+      return Promise.resolve(cur);
+    }
+    var url = urls[step];
+    if (step > 0 && cur && cur.body && url.indexOf(':hash') !== -1) {
+      url = url.replace(':hash', cur.body.trim());
+    }
+    var start = Date.now();
+    return fetchEndpoint(url, timeout).then(function(r) {
+      if (!r.ok) { r.step = step; return r; }
+      cur = r;
+      step++;
+      return next();
+    }).catch(function(e) {
+      return { ok: false, status: 0, latency: Date.now() - start, size: 0, error: 'chain:' + e.message, step: step };
+    });
+  }
+  return next();
+}
+
+function checkEndpoint(endpoint, retriesLeft) {
+  var maxLatency = endpoint.maxLatency || getTimeoutMs(endpoint);
+  var timeout = getTimeoutMs(endpoint);
+  var attempt = function() {
+    var fetch = (endpoint.chain && endpoint.chain.length > 1) ? fetchChain(endpoint, timeout) : fetchEndpoint(endpoint.url, timeout);
+    return fetch.then(function(res) {
+      var ok = res.ok && res.latency <= maxLatency;
       return {
         key: endpoint.key,
         ok: ok,
         latency: res.latency,
         status: res.status,
         size: res.size,
-        error: res.error || null,
+        error: res.error || (res.ok ? null : (res.status ? ('HTTP ' + res.status) : 'unhealthy')) ,
         checkedAt: new Date().toISOString(),
         dataAge: res.ok ? 'current' : 'stale',
+        step: res.step,
       };
     });
+  };
+  // Per-endpoint override: heavy endpoints declare retries:0 (their timeouts are already generous);
+  // global default comes from CONFIG.monitoring.retries.
+  if (endpoint.retries !== undefined) retriesLeft = endpoint.retries;
+  else if (retriesLeft === undefined) retriesLeft = 1;
+  return attempt().then(function(r) {
+    if (!r.ok && retriesLeft > 0 && r.error === 'timeout') {
+      // Transient-slow tolerance: retry once before recording a failure.
+      return new Promise(function(resolve) { setTimeout(resolve, 1000); })
+        .then(attempt)
+        .then(function(r2) { if (!r2.ok) r2.retried = true; return r2; });
+    }
+    return r;
+  });
 }
 
 function checkAllEndpoints(endpoints) {
   if (!Array.isArray(endpoints) || endpoints.length === 0) {
     return Promise.resolve({ results: {}, healthy: 0, unhealthy: 0, total: 0, timestamp: new Date().toISOString() });
   }
+  var cfg = {};
+  try { cfg = require('./config.js').CONFIG; } catch (e) {}
+  var CONCURRENCY = (cfg && cfg.monitoring && cfg.monitoring.concurrency) || 4;
+  var retries = (cfg && cfg.monitoring && cfg.monitoring.retries !== undefined) ? cfg.monitoring.retries : 1;
+
+  // Bounded-concurrency pool: was Promise.all (13+ simultaneous) which saturated the
+  // mempool.space CDN and caused whole-host timeout cascades. Now 4 at a time.
   var tasks = endpoints.map(function(ep) {
-    return checkEndpoint(ep).then(function(r) { return { key: ep.key, result: r }; });
+    return function() { return checkEndpoint(ep, retries).then(function(r) { return { key: ep.key, result: r }; }); };
   });
-  return Promise.all(tasks).then(function(results) {
+  var results = [];
+  var idx = 0;
+  function next() {
+    if (idx >= tasks.length) return Promise.resolve();
+    var task = tasks[idx++];
+    return task().then(function(r) {
+      results.push(r);
+      return next();
+    });
+  }
+  var runners = [];
+  for (var i = 0; i < Math.min(CONCURRENCY, tasks.length); i++) runners.push(next());
+  return Promise.all(runners).then(function() {
     var healthy = 0, unhealthy = 0;
     var resultsMap = {};
     results.forEach(function(item) {
@@ -93,7 +165,15 @@ function getFreshnessReport(dataDir) {
           var cur = JSON.parse(fs.readFileSync(path.join(curDir, f), 'utf8'));
           var lastSeenMs = new Date(cur.lastSeen).getTime();
           var ageMinutes = Math.round((now - lastSeenMs) / 60000);
-          var healthy = ageMinutes <= require('./config.js').staleAfterMinutes();
+          // 2026-08-02: honor per-source cadence. Sources like node_census legitimately
+          // run daily (expectedIntervalMinutes stored in the cursor); a single global
+          // staleAfterMinutes made a healthy daily census look stale and cost quality
+          // score points. Base threshold = global staleAfterMinutes, raised for slow
+          // sources to their own expected interval + grace (census is 60*24 = daily).
+          var expectedMin = cur.expectedIntervalMinutes || 0;
+          var bound = require('./config.js').staleAfterMinutes();
+          if (expectedMin > 0) bound = Math.max(bound, expectedMin + 60);
+          var healthy = ageMinutes <= bound;
           report.sources[src] = { lastCapture: cur.lastCycleTs || null, ageMinutes: ageMinutes, healthy: healthy };
           if (lastSeenMs < oldestMs) oldestMs = lastSeenMs;
           if (lastSeenMs > newestMs) newestMs = lastSeenMs;
@@ -140,9 +220,12 @@ function rootFileFreshness(dataDir, report) {
   return report;
 }
 
-function getErrorReport(endpoints) {
-  // 1 round per cycle + 12-round sliding window (stabilizes vs transient 3-round noise)
-  return checkAllEndpoints(endpoints).then(function(round) {
+function getErrorReport(endpoints, round) {
+  // 1 round per cycle + 12-round sliding window (stabilizes vs transient 3-round noise).
+  // `round` (optional) is a precomputed checkAllEndpoints result — avoids a 2nd full
+  // endpoint pass in the hourly cycle (3 passes/cycle -> 1 pass/cycle, 2026-08-02).
+  var useRound = round || { results: {}, healthy: 0, unhealthy: 0, total: 0 };
+  return (round ? Promise.resolve(round) : checkAllEndpoints(endpoints)).then(function(round) {
     var history = loadErrorHistory();
     var okMap = {};
     Object.keys(round.results).forEach(function(key) { okMap[key] = round.results[key].ok; });
@@ -170,7 +253,7 @@ function getErrorReport(endpoints) {
   });
 }
 
-function getDataQualityScore() {
+function getDataQualityScore(precomputedHealth) {
   var endpoints = [];
   try {
     var configPath = path.join(__dirname, 'config.js');
@@ -181,7 +264,8 @@ function getDataQualityScore() {
       }
     }
   } catch (e) {}
-  return checkAllEndpoints(endpoints).then(function(healthResult) {
+  var healthPromise = precomputedHealth ? Promise.resolve(precomputedHealth) : checkAllEndpoints(endpoints);
+  return healthPromise.then(function(healthResult) {
     var healthyCount = healthResult.healthy;
     var totalCount = healthResult.total;
     var dataDir = path.join(__dirname, '..', '..', 'captured-data');
@@ -197,16 +281,21 @@ function getDataQualityScore() {
       sourceKeys.forEach(function(k) { if (freshness.sources[k].healthy) healthySources++; });
       freshnessScore = Math.round((healthySources / sourceKeys.length) * 30);
     }
-    return getErrorReport(endpoints).then(function(errorReport) {
+    return getErrorReport(endpoints, healthResult).then(function(errorReport) {
       var reliabilityScore = 0;
       if (errorReport.errorRate < 5) { reliabilityScore = 30; }
       else if (errorReport.errorRate < 10) { reliabilityScore = 20; }
       else if (errorReport.errorRate < 20) { reliabilityScore = 10; }
       var latencyScores = [];
-      Object.keys(healthResult.results).forEach(function(k) {
-        var r = healthResult.results[k];
-        if (r.latency <= 2000) { latencyScores.push(20); }
-        else if (r.latency <= 4000) { latencyScores.push(10); }
+      endpoints.forEach(function(ep) {
+        var r = healthResult.results[ep.key];
+        if (!r) return;
+        // 2026-08-02: latency is scored RELATIVE to each endpoint's configured health bound
+        // (maxLatency). A 19s mempool_recent with maxLatency 30s is healthy; the old fixed
+        // 2s/4s buckets made every legitimately-slow endpoint score 0 even when healthy.
+        var bound = ep.maxLatency || getTimeoutMs(ep);
+        if (r.latency <= bound * 0.4) { latencyScores.push(20); }
+        else if (r.latency <= bound) { latencyScores.push(10); }
         else { latencyScores.push(0); }
       });
       var latencyScore = latencyScores.length > 0 ? Math.round(latencyScores.reduce(function(a, b) { return a + b; }, 0) / latencyScores.length) : 0;

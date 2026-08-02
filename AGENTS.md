@@ -1,4 +1,4 @@
-# Bitcoin Priority Oracle — Research Context
+# Bitcoin Block Space — Research Context
 
 ## Core Operating Principle — NEVER CONFUSE WITH UNDONE WORK (Architect Mandate, 2026-08-01)
 
@@ -13,18 +13,23 @@ Every session in this repo MUST honor these load-bearing rules:
    and structural gaps; propose or execute the fix that closes them. Do not stop at "task complete."
 
 ## Project Identity
-- **Name:** Bitcoin Priority Oracle
+- **Name:** Bitcoin Block Space (Bitcoin Sahi)
 - **Domain:** Bitcoin block space economics
 - **Repo:** bitcoinsahi.com
-- **Deployed URL:** bitcoinsahi.com (DNS pending)
+- **Deployed URL:** bitcoinsahi.com (live, GitHub Pages — DNS pointed 2026-08-02)
+- **Note:** v1 (priority oracle) and v2 (externality fee) are DEAD — refuted on Reddit for sound economic reasons. Successor is open research into unpriced state storage (SCCR). Never repoint anything to `bitcoin-priority-oracle`.
 
 ## Domain Sources
 ### Primary Sources (fetch before answering)
 - [mempool.space fees](https://mempool.space/api/v1/fees/recommended)
-- [blockchain.info BTC price](https://blockchain.info/ticker)
-- [blockchain.info UTXO count](https://blockchain.info/q/utxocount)
-- [ordinals.com stats](https://ordinals.com/api/stats)
-- [BIP-110 signaling](https://wickedsmartbitcoin.com/api/bip110)
+- [blockstream.info](https://blockstream.info/api) — fee/blocks failover
+- [blockchair.com](https://api.blockchair.com) — UTXO outputs proxy + redundancy
+- [CoinPaprika BTC price](https://api.coinpaprika.com/v1/tickers/btc-bitcoin)
+
+### Dead sources (DO NOT fetch — 404, documented in tools/data-engineering/config.js `deadSources`)
+- ~~blockchain.info UTXO count~~ (404; proxied via blockchair outputs)
+- ~~ordinals.com stats~~ (404; inscription stats via fetch_inscription_stats.py)
+- ~~wickedsmartbitcoin BIP-110 signaling~~ (404, ~0.1% signaling, DOA)
 
 ### Community
 - [r/BitcoinEngineering](https://reddit.com/r/BitcoinEngineering)
@@ -49,7 +54,7 @@ Every session in this repo MUST honor these load-bearing rules:
 - **BIP-110 analyzed** — ~0.1% miner signaling, DOA. Michael Saylor called it "iatrogenic."
 - **r/BitcoinEngineering discussion live** — /t/2750
 - **Monetization plan** — Phase R4 in TODO: API tiers ($50–$500/mo), consulting, annual report
-- **Domain ready** — bitcoinsahi.com, DNS not yet pointed
+- **Domain ready** — bitcoinsahi.com live on GitHub Pages (DNS pointed)
 - **Pruned analysis completed** — Inscriptions are 0.91% of block space. Unavoidable cost: ~$2.53/yr/node. Negligible at current volumes.
 
 ## Key Numbers
@@ -503,3 +508,284 @@ Every session in this repo MUST honor these load-bearing rules:
 - Quality: healthy
 - Forecast: holt-linear-trend · stable · regime=normal (349 pts)
 - M4: 4/7 clean cycles · bridgeFlipped=false
+## Session Handoff — 2026-08-01T21:56:53.962Z
+
+### Current State
+- Session mood: neutral
+- Active work: cycle 53 · bridge=on · M4 cleanCycles=5/7
+- Forecast: holt-linear-trend · stable · rmse=1.15 (348 pts)
+
+### Decisions Made
+- M4 gate: cleanCycles=5/7 (no flip)
+
+### Open Issues
+- 3 endpoints unhealthy
+
+### Metrics
+- Quality: healthy
+- Forecast: holt-linear-trend · stable · regime=normal (348 pts)
+- M4: 5/7 clean cycles · bridgeFlipped=false
+## Session Handoff — 2026-08-01T23:29:58.338Z
+
+### Current State
+- Session mood: neutral
+- Active work: cycle 54 · bridge=on · M4 cleanCycles=6/7
+- Forecast: holt-linear-trend · falling · rmse=1.151 (351 pts)
+
+### Decisions Made
+- M4 gate: cleanCycles=6/7 (no flip)
+
+### Open Issues
+- ORCHESTRATOR: heartbeat 104 min ago
+- 13 endpoints unhealthy
+
+### Metrics
+- Quality: degraded
+- Forecast: holt-linear-trend · falling · regime=normal (351 pts)
+- M4: 6/7 clean cycles · bridgeFlipped=false
+## Session Handoff — 2026-08-01T23:31:13.668Z
+
+### Current State
+- Session mood: neutral
+- Active work: cycle 54 · bridge=off · M4 cleanCycles=7/7
+- Forecast: holt-linear-trend · falling · rmse=1.151 (351 pts)
+
+### Decisions Made
+- **M4 COMPLETE**: bridge disabled at 2026-08-01T23:31:13.667Z after 7 clean cycles
+
+### Open Issues
+- ORCHESTRATOR: heartbeat 104 min ago
+- 13 endpoints unhealthy
+
+### Metrics
+- Quality: degraded
+- Forecast: holt-linear-trend · falling · regime=normal (351 pts)
+- M4: 7/7 clean cycles · bridgeFlipped=true
+## Session Handoff — 2026-08-02T00:42:33.864Z
+
+### Current State
+- Session mood: neutral
+- Active work: cycle 55 · bridge=off · M4 cleanCycles=7/7
+- Forecast: holt-linear-trend · stable · rmse=1.15 (352 pts)
+
+### Decisions Made
+- M4 gate: cleanCycles=7/7 (no flip — already flipped)
+
+### Open Issues
+- ORCHESTRATOR: heartbeat 177 min ago
+- 11 endpoints unhealthy
+- 1 sources stale (>120min old)
+
+### Metrics
+- Quality: degraded
+- Forecast: holt-linear-trend · stable · regime=normal (352 pts)
+- M4: 7/7 clean cycles · bridgeFlipped=true
+## Session Handoff — 2026-08-02T01:43:48.124Z
+
+### Current State
+- Session mood: neutral
+- Active work: cycle 56 · bridge=off · M4 cleanCycles=8/7
+- Forecast: holt-linear-trend · stable · rmse=1.147 (354 pts)
+
+### Decisions Made
+- M4 gate: cleanCycles=8/7 (no flip — already flipped)
+
+### Open Issues
+- DE AGENT: last run 95 min ago
+- ORCHESTRATOR: heartbeat 200 min ago
+- 9 endpoints unhealthy
+- 1 sources stale (>120min old)
+
+### Metrics
+- Quality: degraded
+- Forecast: holt-linear-trend · stable · regime=normal (354 pts)
+- M4: 8/7 clean cycles · bridgeFlipped=true
+## Session Handoff — 2026-08-02T02:46:56.963Z
+
+### Current State
+- Session mood: neutral
+- Active work: cycle 57 · bridge=off · M4 cleanCycles=9/7
+- Forecast: holt-linear-trend · stable · rmse=1.147 (354 pts)
+
+### Decisions Made
+- M4 gate: cleanCycles=9/7 (no flip — already flipped)
+
+### Open Issues
+- DE AGENT: last run 95 min ago
+- ORCHESTRATOR: heartbeat 200 min ago
+- 1 endpoints unhealthy
+- 1 sources stale (>120min old)
+
+### Metrics
+- Quality: degraded
+- Forecast: holt-linear-trend · stable · regime=normal (354 pts)
+- M4: 9/7 clean cycles · bridgeFlipped=true
+## Session Handoff — 2026-08-02T04:16:23.191Z
+
+### Current State
+- Session mood: neutral
+- Active work: cycle 58 · bridge=off · M4 cleanCycles=10/7
+- Forecast: holt-linear-trend · stable · rmse=1.149 (355 pts)
+
+### Decisions Made
+- M4 gate: cleanCycles=10/7 (no flip — already flipped)
+
+### Open Issues
+- DE AGENT: last run 95 min ago
+- ORCHESTRATOR: heartbeat 200 min ago
+- 3 endpoints unhealthy
+- 1 sources stale (>120min old)
+
+### Metrics
+- Quality: degraded
+- Forecast: holt-linear-trend · stable · regime=normal (355 pts)
+- M4: 10/7 clean cycles · bridgeFlipped=true
+## Session Handoff — 2026-08-02T05:20:10.222Z
+
+### Current State
+- Session mood: neutral
+- Active work: cycle 59 · bridge=off · M4 cleanCycles=11/7
+- Forecast: holt-linear-trend · stable · rmse=1.148 (356 pts)
+
+### Decisions Made
+- M4 gate: cleanCycles=11/7 (no flip — already flipped)
+
+### Open Issues
+- DE AGENT: last run 95 min ago
+- ORCHESTRATOR: heartbeat 200 min ago
+- 1 endpoints unhealthy
+- 2 sources stale (>120min old)
+
+### Metrics
+- Quality: degraded
+- Forecast: holt-linear-trend · stable · regime=normal (356 pts)
+- M4: 11/7 clean cycles · bridgeFlipped=true
+## Session Handoff — 2026-08-02T06:26:21.811Z
+
+### Current State
+- Session mood: neutral
+- Active work: cycle 60 · bridge=off · M4 cleanCycles=12/7
+- Forecast: holt-linear-trend · stable · rmse=1.147 (357 pts)
+
+### Decisions Made
+- M4 gate: cleanCycles=12/7 (no flip — already flipped)
+
+### Open Issues
+- DE AGENT: last run 95 min ago
+- ORCHESTRATOR: heartbeat 200 min ago
+- 1 endpoints unhealthy
+- 2 sources stale (>120min old)
+
+### Metrics
+- Quality: degraded
+- Forecast: holt-linear-trend · stable · regime=normal (357 pts)
+- M4: 12/7 clean cycles · bridgeFlipped=true
+## Session Handoff — 2026-08-02T07:02:40.497Z
+
+### Current State
+- Session mood: neutral
+- Active work: cycle 61 · bridge=off · M4 cleanCycles=0/7
+- Forecast: holt-linear-trend · stable · rmse=1.146 (358 pts)
+
+### Decisions Made
+- *(No decisions recorded)*
+
+### Open Issues
+- 13 endpoints unhealthy
+- Data quality score below 60 (40)
+- 1 sources stale (>120min old)
+
+### Metrics
+- Quality: healthy
+- Forecast: holt-linear-trend · stable · regime=normal (358 pts)
+- M4: 0/7 clean cycles · bridgeFlipped=true
+## Session Handoff — 2026-08-02T08:04:28.222Z
+
+### Current State
+- Session mood: neutral
+- Active work: cycle 62 · bridge=off · M4 cleanCycles=0/7
+- Forecast: holt-linear-trend · stable · rmse=1.145 (359 pts)
+
+### Decisions Made
+- *(No decisions recorded)*
+
+### Open Issues
+- 1 endpoints unhealthy
+- Data quality score below 60 (28)
+- 1 sources stale (>120min old)
+
+### Metrics
+- Quality: healthy
+- Forecast: holt-linear-trend · stable · regime=normal (359 pts)
+- M4: 0/7 clean cycles · bridgeFlipped=true
+## Session Handoff — 2026-08-02T08:41:09.363Z
+
+### Current State
+- Session mood: neutral
+- Active work: cycle 63 · bridge=off · M4 cleanCycles=0/7
+- Forecast: holt-linear-trend · stable · rmse=1.143 (360 pts)
+
+### Decisions Made
+- *(No decisions recorded)*
+
+### Open Issues
+- 1 sources stale (>120min old)
+
+### Metrics
+- Quality: healthy
+- Forecast: holt-linear-trend · stable · regime=normal (360 pts)
+- M4: 0/7 clean cycles · bridgeFlipped=true
+## Session Handoff — 2026-08-02 (data-pipeline fix — Order 3)
+
+### Current State
+- Session mood: fixed
+- Data pipeline: **Quality 98/100** (latest report 2026-08-02) · **17/17 endpoints healthy** · error rate <4% (healthy) · transient error-count deductions on raw_block_tip/mempool/lightning age out within ~12 rounds
+- DE agent: restarted under launchd with new code · cycle 64 ran clean · endpoints=17 (was 13)
+- Active work: pipeline restored to full health + block-data capture completed
+
+### What was broken (root causes, all verified)
+1. **IPv6 black-hole (the big one)** — Node 17+ defaults to IPv6; blockstream.info, api.blockchair.com, api.alternative.me black-hole IPv6 (packets dropped). curl falls back to IPv4, node hung. FIX: `autoSelectFamily: true` (Happy Eyeballs — races v4/v6). Verified: v6 hangs, v4 works, and vice-versa depending on the host/day; Happy Eyeballs handles both.
+2. **Timeout conflation** — `maxLatency` doubled as health threshold AND fetch timeout (`maxLatency+2000` = 5–7s). Heavy endpoints verified at 13–28s when healthy (mining_pools weekly, mempool_recent, raw block). FIX: decoupled `timeoutMs` (hard fetch bound) from `maxLatency` (health bound); per-endpoint realistic values; `retries` per endpoint.
+3. **Unbounded concurrency** — `Promise.all` fired all endpoints at once (8–13 simultaneous to mempool.space) → CDN throttle cascades. FIX: bounded pool (4 concurrent).
+4. **3 passes per cycle** — getDataQualityScore ran 3 full endpoint rounds per hourly cycle. FIX: single-pass (reuse the cycle's health round).
+5. **Stale pre-fix error history** — window was 100% pre-fix artifacts (36% error rate). Archived to `monitor-error-history.pre-fix.bak.json`, window reset.
+
+### What was added (full block data capture — gaps closed)
+- **block_hash** — tip header hash (blockstream) — new endpoint + schema `capture.block_hash@1.0`
+- **raw_block_tip** — FULL raw block of the tip (~1.2–2.8 MB), chained fetch (tip hash → raw) — new endpoint + schema `capture.raw_block_tip@1.0`
+- **hashrate** — 24h network hashrate series — new endpoint + schema `capture.hashrate@1.0`
+- **mempool_recent** — tx-level mempool snapshot (txid/fee/vsize/value per tx) — new endpoint + schema `capture.mempool_recent@1.0`
+- Protocol docs: `docs/protocols/{block_hash,raw_block_tip,hashrate,mempool_recent}.md`
+- Dead external sources documented in config (`deadSources`): blockchain.info utxocount (404), ordinals.com stats (404), wickedsmartbitcoin BIP-110 (404) — each with an equivalent replacement.
+- Capture-agent: chained-fetch support for raw_block_tip; Bitcoin Core node confirmed running (639K blocks, fee percentiles).
+
+### Tests
+- DE suite: test-envelope 15/15 · test-spool 17/17 · test-bridge 4/4 · test-capture-agent 6/6 (all green)
+- Full capture cycle: 17/17 captured, 0 errored, 0 violated, 0 refused
+- Daily report: **Quality 100/100, Issues: None** · site snapshot regenerated cleanly
+
+### Metrics
+- DI: 1.000 | MD: 0.000
+- Quality: 98/100 (freshness 30 · reliability 30 · latency 20 · coverage 20) — latest report 2026-08-02; the post-fix run hit 100/100, current report shows 98/100 (transient error-count deductions)
+
+### LEFT / TODO
+- Monitor error window will fully age out the 2 raw_block_tip slow-round entries within ~12 rounds (already <4% error rate — healthy).
+- (optional) Promote the new endpoints into `research/model-spec.json` consumers / fee-forecast inputs.
+- (optional) Wire raw_block_tip into the R5 storage-ratio pipeline (per-block size verification from raw bytes).
+## Session Handoff — 2026-08-02T09:50:39.396Z
+
+### Current State
+- Session mood: neutral
+- Active work: cycle 64 · bridge=off · M4 cleanCycles=0/7
+- Forecast: holt-linear-trend · stable · rmse=1.141 (362 pts)
+
+### Decisions Made
+- *(No decisions recorded)*
+
+### Open Issues
+- - None
+
+### Metrics
+- Quality: healthy
+- Forecast: holt-linear-trend · stable · regime=normal (362 pts)
+- M4: 0/7 clean cycles · bridgeFlipped=true

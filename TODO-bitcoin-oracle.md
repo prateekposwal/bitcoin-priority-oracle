@@ -1,5 +1,12 @@
 # Bitcoin Block Space — Research TODO
 
+Status as of 2026-08-02. Active project: **open research into unpriced state
+storage (SCCR)**, deployed as a static research showcase at bitcoinsahi.com.
+v1 (priority oracle) and v2 (externality fee) are dead — refuted on Reddit for
+sound economic reasons. The three project decisions (scope, data source,
+deployment) are documented in `docs/decisions/2026-08-02-project-decisions.md`
+(drafted, awaiting ratification).
+
 ## Phase R1: Reading ✅
 
 - [x] Read BIP-141 rationale for witness discount (malleability vs state economics) → `research/bip141_analysis.md`
@@ -29,45 +36,67 @@
 - [x] Subscribe to Bitcoin Optech newsletter
 - [x] Follow r/BitcoinEngineering for "state expiry" discussions
 - [x] Track bitcoin-dev mailing list for UTXO/state threads
-- [x] Analyze BIP-110 (Reduced Data Temporary Softfork) — see bitcoin-oracle-arch.md
+- [x] Analyze BIP-110 (Reduced Data Temporary Softfork) — see bitcoin-oracle-arch.md; source API dead (documented DOA, ~0.1% signaling)
 - [x] Watch covenant proposal discussions (CTV, APO, OP_VAULT, OP_CAT)
 - [x] Note: BIP-110 validates our problem diagnosis. Our cost model provides the economic data BIP-110's rationale lacks.
 
 ## Phase R4: Deployment & Business (bitcoinsahi.com)
 
-### Stage 1: Static Site (Week 1)
-- [ ] Enable GitHub Pages on the repo (Settings → Pages)
-- [ ] Add CNAME file with `bitcoinsahi.com`
-- [ ] Point DNS: A records to GitHub Pages IPs + CNAME www → prateekposwal.github.io
-- [ ] Verify site loads at https://bitcoinsahi.com
+### Stage 1: Static Site ✅
+- [x] Enable GitHub Pages on the repo
+- [x] Add CNAME file with `bitcoinsahi.com`
+- [x] Point DNS: A records to GitHub Pages IPs + CNAME www → prateekposwal.github.io
+- [x] Verify site loads at https://bitcoinsahi.com
 - [ ] Add Google Analytics or Plausible for visitor tracking
 
-### Stage 2: Live Data Pipeline (Week 2-3)
-- [ ] Create `.github/workflows/refresh-data.yml` — daily Python run that fetches fees, inscription count, UTXO size
-- [ ] Script outputs `research/live_data.json` committed to repo
-- [ ] HTML page reads `live_data.json` via JavaScript for always-current numbers
-- [ ] Add "Last updated: X hours ago" timestamp to site
+### Stage 2: Live Data Pipeline ✅ (repaired 2026-08-02)
+- [x] Local launchd agents (data-engine, snapshot, site-health, ops-health, engagement) capture 24/7 → `captured-data/` + spool
+- [x] Snapshot agent (`tools/agents/19-web-snapshot-agent.js`) writes rich `data/*.json` from local spool, commits + pushes
+- [x] GH Actions fallback (`data-snapshot.yml`) regenerates snapshot when local Mac is off; reads committed rich history (stub-writer bug fixed 2026-08-02)
+- [x] HTML pages read `data/*.json` via JavaScript for always-current numbers
+- [x] Data-engineering monitor: 17/17 endpoints, quality 100/100 (IPv6 black-hole, timeout, concurrency fixes landed 2026-08-02)
+- [ ] Add "Last updated: X hours ago" freshness timestamp to site
 
-### Stage 3: Full Stack Backend (Month 2)
-- [ ] Set up Flask/FastAPI backend on VPS ($6–$12/mo)
-- [ ] API endpoints: `/api/fees`, `/api/inscriptions`, `/api/utxo-cost-model`
-- [ ] Add interactive model UI (sliders for parameters, live recalculation in browser)
-- [ ] Add newsletter signup (free email service: SendGrid / Mailchimp free tier)
+### Stage 3: Full Stack Backend (deferred — see Decision 3)
+- [ ] Set up Flask/FastAPI backend on VPS ($6–$12/mo) — *deferred; static + launchd + GH-Actions is the chosen shape*
+- [ ] API endpoints: `/api/fees`, `/api/inscriptions`, `/api/utxo-cost-model` — *deferred*
+- [ ] Add interactive model UI (sliders for parameters, live recalculation in browser) — *deferred*
+- [ ] Add newsletter signup (free email service: SendGrid / Mailchimp free tier) — *deferred*
 
-### Stage 4: Monetization (Month 3+)
+### Stage 4: Monetization (Month 3+ — deferred, gated on product proof)
 - [ ] Draft sponsorship deck for Bitcoin mining pools and Lightning companies
 - [ ] Launch Developer API tier at $50/mo (history, projections, custom runs)
 - [ ] Enterprise API tier at $500/mo (real-time, webhooks, dedicated support)
 - [ ] Publish first "State of Block Space" annual report ($500/copy)
 - [ ] Begin consulting outreach to ETF providers, mining companies, L2 protocols
 
-### Revenue Target: $50K–$150K/year by Month 12
+### Revenue Target: $50K–$150K/year by Month 12 (not started — gated)
 
 ## Phase R5: Contribution (if warranted)
 
 - [ ] Only if feedback suggests a genuine gap exists
 - [ ] Only if the problem can be addressed without consensus change (v1 principle)
 - [ ] Only if the proposed mechanism survives incentive analysis
+
+## Phase R5: Storage Cost Coverage Ratio (2026-07-30)
+
+- [x] Define metric: StorageCostCoverageRatio = TransactionFee / (Bytes × ReplicationFactor × CostPerBytePerYear × Years)
+- [x] Build reproducible computation module → `tools/research/storage-ratio.js`
+- [x] Generate first report: 148 blocks, avg ratio 0.0149 (1.49%) → `reports/research/storage-ratio-2026-07-30.md` *(superseded by v2.0.0 correction)*
+- [x] v2.0.0 correction: duplicated time-horizon term removed (16.4× → model reconciliation) — see research/model-spec.json
+- [x] v2.0.1 correction: node count reclassified to real census N=32K (agent-25, getnodeaddresses); L_net recomputed 5627.808
+- [x] Live re-measure 2026-08-02: 168 blocks, avg ratio **0.2252**, 100% below 1×
+- [ ] Track ratio over time as new data accumulates — **partial**: automate `storage-ratio.js` via launchd/cron (scheduled, not manual)
+- [ ] Publish as research note (arXiv, Bitcoin Optech, r/BitcoinEngineering) — working paper live; arXiv/Optech not yet submitted
+- [ ] Feed Bitcoin Core `getblockstats → utxo_size_inc` for per-block UTXO growth data — **deferred**: local node ~320K blocks behind tip; drop until synced
+
+**Key finding (v2.0.1, canonical):** at the real node census (N=32K), fees cover
+~22.5% of the estimated 10-year storage cost (live re-measure 2026-08-02), with
+100% of sampled blocks below 1×. The ratio moves with the fee market — all
+surfaces must read the live value from `node tools/research/storage-ratio.js`,
+never a hardcoded figure. Historical figures (1.49% v1.0.0, ~17% v2.0.0 at N=60K,
+~29% working-paper dated snapshot) are documented provenance, superseded by the
+canonical live measurement.
 
 ## Exploratory Directions
 
@@ -108,17 +137,6 @@ The fee market prices **congestion** (inclusion in the next block). It does not 
 
 **Open question:** Is the permanence externality significant enough to matter, or do most node operators run pruned nodes and not care about historical data?
 
-## Phase R5: Storage Cost Coverage Ratio (2026-07-30)
-
-- [x] Define metric: StorageCostCoverageRatio = TransactionFee / (Bytes × ReplicationFactor × CostPerBytePerYear × Years)
-- [x] Build reproducible computation module → `tools/research/storage-ratio.js`
-- [x] Generate first report: 148 blocks, avg ratio 0.0149 (1.49%) → `reports/research/storage-ratio-2026-07-30.md` *(superseded by the v2.0.0 correction — see research/model-spec.json; corrected avg ≈ 0.174)*
-- [ ] Feed Bitcoin Core `getblockstats → utxo_size_inc` for per-block UTXO growth data
-- [ ] Track ratio over time as new data accumulates
-- [ ] Publish as research note (arXiv, Bitcoin Optech, r/BitcoinEngineering)
-
-**Key finding (v1.0.0, superseded):** 100% of sampled blocks had fees covering less than 1× the estimated 10-year storage cost. Average coverage: **1.49%**. Corrected in v2.0.0 (duplicated time-horizon term removed) — the regenerated average is ≈ **17.4%** (see research/verification_appendix.md Model Reconciliation); the direction of the finding is unchanged.
-
 ## Open Questions
 
 1. Does the SegWit weight formula need to be parameterized differently for data vs financial transactions?
@@ -126,3 +144,19 @@ The fee market prices **congestion** (inclusion in the next block). It does not 
 3. Can covenant proposals reduce UTXO churn from inscriptions?
 4. What would a "storage cost oracle" look like — and is it even possible without trust?
 5. Is the "externality of data permanence" actually a problem with economic significance, or is the existing fee market sufficient?
+6. Should the SCCR research be published to arXiv / Bitcoin Optech (the R5 publication sub-task)?
+
+## Remaining Work Summary (2026-08-02)
+
+**Data layer (in progress to complete):**
+- [ ] Automate SCCR tracking via launchd (storage-ratio.js)
+- [ ] Add fee-source failover for mempool.space single point of failure
+- [ ] Site freshness label + sitemap update (working-paper.html, history-of-bitcoin.html)
+
+**Research layer:**
+- [ ] arXiv / Bitcoin Optech submission of the working paper
+- [ ] Publish decision ratification from Prateek (scope/data-source/deployment)
+- [ ] Sync Core node to tip OR formally drop utxo_size_inc (documented in decisions)
+
+**Docs (2026-08-02):**
+- [ ] README (setup, architecture, quick start) + launchd runbook + known-issues list

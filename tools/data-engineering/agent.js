@@ -132,7 +132,7 @@ async function runCycle() {
   // Step 4: Get quality score
   var quality = { score: 0 };
   try {
-    quality = monitor.getDataQualityScore ? await monitor.getDataQualityScore() : { score: 0 };
+    quality = monitor.getDataQualityScore ? await monitor.getDataQualityScore(health) : { score: 0 }; // single-pass: reuse step-1 health round (2026-08-02)
   } catch (e) { quality = { score: 0 }; }
   log('Data quality score: ' + (quality.score || 'N/A') + '/100');
 

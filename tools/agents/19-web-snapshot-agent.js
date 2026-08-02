@@ -51,14 +51,30 @@ function run() {
   // Posts count
   var postLog = loadJson(path.join(REPO, 'captured-data', 'post-log.json'), { posts: [] });
 
+  // Live price / height / mempool from the latest data-engine mirror (the local
+  // capture agent has them; previously hardcoded null meant the public snapshot
+  // served empty price/height on the rich path).
+  var latestMirror = loadJson(path.join(REPO, 'captured-data', 'latest.json'), null);
+  var mirror = {};
+  try {
+    var capDir = path.join(REPO, 'captured-data');
+    var files = fs.existsSync(capDir) ? fs.readdirSync(capDir).filter(function(f) { return /^\d{4}-\d{2}-\d{2}_/.test(f) && f.endsWith('.json'); }).sort() : [];
+    if (files.length) mirror = loadJson(path.join(capDir, files[files.length - 1]), {});
+  } catch (e) {}
+  var ep = mirror.endpoints || {};
+  function epData(key) { return (ep[key] && ep[key].data) || null; }
+  var price = epData('btc_price');
+  var height = epData('block_height');
+  var mempool = epData('mempool');
+
   var snapshot = {
     schema_version: 1,
     generated_at: new Date().toISOString(),
     freshness_min: 0,
     fees: fc && fc.latest_fastest_fee !== undefined ? { fastestFee: fc.latest_fastest_fee } : {},
-    btc_price: null,
-    block_height: null,
-    mempool_tx: null,
+    btc_price: (price && price.USD) || null,
+    block_height: (typeof height === 'object') ? (height.block_height !== undefined ? height.block_height : (height.height !== undefined ? height.height : null)) : height,
+    mempool_tx: (mempool && mempool.count) || null,
     forecast: fc ? fc.forecast : [],
     alerts: (alerts && alerts.alerts) || [],
     history: history,
@@ -77,8 +93,8 @@ function run() {
   if (process.argv.indexOf('--commit') !== -1) {
     try {
       require('child_process').execSync(
-        'git add data/ && git diff --cached --quiet || (git -c user.name="bsahi-snapshot-bot" -c user.email="snapshot@bitcoinsahi.com" commit -m "chore: public snapshot ' + new Date().toISOString().slice(0, 16) + '" && git pull --rebase origin main && git push)',
-        { cwd: REPO, timeout: 90000, stdio: 'inherit' }
+        'git add data/ && git diff --cached --quiet || (git -c user.name="bsahi-snapshot-bot" -c user.email="snapshot@bitcoinsahi.com" commit -m "chore: public snapshot ' + new Date().toISOString().slice(0, 16) + '" && git pull --rebase --autostash origin main && git push)',
+        { cwd: REPO, timeout: 120000, stdio: 'inherit' }
       );
     } catch (e) {
       console.error('snapshot commit failed:', e.message);
