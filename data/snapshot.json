@@ -1,33 +1,35 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-02T20:04:27.066Z",
+  "generated_at": "2026-08-02T20:29:41.597162+00:00",
   "freshness_min": 0,
   "fees": {
-    "fastestFee": 1
+    "fastestFee": 2,
+    "halfHourFee": 1,
+    "hourFee": 1,
+    "economyFee": 1,
+    "minimumFee": 1
   },
-  "btc_price": 63276,
-  "block_height": 960761,
-  "mempool_tx": 95350,
+  "btc_price": 63359,
+  "block_height": 960768,
+  "mempool_tx": 94099,
   "forecast": [
     {
       "day_offset": 1,
-      "predicted_fastest_fee": 1,
-      "trend": "stable"
+      "predicted_fastest_fee": 3.6,
+      "trend": "rising"
     },
     {
       "day_offset": 2,
-      "predicted_fastest_fee": 1,
-      "trend": "stable"
+      "predicted_fastest_fee": 3.7,
+      "trend": "rising"
     },
     {
       "day_offset": 3,
-      "predicted_fastest_fee": 1,
-      "trend": "stable"
+      "predicted_fastest_fee": 3.8,
+      "trend": "rising"
     }
   ],
-  "alerts": [
-    "🛡 DE AGENT: last run 1664 min ago"
-  ],
+  "alerts": [],
   "history": [
     {
       "date": "2026-07-30",
