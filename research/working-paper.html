@@ -249,7 +249,201 @@ footer .links a:hover{color:#D4933A}</style>
 <tr><td>8</td><td>What is the equilibrium? Does price, fees, or demand close the loop?</td><td><strong>Open.</strong> The model measures a ratio; it does not close the dynamic loop (N ↔ fees ↔ price). Framed as a dynamic system in the report</td></tr>
 </table>
 <p><strong>Method notes for the agenda.</strong> Q1–Q4, Q6, and Q7 are directly computable from the canonical model because SCCR is a simple homogeneous function of its drivers: <code>SCCR = fee_USD / L_net = fee_BTC × P × R_blocks / (C × T × N)</code> (dimensionless). Q5 requires a demand-side model of what moves off-chain and at what value per byte — outside the current model, and therefore flagged as reasoning-plus-assumption rather than computation. Q8 is the deep question: whether Bitcoin&#x27;s fee market has a self-correcting mechanism (e.g., node attrition raising the per-node burden, or scarcity rents raising fees) that internalizes storage costs endogenously. That is the v3.0 centerpiece, and we state honestly that the current framework cannot settle it — it can only bound the parameter space in which the answer would flip.</p>
+<p><strong>First answers (2026-08-02 addendum):</strong> five deeper questions extending this</p>
+<p>agenda — the equilibrium force (Q1), attribute pricing (Q2), the RIR family with</p>
+<p>DCIR (Q3), the price-only internalization path (Q4), and the 2040 scenarios</p>
+<p>(Q5) — are answered in <strong>§11</strong> with exact model output from</p>
+<p><code>tools/research/sccr_dynamics.py</code>. The cross-chain generalization of the</p>
+<p>framework (Phase V) is sketched in <strong>§12</strong>.</p>
 <p><strong>Open-question honesty.</strong> Nothing in this section claims the fee market *will* internalize these costs, nor that it *should*. The claim is narrower: the question is now well-posed, the drivers are identified, and each driver&#x27;s lever on the ratio is measured. Whether any economic force actually pulls the system toward internalization is the v3.0 research question.</p>
+<h3>11. Deep Questions (v3.0 Agenda — First Answers)</h3>
+<p>*Addendum 2026-08-02, within the <strong>Bitcoin Resource Accounting</strong> program (see</p>
+<p><code>research/roadmap.md</code>; SCCR is Metric #1 of the RIR family). This section answers</p>
+<p>the five deeper questions extending the §10 agenda. All computations use the</p>
+<p>canonical model-spec v2.0.1 quantities and the §10 live baseline</p>
+<p>(SCCR = 0.2228 at N=32K, C=$925/yr, T=10 yr, P≈$63K, ~2 sat/vB), are regenerated</p>
+<p>by <code>tools/research/sccr_dynamics.py</code> (JSON: <code>tools/research/sccr_dynamics_output.json</code>),</p>
+<p>and are cross-checked against the frozen-capture reproduction (SCCR = 0.2186,</p>
+<p>171 blocks, <code>tools/research/reproduce.py</code>). Where a result is judgment rather</p>
+<p>than model output, it is labeled <strong>JUDGMENT</strong>.*</p>
+<h4>Q1 — What economic force pushes SCCR toward equilibrium?</h4>
+<p><strong>Model output (the static map).</strong> SCCR is homogeneous in its drivers, so each</p>
+<p>lever&#x27;s direction is exact:</p>
+<table>
+<tr><th>Scenario (one lever at a time)</th><th>P (USD)</th><th>Fee level</th><th>N (nodes)</th><th>C (USD/yr)</th><th>fee_USD/block</th><th>L_net USD</th><th><strong>SCCR</strong></th></tr>
+<tr><td>Baseline (today)</td><td>63,000</td><td>~2 sat/vB</td><td>32,000</td><td>925</td><td>$1,253.87</td><td>$5,627.80</td><td><strong>0.2228</strong></td></tr>
+<tr><td>Price only: BTC = $1M</td><td>1,000,000</td><td>~2 sat/vB</td><td>32,000</td><td>925</td><td>$19,902.77</td><td>$5,627.80</td><td><strong>3.5365</strong></td></tr>
+<tr><td>Fees only: 5 sat/vB</td><td>63,000</td><td>5 sat/vB</td><td>32,000</td><td>925</td><td>$3,150.44</td><td>$5,627.80</td><td><strong>0.5598</strong></td></tr>
+<tr><td>Nodes only: N = 64K</td><td>63,000</td><td>~2 sat/vB</td><td>64,000</td><td>925</td><td>$1,253.87</td><td>$11,255.61</td><td><strong>0.1114</strong></td></tr>
+<tr><td>Storage only: C ÷ 2</td><td>63,000</td><td>~2 sat/vB</td><td>32,000</td><td>462.50</td><td>$1,253.87</td><td>$2,813.90</td><td><strong>0.4456</strong></td></tr>
+</table>
+<p>**Model output (the joint 4-way scenario: BTC $1M, fees up, nodes up, storage</p>
+<p>cheaper):**</p>
+<table>
+<tr><th>Scenario</th><th>P (USD)</th><th>Fee level</th><th>N</th><th>C</th><th>fee_USD/block</th><th>L_net USD</th><th><strong>SCCR</strong></th></tr>
+<tr><td>4-WAY: $1M, 5 sat/vB, N=64K, C/2</td><td>1,000,000</td><td>5 sat/vB</td><td>64,000</td><td>462.50</td><td>$50,006.97</td><td>$5,627.80</td><td><strong>8.8857</strong></td></tr>
+<tr><td>4-WAY alt: $1M, 10 sat/vB, N=64K, C/2</td><td>1,000,000</td><td>10 sat/vB</td><td>64,000</td><td>462.50</td><td>$100,013.94</td><td>$5,627.80</td><td><strong>17.7714</strong></td></tr>
+<tr><td>3-way (no N): $1M, 5 sat/vB, C/2</td><td>1,000,000</td><td>5 sat/vB</td><td>32,000</td><td>462.50</td><td>$50,006.97</td><td>$2,813.90</td><td><strong>17.7714</strong></td></tr>
+</table>
+<p><strong>Verdict (model output):</strong> the stated 4-way scenario <strong>overshoots</strong> — SCCR ≈</p>
+<p><strong>8.9</strong> (coverage, not gap), i.e. fees would over-cover modeled storage cost by</p>
+<p>~8.9× at 5 sat/vB, ~17.8× at 10 sat/vB. The price lever alone ($1M, everything</p>
+<p>else fixed) gives <strong>3.54×</strong> — it crosses 1× by itself. It does <strong>not</strong> converge</p>
+<p>toward 1 in any of the computed paths; every path that includes the price move</p>
+<p>overshoots.</p>
+<p>**Why the directions are what they are (model output + one honest correction to</p>
+<p>the naive intuition):<strong> three of the four levers push SCCR </strong>up** (price, fee</p>
+<p>level, cheaper storage — the last because <code>L_net ∝ C</code>, so a smaller cost</p>
+<p>denominator is over-covered by the same fees; the *absolute* externality</p>
+<p>shrinks even as the ratio rises). <strong>Only node growth pushes SCCR down</strong></p>
+<p>(<code>L_net ∝ N</code>). So &quot;cheap storage&quot; is *not* a counter-force to internalization in</p>
+<p>ratio terms — it is a *co-force*; the true counter-force is node growth. This</p>
+<p>matters for the dynamic reading: the ratio and the absolute externality can move</p>
+<p>in opposite directions under C.</p>
+<p><strong>The dynamic-system framing (JUDGMENT — not computable from the static model).</strong></p>
+<p>The only *endogenous* negative feedback in the model&#x27;s structure is at the N</p>
+<p>margin: under-pricing → node operators prune or exit → N↓ → L_net↓ → SCCR↑ →</p>
+<p>under-pricing eases. With a linear-response assumption <code>dN/dt = α·(SCCR − 1)</code></p>
+<p>(node exit proportional to under-pricing) and <code>SCCR = K/N</code>, this loop is locally</p>
+<p>stabilizing at SCCR = 1. But two forces break it: (i) exogenous node entry</p>
+<p>(cost-deflation + hobbyist adoption) adds a positive <code>γ</code> to <code>dN/dt</code>, which moves</p>
+<p>the fixed point to <code>SCCR* = 1 − γ/α</code> — <strong>structurally below 1</strong>, a persistent</p>
+<p>partial-internalization equilibrium, not full coverage; (ii) the model contains</p>
+<p><strong>no measured response functions</strong> for N(·) or for fee-demand as a function of</p>
+<p>price, so whether a stable fixed point exists in reality is **not settled by</p>
+<p>this model** — the model can only show the conditions under which one would</p>
+<p>exist. <strong>Honest answer: no stable fixed point is established in the model</strong>; the</p>
+<p>4-way overshoot shows the price lever alone would blow past 1× long before the</p>
+<p>slow N-margin loop could equilibrate it.</p>
+<h4>Q2 — Is Bitcoin optimizing one resource, or many, with one price?</h4>
+<p><strong>Framing (no new computation — the paper&#x27;s central mechanism question).</strong> The</p>
+<p>fee market sells <strong>one bundled good</strong> — a ledger slot in the next block — at</p>
+<p><strong>one price</strong> (sat/vbyte, modulated by SegWit weight). The question is whether</p>
+<p>that single price is informative about <strong>one attribute</strong> (congestion) or whether</p>
+<p>it carries signal about <strong>many</strong> (persistence, state, validation). This is the</p>
+<p>attribute-pricing question: a price can clear a market for a composite good</p>
+<p>while being informative about only the dominant marginal attribute.</p>
+<p>The <strong>planned empirical answer</strong> is the attribute-pricing regression (the &quot;ONE</p>
+<p>experiment&quot;): regress per-block fee density (USD/byte, sat/vbyte) on attribute</p>
+<p>descriptors — data-bearing vs financial payloads, witness vs non-witness</p>
+<p>residency, script class, output/UTXO contribution — over the captured block</p>
+<p>history. If attribute descriptors load significantly, the single price carries</p>
+<p>multi-attribute signal; if only congestion loads, it is single-attribute. This</p>
+<p>regression is a Phase IV deliverable (working-paper §10 Q8 companion), not yet</p>
+<p>run.</p>
+<p>The <strong>SegWit natural experiment</strong> is the discriminator: BIP 141 (Aug 2017)</p>
+<p>imposed a *protocol-level attribute price* — witness data at 1 weight unit per</p>
+<p>byte vs 4 for non-witness. The market&#x27;s response (the inscription regime from</p>
+<p>2023, and SegWit financial adoption before it) demonstrates the price is *not*</p>
+<p>single-attribute: the protocol itself priced an attribute, and demand moved</p>
+<p>along it. SegWit therefore validates that attribute pricing is both feasible and</p>
+<p>behaviorally real in Bitcoin&#x27;s fee market — which is precisely why the SCCR</p>
+<p>family (Q3) is well-posed: if the fee price can carry attribute signal, then</p>
+<p>per-resource internalization ratios are measurable objects, not category errors.</p>
+<h4>Q3 — Can every Bitcoin resource have its own internalization ratio?</h4>
+<p><strong>Yes, by construction — the RIR family.</strong> The unified family formalizes §8.3&#x27;s</p>
+<p>Cost Internalization Ratio into a per-resource family:</p>
+<blockquote><strong>RIR_i = fee_contribution_toward_resource_i / estimated_lifetime_cost_of_resource_i</strong></blockquote>
+<table>
+<tr><th>#</th><th>Metric</th><th>Resource</th><th>Cost leg (denominator)</th><th>Fee leg (numerator)</th><th>Status</th></tr>
+<tr><td><strong>1</strong></td><td><strong>SCCR</strong></td><td>Storage (permanent replication)</td><td><code>C·T·N / R_blocks</code> (USD/block)</td><td>block fee (USD)</td><td><strong>MEASURED — this paper</strong> (0.2228 live baseline; §5)</td></tr>
+<tr><td>2</td><td><strong>UCIR</strong></td><td>UTXO set / state permanence</td><td>RAM/lookup per lifetime UTXO</td><td>per-tx fee allocation</td><td>Phase II — cost side exists (<code>utxo_cost_model.py</code>); fee-side attribution open</td></tr>
+<tr><td>3</td><td><strong>VCIR</strong></td><td>Validation (script-class CPU)</td><td>CPU per tx class (pinned-benchmark bound only)</td><td>per-tx fee</td><td>Phase II — demoted to bounded analytical sub-study (4-question gate, roadmap §4)</td></tr>
+<tr><td>4</td><td><strong>RCIR</strong></td><td>Relay (marginal bandwidth)</td><td>tx size × replication × $/GB</td><td>per-tx fee</td><td>Phase III fill-in (analytical bounds)</td></tr>
+<tr><td>5</td><td><strong>BCIR</strong></td><td>Propagation (witness size vs delay)</td><td>topology-dependent delay cost</td><td>per-tx fee</td><td>Phase III/IV — research-hard</td></tr>
+<tr><td>6</td><td><strong>DCIR</strong></td><td>Indexer / API serving</td><td>index storage + serving cost (commercial)</td><td>indexer/API fees (off-chain)</td><td>Phase III — fee-market numerator structurally near-zero; likely persistent-negative row</td></tr>
+</table>
+<p>**DCIR (the indexer leg, added in the prior review — verified absent from</p>
+<p><code>roadmap.md</code> as of 2026-08-02 and now added):** indexers (block explorers, API</p>
+<p>providers) maintain searchable copies of the same ledger. Their cost is real and</p>
+<p>commercial, but their revenue is <strong>off-chain</strong> (subscriptions, API pricing) — the</p>
+<p>on-chain fee-market numerator is structurally near-zero. DCIR is therefore the</p>
+<p>family&#x27;s likely *persistent-negative* row: near-zero internalization **by</p>
+<p>design**, not by accident. It is still a legitimate RIR — the framework&#x27;s value</p>
+<p>is making the &quot;the fee market does not pay indexers&quot; fact *measured*, not</p>
+<p>asserted.</p>
+<p><strong>SCCR is Metric #1</strong> — the only measured member of the family, and the</p>
+<p>template (canonical spec → live capture → three implementations → cross-check)</p>
+<p>every other metric inherits. Roadmap updated: DCIR added to Phase III + the</p>
+<p>coverage matrix.</p>
+<h4>Q4 — Could Bitcoin eventually price everything without protocol changes?</h4>
+<p><strong>Model output (storage leg):</strong> SCCR crosses 1× at <strong>P* ≈ $282,765 ≈ $283K</strong></p>
+<p>at the live baseline (frozen-capture cross-check: <strong>$288,296 ≈ $288K</strong>). If BTC</p>
+<p>reaches that price with today&#x27;s fee level, storage is **fully internalized with</p>
+<p>zero protocol change** — a pure price effect, because the storage-cost</p>
+<p>denominator is USD-denominated and price-invariant while the fee numerator</p>
+<p>scales linearly with price. Target table: 0.5× at $141K, 1.0× at $283K, 2.0× at</p>
+<p>$566K, 3.5× at $990K.</p>
+<p>**Extension method (JUDGMENT — the numerator/denominator structure, not a</p>
+<p>computed number):** the same price lever applies to any RIR whose denominator is</p>
+<p>a USD-denominated, price-invariant cost and whose numerator is a USD fee. For</p>
+<p>UCIR-style resources the price lever exists <strong>formally</strong> (`P*_i = P₀ ×</p>
+<p>target/RIR_i,₀`) but is <strong>economically hollow</strong>: the UTXO cost is</p>
+<p>RAM/lookup — driven by the *live set size*, not by the USD value of traffic. A</p>
+<p>pure price rise inflates the fee numerator without changing the resource burden</p>
+<p>one byte; the ratio moves as a <strong>unit effect</strong>, not as internalization. **The</p>
+<p>key structural distinction:** storage&#x27;s cost is (approximately) proportional to</p>
+<p>bytes written and independent of price, so price genuinely internalizes it;</p>
+<p>UTXO and validation costs scale with set size and script complexity, which price</p>
+<p>does not touch. **Honest answer: price alone can solve storage; it cannot solve</p>
+<p>UTXO or validation the same way** — those need state-management or</p>
+<p>fee-structure levers, which is why UCIR&#x27;s data path and VCIR&#x27;s benchmark path</p>
+<p>are the actual Phase II work.</p>
+<h4>Q5 — What happens in 2040?</h4>
+<p><strong>Model output</strong> (all 2040 rows at P = $63K unless noted; C ÷ 10 = SSD</p>
+<p>deflation, N × 2 = 32K → 64K):</p>
+<table>
+<tr><th>2040 scenario</th><th>P (USD)</th><th>Fee level</th><th>N</th><th>C</th><th>fee_USD/block</th><th>L_net USD</th><th><strong>SCCR</strong></th></tr>
+<tr><td>Cost collapse + node growth, fees flat</td><td>63,000</td><td>~2 sat/vB</td><td>64,000</td><td>92.50</td><td>$1,253.87</td><td>$1,125.56</td><td><strong>1.1140</strong></td></tr>
+<tr><td>Cost collapse + node growth, fees 10 sat/vB</td><td>63,000</td><td>10 sat/vB</td><td>64,000</td><td>92.50</td><td>$6,300.88</td><td>$1,125.56</td><td><strong>5.5980</strong></td></tr>
+<tr><td>Fees 10 sat/vB, C &amp; N today</td><td>63,000</td><td>10 sat/vB</td><td>32,000</td><td>925</td><td>$6,300.88</td><td>$5,627.80</td><td><strong>1.1196</strong></td></tr>
+<tr><td>Node growth dominant: N ×4 (128K), C flat, fees flat</td><td>63,000</td><td>~2 sat/vB</td><td>128,000</td><td>925</td><td>$1,253.87</td><td>$22,511.22</td><td><strong>0.0557</strong></td></tr>
+<tr><td>Moderate: C ÷ 2, N × 2, fees flat</td><td>63,000</td><td>~2 sat/vB</td><td>64,000</td><td>462.50</td><td>$1,253.87</td><td>$5,627.80</td><td><strong>0.2228</strong></td></tr>
+</table>
+<p><strong>Two honest corrections to the common intuition.</strong> (i) **SSD deflation does NOT</p>
+<p>push SCCR down — it pushes it up.** <code>L_net ∝ C</code>, so C ÷ 10 shrinks the cost</p>
+<p>denominator 10× and the same fees over-cover it: SCCR = 1.114 even at today&#x27;s</p>
+<p>flat fee level, and 5.6 at 10 sat/vB. The *absolute* externality collapses</p>
+<p>toward ~free, but the *ratio* explodes. (ii) The **0.056 anchor belongs to the</p>
+<p>node-growth-only branch** (N × 4 → 128K, C flat, fees flat), reproduced exactly</p>
+<p>(0.0557 — same as working-paper §10 Q6). Node growth is the only lever that</p>
+<p>deepens the ratio gap; deflation and fees both close it.</p>
+<p><strong>The two genuinely divergent futures are therefore:</strong> (a) *cost-deflation</p>
+<p>world* — storage approaches free, SCCR ≥ 1.11, the externality evaporates by</p>
+<p>deflation of the denominator (nothing to internalize); (b) *node-growth-dominant</p>
+<p>world* — replication spreads the same cost over 2–4× more nodes, SCCR falls to</p>
+<p>0.056–0.11, the gap deepens. A sustained 10 sat/vB regime pushes SCCR past 1 in</p>
+<p>either world (1.12 at today&#x27;s C/N; 5.6 with deflation).</p>
+<p><strong>Honest tension, not a prediction:</strong> the 2040 question is really *which lever</p>
+<p>dominates over a decade* — C-deflation (ratio ↑) vs N-growth (ratio ↓) vs</p>
+<p>fee/price demand (ratio ↑). The model maps every lever&#x27;s direction and magnitude</p>
+<p>exactly; it <strong>cannot</strong> predict their relative rates, and no claim is made about</p>
+<p>which future obtains. If BTC price also appreciates (Q4), the price lever</p>
+<p>dominates both branches and SCCR crosses 1 regardless.</p>
+<h3>12. Cross-Chain: Distributed-Systems Economics (Phase V horizon)</h3>
+<p>**Framing (no new computation — research horizon, not a near-term</p>
+<p>deliverable).<strong> The framework&#x27;s core structure — </strong>one-time payment → long-lived</p>
+<p>shared resource** — is not Bitcoin-specific. Any distributed system with a</p>
+<p>one-time fee and a persistent replicated resource admits an RIR question. The</p>
+<p>generalization turns this paper into *distributed-systems economics*. Full</p>
+<p>treatment in <code>roadmap.md</code> §Phase V; the honest fit map:</p>
+<table>
+<tr><th>System</th><th>Long-lived shared resource</th><th>One-time payment</th><th>RIR well-defined?</th><th>Fit</th></tr>
+<tr><td><strong>Bitcoin</strong></td><td>permanent replicated history</td><td>tx fee</td><td>✅</td><td>This paper (SCCR = Metric #1)</td></tr>
+<tr><td><strong>Celestia</strong></td><td>data-availability (blob space, sampled)</td><td>blob fee</td><td>✅ <strong>clean</strong></td><td>High — DA is exactly a long-lived shared resource paid per blob</td></tr>
+<tr><td><strong>Arweave</strong></td><td>permanent storage (endowment)</td><td>one-time permaweb fee</td><td>✅ <strong>clean</strong></td><td>High — native one-time-payment→permanent-storage structure</td></tr>
+<tr><td><strong>Solana</strong></td><td>state + history (high per-slot growth)</td><td>tx fee + <strong>rent</strong></td><td>⚠️ partial</td><td>Medium-high — rent already prices state, so the RIR measures whether rent *internalizes*</td></tr>
+<tr><td><strong>Ethereum</strong></td><td>state (accounts/contracts) + history</td><td>gas (incl. SSTORE state-cost)</td><td>⚠️ partial</td><td>Medium — gas has state-cost components; state rent historically failed (EIP-3521 etc.)</td></tr>
+<tr><td><strong>Filecoin</strong></td><td>storage deals (time-bound)</td><td>deal payments</td><td>⚠️ different</td><td>Medium — fee and cost live in the *same* storage market, so internalization is near-total by construction; the real question is replication/retrieval coverage</td></tr>
+<tr><td><strong>IPFS</strong></td><td>content-addressed storage (voluntary replication)</td><td>storage payments (Filecoin)</td><td>⚠️ weak</td><td>Low-medium — no consensus-level fee market for storage; RIR degenerates</td></tr>
+</table>
+<p><strong>Honest caution (unchanged from roadmap §Phase V):</strong> compare <strong>METHODOLOGY</strong>,</p>
+<p>never rankings; do <strong>not</strong> compare BTC-ETH early — different cost structures</p>
+<p>(rent vs no-rent, history size, node economics) make raw ratio comparisons</p>
+<p>meaningless before the method is cross-validated. Some systems (Arweave,</p>
+<p>Celestia) are cleaner fits than others (Ethereum state rent is a different</p>
+<p>mechanism; IPFS has no fee market to measure). This is the research horizon for</p>
+<p>Phase V, explicitly not a near-term deliverable.</p>
 <hr>
 <p>*Bitcoin Sahi Research Council — The Bitcoin Block Space Problem (Working Paper v2.1.0)*</p>
 <p>*Component docs: problem_statement · bip141_analysis · pruning_externality_analysis · utxo_cost_note · verification_appendix · history-of-bitcoin*</p>

@@ -1,24 +1,37 @@
-# Resource Internalization Framework — Research Roadmap
+# Bitcoin Resource Accounting — Research Roadmap
+
+*(program name adopted 2026-08-02; previously "Resource Internalization
+Framework" / "the storage paper". The Paper-1 title "Storage Cost Internalization
+in Bitcoin's Fee Market" is kept as the paper's descriptive title — the rename is
+about the PROGRAM identity, not the paper title.)*
 
 **Status:** **ADOPTED (2026-08-02)** — Prateek adopted the roadmap WITH the §6
 amendments on 2026-08-02 ("continue :)" ratification). Phase I publication path
-greenlit; UCIR data-path decision deferred until Phase I ships. Recorded by TELOS
-(as Aviku). Consistent with ratified Decision 1 (research-first scope, see
-`docs/decisions/2026-08-02-project-decisions.md`). Companion to `working-paper.md`
-v2.1.0 and `model-spec.json` v2.0.1.
+greenlit; UCIR data-path decision deferred until Phase I ships. **Program renamed
+to "Bitcoin Resource Accounting" 2026-08-02** (Prateek directive, executed by
+TELOS as Aviku): the final assessment reframes the program as
+**"Can we build a complete accounting system for every long-lived resource
+consumed by Bitcoin, and quantify how much of each cost is internalized by the
+fee market?"** — with **SCCR as the first metric (Metric #1) in the family**.
+Recorded by TELOS (as Aviku). Consistent with ratified Decision 1 (research-first
+scope, see `docs/decisions/2026-08-02-project-decisions.md`). Companion to
+`working-paper.md` v2.1.0 (+ §11/§12 addendum 2026-08-02) and `model-spec.json`
+v2.0.1.
 
 ---
 
 ## 1. The reframe
 
-The working paper (v2.1.0) is currently framed as *the storage paper*. The roadmap
-reframes the program from **"storage measurement"** to a broader thesis:
+The working paper (v2.1.0) is the **storage paper (Paper 1)**. The program is
+named **Bitcoin Resource Accounting** and reframes from **"storage measurement"**
+to a complete accounting thesis:
 
-> **Can all long-lived resource costs (storage, UTXO maintenance, validation,
-> bandwidth, relay, propagation) be expressed in ONE reproducible accounting
-> framework, each with its own measurable Cost Internalization Ratio — and which
-> resources are efficiently priced, partially internalized, or largely
-> externalized under different network conditions?**
+> **Can we build a complete accounting system for every long-lived resource
+> consumed by Bitcoin, and quantify how much of each cost is internalized by the
+> fee market?** — all long-lived resource costs (storage, UTXO maintenance,
+> validation, bandwidth, relay, propagation, indexer serving) expressed in ONE
+> reproducible accounting framework, each with its own measurable Cost
+> Internalization Ratio; **SCCR is Metric #1** (the storage account).
 
 **Verdict on the reframe:** genuinely valuable, not cosmetic. The observation that
 fees may under-price storage is not novel (Liu et al. 2021, arXiv:2103.05866 — the
@@ -42,20 +55,41 @@ partial/external pricing the structural equilibrium? (This is working-paper §10
   pre-publication execution plan and all three are verified to agree per-block
   via `research/reproduce/cross_check.sh`), SCCR over time (automated tracking; manual only now),
   sensitivity (exists), limitations (exists).
-- **Phase II — Resource Accounting Framework, one new metric per resource:**
+- **Phase II — Resource Accounting Framework, one new metric per resource**
+  (SCCR is **Metric #1**, already measured — every new metric inherits its
+  template: canonical spec → live capture → independent implementations → cross-check):
   - **UCIR** (UTXO Growth): RAM/lookup/validation cost per lifetime UTXO
   - **VCIR** (Validation): CPU per script class (P2PKH / P2WPKH / Taproot / multisig)
+    — demoted to bounded analytical sub-study (4-question gate, §4)
   - **RCIR** (Relay): marginal bandwidth per tx
   - **BCIR** (Propagation): witness size vs block propagation delay
 - **Phase III — Unified framework:** Resource Coverage Matrix
   (resource × cost-exists × fee-prices × measurable × metric) consolidating all
   ratios under one formula:
   `ResourceInternalizationRatio_i = fee_contribution_toward_i / estimated_lifetime_cost_of_i`
+  **DCIR (Indexer/API leg — added 2026-08-02, was missing from the roadmap):**
+  indexers maintain searchable copies of the same ledger; their cost is commercial
+  and their revenue is off-chain (subscriptions/API fees), so the fee-market
+  numerator is structurally near-zero — DCIR is the family's likely
+  *persistent-negative* row (near-zero internalization by design). See
+  working-paper §11 Q3 for the full coverage matrix.
 - **Phase IV — Dynamic questions:** SCCR over time (2015 / 2017 SegWit / 2021 /
   2023 Ordinals / today); network-evolution equilibrium (does SCCR move toward 1 as
-  nodes/price/fees/L2 grow?). Overlaps working-paper §10 (see §4).
-- **Phase V — Cross-chain:** apply the framework to Ethereum / Litecoin / Monero;
-  compare METHODOLOGY not rankings; NO early ETH-vs-BTC comparison.
+  nodes/price/fees/L2 grow?). Overlaps working-paper §10 (see §4). **First
+  answers 2026-08-02 (working-paper §11 Q1–Q5, computed by
+  `tools/research/sccr_dynamics.py`):** Q1 4-way scenario (BTC $1M, fees up, nodes
+  up, storage cheaper) **overshoots** — SCCR ≈ 8.9, price lever dominates; Q4
+  price-only path: SCCR crosses 1× at **P* ≈ $283K** (storage fully internalized,
+  zero protocol change); Q5 2040: C÷10 deflation pushes SCCR **up** (1.11 at flat
+  fees — the 0.056 anchor is the N×4 node-growth branch), sustained 10 sat/vB
+  pushes past 1 either way — "which lever dominates" is the honest tension, not a
+  prediction.
+- **Phase V — Cross-chain (expanded 2026-08-02):** apply the framework to any
+  system with **one-time payment → long-lived shared resource**: Ethereum,
+  Solana, IPFS, Arweave, Filecoin, Celestia (fit map in §9 below). Turns the
+  Bitcoin paper into **distributed-systems economics**. Compare METHODOLOGY not
+  rankings; NO early ETH-vs-BTC comparison. Research horizon, not a near-term
+  deliverable.
 
 ## 4. The 4-question gate (apply to every new metric)
 
@@ -142,6 +176,9 @@ requests.
 | Adopt roadmap with §6 amendments | ✅ ADOPTED — UCIR rated 4/5 with validation-cost carve-out (scoped to RAM/lookup cost per lifetime UTXO); VCIR demoted to a bounded analytical sub-study, never a headline ratio; BCIR research-hard (defer to Phase III/IV); RCIR next model-possible leg (fill in cheaply at Phase III); archival-vs-pruned slots into Phase I as a companion note (evidence for the storage leg; needs the census, not the unsynced node — unblocked) |
 | Greenlight Phase I publication path | ✅ GREENLIT — arXiv / Bitcoin Optech submission of working-paper v2.1.0 with the archival-vs-pruned companion note; see `research/publication-plan.md` |
 | Decide UCIR data path | ⏸️ DEFERRED — not needed until Phase I ships (public-API approximation vs R5-gate reopen for node sync) |
+| **Program rename → "Bitcoin Resource Accounting"** | ✅ **RENAMED 2026-08-02** — Prateek directive; program identity now "Bitcoin Resource Accounting", Paper-1 title unchanged; SCCR = Metric #1; reframe: "Can we build a complete accounting system for every long-lived resource consumed by Bitcoin…?" (see §1) |
+| **Deep-question answers (v3.0, Q1–Q5)** | ✅ **COMPUTED 2026-08-02** — `tools/research/sccr_dynamics.py`; answers in working-paper §11; summary in §8 below |
+| **Cross-chain Phase V scope** | ✅ **EXPANDED 2026-08-02** — six candidate systems with honest fit map (§9); research horizon only |
 
 **Phase I deliverables produced at adoption:** `research/archival-vs-pruned-note.md`
 (companion note, honest data-gap framing — the census captures reachable node
@@ -150,4 +187,103 @@ count N but NOT the pruned-vs-archival split) and `research/publication-plan.md`
 
 ---
 
-*Bitcoin Sahi Research Council — Resource Internalization Framework Roadmap (2026-08-02)*
+## 8. Phase IV first answers — the five deep questions (2026-08-02)
+
+Computed with `tools/research/sccr_dynamics.py` (canonical model-spec v2.0.1
+quantities; live baseline SCCR = 0.2228 @ N=32K, C=$925, T=10, P≈$63K, ~2 sat/vB;
+frozen-capture cross-check 0.2186). Full derivations in working-paper §11.
+**Model output vs judgment are separated in the paper**; this section is the
+roadmap-level summary.
+
+### Q1 — What force pushes SCCR toward equilibrium? (4-way scenario)
+
+| Lever (single, vs baseline 0.2228) | SCCR | Direction |
+|---|---|---|
+| Price only: BTC $1M | **3.5365** | ↑ overshoots 1× by itself |
+| Fees only: 5 sat/vB | **0.5598** | ↑ toward 1 |
+| Nodes only: N=64K | **0.1114** | ↓ away from 1 (the only counter-force) |
+| Storage only: C÷2 | **0.4456** | ↑ (cheaper storage raises the ratio; shrinks the absolute gap) |
+
+**4-WAY ($1M, 5 sat/vB, N=64K, C/2): SCCR = 8.886 — OVERSHOOTS** (17.77 at 10
+sat/vB). Verdict: no convergence to 1 in any computed path; the price lever
+dominates. Dynamic-system reading (JUDGMENT): the only endogenous negative
+feedback is the N-margin loop (under-pricing → exit → N↓ → SCCR↑), locally
+stabilizing under a linear-response assumption, but exogenous node entry shifts
+the fixed point below 1 (`SCCR* = 1 − γ/α`) and the model contains no measured
+response functions — **a stable fixed point is not established in the model.**
+
+### Q4 — Price-only internalization
+
+SCCR crosses 1× at **P* ≈ $282,765 ≈ $283K** (frozen-capture cross-check:
+$288K) with zero protocol change — storage is USD-denominated and
+price-invariant, so price genuinely internalizes it. **BUT (key structural
+distinction): UTXO (RAM/lookup, driven by live-set size) and validation (CPU,
+driven by script complexity) costs do NOT scale with price** — a price rise
+inflates the fee numerator as a *unit effect*, not as internalization. Price can
+solve storage; it cannot solve UTXO/validation the same way.
+
+### Q5 — 2040 scenarios
+
+| 2040 scenario | SCCR |
+|---|---|
+| C÷10 (SSD deflation), N×2, fees flat ~2 sat/vB | **1.114** (↑ past 1 — deflation shrinks the cost denominator) |
+| C÷10, N×2, fees 10 sat/vB | **5.598** |
+| fees 10 sat/vB, C & N today | **1.120** (↑ past 1) |
+| N×4 (128K), C flat, fees flat | **0.0557** (the "0.056" anchor — node-growth-only branch) |
+| C÷2, N×2, fees flat | **0.2228** (levers cancel) |
+
+**Honest correction to the common intuition:** SSD deflation does NOT push SCCR
+down — it pushes it UP (`L_net ∝ C`); the **0.056 anchor is the node-growth-only
+branch** (N×4). The two divergent futures: (a) cost-deflation world → SCCR ≥
+1.11, externality evaporates; (b) node-growth-dominant world → SCCR → 0.056–0.11,
+gap deepens. Sustained 10 sat/vB pushes past 1 in either world. **Which lever
+dominates over a decade is the honest tension — the model maps directions and
+magnitudes exactly but cannot predict relative rates.**
+
+### Q2 / Q3 (framing + formalization)
+
+- **Q2 (attribute pricing):** one bundled good (ledger slot) at one price —
+  is the price informative about one attribute (congestion) or many
+  (persistence, state, validation)? The planned **attribute-pricing regression
+  (the ONE experiment)** is the empirical answer; the **SegWit natural
+  experiment** (BIP 141's 4:1 witness discount, and the inscription regime that
+  followed) is the discriminator — protocol-level attribute pricing demonstrably
+  moves demand, so per-resource ratios are measurable objects, not category
+  errors. Framing only; no computation needed.
+- **Q3 (RIR family):** formalized as
+  `RIR_i = fee_contribution_toward_resource_i / estimated_lifetime_cost_of_resource_i`
+  with a 6-row coverage matrix (SCCR/UCIR/VCIR/RCIR/BCIR/**DCIR**) in
+  working-paper §11 Q3. **SCCR = Metric #1** (the only measured member).
+  **DCIR (indexer leg) was verified ABSENT from this roadmap as of 2026-08-02
+  and is now added** — Phase III, likely persistent-negative row (indexers
+  recover costs off-chain, so the fee-market numerator is structurally near
+  zero).
+
+---
+
+## 9. Phase V — Cross-chain: distributed-systems economics (2026-08-02)
+
+The framework's core structure — **one-time payment → long-lived shared
+resource** — generalizes to any distributed system. This turns the Bitcoin paper
+into *distributed-systems economics* (working-paper §12). **Research horizon,
+not a near-term deliverable.**
+
+| System | Long-lived shared resource | One-time payment | RIR well-defined? | Honest fit |
+|---|---|---|---|---|
+| **Bitcoin** | permanent replicated history | tx fee | ✅ | This paper — SCCR = Metric #1 |
+| **Celestia** | data availability (blob space, sampled) | blob fee | ✅ **clean** | **High** — DA is a long-lived shared resource paid per blob |
+| **Arweave** | permanent storage (endowment model) | one-time permaweb fee | ✅ **clean** | **High** — native one-time-payment→permanent-storage structure |
+| **Solana** | state + history (high per-slot growth) | tx fee + rent | ⚠️ partial | Medium-high — rent already prices state; RIR measures whether rent *internalizes* |
+| **Ethereum** | state (accounts/contracts) + history | gas (incl. SSTORE) | ⚠️ partial | Medium — gas has state-cost components; state rent historically failed; do NOT compare BTC-ETH early |
+| **Filecoin** | storage deals (time-bound) | deal payments | ⚠️ different | Medium — fee and cost in the *same* storage market → internalization near-total by construction; real question is replication/retrieval coverage |
+| **IPFS** | content-addressed storage (voluntary replication) | storage payments (Filecoin) | ⚠️ weak | Low-medium — no consensus-level fee market for storage; RIR degenerates |
+
+**Rules (unchanged):** compare **METHODOLOGY** not rankings; **NO early
+ETH-vs-BTC comparison**; some systems (Arweave, Celestia) are cleaner fits than
+others (Ethereum state rent is a different mechanism; IPFS has no fee market to
+measure). Do not overclaim — Phase V is the research horizon, and each new
+system must pass the 4-question gate (§4) before a metric is named.
+
+---
+
+*Bitcoin Sahi Research Council — Bitcoin Resource Accounting Roadmap (2026-08-02)*

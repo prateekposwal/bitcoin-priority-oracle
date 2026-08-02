@@ -1,12 +1,20 @@
 # Bitcoin Sahi — Block Space Research & Decision Platform
 
-**Live at [bitcoinsahi.com](https://bitcoinsahi.com)** · **Research paper:**
-[Storage Cost Internalization in Bitcoin's Fee Market — Working Paper v2.1.0](research/working-paper.md)
-*(program subtitle: The Bitcoin Block Space Problem)*
+**Live at [bitcoinsahi.com](https://bitcoinsahi.com)** · **Research program:**
+**Bitcoin Resource Accounting** — a complete accounting system for every
+long-lived resource consumed by Bitcoin, quantifying how much of each cost the
+fee market internalizes. **SCCR (Storage Cost Coverage Ratio) is Metric #1.**
+
+**Paper 1:** [Storage Cost Internalization in Bitcoin's Fee Market — Working Paper v2.1.0](research/working-paper.md)
+*(program subtitle: The Bitcoin Block Space Problem — the paper keeps its
+descriptive title; the program name is Bitcoin Resource Accounting, adopted
+2026-08-02. Roadmap: [research/roadmap.md](research/roadmap.md).)*
 
 **Research focus:** open research into *unpriced state storage* — whether Bitcoin's
 fee market internalizes the long-lived resource cost of permanently recorded
-blockchain data, measured as the **Storage Cost Coverage Ratio (SCCR)**.
+blockchain data, measured as the **Storage Cost Coverage Ratio (SCCR)**,
+Metric #1 of the RIR family (SCCR / UCIR / VCIR / RCIR / BCIR / DCIR — see
+[working-paper §11 Q3](research/working-paper.md)).
 v1 (priority oracle) and v2 (externality fee) are dead; this is the research-first
 successor.
 
@@ -18,14 +26,17 @@ available for viewing and evaluation purposes only. For licensing inquiries:
 
 ## Research question
 
-> Bitcoin's fee market prices competition for inclusion in the next block, but it
-> does not explicitly price the long-term resource costs of permanently recorded
-> blockchain data. **Does the fee market internalize long-term storage costs?**
+> Can we build a complete accounting system for every long-lived resource consumed
+> by Bitcoin, and quantify how much of each cost is internalized by the fee
+> market? — starting with storage: **does the fee market internalize long-term
+> storage costs?**
 
 This is a *measurement* question, not a policy claim. The paper measures; it does
 not propose a fix, does not claim the externality is economically significant at
 current volumes, and does not argue Bitcoin is "broken" (see
-[working-paper §2](research/working-paper.md)).
+[working-paper §2](research/working-paper.md)). The framework generalizes to any
+one-time-payment → long-lived-shared-resource system (cross-chain, Phase V —
+[roadmap §9](research/roadmap.md)).
 
 ## The model (one equation)
 

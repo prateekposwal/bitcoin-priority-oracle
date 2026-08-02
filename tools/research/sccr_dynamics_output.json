@@ -1,0 +1,220 @@
+{
+  "spec_version": "2.0.1",
+  "baseline": {
+    "sccr": 0.2228,
+    "P_usd": 63000.0,
+    "fee_sats_per_block": 1990277.491076031,
+    "sat_per_vb": 1.990277491076031,
+    "l_net_usd": 5627.804395771542
+  },
+  "frozen_capture": {
+    "sccr": 0.218605,
+    "P_usd": 63023.0
+  },
+  "q1_4way": {
+    "tag": "4way",
+    "label": "4-WAY: $1M, 5 sat/vB, N=64K, C/2",
+    "P_usd": 1000000,
+    "fee_mult": 2.512562814070352,
+    "fee_sats_per_block": 5000697.213758872,
+    "N": 64000.0,
+    "C_usd_per_yr": 462.5,
+    "fee_usd_per_block": 50006.972137588724,
+    "l_net_usd": 5627.804395771542,
+    "sccr": 8.885698332934515
+  },
+  "q1_scenarios": [
+    {
+      "tag": "base",
+      "label": "Baseline (today)",
+      "P_usd": 63000.0,
+      "fee_mult": 1.0,
+      "fee_sats_per_block": 1990277.491076031,
+      "N": 32000.0,
+      "C_usd_per_yr": 925.0,
+      "fee_usd_per_block": 1253.8748193778995,
+      "l_net_usd": 5627.804395771542,
+      "sccr": 0.2228
+    },
+    {
+      "tag": "p1m",
+      "label": "Price only: $1M",
+      "P_usd": 1000000,
+      "fee_mult": 1.0,
+      "fee_sats_per_block": 1990277.491076031,
+      "N": 32000.0,
+      "C_usd_per_yr": 925.0,
+      "fee_usd_per_block": 19902.77491076031,
+      "l_net_usd": 5627.804395771542,
+      "sccr": 3.5365079365079364
+    },
+    {
+      "tag": "f5",
+      "label": "Fees only: 5 sat/vB",
+      "P_usd": 63000.0,
+      "fee_mult": 2.512562814070352,
+      "fee_sats_per_block": 5000697.213758872,
+      "N": 32000.0,
+      "C_usd_per_yr": 925.0,
+      "fee_usd_per_block": 3150.4392446680895,
+      "l_net_usd": 5627.804395771542,
+      "sccr": 0.5597989949748744
+    },
+    {
+      "tag": "n64",
+      "label": "Nodes only: N=64K",
+      "P_usd": 63000.0,
+      "fee_mult": 1.0,
+      "fee_sats_per_block": 1990277.491076031,
+      "N": 64000.0,
+      "C_usd_per_yr": 925.0,
+      "fee_usd_per_block": 1253.8748193778995,
+      "l_net_usd": 11255.608791543083,
+      "sccr": 0.1114
+    },
+    {
+      "tag": "c2",
+      "label": "Storage only: C/2",
+      "P_usd": 63000.0,
+      "fee_mult": 1.0,
+      "fee_sats_per_block": 1990277.491076031,
+      "N": 32000.0,
+      "C_usd_per_yr": 462.5,
+      "fee_usd_per_block": 1253.8748193778995,
+      "l_net_usd": 2813.902197885771,
+      "sccr": 0.4456
+    },
+    {
+      "tag": "4way",
+      "label": "4-WAY: $1M, 5 sat/vB, N=64K, C/2",
+      "P_usd": 1000000,
+      "fee_mult": 2.512562814070352,
+      "fee_sats_per_block": 5000697.213758872,
+      "N": 64000.0,
+      "C_usd_per_yr": 462.5,
+      "fee_usd_per_block": 50006.972137588724,
+      "l_net_usd": 5627.804395771542,
+      "sccr": 8.885698332934515
+    },
+    {
+      "tag": "4way10",
+      "label": "4-WAY alt: $1M, 10 sat/vB, N=64K, C/2",
+      "P_usd": 1000000,
+      "fee_mult": 5.025125628140704,
+      "fee_sats_per_block": 10001394.427517744,
+      "N": 64000.0,
+      "C_usd_per_yr": 462.5,
+      "fee_usd_per_block": 100013.94427517745,
+      "l_net_usd": 5627.804395771542,
+      "sccr": 17.77139666586903
+    },
+    {
+      "tag": "3way_n",
+      "label": "3-way (no N): $1M, 5 sat/vB, C/2",
+      "P_usd": 1000000,
+      "fee_mult": 2.512562814070352,
+      "fee_sats_per_block": 5000697.213758872,
+      "N": 32000.0,
+      "C_usd_per_yr": 462.5,
+      "fee_usd_per_block": 50006.972137588724,
+      "l_net_usd": 2813.902197885771,
+      "sccr": 17.77139666586903
+    }
+  ],
+  "q4": {
+    "P_star_baseline": 282764.81149012566,
+    "P_star_frozen": 288296.2420804648,
+    "targets": [
+      {
+        "target": 0.5,
+        "P": 141382.40574506283
+      },
+      {
+        "target": 1.0,
+        "P": 282764.81149012566
+      },
+      {
+        "target": 2.0,
+        "P": 565529.6229802513
+      },
+      {
+        "target": 3.5,
+        "P": 989676.8402154398
+      }
+    ]
+  },
+  "q5_scenarios": [
+    {
+      "tag": "q5flat",
+      "label": "2040: C/10, N x2, fees ~2 sat/vB (flat)",
+      "P_usd": 63000.0,
+      "fee_mult": 1.0,
+      "fee_sats_per_block": 1990277.491076031,
+      "N": 64000.0,
+      "C_usd_per_yr": 92.5,
+      "fee_usd_per_block": 1253.8748193778995,
+      "l_net_usd": 1125.5608791543084,
+      "sccr": 1.1139999999999999
+    },
+    {
+      "tag": "q5fee10",
+      "label": "2040: C/10, N x2, fees 10 sat/vB",
+      "P_usd": 63000.0,
+      "fee_mult": 5.025125628140704,
+      "fee_sats_per_block": 10001394.427517744,
+      "N": 64000.0,
+      "C_usd_per_yr": 92.5,
+      "fee_usd_per_block": 6300.878489336179,
+      "l_net_usd": 1125.5608791543084,
+      "sccr": 5.597989949748744
+    },
+    {
+      "tag": "q5demand",
+      "label": "2040: fees 10 sat/vB, C & N today",
+      "P_usd": 63000.0,
+      "fee_mult": 5.025125628140704,
+      "fee_sats_per_block": 10001394.427517744,
+      "N": 32000.0,
+      "C_usd_per_yr": 925.0,
+      "fee_usd_per_block": 6300.878489336179,
+      "l_net_usd": 5627.804395771542,
+      "sccr": 1.1195979899497488
+    },
+    {
+      "tag": "q5n4",
+      "label": "2040: N x4 (128K), C flat, fees flat",
+      "P_usd": 63000.0,
+      "fee_mult": 1.0,
+      "fee_sats_per_block": 1990277.491076031,
+      "N": 128000.0,
+      "C_usd_per_yr": 925.0,
+      "fee_usd_per_block": 1253.8748193778995,
+      "l_net_usd": 22511.217583086167,
+      "sccr": 0.0557
+    },
+    {
+      "tag": "q5c2n2",
+      "label": "2040: C/2, N x2, fees flat",
+      "P_usd": 63000.0,
+      "fee_mult": 1.0,
+      "fee_sats_per_block": 1990277.491076031,
+      "N": 64000.0,
+      "C_usd_per_yr": 462.5,
+      "fee_usd_per_block": 1253.8748193778995,
+      "l_net_usd": 5627.804395771542,
+      "sccr": 0.2228
+    },
+    {
+      "tag": "q5neutmix",
+      "label": "2040: C/10, N x2, fees 10 sat/vB, P=$283K",
+      "P_usd": 283000,
+      "fee_mult": 5.025125628140704,
+      "fee_sats_per_block": 10001394.427517744,
+      "N": 64000.0,
+      "C_usd_per_yr": 92.5,
+      "fee_usd_per_block": 28303.946229875215,
+      "l_net_usd": 1125.5608791543084,
+      "sccr": 25.146526282204675
+    }
+  ]
+}

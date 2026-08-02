@@ -1,5 +1,5 @@
 # Storage Cost Coverage Ratio Report
-Generated: 2026-08-02 10:41:41 UTC
+Generated: 2026-08-02 15:03:10 UTC
 Methodology version: 2.0.1 (research/model-spec.json)
 
 ## Thesis
@@ -26,8 +26,8 @@ subsidizes storage beyond what the fee covers.
 
 | Metric | Value |
 |--------|-------|
-| Blocks sampled | 168 |
-| Avg coverage ratio | 0.2252 |
+| Blocks sampled | 171 |
+| Avg coverage ratio | 0.2186 |
 | Min ratio | 0.0584 |
 | Max ratio | 0.8320 |
 | Interpretation | Fees BELOW storage cost |
@@ -37,8 +37,8 @@ subsidizes storage beyond what the fee covers.
 ### Ratio Distribution (last 24h)
 
 ```
-<0.1     █████████ (29)
-0.1-0.5  ███████████████████████████████████████ (130)
+<0.1     ██████████ (33)
+0.1-0.5  ██████████████████████████████████████ (129)
 0.5-1    ███ (9)
 1-2       (0)
 2-5       (0)
@@ -48,7 +48,7 @@ subsidizes storage beyond what the fee covers.
 
 ## Discussion
 
-Average ratio of 0.23 suggests that current fees do NOT fully cover the estimated
+Average ratio of 0.22 suggests that current fees do NOT fully cover the estimated
 10-year storage cost across the network. The difference represents an
 unpriced externality borne by node operators.
 

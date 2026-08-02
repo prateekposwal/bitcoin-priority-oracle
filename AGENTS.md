@@ -858,12 +858,63 @@ Every session in this repo MUST honor these load-bearing rules:
 - Author identity recommendation: **Prateek Poswal, Independent Researcher** (`research/author-identity.md`); ORCID signup steps included.
 
 ### Open Issues
-- **DECISIONS NEEDED (Prateek):** arXiv account, ORCID iD, author identity ratification (default: Independent Researcher), license ratification (default: MIT+CC BY 4.0). See DECISIONS section of the execution report + research/author-identity.md + research/license-draft.md.
-- External reproduction (someone uninvolved) — Prateek's task; protocol + log in `research/reproduce/`.
-- LaTeX needs a compile pass on a machine with pdflatex (toolchain absent locally).
-- Companion note `archival-vs-pruned-note.md` still awaiting Prateek review before it ships.
+- **DECISIONS NEEDED (Prateek) — status after 2026-08-02 directive:**
+  - ✅ RESOLVED/RECOMMENDED: D1 author (Prateek Poswal, Independent Researcher — Bitcoin Sahi Research), D3 arXiv real identity, D6 LaTeX submission, D7 companion note simultaneous
+  - 🟡 ACTION (before submission): D2 ORCID — create ORCID iD
+  - 🚨 CRITICAL PATH: D5 external reproducer (the ONLY thing worth delaying submission for)
+  - ✅ RECOMMENDED, awaiting final go: D4 license (MIT code + CC BY 4.0 paper) — LICENSE file NOT changed until Prateek ratifies
+  - See `docs/decisions/2026-08-02-publication-decisions.md` (authoritative tracker) + research/author-identity.md + research/license-draft.md + research/publication-plan.md
 
 ### Metrics
 - Validation: `node tools/validate.js` ✅ PASS (0 errors)
 - Reproduction: 3/3 implementations agree (0.2186, 171 blocks, 100% below 1×)
 - Live SCCR at session end: 0.2151 (169 blocks — rolling 24h window)
+
+## Session Handoff — 2026-08-02 (v3.0 deep questions + program rename + publication decisions)
+
+### Current State
+- Session mood: focused
+- Active work: **Bitcoin Resource Accounting** program rename + v3.0 deep questions (Q1–Q5) + cross-chain Phase V + Prateek's publication decisions — COMPLETE
+
+### Decisions Made
+- **Program renamed → "Bitcoin Resource Accounting"** (2026-08-02, Prateek directive): program identity is the framework name; Paper-1 title "Storage Cost Internalization in Bitcoin's Fee Market" unchanged; SCCR = Metric #1 of the RIR family. Reframe: "Can we build a complete accounting system for every long-lived resource consumed by Bitcoin…?" Applied to roadmap (title/§1/§8/§9), TODO, README, publication-plan, AGENTS.md.
+- **v3.0 deep questions answered with model output** — new `tools/research/sccr_dynamics.py` (canonical model-spec v2.0.1; JSON output `tools/research/sccr_dynamics_output.json`); answers in working-paper §11 + roadmap §8:
+  - Q1: 4-way scenario (BTC $1M, 5 sat/vB, N=64K, C/2) → **SCCR = 8.886 OVERSHOOTS** (price lever dominates; 17.77 at 10 sat/vB). No stable fixed point established in the model (N-margin feedback sketched as judgment).
+  - Q2: attribute-pricing framing (ONE experiment = regression; SegWit natural experiment = discriminator). Framing only, no computation.
+  - Q3: RIR family formalized `RIR_i = fee_i / lifetime_cost_i`, 6-row coverage matrix (SCCR/UCIR/VCIR/RCIR/BCIR/**DCIR**); **DCIR verified ABSENT from roadmap → added**; SCCR = Metric #1.
+  - Q4: P* ≈ **$282,765 ≈ $283K** (frozen cross-check $288K) — price solves storage (USD-denominated denominator); **cannot solve UTXO/validation** (RAM/lookup, script-complexity costs don't scale with price).
+  - Q5: 2040 — C÷10 deflation pushes SCCR **UP** to 1.114 (NOT down; `L_net ∝ C`); the **0.056 anchor is the N×4 node-growth branch** (verified exactly 0.0557); sustained 10 sat/vB → 1.12–5.60 (past 1). Two divergent futures mapped; honest tension, no prediction.
+- **Cross-chain Phase V (Part B)** — roadmap §9 + working-paper §12: 6 candidate systems with honest fit map (Arweave/Celestia clean; Solana/Ethereum partial; Filecoin different; IPFS weak). Compare METHODOLOGY, no early BTC-ETH comparison. Research horizon only.
+- **Prateek's 7 publication decisions recorded (Part C)** — `docs/decisions/2026-08-02-publication-decisions.md` (authoritative): D1 author ✅, D2 ORCID 🟡 action, D3 real identity ✅, D4 license ✅ recommended (LICENSE untouched — awaiting final go), D5 external reproducer 🚨 CRITICAL PATH, D6 LaTeX ✅, D7 companion note simultaneous ✅. author-identity.md / license-draft.md / publication-plan.md updated.
+
+### Open Issues
+- **CRITICAL PATH:** D5 external reproducer — the only submission-delaying item; protocol + log in `research/reproduce/`.
+- Prateek: ORCID iD (D2, before submission) + arXiv account with real identity (D3).
+- Prateek: final ratification of LICENSE pair (D4) — then apply MIT text + CC BY 4.0 notices.
+- LaTeX compile pass on a machine with pdflatex (toolchain absent locally).
+- Companion note `archival-vs-pruned-note.md` content review sign-off (D7 simultaneous publication decided).
+- `research/working-paper.tex` needs §11/§12 addendum conversion (LaTeX source predates the deep-questions addendum).
+
+### Metrics
+- Validation: `node tools/validate.js` ✅ PASS (0 errors)
+- Reproduction: 3/3 implementations agree (0.2186, 171 blocks, 100% below 1×)
+- Dynamics engine: `python3 tools/research/sccr_dynamics.py` ✅ (Q1/Q4/Q5 computed)
+- Live SCCR: 0.2151 (169 blocks — rolling 24h window)
+## Session Handoff — 2026-08-02T14:51:18.865Z
+
+### Current State
+- Session mood: neutral
+- Active work: cycle 69 · bridge=off · M4 cleanCycles=5/7
+- Forecast: holt-linear-trend · stable · rmse=1.138 (367 pts)
+
+### Decisions Made
+- M4 gate: cleanCycles=5/7 (no flip — already flipped)
+
+### Open Issues
+- 1 endpoints unhealthy
+- 1 sources stale (>120min old)
+
+### Metrics
+- Quality: healthy
+- Forecast: holt-linear-trend · stable · regime=normal (367 pts)
+- M4: 5/7 clean cycles · bridgeFlipped=true

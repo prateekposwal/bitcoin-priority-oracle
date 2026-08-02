@@ -1,8 +1,11 @@
 # Author Identity & ORCID — Recommendation (Pre-Submission)
 
-**For:** arXiv submission of working-paper v2.1.0 (SCCR storage paper)
-**Status:** RECOMMENDATION — final choice is Prateek's decision (see DECISIONS)
-**Date:** 2026-08-02
+**For:** arXiv submission of working-paper v2.1.0 (SCCR storage paper, Paper 1 of
+the **Bitcoin Resource Accounting** program)
+**Status:** **RECOMMENDED (Prateek's choice recorded 2026-08-02)** — author
+identity and arXiv real-identity are RESOLVED by Prateek's directive; ORCID is an
+ACTION (create before submission). See DECISIONS NEEDED below.
+**Date:** 2026-08-02 (updated 2026-08-02 with Prateek's decision)
 
 ---
 
@@ -55,26 +58,55 @@ under Option A this becomes "Prateek Poswal · Independent Researcher · 2026-08
 
 ## 4. Where the identity must be applied (once decided)
 
-- [ ] `research/working-paper.md` header line (title block)
+- [x] `research/working-paper.tex` (`\author` block) — already
+  `Prateek Poswal / Independent Researcher (Bitcoin Sahi Research)` — matches
+  Prateek's directive
+- [ ] `research/working-paper.md` header line (title block) — program-name
+  context added in §11 addendum; full byline application LEFT until ORCID lands
 - [ ] `research/working-paper.html` (regenerate via `tools/generate_research_pages.py`)
-- [ ] `research/working-paper.tex` (`\author` block) — created in this execution plan
 - [ ] `research/publication-plan.md` §2 (author list item)
 - [ ] README.md © line (already correct: Prateek Poswal)
-- [ ] arXiv submission account (new account: author email + name)
+- [ ] arXiv submission account (new account: real identity, per Prateek)
 
 ---
 
-## DECISIONS NEEDED (Prateek)
+## DECISIONS NEEDED (Prateek) — status per Prateek's 2026-08-02 directive
 
-- **D1 — Author identity:** confirm Option A (Prateek Poswal, Independent
-  Researcher). Alternatives: B (Bitcoin Sahi Research) or C (Council, not
-  recommended). *Default if no response: Option A.*
-- **D2 — ORCID:** create the ORCID iD (steps above) and provide the 16-digit iD.
-  *Not required to block other prep, but required before arXiv upload.*
-- **D3 — arXiv account:** create the submitter account
-  (https://arxiv.org/user) — the email you use is the submitter identity.
-  Note: first submissions to cs.* may require endorsement by an existing arXiv
-  author; check the endorsement policy at submission time.
+- **D1 — Author identity:** ✅ **RESOLVED (RECOMMENDED)** — Prateek directed:
+  **Prateek Poswal (Independent Researcher, Bitcoin Sahi Research)** — the
+  program name "Bitcoin Sahi Research" is carried as program context, with
+  "Independent Researcher" as the arXiv-standard byline. The byline is
+  `Prateek Poswal, Independent Researcher`; "Bitcoin Sahi Research" appears as
+  the program line/acknowledgement (matching the LaTeX uthor block already in
+  `research/working-paper.tex`). Apply across (a) arXiv byline, (b)
+  working-paper.md header, (c) working-paper.html, (d) README © line, (e)
+  publication-plan.md, (f) LaTeX source. DONE in .tex; .md header update is
+  LEFT (paper title block keeps "Bitcoin Sahi Research Council" as program
+  footer per the paper's own convention).
+- **D2 — ORCID:** 🟡 **ACTION (RECOMMENDED by Prateek: create BEFORE
+  submission)** — sign up at https://orcid.org/register (steps in §3), then add
+  the 16-digit iD here + publication-plan.md §2 + LaTeX uthor block. Not a
+  submission blocker for other prep, but REQUIRED before arXiv upload.
+- **D3 — arXiv account:** ✅ **RESOLVED (RECOMMENDED)** — Prateek directed:
+  **use his real identity** (no pseudonym). Create the submitter account at
+  https://arxiv.org/user with the real name + email. Note: first submissions to
+  cs.* may require endorsement by an existing arXiv author; check at submission.
+
+**Other publication decisions (Prateek's directive 2026-08-02):**
+- **D4 — License:** ✅ **RECOMMENDED (awaiting final ratification before the
+  LICENSE file changes)** — MIT (code) + CC BY 4.0 (paper); see
+  `research/license-draft.md`. The LICENSE file itself stays untouched until
+  Prateek's explicit final go ("recommended, awaiting final go").
+- **D5 — External reproducer:** 🚨 **CRITICAL PATH** — Prateek: the external
+  reproduction is *the only thing worth delaying submission for*. Protocol +
+  log in `research/reproduce/`; do NOT submit until an uninvolved reproducer
+  has run it (or the delay is explicitly waived).
+- **D6 — Source format:** ✅ **RESOLVED (RECOMMENDED)** — **submit LaTeX, not
+  PDF-only** (`research/working-paper.tex`; compile pass on a machine with
+  pdflatex still required — toolchain absent locally).
+- **D7 — Companion note:** ✅ **RESOLVED (RECOMMENDED)** — **publish the
+  archival-vs-pruned companion note simultaneously** with the paper (as
+  appendix or separate posting).
 
 ---
 

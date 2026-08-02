@@ -1,9 +1,13 @@
 # License — Recommendation & Drafts (Pre-Submission)
 
-**For:** working-paper v2.1.0 (SCCR storage paper) + the block-space-economics repo
-**Status:** RECOMMENDATION — LICENSE file changes need Prateek's ratification
+**For:** working-paper v2.1.0 (SCCR storage paper, Paper 1 of the **Bitcoin
+Resource Accounting** program) + the block-space-economics repo
+**Status:** ✅ **RECOMMENDED by Prateek (2026-08-02): MIT (code) + CC BY 4.0
+(paper)** — flagged **"recommended, awaiting final go"**: the LICENSE file must
+NOT be changed until Prateek explicitly ratifies (his stated recommendation is
+recorded; the file change itself needs his final ratification).
 **Current state:** `LICENSE` is a stub ("All rights reserved." — 20 bytes).
-**Date:** 2026-08-02
+**Date:** 2026-08-02 (updated 2026-08-02 with Prateek's recommendation)
 
 ---
 
@@ -79,10 +83,14 @@ non-exclusive license to distribute this article (minimal rights)"** OR
 ## 5. DONE vs LEFT
 
 **DONE:** recommendation + exact draft texts (MIT for code, CC BY 4.0 for paper,
-arXiv field guidance) — ready to apply.
+arXiv field guidance) — ready to apply. **Prateek's recommendation recorded
+2026-08-02: MIT (code) + CC BY 4.0 (paper) — matches the drafted pair.**
 
 **LEFT (Prateek decisions):**
-- [ ] Ratify: MIT for code + CC BY 4.0 for paper (vs. keep all-rights-reserved, or another pair)
+- [ ] ✅ **Prateek's recommendation recorded (2026-08-02): MIT + CC BY 4.0** —
+      matches the drafts below; formal ratification of the LICENSE file change
+      is the remaining step
+- [ ] 🚫 **DO NOT change `LICENSE` until Prateek's final go** — recommended, awaiting ratification
 - [ ] After ratification: replace `LICENSE` stub with the MIT text
 - [ ] After ratification: add CC BY 4.0 notice to working-paper.md/.tex headers and README
 - [ ] At arXiv upload: select CC BY 4.0 in the license field

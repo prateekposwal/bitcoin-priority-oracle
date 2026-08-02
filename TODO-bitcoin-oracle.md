@@ -1,7 +1,13 @@
 # Bitcoin Block Space — Research TODO
 
-Status as of 2026-08-02. Active project: **open research into unpriced state
-storage (SCCR)**, deployed as a static research showcase at bitcoinsahi.com.
+*(The research program is named **Bitcoin Resource Accounting** (2026-08-02) —
+a complete accounting system for every long-lived resource consumed by Bitcoin,
+with SCCR as Metric #1. The Paper-1 title "Storage Cost Internalization in
+Bitcoin's Fee Market" is unchanged; see `research/roadmap.md`.)*
+
+Status as of 2026-08-02. Active project: **Bitcoin Resource Accounting** — open
+research into unpriced state storage (SCCR, Metric #1), deployed as a static
+research showcase at bitcoinsahi.com.
 v1 (priority oracle) and v2 (externality fee) are dead — refuted on Reddit for
 sound economic reasons. The three project decisions (scope, data source,
 deployment) are documented in `docs/decisions/2026-08-02-project-decisions.md`
@@ -92,7 +98,10 @@ deployment) are documented in `docs/decisions/2026-08-02-project-decisions.md`
 
 **Key finding (v2.0.1, canonical):** at the real node census (N=32K), fees cover
 ~22.5% of the estimated 10-year storage cost (live re-measure 2026-08-02), with
-100% of sampled blocks below 1×. The ratio moves with the fee market — all
+100% of sampled blocks below 1×. **v3.0 deep questions (Q1–Q5) answered
+2026-08-02** — `tools/research/sccr_dynamics.py` (4-way scenario overshoots at
+SCCR ≈ 8.9; P* ≈ $283K for 1×; 2040: C-deflation pushes SCCR up, N×4 is the
+0.056 anchor; sustained 10 sat/vB > 1×); answers in working-paper §11 + roadmap §8. The ratio moves with the fee market — all
 surfaces must read the live value from `node tools/research/storage-ratio.js`,
 never a hardcoded figure. Historical figures (1.49% v1.0.0, ~17% v2.0.0 at N=60K,
 ~29% working-paper dated snapshot) are documented provenance, superseded by the
@@ -170,9 +179,11 @@ The fee market prices **congestion** (inclusion in the next block). It does not 
 **Docs (2026-08-02):**
 - [ ] README (setup, architecture, quick start) + launchd runbook + known-issues list
 
-**Roadmap (2026-08-02):** Resource Internalization Framework ADOPTED as the
-program thesis — `research/roadmap.md` (phases I–V, unified RIR formula, central
-question, 4-question gate). Prateek ratified 2026-08-02 ("continue :)") WITH the
+**Roadmap (2026-08-02):** **Bitcoin Resource Accounting** ADOPTED as the
+program thesis (renamed 2026-08-02 from "Resource Internalization Framework" —
+program identity; Paper-1 title unchanged) — `research/roadmap.md` (phases I–V,
+unified RIR formula incl. DCIR, central question, 4-question gate, §8 deep
+question answers, §9 cross-chain fit map). Prateek ratified 2026-08-02 ("continue :)") WITH the
 §6 amendments: UCIR 4/5 (validation-cost carve-out scoped to RAM/lookup per
 lifetime UTXO), VCIR demoted to bounded analytical sub-study, BCIR research-hard,
 RCIR next model-possible leg, archival-vs-pruned as Phase I companion note.

@@ -1,19 +1,25 @@
 # Phase I Publication Plan — "Storage Cost Internalization in Bitcoin's Fee Market" (Working Paper v2.1.0)
 
-**Status:** DRAFT (2026-08-02) — greenlit at roadmap adoption (Prateek, "continue :)")
+*Paper 1 of the **Bitcoin Resource Accounting** program (renamed 2026-08-02; the
+program name is the framework identity — SCCR is Metric #1 — while this paper
+keeps its descriptive title).*
+
+**Status:** DRAFT (2026-08-02) — greenlit at roadmap adoption (Prateek, "continue :)");
+publication decisions recorded 2026-08-02 (Prateek's directive) — see §7 + `docs/decisions/2026-08-02-publication-decisions.md`.
 **Scope:** submit `research/working-paper.md` v2.1.0 (SCCR storage paper, now titled
 **"Storage Cost Internalization in Bitcoin's Fee Market"**, keeping "The Bitcoin Block
 Space Problem" as the program subtitle) with the archival-vs-pruned companion note
-(`research/archival-vs-pruned-note.md`).
+(`research/archival-vs-pruned-note.md`), **published simultaneously** (Prateek's
+decision).
 **Renamed 2026-08-02:** from "The Bitcoin Block Space Problem: Does the Fee Market
 Internalize Long-Term Storage Costs?" — the new title is the economics-native phrasing
 (see §8.3 Cost Internalization Ratio) and avoids the protocol-critique reading a Core
 reviewer flagged (reviewer-simulation.md Reviewer A objection 3).
-**Paper-series framing (roadmap):** this is **Paper 1** (storage). The roadmap's
-Resource Internalization Framework continues as **Paper 2 (UTXO leg, UCIR)**, **Paper 3
-(validation leg, VCIR as bounded study)**, **Paper 4 (unified Resource Coverage Matrix)** —
-each builds on Paper 1's reproducible-metric template. Do NOT mix Paper 2–4 content into
-Paper 1 (roadmap §6 amendment 1).
+**Paper-series framing (roadmap):** this is **Paper 1** (storage). The **Bitcoin
+Resource Accounting** program continues as **Paper 2 (UTXO leg, UCIR)**, **Paper 3
+(validation leg, VCIR as bounded study)**, **Paper 4 (unified Resource Coverage
+Matrix, incl. the DCIR indexer leg)** — each builds on Paper 1's reproducible-metric
+template. Do NOT mix Paper 2–4 content into Paper 1 (roadmap §6 amendment 1).
 **Target:** arXiv (cs.CR / econ.GN) + Bitcoin Optech newsletter; r/BitcoinEngineering
 already engaged (v1/v2 history).
 
@@ -30,32 +36,34 @@ already engaged (v1/v2 history).
 
 ## 2. Submission steps (arXiv)
 
-1. **Author list & account.** **RECOMMENDATION (Prateek to ratify):** author line
-   = **Prateek Poswal, Independent Researcher** (Bitcoin Sahi Research Council
-   acknowledged in the paper body, not the byline). Full three-option analysis,
-   ORCID rationale, and exact signup steps in `research/author-identity.md`.
-   arXiv accounts are free; a new submitter may need endorsement — first
-   submissions to cs.* often require endorsement by an existing arXiv author.
-   Check `arxiv.org` endorsement rules before submitting. *(ACTION — needs
-   Prateek: arXiv account email + author details + any existing arXiv account +
-   ORCID iD. Default if no response: Independent Researcher, no affiliation.)*
-2. **License.** **RECOMMENDATION (Prateek to ratify):** **MIT** for code +
+1. **Author list & account.** ✅ **DECIDED (Prateek, 2026-08-02):**
+   author line = **Prateek Poswal, Independent Researcher** (program line
+   "Bitcoin Sahi Research"; Council acknowledged in the paper body, not the
+   byline). Full three-option analysis, ORCID rationale, and exact signup steps
+   in `research/author-identity.md`. **arXiv = real identity** (Prateek's
+   decision — no pseudonym). arXiv accounts are free; a new submitter may need
+   endorsement — first submissions to cs.* often require endorsement by an
+   existing arXiv author. Check `arxiv.org` endorsement rules before submitting.
+   *(ACTION — Prateek: create ORCID **before submission** (D2) and provide the
+   16-digit iD; create the arXiv account with his real identity (D3).)*
+2. **License.** ✅ **RECOMMENDED (Prateek, 2026-08-02):** **MIT** for code +
    **CC BY 4.0** for the paper, matched by the CC BY 4.0 license field on arXiv.
    Exact draft texts (LICENSE file replacement + paper notice + arXiv field) in
-   `research/license-draft.md`. The repo LICENSE file is currently a stub
-   ("All Rights Reserved") — do NOT change it until Prateek ratifies the pair.
+   `research/license-draft.md`. **The repo LICENSE file remains a stub
+   ("All Rights Reserved") — do NOT change it until Prateek's final ratification
+   (recommended, awaiting final go).**
 3. **Abstract.** Rewrite to arXiv constraints (~1 paragraph, ≤ ~1500 chars):
    state the question, the SCCR definition, the primary-source census (≥32K), the
    banded result (~22–29%, ~99–100% below 1×), and the reproducibility claim.
    The current abstract (working-paper §1) is close; trim to venue style.
    Banded claims only — never the strong form (100% below 1×).
-4. **Source format.** **DONE (2026-08-02):** full LaTeX source exists at
-   `research/working-paper.tex` (compilable skeleton — abstract verbatim, all
-   10 sections, 8 tables, references; conversion status noted in the file
-   header). LaTeX toolchain NOT present on the dev machine (no pdflatex) —
-   compile `pdflatex working-paper.tex` on any TeX installation before
-   submission, and diff content against working-paper.md. Fallback remains the
-   PDF export of working-paper.html.
+4. **Source format.** ✅ **DECIDED (Prateek, 2026-08-02): submit LaTeX, not
+   PDF-only.** Full LaTeX source exists at `research/working-paper.tex`
+   (compilable skeleton — abstract verbatim, all sections, tables, references;
+   conversion status noted in the file header). LaTeX toolchain NOT present on
+   the dev machine (no pdflatex) — compile `pdflatex working-paper.tex` on any
+   TeX installation before submission, and diff content against
+   working-paper.md. Fallback remains the PDF export of working-paper.html.
 5. **Units & notation consistency check.** The paper v2.1.0 already added units
    everywhere (dimensionless ratios, USD/block, nodes, yr). Before upload: run a
    final pass confirming (i) every table row carries units, (ii) SCCR is stated
@@ -83,13 +91,14 @@ already engaged (v1/v2 history).
 
 ## 4. Pre-submit checklist (both venues)
 
-- [ ] **Author list confirmed** (Prateek: ratify Independent Researcher + ORCID iD + arXiv account) — *needed from Prateek (see research/author-identity.md)*
-- [ ] **License chosen** (recommend MIT code + CC BY 4.0 paper; drafts in research/license-draft.md; LICENSE file untouched until Prateek ratifies)
+- [x] **Author list** — ✅ DECIDED (Prateek 2026-08-02): Prateek Poswal, Independent Researcher (Bitcoin Sahi Research program line); arXiv = real identity. *(LEFT: ORCID iD — create BEFORE submission, D2)*
+- [x] **License** — ✅ RECOMMENDED (Prateek 2026-08-02): MIT code + CC BY 4.0 paper. *(LICENSE file still untouched — awaiting Prateek's final go)*
 - [ ] **Abstract rewritten** to venue constraints, banded claims only
 - [ ] **Units consistency pass** (every quantity tagged; no undated headline numbers)
 - [ ] **Claims-within-evidence pass** (banded ~22–29% / ~99–100%; ≥32K lower bound; T=10 assumption stated)
-- [ ] **Companion note final** (`archival-vs-pruned-note.md` — Prateek review pending)
-- [ ] **Source format decided** — LaTeX source EXISTS (`research/working-paper.tex`); needs a compile pass on a machine with pdflatex (toolchain absent locally)
+- [ ] **Companion note final** (`archival-vs-pruned-note.md` — Prateek's simultaneous-publication decision recorded; note content review pending)
+- [x] **Source format** — ✅ DECIDED (Prateek 2026-08-02): **LaTeX, not PDF-only**; LaTeX source EXISTS (`research/working-paper.tex`); needs a compile pass on a machine with pdflatex (toolchain absent locally)
+- [ ] **External reproduction** — 🚨 **CRITICAL PATH** (Prateek 2026-08-02: *the only thing worth delaying submission for*); protocol + log in `research/reproduce/`; do NOT submit until an uninvolved reproducer has run it (or delay waived)
 - [ ] **Reproducibility line intact**: model-spec v2.0.1 + three independent implementations (JS/Python/C) named
 - [ ] **Prior-work honesty intact**: Liu et al. 2021 (arXiv:2103.05866) acknowledged as closest prior work; contribution = measurement, not the observation (working-paper §8.2)
 - [ ] **Dead-claims audit**: no reference to v1/v2 oracle framing (refuted); no BIP-110 claim beyond documented DOA status
@@ -172,11 +181,32 @@ learn.html dashboard work already shipped.
 - Checklist items that do not need new input are all marked actionable in §4.
 
 **LEFT / TODO (verified):**
-- [ ] Prateek: arXiv account + author list (name/affiliation/ORCID) + license preference
-- [ ] Prateek: review `archival-vs-pruned-note.md` (data-gap framing sign-off)
-- [ ] Abstract rewrite + LaTeX-or-PDF decision (mechanical once author/license known)
-- [ ] Actual submission (arXiv upload + Optech pitch) — after Prateek's inputs land
+- [ ] 🚨 **External reproduction** — CRITICAL PATH (Prateek 2026-08-02); the only
+      submission-delaying item; protocol + log in `research/reproduce/`
+- [ ] Prateek: ORCID iD (create BEFORE submission) + arXiv account (real identity)
+- [ ] Prateek: review `archival-vs-pruned-note.md` (data-gap framing sign-off) —
+      simultaneous publication decided
+- [ ] Abstract rewrite (mechanical once ORCID/endorsement known)
+- [ ] LaTeX compile pass (pdflatex on any TeX machine) — format decided: LaTeX
+- [ ] Actual submission (arXiv upload + Optech pitch) — after the critical path clears
 - [ ] Post-publication: update TODO-bitcoin-oracle.md R5 item + site surfaces with the preprint URL
+
+## 7. Publication decisions — Prateek's directive (2026-08-02)
+
+All seven recorded in `docs/decisions/2026-08-02-publication-decisions.md`:
+
+| # | Decision | Prateek's guidance | Status |
+|---|---|---|---|
+| D1 | Author | Prateek Poswal, Independent Researcher (Bitcoin Sahi Research) | ✅ RECOMMENDED/RESOLVED |
+| D2 | ORCID | Create BEFORE submission | 🟡 ACTION (pre-submission required) |
+| D3 | arXiv identity | Real identity (no pseudonym) | ✅ RECOMMENDED/RESOLVED |
+| D4 | License | MIT (code) + CC BY 4.0 (paper) | ✅ RECOMMENDED — LICENSE file change awaits final go |
+| D5 | External reproducer | The ONLY thing worth delaying submission for | 🚨 CRITICAL PATH |
+| D6 | Source format | Submit LaTeX, not PDF-only | ✅ RECOMMENDED/RESOLVED |
+| D7 | Companion note | Publish simultaneously | ✅ RECOMMENDED/RESOLVED |
+
+The roadmap rename (2026-08-02) makes this Paper 1 of **Bitcoin Resource
+Accounting**; SCCR is Metric #1 of the RIR family (working-paper §11 Q3).
 
 ---
 
