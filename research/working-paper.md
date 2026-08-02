@@ -1,13 +1,13 @@
 # The Bitcoin Block Space Problem: Does the Fee Market Internalize Long-Term Storage Costs?
 
-**BSAHI Working Paper — v2.0.0** (model-spec.json v2.0.0)
+**BSAHI Working Paper — v2.1.0** (model-spec.json v2.0.1)
 *Bitcoin Sahi Research Council · 2026-08-02*
 
 ---
 
 ## Abstract
 
-Bitcoin's fee market allocates scarce block space among competing transactions. This paper asks a distinct empirical question: does the fee market *also* internalize the long-term resource costs imposed by permanently recorded blockchain data? We define a **Storage Cost Coverage Ratio (SCCR)** — the ratio of transaction fees paid to the estimated lifetime storage cost borne by full nodes — and measure it against live fee-history data using a **primary-source node census (≥32,000 known addresses from a live Bitcoin Core node)**. Across 156 sampled blocks, the average ratio is **~0.29**: fees cover roughly **29%** of the estimated 10-year replicated storage cost of an average block, and **~99% of sampled blocks fall below the 1× threshold** (a small number of high-fee blocks exceed it). We reconcile two cost models that previously disagreed by 16.4×, document the correction transparently (model-spec.json v2.0.0), and bound the result against parameter uncertainty (joint Monte Carlo: 99.8% of draws below 1× under the old N band; ~99% at the real census). We present the framework as reproducible, falsifiable research — not a claim that Bitcoin is broken.
+Bitcoin's fee market allocates scarce block space among competing transactions. This paper asks a distinct empirical question: does the fee market *also* internalize the long-term resource costs imposed by permanently recorded blockchain data? We define a **Storage Cost Coverage Ratio (SCCR)** — the ratio of transaction fees paid (USD) to the estimated lifetime storage cost borne by full nodes (USD) — and measure it against live fee-history data using a **primary-source node census (≥32,000 known addresses from a live Bitcoin Core node)**. Across 156 sampled blocks, the average ratio is **~0.29 (dimensionless)**: fees cover roughly **29%** of the estimated 10-year replicated storage cost of an average block, and **~99% of sampled blocks fall below the 1× threshold** (a small number of high-fee blocks exceed it). A live re-measure on 2026-08-02 gives **~0.225 (dimensionless)** (168 blocks, model-spec v2.0.1); a re-read of the same capture at time of writing (167 blocks) gave 0.2228 with 100% of blocks below 1× — the ratio moves with the fee market. We reconcile two cost models that previously disagreed by 16.4× (dimensionless), document the correction transparently (model-spec.json v2.0.0), and bound the result against parameter uncertainty (joint Monte Carlo: 99.8% of draws below 1× under the old N band; ~99% at the real census). We present the framework as reproducible, falsifiable research — not a claim that Bitcoin is broken.
 
 **Hypothesis:** Bitcoin's fee market efficiently allocates scarce block space, but may not fully internalize every long-lived resource cost created by confirmed transactions.
 
@@ -19,9 +19,9 @@ The one-sentence frame (full treatment in `problem_statement.md`):
 
 > **Bitcoin's fee market prices competition for inclusion in the next block, but it does not explicitly price the long-term resource costs of permanently recorded blockchain data.**
 
-The fee market solves a short-term optimization problem extremely well: during congestion, higher fees win block space. This is **congestion pricing**, with a horizon of roughly one block (~10 minutes). Storage cost is structurally different:
+The fee market solves a short-term optimization problem extremely well: during congestion, higher fees win block space. This is **congestion pricing**, with a horizon of roughly one block (~10 min). Storage cost is structurally different:
 
-- **One-time payment** (the fee) vs. **recurring cost** (long-term replicated storage across the network)
+- **One-time payment** (the fee, USD/block) vs. **recurring cost** (long-term replicated storage across the network, USD/(node·yr))
 - **Payer chooses** to pay vs. **node operators bear** the cost involuntarily
 - **~10-min horizon** (next block) vs. **indefinite horizon** (data persists in blockchain history)
 
@@ -37,7 +37,7 @@ The fee market solves a short-term optimization problem extremely well: during c
 
 ## 3. The SegWit Pricing Structure
 
-SegWit (BIP 141, activated August 2017) introduced block weight: witness data counts **1 weight unit per byte**, non-witness data **4 weight units per byte**. This **4:1 discount** reduces the marginal block-space cost of witness-resident data relative to non-witness data. Years later, inscription protocols (Ordinals, BRC-20, Runes) took advantage of that pricing structure.
+SegWit (BIP 141, activated August 2017) introduced block weight: witness data counts **1 weight unit (WU) per byte**, non-witness data **4 WU per byte**. This **4:1 (dimensionless) discount** reduces the marginal block-space cost of witness-resident data relative to non-witness data. Years later, inscription protocols (Ordinals, BRC-20, Runes) took advantage of that pricing structure.
 
 Two precise caveats (full treatment in `bip141_analysis.md`):
 1. The discount applies to **all** witness data — SegWit financial transactions benefit identically. The "accident" is that it also subsidizes data-bearing constructions, not that SegWit was designed for them.
@@ -47,43 +47,45 @@ Two precise caveats (full treatment in `bip141_analysis.md`):
 
 ### 4.1 Canonical specification
 
-All quantities, units, and formulas live in **`research/model-spec.json` (v2.0.0)** — a single canonical source that every script imports. No script redefines a model constant.
+All quantities, units, and formulas live in **`research/model-spec.json` (v2.0.1)** — a single canonical source that every script imports. No script redefines a model constant.
 
 | Quantity | Symbol | Units | Value | Source |
 |---|---|---|---|---|
-| Annual node cost | C | USD/year | 925 | `utxo_cost_model` component sum (924.35) rounded |
+| Annual node cost | C | USD/yr | 925 | `utxo_cost_model` component sum (924.35) rounded |
 | Replication factor | N | nodes | 32,000 | primary-source census (agent-25, getnodeaddresses, ≥32K) |
-| Storage horizon | T | years | 10 | assumption (archival retention) |
+| Storage horizon | T | yr | 10 | assumption (archival retention) |
 | Average block size | B_block | bytes | 1,500,000 | block_stats / fee_history |
 | Blocks per year | R_blocks | blocks/yr | 52,596 | 365.25 × 24 × 6 |
 | Total block bytes/yr | B_all_yr | bytes/yr | 7.8894e10 | B_block × R_blocks |
 | **Cost per byte per year** | **cb** | USD/(byte·yr) | **1.17246e-8** | C / B_all_yr (block-average) |
-| Lifetime storage cost/node/block | L | USD | 0.175869 | cb × B_block × T |
-| Network lifetime cost/block | L_net | USD | 5,628 | L × N (=32K) |
-| **Storage Cost Coverage Ratio** | **SCCR** | dimensionless | **~0.29** (156 blocks, N=32K) | fee_USD / L_net |
+| Lifetime storage cost/node/block | L | USD/block | 0.175869 | cb × B_block × T |
+| Network lifetime cost/block | L_net | USD/block | 5,628 | L × N (=32K) |
+| **Storage Cost Coverage Ratio** | **SCCR** | dimensionless | **~0.29** (156 blocks, N=32K, dated 2026-08-01); **0.2228** (167 blocks, live 2026-08-02) | fee_USD / L_net |
 
 **Design principle:** `cb` is **horizon-free** (C / annual bytes). The horizon `T` enters **only** through `L = cb × B × T`. This corrects the v1.0.0 implementation, which applied `T` twice (see §6).
 
 ### 4.2 The marginal-inscription attribution (secondary)
 
-The inscription-externality branch uses a **marginal attribution**: `cb_insc = C / (inscription bytes/yr) = 1.92573e-6` USD/(byte·yr). This differs from `cb` by a factor of **164.4×** — not an error, but two different denominators (all block bytes vs. inscription-only bytes). The paper headline uses the block-average `cb`; the marginal figure appears only in the inscription-externality analysis. The 16.4× figure reported in earlier versions was this 164× denominator gap **divided by** the 10× bug — see §6.
+The inscription-externality branch uses a **marginal attribution**: `cb_insc = C / (inscription bytes/yr) = 1.92573e-6` USD/(byte·yr). This differs from `cb` by a factor of **164.4× (dimensionless)** — not an error, but two different denominators (all block bytes vs. inscription-only bytes). The paper headline uses the block-average `cb`; the marginal figure appears only in the inscription-externality analysis. The 16.4× (dimensionless) figure reported in earlier versions was this 164× (dimensionless) denominator gap **divided by** the 10× (dimensionless) bug — see §6.
 
 ## 5. Findings
 
 ### 5.1 The Storage Cost Coverage Ratio
 
-Measured from live `fee_history` captures (2026-08-01), node count N=32,000 (real census):
+Measured from live `fee_history` captures, node count N=32,000 (real census). Two snapshots, dated explicitly:
 
-| Metric | Value |
-|---|---|
-| Blocks sampled | 156 |
-| Average SCCR | **~0.293** |
-| Min / Max | ~0.058 / ~1.537 |
-| Blocks below 1× | **98.7%** (154/156) |
+| Metric | Dated capture (2026-08-01) | Live capture (2026-08-02) |
+|---|---|---|
+| Blocks sampled | 156 | 167 |
+| Average SCCR (dimensionless) | **~0.293** | **0.2228** |
+| Min / Max (dimensionless) | ~0.058 / ~1.537 | ~0.058 / ~0.832 |
+| Blocks below 1× | **98.7%** (154/156) | **100.0%** |
 
-**Fee-regime + node-count dependence:** the ratio tracks both the fee market and the replication factor. Under the earlier N=60K assumption the average was 0.156–0.172 with 100% below 1×; at the real census N=32K it rises to ~0.29 with ~99% below 1× (a few high-fee blocks exceed coverage). The headline is a *distribution over time and parameters*, not a point.
+**Live re-measure (canonical, 2026-08-02):** the ratio moves with the fee market. The canonical re-measure recorded in `research/model-spec.json` v2.0.1 is **0.2252** (168 blocks, 2026-08-02); the 0.2228 above is the same capture window re-read at the time of writing (167 blocks). The 0.293 figure is the dated 2026-08-01 snapshot. The single source of truth is `research/model-spec.json` (v2.0.1, canonical); all surfaces must read the live value from `node tools/research/storage-ratio.js`, never a hardcoded figure. The v2.0.0 N=60K-era values (0.1719 / 0.1535) are superseded.
 
-**Interpretation:** transaction fees cover, on average, roughly **29%** of the estimated 10-year replicated storage cost of an average block across the ≥32K observed nodes. Most sampled blocks' fees remain below their estimated storage cost.
+**Fee-regime + node-count dependence:** the ratio tracks both the fee market and the replication factor. Under the earlier N=60K assumption the average was 0.156–0.172 (dimensionless) with 100% below 1×; at the real census N=32K it rises to ~0.22–0.29 with ~99–100% below 1× (a few high-fee blocks exceed coverage in the dated capture). The headline is a *distribution over time and parameters*, not a point.
+
+**Interpretation:** transaction fees cover, on average, roughly **22–29%** of the estimated 10-year replicated storage cost of an average block across the ≥32K observed nodes. Most sampled blocks' fees remain below their estimated storage cost.
 
 ### 5.2 The inscription externality (marginal branch)
 
@@ -92,33 +94,35 @@ At 100,000 inscriptions/month (~400 bytes each, in witness):
 | Metric | Value |
 |---|---|
 | Cost per byte per year (marginal) | 1.92573e-6 USD/(byte·yr) |
-| Lifetime storage cost per inscription (10 yr) | $0.00770 |
-| New 10-yr storage liabilities created per year at 100K/mo | ~$9,240 spread across all nodes |
-| Steady-state annual externality (amortized) | ~$924/yr spread across all nodes |
+| Lifetime storage cost per inscription (10 yr) | $0.00770 USD/inscription |
+| New 10-yr storage liabilities created per year at 100K/mo | ~$9,240 USD/yr spread across all nodes |
+| Steady-state annual externality (amortized) | ~$924 USD/yr spread across all nodes |
 
-**Unit note (corrected):** $9,240 is the *undiscounted 10-year liability of one year's inscriptions*, not an annual cost. Amortized over the 10-yr horizon it is ~$924/yr. This was previously labeled "annual unpriced externality" — a T/1 conflation of the same shape as the fixed 10× bug, in label only. The per-node figure (~$0.015/yr) is unchanged under either reading.
+**Unit note (corrected):** $9,240 is the *undiscounted 10-year liability of one year's inscriptions* (USD/yr), not an annual cost. Amortized over the 10-yr horizon it is ~$924/yr. This was previously labeled "annual unpriced externality" — a T/1 conflation of the same shape as the fixed 10× bug, in label only. The per-node figure (~$0.015 USD/(node·yr)) is unchanged under either reading.
 
-**Pruning-consistency note:** this externality is structurally real but **not economically significant at current volumes** — per-node it is well under $1/year. The contribution of this paper is the reproducible ratio framework, not the magnitude. A future fee regime (sustained congestion, larger data-bearing volume) would change the magnitude while keeping the framework intact.
+**Pruning-consistency note:** this externality is structurally real but **not economically significant at current volumes** — per-node it is well under $1/yr. The contribution of this paper is the reproducible ratio framework, not the magnitude. A future fee regime (sustained congestion, larger data-bearing volume) would change the magnitude while keeping the framework intact.
 
 ### 5.3 Sensitivity
 
-`node tools/research/storage-ratio.js --sensitivity` (model-spec v2.0.0). Base node count is the real census N=32K; the table's node range brackets it:
+Recomputed at the live capture (2026-08-02, 167 blocks; baseline SCCR = 0.2228 (dimensionless) at N=32K, C=$925/yr, T=10 yr) with `node tools/research/storage-ratio.js` and the canonical spec. The table's parameter ranges bracket the canonical values:
 
-| Parameter | Value | Avg SCCR |
+| Parameter | Value | Avg SCCR (dimensionless) |
 |---|---|---|
-| Node cost | 600 / 925 / 1400 | 0.240 / 0.156 / 0.103 |
-| Node count | 16K / 32K / 100K | ~0.55 / ~0.29 / ~0.09 |
-| Storage horizon | 5 / 10 / 15 yr | 0.312 / 0.156 / 0.104 |
-| Avg block size | 1.0 / 1.5 / 2.0 MB | 0.156 (invariant) |
+| Node cost, C (USD/yr) | 600 / 925 / 1400 | 0.343 / 0.223 / 0.147 |
+| Node count, N (nodes) | 16,000 / 32,000 / 100,000 | 0.446 / 0.223 / 0.071 |
+| Storage horizon, T (yr) | 5 / 10 / 15 | 0.446 / 0.223 / 0.149 |
+| Avg block size, B (MB) | 1.0 / 1.5 / 2.0 | 0.223 (invariant) |
 
-**BTC price (the dominant omitted driver — verified in independent implementation):** the ratio is linear in price. Over the realistic band (at N=32K, base ~0.29):
+**BTC price (the dominant omitted driver — verified in independent implementation):** the ratio is linear in price. At the live N=32K baseline (capture price ≈ $63,018 USD/BTC):
 
-| BTC price | Avg SCCR (at N=32K census) |
+| BTC price (USD/BTC) | Avg SCCR (dimensionless, N=32K) |
 |---|---|
-| $30,000 | 0.154 |
-| $45,000 | 0.231 |
-| $62,900 (capture) | 0.293 |
-| $100,000 | 0.512 |
+| $30,000 | 0.106 |
+| $45,000 | 0.159 |
+| $62,900 | 0.222 |
+| $100,000 | 0.354 |
+| $200,000 | 0.707 |
+| $500,000 | 1.768 |
 
 **Structural property:** SCCR is **invariant to block size** — `cb ∝ 1/B` while `L ∝ B`, so `B` cancels. Caveat: this invariance follows from attributing *all* node cost per byte then multiplying back by bytes — it reflects that the model is size-agnostic (contains no size-dependent economics), not that size is economically irrelevant.
 
@@ -126,24 +130,26 @@ At 100,000 inscriptions/month (~400 bytes each, in witness):
 
 The SCCR is homogeneous of degree 1 in its scale parameters: `SCCR ∝ (fee × price) / (C × T × N)`. Two thresholds matter (derived and verified in the independent C implementation):
 
-- **The average SCCR crosses 1.0 at N ≈ 10,300 nodes** (or BTC ≈ $366K)
-- **The "100% of sampled blocks below 1×" claim breaks at N ≈ 49,200 nodes** (or BTC ≈ $76,700) — the highest-fee sampled block (13.75M sats, height 960469) sits at 0.82× coverage under the old N=60K
+- **The average SCCR crosses 1.0 at N ≈ 10,300 nodes** (or BTC ≈ $366,000 USD/BTC) — dated v2.0.0-era reference values (baseline 0.1719 at N=60K)
+- **The "100% of sampled blocks below 1×" claim breaks at N ≈ 49,200 nodes** (or BTC ≈ $76,700) — the highest-fee sampled block (13.75M sats, height 960469) sits at 0.82× coverage (dimensionless) under the old N=60K
+
+**Live recompute (2026-08-02 baseline, SCCR = 0.2228 at N=32K):** because the baseline ratio itself rose, the average now inverts at **N ≈ 7,130 nodes** or **BTC ≈ $283,000**; the "100% below 1×" break on the dated capture is unchanged at N ≈ 49,200 (the max block is 0.832× at N=32K on the live capture, still below 1×). Both the dated and live thresholds are reported; the model-spec v2.0.1 note retains the v2.0.0-era values (10.3K / $366K).
 
 **The real census (primary source).** We replaced the 60K assumption with data from a live Bitcoin Core node (`getnodeaddresses`, agent-25/node-census): **32,000 known addresses** — the RPC maximum, meaning the node's address manager is saturated at the cap and the true reachable set is *at least* 32K. Independent estimates span ~10K–100K; BSAHI's own earlier marketing data used ~27.8K.
 
-**Consequence of the real N=32,000 (recomputed, 156 blocks):**
+**Consequence of the real N=32,000 (recomputed, dated 156-block capture):**
 
 | Metric | At N=60K (old assumption) | At N=32K (real census) |
 |---|---|---|
-| Average SCCR | 0.156–0.172 | **~0.293** |
-| Max per-block ratio | 0.820 | **1.537** |
+| Average SCCR (dimensionless) | 0.156–0.172 | **~0.293** |
+| Max per-block ratio (dimensionless) | 0.820 | **1.537** |
 | Blocks below 1× | 100.0% | **98.7%** (154/156) |
 
-**This is a substantive finding, not a cosmetic one:** with a defensible node count, fees cover *more* of the modeled storage cost than the 60K assumption implied (~29% vs ~17%), and a handful of high-fee blocks now *exceed* 1× coverage. The direction of the headline is unchanged — most blocks are still below 1× — but the strong form ("100% below 1×") does **not** survive the real census. **The defensible claim is: ~29% average coverage, ~99% of sampled blocks below 1×, at the real observed node count (≥32K).**
+**This is a substantive finding, not a cosmetic one:** with a defensible node count, fees cover *more* of the modeled storage cost than the 60K assumption implied (~29% vs ~17%), and a handful of high-fee blocks now *exceed* 1× coverage. The direction of the headline is unchanged — most blocks are still below 1× — but the strong form ("100% below 1×") does **not** survive the real census on the dated capture. **The defensible claim is: ~22–29% average coverage, ~99–100% of sampled blocks below 1×, at the real observed node count (≥32K).**
 
 **Joint Monte Carlo on the headline** (`research/sccr_monte_carlo.py`, 10,000 samples, N ~ Tri(10K,150K,mode 60K), C ~ Tri($500,$2000,mode $925), T ~ Tri(5,30,mode 10), P ~ Tri($30K,$120K,mode $62.9K)):
 
-| Quantile | SCCR |
+| Quantile | SCCR (dimensionless) |
 |---|---|
 | P5 | 0.034 |
 | P25 | 0.062 |
@@ -154,35 +160,51 @@ The SCCR is homogeneous of degree 1 in its scale parameters: `SCCR ∝ (fee × p
 
 The median is below the deterministic point estimate because the node-count distribution's right tail (median N ≈ 86K) dominates. The result is robust in distribution: under joint uncertainty about every scale parameter, the ratio remains below 1 in 99.8% of draws — the *direction* of the finding is not sensitive to the audited parameter uncertainty, though the magnitude spans ~10× (P5–P95).
 
-## 6. Internal Validation and Reconciliation (v2.0.0)
+## 6. Internal Validation, Correction, and Reconciliation (v2.0.0)
 
-Internal validation identified an inconsistency in the SCCR implementation, traced it to a **duplicated time-horizon term**, corrected the implementation, regenerated all reported values, and confirmed the qualitative conclusions unchanged.
+Internal validation identified an inconsistency in the SCCR implementation, traced it to a **duplicated time-horizon term**, corrected the implementation, regenerated all reported values, and confirmed the qualitative conclusions unchanged. We present the correction in four labeled steps: **Bug → Fix → Results → Reconciliation**.
 
-**The bug:** methodology.json v1.0.0 and `storage-ratio.js` applied the horizon `T` twice — once dividing the denominator of `costPerBytePerYear` (`C / (B_all_yr / T)`) and again in the lifetime-cost product (`bytes × cb × T`). This inflated modeled storage cost — and deflated the ratio — by exactly **10×**.
+### 6.1 The bug
 
-**The correction:** `cb` is defined horizon-free (`C / bytes-per-year`); `T` enters only through `L = cb × B × T`. After correction:
+methodology.json v1.0.0 and `storage-ratio.js` applied the horizon `T` twice — once dividing the denominator of `costPerBytePerYear` (`C / (B_all_yr / T)`) and again in the lifetime-cost product (`bytes × cb × T`). This inflated modeled storage cost (USD/block) — and deflated the ratio (dimensionless) — by exactly **10×**.
 
-| Quantity | Before (v1.0.0) | After (v2.0.0) |
+**The error affected the magnitude of the reported ratio, not the logical structure of the model or the interpretation of the hypothesis.** The formula's shape (fee vs. replicated lifetime storage cost) was correct; the bug was a dimensional slip in one derived quantity (`cb`), not a conceptual change to what the ratio measures.
+
+### 6.2 The fix
+
+`cb` is defined horizon-free (`C / bytes-per-year`); `T` enters only through `L = cb × B × T`. This is the canonical v2.0.0 definition and is pinned in `research/model-spec.json`; no script may reintroduce `T` into `cb`.
+
+### 6.3 Results
+
+| Quantity | Before (v1.0.0 formula, N=60K) | After (v2.0.0, N=60K) |
 |---|---|---|
-| Cost per byte per year | 1.17247e-7 | **1.17247e-8** |
-| Lifetime storage cost/node/block | $1.759 | **$0.176** |
-| Network lifetime cost/block | $105,522 | **$10,552** |
-| **Average SCCR** | 0.0172 | **0.1719** |
+| Cost per byte per year (USD/(byte·yr)) | 1.17247e-7 | **1.17247e-8** |
+| Lifetime storage cost/node/block (USD/block) | $1.759 | **$0.176** |
+| Network lifetime cost/block (USD/block) | $105,522 | **$10,552** |
+| **Average SCCR (dimensionless)** | 0.0172 | **0.1719** |
 | Blocks below 1× | 100% | **100% (unchanged)** |
 
-*Note: this table documents the 10× time-horizon correction at the then-assumed N=60K. A separate, subsequent correction replaced the node count with the primary-source census (N=32K), which moves the average to ~0.29 and the below-1× share to ~99% (see §5.4). The two corrections are independent and both are documented.*
+**Why the conclusion survived the correction.** Although the correction increased the estimated SCCR by ~10× on a same-capture basis (0.0172 → 0.1719 (dimensionless) at the then-assumed N=60K) — and by ~11.5× across the as-reported headlines (v1.0.0 **0.0149** → v2.0.0 **0.1719**, a change that also spans different capture windows) — every sampled block still remained below the modeled full-cost threshold (1×) under the then-assumed node count (N=60K). At the real N=32K census the average rose further to **~0.225 (22.5%)** on the 2026-08-02 live re-measure (168 blocks), with ~99% of sampled blocks still below the 1× threshold. The magnitude of the measurement moved by an order of magnitude; the *direction* of the finding did not.
 
-**The reconciliation:** the two cost models (`storage-ratio.js` and `utxo_cost_model.py`) disagreed by 16.4×. This decomposed as **164× denominator gap ÷ 10× bug = 16.4×**. The models measure different quantities (block-average vs. marginal-inscription attribution); the gap is documented, not erased. See `verification_appendix.md → Model Reconciliation (v2.0.0)`.
+*Note: the table above documents the 10× time-horizon correction at the then-assumed N=60K. A separate, subsequent correction replaced the node count with the primary-source census (N=32K), which moves the average to ~0.22–0.29 and the below-1× share to ~99–100% (see §5.4). The two corrections are independent and both are documented.*
+
+### 6.4 Reconciliation
+
+The two cost models (`storage-ratio.js` and `utxo_cost_model.py`) disagreed by 16.4× (dimensionless). This decomposed as **164× (dimensionless) denominator gap ÷ 10× (dimensionless) bug = 16.4× (dimensionless)**. The models measure different quantities (block-average vs. marginal-inscription attribution); the gap is documented, not erased. See `verification_appendix.md → Model Reconciliation (v2.0.0)`.
+
+### 6.5 Reproducibility
+
+The correction increased the estimated SCCR by an order of magnitude but did not reverse the paper's qualitative conclusion. This distinction is important: the implementation error affected the estimated magnitude of the measurement, whereas the underlying hypothesis was evaluated against the corrected model and remained supported under the paper's assumptions. Every quantity in this paper is regenerated from `research/model-spec.json` (v2.0.1) by three independent implementations (JS, Python, standalone C); no script redefines a model constant, and the full capture log is retained in `captured-data/bsahi.db`.
 
 ## 7. Limitations and Future Work
 
 **Limitations:**
-1. **Node count (60K) is an estimate**, not a census — actual full-node count varies widely (pruned vs. archival). Independent estimates span ~10K–100K reachable nodes; the 60K midpoint is an assumption (see §5.4). The SCCR is inversely proportional to node count: at the audit's boundary, the "100% below 1×" claim inverts below ~49K nodes and the average inverts below ~10K.
+1. **The node count (≥32K from the live census) is a lower bound**, not a complete enumeration — the addrman caps at 32,000 addresses, so the true reachable set is at least 32K, and independent estimates span ~10K–100K reachable nodes (pruned vs. archival). The SCCR is inversely proportional to node count: at the live baseline the average inverts above 1× only below ~7.1K nodes, and the "100% below 1×" claim breaks below ~49K nodes at the dated capture (see §5.4).
 2. **Node costs are homogeneous** in the model; hardware/bandwidth/electricity vary by geography and operator.
 3. **10-year horizon is an assumption**; pruning shortens actual retention, permanent storage extends it.
-4. **No discounting.** A one-time fee is compared against an undiscounted 10-yr storage-cost sum; discounting the liability at r=5% (8%) reduces the present value by ~27% (45%). The ratio therefore overstates the liability as commonly valued.
+4. **No discounting.** A one-time fee (USD/block) is compared against an undiscounted 10-yr storage-cost sum (USD/block); discounting the liability at r=5%/yr (8%/yr) reduces the present value by ~27% (45%). The ratio therefore overstates the liability as commonly valued.
 5. **Bandwidth is included in the fixed node cost (C) yet marginal bandwidth-propagation cost is excluded from the storage leg.** This is the fixed-vs-marginal distinction, not a double count: C prices the node's *average* bandwidth bill; the excluded term is the *marginal* cost of propagating one more block to one more node.
-6. **Marginal vs. average attribution** changes the per-byte cost by 164× — the choice is explicit and documented, not hidden.
+6. **Marginal vs. average attribution** changes the per-byte cost by 164× (dimensionless) — the choice is explicit and documented, not hidden.
 
 **Future work (the resource-pricing program):**
 - **UTXO leg:** capture `getblockstats → utxo_size_inc` (already produced by agent-06, currently dropped at DB write)
@@ -190,6 +212,7 @@ Internal validation identified an inconsistency in the SCCR implementation, trac
 - **Validation leg:** Core benchmarks + node-cost literature with explicit uncertainty
 - **Node distribution:** expand `node_geo` (currently 224 rows) for per-region cost distributions
 - **BIP-110 pre/post measurement protocol** if activation is ever signaled
+- **v3.0 economic-dynamics program:** the eight-question agenda in §10
 
 ## 8. Economics and Related Work
 
@@ -214,15 +237,37 @@ Following standard environmental-economics usage (Pigou, 1920; Coase, 1960), a *
 
 ## 9. Conclusion
 
-The fee market solves block-space allocation well — that is not in question. Whether it internalizes long-lived resource costs is an **open empirical question**, and this paper contributes the first reproducible measurement using a primary-source node census: a storage-cost-internalization ratio averaging **~0.29** (156 blocks, N=32K real census), with **~99% of sampled blocks below the 1× threshold**.
+The fee market solves block-space allocation well — that is not in question. Whether it internalizes long-lived resource costs is an **open empirical question**, and this paper contributes the first reproducible measurement using a primary-source node census: a storage-cost-internalization ratio averaging **~0.22–0.29 (dimensionless)** (167–156 blocks, N=32K real census, dated captures), with **~99–100% of sampled blocks below the 1× threshold**.
 
-The strong form of the claim ("100% below 1×") does **not** survive the real node census — a small set of high-fee blocks exceed 1× coverage at N=32K. The defensible statement is a **banded estimate**: fees currently cover roughly **one-sixth to one-third** of the modeled 10-year replicated storage cost depending on the node-count assumption, with the *direction* (most blocks below 1×) robust to every correction made in this paper's review.
+The strong form of the claim ("100% below 1×") does **not** survive the real node census on the dated capture — a small set of high-fee blocks exceed 1× coverage at N=32K. The defensible statement is a **banded estimate**: fees currently cover roughly **one-fifth to one-third** of the modeled 10-year replicated storage cost depending on the node-count assumption and capture window, with the *direction* (most blocks below 1×) robust to every correction made in this paper's review.
 
-We invite the community to reproduce, challenge, and extend this framework. All quantities derive from `research/model-spec.json` (v2.0.0); no script redefines a model constant. The data is live-captured, the measurement is continuous, and the arithmetic has been reproduced in three independent implementations (JS, Python, standalone C). The framework is presented as exactly what it is: a reproducible first measurement of a genuinely open question — not a verdict.
+We invite the community to reproduce, challenge, and extend this framework. All quantities derive from `research/model-spec.json` (v2.0.1); no script redefines a model constant. The data is live-captured, the measurement is continuous, and the arithmetic has been reproduced in three independent implementations (JS, Python, standalone C). The framework is presented as exactly what it is: a reproducible first measurement of a genuinely open question — not a verdict.
+
+## 10. Next Evolution (v3.0): When Would the Fee Market Naturally Internalize These Costs?
+
+**Trajectory.** v2.0 asked and answered a *measurement* question: **"Can we measure whether the fee market internalizes long-term storage costs?"** — the SCCR is that measurement. The next evolution of this program (v3.0) moves from measurement to *economic dynamics*: **"Under what economic conditions would the fee market naturally internalize these costs?"** Instead of asking how large today's gap is, v3.0 asks which parameter paths — BTC price, fee levels, node counts, storage costs, payment-layer substitution — close the gap on their own, and whether any endogenous mechanism does so.
+
+**The v3.0 research agenda is the following eight questions.** Preliminary computations at the live fee level (canonical model-spec v2.0.1 quantities; live `fee_history` capture, 2026-08-02; baseline SCCR = 0.2228 (dimensionless) at N=32K, T=10 yr, C=$925/yr) are reported as previews; full derivations, assumptions, and sensitivity detail are in the accompanying analysis report.
+
+| # | Question | Headline model output (live baseline) |
+|---|---|---|
+| 1 | Storage horizon: SCCR at T = 5, 10, 20, 30, 50 yr | 0.446 / 0.223 / 0.111 / 0.074 / 0.045 (inverse-linear in T) |
+| 2 | Storage 10× cheaper: C = $92.5/yr (SSD cost collapse) | SCCR = 2.228 — the gap flips sign; fees would over-cover storage |
+| 3 | BTC = $500,000 | SCCR = 1.768; average crosses 1× at ~$283K (live baseline) |
+| 4 | Fees sustained at 100 sat/vB for 5 yr | fee_USD ≈ $63,018/block (1M vB) vs L_net ≈ $5,628 (T=10) → SCCR ≈ 11.2 (22.4 at T=5); crosses 1× at ~9 sat/vB (T=10) |
+| 5 | Lightning moves 90% of payments off-chain | Two-sided: lower on-chain fee demand ↓SCCR; higher-value residual traffic ↑SCCR — net effect is an open empirical question |
+| 6 | Nodes double / triple: N = 32K → 64K → 128K | 0.223 → 0.111 → 0.056 (inverse-linear in N) |
+| 7 | Can SCCR reach 1 without protocol changes? | Historically yes: SCCR averaged **above 1×** in 2017–2024 fee-peak years (2017 avg ~10.0, 2021 ~8.0, 2023 ~5.0, 2024 ~4.8, era-adjusted node counts); 2025–2026 is the first sustained sub-1× regime |
+| 8 | What is the equilibrium? Does price, fees, or demand close the loop? | **Open.** The model measures a ratio; it does not close the dynamic loop (N ↔ fees ↔ price). Framed as a dynamic system in the report |
+
+**Method notes for the agenda.** Q1–Q4, Q6, and Q7 are directly computable from the canonical model because SCCR is a simple homogeneous function of its drivers: `SCCR = fee_USD / L_net = fee_BTC × P × R_blocks / (C × T × N)` (dimensionless). Q5 requires a demand-side model of what moves off-chain and at what value per byte — outside the current model, and therefore flagged as reasoning-plus-assumption rather than computation. Q8 is the deep question: whether Bitcoin's fee market has a self-correcting mechanism (e.g., node attrition raising the per-node burden, or scarcity rents raising fees) that internalizes storage costs endogenously. That is the v3.0 centerpiece, and we state honestly that the current framework cannot settle it — it can only bound the parameter space in which the answer would flip.
+
+**Open-question honesty.** Nothing in this section claims the fee market *will* internalize these costs, nor that it *should*. The claim is narrower: the question is now well-posed, the drivers are identified, and each driver's lever on the ratio is measured. Whether any economic force actually pulls the system toward internalization is the v3.0 research question.
 
 ---
 
-*Bitcoin Sahi Research Council — The Bitcoin Block Space Problem (Working Paper v2.0.0)*
+*Bitcoin Sahi Research Council — The Bitcoin Block Space Problem (Working Paper v2.1.0)*
+
 *Component docs: problem_statement · bip141_analysis · pruning_externality_analysis · utxo_cost_note · verification_appendix · history-of-bitcoin*
 
 ## References
