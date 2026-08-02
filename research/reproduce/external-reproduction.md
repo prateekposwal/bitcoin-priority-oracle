@@ -75,11 +75,41 @@ copy the message into an email/DM to one person (friend, colleague, any
 technically-literate non-crypto person), and send. Then record the result
 below.
 
-## When a result lands, record it here:
+## Result table (ready to fill)
 
-| Date | Reproducer | Language | Avg SCCR | Min | Max | Below 1× | Per-block max dev | Verdict |
+| Reproducer | Environment | Result | Notes |
+|---|---|---|---|
+| **You (Prateek)** | macOS (darwin); Python 3.9 + Node + gcc | **0.2186** (Reference) | Reference run — the published numbers (avg 0.2186, min 0.0584, max 0.8320, 100% below 1×); confirmed by fresh-clone simulation 2026-08-03 |
+| External #1 | *(pending)* | *(pending)* | |
+| External #2 | *(pending)* | *(pending)* | |
+| External #3 | *(pending)* | *(pending)* | |
+
+## Phrasing rule
+
+Use **"Independently reproduced by external participants following the published
+reproduction protocol"** — **NOT** "externally verified."
+
+## When a result lands, also record the detail row here:
+
+| Date | Reproducer | Language/Env | Avg SCCR | Min | Max | Below 1× | Per-block max dev | Verdict |
 |---|---|---|---|---|---|---|---|---|
 | *(pending)* | | | | | | | | |
+
+## ✅ GO / SUBMIT TRIGGER — "reproducibility milestone achieved" (advisor rule)
+
+> **Milestone achieved** when any external participant replies with the equivalent
+> of: **"I cloned it, ran one command, and got 0.2186"** — i.e., an uninvolved human
+> independently confirms the published numbers from a clean clone, following the
+> published protocol.
+>
+> **→ milestone achieved → stop polishing → submit.**
+>
+> Until that reply lands, the submission gate stays closed. When it lands: record
+> the reply (quote + date + reproducer, anonymous ok) in this log, then submit.
+
+**Recruit assets (2026-08-03):** copy-paste message `recruit-message.md` ·
+personalized variants `recruit-message-personalized.md` · verified contact list
+`external-reproducer-contacts.md` (8 verified channels; no fabricated emails).
 
 ---
 
