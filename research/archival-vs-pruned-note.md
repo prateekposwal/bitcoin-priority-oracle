@@ -22,9 +22,9 @@ Two of those terms rest on assumptions that pruning directly conditions:
   `canonicalSource: "research/verification_appendix.md Open Q3 (assumption)"`.
   Working-paper §7 limitation 3 states it plainly: *"10-year horizon is an
   assumption; pruning shortens actual retention, permanent storage extends it."*
-- **N (replication) = 32,000 nodes** — a lower-bound census via the
-  `getnodeaddresses` RPC on a live Bitcoin Core node (addrman saturated at the
-  RPC max). The census measures *reachable node count*, a lower bound (≥32K). It
+- **N (replication) = 32,000 nodes** — a **primary-source lower-bound census
+  (≥32,000 known addresses via Bitcoin Core `getnodeaddresses`)** (addrman
+  saturated at the RPC max). The census measures *reachable node count*, a lower bound (≥32K). It
   says nothing about how many of those nodes retain the full chain vs. prune.
 
 If a large share of nodes prune, then **who bears the storage cost** changes: only
@@ -36,7 +36,7 @@ fraction of the network is archival, and does the fee market price storage for
 
 ## 2. What the data actually is (investigated, 2026-08-02)
 
-### 2.1 The node census (getnodeaddresses RPC) — reachability only
+### 2.1 The node census — primary-source lower-bound census (getnodeaddresses RPC), reachability only
 
 Source: `getnodeaddresses` RPC query (agent 25-node-census script) → `captured-data/spool/index/node_census/`
 (schema `capture.node_census@1.0`). Fields captured per run, verified across all
@@ -65,7 +65,7 @@ archival indicators.
 
 ### 2.3 Conclusion — measurement gap
 
-> **The repo's census captures N (reachable node count, ≥32K lower bound) but does
+> **The repo's primary-source lower-bound census captures N (reachable node count, ≥32K) but does
 > NOT contain a pruned-vs-archival split. No measured split exists in the repo as
 > of 2026-08-02. This note therefore identifies the split as the measurement gap
 > the companion study must close — it does not fabricate one.**

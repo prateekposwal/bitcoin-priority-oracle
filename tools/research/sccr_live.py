@@ -118,7 +118,7 @@ def main():
         'T': cfg['T'],
         'C': cfg['C'],
         'heights': [heights[0], heights[-1]] if heights else [],
-        'notes': 'SCCR = fee_USD / L_net; N=32K real census (>=32K lower bound); T=10yr assumption. Static JSON endpoint: /sccr/latest',
+        'notes': 'SCCR = fee_USD / L_net; N=32K primary-source lower-bound census (>=32,000 known addresses via Bitcoin Core getnodeaddresses); T=10yr assumption. Static JSON endpoint: /sccr/latest',
     }
 
     # history: append-or-replace today's entry

@@ -161,8 +161,8 @@ measured. Also the basis for the Optech 2–4 sentence summary (§3 step 1).
       surface (abstract, paper, companion note) states the banded claim and never
       the strong form
 - [ ] **Evidence/hypothesis separation** — SCCR labeled ESTABLISHED METRIC; all
-      other RIRs labeled RESEARCH HYPOTHESES wherever named (abstract, §11 Q3 table,
-      roadmap references); no surface implies UCIR/VCIR/RCIR/BCIR/DCIR are results
+      other RIRs labeled RESEARCH HYPOTHESES wherever named (abstract, companion
+      §2 Q3 table, roadmap references); no surface implies UCIR/VCIR/RCIR/BCIR/DCIR are results
 
 ## 5. What the archival-vs-pruned note adds to the submission
 
@@ -248,7 +248,7 @@ investors/general public). D5 remains the only submission blocker.
 **DONE (2026-08-03, advisor-feedback execution):** working-paper §7.1
 falsifiability section (md/html/tex); roadmap §4 evidence-status table +
 hypothesis labels; framework-paper outline (`research/framework-paper-outline.md`,
-Paper 4 synthesis); §11 Q4 + roadmap §8 Q4 sharpened ("no single resource
+Paper 4 synthesis); companion §2 Q4 + roadmap §8 Q4 sharpened ("no single resource
 market" — attribute/stock-vs-flow mismatch, not USD-vs-CPU denomination);
 publication-decisions tracker addendum (falsifiability = pre-submission item,
 D5 confirmed critical path). See commit message.

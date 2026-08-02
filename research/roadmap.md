@@ -18,14 +18,15 @@ consumed by Bitcoin, and quantify how much of each cost is internalized by the
 fee market?"** — with **SCCR as the first metric (Metric #1) in the family**.
 Recorded by TELOS (as Aviku). Consistent with ratified Decision 1 (research-first
 scope, see `docs/decisions/2026-08-02-project-decisions.md`). Companion to
-`working-paper.md` v2.1.0 (+ §11/§12 addendum 2026-08-02) and `model-spec.json`
-v2.0.1.
+`working-paper.md` v2.2.0 (core paper) and `research/future-directions-v3.md`
+(the v3.0 agenda split out of the paper's former §11/§12), and
+`model-spec.json` v2.0.1.
 
 ---
 
 ## 1. The reframe
 
-The working paper (v2.1.0) is the **storage paper (Paper 1)**. The program is
+The working paper (v2.2.0) is the **storage paper (Paper 1)**. The program is
 named **Bitcoin Resource Accounting** and reframes from **"storage measurement"**
 to a complete accounting thesis:
 
@@ -285,7 +286,7 @@ requests.
 | Item | Status |
 |---|---|
 | Adopt roadmap with §6 amendments | ✅ ADOPTED — UCIR rated 4/5 with validation-cost carve-out (scoped to RAM/lookup cost per lifetime UTXO); VCIR demoted to a bounded analytical sub-study, never a headline ratio; BCIR research-hard (defer to Phase III/IV); RCIR next model-possible leg (fill in cheaply at Phase III); archival-vs-pruned slots into Phase I as a companion note (evidence for the storage leg; needs the census, not the unsynced node — unblocked) |
-| Greenlight Phase I publication path | ✅ GREENLIT — arXiv / Bitcoin Optech submission of working-paper v2.1.0 with the archival-vs-pruned companion note; see `research/publication-plan.md` |
+| Greenlight Phase I publication path | ✅ GREENLIT — arXiv / Bitcoin Optech submission of working-paper v2.2.0 with the archival-vs-pruned companion note; see `research/publication-plan.md` |
 | Decide UCIR data path | ⏸️ DEFERRED — not needed until Phase I ships (public-API approximation vs R5-gate reopen for node sync) |
 | **Program rename → "Bitcoin Resource Accounting"** | ✅ **RENAMED 2026-08-02** — Prateek directive; program identity now "Bitcoin Resource Accounting", Paper-1 title unchanged; SCCR = Metric #1; reframe: "Can we build a complete accounting system for every long-lived resource consumed by Bitcoin…?" (see §1) |
 | **Deep-question answers (v3.0, Q1–Q5)** | ✅ **COMPUTED 2026-08-02** — `tools/research/sccr_dynamics.py`; answers in companion `future-directions-v3.md` §2; summary in §8 below |

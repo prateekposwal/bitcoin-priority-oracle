@@ -16,5 +16,5 @@
     960614,
     960766
   ],
-  "notes": "SCCR = fee_USD / L_net; N=32K real census (>=32K lower bound); T=10yr assumption. Static JSON endpoint: /sccr/latest"
+  "notes": "SCCR = fee_USD / L_net; N=32K primary-source lower-bound census (>=32,000 known addresses via Bitcoin Core getnodeaddresses); T=10yr assumption. Static JSON endpoint: /sccr/latest"
 }

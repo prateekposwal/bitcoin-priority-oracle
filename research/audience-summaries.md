@@ -12,7 +12,7 @@ rolling value 0.2151** (169 blocks, rolling 24h window, 2026-08-02 session). SCC
 (Resource Internalization Ratios); every other member (UCIR, VCIR, RCIR, BCIR,
 DCIR) is a research hypothesis, not a measured result. All surfaces must state
 the banded claim — never the strong form ("100% below 1×" does not survive the
-real census on the dated capture; working-paper §5.4).
+**Primary-source lower-bound census (≥32,000 known addresses via Bitcoin Core `getnodeaddresses`)** on the dated capture; working-paper §5.4).
 
 ---
 
@@ -25,9 +25,10 @@ decades of storage that byte causes every full node to keep.
 next block (~10 minutes away). It does not price *permanence*: the data in that
 block is then replicated and retained by the node network for years. We measured
 how much of that permanent storage bill the fee market actually covers, using
-live fee-history data from a Bitcoin Core node and a primary-source node census
-(≥32,000 known addresses — the RPC maximum, so a lower bound on the reachable
-network).
+live fee-history data from a Bitcoin Core node and a **primary-source
+lower-bound census (≥32,000 known addresses via Bitcoin Core
+`getnodeaddresses`)** — the RPC maximum, so a lower bound on the reachable
+network.
 
 **The number.** Fees cover roughly **22–29%** of the modeled 10-year replicated
 storage cost of an average block (frozen-capture reproduction: **0.2186**;
@@ -55,8 +56,8 @@ for measuring the rest.
 **The contribution.** The observation that fees may under-price storage is not
 novel (Liu et al., 2021, arXiv:2103.05866 — the closest prior work, acknowledged
 directly). The novel asset is the *measurement*: a storage-cost-internalization
-ratio (SCCR) computed from live fee-history data, a primary-source node census
-(≥32K, a documented lower bound), and a canonical model spec, reproduced by
+ratio (SCCR) computed from live fee-history data, a primary-source lower-bound census
+(≥32K via Bitcoin Core `getnodeaddresses`, a documented lower bound), and a canonical model spec, reproduced by
 three independent implementations. We document our own v2.0.0 correction
 transparently (a duplicated time-horizon term, fixed; the direction of the
 finding survived), reconcile two cost models that disagreed by 16.4×
@@ -89,8 +90,9 @@ real resource economics.
 **The explainer.** Every Bitcoin transaction pays a fee for the next block, then
 imposes a decades-long storage cost on the node network. We measured the ratio
 between those two numbers — the **Storage Cost Coverage Ratio (SCCR)** — live,
-from real fee data and a lower-bound node census (≥32,000 known addresses — the
-RPC cap, not a complete enumeration). Today
+from real fee data and a primary-source lower-bound census (≥32,000 known
+addresses via Bitcoin Core `getnodeaddresses` — the RPC cap, not a complete
+enumeration). Today
 fees cover roughly **22–29%** of modeled 10-year storage cost at N=32K
 (**~7–71% across the true-N band**) (latest live
 rolling value: **0.2151**; frozen-capture reproduction: **0.2186**).
