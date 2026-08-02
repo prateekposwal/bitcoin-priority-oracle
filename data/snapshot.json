@@ -1,32 +1,28 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-02T21:29:37.904655+00:00",
+  "generated_at": "2026-08-02T21:41:17.917Z",
   "freshness_min": 0,
   "fees": {
-    "fastestFee": 2,
-    "halfHourFee": 1,
-    "hourFee": 1,
-    "economyFee": 1,
-    "minimumFee": 1
+    "fastestFee": 1
   },
-  "btc_price": 63457,
-  "block_height": 960773,
-  "mempool_tx": 92182,
+  "btc_price": 63491,
+  "block_height": 960772,
+  "mempool_tx": 91379,
   "forecast": [
     {
       "day_offset": 1,
-      "predicted_fastest_fee": 3.5,
-      "trend": "rising"
+      "predicted_fastest_fee": 2.8,
+      "trend": "stable"
     },
     {
       "day_offset": 2,
-      "predicted_fastest_fee": 3.6,
-      "trend": "rising"
+      "predicted_fastest_fee": 2.9,
+      "trend": "stable"
     },
     {
       "day_offset": 3,
-      "predicted_fastest_fee": 3.8,
-      "trend": "rising"
+      "predicted_fastest_fee": 2.9,
+      "trend": "stable"
     }
   ],
   "alerts": [],
@@ -1522,6 +1518,10 @@
     {
       "date": "2026-08-03",
       "fastestFee": 3
+    },
+    {
+      "date": "2026-08-03",
+      "fastestFee": 1
     }
   ],
   "totalPosts": 36

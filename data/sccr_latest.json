@@ -2,7 +2,7 @@
   "endpoint": "/sccr/latest",
   "payload": {
     "date": "2026-08-02",
-    "generated_at": "2026-08-02T20:35:06.208522+00:00",
+    "generated_at": "2026-08-02T21:10:59.985321+00:00",
     "spec_version": "2.0.1",
     "blocks": 153,
     "avg_sccr": 0.224263,
