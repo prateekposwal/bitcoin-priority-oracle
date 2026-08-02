@@ -27,7 +27,7 @@
   "params": {
     "alpha": 0.3,
     "beta": 0.1,
-    "z_score_threshold": 2,
+    "z_score_threshold": 2.0,
     "regime_window": 24
   },
   "regime": {
