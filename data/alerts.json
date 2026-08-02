@@ -1,5 +1,7 @@
 {
-  "alerts": [],
-  "timestamp": "2026-08-03_00-41-25",
-  "source": "spool"
+  "alerts": [
+    "🛡 DE AGENT: last run 1664 min ago"
+  ],
+  "timestamp": "2026-08-02T19:59:19.437Z",
+  "source": "ops-health"
 }
