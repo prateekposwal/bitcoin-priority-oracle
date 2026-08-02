@@ -1,13 +1,9 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-02T09:58:37.160Z",
+  "generated_at": "2026-08-02T10:39:23.275Z",
   "freshness_min": 0,
   "fees": {
-    "fastestFee": 1,
-    "halfHourFee": 1,
-    "hourFee": 1,
-    "economyFee": 1,
-    "minimumFee": 1
+    "fastestFee": 1
   },
   "btc_price": null,
   "block_height": null,
@@ -32,7 +28,11 @@
   "alerts": [],
   "history": [
     {
-      "date": "2026-07-28",
+      "date": "2026-07-30",
+      "fastestFee": 5
+    },
+    {
+      "date": "2026-07-30",
       "fastestFee": 3
     },
     {
