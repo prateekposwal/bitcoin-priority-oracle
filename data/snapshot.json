@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-01T22:01:48.181Z",
+  "generated_at": "2026-08-02T06:36:23.793Z",
   "freshness_min": 0,
   "fees": {
-    "fastestFee": 1
+    "fastestFee": 2
   },
   "btc_price": null,
   "block_height": null,
@@ -12,20 +12,31 @@
     {
       "day_offset": 1,
       "predicted_fastest_fee": 1.4,
-      "trend": "falling"
+      "trend": "stable"
     },
     {
       "day_offset": 2,
-      "predicted_fastest_fee": 1.3,
-      "trend": "falling"
+      "predicted_fastest_fee": 1.4,
+      "trend": "stable"
     },
     {
       "day_offset": 3,
-      "predicted_fastest_fee": 1.2,
-      "trend": "falling"
+      "predicted_fastest_fee": 1.3,
+      "trend": "stable"
     }
   ],
-  "alerts": [],
+  "alerts": [
+    "🛡 SITE / -> 0 (timeout)",
+    "🛡 SITE /live -> 0 (timeout)",
+    "🛡 SITE /capacity -> 0 (timeout)",
+    "🛡 SITE /learn -> 0 (timeout)",
+    "🛡 SITE /fork-tracker -> 0 (timeout)",
+    "🛡 SITE /feed.xml -> 0 (timeout)",
+    "🛡 SITE /data/snapshot.json -> 0 (timeout)",
+    "🛡 SITE /api/v1/ -> 0 (timeout)",
+    "🛡 SITE /robots.txt -> 0 (timeout)",
+    "🛡 SITE /sitemap.xml -> 0 (timeout)"
+  ],
   "history": [
     {
       "date": "2026-07-30",
@@ -1430,6 +1441,34 @@
     {
       "date": "2026-08-02",
       "fastestFee": 1
+    },
+    {
+      "date": "2026-08-02",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-08-02",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-08-02",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-08-02",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-08-02",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-08-02",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-08-02",
+      "fastestFee": 2
     }
   ],
   "totalPosts": 36

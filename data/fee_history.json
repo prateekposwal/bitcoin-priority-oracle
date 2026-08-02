@@ -1402,5 +1402,33 @@
   {
     "date": "2026-08-02",
     "fastestFee": 1
+  },
+  {
+    "date": "2026-08-02",
+    "fastestFee": 2
+  },
+  {
+    "date": "2026-08-02",
+    "fastestFee": 2
+  },
+  {
+    "date": "2026-08-02",
+    "fastestFee": 1
+  },
+  {
+    "date": "2026-08-02",
+    "fastestFee": 3
+  },
+  {
+    "date": "2026-08-02",
+    "fastestFee": 1
+  },
+  {
+    "date": "2026-08-02",
+    "fastestFee": 1
+  },
+  {
+    "date": "2026-08-02",
+    "fastestFee": 2
   }
 ]
