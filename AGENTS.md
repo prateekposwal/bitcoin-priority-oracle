@@ -1002,3 +1002,24 @@ Every session in this repo MUST honor these load-bearing rules:
 ### Metrics
 - Validation: `node tools/validate.js` ✅ PASS
 - Evidence status: 1 established metric (SCCR) · 6 named hypotheses · 1 template · 0 unfalsifiable claims
+
+## Session Handoff — 2026-08-03 (D5 external reproduction — fresh-clone simulation + hardening)
+
+### Current State
+- Session mood: deliberate
+- Active work: **D5 external reproduction executed** — fresh-clone simulation of the published protocol, three stranger-facing gaps fixed, package + recruit message prepared, log updated. Submission blocker: kit is now reproducible-by-stranger; only actual human recruitment remains.
+
+### DONE (verified)
+- **Fresh-clone simulation PASSED (twice):** (1) pre-fix clone exposed gaps; (2) post-fix re-clone of the **live GitHub repo** (`59573b0` + `7d7d255` pushed) → `python3 tools/research/reproduce.py` prints **avg 0.2186** (min 0.0584 / max 0.8320, 171/171 below 1×, L_net $5627.80) from a clean state; `bash research/reproduce/cross_check.sh` prints **VERDICT: ALL THREE IMPLEMENTATIONS AGREE** (JS/Python/C, per-block max dev 5e-7); `git status` completely clean after all runs.
+- **Input data verified committed + versioned:** `research/reproduce/input/fee_history_capture.json` (171 entries) is git-tracked and on origin; `reproduce.py` defaults to it (frozen capture, no DB). Model constants come only from `research/model-spec.json` (v2.0.1).
+- **Three gaps found BY the simulation and fixed (all committed + pushed):**
+  1. `cross_check.sh` failed for strangers — C binary is gitignored, absent in clones. Now auto-compiles `reproduce_sccr.c` when missing.
+  2. `storage-ratio.js` in `SCCR_INPUT_FILE` mode touched the DB (sqlite "no such table" stderr noise) and overwrote the committed dated report in the clone. Frozen-input mode is now DB-free and side-effect-free; live-DB behavior unchanged.
+  3. Frozen capture heights were contiguous-but-unsorted (stranger checking `range(960562,960733)` saw False). Input normalized to ascending height order — order-invariant, all three implementations still agree at 0.2186; reference outputs regenerated.
+- **Shareable package:** `research/reproduce/recruit-message.md` (copy-paste email/DM, ~15 min, asks for avg/min/max + tool used + time). Protocol: `research/reproduce/README.md` → 3-step external reproduction protocol.
+- **Outreach honestly assessed:** community-review-plan outreach list is gated on **arXiv being live** (not yet — Prateek's account/ORCID/license pending); Nostr publisher exists but uses Prateek's key (`captured-data/nostr-key.json`) — TELOS did NOT post and will not without explicit approval. Documented in the log as the human step.
+- `node tools/validate.js` ✅ PASS before each commit.
+
+### LEFT / TODO (verified)
+- **THE one remaining human step:** Prateek sends the recruit message (`research/reproduce/recruit-message.md`) to one uninvolved person (~15 min), then records the result row in `research/reproduce/external-reproduction.md`. TELOS cannot recruit a real human, and posting requires either arXiv-live (community plan sequencing) or Prateek's explicit approval for his Nostr key.
+- Repo note: snapshot bot's automated `pull --rebase` was mid-flight during this session (stale sequencer state, same symptom as the prior stuck rebase); finalized safely via manual pick-commit + `rebase --quit` + `branch -f main HEAD` — autostashes preserved in `git stash list`, no data lost. The bot's cycle completed as commit `9042873`.
