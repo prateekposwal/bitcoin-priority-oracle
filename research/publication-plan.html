@@ -353,6 +353,86 @@ footer .links a:hover{color:#D4933A}</style>
 <p>The roadmap rename (2026-08-02) makes this Paper 1 of **Bitcoin Resource</p>
 <p>Accounting**; SCCR is Metric #1 of the RIR family (working-paper §11 Q3).</p>
 <hr>
+<h3>8. Submission-moment protocol (the instant one independent person reproduces)</h3>
+<p>*Added 2026-08-03 (advisor&#x27;s final directives). <strong>Trigger:</strong> the first reply</p>
+<p>from an uninvolved person of the form &quot;I followed the instructions from a clean</p>
+<p>clone and reproduced the published result&quot; — the reproducibility milestone in</p>
+<p><code>research/reproduce/external-reproduction.md</code> (GO/SUBMIT TRIGGER). Record the</p>
+<p>reply (quote + date + reproducer, anonymous ok) in the reproduction log, then</p>
+<p>execute the sequence below in order. <strong>No more polishing.</strong>*</p>
+<ol>
+<li><strong>Freeze the repository.</strong> Stop all content changes. Verify <code>git status</code></li>
+</ol>
+<p>shows exactly the tree the reproducer ran; note the freeze in the</p>
+<p>reproduction log + decisions tracker. Any change needed after this point is a</p>
+<p>v1.0.x fix, not a pre-submission edit.</p>
+<ol>
+<li><strong>Tag the release.</strong> <code>git tag -a v1.0.0 -m &quot;v1.0.0 — SCCR paper + reproduction kit (frozen)&quot;</code></li>
+</ol>
+<p>then <code>git push origin v1.0.0</code>. The tag points at the commit the external</p>
+<p>reproducer verified.</p>
+<ol>
+<li><strong>Archive to Zenodo (or similar).</strong> Create a Zenodo record from the v1.0.0</li>
+</ol>
+<p>tag (GitHub↔Zenodo integration, or upload the release archive manually).</p>
+<p>Record the DOI in this plan + README + site surfaces.</p>
+<ol>
+<li><strong>Submit to arXiv.</strong> LaTeX source (<code>research/working-paper.tex</code>, compiled</li>
+</ol>
+<p>once on a machine with pdflatex) with CC BY 4.0 license field; real-identity</p>
+<p>account (D2/D3 pre-conditions — ORCID iD + arXiv account must already exist);</p>
+<p>moderator pitch (§2a) as the cover letter; banded-claim abstract (§2 step 3).</p>
+<ol>
+<li><strong>Post to Delving Bitcoin.</strong> Link-first announcement of the preprint + the</li>
+</ol>
+<p>measurement (community-review-plan.md outreach list starts here).</p>
+<ol>
+<li><strong>Share with Bitcoin Optech.</strong> The 2–4 sentence research summary (§3 step 1)</li>
+</ol>
+<p>+ arXiv link via the Optech submission path.</p>
+<ol>
+<li><strong>Invite criticism — no more polishing.</strong> The submission gate is closed.</li>
+</ol>
+<p>Feedback is collected; fixes ship as v1.0.x revisions.</p>
+<p><strong>Cadence rule:</strong> steps 1–3 happen the same day the trigger lands; steps 4–6</p>
+<p>within one week; step 7 is permanent.</p>
+<h3>9. v1.0.0 release checklist (what the frozen release contains)</h3>
+<p>*Added 2026-08-03 (advisor&#x27;s final directives). The v1.0.0 tag/archive is not</p>
+<p>the release unless it contains ALL of the following:*</p>
+<ul>
+<li>[ ] <strong>The paper, all formats</strong> — <code>research/working-paper.md</code> v2.1.0; compiled</li>
+</ul>
+<p>PDF from <code>research/working-paper.tex</code> (LaTeX source shipped); HTML</p>
+<p>rendering <code>research/working-paper.html</code> — content-identical across formats</p>
+<ul>
+<li>[ ] <strong>The model specification</strong> — <code>research/model-spec.json</code> v2.0.1 (canonical</li>
+</ul>
+<p>source of every constant; the reproduction kit depends on it)</p>
+<ul>
+<li>[ ] <strong>The reproduction kit</strong> — <code>research/reproduce/</code> (frozen input</li>
+</ul>
+<p><code>fee_history_capture.json</code>, JS/Python/C implementations, <code>cross_check.sh</code>,</p>
+<p>protocol README) + the external reproduction log</p>
+<p>(<code>external-reproduction.md</code>)</p>
+<ul>
+<li>[ ] <strong>WHY_THIS_EXISTS.md</strong> — the one-page plain-language framing (repo root)</li>
+<li>[ ] <strong>Audience summaries</strong> — <code>research/audience-summaries.md</code> (developers /</li>
+</ul>
+<p>researchers / investors / general public)</p>
+<ul>
+<li>[ ] <strong>Companion note</strong> — <code>research/archival-vs-pruned-note.md</code> (D7:</li>
+</ul>
+<p>simultaneous publication)</p>
+<ul>
+<li>[ ] 🚨 <strong>License decision APPLIED</strong> — <strong>PRE-FREEZE REQUIREMENT.</strong> D4 is still</li>
+</ul>
+<p>🟡 RECOMMENDED-AWAITING-RATIFICATION (MIT code + CC BY 4.0 paper, drafts in</p>
+<p><code>research/license-draft.md</code>); the <code>LICENSE</code> stub (&quot;All Rights Reserved&quot;)</p>
+<p>must be replaced with the ratified pair BEFORE the freeze. A frozen release</p>
+<p>cannot ship with an unratified license. **This elevates D4 to a pre-freeze</p>
+<p>blocker — distinct from D5 (external reproduction), which remains the only</p>
+<p>submission blocker.**</p>
+<hr>
 <p>*Bitcoin Sahi Research Council — Publication plan for &quot;Storage Cost Internalization in Bitcoin&#x27;s Fee Market&quot; (working-paper v2.1.0, Phase I), 2026-08-02*</p>
 <p style="margin-top:32px;"><a href="/research">← All research</a> · <a href="/learn">← Back to Learn</a></p>
 </div>

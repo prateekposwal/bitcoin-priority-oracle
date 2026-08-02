@@ -246,8 +246,8 @@ def main():
     index = '''<!DOCTYPE html>
 <html lang="en">
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="The BSAHI open research library on Bitcoin block space economics — fees, mempool, and settlement analysis from live Bitcoin network data, updated continuously.">
-<meta property="og:title" content="BSAHI Research">
+<meta name="description" content="The BSAHI open research library on Bitcoin block space economics — Bitcoin Resource Accounting: measuring how much of every long-lived resource cost the fee market internalizes. Live Bitcoin network data, updated continuously.">
+<meta property="og:title" content="BSAHI Research — Bitcoin Resource Accounting">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://bitcoinsahi.com/"},{"@type":"ListItem","position":2,"name":"Research","item":"https://bitcoinsahi.com/research/"}]}
 </script>
@@ -255,13 +255,19 @@ def main():
 <meta property="og:image" content="https://bitcoinsahi.com/og-image.png">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="canonical" href="https://bitcoinsahi.com/research/">
-<title>BSAHI Research — Block Space Economics</title>
+<title>BSAHI Research — Bitcoin Resource Accounting</title>
 <style>''' + STYLE + '''</style></head>
 <body>
 <header><div class="header-inner"><a href="/" class="brand">⬡ BSAHI</a>''' + NAV + '''</div></header>
 <div class="container">
 <h1>BSAHI Research</h1>
-<p>Open research on Bitcoin block space economics — the fee market, mempool dynamics, and the permanent cost of data storage.</p>
+<p><strong>Bitcoin Resource Accounting</strong> — the research program of Bitcoin
+Sahi: a complete accounting system for every long-lived resource Bitcoin consumes
+(replicated storage, UTXO state, validation, relay, bandwidth), quantifying how
+much of each cost the fee market internalizes. <strong>SCCR (storage) is Metric
+#1</strong> — the first measured member of the RIR family; the rest are research
+hypotheses. Open research on block space economics — the fee market, mempool
+dynamics, and the permanent cost of data storage.</p>
 <ul>''' + items + '''</ul>
 <p style="margin-top:32px;"><a href="/learn">← Back to Learn</a></p>
 </div>

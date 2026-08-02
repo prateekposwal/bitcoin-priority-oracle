@@ -3,7 +3,10 @@
 *(program name adopted 2026-08-02; previously "Resource Internalization
 Framework" / "the storage paper". The Paper-1 title "Storage Cost Internalization
 in Bitcoin's Fee Market" is kept as the paper's descriptive title — the rename is
-about the PROGRAM identity, not the paper title.)*
+about the PROGRAM identity, not the paper title. Advisor directive 2026-08-03:
+continue the SLOW rebrand — the framework is the identity, the metrics are
+implementations, SCCR becomes one chapter. Every public surface leads with
+Bitcoin Resource Accounting; the paper's title is untouched.)*
 
 **Status:** **ADOPTED (2026-08-02)** — Prateek adopted the roadmap WITH the §6
 amendments on 2026-08-02 ("continue :)" ratification). Phase I publication path
@@ -78,6 +81,24 @@ reframe multiplies that asset: instead of one measurement, it offers a *measurem
 framework* for the whole class of long-lived resources. Working-paper §8.3 already
 names the economics-native phrasing — **Cost Internalization Ratio** — the roadmap
 generalizes that into **Resource Internalization Ratio (RIR)**.
+
+
+**Three assets — protect all three (advisor, 2026-08-03).** The program holds
+three distinct assets, and they must never be conflated:
+
+1. **Asset 1 — the measurement (SCCR).** *What people will cite.* The number,
+   the capture, the banded result. Reproducible, dated, alive.
+2. **Asset 2 — the methodology (reproducibility).** *What reviewers appreciate.*
+   The canonical-spec → live-capture → independent-implementations → cross-check
+   template, the frozen input, three implementations agreeing per block. This is
+   the asset that survives every specific number going stale.
+3. **Asset 3 — the vision (Bitcoin Resource Accounting).** *What defines future
+   work.* The complete accounting system for every long-lived resource — the
+   framework as identity, metrics as implementations, SCCR as one chapter.
+
+Protect all three; they are different. The measurement earns citations, the
+methodology earns trust, the vision earns the roadmap. No single asset is a
+substitute for the other two.
 
 ## 2. The central question
 
@@ -175,6 +196,19 @@ dashboard never fabricates a cell).
 | **RCIR** | 🟡 **RESEARCH HYPOTHESIS** — analytical bounds sketched; no ratio measured | Phase III fill-in (low priority) |
 | **BCIR** | 🔴 **RESEARCH HYPOTHESIS (research-hard)** — no public network-topology data | own measurement/simulation; Phase III/IV |
 | **DCIR** | 🟡 **RESEARCH HYPOTHESIS** — structural argument (off-chain revenue ⇒ fee-market numerator ~0); no measurement | Phase III; likely persistent-negative row |
+
+
+**Earn the right (advisor, 2026-08-03): "Frameworks grow through evidence, not
+naming."** Do NOT invent UCIR/VCIR/RCIR before their time. SCCR must become
+*accepted* first — externally reproduced, published, and engaged with — and the
+family grows one accepted measurement at a time. Naming a ratio before it is
+measured is not planning; it is premature commitment. Concretely: every
+unmeasured leg above is a **research hypothesis with promotion criteria** (§4
+table, §10) and nothing more; no new member is added to the RIR family until the
+previous one has passed the 4-question gate **and** the SCCR evidence ladder
+(canonical spec → live capture → independent implementations → cross-check) and
+has been accepted outside this repo. The next metric earns its name by evidence,
+not by announcement.
 
 Rule (unchanged): a hypothesis that fails Q2 may appear as a "bounded analytical
 estimate" row — never as a headline ratio.

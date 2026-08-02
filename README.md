@@ -1,20 +1,28 @@
-# Bitcoin Sahi — Block Space Research & Decision Platform
+# Bitcoin Resource Accounting — Block Space Research
 
-**Live at [bitcoinsahi.com](https://bitcoinsahi.com)** · **Research program:**
-**Bitcoin Resource Accounting** — a complete accounting system for every
-long-lived resource consumed by Bitcoin, quantifying how much of each cost the
-fee market internalizes. **SCCR (Storage Cost Coverage Ratio) is Metric #1.**
+**The research program of [Bitcoin Sahi](https://bitcoinsahi.com)** — a complete
+accounting system for every long-lived resource consumed by Bitcoin, quantifying
+how much of each cost the fee market internalizes. **SCCR (Storage Cost Coverage
+Ratio) is Metric #1** — the first measured member of the RIR family.
+
+**Why this exists:** [WHY_THIS_EXISTS.md](WHY_THIS_EXISTS.md) — one page,
+plain language, no equations. (If you read only one thing, read that.)
 
 **Paper 1:** [Storage Cost Internalization in Bitcoin's Fee Market — Working Paper v2.1.0](research/working-paper.md)
 *(program subtitle: The Bitcoin Block Space Problem — the paper keeps its
 descriptive title; the program name is Bitcoin Resource Accounting, adopted
 2026-08-02. Roadmap: [research/roadmap.md](research/roadmap.md).)*
 
-**Research focus:** open research into *unpriced state storage* — whether Bitcoin's
-fee market internalizes the long-lived resource cost of permanently recorded
-blockchain data, measured as the **Storage Cost Coverage Ratio (SCCR)**,
-Metric #1 of the RIR family (SCCR / UCIR / VCIR / RCIR / BCIR / DCIR — see
-[working-paper §11 Q3](research/working-paper.md)).
+**Research focus:** the **Bitcoin Resource Accounting** framework — every
+long-lived resource Bitcoin consumes (replicated storage, UTXO state, validation,
+relay, bandwidth, indexer serving) has a measurable cost, and the single fee
+price may not internalize all of it. Each resource gets its own measured ratio
+(SCCR / UCIR / VCIR / RCIR / BCIR / DCIR — see
+[working-paper §11 Q3](research/working-paper.md)). The framework is the
+identity; each ratio is an implementation; the storage paper is one chapter.
+SCCR — whether the fee market internalizes the long-term storage cost of
+permanently recorded blockchain data, measured as the **Storage Cost Coverage
+Ratio** — is **Metric #1**, established and reproduced.
 v1 (priority oracle) and v2 (externality fee) are dead; this is the research-first
 successor.
 
@@ -24,7 +32,7 @@ available for viewing and evaluation purposes only. For licensing inquiries:
 
 ---
 
-## Research question
+
 
 > Can we build a complete accounting system for every long-lived resource consumed
 > by Bitcoin, and quantify how much of each cost is internalized by the fee

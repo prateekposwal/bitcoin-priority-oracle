@@ -114,6 +114,46 @@ LICENSE ratification, **D5 external reproducer (the only submission blocker)**,
 D6 LaTeX compile pass, D7 companion-note sign-off, + abstract/moderator-pitch
 final pass (publication-plan §2 step 3 + §2a).
 
+## Addendum 3 — advisor final directives (2026-08-03)
+
+Final advisor review executed by TELOS (as Aviku) in `../block-space-economics`;
+all items docs-only, no code:
+
+- **WHY_THIS_EXISTS.md created** (repo root) — one page, questions only, no
+  equations: the working block-space market, the unpriced long-lived resources,
+  the internalization question, explicit non-claims, the invitation. High-
+  visibility public document; may be read more than the paper.
+- **Strategic rebranding to "Bitcoin Resource Accounting" continued.** The
+  advisor's instruction: slowly stop branding as an SCCR project — the framework
+  becomes the identity, metrics become implementations, SCCR becomes one chapter.
+  Applied to README.md (title/tagline + research-focus now lead with the
+  framework), roadmap.md (header note), research index page. Paper title
+  untouched; dated SCCR-provenance HTML deliberately not over-rebranded.
+- **Three-assets framing recorded** (roadmap §1): Asset 1 = the measurement
+  (SCCR — what people cite); Asset 2 = the methodology (reproducibility — what
+  reviewers appreciate); Asset 3 = the vision (Bitcoin Resource Accounting —
+  what defines future work). Protect all three; they are different.
+- **"Earn the right" discipline strengthened** (roadmap §4): "Frameworks grow
+  through evidence, not naming" — do NOT invent UCIR/VCIR/RCIR before their
+  time; SCCR must be accepted first; each new metric earns its name by evidence.
+- **Submission-moment protocol added** (publication-plan §8) — the exact
+  sequence the instant one independent person reproduces: freeze → tag v1.0.0 →
+  Zenodo → arXiv → Delving Bitcoin → Bitcoin Optech → invite criticism; no more
+  polishing. Numbered, executable.
+- **v1.0.0 release checklist added** (publication-plan §9) — paper (all
+  formats), model-spec, reproduction kit, WHY_THIS_EXISTS.md, audience
+  summaries, companion note, **license decision APPLIED**.
+- **D4 elevated to a PRE-FREEZE REQUIREMENT.** License ratification is no longer
+  merely "awaiting final go" — the v1.0.0 freeze cannot ship with the
+  "All Rights Reserved" stub. **D4 is now a pre-freeze blocker, distinct from
+  D5.** D5 (external reproduction) remains the ONLY submission blocker.
+
+**Open items after addendum 3:** D2 ORCID, D3 arXiv account, **D4 LICENSE
+ratification (now a PRE-FREEZE requirement for v1.0.0)**, **D5 external
+reproducer (the only submission blocker)**, D6 LaTeX compile pass, D7 companion-
+note sign-off, + abstract/moderator-pitch final pass (publication-plan §2 step 3
++ §2a).
+
 ---
 ---
 
