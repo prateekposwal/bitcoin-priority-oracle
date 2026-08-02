@@ -57,7 +57,9 @@ partial/external pricing the structural equilibrium? (This is working-paper §10
   sensitivity (exists), limitations (exists).
 - **Phase II — Resource Accounting Framework, one new metric per resource**
   (SCCR is **Metric #1**, already measured — every new metric inherits its
-  template: canonical spec → live capture → independent implementations → cross-check):
+  template: canonical spec → live capture → independent implementations → cross-check;
+  **evidence status: UCIR/VCIR/RCIR/BCIR/DCIR are RESEARCH HYPOTHESES — not yet
+  modeled/measured/reproduced — see the evidence-status table in §4**):
   - **UCIR** (UTXO Growth): RAM/lookup/validation cost per lifetime UTXO
   - **VCIR** (Validation): CPU per script class (P2PKH / P2WPKH / Taproot / multisig)
     — demoted to bounded analytical sub-study (4-question gate, §4)
@@ -109,6 +111,25 @@ partial/external pricing the structural equilibrium? (This is working-paper §10
 
 Rule: a metric that fails Q2 may still appear in the Resource Coverage Matrix as a
 "bounded analytical estimate" row — never as a headline ratio.
+
+**Evidence status — discipline separation (post-advisor review, 2026-08-03).**
+The framework never overclaims: exactly ONE member of the RIR family is an
+**ESTABLISHED METRIC (validated)**; every other named ratio is a **RESEARCH
+HYPOTHESIS (not yet modeled / measured / reproduced)** and must be labeled as
+such in every surface (roadmap, publication plan, paper, talk, site). Naming a
+hypothesis is not claiming a result.
+
+| Metric | Evidence status | What would promote it |
+|---|---|---|
+| **SCCR** | 🟢 **ESTABLISHED METRIC (validated)** — measured on live data; three independent implementations (JS/Python/C) agree per-block; joint Monte Carlo bounded; v2.0.0 correction documented (§5/§6) | — (this is the template every other metric inherits) |
+| **UCIR** | 🟡 **RESEARCH HYPOTHESIS** — cost side exists (`utxo_cost_model.py`); fee-side numerator unmodeled; data path undecided (R5-gated) | canonical spec → live capture → independent implementations → cross-check, after the 4-question gate re-pass |
+| **VCIR** | 🔴 **RESEARCH HYPOTHESIS (demoted)** — failed Q2 (CPU cycles/tx-class not reproducibly measurable); only a pinned-benchmark bound is possible | bounded analytical sub-study, never a headline ratio |
+| **RCIR** | 🟡 **RESEARCH HYPOTHESIS** — analytical bounds sketched; no ratio measured | Phase III fill-in (low priority) |
+| **BCIR** | 🔴 **RESEARCH HYPOTHESIS (research-hard)** — no public network-topology data | own measurement/simulation; Phase III/IV |
+| **DCIR** | 🟡 **RESEARCH HYPOTHESIS** — structural argument (off-chain revenue ⇒ fee-market numerator ~0); no measurement | Phase III; likely persistent-negative row |
+
+Rule (unchanged): a hypothesis that fails Q2 may appear as a "bounded analytical
+estimate" row — never as a headline ratio.
 
 ## 5. Mapping to existing repo state (DONE vs LEFT)
 
@@ -215,12 +236,18 @@ response functions — **a stable fixed point is not established in the model.**
 ### Q4 — Price-only internalization
 
 SCCR crosses 1× at **P* ≈ $282,765 ≈ $283K** (frozen-capture cross-check:
-$288K) with zero protocol change — storage is USD-denominated and
-price-invariant, so price genuinely internalizes it. **BUT (key structural
-distinction): UTXO (RAM/lookup, driven by live-set size) and validation (CPU,
-driven by script complexity) costs do NOT scale with price** — a price rise
-inflates the fee numerator as a *unit effect*, not as internalization. Price can
-solve storage; it cannot solve UTXO/validation the same way.
+$288K) with zero protocol change — storage is a price-invariant per-byte USD
+liability and the fee's charging attribute (bytes) matches it, so price
+genuinely internalizes it. **BUT (key structural distinction, sharpened 2026-08-03
+per advisor review):** every resource's cost is ultimately USD-denominated
+(hardware and operator time carry USD opportunity cost) — the real mismatch is
+that **the fee's charging attribute does not match the other cost drivers**:
+validation cost is per-transaction-*class* (script complexity) while the fee is
+per-transaction; UTXO cost is a *stock* (live-set RAM/lookup) while fees are a
+*flow*. A price rise inflates the fee numerator as a *unit effect*, not as
+internalization, for every resource except storage. **Price can solve storage;
+it cannot solve validation, UTXO, or relay the same way — there is no single
+"resource market."**
 
 ### Q5 — 2040 scenarios
 

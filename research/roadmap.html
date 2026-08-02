@@ -99,7 +99,9 @@ footer .links a:hover{color:#D4933A}</style>
 <li><strong>Phase II — Resource Accounting Framework, one new metric per resource</strong></li>
 </ul>
 <p>(SCCR is <strong>Metric #1</strong>, already measured — every new metric inherits its</p>
-<p>template: canonical spec → live capture → independent implementations → cross-check):</p>
+<p>template: canonical spec → live capture → independent implementations → cross-check;</p>
+<p>**evidence status: UCIR/VCIR/RCIR/BCIR/DCIR are RESEARCH HYPOTHESES — not yet</p>
+<p>modeled/measured/reproduced — see the evidence-status table in §4**):</p>
 <ul>
 <li><strong>UCIR</strong> (UTXO Growth): RAM/lookup/validation cost per lifetime UTXO</li>
 <li><strong>VCIR</strong> (Validation): CPU per script class (P2PKH / P2WPKH / Taproot / multisig)</li>
@@ -155,6 +157,23 @@ footer .links a:hover{color:#D4933A}</style>
 </table>
 <p>Rule: a metric that fails Q2 may still appear in the Resource Coverage Matrix as a</p>
 <p>&quot;bounded analytical estimate&quot; row — never as a headline ratio.</p>
+<p><strong>Evidence status — discipline separation (post-advisor review, 2026-08-03).</strong></p>
+<p>The framework never overclaims: exactly ONE member of the RIR family is an</p>
+<p><strong>ESTABLISHED METRIC (validated)</strong>; every other named ratio is a **RESEARCH</p>
+<p>HYPOTHESIS (not yet modeled / measured / reproduced)** and must be labeled as</p>
+<p>such in every surface (roadmap, publication plan, paper, talk, site). Naming a</p>
+<p>hypothesis is not claiming a result.</p>
+<table>
+<tr><th>Metric</th><th>Evidence status</th><th>What would promote it</th></tr>
+<tr><td><strong>SCCR</strong></td><td>🟢 <strong>ESTABLISHED METRIC (validated)</strong> — measured on live data; three independent implementations (JS/Python/C) agree per-block; joint Monte Carlo bounded; v2.0.0 correction documented (§5/§6)</td><td>— (this is the template every other metric inherits)</td></tr>
+<tr><td><strong>UCIR</strong></td><td>🟡 <strong>RESEARCH HYPOTHESIS</strong> — cost side exists (<code>utxo_cost_model.py</code>); fee-side numerator unmodeled; data path undecided (R5-gated)</td><td>canonical spec → live capture → independent implementations → cross-check, after the 4-question gate re-pass</td></tr>
+<tr><td><strong>VCIR</strong></td><td>🔴 <strong>RESEARCH HYPOTHESIS (demoted)</strong> — failed Q2 (CPU cycles/tx-class not reproducibly measurable); only a pinned-benchmark bound is possible</td><td>bounded analytical sub-study, never a headline ratio</td></tr>
+<tr><td><strong>RCIR</strong></td><td>🟡 <strong>RESEARCH HYPOTHESIS</strong> — analytical bounds sketched; no ratio measured</td><td>Phase III fill-in (low priority)</td></tr>
+<tr><td><strong>BCIR</strong></td><td>🔴 <strong>RESEARCH HYPOTHESIS (research-hard)</strong> — no public network-topology data</td><td>own measurement/simulation; Phase III/IV</td></tr>
+<tr><td><strong>DCIR</strong></td><td>🟡 <strong>RESEARCH HYPOTHESIS</strong> — structural argument (off-chain revenue ⇒ fee-market numerator ~0); no measurement</td><td>Phase III; likely persistent-negative row</td></tr>
+</table>
+<p>Rule (unchanged): a hypothesis that fails Q2 may appear as a &quot;bounded analytical</p>
+<p>estimate&quot; row — never as a headline ratio.</p>
 <h3>5. Mapping to existing repo state (DONE vs LEFT)</h3>
 <p><strong>DONE (verified) — already in the repo and load-bearing for the roadmap:</strong></p>
 <ul>
@@ -270,12 +289,18 @@ footer .links a:hover{color:#D4933A}</style>
 <p>response functions — <strong>a stable fixed point is not established in the model.</strong></p>
 <h4>Q4 — Price-only internalization</h4>
 <p>SCCR crosses 1× at <strong>P* ≈ $282,765 ≈ $283K</strong> (frozen-capture cross-check:</p>
-<p>$288K) with zero protocol change — storage is USD-denominated and</p>
-<p>price-invariant, so price genuinely internalizes it. **BUT (key structural</p>
-<p>distinction): UTXO (RAM/lookup, driven by live-set size) and validation (CPU,</p>
-<p>driven by script complexity) costs do NOT scale with price** — a price rise</p>
-<p>inflates the fee numerator as a *unit effect*, not as internalization. Price can</p>
-<p>solve storage; it cannot solve UTXO/validation the same way.</p>
+<p>$288K) with zero protocol change — storage is a price-invariant per-byte USD</p>
+<p>liability and the fee&#x27;s charging attribute (bytes) matches it, so price</p>
+<p>genuinely internalizes it. **BUT (key structural distinction, sharpened 2026-08-03</p>
+<p>per advisor review):** every resource&#x27;s cost is ultimately USD-denominated</p>
+<p>(hardware and operator time carry USD opportunity cost) — the real mismatch is</p>
+<p>that <strong>the fee&#x27;s charging attribute does not match the other cost drivers</strong>:</p>
+<p>validation cost is per-transaction-*class* (script complexity) while the fee is</p>
+<p>per-transaction; UTXO cost is a *stock* (live-set RAM/lookup) while fees are a</p>
+<p>*flow*. A price rise inflates the fee numerator as a *unit effect*, not as</p>
+<p>internalization, for every resource except storage. **Price can solve storage;</p>
+<p>it cannot solve validation, UTXO, or relay the same way — there is no single</p>
+<p>&quot;resource market.&quot;**</p>
 <h4>Q5 — 2040 scenarios</h4>
 <table>
 <tr><th>2040 scenario</th><th>SCCR</th></tr>

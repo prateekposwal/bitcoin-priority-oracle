@@ -20,6 +20,11 @@ Resource Accounting** program continues as **Paper 2 (UTXO leg, UCIR)**, **Paper
 (validation leg, VCIR as bounded study)**, **Paper 4 (unified Resource Coverage
 Matrix, incl. the DCIR indexer leg)** — each builds on Paper 1's reproducible-metric
 template. Do NOT mix Paper 2–4 content into Paper 1 (roadmap §6 amendment 1).
+**Evidence discipline (post-advisor review, 2026-08-03):** SCCR is the ONLY
+**ESTABLISHED METRIC (validated)**; UCIR/VCIR/RCIR/BCIR/DCIR are **RESEARCH
+HYPOTHESES (not yet modeled/measured/reproduced)** and must be labeled as such in
+every surface — the framework never overclaims (roadmap §4 evidence-status table;
+Paper 4 synthesis outline in `research/framework-paper-outline.md`).
 **Target:** arXiv (cs.CR / econ.GN) + Bitcoin Optech newsletter; r/BitcoinEngineering
 already engaged (v1/v2 history).
 
@@ -102,6 +107,13 @@ already engaged (v1/v2 history).
 - [ ] **Reproducibility line intact**: model-spec v2.0.1 + three independent implementations (JS/Python/C) named
 - [ ] **Prior-work honesty intact**: Liu et al. 2021 (arXiv:2103.05866) acknowledged as closest prior work; contribution = measurement, not the observation (working-paper §8.2)
 - [ ] **Dead-claims audit**: no reference to v1/v2 oracle framing (refuted); no BIP-110 claim beyond documented DOA status
+- [ ] **Falsifiability section present** — working-paper §7.1 ("What would falsify
+      this framework?", added 2026-08-03 post-advisor review); every submission
+      surface (abstract, paper, companion note) states the banded claim and never
+      the strong form
+- [ ] **Evidence/hypothesis separation** — SCCR labeled ESTABLISHED METRIC; all
+      other RIRs labeled RESEARCH HYPOTHESES wherever named (abstract, §11 Q3 table,
+      roadmap references); no surface implies UCIR/VCIR/RCIR/BCIR/DCIR are results
 
 ## 5. What the archival-vs-pruned note adds to the submission
 
@@ -166,6 +178,14 @@ preprint is live — building it now would delay submission and duplicate the
 learn.html dashboard work already shipped.
 
 ## 7. DONE vs LEFT
+
+**DONE (2026-08-03, advisor-feedback execution):** working-paper §7.1
+falsifiability section (md/html/tex); roadmap §4 evidence-status table +
+hypothesis labels; framework-paper outline (`research/framework-paper-outline.md`,
+Paper 4 synthesis); §11 Q4 + roadmap §8 Q4 sharpened ("no single resource
+market" — attribute/stock-vs-flow mismatch, not USD-vs-CPU denomination);
+publication-decisions tracker addendum (falsifiability = pre-submission item,
+D5 confirmed critical path). See commit message.
 
 **DONE (verified, 2026-08-02 execution plan):**
 - Full LaTeX source (`research/working-paper.tex`) — compilable skeleton; toolchain NOT local (flag for compile pass).

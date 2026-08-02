@@ -43,6 +43,42 @@ TELOS (as Aviku). Companion to `docs/decisions/2026-08-02-project-decisions.md`
 - [ ] LaTeX compile pass on a machine with pdflatex (D6)
 - [ ] Companion note content review sign-off (D7)
 
+
+## Addendum — advisor review (2026-08-03)
+
+External advisor feedback on the **Bitcoin Resource Accounting** program reviewed
+by TELOS (as Aviku); clear wins executed 2026-08-03:
+
+- **D5 confirmed as the only submission-delaying item.** The advisor's "external
+  reproduction is the only real blocker" matches this tracker's critical-path
+  status; no change. (Two distinct things, per advisor: independent
+  implementations prove software correctness; independent researchers prove
+  scientific credibility.)
+- **New pre-submission item added:** "What would falsify this framework?" section
+  (working-paper §7.1, added 2026-08-03 in .md/.html/.tex) — required before
+  submission, alongside the banded-claim discipline.
+- **Evidence/hypothesis separation enforced** — roadmap §4 evidence-status table
+  (SCCR = ESTABLISHED METRIC (validated); UCIR/VCIR/RCIR/BCIR/DCIR = RESEARCH
+  HYPOTHESES (not yet modeled/measured/reproduced)); publication-plan evidence
+  discipline + two new pre-submit checklist items.
+- **Paper-4 synthesis outline created** (`research/framework-paper-outline.md`)
+  per the advisor's 6-part structure ("Bitcoin Resource Accounting: A General
+  Framework"); positioned as Paper 4 / the unified framework paper. Outline
+  only — the paper is NOT written (roadmap §6 amendment 1: no Paper 2–4 prose
+  before Phase I ships).
+- **"Price can't solve everything" insight sharpened** (working-paper §11 Q4 +
+  roadmap §8 Q4): the sharper claim is an attribute / stock-vs-flow mismatch
+  between the fee's charging unit and each cost driver — not a USD-vs-CPU
+  denomination claim (hardware/time carry USD opportunity cost; price lifts any
+  aggregate ratio as a unit effect).
+
+**Open items after addendum (unchanged unless noted):** D2 ORCID (create before
+submission), D3 arXiv real-identity account, D4 LICENSE ratification (file
+untouched), D5 external reproducer (critical path), D6 LaTeX compile pass
+(§7.1 now included in the source), D7 companion-note sign-off, + falsifiability
+section folded into the abstract/claims pass (publication-plan §4).
+
+---
 ---
 
 *Bitcoin Sahi Research Council — Publication decisions (2026-08-02), recorded by

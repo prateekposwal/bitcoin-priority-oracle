@@ -918,3 +918,87 @@ Every session in this repo MUST honor these load-bearing rules:
 - Quality: healthy
 - Forecast: holt-linear-trend · stable · regime=normal (367 pts)
 - M4: 5/7 clean cycles · bridgeFlipped=true
+## Session Handoff — 2026-08-02T16:44:47.493Z
+
+### Current State
+- Session mood: neutral
+- Active work: cycle 70 · bridge=off · M4 cleanCycles=6/7
+- Forecast: holt-linear-trend · stable · rmse=1.138 (364 pts)
+
+### Decisions Made
+- M4 gate: cleanCycles=6/7 (no flip — already flipped)
+
+### Open Issues
+- 1 endpoints unhealthy
+- 1 sources stale (>120min old)
+
+### Metrics
+- Quality: healthy
+- Forecast: holt-linear-trend · stable · regime=normal (364 pts)
+- M4: 6/7 clean cycles · bridgeFlipped=true
+## Session Handoff — 2026-08-02T18:42:54.682Z
+
+### Current State
+- Session mood: neutral
+- Active work: cycle 72 · bridge=off · M4 cleanCycles=7/7
+- Forecast: holt-linear-trend · stable · rmse=1.137 (369 pts)
+
+### Decisions Made
+- M4 gate: cleanCycles=7/7 (no flip — already flipped)
+
+### Open Issues
+- DE AGENT: last run 121 min ago
+- 3 endpoints unhealthy
+- 1 sources stale (>120min old)
+
+### Metrics
+- Quality: degraded
+- Forecast: holt-linear-trend · stable · regime=normal (369 pts)
+- M4: 7/7 clean cycles · bridgeFlipped=true
+## Session Handoff — 2026-08-02T19:05:30.634Z
+
+### Current State
+- Session mood: neutral
+- Active work: cycle 72 · bridge=off · M4 cleanCycles=8/7
+- Forecast: holt-linear-trend · rising · rmse=1.143 (371 pts)
+
+### Decisions Made
+- M4 gate: cleanCycles=8/7 (no flip — already flipped)
+
+### Open Issues
+- DE AGENT: last run 121 min ago
+- 5 endpoints unhealthy
+- 2 sources stale (>120min old)
+
+### Metrics
+- Quality: degraded
+- Forecast: holt-linear-trend · rising · regime=normal (371 pts)
+- M4: 8/7 clean cycles · bridgeFlipped=true
+
+## Session Handoff — 2026-08-03 (advisor feedback on Bitcoin Resource Accounting)
+
+### Current State
+- Session mood: focused
+- Active work: advisor-feedback execution on the Bitcoin Resource Accounting program — COMPLETE
+- Advisor's core points (paraphrased): (1) keep the framework from outgrowing the evidence — SCCR is the ONE validated metric, UCIR/VCIR/RCIR/DCIR are hypotheses; (2) the most interesting finding is that BTC price cannot internalize every resource — there is no single "resource market"; (3) the SCCR ≈ 8.9 overshoot is realistic (no neat fixed point); (4) cross-chain as methodology-not-rankings: keep; (5) next work = foundational paper "Bitcoin Resource Accounting: A General Framework" (6-part structure), current paper becomes Paper 1: Storage; (6) external reproduction is the only real submission blocker; (7) add a "What would falsify this framework?" section before submission; (8) discipline separation: SCCR = established metric, framework = theory, future ratios = hypotheses.
+
+### Decisions Made
+- **Falsifiability section added** to working-paper §7.1 (.md/.html/.tex): the advisor's four falsifiers + two added (attribute-pricing regression finding no persistence signal → RIR family premise fails; pruning census showing the burden avoidable at scale; measured response functions closing the loop ≥1×).
+- **Evidence/hypothesis separation enforced**: roadmap §4 evidence-status table (SCCR = 🟢 ESTABLISHED METRIC; UCIR/VCIR/RCIR/BCIR/DCIR = 🟡/🔴 RESEARCH HYPOTHESES); Phase II/III labeled; publication-plan evidence discipline + 2 new pre-submit checklist items.
+- **Paper-4 synthesis outline created** (`research/framework-paper-outline.md`): "Bitcoin Resource Accounting: A General Framework" — 9 sections + evidence master table + anti-scope appendix; outline only, paper NOT written (roadmap §6 amendment 1).
+- **Q4 sharpened** (working-paper §11 + roadmap §8): the "price can't solve everything" claim is now stated as an attribute / stock-vs-flow mismatch (fee charging unit vs cost driver) rather than a USD-vs-CPU denomination claim — hardware/time have USD opportunity cost; price lifts any aggregate ratio as a unit effect, genuine internalization only for storage's matched per-byte attribute.
+- **Decision tracker addendum** (`docs/decisions/2026-08-02-publication-decisions.md`): D5 confirmed as the only submission-delaying item; falsifiability section added as pre-submission item.
+- **Assessment (where I agree / push back)**: agree on evidence discipline, falsifiability, overshoot realism, cross-chain-as-methodology, external-reproduction-as-critical-path, foundational-paper sequencing. Push back mildly on point 2's literal phrasing (see Q4 sharpening — the denomination shorthand is only half right; the sharper claim is attribute mismatch). On point 7, added two framework-level falsifiers beyond the four measurement-level ones. On point 1, the framework already had the 4-question gate (roadmap §4) — the new table makes the status explicit rather than implicit.
+
+### Open Issues
+- **CRITICAL PATH (unchanged):** D5 external reproducer — the only submission-delaying item; protocol + log in `research/reproduce/`.
+- Prateek: ORCID iD (D2, before submission) + arXiv account with real identity (D3).
+- Prateek: final ratification of LICENSE pair (D4) — LICENSE file NOT changed (untouched).
+- LaTeX compile pass on a machine with pdflatex (D6; §7.1 now included in the source).
+- Companion note `archival-vs-pruned-note.md` content review sign-off (D7).
+- `research/working-paper.tex` STILL needs §11/§12 addendum conversion (open item; §7.1 added 2026-08-03, §11/§12 pending).
+- Paper 4 outline exists; do NOT write the paper until Phase I ships (roadmap §6 amendment 1).
+
+### Metrics
+- Validation: `node tools/validate.js` ✅ PASS
+- Evidence status: 1 established metric (SCCR) · 6 named hypotheses · 1 template · 0 unfalsifiable claims

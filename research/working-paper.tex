@@ -14,6 +14,10 @@
 %     canonical text). This source compiles; content parity with the .md
 %     should be checked by diff before submission.
 %
+%  2026-08-03: subsection 7.1 (falsifiability) added to this source.
+%  2026-08-03: NOTE working-paper.md sections 11-12 (deep questions +
+%   cross-chain) are NOT YET CONVERTED to LaTeX (open item, see repo handoff).
+%
 %  TOOLCHAIN: pdflatex (not present on the dev machine at conversion
 %  time — compile on any TeX installation:  pdflatex working-paper.tex)
 %
@@ -241,6 +245,35 @@ Every quantity in this paper is regenerated from \texttt{research/model-spec.jso
   \item Marginal vs.\ average attribution changes the per-byte cost by $164\times$ (dimensionless) --- the choice is explicit and documented.
 \end{enumerate}
 \textbf{Future work (the resource-pricing program):} UTXO leg (\texttt{utxo\_size\_inc}); bandwidth leg (analytical bounds); validation leg (Core benchmarks); node distribution (\texttt{node\_geo}); BIP-110 pre/post measurement protocol if ever signaled; v3.0 economic-dynamics program (\S\ref{sec:10}).
+
+\subsection{What would falsify this framework?}\label{sec:7.1}
+\textit{(Added 2026-08-03, post-advisor review --- see
+\texttt{docs/decisions/2026-08-02-publication-decisions.md}.)} A framework that
+cannot specify its own failure conditions is not a framework; it is a posture. We
+state, in advance, the observations that would force us to retract or
+substantially revise the claims in this paper. They operate at two levels --- the
+\textbf{measurement} (SCCR, this paper) and the \textbf{framework} (the RIR
+family and the ``no single resource market'' thesis; outline in
+\texttt{research/framework-paper-outline.md}).
+
+\textbf{Falsifiers of the SCCR measurement:}
+\begin{enumerate}[nosep]
+  \item \textbf{Independent implementations cannot reproduce the ratio.} The framework ships a frozen capture plus three independent implementations (JS/Python/C, verified agreeing per-block). If an uninvolved party running the protocol on the same inputs cannot reproduce SCCR $\approx$ 0.22 (or the discrepancy cannot be reconciled), the measurement is not trustworthy and the paper's headline falls. This is the external-reproduction critical path (\texttt{research/reproduce/external-reproduction.md}).
+  \item \textbf{A better storage-cost model reverses the conclusion.} The denominator ($C \cdot T \cdot N / R_{\mathrm{blocks}}$) rests on a homogeneous node-cost model, an assumed $T=10$ horizon, and the $\geq$32K census. If a defensible refinement --- measured pruned-vs-archival retention, regional cost heterogeneity, or corrected discounting --- moves the banded result ($\sim$22--29\% coverage, most blocks below $1\times$) to a qualitatively different conclusion, the paper's central claim is falsified in its current form.
+  \item \textbf{Fees consistently exceed modeled long-term costs.} If sustained fee regimes (or re-measured 2017--2024 fee-peak years) show fees \emph{covering} modeled costs in a stationary way, the partial-internalization reading collapses into ``the market internalizes storage when it matters'' --- a different result, and the banded headline (\S\ref{sec:5}) would be wrong.
+\end{enumerate}
+
+\textbf{Falsifiers of the framework (the RIR family and the ``no single resource market'' thesis):}
+\begin{enumerate}[nosep]
+  \setcounter{enumi}{3}
+  \item \textbf{Resource-cost attribution is shown economically inappropriate.} If the planned attribute-pricing regression (working-paper.md \S 11 Q2) shows the single fee price carries \emph{no} persistence signal, then per-resource internalization ratios are category errors, not measurements --- the RIR family premise fails even though SCCR-as-computed may stand.
+  \item \textbf{The pruned-vs-archival census shows the storage burden is avoidable at scale.} The $T=10$ replicated-storage denominator assumes archival retention across the network. A measured pruning distribution showing most nodes avoid most of the burden (companion note \texttt{archival-vs-pruned-note.md}) would reframe SCCR as an upper bound on an avoidable cost --- a genuine falsification of the externality reading, though not of the measurement.
+  \item \textbf{Measured response functions close the dynamic loop at or above $1\times$.} If node-entry/exit and fee-demand response functions (working-paper.md \S 11 Q1) are measured and exhibit a stable fixed point at or above $1\times$, the persistent-partial-internalization equilibrium hypothesis is falsified.
+\end{enumerate}
+
+We do not believe any of these falsifiers currently obtain; we list them so the
+reader can check, and so the framework is never mistaken for an unfalsifiable
+claim.
 
 \section{Economics and Related Work}\label{sec:8}
 \subsection{Is this an externality?}\label{sec:8.1}

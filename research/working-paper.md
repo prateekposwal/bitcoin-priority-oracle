@@ -214,6 +214,24 @@ The correction increased the estimated SCCR by an order of magnitude but did not
 - **BIP-110 pre/post measurement protocol** if activation is ever signaled
 - **v3.0 economic-dynamics program:** the eight-question agenda in §10
 
+### 7.1 What would falsify this framework?
+
+*(Added 2026-08-03, post-advisor review — see `docs/decisions/2026-08-02-publication-decisions.md`.)* A framework that cannot specify its own failure conditions is not a framework; it is a posture. We therefore state, in advance, the observations that would force us to retract or substantially revise the claims in this paper. They operate at two levels — the **measurement** (SCCR, this paper) and the **framework** (the RIR family and the "no single resource market" thesis; outline in `research/framework-paper-outline.md`).
+
+**Falsifiers of the SCCR measurement:**
+
+1. **Independent implementations cannot reproduce the ratio.** The framework ships a frozen capture plus three independent implementations (JS/Python/C, verified agreeing per-block). If an uninvolved party running the protocol on the same inputs cannot reproduce SCCR ≈ 0.22 (or the discrepancy cannot be reconciled), the measurement is not trustworthy and the paper's headline falls. This is the D5 critical path (external reproduction; `research/reproduce/external-reproduction.md`).
+2. **A better storage-cost model reverses the conclusion.** The denominator (`C·T·N / R_blocks`) rests on a homogeneous node-cost model, an assumed T=10 horizon, and the ≥32K census. If a defensible refinement — measured pruned-vs-archival retention, regional cost heterogeneity, or corrected discounting — moves the banded result (~22–29% coverage, most blocks below 1×) to a qualitatively different conclusion, the paper's central claim is falsified in its current form.
+3. **Fees consistently exceed modeled long-term costs.** If sustained fee regimes (or re-measured 2017–2024 fee-peak years) show fees *covering* modeled costs in a stationary way, the partial-internalization reading collapses into "the market internalizes storage when it matters" — a different result, and the banded headline (§5) would be wrong.
+
+**Falsifiers of the framework (the RIR family and the "no single resource market" thesis):**
+
+4. **Resource-cost attribution is shown economically inappropriate.** If the planned attribute-pricing regression (§11 Q2) shows the single fee price carries *no* persistence signal, then per-resource internalization ratios are category errors, not measurements — the RIR family premise fails even though SCCR-as-computed may stand.
+5. **The pruned-vs-archival census shows the storage burden is avoidable at scale.** The T=10 replicated-storage denominator assumes archival retention across the network. A measured pruning distribution showing most nodes avoid most of the burden (companion note `archival-vs-pruned-note.md`) would reframe SCCR as an upper bound on an avoidable cost — a genuine falsification of the externality reading, though not of the measurement.
+6. **Measured response functions close the dynamic loop at or above 1×.** If node-entry/exit and fee-demand response functions (§11 Q1) are measured and exhibit a stable fixed point at or above 1×, the persistent-partial-internalization equilibrium hypothesis is falsified.
+
+We do not believe any of these falsifiers currently obtain; we list them so the reader can check, and so the framework is never mistaken for an unfalsifiable claim.
+
 ## 8. Economics and Related Work
 
 ### 8.1 Is this an externality?
@@ -415,20 +433,46 @@ scales linearly with price. Target table: 0.5× at $141K, 1.0× at $283K, 2.0× 
 $566K, 3.5× at $990K.
 
 **Extension method (JUDGMENT — the numerator/denominator structure, not a
-computed number):** the same price lever applies to any RIR whose denominator is
-a USD-denominated, price-invariant cost and whose numerator is a USD fee. For
-UCIR-style resources the price lever exists **formally** (`P*_i = P₀ ×
-target/RIR_i,₀`) but is **economically hollow**: the UTXO cost is
-RAM/lookup — driven by the *live set size*, not by the USD value of traffic. A
-pure price rise inflates the fee numerator without changing the resource burden
-one byte; the ratio moves as a **unit effect**, not as internalization. **The
-key structural distinction:** storage's cost is (approximately) proportional to
-bytes written and independent of price, so price genuinely internalizes it;
-UTXO and validation costs scale with set size and script complexity, which price
-does not touch. **Honest answer: price alone can solve storage; it cannot solve
-UTXO or validation the same way** — those need state-management or
-fee-structure levers, which is why UCIR's data path and VCIR's benchmark path
-are the actual Phase II work.
+computed number; sharpened 2026-08-03 post-advisor review):** formally, the same
+price lever applies to any RIR whose denominator is a price-invariant cost and
+whose numerator is a USD fee (`P*_i = P₀ × target/RIR_i,₀`). For every resource
+except storage that lever is **economically hollow**, and the reason must be
+stated precisely. The common shorthand — "storage is USD-denominated;
+validation/UTXO are CPU/RAM-denominated; so price solves one and not the other"
+— is only half right: validation hardware and operator time have USD opportunity
+costs, so in the *aggregate* a price rise would mechanically lift any resource
+ratio, storage or not. The sharper distinction is that **the fee's charging
+attribute does not match the other cost drivers**:
+
+- **Storage — matched in attribute, mismatched in time.** Storage cost is a
+  homogeneous per-byte USD liability (`cb` USD/(byte·yr)) incurred *after* the
+  fee; the fee is charged per (v)byte. The per-byte attribute matches, so a
+  price rise raises USD fee revenue against a fixed USD cost stream — price
+  genuinely closes the per-byte intertemporal gap (P* ≈ $283K).
+- **Validation — mismatched in attribute.** The fee is per-transaction (sat/vB);
+  the validation cost is per-transaction-*class* (script complexity, signature
+  count). One price cannot distinguish classes, so price appreciation inflates
+  every transaction's fee uniformly without reallocating toward — or signaling
+  anything about — the costly classes. The ratio would move; the move is a unit
+  effect, not internalization.
+- **UTXO — mismatched in stock vs. flow.** The UTXO cost is a *stock*
+  (RAM/lookup driven by live-set size, per lifetime UTXO); fees are a *flow*
+  (per transaction). Price appreciation inflates the flow without touching the
+  stock driver.
+- **Relay/bandwidth — mismatched in payer/receiver structure.** Marginal
+  propagation cost is incurred per recipient node; the fee is paid once by the
+  sender. Price does not change the replication topology that sets the burden.
+
+**Honest answer, sharpened:** price can lift the aggregate ratio for *any*
+USD-priced resource — that is arithmetic. What it cannot do is repair a mismatch
+between the fee's charging attribute and the resource's cost driver. Storage's
+per-byte attribute matches, so price genuinely internalizes it; validation
+(per-class), UTXO (stock), and relay (per-recipient) do not match, so for them
+the price lever is a unit effect. **There is no single "resource market":** there
+is one block-space market (congestion) whose single price carries a genuine
+per-byte signal and only accidental signal about the other resources. Those need
+state-management or fee-structure levers — which is why UCIR's data path and
+VCIR's benchmark path are the actual Phase II work.
 
 ### Q5 — What happens in 2040?
 
