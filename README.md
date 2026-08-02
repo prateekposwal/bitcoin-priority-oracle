@@ -86,7 +86,8 @@ The SCCR is also reproduced in **three independent implementations** — JS
 (`tools/research/storage-ratio.js`, canonical), Python
 (`research/reproduce/reproduce_sccr.py`), and standalone C
 (`research/reproduce/reproduce_sccr.c`, `gcc -O2 -o reproduce_sccr reproduce_sccr.c -lm`)
-— and a cross-check script asserts per-block agreement across all three:
+— and a cross-check script asserts per-block agreement across all three
+(it auto-compiles the C binary from source, which is gitignored):
 
 ```bash
 bash research/reproduce/cross_check.sh     # prints all three + VERDICT

@@ -23,7 +23,7 @@ function sqlQuery(sql) {
   try {
     var tmpFile = '/tmp/bsahi-sr-' + process.pid + '-' + Date.now() + '-' + Math.floor(Math.random()*1e9) + '.sql';
     fs.writeFileSync(tmpFile, '.mode json\n' + sql);
-    var result = child_process.execSync('sqlite3 "' + DB_PATH + '" < "' + tmpFile + '"', { encoding: 'utf8', timeout: 10000 });
+    var result = child_process.execSync('sqlite3 "' + DB_PATH + '" < "' + tmpFile + '"', { encoding: 'utf8', timeout: 10000, stdio: ['ignore', 'pipe', 'ignore'] });
     try { fs.unlinkSync(tmpFile); } catch (e) {}
     try { return JSON.parse(result); } catch (e) { return []; }
   } catch (e) { return []; }
@@ -112,8 +112,12 @@ function computeFromBlockStats() {
 }
 
 function generateReport() {
+  // Frozen-input mode (SCCR_INPUT_FILE set): pure external reproduction — no DB
+  // access, no research_findings insert, no report file written into the clone.
+  // Canonical live-DB behavior is unchanged when the env var is absent.
+  var FROZEN_MODE = !!process.env.SCCR_INPUT_FILE;
   var feeHistoryRatios = computeFromFeeHistory();
-  var blockStatsRatios = computeFromBlockStats();
+  var blockStatsRatios = FROZEN_MODE ? [] : computeFromBlockStats();
 
   var lines = [];
   lines.push('# Storage Cost Coverage Ratio Report');
@@ -225,14 +229,18 @@ function generateReport() {
   lines.push('---');
   lines.push('*Bitcoin Sahi Research — Storage Cost Coverage Ratio*');
 
-  var reportDir = path.resolve(__dirname, '..', '..', 'reports', 'research');
-  if (!fs.existsSync(reportDir)) fs.mkdirSync(reportDir, { recursive: true });
   var dateStr = new Date().toISOString().slice(0, 10);
-  var filePath = path.join(reportDir, 'storage-ratio-' + dateStr + '.md');
-  fs.writeFileSync(filePath, lines.join('\n'));
+  var filePath = null;
+  if (!FROZEN_MODE) {
+    var reportDir = path.resolve(__dirname, '..', '..', 'reports', 'research');
+    if (!fs.existsSync(reportDir)) fs.mkdirSync(reportDir, { recursive: true });
+    filePath = path.join(reportDir, 'storage-ratio-' + dateStr + '.md');
+    fs.writeFileSync(filePath, lines.join('\n'));
+  }
 
   // Persist the flagship finding into research_findings (first-class DB row).
-  try {
+  // Skipped in frozen-input mode: no DB is expected to exist in an external clone.
+  try { if (!FROZEN_MODE) {
     var avgRatio = feeHistoryRatios.length > 0 ? (feeHistoryRatios.reduce(function(a, b) { return a + b.ratio; }, 0) / feeHistoryRatios.length).toFixed(4) : 'N/A';
     var pctBelow = feeHistoryRatios.length > 0 ? (feeHistoryRatios.filter(function(r) { return r.ratio < 1; }).length / feeHistoryRatios.length * 100).toFixed(1) + '%' : 'N/A';
     var db = require('../db/init.js');
@@ -243,9 +251,9 @@ function generateReport() {
       JSON.stringify({ version: MODEL_VERSION, params: CONFIG, blocks: feeHistoryRatios.length, avgRatio: avgRatio }),
       0.95, 'storage-externality', 'reports/research/storage-ratio-' + dateStr + '.md', 0
     );
-  } catch (e) { console.log('storage-ratio insert failed:', e.message); }
+  } } catch (e) { if (!FROZEN_MODE) console.log('storage-ratio insert failed:', e.message); }
 
-  return { filePath: filePath, blocks: feeHistoryRatios.length, avgRatio: feeHistoryRatios.length > 0 ? (feeHistoryRatios.reduce(function(a, b) { return a + b.ratio; }, 0) / feeHistoryRatios.length).toFixed(4) : 'N/A', belowThreshold: feeHistoryRatios.length > 0 ? (feeHistoryRatios.filter(function(r) { return r.ratio < 1; }).length / feeHistoryRatios.length * 100).toFixed(1) + '%' : 'N/A' };
+  return { filePath: filePath, blocks: feeHistoryRatios.length, avgRatio: feeHistoryRatios.length > 0 ? (feeHistoryRatios.reduce(function(a, b) { return a + b.ratio; }, 0) / feeHistoryRatios.length).toFixed(4) : 'N/A', belowThreshold: feeHistoryRatios.length > 0 ? (feeHistoryRatios.filter(function(r) { return r.ratio < 1; }).length / feeHistoryRatios.length * 100).toFixed(1) + '%' : 'N/A', frozenMode: FROZEN_MODE };
 }
 
 function sensitivityGrid() {
@@ -281,7 +289,7 @@ if (require.main === module) {
   }
   var result = generateReport();
   console.log('Storage Cost Coverage Ratio Report');
-  console.log('  File: ' + result.filePath);
+  console.log(result.frozenMode ? '  File: (frozen-input reproduction — no report written)' : '  File: ' + result.filePath);
   console.log('  Methodology: v' + MODEL_VERSION);
   console.log('  Blocks sampled: ' + result.blocks);
   console.log('  Avg ratio: ' + result.avgRatio);

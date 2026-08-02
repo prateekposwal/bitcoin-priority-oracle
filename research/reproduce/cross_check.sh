@@ -5,6 +5,15 @@ set -e
 REPO="$(cd "$(dirname "$0")/../.." && pwd)"
 cd "$REPO"
 
+# The C binary is gitignored (not shipped in clones); compile it from source if
+# absent so the published "bash research/reproduce/cross_check.sh" works for an
+# external reproducer with zero extra steps.
+if [ ! -x research/reproduce/reproduce_sccr ]; then
+  echo "── (compiling C implementation from source — binary is gitignored)"
+  gcc -O2 -o research/reproduce/reproduce_sccr research/reproduce/reproduce_sccr.c -lm \
+    || { echo "❌ gcc compile failed — run: gcc -O2 -o research/reproduce/reproduce_sccr research/reproduce/reproduce_sccr.c -lm"; exit 1; }
+fi
+
 echo "── 1/3 JS (canonical, frozen capture via SCCR_INPUT_FILE)"
 SCCR_INPUT_FILE=research/reproduce/input/fee_history_capture.json node tools/research/storage-ratio.js > /tmp/sccr_js_report.txt
 JS_LINE=$(grep -E "Avg ratio" /tmp/sccr_js_report.txt)

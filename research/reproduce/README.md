@@ -34,6 +34,12 @@ Each element:
 - `avgFees` — total block fees (sats) at that height
 - `USD` — BTC price (USD) at capture time
 
+The file holds 171 elements with **contiguous, ascending heights
+(960562 → 960732, no gaps)**. A quick sanity check:
+
+    python3 -c "import json;d=json.load(open('research/reproduce/input/fee_history_capture.json'));print(len(d),[e['avgHeight'] for e in d]==list(range(960562,960733)))"
+    # 171 True
+
 ## Data-freshness nuance (why the frozen input exists)
 
 The canonical JS implementation reads the **live** `fee_history` capture from the
@@ -55,7 +61,9 @@ bash research/reproduce/cross_check.sh
 ```
 
 Prints each implementation's avg/min/max/below-1× and asserts per-block
-agreement between JS, Python, and C (max |diff| < 1e-6).
+agreement between JS, Python, and C (max |diff| < 1e-6). The script
+auto-compiles the C implementation from source if the binary is absent
+(the binary is gitignored and not shipped in clones).
 
 ## Reference outputs (2026-08-02 freeze, 171 blocks, model-spec v2.0.1)
 
