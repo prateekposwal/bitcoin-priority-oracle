@@ -347,6 +347,391 @@
         "bridgeFlipped": false,
         "forecastModel": "holt-linear-trend"
       }
+    },
+    {
+      "ts": "2026-08-01T18:14:48.160Z",
+      "cycle": 48,
+      "source": "de-agent",
+      "decisions": [
+        "M4 gate: cleanCycles=0/7"
+      ],
+      "issues": [
+        "DE AGENT: last run 111 min ago",
+        "6 endpoints unhealthy"
+      ],
+      "metrics": {
+        "quality": "degraded",
+        "m4CleanCycles": 0,
+        "bridgeFlipped": false,
+        "forecastModel": "holt-linear-trend"
+      }
+    },
+    {
+      "ts": "2026-08-01T19:15:17.808Z",
+      "cycle": 49,
+      "source": "de-agent",
+      "decisions": [
+        "M4 gate: cleanCycles=1/7"
+      ],
+      "issues": [
+        "1 endpoints unhealthy"
+      ],
+      "metrics": {
+        "quality": "healthy",
+        "m4CleanCycles": 1,
+        "bridgeFlipped": false,
+        "forecastModel": "holt-linear-trend"
+      }
+    },
+    {
+      "ts": "2026-08-01T19:45:00.000Z",
+      "cycle": 50,
+      "source": "architect-mandate",
+      "decisions": [
+        "CORE PRINCIPLE persisted: done_vs_left_mandatory / done_means_shipped / pattern_gap_filling",
+        "Principle written to: TELOS AGENTS.md, telos SKILL.md, IdentityCore.core_principles, BSAHI AGENTS.md",
+        "SCCR v2.0.0 correction verified UNCOMMITTED (82 files dirty); live site still 0.0149"
+      ],
+      "issues": [
+        "Snapshot bot 19:23 UTC commit FAILED: pre-commit hook 'node: command not found'",
+        "20:00 UTC snapshot deadline ~15 min away with uncommitted correction",
+        "de-server/engagement/ops-health/site-health agents running; snapshot loaded but idle"
+      ],
+      "metrics": {
+        "quality": "aware",
+        "dirty_files": 82,
+        "live_sccr": "0.0149",
+        "local_sccr": "0.1719",
+        "brief_52_status": "pending"
+      }
+    },
+    {
+      "ts": "2026-08-01T19:55:56.702Z",
+      "cycle": 50,
+      "source": "de-agent",
+      "decisions": [
+        "M4 gate: cleanCycles=2/7"
+      ],
+      "issues": [
+        "2 endpoints unhealthy"
+      ],
+      "metrics": {
+        "quality": "healthy",
+        "m4CleanCycles": 2,
+        "bridgeFlipped": false,
+        "forecastModel": "holt-linear-trend"
+      }
+    },
+    {
+      "ts": "2026-08-01T20:55:42.083Z",
+      "cycle": 51,
+      "source": "de-agent",
+      "decisions": [
+        "M4 gate: cleanCycles=3/7"
+      ],
+      "issues": [
+        "3 endpoints unhealthy"
+      ],
+      "metrics": {
+        "quality": "healthy",
+        "m4CleanCycles": 3,
+        "bridgeFlipped": false,
+        "forecastModel": "holt-linear-trend"
+      }
+    },
+    {
+      "ts": "2026-08-01T21:04:47.279Z",
+      "cycle": 52,
+      "source": "de-agent",
+      "decisions": [
+        "M4 gate: cleanCycles=4/7"
+      ],
+      "issues": [
+        "2 endpoints unhealthy"
+      ],
+      "metrics": {
+        "quality": "healthy",
+        "m4CleanCycles": 4,
+        "bridgeFlipped": false,
+        "forecastModel": "holt-linear-trend"
+      }
+    },
+    {
+      "ts": "2026-08-01T21:56:53.962Z",
+      "cycle": 53,
+      "source": "de-agent",
+      "decisions": [
+        "M4 gate: cleanCycles=5/7"
+      ],
+      "issues": [
+        "3 endpoints unhealthy"
+      ],
+      "metrics": {
+        "quality": "healthy",
+        "m4CleanCycles": 5,
+        "bridgeFlipped": false,
+        "forecastModel": "holt-linear-trend"
+      }
+    },
+    {
+      "ts": "2026-08-01T23:29:58.338Z",
+      "cycle": 54,
+      "source": "de-agent",
+      "decisions": [
+        "M4 gate: cleanCycles=6/7"
+      ],
+      "issues": [
+        "ORCHESTRATOR: heartbeat 104 min ago",
+        "13 endpoints unhealthy"
+      ],
+      "metrics": {
+        "quality": "degraded",
+        "m4CleanCycles": 6,
+        "bridgeFlipped": false,
+        "forecastModel": "holt-linear-trend"
+      }
+    },
+    {
+      "ts": "2026-08-01T23:31:13.668Z",
+      "cycle": 54,
+      "source": "de-agent",
+      "decisions": [
+        "M4 COMPLETE: bridge disabled"
+      ],
+      "issues": [
+        "ORCHESTRATOR: heartbeat 104 min ago",
+        "13 endpoints unhealthy"
+      ],
+      "metrics": {
+        "quality": "degraded",
+        "m4CleanCycles": 7,
+        "bridgeFlipped": true,
+        "forecastModel": "holt-linear-trend"
+      }
+    },
+    {
+      "ts": "2026-08-02T00:42:33.864Z",
+      "cycle": 55,
+      "source": "de-agent",
+      "decisions": [
+        "M4 gate: cleanCycles=7/7"
+      ],
+      "issues": [
+        "ORCHESTRATOR: heartbeat 177 min ago",
+        "11 endpoints unhealthy",
+        "1 sources stale (>120min old)"
+      ],
+      "metrics": {
+        "quality": "degraded",
+        "m4CleanCycles": 7,
+        "bridgeFlipped": true,
+        "forecastModel": "holt-linear-trend"
+      }
+    },
+    {
+      "ts": "2026-08-02T01:43:48.124Z",
+      "cycle": 56,
+      "source": "de-agent",
+      "decisions": [
+        "M4 gate: cleanCycles=8/7"
+      ],
+      "issues": [
+        "DE AGENT: last run 95 min ago",
+        "ORCHESTRATOR: heartbeat 200 min ago",
+        "9 endpoints unhealthy",
+        "1 sources stale (>120min old)"
+      ],
+      "metrics": {
+        "quality": "degraded",
+        "m4CleanCycles": 8,
+        "bridgeFlipped": true,
+        "forecastModel": "holt-linear-trend"
+      }
+    },
+    {
+      "ts": "2026-08-02T02:46:56.963Z",
+      "cycle": 57,
+      "source": "de-agent",
+      "decisions": [
+        "M4 gate: cleanCycles=9/7"
+      ],
+      "issues": [
+        "DE AGENT: last run 95 min ago",
+        "ORCHESTRATOR: heartbeat 200 min ago",
+        "1 endpoints unhealthy",
+        "1 sources stale (>120min old)"
+      ],
+      "metrics": {
+        "quality": "degraded",
+        "m4CleanCycles": 9,
+        "bridgeFlipped": true,
+        "forecastModel": "holt-linear-trend"
+      }
+    },
+    {
+      "ts": "2026-08-02T04:16:23.191Z",
+      "cycle": 58,
+      "source": "de-agent",
+      "decisions": [
+        "M4 gate: cleanCycles=10/7"
+      ],
+      "issues": [
+        "DE AGENT: last run 95 min ago",
+        "ORCHESTRATOR: heartbeat 200 min ago",
+        "3 endpoints unhealthy",
+        "1 sources stale (>120min old)"
+      ],
+      "metrics": {
+        "quality": "degraded",
+        "m4CleanCycles": 10,
+        "bridgeFlipped": true,
+        "forecastModel": "holt-linear-trend"
+      }
+    },
+    {
+      "ts": "2026-08-02T05:20:10.222Z",
+      "cycle": 59,
+      "source": "de-agent",
+      "decisions": [
+        "M4 gate: cleanCycles=11/7"
+      ],
+      "issues": [
+        "DE AGENT: last run 95 min ago",
+        "ORCHESTRATOR: heartbeat 200 min ago",
+        "1 endpoints unhealthy",
+        "2 sources stale (>120min old)"
+      ],
+      "metrics": {
+        "quality": "degraded",
+        "m4CleanCycles": 11,
+        "bridgeFlipped": true,
+        "forecastModel": "holt-linear-trend"
+      }
+    },
+    {
+      "ts": "2026-08-02T06:26:21.811Z",
+      "cycle": 60,
+      "source": "de-agent",
+      "decisions": [
+        "M4 gate: cleanCycles=12/7"
+      ],
+      "issues": [
+        "DE AGENT: last run 95 min ago",
+        "ORCHESTRATOR: heartbeat 200 min ago",
+        "1 endpoints unhealthy",
+        "2 sources stale (>120min old)"
+      ],
+      "metrics": {
+        "quality": "degraded",
+        "m4CleanCycles": 12,
+        "bridgeFlipped": true,
+        "forecastModel": "holt-linear-trend"
+      }
+    },
+    {
+      "ts": "2026-08-02T07:02:40.497Z",
+      "cycle": 61,
+      "source": "de-agent",
+      "decisions": [
+        "M4 gate: cleanCycles=0/7"
+      ],
+      "issues": [
+        "13 endpoints unhealthy",
+        "Data quality score below 60 (40)",
+        "1 sources stale (>120min old)"
+      ],
+      "metrics": {
+        "quality": "healthy",
+        "m4CleanCycles": 0,
+        "bridgeFlipped": true,
+        "forecastModel": "holt-linear-trend"
+      }
+    },
+    {
+      "ts": "2026-08-02T08:04:28.222Z",
+      "cycle": 62,
+      "source": "de-agent",
+      "decisions": [
+        "M4 gate: cleanCycles=0/7"
+      ],
+      "issues": [
+        "1 endpoints unhealthy",
+        "Data quality score below 60 (28)",
+        "1 sources stale (>120min old)"
+      ],
+      "metrics": {
+        "quality": "healthy",
+        "m4CleanCycles": 0,
+        "bridgeFlipped": true,
+        "forecastModel": "holt-linear-trend"
+      }
+    },
+    {
+      "ts": "2026-08-02T08:41:09.363Z",
+      "cycle": 63,
+      "source": "de-agent",
+      "decisions": [
+        "M4 gate: cleanCycles=0/7"
+      ],
+      "issues": [
+        "1 sources stale (>120min old)"
+      ],
+      "metrics": {
+        "quality": "healthy",
+        "m4CleanCycles": 0,
+        "bridgeFlipped": true,
+        "forecastModel": "holt-linear-trend"
+      }
+    },
+    {
+      "ts": "2026-08-02T09:50:39.396Z",
+      "cycle": 64,
+      "source": "de-agent",
+      "decisions": [
+        "M4 gate: cleanCycles=0/7"
+      ],
+      "issues": [
+        "- None"
+      ],
+      "metrics": {
+        "quality": "healthy",
+        "m4CleanCycles": 0,
+        "bridgeFlipped": true,
+        "forecastModel": "holt-linear-trend"
+      }
+    },
+    {
+      "ts": "2026-08-02T11:51:28.738Z",
+      "cycle": 66,
+      "source": "de-agent",
+      "decisions": [
+        "M4 gate: cleanCycles=2/7"
+      ],
+      "issues": [
+        "1 sources stale (>120min old)"
+      ],
+      "metrics": {
+        "quality": "healthy",
+        "m4CleanCycles": 2,
+        "bridgeFlipped": true,
+        "forecastModel": "holt-linear-trend"
+      }
+    },
+    {
+      "ts": "2026-08-02T11:55:55.000Z",
+      "cycle": 67,
+      "source": "architect-mandate",
+      "decisions": [
+        "PROJECT DECISIONS RATIFIED by Prateek (2026-08-02, 'ratify all bundle'): (1) research-first scope \u2014 SCCR measurement + publication, oracle-MVP only via R5 gate; (2) fee failover (blockstream/blockchair) for core fee/mempool series + deferred Core node sync, utxo_size_inc dropped until synced; (3) static + launchd + GH-Actions-fallback deployment shape, backend deferred until R5 demand",
+        "Record: docs/decisions/2026-08-02-project-decisions.md (status RATIFIED)"
+      ],
+      "issues": [],
+      "metrics": {
+        "quality": "ratified",
+        "ratifiedBy": "Prateek",
+        "ratifiedOn": "2026-08-02",
+        "bundle": "scope/data-source/deployment"
+      }
     }
   ]
 }

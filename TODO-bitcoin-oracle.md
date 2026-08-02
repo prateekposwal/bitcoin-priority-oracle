@@ -5,7 +5,7 @@ storage (SCCR)**, deployed as a static research showcase at bitcoinsahi.com.
 v1 (priority oracle) and v2 (externality fee) are dead — refuted on Reddit for
 sound economic reasons. The three project decisions (scope, data source,
 deployment) are documented in `docs/decisions/2026-08-02-project-decisions.md`
-(drafted, awaiting ratification).
+(ratified 2026-08-02 — locked; deferrals R5-gated).
 
 ## Phase R1: Reading ✅
 
@@ -148,15 +148,22 @@ The fee market prices **congestion** (inclusion in the next block). It does not 
 
 ## Remaining Work Summary (2026-08-02)
 
+> **Decisions RATIFIED 2026-08-02** — Prateek ratified the recommended bundle
+> (scope / data source / deployment, "ratify all bundle"). Direction is now
+> locked: research-first scope, fee-failover + deferred node sync, static
+> deployment; all deferrals remain R5-gated. Record:
+> `docs/decisions/2026-08-02-project-decisions.md`.
+
 **Data layer (in progress to complete):**
 - [ ] Automate SCCR tracking via launchd (storage-ratio.js)
-- [ ] Add fee-source failover for mempool.space single point of failure
+- [x] Add fee-source failover for mempool.space single point of failure — RATIFIED (Decision 2); blockstream/blockchair fallbacks live 2026-08-02
 - [ ] Site freshness label + sitemap update (working-paper.html, history-of-bitcoin.html)
 
 **Research layer:**
-- [ ] arXiv / Bitcoin Optech submission of the working paper
-- [ ] Publish decision ratification from Prateek (scope/data-source/deployment)
-- [ ] Sync Core node to tip OR formally drop utxo_size_inc (documented in decisions)
+- [ ] arXiv / Bitcoin Optech submission of the working paper (unblocked)
+- [ ] v3.0 archival-vs-pruned study — node-census pruned-vs-archival distribution (working-paper §10, Q2/Q3) — unblocked by ratification
+- [x] Publish decision ratification from Prateek (scope/data-source/deployment) — RATIFIED 2026-08-02
+- [x] Formally drop utxo_size_inc until Core node is synced — RATIFIED (Decision 2); node sync deferred, R5-gated
 
 **Docs (2026-08-02):**
 - [ ] README (setup, architecture, quick start) + launchd runbook + known-issues list

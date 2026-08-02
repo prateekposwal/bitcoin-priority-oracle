@@ -1,9 +1,8 @@
 # Project Decisions — scope, data source, deployment (2026-08-02)
 
-Status: DRAFTED — awaiting Prateek's ratification. These three decisions were
-owed for days and had never been written down. Each is documented with the
-recommendation and rationale; the repo's working assumption is the recommended
-option until Prateek ratifies or overrides.
+Status: RATIFIED (2026-08-02) — Prateek ratified the recommended bundle
+("ratify all bundle") on 2026-08-02. The three decisions below are locked;
+deferrals within them remain R5-gated (reopenable only through the R5 gate).
 
 ---
 
