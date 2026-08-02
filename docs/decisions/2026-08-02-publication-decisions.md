@@ -78,6 +78,42 @@ untouched), D5 external reproducer (critical path), D6 LaTeX compile pass
 (§7.1 now included in the source), D7 companion-note sign-off, + falsifiability
 section folded into the abstract/claims pass (publication-plan §4).
 
+## Addendum 2 — advisor review deliverables (2026-08-03)
+
+Second advisor review executed by TELOS (as Aviku); all items docs-only, no code:
+
+- **Resource Map figure added (Figure 1).** One figure showing the whole
+  framework: root = Bitcoin Fee Market; two branches = **Directly Priced**
+  (Block Space) and **Indirectly Measured** (Storage/SCCR + UTXO/Validation/
+  Relay/Bandwidth as FUTURE). ASCII version embedded in working-paper §1,
+  roadmap §1, and framework-paper-outline (Figure 1); standalone assets
+  `research/resource-map.txt` + `research/resource-map.svg` (dark theme,
+  site-ready). The Directly/Indirectly split is the visual anchor.
+- **Theory-paper outline restructured (framework-paper-outline.md).** Now a
+  **mostly-theory, minimal-equations** plan: five-question spine (What is a
+  resource? Which are scarce? Which are priced? Which are shared? Which are
+  externalized?) with **SCCR as Example #1, not the headline**. Positioned as
+  the framework-defining paper — the one that could "become the citation
+  everyone references." Write THIS next (advisor sequencing), after Phase I.
+- **arXiv moderator pitch recorded (publication-plan §2a).** The advisor's
+  one-paragraph "Why is this paper interesting?" (does not argue the fee market
+  is incorrect; reproducible empirical metric; broader contribution = proposed
+  framework) — canonical submission framing, distinct from the technical
+  abstract.
+- **Evidence discipline reinforced.** Advisor's exact statement added to roadmap
+  §4: *never "established metrics" for UCIR/VCIR/RCIR/BCIR/DCIR until they
+  exist — always "proposed research directions."* Working paper + audience
+  summaries audited: consistent (all future legs labeled research hypotheses).
+- **D5 priority reinforced (unchanged blocker).** Advisor: external reproduction
+  is **"worth far more than another 100 commits"** — THE highest-value remaining
+  action; everything else is secondary. Recorded in publication-plan §4/§7 and
+  this tracker. **D5 remains the ONLY submission blocker** (unchanged).
+
+**Open items after addendum 2 (unchanged):** D2 ORCID, D3 arXiv account, D4
+LICENSE ratification, **D5 external reproducer (the only submission blocker)**,
+D6 LaTeX compile pass, D7 companion-note sign-off, + abstract/moderator-pitch
+final pass (publication-plan §2 step 3 + §2a).
+
 ---
 ---
 

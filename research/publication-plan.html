@@ -139,6 +139,31 @@ footer .links a:hover{color:#D4933A}</style>
 <li><strong>Register the DOI/preprint URL</strong> in the repo (TODO-bitcoin-oracle.md R5</li>
 </ol>
 <p>publication item + site surfaces).</p>
+<h4>2a. The moderator pitch (canonical submission summary — distinct from the technical abstract)</h4>
+<p>*(Added 2026-08-03, post-advisor review. This is the one-paragraph answer to</p>
+<p>the arXiv moderator&#x27;s &quot;Why is this paper interesting?&quot; — the framing that gets</p>
+<p>the paper past moderation. It is DIFFERENT from the technical abstract (§2 step</p>
+<p>3): it leads with the contribution&#x27;s shape, not the number.)*</p>
+<blockquote><strong>Why is this paper interesting?</strong> This paper does not argue that Bitcoin&#x27;s</blockquote>
+<blockquote>fee market is incorrect — the market clears block space efficiently, and that</blockquote>
+<blockquote>is not in question. The contribution is narrower and more durable. First, it</blockquote>
+<blockquote>introduces a *reproducible empirical metric*: the Storage Cost Coverage Ratio</blockquote>
+<blockquote>(SCCR) — the first live-data measurement of how much of the long-lived storage</blockquote>
+<blockquote>cost of confirmed transactions the fee market actually covers, built from a</blockquote>
+<blockquote>primary-source node census (≥32,000 addresses) and reproduced by three</blockquote>
+<blockquote>independent implementations (JavaScript, Python, standalone C). Second — and</blockquote>
+<blockquote>this is the broader contribution — the paper proposes a *framework*: Bitcoin&#x27;s</blockquote>
+<blockquote>single fee price is not the price of one resource, but one price charged</blockquote>
+<blockquote>against many long-lived shared resources (storage, UTXO state, validation,</blockquote>
+<blockquote>relay, bandwidth). The framework defines a family of internalization ratios —</blockquote>
+<blockquote>one per resource — of which SCCR is the first measured member; the rest are</blockquote>
+<blockquote>stated explicitly as research hypotheses with defined promotion criteria. One</blockquote>
+<blockquote>measurement today; the framework is the deliverable.</blockquote>
+<p><strong>Usage:</strong> paste as the arXiv cover-letter / abstract-if-needed framing; keep</p>
+<p>the technical abstract (banded ~22–29%, ~99–100% below 1×, ≥32K census, model-</p>
+<p>spec v2.0.1, three implementations) as the submission abstract. The two frames</p>
+<p>do not contradict — the pitch is why the paper matters, the abstract is what it</p>
+<p>measured. Also the basis for the Optech 2–4 sentence summary (§3 step 1).</p>
 <h3>3. Submission steps (Bitcoin Optech)</h3>
 <ol>
 <li>Draft a <strong>2–4 sentence research summary</strong>: what was measured (SCCR, live data,</li>
@@ -296,9 +321,12 @@ footer .links a:hover{color:#D4933A}</style>
 </ul>
 <p><strong>LEFT / TODO (verified):</strong></p>
 <ul>
-<li>[ ] 🚨 <strong>External reproduction</strong> — CRITICAL PATH (Prateek 2026-08-02); the only</li>
+<li>[ ] 🚨 <strong>External reproduction</strong> — CRITICAL PATH (Prateek 2026-08-02; advisor</li>
 </ul>
-<p>submission-delaying item; protocol + log in <code>research/reproduce/</code></p>
+<p>reinforced 2026-08-03: **&quot;this is now worth far more than another 100</p>
+<p>commits&quot;** — external reproduction is THE highest-value remaining action</p>
+<p>and everything else is secondary). The ONLY submission-delaying item;</p>
+<p>protocol + log in <code>research/reproduce/</code></p>
 <ul>
 <li>[ ] Prateek: ORCID iD (create BEFORE submission) + arXiv account (real identity)</li>
 <li>[ ] Prateek: review <code>archival-vs-pruned-note.md</code> (data-gap framing sign-off) —</li>
@@ -318,7 +346,7 @@ footer .links a:hover{color:#D4933A}</style>
 <tr><td>D2</td><td>ORCID</td><td>Create BEFORE submission</td><td>🟡 ACTION (pre-submission required)</td></tr>
 <tr><td>D3</td><td>arXiv identity</td><td>Real identity (no pseudonym)</td><td>✅ RECOMMENDED/RESOLVED</td></tr>
 <tr><td>D4</td><td>License</td><td>MIT (code) + CC BY 4.0 (paper)</td><td>✅ RECOMMENDED — LICENSE file change awaits final go</td></tr>
-<tr><td>D5</td><td>External reproducer</td><td>The ONLY thing worth delaying submission for</td><td>🚨 CRITICAL PATH</td></tr>
+<tr><td>D5</td><td>External reproducer</td><td>The ONLY thing worth delaying submission for (advisor 2026-08-03: <strong>&quot;worth far more than another 100 commits&quot;</strong> — highest-value remaining action, everything else secondary)</td><td>🚨 CRITICAL PATH</td></tr>
 <tr><td>D6</td><td>Source format</td><td>Submit LaTeX, not PDF-only</td><td>✅ RECOMMENDED/RESOLVED</td></tr>
 <tr><td>D7</td><td>Companion note</td><td>Publish simultaneously</td><td>✅ RECOMMENDED/RESOLVED</td></tr>
 </table>

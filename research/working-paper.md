@@ -27,6 +27,45 @@ The fee market solves a short-term optimization problem extremely well: during c
 
 **Scope:** this paper measures the **storage leg** of a broader resource-pricing question. Bandwidth, validation, and UTXO-maintenance legs are future work (see §7).
 
+**Where storage sits — the Bitcoin Resource Map (Figure 1).** One picture of
+the whole framework before the model starts, so the reader can place the storage
+leg (and the five unmeasured legs) at a glance:
+
+```
+                        ┌───────────────────────────┐
+                        │    BITCOIN FEE MARKET     │
+                        │  one price · sat/vbyte ·  │
+                        │      next block only      │
+                        └─────────────┬─────────────┘
+                                      │
+                   ┌──────────────────┴────────────────┐
+                   │                                   │
+      ┌────────────▼────────────┐      ┌───────────────▼───────────────┐
+      │     DIRECTLY PRICED     │      │      INDIRECTLY MEASURED      │
+      │   (the market clears)   │      │    (measured, not priced)     │
+      └────────────┬────────────┘      └───────────────┬───────────────┘
+                   │                                   │
+                   ▼                                   ▼
+      ┌─────────────────────────┐     ┌────────────────┬────────────────┐
+      │       BLOCK SPACE       │     │    STORAGE (SCCR) — MEASURED    │
+      │congestion · the one good│     │ ~0.22-0.29 · ~99-100% below 1×  │
+      │  the fee market prices  │     │ ──────────────────────────────  │
+      │    (~10-min horizon)    │     │      UTXO (UCIR) — FUTURE       │
+      │                         │     │   VALIDATION (VCIR) — FUTURE    │
+      └─────────────────────────┘     │      RELAY (RCIR) — FUTURE      │
+                                      │    BANDWIDTH (BCIR) — FUTURE    │
+                                      └─────────────────────────────────┘
+```
+
+*Figure 1 — The Bitcoin Resource Map. The fee market **directly prices** one
+good — block space (congestion, ~10-min horizon). Every other long-lived
+resource is **indirectly measured** against that price: storage is the first
+measured leg (SCCR, this paper); UTXO state, validation, relay, and bandwidth
+are named **research hypotheses, not results** — none measured yet. The
+Directly-Priced / Indirectly-Measured split is the framework's visual anchor.
+(SVG version for the site: `research/resource-map.svg`; ASCII asset:
+`research/resource-map.txt`.)*
+
 **Why storage? It is not the "most important" resource — it is simply the first measurable one.** The program's discipline is: take the resource with a reproducible cost estimate and a live fee attribution, measure it, and leave the rest to the roadmap (RIR family, §7 and `roadmap.md` Phase II). Storage qualified first because its cost leg (`C`, `N`, `T`) and its fee leg (block fees, USD) are both estimable from primary sources. Every other resource is a named research hypothesis, not a measured result.
 
 **Storage ≠ state.** SCCR measures the cost of replicated **history** — the permanent record of confirmed blocks retained by full nodes. It does *not* measure the **UTXO set**, the live ledger state every node maintains in RAM and index structures. State permanence is a separate resource with its own accounting leg (UCIR, §7 / `roadmap.md` Phase II); this paper's storage leg must not be read as a state-cost measurement.

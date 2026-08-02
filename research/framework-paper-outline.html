@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="*(Created 2026-08-03, post-advisor review. This is the OUTLINE/PLAN for the Bitcoin block space economics research from BSAHI — live fee, mempool, and settlemen">
+<meta name="description" content="*(Created 2026-08-03, post-advisor review; restructured 2026-08-03 to the Bitcoin block space economics research from BSAHI — live fee, mempool, and settlement ">
 <meta property="og:title" content="Framework-Paper-Outline">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://bitcoinsahi.com/research/framework-paper-outline.html">
@@ -47,19 +47,25 @@ footer .links a:hover{color:#D4933A}</style>
 <header><div class="header-inner"><a href="/" class="brand">⬡ BSAHI</a><nav class="nav"><a href="/" class="nav-item">Home</a><a href="/live" class="nav-item">Live Fees</a><a href="/learn" class="nav-item">Learn</a><a href="/capacity" class="nav-item">Capacity</a><a href="/fork-tracker" class="nav-item">Fork Tracker</a><span class="nav-item active">Research</span></nav></div></header>
 <div class="container">
 <h1>Framework-Paper-Outline</h1>
-<h2>Bitcoin Resource Accounting: A General Framework — Paper 4 Outline (synthesis)</h2>
-<p>*(Created 2026-08-03, post-advisor review. This is the OUTLINE/PLAN for the</p>
-<p>foundational synthesis paper — NOT the paper itself. Nothing here is a result;</p>
-<p>results live in Paper 1 and future Papers 2–3. Evidence status is labeled per</p>
-<p>the roadmap §4 discipline separation.)*</p>
-<p><strong>Status:</strong> DRAFT OUTLINE — adopted as the Paper-4 plan (2026-08-03). Adviser&#x27;s</p>
-<p>recommendation: the program&#x27;s foundational paper should be a <strong>general framework</strong></p>
-<p>— &quot;Bitcoin Resource Accounting: A General Framework&quot; — with the 6-part structure</p>
-<p>below; the current storage paper becomes Paper 1 of the series. This outline</p>
-<p>matches the roadmap&#x27;s Paper 1/2/3/4 framing (publication-plan §intro): <strong>Paper 1</strong></p>
-<p>= storage/SCCR (written), <strong>Paper 2</strong> = UTXO/UCIR, <strong>Paper 3</strong> = validation/VCIR</p>
-<p>(bounded), <strong>Paper 4</strong> = this unified framework + Resource Coverage Matrix (incl.</p>
-<p>DCIR).</p>
+<h2>Bitcoin Resource Accounting: A General Framework — Theory Paper Outline</h2>
+<p>*(Created 2026-08-03, post-advisor review; restructured 2026-08-03 to the</p>
+<p>adviser&#x27;s theory-first shape. This is the OUTLINE/PLAN for the foundational</p>
+<p>synthesis paper — NOT the paper itself. Nothing here is a result; results live in</p>
+<p>Paper 1 and future Papers 2–3. Evidence status is labeled per the roadmap §4</p>
+<p>discipline separation.)*</p>
+<p><strong>Status:</strong> DRAFT OUTLINE — adopted as the Paper-4 plan (2026-08-03), sharpened</p>
+<p>to the advisor&#x27;s emphasis 2026-08-03. The program&#x27;s foundational paper is a</p>
+<p><strong>mostly-theory paper with minimal equations</strong> — the framework-defining paper,</p>
+<p>the one that could <strong>&quot;become the citation everyone references&quot;</strong> (advisor). It is</p>
+<p>structured around five questions — *What is a resource? Which are scarce? Which</p>
+<p>are priced? Which are shared? Which are externalized?* — with **SCCR as</p>
+<p>Example #1, not the headline**. The storage paper remains Paper 1 of the series.</p>
+<p>This outline matches the roadmap&#x27;s Paper 1/2/3/4 framing (publication-plan</p>
+<p>§intro): <strong>Paper 1</strong> = storage/SCCR (written), <strong>Paper 2</strong> = UTXO/UCIR,</p>
+<p><strong>Paper 3</strong> = validation/VCIR (bounded), <strong>Paper 4</strong> = this unified framework +</p>
+<p>Resource Coverage Matrix (incl. DCIR). Per roadmap §6 amendment 1, the prose is</p>
+<p>NOT written before Phase I publishes; this is the plan for what is written next</p>
+<p>(advisor: write THIS next, not UCIR/validation).</p>
 <p><strong>Evidence-status key (used throughout):</strong></p>
 <ul>
 <li>🟢 <strong>ESTABLISHED</strong> — measured + reproduced (SCCR only)</li>
@@ -67,6 +73,12 @@ footer .links a:hover{color:#D4933A}</style>
 <li>🔴 <strong>HYPOTHESIS (research-hard)</strong> — named, gate-failed or data-blocked (VCIR/BCIR)</li>
 <li>⚪ <strong>FRAMING</strong> — conceptual/economic argument, not a measurement (no evidence claim)</li>
 </ul>
+<p><strong>Minimal-equations discipline (advisor):</strong> the paper carries exactly ONE</p>
+<p>equation — the Resource Internalization Ratio definition,</p>
+<p><code>RIR_i = fee_contribution_toward_resource_i / estimated_lifetime_cost_of_resource_i</code> —</p>
+<p>and it appears as a definition, not a derivation. No new arithmetic is derived</p>
+<p>in this paper; Paper 1 owns the SCCR arithmetic, and future papers own theirs.</p>
+<p>The theory is stated in prose and taxonomy, not in formula count.</p>
 <hr>
 <h3>Paper title (working)</h3>
 <p>**Bitcoin Resource Accounting: A General Framework for Measuring Fee-Market</p>
@@ -75,23 +87,64 @@ footer .links a:hover{color:#D4933A}</style>
 <p>Bitcoin&#x27;s fee market prices one good — inclusion in the next block — at one price.</p>
 <p>But confirmed transactions create costs in *multiple* long-lived shared resources</p>
 <p>(storage, UTXO state, validation CPU, relay bandwidth, propagation, indexer</p>
-<p>serving), each with a different cost driver. The framework generalizes the</p>
-<p>storage Cost Internalization Ratio (SCCR, Paper 1) into a per-resource family —</p>
-<p>**RIR_i = fee contribution toward resource i / estimated lifetime cost of</p>
-<p>resource i** — states which resources price can internalize and why, and provides</p>
-<p>a reproducible construction template for each new metric. **Claimed scope: a</p>
-<p>measurement framework, not a verdict; one established metric, six named</p>
-<p>hypotheses.**</p>
+<p>serving), each with a different cost driver. The framework answers five questions</p>
+<p>in order — **what counts as a resource, which resources are scarce, which are</p>
+<p>priced, which are shared, and which are externalized** — then generalizes the</p>
+<p>storage Cost Internalization Ratio (SCCR, Paper 1) into a per-resource family,</p>
+<p>states which resources price can internalize and why, and provides a reproducible</p>
+<p>construction template for each new metric. **Claimed scope: a measurement</p>
+<p>framework, not a verdict; one established metric, six named hypotheses.** The</p>
+<p>paper&#x27;s value is that it makes the *questions* the contribution — a reader should</p>
+<p>be able to cite this paper for &quot;how to think about Bitcoin&#x27;s resources,&quot; not for</p>
+<p>any single number.</p>
+<hr>
+<h3>Figure 1 — The Bitcoin Resource Map</h3>
+<p>One figure shows the entire framework at a glance. It appears in the working</p>
+<p>paper (§1), the roadmap (§1), and this paper as <strong>Figure 1</strong>. The</p>
+<p>Directly-Priced / Indirectly-Measured split is the visual anchor: the fee market</p>
+<p>directly prices ONE good (block space); everything else is measured against that</p>
+<p>price, with only storage measured today. Place it in the paper immediately after</p>
+<p>the thesis paragraph, before §1.</p>
+<pre><code>                        ┌───────────────────────────┐
+                        │    BITCOIN FEE MARKET     │
+                        │  one price · sat/vbyte ·  │
+                        │      next block only      │
+                        └─────────────┬─────────────┘
+                                      │
+                   ┌──────────────────┴────────────────┐
+                   │                                   │
+      ┌────────────▼────────────┐      ┌───────────────▼───────────────┐
+      │     DIRECTLY PRICED     │      │      INDIRECTLY MEASURED      │
+      │   (the market clears)   │      │    (measured, not priced)     │
+      └────────────┬────────────┘      └───────────────┬───────────────┘
+                   │                                   │
+                   ▼                                   ▼
+      ┌─────────────────────────┐     ┌────────────────┬────────────────┐
+      │       BLOCK SPACE       │     │    STORAGE (SCCR) — MEASURED    │
+      │congestion · the one good│     │ ~0.22-0.29 · ~99-100% below 1×  │
+      │  the fee market prices  │     │ ──────────────────────────────  │
+      │    (~10-min horizon)    │     │      UTXO (UCIR) — FUTURE       │
+      │                         │     │   VALIDATION (VCIR) — FUTURE    │
+      └─────────────────────────┘     │      RELAY (RCIR) — FUTURE      │
+                                      │    BANDWIDTH (BCIR) — FUTURE    │
+                                      └─────────────────────────────────┘</code></pre>
+<p>*Figure 1 — The Bitcoin Resource Map. SVG version for the site:</p>
+<p><code>research/resource-map.svg</code>; ASCII asset: <code>research/resource-map.txt</code>.</p>
+<p>&quot;FUTURE&quot; = research hypothesis, never an established metric.*</p>
 <hr>
 <h3>Outline</h3>
-<h4>§1 Introduction — why multiple shared resources (⚪ FRAMING)</h4>
+<h4>§1 What is a resource? (⚪ FRAMING — the ontology, first)</h4>
 <ul>
-<li><strong>What this section contains:</strong> the structural observation that a single</li>
+<li><strong>What this section contains:</strong> the definitional ground, before any scarcity or</li>
 </ul>
-<p>one-time payment (tx fee) creates long-lived costs across many resources;</p>
-<p>the reframe from &quot;storage measurement&quot; to &quot;complete accounting&quot; (roadmap §1);</p>
-<p>scope discipline: this paper is the framework + coverage matrix, not new</p>
-<p>measurements.</p>
+<p>pricing talk. A *resource* here means a <strong>long-lived, shared, scarce input</strong></p>
+<p>that confirmed transactions consume over time: replicated history (storage),</p>
+<p>live ledger state (UTXO set), validation CPU, relay bandwidth, propagation</p>
+<p>delay, indexer serving. The section distinguishes (a) the **good the fee market</p>
+<p>sells<strong> (a ledger slot in the next block), (b) the </strong>resources transactions</p>
+<p>create costs in<strong>, and (c) the </strong>agents who bear those costs** (node operators,</p>
+<p>indexers, miners). Scope discipline: this paper is the framework + coverage</p>
+<p>matrix, not new measurements.</p>
 <ul>
 <li><strong>Evidence status:</strong> ⚪ framing — the observation that fees under-price storage</li>
 </ul>
@@ -103,98 +156,125 @@ footer .links a:hover{color:#D4933A}</style>
 </ul>
 <p>externalized at economically significant scale; no claim about what *should*</p>
 <p>be priced.</p>
-<h4>§2 Which resources are priced directly (🟢 ESTABLISHED + ⚪ FRAMING)</h4>
+<h4>§2 Which resources are scarce? (⚪ FRAMING — the scarcity taxonomy)</h4>
 <ul>
-<li><strong>What this section contains:</strong> the taxonomy of cost drivers and their match to</li>
+<li><strong>What this section contains:</strong> a taxonomy of *what runs out*. Block space is</li>
 </ul>
-<p>the fee&#x27;s charging attribute:</p>
+<p>scarce per-block (hard cap, ~10-min horizon). Storage is scarce per-byte over</p>
+<p>an indefinite horizon (history grows forever). Validation CPU is scarce</p>
+<p>per-operation but elastic in hardware. State (UTXO) is scarce as a stock, not</p>
+<p>a flow. The section&#x27;s point: <strong>scarcity is not one thing</strong> — each resource has</p>
+<p>its own constraint surface, so one price cannot clear them all.</p>
 <ul>
-<li><strong>Storage</strong> — homogeneous per-byte USD liability, incurred *after* the fee;</li>
+<li><strong>Evidence status:</strong> ⚪ framing — conceptual taxonomy; no measurements claimed.</li>
+<li><strong>Key claims to avoid overstating:</strong> naming a scarcity is not measuring it.</li>
 </ul>
-<p>fee charged per (v)byte → attribute matched, time mismatched → price can</p>
-<p>genuinely internalize it (Paper 1 §5, §11 Q4: P* ≈ $283K). 🟢 established.</p>
+<h4>§3 Which resources are priced? (🟢 ESTABLISHED + ⚪ FRAMING — the one directly priced good)</h4>
 <ul>
-<li><strong>Congestion/block-space</strong> — the one good the fee market *does* price</li>
+<li><strong>What this section contains:</strong> the direct side of Figure 1. The fee market</li>
 </ul>
-<p>directly (short-horizon, ~10 min). ⚪ framing.</p>
+<p><strong>directly prices exactly one good</strong>: block space (congestion, ~10-min</p>
+<p>horizon) — the short-horizon market that clears efficiently (Paper 1 §8.3).</p>
+<p>Everything else is *indirectly measured*, not priced: the fee is charged per</p>
+<p>(v)byte, and storage&#x27;s per-byte attribute happens to match (Paper 1 §5, §11</p>
+<p>Q4: P* ≈ $283K), but the match is the exception that motivates the framework,</p>
+<p>not the rule.</p>
 <ul>
-<li>Everything else is NOT priced directly — see §3.</li>
-<li><strong>Evidence status:</strong> storage leg 🟢 (SCCR measured); the &quot;directly priced&quot;</li>
+<li><strong>Evidence status:</strong> the &quot;directly priced&quot; list is ⚪ framing plus Paper 1&#x27;s</li>
 </ul>
-<p>list is ⚪ framing plus Paper 1&#x27;s measurement.</p>
-<h4>§3 Which resources are only partially internalized — and why (🟡 HYPOTHESIS)</h4>
+<p>measurement; storage leg 🟢 (SCCR measured).</p>
 <ul>
-<li><strong>What this section contains:</strong> the &quot;<strong>no single resource market</strong>&quot; thesis,</li>
+<li><strong>The section&#x27;s central question:</strong> what does the single sat/vB price actually</li>
 </ul>
-<p>sharpened: every resource&#x27;s cost is ultimately USD-denominated (hardware/time</p>
-<p>carry USD opportunity cost) — the real mismatch is that **the fee&#x27;s charging</p>
-<p>attribute does not match the cost driver**:</p>
+<p>carry signal about — one attribute (congestion) or many? (Attribute pricing;</p>
+<p>working-paper §11 Q2.) Answered empirically in a later paper, framed here.</p>
+<h4>§4 Which resources are shared? (⚪ FRAMING — the one-time-payment → long-lived-shared-resource structure)</h4>
 <ul>
-<li><strong>Validation (VCIR)</strong> — fee per-transaction (sat/vB) vs. cost</li>
+<li><strong>What this section contains:</strong> the structural core of the framework — the</li>
 </ul>
-<p>per-transaction-*class* (script complexity) → attribute mismatch. 🔴</p>
-<p>gate-failed for measurement; bounded analytical sub-study only.</p>
+<p><strong>one-time payment → long-lived shared resource</strong> pattern. A transaction pays</p>
+<p>once; the cost it creates is borne by many, over time, involuntarily (node</p>
+<p>operators who neither created the transaction nor were compensated). Three</p>
+<p>mismatches structure the whole family (sharpened 2026-08-03 per advisor</p>
+<p>review; working-paper §11 Q4):</p>
 <ul>
-<li><strong>UTXO state (UCIR)</strong> — fee is a *flow*, cost is a *stock* (live-set</li>
+<li><strong>Attribute mismatch</strong> — fee per-(v)byte vs. validation cost per</li>
 </ul>
-<p>RAM/lookup) → stock/flow mismatch. 🟡</p>
+<p>transaction-*class* (VCIR);</p>
 <ul>
-<li><strong>Relay/propagation (RCIR/BCIR)</strong> — fee paid once by sender vs. cost per</li>
+<li><strong>Stock/flow mismatch</strong> — fee is a *flow* vs. UTXO cost is a *stock*</li>
 </ul>
-<p>recipient node (replication topology) → payer/receiver mismatch. 🟡/🔴.</p>
+<p>(UCIR);</p>
 <ul>
-<li><strong>Indexer serving (DCIR)</strong> — cost is commercial, revenue is off-chain → the</li>
+<li><strong>Payer/receiver mismatch</strong> — fee paid once by sender vs. relay cost per</li>
 </ul>
-<p>fee-market numerator is structurally near-zero (persistent-negative row). 🟡.</p>
+<p>recipient node (RCIR/BCIR); indexer cost is commercial, revenue off-chain</p>
+<p>(DCIR).</p>
 <ul>
 <li>Consequence: price can lift any aggregate ratio as a *unit effect*, but that</li>
 </ul>
-<p>is not internalization; only storage&#x27;s matched attribute makes the price</p>
-<p>lever genuine. This is the paper&#x27;s central economic claim (sharpened</p>
-<p>2026-08-03 per advisor review; working-paper §11 Q4).</p>
+<p>is not internalization; <strong>there is no single &quot;resource market.&quot;</strong></p>
 <ul>
-<li><strong>Evidence status:</strong> 🟡 hypothesis — the mismatch taxonomy is an economic</li>
+<li><strong>Evidence status:</strong> ⚪ framing — the mismatch taxonomy is an economic</li>
 </ul>
 <p>argument; no VCIR/UCIR/RCIR/DCIR measurement exists yet. Must NOT be presented</p>
 <p>as established result.</p>
-<h4>§4 How to construct a Resource Internalization Ratio (🟢 template + 🟡 discipline)</h4>
+<h4>§5 Which resources are externalized? (🟢 + 🟡 — the measurement question and the one equation)</h4>
 <ul>
-<li><strong>What this section contains:</strong> the reproducible template every metric inherits</li>
+<li><strong>What this section contains:</strong> the question that makes the framework</li>
 </ul>
-<p>(roadmap §3): **canonical spec (model-spec.json) → live capture → independent</p>
-<p>implementations → cross-check<strong>, plus the </strong>4-question gate** (roadmap §4: is</p>
-<p>the resource real? is the cost estimable reproducibly? is the fee contribution</p>
-<p>comparable? is the answer interesting?) and the Q2 rule (a metric that fails</p>
-<p>Q2 may appear as a &quot;bounded analytical estimate&quot; row, never a headline ratio).</p>
+<p>empirical. &quot;Externalized&quot; here means *not covered by the one-time fee* — the</p>
+<p>share of each resource&#x27;s long-lived cost that the fee market does not</p>
+<p>internalize. This is where the paper introduces its <strong>only equation</strong>, as a</p>
+<p>definition, not a derivation:</p>
+<blockquote><strong>RIR_i = fee contribution toward resource i / estimated lifetime cost of resource i</strong></blockquote>
+<p>Every quantity is tagged with units; ratios are dimensionless; captures are</p>
+<p>dated. The section then walks the reader through *how* the ratio operationalizes</p>
+<p>&quot;externalized&quot; for a generic resource — no numbers, no derivations.</p>
 <ul>
-<li><strong>Evidence status:</strong> 🟢 the template is validated by SCCR (three independent</li>
+<li><strong>Evidence status:</strong> 🟡 the generic definition is a hypothesis until applied;</li>
 </ul>
-<p>implementations agreeing per-block, Paper 1 §6.5); the *application* to each</p>
-<p>new resource is 🟡 discipline, not a result.</p>
+<p>🟢 the template is validated by SCCR (Paper 1 §6.5: three independent</p>
+<p>implementations agreeing per-block).</p>
+<h4>§6 Example #1: the storage account (🟢 ESTABLISHED — summarized, not the headline, not re-derived)</h4>
 <ul>
-<li><strong>Deliverable in the paper:</strong> the general formula</li>
+<li><strong>What this section contains:</strong> Paper 1&#x27;s SCCR as the *worked example* of the</li>
 </ul>
-<p><code>RIR_i = fee_contribution_toward_resource_i / estimated_lifetime_cost_of_resource_i</code></p>
-<p>with units discipline (dimensionless ratios, every quantity tagged, dated</p>
-<p>captures only).</p>
-<h4>§5 SCCR as the first example (🟢 ESTABLISHED — summarized, not re-derived)</h4>
-<ul>
-<li><strong>What this section contains:</strong> Paper 1&#x27;s storage account as the worked</li>
-</ul>
-<p>template: definition, census, banded result (~22–29% coverage, ~99–100% of</p>
-<p>blocks below 1× at ≥32K nodes), knife-edge thresholds (N ≈ 7.1K / P* ≈ $283K),</p>
-<p>the v2.0.0 10× correction as an example of the framework self-correcting, and</p>
-<p>the reproduction kit (3 implementations + frozen capture).</p>
+<p>framework — deliberately placed after the theory, and summarized, NOT the</p>
+<p>headline of the paper. Definition, census (≥32K, primary source), banded</p>
+<p>result (~22–29% coverage, ~99–100% of blocks below 1× at ≥32K nodes),</p>
+<p>knife-edge thresholds (N ≈ 7.1K / P* ≈ $283K), the v2.0.0 10× correction as</p>
+<p>an example of the framework self-correcting, and the reproduction kit (3</p>
+<p>implementations + frozen capture).</p>
 <ul>
 <li><strong>Evidence status:</strong> 🟢 ESTABLISHED METRIC (validated). Point to Paper 1 for</li>
 </ul>
-<p>full derivation; do not re-derive.</p>
-<h4>§6 Roadmap for UTXO / validation / relay / bandwidth (🟡 HYPOTHESES with gate verdicts)</h4>
+<p>full derivation; do not re-derive. The reader should come away saying &quot;the</p>
+<p>framework works&quot; — not &quot;storage is 29%.&quot;</p>
+<h4>§7 How to construct the next ratio (🟢 template + 🟡 discipline)</h4>
 <ul>
-<li><strong>What this section contains:</strong> the research program for each remaining</li>
+<li><strong>What this section contains:</strong> the reproducible construction template every</li>
 </ul>
-<p>resource, with the roadmap §4 gate verdict and what evidence would promote each</p>
-<p>from hypothesis to metric:</p>
+<p>metric inherits (roadmap §3): **canonical spec (model-spec.json) → live</p>
+<p>capture → independent implementations → cross-check<strong>, plus the </strong>4-question</p>
+<p>gate** (roadmap §4: is the resource real? is the cost estimable reproducibly?</p>
+<p>is the fee contribution comparable? is the answer interesting?) and the Q2</p>
+<p>rule (a metric that fails Q2 may appear as a &quot;bounded analytical estimate&quot;</p>
+<p>row, never a headline ratio).</p>
+<ul>
+<li><strong>Evidence status:</strong> 🟢 the template is validated by SCCR; the *application*</li>
+</ul>
+<p>to each new resource is 🟡 discipline, not a result.</p>
+<ul>
+<li><strong>Deliverable in the paper:</strong> the general formula + units discipline (every</li>
+</ul>
+<p>quantity tagged, dated captures only) + the promotion path from hypothesis to</p>
+<p>metric.</p>
+<h4>§8 What we will measure next (🟡/🔴 HYPOTHESES with gate verdicts)</h4>
+<ul>
+<li><strong>What this section contains:</strong> the honest &quot;what we will measure, not what we</li>
+</ul>
+<p>have measured&quot; statement for each remaining resource:</p>
 <ul>
 <li><strong>UCIR (Paper 2):</strong> cost side exists (<code>utxo_cost_model.py</code>); fee-side</li>
 </ul>
@@ -210,10 +290,11 @@ footer .links a:hover{color:#D4933A}</style>
 </ul>
 <p>open (commercial cost data).</p>
 <ul>
-<li><strong>Evidence status:</strong> all 🟡/🔴 hypotheses. This section is the honest</li>
+<li><strong>Evidence status:</strong> all 🟡/🔴 hypotheses. Discipline: **never call these</li>
 </ul>
-<p>&quot;what we will measure, not what we have measured&quot; statement.</p>
-<h4>§7 Cross-chain: methodology, not rankings (⚪ FRAMING, Phase V horizon)</h4>
+<p>&quot;established metrics&quot; — always &quot;proposed research directions&quot;** (advisor&#x27;s</p>
+<p>statement, roadmap §4).</p>
+<h4>§9 Cross-chain: methodology, not rankings (⚪ FRAMING, Phase V horizon)</h4>
 <ul>
 <li><strong>What this section contains:</strong> the generalization to any system with</li>
 </ul>
@@ -225,7 +306,7 @@ footer .links a:hover{color:#D4933A}</style>
 <li><strong>Evidence status:</strong> ⚪ framing + research horizon (explicitly not a</li>
 </ul>
 <p>deliverable of Paper 4 beyond the methodology statement).</p>
-<h4>§8 What would falsify this framework (⚪ FRAMING — required before submission)</h4>
+<h4>§10 What would falsify this framework (⚪ FRAMING — required before submission)</h4>
 <ul>
 <li><strong>What this section contains:</strong> the framework-level falsifiers, expanded from</li>
 </ul>
@@ -239,7 +320,7 @@ footer .links a:hover{color:#D4933A}</style>
 <li><strong>Evidence status:</strong> ⚪ framing — this section states failure conditions; it</li>
 </ul>
 <p>is what makes the framework scientific rather than rhetorical.</p>
-<h4>§9 Conclusion + Resource Coverage Matrix (🟢 + 🟡 consolidated)</h4>
+<h4>§11 Conclusion + Resource Coverage Matrix (🟢 + 🟡 consolidated)</h4>
 <ul>
 <li><strong>What this section contains:</strong> the consolidated matrix</li>
 </ul>
@@ -260,34 +341,43 @@ footer .links a:hover{color:#D4933A}</style>
 </table>
 <h3>Appendix B — What is NOT in this paper (anti-scope)</h3>
 <ul>
-<li>No new measurements beyond SCCR (Paper 1 owns those).</li>
+<li>No new measurements beyond SCCR (Paper 1 owns those; SCCR appears only as</li>
+</ul>
+<p>Example #1 in §6).</p>
+<ul>
 <li>No UCIR/VCIR/RCIR/BCIR/DCIR numbers — they do not exist yet; presenting them</li>
 </ul>
 <p>would be the exact overclaim the advisor flagged.</p>
 <ul>
 <li>No policy proposals, no normative claims about what should be priced.</li>
 <li>No cross-chain rankings.</li>
+<li><strong>No equation count beyond the single RIR definition</strong> — minimal-equations</li>
 </ul>
+<p>discipline (§header).</p>
 <hr>
 <h3>DONE vs LEFT</h3>
-<p><strong>DONE (verified):</strong> outline created (this file); advisor&#x27;s 6-part structure</p>
-<p>mapped to §1–§6; evidence-status labels applied throughout; falsifiability</p>
-<p>section required (§8) matching working-paper §7.1; cross-chain methodology kept</p>
-<p>as framing (§7); positioned as Paper 4 per roadmap/publication-plan framing.</p>
-<p>Working-paper.md/.html/.tex updated with the falsifiability section; roadmap §4</p>
-<p>evidence-status table added; Q4 sharpened in working-paper §11 + roadmap §8;</p>
-<p>publication-plan evidence discipline + checklist items added; decision tracker</p>
-<p>addendum recorded.</p>
+<p><strong>DONE (verified, 2026-08-03 restructure):</strong> outline restructured to the</p>
+<p>advisor&#x27;s theory-first shape — five-question spine (what is a resource / scarce /</p>
+<p>priced / shared / externalized), SCCR demoted to Example #1 (§6), minimal-</p>
+<p>equations discipline stated (single RIR definition), &quot;citation everyone</p>
+<p>references&quot; positioning in the status block; **Figure 1 (The Bitcoin Resource</p>
+<p>Map) added** with ASCII + SVG (<code>research/resource-map.svg</code>) + placement rule</p>
+<p>(after the thesis paragraph); §8 carries the advisor&#x27;s never-&quot;established</p>
+<p>metrics&quot; discipline statement; roadmap §1/§4, working-paper §1 updated with the</p>
+<p>same figure/discipline; publication-plan moderator pitch + D5 priority</p>
+<p>reinforcement added (2026-08-03).</p>
 <p><strong>LEFT / TODO (verified):</strong> write the paper itself (this is the outline, not the</p>
-<p>paper — do NOT start the prose before Phase I publishes, roadmap §6 amendment 1);</p>
-<p>Paper 2 (UCIR) data-path decision (R5-gated, deferred until Phase I ships);</p>
-<p>Paper 3 (VCIR) pinned-benchmark study; Phase III RCIR fill-in; Phase V</p>
-<p>cross-chain methodology note (research horizon). All metric promotions require</p>
-<p>the roadmap §4 gate + evidence template.</p>
+<p>paper — do NOT start the prose before Phase I publishes, roadmap §6 amendment 1;</p>
+<p>the advisor&#x27;s sequencing: <strong>write THIS next</strong> after Phase I — before UCIR/</p>
+<p>validation papers); Paper 2 (UCIR) data-path decision (R5-gated, deferred until</p>
+<p>Phase I ships); Paper 3 (VCIR) pinned-benchmark study; Phase III RCIR fill-in;</p>
+<p>Phase V cross-chain methodology note (research horizon). All metric promotions</p>
+<p>require the roadmap §4 gate + evidence template.</p>
 <hr>
 <p>*Bitcoin Sahi Research Council — Paper 4 outline (Bitcoin Resource Accounting:</p>
-<p>A General Framework), 2026-08-03. Companion: roadmap.md §3/§4/§8, publication-plan.md,</p>
-<p>working-paper.md §7.1/§11, docs/decisions/2026-08-02-publication-decisions.md.*</p>
+<p>A General Framework), 2026-08-03, restructured to advisor&#x27;s theory-first shape.</p>
+<p>Companion: roadmap.md §1/§3/§4/§8, publication-plan.md, working-paper.md</p>
+<p>§1/§7.1/§11, docs/decisions/2026-08-02-publication-decisions.md.*</p>
 <p style="margin-top:32px;"><a href="/research">← All research</a> · <a href="/learn">← Back to Learn</a></p>
 </div>
 <footer><div class="links"><a href="/">Home</a><a href="/live">Decide</a><a href="/learn">Learn</a><a href="/capacity">Capacity</a><a href="/fork-tracker">Fork</a><a href="/research">Research</a></div><div>Bitcoin Sahi — research and decision platform for the Bitcoin block space economy</div></footer>

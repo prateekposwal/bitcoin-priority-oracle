@@ -83,6 +83,36 @@ already engaged (v1/v2 history).
 8. **Register the DOI/preprint URL** in the repo (TODO-bitcoin-oracle.md R5
    publication item + site surfaces).
 
+### 2a. The moderator pitch (canonical submission summary — distinct from the technical abstract)
+
+*(Added 2026-08-03, post-advisor review. This is the one-paragraph answer to
+the arXiv moderator's "Why is this paper interesting?" — the framing that gets
+the paper past moderation. It is DIFFERENT from the technical abstract (§2 step
+3): it leads with the contribution's shape, not the number.)*
+
+> **Why is this paper interesting?** This paper does not argue that Bitcoin's
+> fee market is incorrect — the market clears block space efficiently, and that
+> is not in question. The contribution is narrower and more durable. First, it
+> introduces a *reproducible empirical metric*: the Storage Cost Coverage Ratio
+> (SCCR) — the first live-data measurement of how much of the long-lived storage
+> cost of confirmed transactions the fee market actually covers, built from a
+> primary-source node census (≥32,000 addresses) and reproduced by three
+> independent implementations (JavaScript, Python, standalone C). Second — and
+> this is the broader contribution — the paper proposes a *framework*: Bitcoin's
+> single fee price is not the price of one resource, but one price charged
+> against many long-lived shared resources (storage, UTXO state, validation,
+> relay, bandwidth). The framework defines a family of internalization ratios —
+> one per resource — of which SCCR is the first measured member; the rest are
+> stated explicitly as research hypotheses with defined promotion criteria. One
+> measurement today; the framework is the deliverable.
+
+**Usage:** paste as the arXiv cover-letter / abstract-if-needed framing; keep
+the technical abstract (banded ~22–29%, ~99–100% below 1×, ≥32K census, model-
+spec v2.0.1, three implementations) as the submission abstract. The two frames
+do not contradict — the pitch is why the paper matters, the abstract is what it
+measured. Also the basis for the Optech 2–4 sentence summary (§3 step 1).
+
+
 ## 3. Submission steps (Bitcoin Optech)
 
 1. Draft a **2–4 sentence research summary**: what was measured (SCCR, live data,
@@ -218,8 +248,11 @@ D5 confirmed critical path). See commit message.
 - Checklist items that do not need new input are all marked actionable in §4.
 
 **LEFT / TODO (verified):**
-- [ ] 🚨 **External reproduction** — CRITICAL PATH (Prateek 2026-08-02); the only
-      submission-delaying item; protocol + log in `research/reproduce/`
+- [ ] 🚨 **External reproduction** — CRITICAL PATH (Prateek 2026-08-02; advisor
+      reinforced 2026-08-03: **"this is now worth far more than another 100
+      commits"** — external reproduction is THE highest-value remaining action
+      and everything else is secondary). The ONLY submission-delaying item;
+      protocol + log in `research/reproduce/`
 - [ ] Prateek: ORCID iD (create BEFORE submission) + arXiv account (real identity)
 - [ ] Prateek: review `archival-vs-pruned-note.md` (data-gap framing sign-off) —
       simultaneous publication decided
@@ -238,7 +271,7 @@ All seven recorded in `docs/decisions/2026-08-02-publication-decisions.md`:
 | D2 | ORCID | Create BEFORE submission | 🟡 ACTION (pre-submission required) |
 | D3 | arXiv identity | Real identity (no pseudonym) | ✅ RECOMMENDED/RESOLVED |
 | D4 | License | MIT (code) + CC BY 4.0 (paper) | ✅ RECOMMENDED — LICENSE file change awaits final go |
-| D5 | External reproducer | The ONLY thing worth delaying submission for | 🚨 CRITICAL PATH |
+| D5 | External reproducer | The ONLY thing worth delaying submission for (advisor 2026-08-03: **"worth far more than another 100 commits"** — highest-value remaining action, everything else secondary) | 🚨 CRITICAL PATH |
 | D6 | Source format | Submit LaTeX, not PDF-only | ✅ RECOMMENDED/RESOLVED |
 | D7 | Companion note | Publish simultaneously | ✅ RECOMMENDED/RESOLVED |
 

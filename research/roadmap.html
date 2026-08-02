@@ -75,6 +75,39 @@ footer .links a:hover{color:#D4933A}</style>
 <blockquote>validation, bandwidth, relay, propagation, indexer serving) expressed in ONE</blockquote>
 <blockquote>reproducible accounting framework, each with its own measurable Cost</blockquote>
 <blockquote>Internalization Ratio; <strong>SCCR is Metric #1</strong> (the storage account).</blockquote>
+<p><strong>The resource map (Figure 1).</strong> One picture of the whole program — the visual</p>
+<p>anchor for every surface of this roadmap:</p>
+<pre><code>                        ┌───────────────────────────┐
+                        │    BITCOIN FEE MARKET     │
+                        │  one price · sat/vbyte ·  │
+                        │      next block only      │
+                        └─────────────┬─────────────┘
+                                      │
+                   ┌──────────────────┴────────────────┐
+                   │                                   │
+      ┌────────────▼────────────┐      ┌───────────────▼───────────────┐
+      │     DIRECTLY PRICED     │      │      INDIRECTLY MEASURED      │
+      │   (the market clears)   │      │    (measured, not priced)     │
+      └────────────┬────────────┘      └───────────────┬───────────────┘
+                   │                                   │
+                   ▼                                   ▼
+      ┌─────────────────────────┐     ┌────────────────┬────────────────┐
+      │       BLOCK SPACE       │     │    STORAGE (SCCR) — MEASURED    │
+      │congestion · the one good│     │ ~0.22-0.29 · ~99-100% below 1×  │
+      │  the fee market prices  │     │ ──────────────────────────────  │
+      │    (~10-min horizon)    │     │      UTXO (UCIR) — FUTURE       │
+      │                         │     │   VALIDATION (VCIR) — FUTURE    │
+      └─────────────────────────┘     │      RELAY (RCIR) — FUTURE      │
+                                      │    BANDWIDTH (BCIR) — FUTURE    │
+                                      └─────────────────────────────────┘</code></pre>
+<p>*Figure 1 — The Bitcoin Resource Map. The fee market <strong>directly prices</strong> one</p>
+<p>good — block space (congestion, ~10-min horizon). Every other long-lived</p>
+<p>resource is <strong>indirectly measured</strong> against that price: storage (SCCR) is the</p>
+<p>one <strong>measured</strong> leg — Metric #1; UTXO (UCIR), validation (VCIR), relay (RCIR),</p>
+<p>and bandwidth (BCIR) are <strong>research hypotheses (FUTURE)</strong>, not results. SVG</p>
+<p>version for the site: <code>research/resource-map.svg</code>; ASCII asset:</p>
+<p><code>research/resource-map.txt</code>. The same figure appears in working-paper §1 and</p>
+<p>framework-paper-outline (Figure 1).*</p>
 <p><strong>Verdict on the reframe:</strong> genuinely valuable, not cosmetic. The observation that</p>
 <p>fees may under-price storage is not novel (Liu et al. 2021, arXiv:2103.05866 — the</p>
 <p>closest prior work). What IS novel is the reproducible measurement (the SCCR). The</p>
@@ -163,6 +196,15 @@ footer .links a:hover{color:#D4933A}</style>
 <p>HYPOTHESIS (not yet modeled / measured / reproduced)** and must be labeled as</p>
 <p>such in every surface (roadmap, publication plan, paper, talk, site). Naming a</p>
 <p>hypothesis is not claiming a result.</p>
+<p><strong>Advisor&#x27;s discipline statement (verbatim intent, added 2026-08-03):</strong> *&quot;Never</p>
+<p>say &#x27;established metrics&#x27; for UCIR/VCIR/RCIR/BCIR/DCIR until they exist —</p>
+<p>always &#x27;proposed research directions.&#x27;&quot;* Applied everywhere: the roadmap, the</p>
+<p>publication plan, the working paper, audience summaries, talks, and the site.</p>
+<p>The only allowed label for an unmeasured leg is **research hypothesis /</p>
+<p>proposed research direction** — never &quot;established metric,&quot; never &quot;will be</p>
+<p>measured,&quot; and never a number that does not exist yet. If a surface needs a</p>
+<p>cell for an unmeasured resource, it renders &quot;?&quot; (roadmap §10 direction 7: the</p>
+<p>dashboard never fabricates a cell).</p>
 <table>
 <tr><th>Metric</th><th>Evidence status</th><th>What would promote it</th></tr>
 <tr><td><strong>SCCR</strong></td><td>🟢 <strong>ESTABLISHED METRIC (validated)</strong> — measured on live data; three independent implementations (JS/Python/C) agree per-block; joint Monte Carlo bounded; v2.0.0 correction documented (§5/§6)</td><td>— (this is the template every other metric inherits)</td></tr>

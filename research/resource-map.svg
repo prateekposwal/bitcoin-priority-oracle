@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 620" role="img" aria-labelledby="rm-title rm-desc">
+  <title id="rm-title">The Bitcoin Resource Map</title>
+  <desc id="rm-desc">The Bitcoin fee market directly prices one good — block space. Every other long-lived resource (storage, UTXO state, validation, relay, bandwidth) is indirectly measured against that price; only storage (SCCR) is measured today, the rest are future research directions.</desc>
+  <rect width="900" height="620" fill="#1A1612"/>
+  <text x="450" y="38" fill="#F7931A" font-family="-apple-system, 'Segoe UI', sans-serif" font-size="22" font-weight="700" text-anchor="middle">The Bitcoin Resource Map</text>
+
+  <!-- Root: Bitcoin Fee Market -->
+  <rect x="330" y="58" width="240" height="72" rx="8" fill="#231F19" stroke="#3A3228" stroke-width="1.5"/>
+  <text x="450" y="86" fill="#EADCC8" font-family="sans-serif" font-size="14" font-weight="700" text-anchor="middle">BITCOIN FEE MARKET</text>
+  <text x="450" y="106" fill="#9B8B78" font-family="sans-serif" font-size="11" text-anchor="middle">one price · sat/vbyte · next block only</text>
+
+  <!-- Trunk + spread -->
+  <path d="M450,130 L450,160 M220,160 L680,160 M220,160 L220,192 M680,160 L680,192" stroke="#6A5D4E" stroke-width="2" fill="none"/>
+  <polygon points="220,196 214,188 226,188" fill="#6A5D4E"/>
+  <polygon points="680,196 674,188 686,188" fill="#6A5D4E"/>
+
+  <!-- Branch boxes -->
+  <rect x="140" y="204" width="160" height="66" rx="8" fill="#231F19" stroke="#3A3228" stroke-width="1.5"/>
+  <text x="220" y="230" fill="#F7931A" font-family="sans-serif" font-size="13" font-weight="700" text-anchor="middle">DIRECTLY PRICED</text>
+  <text x="220" y="250" fill="#9B8B78" font-family="sans-serif" font-size="10.5" text-anchor="middle">(the market clears)</text>
+  <rect x="600" y="204" width="160" height="66" rx="8" fill="#231F19" stroke="#3A3228" stroke-width="1.5"/>
+  <text x="680" y="230" fill="#F7931A" font-family="sans-serif" font-size="13" font-weight="700" text-anchor="middle">INDIRECTLY MEASURED</text>
+  <text x="680" y="250" fill="#9B8B78" font-family="sans-serif" font-size="10.5" text-anchor="middle">(measured, not priced)</text>
+
+  <!-- Down to leaves -->
+  <path d="M220,270 L220,302 M680,270 L680,302" stroke="#6A5D4E" stroke-width="2" fill="none"/>
+  <polygon points="220,306 214,298 226,298" fill="#6A5D4E"/>
+  <polygon points="680,306 674,298 686,298" fill="#6A5D4E"/>
+
+  <!-- Left leaf: Block Space -->
+  <rect x="110" y="314" width="220" height="130" rx="8" fill="#231F19" stroke="#3A3228" stroke-width="1.5"/>
+  <text x="220" y="346" fill="#EADCC8" font-family="sans-serif" font-size="14" font-weight="700" text-anchor="middle">BLOCK SPACE</text>
+  <text x="220" y="372" fill="#C9C2B8" font-family="sans-serif" font-size="11.5" text-anchor="middle">congestion · the one good</text>
+  <text x="220" y="392" fill="#C9C2B8" font-family="sans-serif" font-size="11.5" text-anchor="middle">the fee market prices</text>
+  <text x="220" y="420" fill="#6A5D4E" font-family="sans-serif" font-size="11" font-style="italic" text-anchor="middle">(~10-min horizon)</text>
+
+  <!-- Right leaf: measured resources -->
+  <rect x="480" y="314" width="400" height="240" rx="8" fill="#231F19" stroke="#3A3228" stroke-width="1.5"/>
+  <path d="M500,368 L860,368" stroke="#3A3228" stroke-width="1.5"/>
+  <text x="680" y="342" font-family="sans-serif" font-size="13" font-weight="700" text-anchor="middle">
+    <tspan fill="#7BC96F">STORAGE (SCCR)</tspan><tspan fill="#C9C2B8"> — </tspan><tspan fill="#7BC96F">MEASURED</tspan>
+  </text>
+  <text x="680" y="362" fill="#C9C2B8" font-family="sans-serif" font-size="11" text-anchor="middle">~0.22–0.29 · ~99–100% below 1×</text>
+  <text x="680" y="402" font-family="sans-serif" font-size="12" text-anchor="middle"><tspan fill="#C9C2B8">UTXO</tspan><tspan fill="#9B8B78"> (UCIR) — </tspan><tspan fill="#D4933A">FUTURE</tspan></text>
+  <text x="680" y="428" font-family="sans-serif" font-size="12" text-anchor="middle"><tspan fill="#C9C2B8">VALIDATION</tspan><tspan fill="#9B8B78"> (VCIR) — </tspan><tspan fill="#D4933A">FUTURE</tspan></text>
+  <text x="680" y="454" font-family="sans-serif" font-size="12" text-anchor="middle"><tspan fill="#C9C2B8">RELAY</tspan><tspan fill="#9B8B78"> (RCIR) — </tspan><tspan fill="#D4933A">FUTURE</tspan></text>
+  <text x="680" y="480" font-family="sans-serif" font-size="12" text-anchor="middle"><tspan fill="#C9C2B8">BANDWIDTH</tspan><tspan fill="#9B8B78"> (BCIR) — </tspan><tspan fill="#D4933A">FUTURE</tspan></text>
+  <text x="680" y="524" fill="#6A5D4E" font-family="sans-serif" font-size="10.5" font-style="italic" text-anchor="middle">every other leg is a research hypothesis, not a result</text>
+
+  <!-- Footer -->
+  <text x="450" y="578" fill="#9B8B78" font-family="sans-serif" font-size="11.5" text-anchor="middle">The fee market directly prices one good — block space.</text>
+  <text x="450" y="598" fill="#9B8B78" font-family="sans-serif" font-size="11.5" text-anchor="middle">Every other long-lived resource is measured against that price; only storage is measured today (SCCR, Paper 1).</text>
+</svg>

@@ -1,0 +1,23 @@
+                        ┌───────────────────────────┐
+                        │    BITCOIN FEE MARKET     │
+                        │  one price · sat/vbyte ·  │
+                        │      next block only      │
+                        └─────────────┬─────────────┘
+                                      │
+                   ┌──────────────────┴────────────────┐
+                   │                                   │
+      ┌────────────▼────────────┐      ┌───────────────▼───────────────┐
+      │     DIRECTLY PRICED     │      │      INDIRECTLY MEASURED      │
+      │   (the market clears)   │      │    (measured, not priced)     │
+      └────────────┬────────────┘      └───────────────┬───────────────┘
+                   │                                   │
+                   ▼                                   ▼
+      ┌─────────────────────────┐     ┌────────────────┬────────────────┐
+      │       BLOCK SPACE       │     │    STORAGE (SCCR) — MEASURED    │
+      │congestion · the one good│     │ ~0.22-0.29 · ~99-100% below 1×  │
+      │  the fee market prices  │     │ ──────────────────────────────  │
+      │    (~10-min horizon)    │     │      UTXO (UCIR) — FUTURE       │
+      │                         │     │   VALIDATION (VCIR) — FUTURE    │
+      └─────────────────────────┘     │      RELAY (RCIR) — FUTURE      │
+                                      │    BANDWIDTH (BCIR) — FUTURE    │
+                                      └─────────────────────────────────┘

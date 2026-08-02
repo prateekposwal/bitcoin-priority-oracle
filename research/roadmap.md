@@ -33,6 +33,44 @@ to a complete accounting thesis:
 > reproducible accounting framework, each with its own measurable Cost
 > Internalization Ratio; **SCCR is Metric #1** (the storage account).
 
+**The resource map (Figure 1).** One picture of the whole program — the visual
+anchor for every surface of this roadmap:
+
+```
+                        ┌───────────────────────────┐
+                        │    BITCOIN FEE MARKET     │
+                        │  one price · sat/vbyte ·  │
+                        │      next block only      │
+                        └─────────────┬─────────────┘
+                                      │
+                   ┌──────────────────┴────────────────┐
+                   │                                   │
+      ┌────────────▼────────────┐      ┌───────────────▼───────────────┐
+      │     DIRECTLY PRICED     │      │      INDIRECTLY MEASURED      │
+      │   (the market clears)   │      │    (measured, not priced)     │
+      └────────────┬────────────┘      └───────────────┬───────────────┘
+                   │                                   │
+                   ▼                                   ▼
+      ┌─────────────────────────┐     ┌────────────────┬────────────────┐
+      │       BLOCK SPACE       │     │    STORAGE (SCCR) — MEASURED    │
+      │congestion · the one good│     │ ~0.22-0.29 · ~99-100% below 1×  │
+      │  the fee market prices  │     │ ──────────────────────────────  │
+      │    (~10-min horizon)    │     │      UTXO (UCIR) — FUTURE       │
+      │                         │     │   VALIDATION (VCIR) — FUTURE    │
+      └─────────────────────────┘     │      RELAY (RCIR) — FUTURE      │
+                                      │    BANDWIDTH (BCIR) — FUTURE    │
+                                      └─────────────────────────────────┘
+```
+
+*Figure 1 — The Bitcoin Resource Map. The fee market **directly prices** one
+good — block space (congestion, ~10-min horizon). Every other long-lived
+resource is **indirectly measured** against that price: storage (SCCR) is the
+one **measured** leg — Metric #1; UTXO (UCIR), validation (VCIR), relay (RCIR),
+and bandwidth (BCIR) are **research hypotheses (FUTURE)**, not results. SVG
+version for the site: `research/resource-map.svg`; ASCII asset:
+`research/resource-map.txt`. The same figure appears in working-paper §1 and
+framework-paper-outline (Figure 1).*
+
 **Verdict on the reframe:** genuinely valuable, not cosmetic. The observation that
 fees may under-price storage is not novel (Liu et al. 2021, arXiv:2103.05866 — the
 closest prior work). What IS novel is the reproducible measurement (the SCCR). The
@@ -118,6 +156,16 @@ The framework never overclaims: exactly ONE member of the RIR family is an
 HYPOTHESIS (not yet modeled / measured / reproduced)** and must be labeled as
 such in every surface (roadmap, publication plan, paper, talk, site). Naming a
 hypothesis is not claiming a result.
+
+**Advisor's discipline statement (verbatim intent, added 2026-08-03):** *"Never
+say 'established metrics' for UCIR/VCIR/RCIR/BCIR/DCIR until they exist —
+always 'proposed research directions.'"* Applied everywhere: the roadmap, the
+publication plan, the working paper, audience summaries, talks, and the site.
+The only allowed label for an unmeasured leg is **research hypothesis /
+proposed research direction** — never "established metric," never "will be
+measured," and never a number that does not exist yet. If a surface needs a
+cell for an unmeasured resource, it renders "?" (roadmap §10 direction 7: the
+dashboard never fabricates a cell).
 
 | Metric | Evidence status | What would promote it |
 |---|---|---|
