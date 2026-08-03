@@ -121,6 +121,8 @@ designer's own predictions.
 
 ---
 
+*Companion (2026-08-03): `research/whitepaper-patterns.md` — the 44-pattern “engineered asymmetry” lens with six additional verified whitepaper/forum quotes (§2/§9/§10/§11/§12 last line, BitDNS thread 532/535/537/539), including the 21M/1MB/halving-not-in-whitepaper correction and the anti-master-chain principle.*
+
 *Verification note by TELOS/Aviku, 2026-08-03. Prepared for the Bitcoin Sahi Research
 Council; feeds working-paper §8.3 (designer-intent paragraph), roadmap Q1/Q6, and
 framework-paper-outline (Paper 4 falsifiable-claims table).*
