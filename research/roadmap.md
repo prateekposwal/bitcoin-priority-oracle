@@ -333,6 +333,17 @@ frozen-capture cross-check 0.2186). Full derivations in companion `future-direct
 **Model output vs judgment are separated in the paper**; this section is the
 roadmap-level summary.
 
+**Satoshi anchored (2026-08-03, primary-source verification note
+\`research/satoshi-primary-source-note.md\`).** The designer predicted both the
+equilibrium and its mechanism: *"I anticipate there will never be more than 100K
+nodes, probably less. It will reach an equilibrium where it's not worth it for
+more nodes to join in"* (BitcoinTalk post 188, Jul 2010) and *"The more burden it
+is to run a node, the fewer nodes there will be"* (post 287, Jul 2010). Q1's
+N-margin loop (under-pricing → exit → N↓ → SCCR↑) is Satoshi's own hypothesis;
+a measured N-response function would test it directly (working-paper §7.1
+falsifier 6). The "never more than 100K nodes" claim is consistent with this
+paper's N-band (census ≥32K; estimates 10K–100K).
+
 ### Q1 — What force pushes SCCR toward equilibrium? (4-way scenario)
 
 | Lever (single, vs baseline 0.2228) | SCCR | Direction |
@@ -365,6 +376,11 @@ per-transaction; UTXO cost is a *stock* (live-set RAM/lookup) while fees are a
 internalization, for every resource except storage. **Price can solve storage;
 it cannot solve validation, UTXO, or relay the same way — there is no single
 "resource market."**
+
+**Q6 (node-count sensitivity, Satoshi-anchored):** the "0.056 anchor" branch
+(N ×4 → 128K) sits at Satoshi's own ceiling ("never more than 100K nodes", post
+188) — see the falsifiable-claims table in
+\`research/satoshi-primary-source-note.md\` §4.
 
 ### Q5 — 2040 scenarios
 

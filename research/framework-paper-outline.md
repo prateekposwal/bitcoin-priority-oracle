@@ -240,6 +240,18 @@ the thesis paragraph, before §1.
 
 ### §10 What would falsify this framework (⚪ FRAMING — required before submission)
 
+- **Primary-source falsifiable-claims table (2026-08-03, Satoshi's own claims as
+  testable specimens):** the designer's statements — "never more than 100K nodes"
+  (post 188), "storage should not be a problem" (§7), "nodes will have an
+  incentive to receive and include all the transactions they can" (email #13),
+  "The more burden it is to run a node, the fewer nodes there will be" (post 287),
+  block-size threshold as a "circuit breaker" against "wasted disk space"
+  (post 441) — become falsifiable hypotheses against the RIR measurements. Full
+  verification (what is real vs. apocryphal) + the table: companion
+  `research/satoshi-primary-source-note.md` §2/§4. This is Paper-4 material
+  (framework-level falsifiers, roadmap Q1/Q6), NOT Paper-1 content; working-paper
+  §8.3 carries only the compact designer-intent paragraph.
+
 - **What this section contains:** the framework-level falsifiers, expanded from
   working-paper §7.1: (1) independent implementations cannot reproduce SCCR;
   (2) a better storage-cost model reverses the conclusion; (3) fees consistently
