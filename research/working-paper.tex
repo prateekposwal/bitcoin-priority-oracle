@@ -15,6 +15,10 @@
 %     should be checked by diff before submission.
 %
 %  2026-08-03: subsection 7.1 (falsifiability) added to this source.
+%  2026-08-03: fourth-reviewer deliverables applied --- assumption taxonomy
+%  (Type C choices vs Type M mismeasurements) added as subsection 7.2; the v3.0
+%  companion is labeled non-submission program material; advisor D5-first principle
+%  recorded (roadmap §4); publication-plan v3.0 exclusion verified.
 %  2026-08-03: peer-review execution applied --- abstract opening rewritten, SCCR
 %  fraction equation + explicit-notation block (bundled C, time-dependent cb,
 %  heterogeneous N, storage-vs-state) added to sec 4.1, average-vs-marginal
@@ -379,6 +383,89 @@ claim about the number itself and is handled under falsifier 1.
 We do not believe any of these falsifiers currently obtain; we list them so the
 reader can check, and so the framework is never mistaken for an unfalsifiable
 claim.
+
+\subsection{Assumption taxonomy --- deliberate choices (Type C) vs.\ empirical risks (Type M)}\label{sec:7.2}
+\textit{(Added 2026-08-03, fourth-reviewer deliverable.)}
+\S\ref{sec:7.1} draws a categorical line between two external outcomes --- a
+\textbf{failed reproduction} (the number is wrong) and a \textbf{reproduced
+number with disagreed framing} (the number stands). That line is only
+enforceable if the paper's own assumptions are pre-sorted into the same two
+buckets \textbf{before} the challenge arrives --- not argued case-by-case under
+time pressure when an external review lands. Every material assumption in this
+paper therefore belongs to exactly one of two categories, stated here in advance:
+
+\textbf{The crisp test.} A challenge is classified by what it does to the
+assumption's current value, not by who makes it:
+\begin{itemize}[nosep]
+  \item \textbf{If a critic simply asserts a different value or a different
+  modeling choice} (T = 20, marginal attribution, ``validation matters more'')
+  --- there is no evidence the current value is wrong. That is \textbf{Type C
+  territory: recorded as feedback} (community-feedback triage,
+  \texttt{research/community-review-plan.md} \S4), engaged in the next revision,
+  and \textbf{the measurement stands}.
+  \item \textbf{If the critic shows the current value or measurement is wrong}
+  --- with evidence, a reproduction mismatch, or better data (a complete node
+  census, a corrected fee capture, a measured cost decomposition) --- that is
+  \textbf{Type M territory: a falsification candidate} under \S\ref{sec:7.1}
+  falsifiers 1--3, and \textbf{the headline is at risk} until the discrepancy is
+  reconciled.
+\end{itemize}
+
+\textbf{Type C --- ``Assumption I chose'' (deliberate modeling choice).} A
+selection among defensible alternatives, made explicit and documented where it
+appears (\S7 items 1--7). Not falsifiable by asserting a different choice; a
+reviewer preferring another selection records \textbf{feedback}, not
+falsification. Reclassification to Type M requires showing the choice is
+internally inconsistent with the paper's own stated method, or rests on an
+empirical premise that is wrong.
+
+\textbf{Type M --- ``Assumption that might be mismeasured'' (empirical risk).} An
+empirical quantity, measurement, or bound embedded in the model. Falsifiable: if
+the measurement is wrong, the conclusion may shift. A critic who shows the
+current value/measurement is wrong opens a \textbf{falsification candidate} ---
+handled under \S\ref{sec:7.1} falsifiers 1--3; the headline falls until
+reconciled.
+
+\begin{table}[h]
+\centering
+\small
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.7cm}>{\raggedright\arraybackslash}p{2.9cm}>{\raggedright\arraybackslash}p{2.0cm}>{\raggedright\arraybackslash}p{5.3cm}>{\raggedright\arraybackslash}p{5.0cm}@{}}
+\toprule
+\textbf{\#} & \textbf{Assumption} & \textbf{Type} & \textbf{Why it's that type} & \textbf{What would reclassify or falsify it}\\
+\midrule
+1 & Storage horizon $T = 10$ yr & \textbf{C} & A selection within a defensible range (pruning shortens retention, permanent storage extends it, \S7 item 3); sensitivity disclosed (\S\ref{sec:5.3}: $T=5/10/15 \rightarrow 0.446/0.223/0.149$), direction robust & A measured network-wide retention distribution showing effective retention is an order of magnitude shorter --- reframes the externality reading (falsifier 5); does not make $T=10$ an error\\
+2 & Replication factor $N = 32$K & \textbf{M} & An empirical bound from the primary-source census (addrman cap at 32{,}000 known addresses), explicitly \emph{not} a complete enumeration (\S\ref{sec:5.4}); true set estimated 10K--100K; SCCR $\propto 1/N$ & A defensible complete census showing the true reachable set differs materially from 32K in a direction that moves the $\sim$0.07--0.71 band; the ``$\sim$99--100\% below $1\times$'' claim already breaks at $N \approx 49$K (\S\ref{sec:5.4})\\
+3 & \textbf{C bundling} ($C = C_{\mathrm{storage}} + C_{\mathrm{bandwidth}} + C_{\mathrm{misc}}$) & \textbf{M (leaning --- the blurry case)} & Bundling is presented as a simplification (Type C-like), but it embeds an implicit empirical claim that the components are as measured --- and the component sum is bandwidth-dominated (600 + 166.67 + 157.68, \S\ref{sec:4.1}), so the \emph{storage} reading of the headline is fragile if the decomposition is wrong & A measured node-cost decomposition (operator surveys, hosting bills) showing the storage share is materially different, or a double-counted component --- reframes the headline from ``storage-and-hosting coverage'' (\S\ref{sec:4.1}) and re-bands the ratio\\
+4 & Average block size $B_{\mathrm{block}} = 1.5$MB & \textbf{M (narrow surface)} & An empirical quantity from the fee-history capture --- but \S\ref{sec:5.3} shows SCCR is invariant to $B$ ($B$ cancels), so a wrong value changes the per-byte presentation ($c_b$), not the headline ratio & A material mis-statement of the capture (wrong byte basis in the fee history) propagating through $c_b(t)$; a data-quality flag, not headline-moving under the current spec\\
+5 & \textbf{``Fees paid'' definition} ($\mathrm{fee\_USD} = \mathrm{avgFees} \times \mathrm{USD/BTC}$; subsidy excluded, \S\ref{sec:4.1}) & \textbf{M} & The numerator is a measurement from the live capture (mempool.space 24h block-fee history); the definition is explicit but the value is empirical & A reproduction mismatch on the fee side, a corrected capture, or evidence the conversion/attribution is wrong --- direct falsifier 1/3 territory: the number falls until reconciled\\
+6 & \textbf{Storage-first sequencing} & \textbf{C} & A program ordering, explicitly ``the first measurable one,'' not ``the most important'' (\S7 item 7) & Only evidence that storage is \emph{not} reproducibly measurable (falsifier 1) touches it; asserting validation/UTXO is more important is feedback, not falsification\\
+7 & \textbf{Average-vs-marginal attribution} & \textbf{C} & A documented choice (the $164\times$ denominator gap is disclosed; both branches reported, \S\ref{sec:4.2}); average answers the accounting question, marginal the optimization question & Showing the marginal object is the only economically correct one for the externality claim --- the paper reports both, so this is engagement, not error\\
+8 & \textbf{Homogeneous node cost structure} & \textbf{C (with an empirical seam)} & The single-scalar structure is a deliberate simplification, documented (\S7 item 2); heterogeneity is a refinement direction, not an error & The \emph{value inside} the structure ($C = \$925$/yr) is empirical --- a defensible regional refinement that moves the band is already named falsifier 2; the structural choice itself is not falsifiable by asserting heterogeneity\\
+9 & \textbf{No discounting; constant cost} & \textbf{C} & A documented choice with disclosed sensitivity (\S7 item 4): discounting at $r=5\%/8\%$ cuts the liability's present value by $\sim$27\%/45\%, moving the average up ($\sim$0.30--0.53 at $N=32$K) --- still below the $1\times$ average threshold; the majority-below-$1\times$ direction is robust & A corrected treatment that flips the headline's direction --- none identified under the disclosed sensitivity; a critic asserting discounting records feedback, not falsification\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{The blurry case, named honestly.} Row 3 (C bundling) is the one
+assumption that sits on the line. The \emph{decision to bundle} is a choice
+(Type C); the \emph{claim that the bundle's components are as measured} is
+empirical (Type M). Because the bandwidth leg (600) is the largest component, the
+storage-specific reading of the headline depends on a decomposition that is
+currently \emph{assumed}, not measured. We therefore classify C bundling
+\textbf{leaning Type M} --- the safe default: an external challenge to the
+decomposition gets the full falsification response, not the feedback bucket.
+
+\textbf{Why the taxonomy is stated in advance.} Every assumption-level critique
+this paper receives will be routed by this table before it is answered: Type C
+critiques are engaged as feedback in the next revision (the reproduced number
+stands); Type M critiques are treated as falsification candidates until the
+evidence is reconciled (\S\ref{sec:7.1} falsifiers 1--3). This is the mechanism
+that keeps ``reproduced the number, disagrees with framing'' from silently
+becoming ``the paper might just be wrong'' --- and keeps a genuine mismeasurement
+from being dismissed as a mere framing disagreement. The plan-of-record mirror
+lives in \texttt{roadmap.md} \S12.
+
 
 \section{Economics and Related Work}\label{sec:8}
 \subsection{Is this an externality?}\label{sec:8.1}

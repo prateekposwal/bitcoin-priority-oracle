@@ -3,6 +3,18 @@
 **Companion to:** `research/working-paper.md` v2.2.0 (core paper) · `research/model-spec.json` v2.0.1
 *Bitcoin Sahi Research Council — Bitcoin Resource Accounting program · 2026-08-03*
 
+> **STATUS: PROGRAM / AGENDA MATERIAL — CLEARLY DISTINCT FROM THE MEASURED SCCR PAPER.**
+> This document is the v3.0 research-program companion, **not part of the measured
+> paper** (`research/working-paper.md` §1–§9; the paper's §10 is only a compact pointer to this
+> agenda). **None of the RIR-family members named here (UCIR/VCIR/RCIR/BCIR/DCIR) are
+> measured** — SCCR is the only ESTABLISHED METRIC (roadmap §4). This agenda is **picked
+> up AFTER the measurement paper ships and after external reproduction (D5) lands**
+> (roadmap §4): it is **not a submission artifact**, and every number here is model
+> arithmetic on assumptions, not a measured claim. It does not substitute for the
+> hard, slow work of getting an outside skeptical human to independently rerun the
+> paper's numbers. The assumption taxonomy governing this agenda mirrors the core
+> paper's (§7.2): Type C deliberate choices vs Type M empirical risks (roadmap §12).
+
 This companion carries the forward-looking content that was **deliberately split
 out of the core working paper** (second-review restructure, 2026-08-03): the v3.0
 agenda (§1), the deep-question first answers (§2), and the cross-chain

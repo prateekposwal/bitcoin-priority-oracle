@@ -306,7 +306,7 @@ footer .links a:hover{color:#D4933A}</style>
 <li><strong>&quot;Failed to reproduce&quot;</strong> — an independent party following the published protocol from a clean clone gets a materially different number: not the published avg 0.2186, not the 0.07–0.71 band, or a per-block mismatch that cannot be reconciled. This is a <strong>genuine falsification of the measurement</strong>: the number is not trustworthy as stated, and the paper&#x27;s headline falls until the discrepancy is reconciled. This is the only external-outcome class that blocks submission (falsifier 1 below; D5).</li>
 <li><strong>&quot;Reproduced the number, disagrees with framing/assumptions&quot;</strong> — an independent party runs the protocol, confirms the arithmetic (avg 0.2186, the band, the below-1× share), but disputes a modeling choice: the C = $925/yr bundling, the T = 10 horizon, storage-as-the-first-resource priority, or whether an unpriced-but-avoidable cost is an externality at all. This is <strong>NOT a falsification</strong>. It is honest scientific disagreement about documented assumptions — the paper states these choices as assumptions (§7, items 1–7) and anticipates exactly this class of challenge. It is folded into future revisions the way the Liu et al. (2021) prior work was reconciled (§8.2): acknowledged, engaged, absorbed into the next version. The measurement stands.</li>
 </ul>
-<p>The two outcomes must never be conflated. A framing disagreement is <strong>feedback, not a failed reproduction</strong>: it is recorded in the community-feedback triage (<code>research/community-review-plan.md</code> §4 → <code>research/community-feedback.md</code>) and addressed in the next revision, while the reproduced number stands. A failed reproduction is a claim about the number itself and is handled under falsifier 1.</p>
+<p>The two outcomes must never be conflated. A framing disagreement is <strong>feedback, not a failed reproduction</strong>: it is recorded in the community-feedback triage (<code>research/community-review-plan.md</code> §4 → <code>research/community-feedback.md</code>) and addressed in the next revision, while the reproduced number stands. A failed reproduction is a claim about the number itself and is handled under falsifier 1. The assumption taxonomy that makes this routing mechanical — which assumptions are <strong>Type C</strong> (a chosen value: challenge = feedback) and which are <strong>Type M</strong> (a value that might be mismeasured: challenge = falsification candidate) — is stated in advance in §7.2.</p>
 <p><strong>Falsifiers of the SCCR measurement:</strong></p>
 <ol>
 <li><strong>Independent implementations cannot reproduce the ratio.</strong> The framework ships a frozen capture plus three independent implementations (JS/Python/C, verified agreeing per-block). If an uninvolved party running the protocol on the same inputs cannot reproduce SCCR ≈ 0.22 (or the discrepancy cannot be reconciled), the measurement is not trustworthy and the paper&#x27;s headline falls. This is the D5 critical path (external reproduction; <code>research/reproduce/external-reproduction.md</code>).</li>
@@ -320,6 +320,70 @@ footer .links a:hover{color:#D4933A}</style>
 <li><strong>Measured response functions close the dynamic loop at or above 1×.</strong> If node-entry/exit and fee-demand response functions (companion <code>future-directions-v3.md</code> §2 Q1) are measured and exhibit a stable fixed point at or above 1×, the persistent-partial-internalization equilibrium hypothesis is falsified.</li>
 </ol>
 <p>We do not believe any of these falsifiers currently obtain; we list them so the reader can check, and so the framework is never mistaken for an unfalsifiable claim.</p>
+<h4>7.2 Assumption taxonomy --- deliberate choices (Type C) vs. empirical risks (Type M)</h4>
+<p>*(Added 2026-08-03, fourth-reviewer deliverable.)* §7.1 draws a categorical line</p>
+<p>between two external outcomes --- a <strong>failed reproduction</strong> (the number is wrong)</p>
+<p>and a <strong>reproduced number with disagreed framing</strong> (the number stands). That line</p>
+<p>is only enforceable if the paper&#x27;s own assumptions are pre-sorted into the same</p>
+<p>two buckets <strong>before</strong> the challenge arrives --- not argued case-by-case under</p>
+<p>time pressure when an external review lands. Every material assumption in this</p>
+<p>paper therefore belongs to exactly one of two categories, stated here in advance:</p>
+<p><strong>The crisp test.</strong> A challenge is classified by what it does to the assumption&#x27;s</p>
+<p>current value, not by who makes it:</p>
+<ul>
+<li><strong>If a critic simply asserts a different value or a different modeling choice</strong></li>
+</ul>
+<p>(T = 20, marginal attribution, &quot;validation matters more&quot;) --- there is no</p>
+<p>evidence the current value is wrong. That is **Type C territory: recorded as</p>
+<p>feedback** (community-feedback triage, <code>research/community-review-plan.md</code> §4),</p>
+<p>engaged in the next revision, and <strong>the measurement stands</strong>.</p>
+<ul>
+<li><strong>If the critic shows the current value or measurement is wrong</strong> --- with</li>
+</ul>
+<p>evidence, a reproduction mismatch, or better data (a complete node census, a</p>
+<p>corrected fee capture, a measured cost decomposition) --- that is **Type M</p>
+<p>territory: a falsification candidate<strong> under §7.1 falsifiers 1–3, and </strong>the</p>
+<p>headline is at risk** until the discrepancy is reconciled.</p>
+<p><strong>Type C --- &quot;Assumption I chose&quot; (deliberate modeling choice).</strong> A selection</p>
+<p>among defensible alternatives, made explicit and documented where it appears</p>
+<p>(§7 items 1–7). Not falsifiable by asserting a different choice; a reviewer</p>
+<p>preferring another selection records <strong>feedback</strong>, not falsification.</p>
+<p>Reclassification to Type M requires showing the choice is internally inconsistent</p>
+<p>with the paper&#x27;s own stated method, or rests on an empirical premise that is wrong.</p>
+<p><strong>Type M --- &quot;Assumption that might be mismeasured&quot; (empirical risk).</strong> An</p>
+<p>empirical quantity, measurement, or bound embedded in the model. Falsifiable: if</p>
+<p>the measurement is wrong, the conclusion may shift. A critic who shows the</p>
+<p>current value/measurement is wrong opens a <strong>falsification candidate</strong> --- handled</p>
+<p>under §7.1 falsifiers 1–3; the headline falls until reconciled.</p>
+<table>
+<tr><th>#</th><th>Assumption</th><th>Type</th><th>Why it&#x27;s that type</th><th>What would reclassify or falsify it</th></tr>
+<tr><td>1</td><td>Storage horizon <strong>T = 10 yr</strong></td><td><strong>C</strong></td><td>A selection within a defensible range (pruning shortens retention, permanent storage extends it, §7 item 3); sensitivity disclosed (§5.3: T = 5/10/15 → 0.446/0.223/0.149), direction robust</td><td>A measured network-wide retention distribution showing effective retention is an order of magnitude shorter --- that reframes the externality reading (falsifier 5); it does not make T = 10 an error</td></tr>
+<tr><td>2</td><td>Replication factor <strong>N = 32K</strong></td><td><strong>M</strong></td><td>An empirical bound from the primary-source census (addrman cap at 32,000 known addresses), explicitly *not* a complete enumeration (§5.4); true set estimated 10K–100K; SCCR is inversely proportional to N</td><td>A defensible complete census showing the true reachable set differs materially from 32K in a direction that moves the ~0.07–0.71 band; the &quot;~99–100% below 1×&quot; claim already breaks at N ≈ 49K (§5.4)</td></tr>
+<tr><td>3</td><td><strong>C bundling</strong> (C = C_storage + C_bandwidth + C_misc)</td><td><strong>M (leaning --- the blurry case)</strong></td><td>The bundling is presented as a simplification (Type C-like), but it embeds an implicit empirical claim that the components are as measured --- and the component sum is bandwidth-dominated (600 + 166.67 + 157.68, §4.1), so the *storage* reading of the headline is fragile if the decomposition is wrong</td><td>A measured node-cost decomposition (operator surveys, hosting bills) showing the storage share is materially different, or a double-counted component --- reframes the headline from &quot;storage-and-hosting coverage&quot; (§4.1) and re-bands the ratio</td></tr>
+<tr><td>4</td><td>Average block size <strong>B_block = 1.5MB</strong></td><td><strong>M (narrow surface)</strong></td><td>An empirical quantity from the fee-history capture --- but §5.3 shows SCCR is invariant to B (B cancels), so a wrong value changes the per-byte presentation (cb), not the headline ratio</td><td>A material mis-statement of the capture (wrong byte basis in the fee history) propagating through cb(t); a data-quality flag, not headline-moving under the current spec</td></tr>
+<tr><td>5</td><td><strong>&quot;Fees paid&quot; definition</strong> (fee_USD = avgFees × USD/BTC; subsidy excluded, §4.1)</td><td><strong>M</strong></td><td>The numerator is a measurement from the live capture (mempool.space 24h block-fee history); the definition is explicit but the value is empirical</td><td>A reproduction mismatch on the fee side, a corrected capture, or evidence the conversion/attribution is wrong --- direct falsifier 1/3 territory: the number falls until reconciled</td></tr>
+<tr><td>6</td><td><strong>Storage-first sequencing</strong></td><td><strong>C</strong></td><td>A program ordering, explicitly &quot;the first measurable one,&quot; not &quot;the most important&quot; (§7 item 7)</td><td>Only evidence that storage is *not* reproducibly measurable (falsifier 1) touches it; asserting validation/UTXO is more important is feedback, not falsification</td></tr>
+<tr><td>7</td><td><strong>Average-vs-marginal attribution</strong></td><td><strong>C</strong></td><td>A documented choice (the 164× denominator gap is disclosed; both branches reported, §4.2); average answers the accounting question, marginal the optimization question</td><td>Showing the marginal object is the only economically correct one for the externality claim --- the paper reports both, so this is engagement, not error</td></tr>
+<tr><td>8</td><td><strong>Homogeneous node cost structure</strong></td><td><strong>C (with an empirical seam)</strong></td><td>The single-scalar structure is a deliberate simplification, documented (§7 item 2); heterogeneity is a refinement direction, not an error</td><td>The *value inside* the structure (C = $925/yr) is empirical --- a defensible regional refinement that moves the band is already named falsifier 2; the structural choice itself is not falsifiable by asserting heterogeneity</td></tr>
+<tr><td>9</td><td><strong>No discounting; constant cost</strong></td><td><strong>C</strong></td><td>A documented choice with disclosed sensitivity (§7 item 4): discounting at r = 5%/8% cuts the liability&#x27;s present value by ~27%/45%, moving the average up (~0.30–0.53 at N=32K) --- still below the 1× average threshold; the majority-below-1× direction is robust</td><td>A corrected treatment that flips the headline&#x27;s direction --- none identified under the disclosed sensitivity; a critic asserting discounting records feedback, not falsification</td></tr>
+</table>
+<p><strong>The blurry case, named honestly.</strong> Row 3 (C bundling) is the one assumption</p>
+<p>that sits on the line. The *decision to bundle* is a choice (Type C); the *claim</p>
+<p>that the bundle&#x27;s components are as measured* is empirical (Type M). Because the</p>
+<p>bandwidth leg (600) is the largest component, the storage-specific reading of the</p>
+<p>headline depends on a decomposition that is currently *assumed*, not measured. We</p>
+<p>therefore classify C bundling <strong>leaning Type M</strong> --- the safe default: an external</p>
+<p>challenge to the decomposition gets the full falsification response, not the</p>
+<p>feedback bucket.</p>
+<p><strong>Why the taxonomy is stated in advance.</strong> Every assumption-level critique this</p>
+<p>paper receives will be routed by this table before it is answered: Type C</p>
+<p>critiques are engaged as feedback in the next revision (the reproduced number</p>
+<p>stands); Type M critiques are treated as falsification candidates until the</p>
+<p>evidence is reconciled (§7.1 falsifiers 1–3). This is the mechanism that keeps</p>
+<p>&quot;reproduced the number, disagrees with framing&quot; from silently becoming &quot;the paper</p>
+<p>might just be wrong&quot; --- and keeps a genuine mismeasurement from being dismissed</p>
+<p>as a mere framing disagreement. The plan-of-record mirror of this taxonomy lives</p>
+<p>in <code>roadmap.md</code> §12.</p>
 <h3>8. Economics and Related Work</h3>
 <h4>8.1 Is this an externality?</h4>
 <p>Following standard environmental-economics usage (Pigou, 1920; Coase, 1960), a <strong>negative externality</strong> arises when a transaction&#x27;s cost is borne by parties who did not consent to the transaction. Applied to Bitcoin: an inscription&#x27;s fee is paid by its creator; the long-term storage cost is borne by node operators who neither created the transaction nor were compensated for it. In mechanism terms this is a <strong>two-sided</strong> structure — the payer (transaction creator) and the bearer (node operator) are different agents, and the fee is a one-time congestion payment while the cost recurs over the storage horizon. Two qualifications are stated honestly:</p>

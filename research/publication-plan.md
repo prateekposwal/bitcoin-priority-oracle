@@ -11,6 +11,12 @@ publication decisions recorded 2026-08-02 (Prateek's directive) — see §7 + `d
 Space Problem" as the program subtitle) with the archival-vs-pruned companion note
 (`research/archival-vs-pruned-note.md`), **published simultaneously** (Prateek's
 decision).
+**v3.0 agenda --- explicitly NOT part of the submission.** `research/future-directions-v3.md`
+(the v3.0 agenda companion) is **program/agenda material, not a submission artifact**:
+none of the RIR-family members it names are measured, and it is picked up **after**
+the paper ships and external reproduction (D5) lands (roadmap §4). The submission
+package is the measured paper + its measured robustness note (archival-vs-pruned)
+only; the agenda companion carries the same status line in its header.
 **Renamed 2026-08-02:** from "The Bitcoin Block Space Problem: Does the Fee Market
 Internalize Long-Term Storage Costs?" — the new title is the economics-native phrasing
 (see §8.3 Cost Internalization Ratio) and avoids the protocol-critique reading a Core
@@ -364,6 +370,10 @@ the release unless it contains ALL of the following:*
       researchers / investors / general public)
 - [ ] **Companion note** — `research/archival-vs-pruned-note.md` (D7:
       simultaneous publication)
+- **NOT INCLUDED (deliberately):** `research/future-directions-v3.md` — the v3.0
+      agenda companion is post-publication program material, labeled as such in its
+      header; it is NOT part of the frozen release and ships, if at all, after
+      publication + external reproduction
 - [ ] 🚨 **License decision APPLIED** — **PRE-FREEZE REQUIREMENT.** D4 is still
       🟡 RECOMMENDED-AWAITING-RATIFICATION (MIT code + CC BY 4.0 paper, drafts in
       `research/license-draft.md`); the `LICENSE` stub ("All Rights Reserved")

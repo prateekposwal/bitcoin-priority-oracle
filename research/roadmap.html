@@ -258,6 +258,17 @@ footer .links a:hover{color:#D4933A}</style>
 <p>This governs the post-publication agenda (§11): evidence-generating questions</p>
 <p>come first; taxonomy extension (naming/applying the framework elsewhere) follows</p>
 <p>the evidence, never precedes it. &quot;Don&#x27;t let the vision outrun the evidence.&quot;</p>
+<p>**External reproduction is the gate --- expansion is not a substitute (advisor,</p>
+<p>2026-08-03, verbatim intent):** *&quot;Don&#x27;t let the expansion substitute for external</p>
+<p>reproduction. Programs expand indefinitely because none of it requires the hard,</p>
+<p>slow work of getting an outside skeptical human to independently rerun the numbers.</p>
+<p>D5 first.&quot;* Applied: the v3.0 agenda, the RIR family, and every section below are</p>
+<p><strong>secondary to D5</strong> --- none of them counts as progress toward the only submission</p>
+<p>blocker. Expansion (new sections, new metrics, new agenda items) is cheap and can</p>
+<p>always be added later; external reproduction is the one item that cannot be faked</p>
+<p>or accelerated by more writing. The paper ships when an outside skeptical human</p>
+<p>independently reruns the numbers (D5 trigger, <code>research/reproduce/external-reproduction.md</code>),</p>
+<p>not when the roadmap is complete.</p>
 <p>Do NOT invent UCIR/VCIR/RCIR before their time. SCCR must become</p>
 <p>*accepted* first — externally reproduced, published, and engaged with — and the</p>
 <p>family grows one accepted measurement at a time. Naming a ratio before it is</p>
@@ -535,6 +546,52 @@ footer .links a:hover{color:#D4933A}</style>
 <p>historical fee/node data — the least-risk, highest-certainty evidence win</p>
 <p>immediately post-publication. It also assembles the historical fee dataset that</p>
 <p>attribute pricing&#x27;s regression needs, so #1 feeds #2.</p>
+<h3>12. Assumption taxonomy --- Type C (deliberate choices) vs Type M (empirical risks) (2026-08-03)</h3>
+<p>*Added 2026-08-03 (fourth-reviewer deliverable) --- the plan-of-record mirror of</p>
+<p>working-paper §7.2. Built now, calmly, BEFORE the first D5 challenge arrives, so the</p>
+<p>distinction between &quot;assumption I chose&quot; and &quot;assumption that might be mismeasured&quot;</p>
+<p>is never decided under time pressure. Every material assumption in the paper</p>
+<p>belongs to exactly one of two categories:*</p>
+<p><strong>The crisp test.</strong> If a critic <strong>simply asserts a different value or choice</strong></p>
+<p>(T = 20, marginal attribution, &quot;validation matters more&quot;) → <strong>Type C → feedback</strong></p>
+<p>(community-feedback triage, next revision; the reproduced number stands). If a</p>
+<p>critic <strong>shows the current value or measurement is wrong</strong> (evidence, reproduction</p>
+<p>mismatch, better data) → <strong>Type M → falsification candidate</strong> (working-paper §7.1</p>
+<p>falsifiers 1–3; headline at risk until reconciled).</p>
+<ul>
+<li><strong>Type C --- &quot;Assumption I chose&quot; (deliberate modeling choice).</strong> A selection</li>
+</ul>
+<p>among defensible alternatives, made explicit and documented. Not falsifiable by</p>
+<p>asserting a different choice; a reviewer preferring another selection records</p>
+<p><strong>feedback</strong>, not falsification. Reclassified to M only by showing internal</p>
+<p>inconsistency with the paper&#x27;s stated method, or a wrong empirical premise.</p>
+<ul>
+<li><strong>Type M --- &quot;Assumption that might be mismeasured&quot; (empirical risk).</strong> An</li>
+</ul>
+<p>empirical quantity, measurement, or bound embedded in the model. Falsifiable:</p>
+<p>if the measurement is wrong, the conclusion may shift.</p>
+<table>
+<tr><th>#</th><th>Assumption</th><th>Type</th><th>Why it&#x27;s that type</th><th>What would reclassify or falsify it</th></tr>
+<tr><td>1</td><td><strong>T = 10 yr horizon</strong></td><td><strong>C</strong></td><td>Defensible selection (pruning shortens retention, permanent storage extends it); sensitivity disclosed (working-paper §5.3: T = 5/10/15 → 0.446/0.223/0.149); direction robust</td><td>Measured retention distribution ~10× shorter → reframes the externality reading (falsifier 5), not an error</td></tr>
+<tr><td>2</td><td><strong>N = 32K (addrman-cap lower bound)</strong></td><td><strong>M</strong></td><td>Empirical bound, not a complete enumeration (working-paper §5.4); true set estimated 10K–100K; SCCR ∝ 1/N</td><td>Complete census showing true N differs materially in a direction that moves the ~0.07–0.71 band; &quot;~99–100% below 1×&quot; breaks at N ≈ 49K</td></tr>
+<tr><td>3</td><td><strong>C bundling (storage + bandwidth + misc)</strong></td><td><strong>M (leaning --- the blurry case)</strong></td><td>Bundling is a choice, but the component values are an implicit measurement --- and bandwidth (600) dominates storage (166.67) in the component sum, so the storage reading of the headline is fragile</td><td>Measured cost decomposition showing the storage share materially different, or a double-counted component → reframes and re-bands the headline</td></tr>
+<tr><td>4</td><td><strong>B_block = 1.5MB stationary</strong></td><td><strong>M (narrow surface)</strong></td><td>Empirical quantity, but SCCR is B-invariant (working-paper §5.3: B cancels) --- affects per-byte presentation (cb), not the headline ratio</td><td>Wrong byte basis in the capture → data-quality flag, not headline-moving under the current spec</td></tr>
+<tr><td>5</td><td><strong>&quot;Fees paid&quot; definition</strong> (fee_USD = avgFees × USD/BTC; subsidy excluded)</td><td><strong>M</strong></td><td>Numerator is a live measurement (mempool.space 24h block-fee history); definition explicit, value empirical</td><td>Fee-side reproduction mismatch, corrected capture, or wrong conversion/attribution → falsifier 1/3 territory</td></tr>
+<tr><td>6</td><td><strong>Storage-first sequencing</strong></td><td><strong>C</strong></td><td>Program ordering --- &quot;first measurable,&quot; not &quot;most important&quot; (working-paper §7 item 7)</td><td>Only evidence storage is not reproducibly measurable touches it; asserting another resource matters more is feedback</td></tr>
+<tr><td>7</td><td><strong>Average-vs-marginal attribution</strong></td><td><strong>C</strong></td><td>Documented choice; 164× gap disclosed; both branches reported (working-paper §4.2)</td><td>Showing marginal is the only economically correct object → engagement, not error</td></tr>
+<tr><td>8</td><td><strong>Homogeneous node cost structure</strong></td><td><strong>C (with an empirical seam)</strong></td><td>Deliberate simplification (working-paper §7 item 2); heterogeneity is a refinement direction</td><td>The C = $925/yr value inside is empirical --- a regional refinement moving the band is falsifier 2; the structural choice itself is not falsifiable by asserting heterogeneity</td></tr>
+<tr><td>9</td><td><strong>No discounting / constant cost</strong></td><td><strong>C</strong></td><td>Documented choice; sensitivity disclosed (r = 5/8% → −27/−45% PV; average stays below 1× at N=32K)</td><td>Corrected treatment flipping the headline direction --- none under the disclosed sensitivity</td></tr>
+</table>
+<p><strong>The blurry case, named honestly.</strong> Row 3 (C bundling) sits on the line: the</p>
+<p>*decision to bundle* is a choice (Type C); the *claim that the components are as</p>
+<p>measured* is empirical (Type M). Because bandwidth (600) is the largest component,</p>
+<p>the storage-specific reading depends on an assumed, unmeasured decomposition ---</p>
+<p>classify <strong>leaning Type M</strong>, the safe default: external challenges to the</p>
+<p>decomposition get the full falsification response.</p>
+<p><strong>Governs the agenda too.</strong> Every unmeasured RIR-family member named in §8/§9/§11</p>
+<p>and the companion <code>future-directions-v3.md</code> inherits this taxonomy: agenda choices</p>
+<p>are Type C until a metric is measured; once measured, its inputs are Type M until</p>
+<p>reproduced externally (D5 discipline, §4).</p>
 <hr>
 <p>*Bitcoin Sahi Research Council — Bitcoin Resource Accounting Roadmap (2026-08-02)*</p>
 <p style="margin-top:32px;"><a href="/research">← All research</a> · <a href="/learn">← Back to Learn</a></p>
