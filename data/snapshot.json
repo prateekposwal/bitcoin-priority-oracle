@@ -1,13 +1,17 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-03T16:54:54.911Z",
+  "generated_at": "2026-08-03T17:12:51.771313+00:00",
   "freshness_min": 0,
   "fees": {
-    "fastestFee": 4
+    "fastestFee": 5,
+    "halfHourFee": 4,
+    "hourFee": 3,
+    "economyFee": 2,
+    "minimumFee": 1
   },
-  "btc_price": 63773,
-  "block_height": 960883,
-  "mempool_tx": 94600,
+  "btc_price": 63737,
+  "block_height": 960888,
+  "mempool_tx": 97337,
   "forecast": [
     {
       "day_offset": 1,
@@ -25,9 +29,7 @@
       "trend": "rising"
     }
   ],
-  "alerts": [
-    "🛡 SPOOL: accounting/dead issue"
-  ],
+  "alerts": [],
   "history": [
     {
       "date": "2026-07-30",
