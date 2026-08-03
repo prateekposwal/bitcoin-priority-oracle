@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-03T18:35:34.393Z",
+  "generated_at": "2026-08-03T19:06:30.613Z",
   "freshness_min": 0,
   "fees": {
     "fastestFee": 5
@@ -25,7 +25,9 @@
       "trend": "rising"
     }
   ],
-  "alerts": [],
+  "alerts": [
+    "🛡 SPOOL: accounting/dead issue"
+  ],
   "history": [
     {
       "date": "2026-07-30",
