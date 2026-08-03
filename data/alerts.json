@@ -1,5 +1,7 @@
 {
-  "alerts": [],
-  "timestamp": "2026-08-03_04-15-41",
-  "source": "spool"
+  "alerts": [
+    "🛡 SPOOL: accounting/dead issue"
+  ],
+  "timestamp": "2026-08-03T16:46:41.813Z",
+  "source": "ops-health"
 }
