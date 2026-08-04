@@ -1,33 +1,35 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-04T18:59:38.136Z",
+  "generated_at": "2026-08-04T20:10:12.389074+00:00",
   "freshness_min": 0,
   "fees": {
-    "fastestFee": 2
+    "fastestFee": 3,
+    "halfHourFee": 1,
+    "hourFee": 1,
+    "economyFee": 1,
+    "minimumFee": 1
   },
-  "btc_price": 64269,
-  "block_height": 961057,
-  "mempool_tx": 92768,
+  "btc_price": 64133,
+  "block_height": 961065,
+  "mempool_tx": 90784,
   "forecast": [
     {
       "day_offset": 1,
-      "predicted_fastest_fee": 2,
+      "predicted_fastest_fee": 2.3,
       "trend": "stable"
     },
     {
       "day_offset": 2,
-      "predicted_fastest_fee": 2,
+      "predicted_fastest_fee": 2.3,
       "trend": "stable"
     },
     {
       "day_offset": 3,
-      "predicted_fastest_fee": 1.9,
+      "predicted_fastest_fee": 2.2,
       "trend": "stable"
     }
   ],
-  "alerts": [
-    "🛡 SPOOL: accounting/dead issue"
-  ],
+  "alerts": [],
   "history": [
     {
       "date": "2026-07-30",

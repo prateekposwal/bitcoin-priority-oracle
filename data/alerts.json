@@ -1,6 +1,6 @@
 {
   "alerts": [
-    "🛡 SPOOL: accounting/dead issue"
+    "\ud83d\udee1 SPOOL: accounting/dead issue"
   ],
   "timestamp": "2026-08-04T18:49:58.089Z",
   "source": "ops-health"
