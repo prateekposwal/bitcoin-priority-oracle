@@ -12,11 +12,11 @@ Bitcoin Resource Accounting; the paper's title is untouched.)*
 amendments on 2026-08-02 ("continue :)" ratification). Phase I publication path
 greenlit; UCIR data-path decision deferred until Phase I ships. **Program renamed
 to "Bitcoin Resource Accounting" 2026-08-02** (Prateek directive, executed by
-TELOS as Aviku): the final assessment reframes the program as
+TELOS): the final assessment reframes the program as
 **"Can we build a complete accounting system for every long-lived resource
 consumed by Bitcoin, and quantify how much of each cost is internalized by the
 fee market?"** — with **SCCR as the first metric (Metric #1) in the family**.
-Recorded by TELOS (as Aviku). Consistent with ratified Decision 1 (research-first
+Recorded by Prateek (with TELOS). Consistent with ratified Decision 1 (research-first
 scope, see `docs/decisions/2026-08-02-project-decisions.md`). Companion to
 `working-paper.md` v2.2.0 (core paper) and `research/future-directions-v3.md`
 (the v3.0 agenda split out of the paper's former §11/§12), and

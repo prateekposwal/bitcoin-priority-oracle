@@ -2,7 +2,7 @@
 
 **What Satoshi actually wrote about storage, fees, and node equilibrium**
 
-*(Analysis note — NOT a submission artifact. Created 2026-08-03 by TELOS/Aviku on
+*(Analysis note — NOT a submission artifact. Created 2026-08-03 by Prateek on
 Prateek's request to verify an architect's finding before any fold-in. Every quote
 below was re-verified against the canonical Satoshi Nakamoto Institute (SNI)
 archives and bitcoin.org/bitcoin.pdf on 2026-08-03. Status labels: ✅ VERIFIED
@@ -123,6 +123,6 @@ designer's own predictions.
 
 *Companion (2026-08-03): `research/whitepaper-patterns.md` — the 44-pattern “engineered asymmetry” lens with six additional verified whitepaper/forum quotes (§2/§9/§10/§11/§12 last line, BitDNS thread 532/535/537/539), including the 21M/1MB/halving-not-in-whitepaper correction and the anti-master-chain principle.*
 
-*Verification note by TELOS/Aviku, 2026-08-03. Prepared for the Bitcoin Sahi Research
+*Verification note by Prateek, with verification by TELOS, 2026-08-03. Prepared for the Bitcoin Sahi Research
 Council; feeds working-paper §8.3 (designer-intent paragraph), roadmap Q1/Q6, and
 framework-paper-outline (Paper 4 falsifiable-claims table).*

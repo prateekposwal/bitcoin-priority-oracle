@@ -4,7 +4,7 @@
 publication decisions. Four are RESOLVED/RECOMMENDED, one is a pre-submission
 ACTION (ORCID), one is the CRITICAL PATH (external reproducer), one is
 RECOMMENDED but awaiting final ratification (LICENSE file change). Recorded by
-TELOS (as Aviku). Companion to `docs/decisions/2026-08-02-project-decisions.md`
+Prateek (with TELOS). Companion to `docs/decisions/2026-08-02-project-decisions.md`
 (the scope/data-source/deployment bundle, ratified 2026-08-02).
 
 ---
@@ -47,7 +47,7 @@ TELOS (as Aviku). Companion to `docs/decisions/2026-08-02-project-decisions.md`
 ## Addendum — advisor review (2026-08-03)
 
 External advisor feedback on the **Bitcoin Resource Accounting** program reviewed
-by TELOS (as Aviku); clear wins executed 2026-08-03:
+by Prateek (with TELOS); clear wins executed 2026-08-03:
 
 - **D5 confirmed as the only submission-delaying item.** The advisor's "external
   reproduction is the only real blocker" matches this tracker's critical-path
@@ -80,7 +80,7 @@ section folded into the abstract/claims pass (publication-plan §4).
 
 ## Addendum 2 — advisor review deliverables (2026-08-03)
 
-Second advisor review executed by TELOS (as Aviku); all items docs-only, no code:
+Second advisor review executed by Prateek (with TELOS); all items docs-only, no code:
 
 - **Resource Map figure added (Figure 1).** One figure showing the whole
   framework: root = Bitcoin Fee Market; two branches = **Directly Priced**
@@ -116,7 +116,7 @@ final pass (publication-plan §2 step 3 + §2a).
 
 ## Addendum 3 — advisor final directives (2026-08-03)
 
-Final advisor review executed by TELOS (as Aviku) in `../block-space-economics`;
+Final advisor review executed by Prateek (with TELOS) in `../block-space-economics`;
 all items docs-only, no code:
 
 - **WHY_THIS_EXISTS.md created** (repo root) — one page, questions only, no
@@ -159,8 +159,8 @@ note sign-off, + abstract/moderator-pitch final pass (publication-plan §2 step 
 
 ## Addendum 4 — second reviewer critique (harsher, technical) — executed 2026-08-03
 
-Second (harsher, more technical) reviewer critique received; reviewed by TELOS (as
-Aviku) and executed in `../block-space-economics`. The reviewer's 8 points, our
+Second (harsher, more technical) reviewer critique received; reviewed by Prateek (with
+TELOS) and executed in `../block-space-economics`. The reviewer's 8 points, our
 disposition, and what changed:
 
 1. **Precision theater around a fragile input** — ADMITTED (the strongest point).
@@ -209,7 +209,7 @@ only submission blocker — UNCHANGED by this review)**, D6 LaTeX compile pass
 (source updated, still needs a pdflatex machine), D7 companion-note sign-off.
 
 *Bitcoin Sahi Research Council — Publication decisions (2026-08-02), recorded by
-TELOS (as Aviku). Extends research/author-identity.md, research/license-draft.md,
+Prateek (with TELOS). Extends research/author-identity.md, research/license-draft.md,
 research/publication-plan.md.*
 
 ---

@@ -2,7 +2,7 @@
 
 **The "cleared the blackboard" lens: the master pattern, the pattern lattice, and verified anchors**
 
-*(Analysis note — NOT a submission artifact. Created 2026-08-03 by TELOS/Aviku on
+*(Analysis note — NOT a submission artifact. Created 2026-08-03 by Prateek on
 Prateek's request to combine the deep whitepaper analysis with the prior
 primary-source work. Every quote below was re-verified against the canonical
 Satoshi Nakamoto Institute (SNI) archive on 2026-08-03 — the whitepaper text
@@ -238,7 +238,7 @@ text (same discipline as §2). No unanchored pattern was asserted here.
 
 ---
 
-*Analysis note by TELOS/Aviku, 2026-08-03. Companion to
+*Analysis note by Prateek, with analysis by TELOS, 2026-08-03. Companion to
 `research/satoshi-primary-source-note.md`; feeds working-paper §8.3
 (designer-intent paragraph) and — if the full enumeration ever lands — Paper-4
 (framework paper) §10 falsifiers. Labeled analysis note, NOT a submission
