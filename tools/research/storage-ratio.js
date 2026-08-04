@@ -216,12 +216,12 @@ function generateReport() {
   lines.push('- Node costs vary by hardware, bandwidth, electricity.');
   lines.push('- Storage horizon of ' + CONFIG.yearsOfStorage + ' years is an assumption. Some nodes prune earlier, some keep archival data forever.');
   lines.push('- Block size is averaged. Individual blocks vary significantly.');
-  lines.push('- This model does not account for bandwidth costs of block propagation.');
+  lines.push('- Marginal bandwidth-propagation cost is bounded analytically, not measured: model-spec v2.1.0 bw_cost_per_year_node ≈ $3.94/yr per node at a $0.05/GB retail proxy (working-paper §5.5).');
   lines.push('- Computed under methodology v' + MODEL_VERSION + ' (research/model-spec.json). Param changes bump the version; ratio moves without param changes are fee-regime signal.');
   lines.push('');
   lines.push('## Next Steps');
   lines.push('');
-  lines.push('- Feed per-block UTXO growth data from Bitcoin Core (getblockstats → utxo_size_inc)');
+  lines.push('- DONE (2026-08-04): per-block UTXO growth is live — getblockstats → utxo_size_inc persisted to block_stats (schema + spool-consumer + backfill); avg ~29.9 KB/block across 165 backfilled heights. Next: price the UTXO delta.');
   lines.push('- Track ratio over time to identify trends across fee regimes');
   lines.push('- Correlate with BIP-110 signaling data to measure impact of data restrictions');
   lines.push('- Publish as reproducible research note');
