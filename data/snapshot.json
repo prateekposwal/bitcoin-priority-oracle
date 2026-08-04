@@ -1,35 +1,33 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-04T18:14:23.537847+00:00",
+  "generated_at": "2026-08-04T18:29:30.809Z",
   "freshness_min": 0,
   "fees": {
-    "fastestFee": 3,
-    "halfHourFee": 3,
-    "hourFee": 1,
-    "economyFee": 1,
-    "minimumFee": 1
+    "fastestFee": 2
   },
-  "btc_price": 64074,
+  "btc_price": 63927,
   "block_height": 961051,
-  "mempool_tx": 92613,
+  "mempool_tx": 88757,
   "forecast": [
     {
       "day_offset": 1,
-      "predicted_fastest_fee": 2.1,
+      "predicted_fastest_fee": 2,
       "trend": "stable"
     },
     {
       "day_offset": 2,
-      "predicted_fastest_fee": 2.0,
+      "predicted_fastest_fee": 2,
       "trend": "stable"
     },
     {
       "day_offset": 3,
-      "predicted_fastest_fee": 2.0,
+      "predicted_fastest_fee": 1.9,
       "trend": "stable"
     }
   ],
-  "alerts": [],
+  "alerts": [
+    "🛡 SPOOL: accounting/dead issue"
+  ],
   "history": [
     {
       "date": "2026-07-30",
@@ -1622,6 +1620,10 @@
     {
       "date": "2026-08-04",
       "fastestFee": 3
+    },
+    {
+      "date": "2026-08-04",
+      "fastestFee": 2
     }
   ],
   "totalPosts": 36
