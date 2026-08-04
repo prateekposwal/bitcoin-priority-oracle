@@ -74,8 +74,9 @@ the frame while the banded number evidences it.
    decision — no pseudonym). arXiv accounts are free; a new submitter may need
    endorsement — first submissions to cs.* often require endorsement by an
    existing arXiv author. Check `arxiv.org` endorsement rules before submitting.
-   *(ACTION — Prateek: create ORCID **before submission** (D2) and provide the
-   16-digit iD; create the arXiv account with his real identity (D3).)*
+  *(DONE 2026-08-04 — ORCID created: `0009-0005-2139-1877` /
+  https://orcid.org/0009-0005-2139-1877. LEFT: create the arXiv account with
+  his real identity (D3) + check cs.* endorsement.)*
 2. **License.** ✅ **RECOMMENDED (Prateek, 2026-08-02):** **MIT** for code +
    **CC BY 4.0** for the paper, matched by the CC BY 4.0 license field on arXiv.
    Exact draft texts (LICENSE file replacement + paper notice + arXiv field) in
@@ -151,7 +152,7 @@ measured. Also the basis for the Optech 2–4 sentence summary (§3 step 1).
 
 ## 4. Pre-submit checklist (both venues)
 
-- [x] **Author list** — ✅ DECIDED (Prateek 2026-08-02): Prateek Poswal, Independent Researcher (Bitcoin Sahi Research program line); arXiv = real identity. *(LEFT: ORCID iD — create BEFORE submission, D2)*
+- [x] **Author list** — ✅ DECIDED (Prateek 2026-08-02): Prateek Poswal, Independent Researcher (Bitcoin Sahi Research program line); arXiv = real identity. ORCID created 2026-08-04 (`0009-0005-2139-1877`). *(LEFT: arXiv account, D3)*
 - [x] **License** — ✅ RECOMMENDED (Prateek 2026-08-02): MIT code + CC BY 4.0 paper. *(LICENSE file still untouched — awaiting Prateek's final go)*
 - [ ] **Abstract rewritten** to venue constraints, banded claims only
 - [ ] **Units consistency pass** (every quantity tagged; no undated headline numbers)
@@ -278,7 +279,7 @@ D5 confirmed critical path). See commit message.
       commits"** — external reproduction is THE highest-value remaining action
       and everything else is secondary). The ONLY submission-delaying item;
       protocol + log in `research/reproduce/`
-- [ ] Prateek: ORCID iD (create BEFORE submission) + arXiv account (real identity)
+- [ ] Prateek: arXiv account (real identity, D3 — ORCID D2 DONE `0009-0005-2139-1877`)
 - [ ] Prateek: review `archival-vs-pruned-note.md` (data-gap framing sign-off) —
       simultaneous publication decided
 - [ ] Abstract rewrite (mechanical once ORCID/endorsement known)

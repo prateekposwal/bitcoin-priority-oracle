@@ -58,6 +58,11 @@ under Option A this becomes "Prateek Poswal · Independent Researcher · 2026-08
 
 ## 4. Where the identity must be applied (once decided)
 
+- [x] **ORCID RESOLVED (2026-08-04):** `https://orcid.org/0009-0005-2139-1877`
+  (16-digit iD `0009-0005-2139-1877`) — Prateek created the ORCID; the iD is now
+  wired into publication-plan.md §2, working-paper.tex \author block, and this
+  file. Use this iD at arXiv upload.
+
 - [x] `research/working-paper.tex` (`\author` block) — already
   `Prateek Poswal / Independent Researcher (Bitcoin Sahi Research)` — matches
   Prateek's directive
@@ -83,10 +88,9 @@ under Option A this becomes "Prateek Poswal · Independent Researcher · 2026-08
   publication-plan.md, (f) LaTeX source. DONE in .tex; .md header update is
   LEFT (paper title block keeps "Bitcoin Sahi Research Council" as program
   footer per the paper's own convention).
-- **D2 — ORCID:** 🟡 **ACTION (RECOMMENDED by Prateek: create BEFORE
-  submission)** — sign up at https://orcid.org/register (steps in §3), then add
-  the 16-digit iD here + publication-plan.md §2 + LaTeX uthor block. Not a
-  submission blocker for other prep, but REQUIRED before arXiv upload.
+- **D2 — ORCID:** ✅ **RESOLVED (2026-08-04)** — iD `0009-0005-2139-1877`
+  (https://orcid.org/0009-0005-2139-1877). Wired into publication-plan.md §2 +
+  LaTeX \author block. Enter this iD at arXiv upload.
 - **D3 — arXiv account:** ✅ **RESOLVED (RECOMMENDED)** — Prateek directed:
   **use his real identity** (no pseudonym). Create the submitter account at
   https://arxiv.org/user with the real name + email. Note: first submissions to
