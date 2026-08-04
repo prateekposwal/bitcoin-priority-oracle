@@ -1,35 +1,33 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-04T16:28:45.656584+00:00",
+  "generated_at": "2026-08-04T17:27:33.386Z",
   "freshness_min": 0,
   "fees": {
-    "fastestFee": 1,
-    "halfHourFee": 1,
-    "hourFee": 1,
-    "economyFee": 1,
-    "minimumFee": 1
+    "fastestFee": 3
   },
-  "btc_price": 64032,
-  "block_height": 961042,
-  "mempool_tx": 85620,
+  "btc_price": 63862,
+  "block_height": 961044,
+  "mempool_tx": 90320,
   "forecast": [
     {
       "day_offset": 1,
-      "predicted_fastest_fee": 4.7,
-      "trend": "rising"
+      "predicted_fastest_fee": 2.1,
+      "trend": "stable"
     },
     {
       "day_offset": 2,
-      "predicted_fastest_fee": 4.9,
-      "trend": "rising"
+      "predicted_fastest_fee": 2,
+      "trend": "stable"
     },
     {
       "day_offset": 3,
-      "predicted_fastest_fee": 5.1,
-      "trend": "rising"
+      "predicted_fastest_fee": 2,
+      "trend": "stable"
     }
   ],
-  "alerts": [],
+  "alerts": [
+    "🛡 SPOOL: accounting/dead issue"
+  ],
   "history": [
     {
       "date": "2026-07-30",
@@ -1590,6 +1588,38 @@
     {
       "date": "2026-08-03",
       "fastestFee": 5
+    },
+    {
+      "date": "2026-08-04",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-08-04",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-08-04",
+      "fastestFee": 2
+    },
+    {
+      "date": "2026-08-04",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-08-04",
+      "fastestFee": 3
+    },
+    {
+      "date": "2026-08-04",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-08-04",
+      "fastestFee": 1
+    },
+    {
+      "date": "2026-08-04",
+      "fastestFee": 3
     }
   ],
   "totalPosts": 36

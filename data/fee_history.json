@@ -1558,5 +1558,37 @@
   {
     "date": "2026-08-03",
     "fastestFee": 5
+  },
+  {
+    "date": "2026-08-04",
+    "fastestFee": 1
+  },
+  {
+    "date": "2026-08-04",
+    "fastestFee": 1
+  },
+  {
+    "date": "2026-08-04",
+    "fastestFee": 2
+  },
+  {
+    "date": "2026-08-04",
+    "fastestFee": 3
+  },
+  {
+    "date": "2026-08-04",
+    "fastestFee": 3
+  },
+  {
+    "date": "2026-08-04",
+    "fastestFee": 1
+  },
+  {
+    "date": "2026-08-04",
+    "fastestFee": 1
+  },
+  {
+    "date": "2026-08-04",
+    "fastestFee": 3
   }
 ]
