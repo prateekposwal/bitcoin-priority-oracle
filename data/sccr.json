@@ -1,20 +1,20 @@
 {
   "date": "2026-08-04",
-  "generated_at": "2026-08-04T17:59:24.748769+00:00",
+  "generated_at": "2026-08-04T18:29:30.908549+00:00",
   "spec_version": "2.1.0",
-  "blocks": 156,
-  "avg_sccr": 0.271153,
-  "min": 0.05478,
-  "max": 0.993969,
-  "below_1x": 156,
+  "blocks": 159,
+  "avg_sccr": 0.261079,
+  "min": 0.054781,
+  "max": 0.742893,
+  "below_1x": 159,
   "below_1x_pct": 100.0,
   "l_net_usd": 5627.804396,
   "N": 32000,
   "T": 10,
   "C": 925,
   "heights": [
-    960889,
-    961044
+    960893,
+    961051
   ],
   "notes": "SCCR = fee_USD / L_net; N=32K primary-source lower-bound census (>=32,000 known addresses via Bitcoin Core getnodeaddresses); T=10yr assumption. Static JSON endpoint: /sccr/latest"
 }
