@@ -83,7 +83,7 @@ The fee market solves a short-term optimization problem extremely well: during c
   \item \textbf{Payer chooses} to pay vs.\ \textbf{node operators bear} the cost involuntarily
   \item $\sim$10-min horizon (next block) vs.\ \textbf{indefinite horizon} (data persists in blockchain history)
 \end{itemize}
-\textbf{Scope:} this paper measures the \textbf{storage leg} of a broader resource-pricing question. Bandwidth, validation, and UTXO-maintenance legs are future work (see \S\ref{sec:7}).
+\textbf{Scope:} this paper measures the \textbf{storage leg} of a broader resource-pricing question. Bandwidth, validation, and UTXO-maintenance legs now carry v1 bounds/measurements (\S\ref{sec:5} 5.5--5.7) with the residual program in \S\ref{sec:7}.
 
 \textbf{Why storage? It is not the ``most important'' resource --- it is simply the first measurable one.} Storage qualified first because its cost leg ($C$, $N$, $T$) and its fee leg (block fees, USD) are both estimable from primary sources. Every other resource is a named research hypothesis, not a measured result.
 
@@ -323,7 +323,7 @@ Every quantity in this paper is regenerated from \texttt{research/model-spec.jso
   \item Marginal vs.\ average attribution changes the per-byte cost by $164\times$ (dimensionless) --- the choice is explicit and documented.
   \item \textbf{Why storage at all?} The paper does not claim storage is Bitcoin's most important resource --- \textbf{it is simply the first measurable one}. Bandwidth, validation, UTXO, relay, and indexer serving are named research hypotheses with their own metrics (roadmap \S4), none yet measured.
 \end{enumerate}
-\textbf{Future work (the resource-pricing program):} UTXO leg (\texttt{utxo\_size\_inc}); bandwidth leg (analytical bounds); validation leg (Core benchmarks); node distribution (\texttt{node\_geo}); BIP-110 pre/post measurement protocol if ever signaled; v3.0 economic-dynamics program (companion \texttt{future-directions-v3.md}, agenda summary \S\ref{sec:10}).
+\textbf{Future work (the resource-pricing program; statuses updated 2026-08-04):} UTXO leg --- v1 DONE (measurement: \texttt{utxo\_size\_inc} persisted end-to-end, \S\ref{sec:5}.7; $\sim$29.9 KB/block avg, 165 backfilled heights); remaining: \$/byte pricing of the UTXO delta. Bandwidth leg --- v1 DONE (analytical bound: model-spec v2.1.0, \$3.94/yr per node marginal propagation, \S\ref{sec:5}.5); remaining: measured per-node bills. Validation leg --- v1 STARTED (OOM survey, \texttt{validation-cost.md}, <\$100/yr/node central \$1--2/yr, \S\ref{sec:5}.6); remaining: pinned Core benchmark + hardware census. Node distribution (\texttt{node\_geo}, 224 rows); BIP-110 pre/post measurement protocol if ever signaled; v3.0 economic-dynamics program (companion \texttt{future-directions-v3.md}, agenda summary \S\ref{sec:10}).
 
 \subsection{What would falsify this framework?}\label{sec:7.1}
 \textit{(Added 2026-08-03, post-advisor review --- see

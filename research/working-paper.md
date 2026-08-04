@@ -265,6 +265,90 @@ The median is below the deterministic point estimate because the node-count dist
 
 The current-band median (0.17) sits near the N=32K point estimates (0.22–0.29), and the P5–P95 interval (0.07–0.47) brackets the deterministic N-band range (~0.07–0.71): the confidence interval and the range are two views of the same N-driven uncertainty. The old-N-band result above (99.8% below 1×) remains as the historical conservative check.
 
+
+### 5.5 The Bandwidth Leg (v1 analytical bound)
+
+*(Added 2026-08-04, G-06.)* The storage leg prices *stored* bytes; the
+bandwidth leg prices the **marginal propagation** of those bytes: every full
+node — pruned or archival — must download every byte of every block
+(`pruning_externality_analysis.md`). Quantities live in `model-spec.json`
+v2.1.0 (`cost_per_gb` input; derived `bw_GB_yr`, `bw_cost_per_year_node`,
+`bw_cost_per_year_net`, `bw_insc_incr_node`); the formula is
+**B × replication × $/GB**:
+
+| Quantity | Value | Meaning |
+|---|---|---|
+| `bw_GB_yr` = B_all_yr / 1e9 | **78.894 GB/yr** | full-chain bytes each node downloads |
+| `cost_per_gb` (input) | **$0.05/GB** | retail bandwidth proxy (`pruning_externality_analysis.md`; AWS egress ~$0.09/GB, Hetzner ~$0.011/GB — mid-range) |
+| `bw_cost_per_year_node` | **$3.94/yr per node** | marginal full-chain propagation, one node |
+| `bw_cost_per_year_net` | **~$126K/yr** | × N=32K lower-bound census |
+| `bw_insc_incr_node` | **$0.024/yr per node** | inscription-incremental share (480 MB/yr × $0.05/GB) — reconciles the earlier "~$0.02/yr" figure |
+
+**Honest framing:** this is an **analytical bound, not a measurement.** Real
+node bandwidth bills are overwhelmingly flat-rate (residential/colocation
+unmetered), so $/GB is a *marginal economic proxy*, not a typical bill. The
+bound's job is to bound the *marginal* propagation externality the storage leg
+deliberately excludes (§7 limitation 5): the full-chain marginal cost is
+**~$3.94/yr per node** (~$126K/yr network at ≥32K nodes), and the
+inscription-incremental slice is **~$0.024/yr per node** — small in both
+frames, in the same direction as the pruning analysis's verdict
+(`pruning_externality_analysis.md`: $0.02–0.05/yr unavoidable per node).
+
+### 5.6 The Validation Leg (v1 order-of-magnitude survey)
+
+*(Added 2026-08-04, G-06; full survey: `research/validation-cost.md`.)*
+Validation is the CPU work every node pays for every block since genesis —
+PoW-header check (trivial), block rules, and **signature verification**
+(the dominant term) — and it is the only leg that is strictly unavoidable at
+any replication scale (storage can be pruned; validation cannot be skipped).
+The v1 bound, **order-of-magnitude only** (band ≈ 0.5×–5×):
+
+| Term | Value |
+|---|---|
+| Blocks/yr (R_blocks) | 52,596 |
+| Sig checks per block / throughput | ~3–10K sigs per block vs ~10–30K sigs/s (modern hw, libsecp256k1) |
+| Validation CPU per block | **~0.1–1 s** (cross-checked by initial-sync delta: 6–24 h / ~1M blocks) |
+| Validation CPU per node per year | **~1.5–15 h** |
+| **Validation cost per node per year** | **~$0.5–$5** (central ≈ $1–2/yr at $0.10–0.50/CPU-h) |
+| Network-wide (N = 32K) | **~$16K–160K/yr** |
+
+**Falsifiable claim (v1):** *validation cost per full node per year is
+< $100 — bounded from above by the entire node budget C = $925/yr, central
+estimate ~$1–2/yr.* Falsified by a measured benchmark showing ≥ ~200 h/yr
+steady-state validation CPU, or a hardware census showing validation is a
+*binding* provisioning constraint. Literature anchored on Tschorsch &
+Scheuermann (2016, IEEE COMST), Delgado-Segura et al. (2018, UTXO analysis),
+Bitcoin Core's `src/bench` suite; the architect-notes 3-paper fee list is
+acknowledged as *not* modeling validation — the gap this leg opens.
+**Verdict:** validation is cheap *per block*, so cheap per node; its network
+total (~$16K–160K/yr) is ~3 orders of magnitude below the storage leg's
+modeled network burden — which is itself the finding, not an assertion.
+
+### 5.7 The UTXO Leg (v1 measurement)
+
+*(Added 2026-08-04, G-06.)* `getblockstats → utxo_size_inc` — the net byte
+delta of the UTXO set after each block — was already captured by agent-06 but
+**dropped at DB write** (no `block_stats` column). Fixed end-to-end: column
+added to `tools/db/schema.sql`, wired through `tools/db/init.js`
+(`insertBlockStats` + idempotent `ALTER TABLE` migration), live path in
+`tools/data-engineering/spool-consumer.js` (every `btc_rpc` capture now
+persists per-block rows), and a backfill (`tools/db/backfill-block-stats.js`)
+populated the history from the spool + raw captures. Measured v1 result
+(2026-08-04, `captured-data/bsahi.db`):
+
+| Metric | Value |
+|---|---|
+| block_stats rows with utxo_size_inc | **165 unique heights** (backfill: 351 writes, 119 capture files) |
+| Avg net UTXO-set delta per block | **~29.9 KB/block** (range incl. genesis's 117 B artifact) |
+| Max height covered | 671,460 |
+| Live path | verified (handler test: height→utxo_size_inc persisted) |
+
+**Status:** the leg is now *measured* (the resource's size per block is in the
+queryable DB, growing live). What remains is the *pricing* step — attributing a
+$/byte/yr cost to the UTXO delta (the UTXO set is the index that makes
+validation/script lookups fast; its cost surface is the next model step, and
+it stays in §7 future work until then).
+
 ## 6. Internal Validation, Correction, and Reconciliation (v2.0.0)
 
 Internal validation identified an inconsistency in the SCCR implementation, traced it to a **duplicated time-horizon term**, corrected the implementation, regenerated all reported values, and confirmed the qualitative conclusions unchanged. We present the correction in four labeled steps: **Bug → Fix → Results → Reconciliation**.
@@ -310,15 +394,15 @@ The correction increased the estimated SCCR by an order of magnitude but did not
 2. **Node costs are homogeneous — and bundled.** Hardware/bandwidth/electricity vary by geography and operator; the model treats them as one scalar C = $925/yr. Because C is bundled (C = C_storage + C_bandwidth + C_misc, §4.1), the headline ratio is strictly a **storage-and-hosting coverage ratio**, not a pure-storage ratio, and the bandwidth-vs-storage decomposition is a documented future refinement — the RCIR and BCIR legs (§7 future work / `roadmap.md` Phase II/III).
 3. **10-year horizon is an assumption**; pruning shortens actual retention, permanent storage extends it.
 4. **No discounting; constant-cost assumption.** A one-time fee (USD/block) is compared against an undiscounted 10-yr storage-cost sum (USD/block); discounting the liability at r=5%/yr (8%/yr) reduces the present value by ~27% (45%). A declining $/GB storage-cost trend would likewise lower the future liability (the T=10 constant-cost figure is conservative in the same direction as the discounting caveat). Both effects mean the ratio overstates the liability as commonly valued.
-5. **Bandwidth is included in the fixed node cost (C) yet marginal bandwidth-propagation cost is excluded from the storage leg.** This is the fixed-vs-marginal distinction, not a double count: C prices the node's *average* bandwidth bill; the excluded term is the *marginal* cost of propagating one more block to one more node.
+5. **Bandwidth is included in the fixed node cost (C) yet marginal bandwidth-propagation cost is excluded from the storage leg.** This is the fixed-vs-marginal distinction, not a double count: C prices the node's *average* bandwidth bill; the excluded term is the *marginal* cost of propagating one more block to one more node. **v1 status (2026-08-04):** the marginal term now has an analytical bound in model-spec v2.1.0 (§5.5) — ~$3.94/yr per node at a $0.05/GB retail proxy — still a bound, not a measured bill.
 6. **Marginal vs. average attribution** changes the per-byte cost by 164× (dimensionless) — the choice is explicit and documented, not hidden.
 
-7. **Why storage at all?** The paper does not claim storage is Bitcoin's most important resource — **it is simply the first measurable one**: the first long-lived resource with a reproducible cost estimate and a live fee attribution. Bandwidth, validation, UTXO, relay, and indexer serving are named research hypotheses with their own metrics (`roadmap.md` §4), none yet measured. Storage led because it could be measured, not because it ranks first in economic importance.
+7. **Why storage at all?** The paper does not claim storage is Bitcoin's most important resource — **it is simply the first measurable one**: the first long-lived resource with a reproducible cost estimate and a live fee attribution. Bandwidth, validation, and UTXO now carry v1 bounds or measurements (§5.5–5.7); relay and indexer serving remain named-but-unmeasured research hypotheses (`roadmap.md` §4). Storage led because it could be measured, not because it ranks first in economic importance.
 
-**Future work (the resource-pricing program):**
-- **UTXO leg:** capture `getblockstats → utxo_size_inc` (already returned by the getblockstats RPC pipeline, currently dropped at DB write)
-- **Bandwidth leg:** analytical bounds from block size × replication × $/GB
-- **Validation leg:** Core benchmarks + node-cost literature with explicit uncertainty
+**Future work (the resource-pricing program; statuses updated 2026-08-04):**
+- **UTXO leg — v1 DONE (measurement):** `getblockstats → utxo_size_inc` now persisted end-to-end (schema column, live spool-consumer path, backfill of 165 heights from the spool; avg ~29.9 KB/block) — §5.7. Remaining: $/byte pricing of the UTXO delta and validation-lookup cost surface.
+- **Bandwidth leg — v1 DONE (analytical bound):** model-spec v2.1.0 quantities B × replication × $/GB: $3.94/yr per node marginal full-chain propagation, ~$126K/yr network, inscription-incremental $0.024/yr/node — §5.5. Remaining: measured per-node bills (flat-rate reality) and a measured replication-weighted byte flow.
+- **Validation leg — v1 STARTED (OOM survey):** `research/validation-cost.md` — validation cost per node per year < $100 (central ~$1–2/yr), literature-anchored, falsifiable — §5.6. Remaining: a pinned Core benchmark run and a hardware census.
 - **Node distribution:** expand `node_geo` (currently 224 rows) for per-region cost distributions
 - **BIP-110 pre/post measurement protocol** if activation is ever signaled
 - **v3.0 economic-dynamics program:** the eight-question agenda and deep-question first answers now live in the companion `future-directions-v3.md` (roadmap §8/§9)

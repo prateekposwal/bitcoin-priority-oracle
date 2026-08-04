@@ -28,6 +28,18 @@ function handler(payload, ctx) {
   var json = JSON.stringify(data !== undefined && data !== null ? data : { error: c.error || 'no data' });
   var capturedAt = c.fetchedAt || tsToIso(ctx.captureTime);
   db.insertCapture(ctx.source, 'spool:' + ctx.id, c.status || (c.error ? 0 : 200), 0, json, '', null, 0);
+  // UTXO leg (G-06, 2026-08-04): persist per-block getblockstats (incl.
+  // utxo_size_inc) into block_stats when the capture carried blocks.
+  if (ctx.source === 'btc_rpc' && data && typeof data === 'object' && Array.isArray(data.blocks)) {
+    data.blocks.forEach(function(b) {
+      if (b == null || b.height == null) return;
+      db.insertBlockStats(
+        b.height, b.hash || '', new Date((b.time || 0) * 1000).toISOString(), b.txCount || 0,
+        b.size || 0, b.weight || 0, b.avgFee || 0, b.avgFeeRate || 0, b.feePercentiles || [],
+        (b.subsidy || 0) / 100000000, '', b.utxoSizeInc || 0
+      );
+    });
+  }
   return Promise.resolve();
 }
 

@@ -37,6 +37,7 @@ CREATE TABLE IF NOT EXISTS block_stats (
   avg_fee_rate_satvb REAL,
   fee_percentiles TEXT,               -- JSON array [p10,p25,p50,p75,p90]
   subsidy_btc REAL,
+  utxo_size_inc INTEGER,              -- getblockstats → utxo_size_inc (net UTXO set delta, bytes)
   miner TEXT,
   captured_at TEXT DEFAULT (datetime('now'))
 );

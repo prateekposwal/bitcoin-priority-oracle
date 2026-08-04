@@ -23,10 +23,14 @@ var WIRE = {
   cb_insc:  function() { return get('C_insc') / get('B_insc_yr'); },
   L:        function() { return get('cb') * get('B_block') * get('T'); },
   L_net:    function() { return get('L') * get('N'); },
-  L_insc:   function() { return get('cb_insc') * get('I_bytes') * get('T'); }
+  L_insc:   function() { return get('cb_insc') * get('I_bytes') * get('T'); },
+  bw_GB_yr: function() { return get('B_all_yr') / 1e9; },
+  bw_cost_per_year_node: function() { return get('B_all_yr') * get('cost_per_gb') / 1e9; },
+  bw_cost_per_year_net: function() { return get('bw_cost_per_year_node') * get('N'); },
+  bw_insc_incr_node: function() { return get('B_insc_yr') * get('cost_per_gb') / 1e9; }
 };
 
-var ORDER = ['R_blocks', 'B_all_yr', 'B_insc_yr', 'cb', 'cb_insc', 'L', 'L_net', 'L_insc'];
+var ORDER = ['R_blocks', 'B_all_yr', 'B_insc_yr', 'cb', 'cb_insc', 'L', 'L_net', 'L_insc', 'bw_GB_yr', 'bw_cost_per_year_node', 'bw_cost_per_year_net', 'bw_insc_incr_node'];
 var computed = {};
 ORDER.forEach(function(k) { computed[k] = WIRE[k](); });
 

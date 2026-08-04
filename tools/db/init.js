@@ -11,6 +11,14 @@ function getDB() {
     fs.writeFileSync(tmpFile, initSql);
     child.execSync('sqlite3 "' + DB_PATH + '" < "' + tmpFile + '"', { stdio: 'pipe' });
     try { fs.unlinkSync(tmpFile); } catch (e) {}
+    // Idempotent migration: block_stats.utxo_size_inc (added 2026-08-04, G-06 UTXO leg)
+    try {
+      var cols = child.execSync('sqlite3 "' + DB_PATH + '" "PRAGMA table_info(block_stats);"', { stdio: 'pipe', encoding: 'utf8' });
+      if (cols.indexOf('utxo_size_inc') === -1) {
+        child.execSync('sqlite3 "' + DB_PATH + '" "ALTER TABLE block_stats ADD COLUMN utxo_size_inc INTEGER;"', { stdio: 'pipe' });
+        console.log('DB migration: added block_stats.utxo_size_inc');
+      }
+    } catch (e) { console.error('DB migration check error:', e.message); }
     db = { path: DB_PATH };
   } catch (e) {
     console.error('DB init error:', e.message);
@@ -58,8 +66,8 @@ function insertCapture(source, endpointUrl, status, latencyMs, jsonData, minimiz
   return runSQL(sql);
 }
 
-function insertBlockStats(height, hash, timestamp, txCount, size, weight, avgFeeSats, avgFeeRate, feePercentiles, subsidyBtc, miner) {
-  var sql = 'INSERT OR REPLACE INTO block_stats (height, hash, timestamp, tx_count, size, weight, avg_fee_sats, avg_fee_rate_satvb, fee_percentiles, subsidy_btc, miner) VALUES (' +
+function insertBlockStats(height, hash, timestamp, txCount, size, weight, avgFeeSats, avgFeeRate, feePercentiles, subsidyBtc, miner, utxoSizeInc) {
+  var sql = 'INSERT OR REPLACE INTO block_stats (height, hash, timestamp, tx_count, size, weight, avg_fee_sats, avg_fee_rate_satvb, fee_percentiles, subsidy_btc, utxo_size_inc, miner) VALUES (' +
     height + ', ' +
     "'" + (hash || '') + "', " +
     "'" + (timestamp || '') + "', " +
@@ -69,7 +77,8 @@ function insertBlockStats(height, hash, timestamp, txCount, size, weight, avgFee
     (avgFeeSats || 0) + ', ' +
     (avgFeeRate || 0) + ", '" +
     JSON.stringify(feePercentiles || []) + "', " +
-    (subsidyBtc || 0) + ", '" +
+    (subsidyBtc || 0) + ', ' +
+    (utxoSizeInc == null ? 0 : utxoSizeInc) + ", '" +
     (miner || '') + "')";
   return runSQL(sql);
 }
