@@ -280,6 +280,63 @@ Share below $1\times$ & \textbf{99.9\%} \\
 \end{center}
 The current-band median (0.17) sits near the N=32K point estimates (0.22--0.29), and the P5--P95 interval (0.07--0.47) brackets the deterministic N-band range ($\sim$0.07--0.71): the confidence interval and the range are two views of the same N-driven uncertainty. The old-N-band result above (99.8\% below $1\times$) remains as the historical conservative check.
 
+\subsection{The Bandwidth Leg (v1 analytical bound)}\label{sec:5.5}
+*(Added 2026-08-04.)* The storage leg prices \emph{stored} bytes; the bandwidth leg prices the \textbf{marginal propagation} of those bytes: every full node --- pruned or archival --- must download every byte of every block. Quantities live in \texttt{model-spec.json} v2.1.0 (\texttt{cost\_per\_gb} input; derived \texttt{bw\_GB\_yr}, \texttt{bw\_cost\_per\_year\_node}, \texttt{bw\_cost\_per\_year\_net}, \texttt{bw\_insc\_incr\_node}); the formula is \textbf{$B \times$ replication $\times$ \$/GB}:
+
+\begin{center}
+\begin{tabular}{lcl}
+\toprule
+Quantity & Value & Meaning \\
+\midrule
+\texttt{bw\_GB\_yr} = $B_{\mathrm{all,yr}}$/1e9 & \textbf{78.894 GB/yr} & full-chain bytes each node downloads \\
+\texttt{cost\_per\_gb} (input) & \textbf{\$0.05/GB} & retail bandwidth proxy (AWS egress $\sim$\$0.09/GB, Hetzner $\sim$\$0.011/GB --- mid-range) \\
+\texttt{bw\_cost\_per\_year\_node} & \textbf{\$3.94/yr per node} & marginal full-chain propagation, one node \\
+\texttt{bw\_cost\_per\_year\_net} & \textbf{$\sim$\$126K/yr} & $\times$ $N=32$K lower-bound census \\
+\texttt{bw\_insc\_incr\_node} & \textbf{\$0.024/yr per node} & inscription-incremental share (480 MB/yr $\times$ \$0.05/GB) --- reconciles the earlier ``$\sim$\$0.02/yr'' \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Honest framing:} this is an \textbf{analytical bound, not a measurement.} Real node bandwidth bills are overwhelmingly flat-rate (residential/colocation unmetered), so \$/GB is a \emph{marginal economic proxy}, not a typical bill. The full-chain marginal cost is $\sim$\$3.94/yr per node ($\sim$\$126K/yr network at $\geq$32K nodes), and the inscription-incremental slice is $\sim$\$0.024/yr per node --- small in both frames, in the same direction as the pruning analysis verdict (\$0.02--0.05/yr unavoidable per node).
+
+\subsection{The Validation Leg (v1 order-of-magnitude survey)}\label{sec:5.6}
+*(Added 2026-08-04; full survey: \texttt{research/validation-cost.md}.)* Validation is the CPU work every node pays for every block since genesis --- PoW-header check (trivial), block rules, and \textbf{signature verification} (the dominant term) --- and it is the only leg strictly unavoidable at any replication scale (storage can be pruned; validation cannot be skipped). The v1 bound, \textbf{order-of-magnitude only} (band $\approx$ 0.5$\times$--5$\times$):
+
+\begin{center}
+\begin{tabular}{lcl}
+\toprule
+Term & Value & \\
+\midrule
+Blocks/yr ($R_{\mathrm{blocks}}$) & 52,596 & \\
+Sig checks per block / throughput & $\sim$3--10K sigs/block vs $\sim$10--30K sigs/s (modern hw, libsecp256k1) & \\
+Validation CPU per block & $\sim$0.1--1 s (cross-checked by initial-sync delta: 6--24 h / $\sim$1M blocks) & \\
+Validation CPU per node per year & $\sim$1.5--15 h & \\
+\textbf{Validation cost per node per year} & $\sim$\$0.5--\$5 (central $\approx$ \$1--2/yr at \$0.10--0.50/CPU-h) & \\
+Network-wide ($N=32$K) & $\sim$\$16K--160K/yr & \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Falsifiable claim (v1):} \emph{validation cost per full node per year is $<$\$100 --- bounded from above by the entire node budget $C=\$925$/yr, central estimate $\sim$\$1--2/yr.} Falsified by a measured benchmark showing $\geq \sim$200 h/yr steady-state validation CPU, or a hardware census showing validation is a \emph{binding} provisioning constraint. Literature anchored on Tschorsch \& Scheuermann (2016, IEEE COMST), Delgado-Segura et al.\ (2018, UTXO analysis), Bitcoin Core's \texttt{src/bench} suite. \textbf{Verdict:} validation is cheap per block, so cheap per node; its network total ($\sim$\$16K--160K/yr) is $\sim$3 orders of magnitude below the storage leg's modeled network burden --- which is itself the finding, not an assertion.
+
+\subsection{The UTXO Leg (v1 measurement)}\label{sec:5.7}
+*(Added 2026-08-04.)* \texttt{getblockstats} $\to$ \texttt{utxo\_size\_inc} --- the net byte delta of the UTXO set after each block --- was already captured by agent-06 but \textbf{dropped at DB write} (no \texttt{block\_stats} column). Fixed end-to-end: column added to \texttt{tools/db/schema.sql}, wired through \texttt{tools/db/init.js} (\texttt{insertBlockStats} + idempotent \texttt{ALTER TABLE} migration), live path in \texttt{tools/data-engineering/spool-consumer.js}, and a backfill (\texttt{tools/db/backfill-block-stats.js}) populated history from spool + raw captures. Measured v1 result (2026-08-04, \texttt{captured-data/bsahi.db}):
+
+\begin{center}
+\begin{tabular}{lcl}
+\toprule
+Metric & Value & \\
+\midrule
+\texttt{block\_stats} rows with \texttt{utxo\_size\_inc} & \textbf{165 unique heights} (backfill: 351 writes, 119 capture files) & \\
+Avg net UTXO-set delta per block & $\sim$\textbf{29.9 KB/block} (range incl.\ genesis's 117 B artifact) & \\
+Max height covered & 671,460 & \\
+Live path & verified (handler test: height$\to$\texttt{utxo\_size\_inc} persisted) & \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Status:} the leg is now \emph{measured} (the resource's size per block is in the queryable DB, growing live). What remains is the \emph{pricing} step --- attributing a \$/byte/yr cost to the UTXO delta --- which stays in \S\ref{sec:7} future work until then.
+
 \section{Internal Validation, Correction, and Reconciliation (v2.0.0)}\label{sec:6}
 Internal validation identified an inconsistency in the SCCR implementation, traced it to a \textbf{duplicated time-horizon term}, corrected the implementation, regenerated all reported values, and confirmed the qualitative conclusions unchanged. Four labeled steps: \textbf{Bug $\rightarrow$ Fix $\rightarrow$ Results $\rightarrow$ Reconciliation}.
 

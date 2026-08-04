@@ -1,8 +1,8 @@
 # SCCR Reproduction Kit
 
 **Storage Cost Coverage Ratio (SCCR)** — independent, multi-language reproduction
-of the working paper's headline measurement (`research/working-paper.md` v2.1.0,
-`research/model-spec.json` v2.0.1).
+of the working paper's headline measurement (`research/working-paper.md` v2.2.0,
+`research/model-spec.json` v2.1.0).
 
 ## What is reproduced
 
@@ -65,7 +65,7 @@ agreement between JS, Python, and C (max |diff| < 1e-6). The script
 auto-compiles the C implementation from source if the binary is absent
 (the binary is gitignored and not shipped in clones).
 
-## Reference outputs (2026-08-02 freeze, 171 blocks, model-spec v2.0.1)
+## Reference outputs (2026-08-02 freeze, 171 blocks, model-spec v2.1.0)
 
 | Metric | JS | Python | C |
 |---|---|---|---|
@@ -102,4 +102,4 @@ date, reproducer (anonymous ok), language, their numbers, and any discrepancy.
 ---
 
 *Bitcoin Sahi Research — Reproduction Kit for the Storage Cost Coverage Ratio
-(working-paper v2.1.0, model-spec v2.0.1), 2026-08-02.*
+(working-paper v2.2.0, model-spec v2.1.0), 2026-08-02.*

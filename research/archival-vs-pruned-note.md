@@ -1,9 +1,10 @@
 # Archival vs Pruned — Companion Note to the Storage Paper (Phase I)
 
-**Companion to:** `research/working-paper.md` v2.1.0 · `research/model-spec.json`
-v2.0.1 · `research/roadmap.md` (adopted 2026-08-02, §7)
-**Status:** DRAFT (2026-08-02) — produced at Phase I greenlight; awaiting Prateek
-review before it ships with the paper.
+**Companion to:** `research/working-paper.md` v2.2.0 · `research/model-spec.json`
+v2.1.0 · `research/roadmap.md` (adopted 2026-08-02, §7)
+**Status:** REVIEWED (2026-08-04) — approved for simultaneous publication with the
+paper (D7 sign-off). The pruning-split measurement gap it identifies is Phase I
+follow-on, not a submission blocker.
 **Framing:** how the pruned-vs-archival node distribution conditions the T=10
 storage-cost assumption and the "who bears the cost" question.
 
@@ -141,7 +142,7 @@ measurement is Phase I follow-on work, not a blocker for v2.1.0 submission.
 - Measurement path outlined (4 options, cheapest first).
 
 **LEFT / TODO (verified):**
-- [ ] Prateek review of this note before it ships with the paper.
+- [x] Prateek review of this note before it ships with the paper. **DONE (2026-08-04).**
 - [ ] Actual split measurement (agent-26 probing, survey, or third-party
       reconciliation) — Phase I follow-on, not a submission blocker.
 - [ ] If/when a split is measured: recompute SCCR at N_archival and report the
