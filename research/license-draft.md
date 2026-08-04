@@ -87,12 +87,7 @@ arXiv field guidance) — ready to apply. **Prateek's recommendation recorded
 2026-08-02: MIT (code) + CC BY 4.0 (paper) — matches the drafted pair.**
 
 **LEFT (Prateek decisions):**
-- [ ] ✅ **Prateek's recommendation recorded (2026-08-02): MIT + CC BY 4.0** —
-      matches the drafts below; formal ratification of the LICENSE file change
-      is the remaining step
-- [ ] 🚫 **DO NOT change `LICENSE` until Prateek's final go** — recommended, awaiting ratification
-- [ ] After ratification: replace `LICENSE` stub with the MIT text
-- [ ] After ratification: add CC BY 4.0 notice to working-paper.md/.tex headers and README
+- [x] **RATIFIED (2026-08-04)**: LICENSE updated to MIT text; CC BY 4.0 notice added to working-paper.md/.tex headers + README
 - [ ] At arXiv upload: select CC BY 4.0 in the license field
 
 ---

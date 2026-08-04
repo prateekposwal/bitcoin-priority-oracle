@@ -3,6 +3,8 @@
 **The Bitcoin Block Space Problem** — BSAHI Working Paper v2.2.0 (model-spec.json v2.0.1)
 *Prepared by Prateek Poswal (Independent Researcher) within the Bitcoin Sahi Research Council program · ORCID: 0009-0005-2139-1877 · 2026-08-03*
 
+*This work is licensed under a Creative Commons Attribution 4.0 International License (CC BY 4.0). To view a copy, visit https://creativecommons.org/licenses/by/4.0/.*
+
 ---
 
 ## Abstract

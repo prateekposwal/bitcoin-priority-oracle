@@ -26,9 +26,8 @@ Ratio** — is **Metric #1**, established and reproduced.
 v1 (priority oracle) and v2 (externality fee) are dead; this is the research-first
 successor.
 
-© 2026 Prateek Poswal. All rights reserved. This repository is made publicly
-available for viewing and evaluation purposes only. For licensing inquiries:
-[prateek@block-space-economics.com](mailto:prateek@block-space-economics.com)
+© 2026 Prateek Poswal. Code licensed under the MIT License (see `LICENSE`);
+research text licensed under CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/).
 
 ---
 
