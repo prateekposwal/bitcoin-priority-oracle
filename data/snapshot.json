@@ -1,17 +1,17 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-08T06:08:28.451665+00:00",
+  "generated_at": "2026-08-08T07:30:36.018578+00:00",
   "freshness_min": 0,
   "fees": {
-    "fastestFee": 2,
+    "fastestFee": 1,
     "halfHourFee": 1,
     "hourFee": 1,
     "economyFee": 1,
     "minimumFee": 1
   },
-  "btc_price": 64956,
-  "block_height": 961538,
-  "mempool_tx": 83132,
+  "btc_price": 64973,
+  "block_height": 961544,
+  "mempool_tx": 81301,
   "forecast": [
     {
       "day_offset": 1,
